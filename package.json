@@ -4,8 +4,12 @@
   "version": "0.1.0",
   "author": "",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "prettier": "^2.1.2"
+  },
   "license": "UNLICENSED",
   "private": true,
-  "scripts": {}
+  "scripts": {
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
+  }
 }
