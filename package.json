@@ -5,11 +5,13 @@
   "author": "",
   "dependencies": {},
   "devDependencies": {
+    "esbuild": "^0.7.21",
     "prettier": "^2.1.2"
   },
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "esbuild": "node esbuild.js",
     "format": "prettier --write \"src/**/*.{ts,tsx}\""
   }
 }
