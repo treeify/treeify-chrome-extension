@@ -10,6 +10,12 @@ build({
   outdir: './dist',
   bundle: true,
   sourcemap: 'inline',
-}).catch(() => {
-  process.exit(1)
 })
+  .then(() => {
+    console.log('')
+    console.log('----------------- esbuild completed -----------------')
+    console.log('')
+  })
+  .catch(() => {
+    process.exit(1)
+  })

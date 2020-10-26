@@ -6,12 +6,16 @@
   "dependencies": {},
   "devDependencies": {
     "esbuild": "^0.7.21",
-    "prettier": "^2.1.2"
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2",
+    "typescript": "^4.0.3"
   },
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "build": "run-p esbuild typeCheck",
     "esbuild": "node esbuild.js",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "typeCheck": "tsc --noEmit"
   }
 }
