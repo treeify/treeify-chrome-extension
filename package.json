@@ -5,6 +5,7 @@
   "author": "",
   "dependencies": {},
   "devDependencies": {
+    "cpx": "^1.5.0",
     "esbuild": "^0.7.21",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
@@ -13,7 +14,8 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "build": "run-p esbuild typeCheck",
+    "copy": "cpx static/** dist",
+    "build": "run-p esbuild typeCheck copy",
     "esbuild": "node esbuild.js",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "typeCheck": "tsc --noEmit"
