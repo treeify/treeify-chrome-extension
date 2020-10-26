@@ -1,0 +1,39 @@
+{
+  "manifest_version": 2,
+  "version": "0.1.0",
+  "name": "Treeify",
+  "description": "",
+  "background": {
+    "scripts": [
+      "Background/entryPoint.js"
+    ],
+    "persistent": true
+  },
+  "browser_action": {
+    "default_icon": {
+      "19": "image/app-icon/19px.png"
+    },
+    "default_title": "Treeify",
+    "default_popup": "BrowserAction/index.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "match_about_blank": true,
+      "js": [
+        "ContentScript/entryPoint.js"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "image/app-icon/16px.png",
+    "48": "image/app-icon/48px.png",
+    "128": "image/app-icon/128px.png"
+  },
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "permissions": [
+    "tabs"
+  ]
+}
