@@ -12,15 +12,17 @@
     "esbuild": "^0.7.21",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.1.2",
-    "typescript": "^4.0.3"
+    "typescript": "^4.0.3",
+    "watch": "^1.0.2"
   },
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "copy": "cpx static/** dist",
     "build": "run-p esbuild typeCheck copy",
+    "copy": "cpx static/** dist",
     "esbuild": "node esbuild.js",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "typeCheck": "tsc --noEmit"
+    "typeCheck": "tsc --noEmit --extendedDiagnostics",
+    "watch": "watch \"npm run build\" ./src"
   }
 }
