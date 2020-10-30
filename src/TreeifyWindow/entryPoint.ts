@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {render} from 'lit-html'
-import {ItemType} from 'src/Common/typeAlias'
+import {ItemType} from 'src/Common/basicType'
 import {ItemTreeRootView, ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
 
 // テスト用のViewModel

@@ -1,5 +1,5 @@
 import {is, List} from 'immutable'
-import {ItemId} from 'src/Common/typeAlias'
+import {ItemId} from 'src/Common/basicType'
 
 /** アイテムの親子関係がなす有向グラフにおけるパス */
 export class ItemPath {

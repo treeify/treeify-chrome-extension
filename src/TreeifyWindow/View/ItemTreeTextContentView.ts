@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
+import {ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
-import {ItemType} from 'src/Common/typeAlias'
 
 export type ItemTreeTextContentViewModel = {
   itemType: ItemType.TEXT

@@ -1,6 +1,6 @@
 import {TemplateResult} from 'lit-html'
+import {ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
-import {ItemType} from 'src/Common/typeAlias'
 import {ItemTreeTextContentView, ItemTreeTextContentViewModel} from './ItemTreeTextContentView'
 
 export type ItemTreeContentViewModel = ItemTreeTextContentViewModel
