@@ -12,3 +12,7 @@ export type integer = number
  * 先頭文字が大文字になっている理由はitemIdという変数名を使いたいから。
  */
 export type ItemId = integer
+
+export enum ItemType {
+  TEXT = 'Text',
+}
