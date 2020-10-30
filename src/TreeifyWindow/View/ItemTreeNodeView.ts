@@ -1,6 +1,10 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {
+  ItemTreeBulletView,
+  ItemTreeBulletViewModel,
+} from 'src/TreeifyWindow/View/ItemTreeBulletView'
+import {
   ItemTreeContentView,
   ItemTreeContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTreeContentView'
@@ -8,6 +12,7 @@ import {
 export type ItemTreeNodeViewModel = {
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
+  bulletViewModel: ItemTreeBulletViewModel
 }
 
 /** アイテムツリーの各アイテムのルートView */
@@ -16,7 +21,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   // TODO: インデントラインを表示する
   return html`<div class="item-tree-node">
     <!-- バレット領域 -->
-    <div class="item-tree-node-bullet-area"></div>
+    <div class="item-tree-node-bullet-area">${ItemTreeBulletView(viewModel.bulletViewModel)}</div>
     <!-- コンテンツ領域 -->
     <div class="item-tree-node-content-area">
       ${ItemTreeContentView(viewModel.contentViewModel)}
