@@ -10,5 +10,7 @@ export type ItemTreeTextContentViewModel = {
 
 /** テキストアイテムのコンテンツ領域のView */
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel): TemplateResult {
-  return html`<div contenteditable>${DomishObject.toTemplateResult(viewModel.domishObjects)}</div>`
+  return html`<div class="item-tree-text-content" contenteditable>
+    ${DomishObject.toTemplateResult(viewModel.domishObjects)}
+  </div>`
 }
