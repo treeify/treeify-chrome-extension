@@ -1,6 +1,7 @@
 import {List} from 'immutable'
 import {render} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
+import {BulletState} from 'src/TreeifyWindow/View/ItemTreeBulletView'
 import {ItemTreeRootView, ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
 
 // テスト用のViewModel
@@ -31,7 +32,9 @@ const itemTreeRootViewModel: ItemTreeRootViewModel = {
             }),
           },
           childItemViewModels: List.of(),
+          bulletViewModel: {bulletState: BulletState.NO_CHILDREN},
         }),
+        bulletViewModel: {bulletState: BulletState.UNFOLDED},
       },
       {
         contentViewModel: {
@@ -42,8 +45,10 @@ const itemTreeRootViewModel: ItemTreeRootViewModel = {
           }),
         },
         childItemViewModels: List.of(),
+        bulletViewModel: {bulletState: BulletState.FOLDED},
       }
     ),
+    bulletViewModel: {bulletState: BulletState.UNFOLDED},
   },
 }
 

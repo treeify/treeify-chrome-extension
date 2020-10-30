@@ -1,10 +1,57 @@
-
 :root {
-    /** インデント領域の幅 */
-    --item-tree-indent-area-width: 14px
+  /** インデント領域の幅 */
+  --item-tree-indent-area-width: 14px;
+
+  /* バレットの外側の円の直径 */
+  --bullet-outer-circle-diameter: 14px;
+  /* バレットの外側の円の色 */
+  --bullet-outer-circle-color: hsl(0, 0%, 80%);
+  /* バレットの内側の円の直径 */
+  --bullet-inner-circle-diameter: 5px;
+  /* バレットの内側の円の色 */
+  --bullet-inner-circle-color: hsl(0, 0%, 20%);
 }
 
 .item-tree-node {
-    display: grid;
-    grid-template-columns: var(--item-tree-indent-area-width) 1fr;
+  display: grid;
+  grid-template-columns: var(--item-tree-indent-area-width) 1fr;
+}
+
+/* アイテムツリーのバレットコンポーネントのルート要素 */
+.item-tree-bullet {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
+.item-tree-bullet_outer-circle {
+  width: var(--bullet-outer-circle-diameter);
+  height: var(--bullet-outer-circle-diameter);
+  border-radius: 50%;
+  background: var(--bullet-outer-circle-color);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* アイテムツリーのバレットの内側の円 */
+.item-tree-bullet_inner-circle {
+  width: var(--bullet-inner-circle-diameter);
+  height: var(--bullet-inner-circle-diameter);
+  border-radius: 50%;
+  background: var(--bullet-inner-circle-color);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.item-tree-text-content {
+  font-size: 15px;
 }
