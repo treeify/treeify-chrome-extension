@@ -1,0 +1,10 @@
+
+:root {
+    /** インデント領域の幅 */
+    --item-tree-indent-area-width: 14px
+}
+
+.item-tree-node {
+    display: grid;
+    grid-template-columns: var(--item-tree-indent-area-width) 1fr;
+}
