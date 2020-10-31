@@ -1,5 +1,6 @@
 import {is, List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** アイテムの親子関係がなす有向グラフにおけるパス */
 export class ItemPath {
@@ -10,7 +11,9 @@ export class ItemPath {
 
   /** パスの終点アイテムのIDを返す */
   get itemId(): ItemId {
-    return this.itemIds.last()
+    const last = this.itemIds.last(undefined)
+    assertNonUndefined(last)
+    return last
   }
 
   /** パスの終点より1つ前のアイテムのIDを返す */
