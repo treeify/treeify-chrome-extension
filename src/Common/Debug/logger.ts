@@ -24,6 +24,10 @@ export function log(...args: any[]) {
 
 // DOM要素などJSON.stringifyに適さないオブジェクトを考慮したフォーマット関数
 function formatForConsole(value: any): any {
+  // 一部の型へのアドホックな対策
+  if (value instanceof Event) return value
+  if (value instanceof Node) return value
+
   // JSON.stringifyは循環参照を持つ場合に例外を投げるのでその対策
   try {
     return toString(value)
