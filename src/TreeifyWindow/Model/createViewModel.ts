@@ -1,7 +1,9 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
+import {DomishObject} from 'src/Common/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {Item, State} from 'src/TreeifyWindow/Model/State'
 import {BulletState, ItemTreeBulletViewModel} from 'src/TreeifyWindow/View/ItemTreeBulletView'
 import {ItemTreeContentViewModel} from 'src/TreeifyWindow/View/ItemTreeContentView'
@@ -36,6 +38,14 @@ function createItemTreeContentViewModel(state: State, item: Item): ItemTreeConte
       return {
         itemType: ItemType.TEXT,
         domishObjects: state.textItems[item.itemId].domishObjects,
+        onInput: (event) => {
+          // contenteditableな要素の編集時、Stateに反映する
+          if (event.target instanceof Node) {
+            const domishObjects = DomishObject.fromChildren(event.target)
+            NextState.setTextItemDomishObjects(item.itemId, domishObjects)
+            NextState.commit()
+          }
+        },
       }
     default:
       assertNeverType(item.itemType)
