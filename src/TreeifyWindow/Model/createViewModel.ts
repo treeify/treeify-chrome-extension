@@ -24,31 +24,40 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
 
   return {
     bulletViewModel: createItemTreeBulletViewModel(item),
-    contentViewModel: createItemTreeContentViewModel(state, item),
+    contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
     }),
   }
 }
 
-function createItemTreeContentViewModel(state: State, item: Item): ItemTreeContentViewModel {
+function createItemTreeContentViewModel(
+  state: State,
+  itemPath: ItemPath,
+  itemType: ItemType
+): ItemTreeContentViewModel {
   // アイテムタイプごとの固有部分を追加して返す
-  switch (item.itemType) {
+  switch (itemType) {
     case ItemType.TEXT:
       return {
         itemType: ItemType.TEXT,
-        domishObjects: state.textItems[item.itemId].domishObjects,
+        domishObjects: state.textItems[itemPath.itemId].domishObjects,
         onInput: (event) => {
           // contenteditableな要素の編集時、Stateに反映する
           if (event.target instanceof Node) {
             const domishObjects = DomishObject.fromChildren(event.target)
-            NextState.setTextItemDomishObjects(item.itemId, domishObjects)
+            NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
             NextState.commit()
           }
         },
+        onFocus: (event) => {
+          // contenteditableな要素の編集時、Stateに反映する
+          NextState.setActiveItemPath(itemPath)
+          NextState.commit()
+        },
       }
     default:
-      assertNeverType(item.itemType)
+      assertNeverType(itemType)
   }
 }
 

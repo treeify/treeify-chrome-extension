@@ -15,7 +15,7 @@ export function ItemTreeBulletView(viewModel: ItemTreeBulletViewModel): Template
   return html`<div class="item-tree-bullet">
     ${viewModel.bulletState === BulletState.FOLDED
       ? html`<div class="item-tree-bullet_outer-circle" />`
-      : null}
+      : undefined}
     <div class="item-tree-bullet_inner-circle" />
   </div>`
 }

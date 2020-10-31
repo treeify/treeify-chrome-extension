@@ -1,6 +1,7 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
+import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
@@ -9,6 +10,7 @@ export type State = {
   textItems: {[index: number]: TextItem}
   nextNewItemId: ItemId
   activePageId: ItemId
+  activeItemPath: ItemPath | null
 }
 
 /**

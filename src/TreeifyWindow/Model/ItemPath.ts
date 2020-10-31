@@ -17,9 +17,9 @@ export class ItemPath {
   }
 
   /** パスの終点より1つ前のアイテムのIDを返す */
-  get parentItemId(): ItemId | null {
+  get parentItemId(): ItemId | undefined {
     if (!this.hasParent()) {
-      return null
+      return undefined
     }
     return this.itemIds.get(this.itemIds.size - 2) as ItemId
   }
@@ -30,13 +30,13 @@ export class ItemPath {
 
   /**
    * 親ItemPathを返す。
-   * もし無い場合はnullを返す。
+   * もし無い場合はundefinedを返す。
    */
-  get parent(): ItemPath | null {
+  get parent(): ItemPath | undefined {
     if (this.hasParent()) {
       return new ItemPath(this.itemIds.pop())
     } else {
-      return null
+      return undefined
     }
   }
 
@@ -46,8 +46,8 @@ export class ItemPath {
   }
 
   /** このItemPathの末尾のItemIdを置き換えることで新しいItemPathを作成する */
-  createSiblingItemPath(siblingItemId: ItemId): ItemPath | null {
-    return this.parent?.createChildItemPath(siblingItemId) ?? null
+  createSiblingItemPath(siblingItemId: ItemId): ItemPath | undefined {
+    return this.parent?.createChildItemPath(siblingItemId)
   }
 
   /** 2つのItemPathが同一内容かどうかを判定する */

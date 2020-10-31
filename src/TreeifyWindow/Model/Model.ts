@@ -106,6 +106,7 @@ export class Model {
       },
       nextNewItemId: 5,
       activePageId: 0,
+      activeItemPath: null,
     }
   }
 }
