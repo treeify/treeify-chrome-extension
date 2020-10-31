@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {StackFrame, StackTrace} from 'src/Common/Debug/StackTrace'
 
 /**
@@ -6,18 +7,20 @@ import {StackFrame, StackTrace} from 'src/Common/Debug/StackTrace'
  */
 export function dump(...args: any[]) {
   const stackFrame = new StackTrace().getStackFrameAt(1)
-  console.groupCollapsed(stackFrame.getArgString(), '=', ...args.map(formatForConsole))
-  console.log(createCallerInfoString(stackFrame))
-  console.groupEnd()
-}
-
-/**
- * console.logに色々な機能を追加したユーティリティ関数。
- * 呼び出し元に関する情報を収集し、それらも合わせて表示する。
- */
-export function log(...args: any[]) {
-  const stackFrame = new StackTrace().getStackFrameAt(1)
-  console.groupCollapsed(...args.map(formatForConsole))
+  const argString = stackFrame.getArgString()
+  const eachArgString = argString.split(', ')
+  if (eachArgString.length === args.length) {
+    const collection = List(eachArgString)
+      .zip(List(args.map(formatForConsole)))
+      .map(([a, b]) => [a, '=', b, ', '])
+      .toArray()
+      .flat()
+    // 末尾のコンマを削除
+    collection.pop()
+    console.groupCollapsed(...collection)
+  } else {
+    console.groupCollapsed(argString, '=', ...args.map(formatForConsole))
+  }
   console.log(createCallerInfoString(stackFrame))
   console.groupEnd()
 }
