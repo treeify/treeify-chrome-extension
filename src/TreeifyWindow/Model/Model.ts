@@ -1,14 +1,19 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
+import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
 import {State} from 'src/TreeifyWindow/Model/State'
 
 export class Model {
   private static singletonInstance: Model
 
+  private readonly stateChangeListeners = new Set<(newState: State) => void>()
+
   currentState: State
+  nextState: Batchizer
 
   private constructor() {
     this.currentState = Model.createInitialState()
+    this.nextState = new Batchizer(this.currentState)
   }
 
   /** シングルトンインスタンスを取得する */
@@ -17,6 +22,25 @@ export class Model {
       this.singletonInstance = new Model()
     }
     return this.singletonInstance
+  }
+
+  /** Stateへの変更を確定する */
+  commit() {
+    const modifiedPropertyPath = [...this.nextState.getAllModifiedPropertyPath()]
+    if (modifiedPropertyPath.length === 0) {
+      // 空コミット時
+      this.nextState.commit()
+      return
+    }
+
+    this.nextState.commit()
+    for (const stateChangeListener of this.stateChangeListeners) {
+      stateChangeListener(this.currentState)
+    }
+  }
+
+  addStateChangeListener(listener: (newState: State) => void) {
+    this.stateChangeListeners.add(listener)
   }
 
   private static createInitialState(): State {
