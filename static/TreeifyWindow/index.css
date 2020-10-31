@@ -54,4 +54,6 @@
 
 .item-tree-text-content {
   font-size: 15px;
+  /* contenteditableな要素のフォーカス時の枠線を非表示 */
+  outline: 0 solid transparent;
 }
