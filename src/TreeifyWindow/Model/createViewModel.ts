@@ -52,7 +52,6 @@ function createItemTreeContentViewModel(
           }
         },
         onFocus: (event) => {
-          // contenteditableな要素の編集時、Stateに反映する
           NextState.setActiveItemPath(itemPath)
           NextState.commit()
         },

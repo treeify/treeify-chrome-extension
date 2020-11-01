@@ -9,10 +9,18 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 export type DomishObject = DomishObject.Element | DomishObject.TextNode
 
 export namespace DomishObject {
-  export type Element = BElement | BRElement
+  export type Element = BElement | UElement | IElement | BRElement
 
   export type BElement = {
     type: 'b'
+    children: List<DomishObject>
+  }
+  export type UElement = {
+    type: 'u'
+    children: List<DomishObject>
+  }
+  export type IElement = {
+    type: 'i'
     children: List<DomishObject>
   }
 
@@ -35,6 +43,10 @@ export namespace DomishObject {
       switch (domishObject.type) {
         case 'b':
           return html`<b>${domishObject.children.map(toTemplateResult)}</b>`
+        case 'u':
+          return html`<u>${domishObject.children.map(toTemplateResult)}</u>`
+        case 'i':
+          return html`<i>${domishObject.children.map(toTemplateResult)}</i>`
         case 'br':
           return html`<br />`
         case 'text':
@@ -67,11 +79,22 @@ export namespace DomishObject {
       return {type: 'text', textContent: node.textContent ?? ''}
     }
     if (node instanceof HTMLElement) {
-      if (node.tagName.toLowerCase() === 'b') {
-        return {
-          type: 'b',
-          children: fromChildren(node),
-        }
+      switch (node.tagName.toLowerCase()) {
+        case 'b':
+          return {
+            type: 'b',
+            children: fromChildren(node),
+          }
+        case 'u':
+          return {
+            type: 'u',
+            children: fromChildren(node),
+          }
+        case 'i':
+          return {
+            type: 'i',
+            children: fromChildren(node),
+          }
       }
       return undefined
     }
