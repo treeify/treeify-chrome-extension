@@ -1,4 +1,5 @@
-import {TemplateResult} from 'lit-html'
+import {html, TemplateResult} from 'lit-html'
+import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {ItemTreeNodeView, ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
 
 export type ItemTreeRootViewModel = {
@@ -7,5 +8,20 @@ export type ItemTreeRootViewModel = {
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeRootView(viewModel: ItemTreeRootViewModel): TemplateResult {
-  return ItemTreeNodeView(viewModel.rootNodeViewModel)
+  return html`<div @paste=${onPaste} @focusout=${onFocusOut}>
+    ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
+  </div>`
+}
+
+// ペースト時にプレーンテキスト化する
+function onPaste(event: ClipboardEvent) {
+  event.preventDefault()
+  const text = event.clipboardData?.getData('text/plain')
+  document.execCommand('insertText', false, text)
+}
+
+// フォーカスが外れたらアクティブアイテムをnullにする
+function onFocusOut(event: FocusEvent) {
+  NextState.setActiveItemPath(null)
+  NextState.commit()
 }

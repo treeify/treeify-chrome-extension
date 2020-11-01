@@ -10,8 +10,15 @@ import {BulletState, ItemTreeBulletViewModel} from 'src/TreeifyWindow/View/ItemT
 import {ItemTreeContentViewModel} from 'src/TreeifyWindow/View/ItemTreeContentView'
 import {ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
 import {ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
+import {RootViewModel} from 'src/TreeifyWindow/View/RootView'
 
-export function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel {
+export function createRootViewModel(state: State): RootViewModel {
+  return {
+    itemTreeRootViewModel: createItemTreeRootViewModel(state),
+  }
+}
+
+function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel {
   const rootItemPath = new ItemPath(List.of(state.activePageId))
   return {
     rootNodeViewModel: createItemTreeNodeViewModel(state, rootItemPath),
