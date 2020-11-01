@@ -79,23 +79,22 @@ export namespace DomishObject {
       return {type: 'text', textContent: node.textContent ?? ''}
     }
     if (node instanceof HTMLElement) {
-      if (node.tagName.toLowerCase() === 'b') {
-        return {
-          type: 'b',
-          children: fromChildren(node),
-        }
-      }
-      if (node.tagName.toLowerCase() === 'u') {
-        return {
-          type: 'u',
-          children: fromChildren(node),
-        }
-      }
-      if (node.tagName.toLowerCase() === 'i') {
-        return {
-          type: 'i',
-          children: fromChildren(node),
-        }
+      switch (node.tagName.toLowerCase()) {
+        case 'b':
+          return {
+            type: 'b',
+            children: fromChildren(node),
+          }
+        case 'u':
+          return {
+            type: 'u',
+            children: fromChildren(node),
+          }
+        case 'i':
+          return {
+            type: 'i',
+            children: fromChildren(node),
+          }
       }
       return undefined
     }
