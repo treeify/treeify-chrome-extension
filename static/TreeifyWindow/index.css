@@ -1,15 +1,33 @@
 :root {
+  --item-tree-base-font-size: 18px;
+
+  /*
+  アイテムツリーのテキスト全般に適用されるline-height。
+  階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
+  */
+  --item-tree-line-height: 1.3;
+  /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+  --item-tree-font-size-multiplicator: 97%;
+
+  /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
+  --calculated-item-tree-line-height: calc(1em * var(--item-tree-line-height));
+
   /** インデント領域の幅 */
-  --item-tree-indent-area-width: 14px;
+  --item-tree-indent-area-width: var(--calculated-item-tree-line-height);
 
   /* バレットの外側の円の直径 */
-  --bullet-outer-circle-diameter: 14px;
+  --bullet-outer-circle-diameter: 100%;
   /* バレットの外側の円の色 */
   --bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの内側の円の直径 */
-  --bullet-inner-circle-diameter: 5px;
+  --bullet-inner-circle-diameter: 35%;
   /* バレットの内側の円の色 */
   --bullet-inner-circle-color: hsl(0, 0%, 20%);
+}
+
+.item-tree-root {
+  font-size: var(--item-tree-base-font-size);
+  line-height: var(--item-tree-line-height);
 }
 
 .item-tree-node {
@@ -17,11 +35,23 @@
   grid-template-columns: var(--item-tree-indent-area-width) 1fr;
 }
 
-/* アイテムツリーのバレットコンポーネントのルート要素 */
+.item-tree-node_children-area {
+  font-size: var(--item-tree-font-size-multiplicator);
+}
+
+.item-tree-node_bullet-and-indent-area {
+  grid-row: 1 / 3;
+
+  display: flex;
+  justify-content: center;
+}
+
+/* アイテムツリーのバレットのルート要素 */
 .item-tree-bullet {
-  width: 100%;
-  height: 100%;
+  width: var(--item-tree-indent-area-width);
+  height: var(--item-tree-indent-area-width);
   position: relative;
+  /*cursor: pointer;*/
 }
 
 /* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
@@ -53,7 +83,6 @@
 }
 
 .item-tree-text-content {
-  font-size: 15px;
   /* contenteditableな要素のフォーカス時の枠線を非表示 */
   outline: 0 solid transparent;
 }

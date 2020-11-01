@@ -8,7 +8,7 @@ export type ItemTreeRootViewModel = {
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeRootView(viewModel: ItemTreeRootViewModel): TemplateResult {
-  return html`<div @paste=${onPaste} @focusout=${onFocusOut}>
+  return html`<div class="item-tree-root" @paste=${onPaste} @focusout=${onFocusOut}>
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </div>`
 }

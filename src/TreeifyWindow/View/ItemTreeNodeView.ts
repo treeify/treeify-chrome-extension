@@ -20,16 +20,17 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   // TODO: バレットを表示する
   // TODO: インデントラインを表示する
   return html`<div class="item-tree-node">
-    <!-- バレット領域 -->
-    <div class="item-tree-node-bullet-area">${ItemTreeBulletView(viewModel.bulletViewModel)}</div>
+    <!-- バレットとインデントラインの領域 -->
+    <div class="item-tree-node_bullet-and-indent-area">
+      ${ItemTreeBulletView(viewModel.bulletViewModel)}
+      <div class="item-tree-node_indent-area"></div>
+    </div>
     <!-- コンテンツ領域 -->
     <div class="item-tree-node-content-area">
       ${ItemTreeContentView(viewModel.contentViewModel)}
     </div>
-    <!-- インデント領域 -->
-    <div class="item-tree-node-indent-area"></div>
     <!-- 子リスト領域 -->
-    <div class="item-tree-node-children-area">
+    <div class="item-tree-node_children-area">
       ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
     </div>
   </div>`
