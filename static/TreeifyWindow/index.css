@@ -39,23 +39,26 @@
   font-size: var(--item-tree-font-size-multiplicator);
 }
 
-.item-tree-node_bullet-and-indent-area {
+.item-tree-node_spool-area {
   grid-row: 1 / 3;
 
   display: flex;
   justify-content: center;
 }
 
-/* アイテムツリーのバレットのルート要素 */
-.item-tree-bullet {
-  width: var(--item-tree-indent-area-width);
-  height: var(--item-tree-indent-area-width);
-  position: relative;
+/* アイテムツリーのバレットとインデントのルート要素 */
+.item-tree-spool {
   /*cursor: pointer;*/
 }
 
+.item-tree-spool_bullet-area {
+  width: var(--item-tree-indent-area-width);
+  height: var(--item-tree-indent-area-width);
+  position: relative;
+}
+
 /* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
-.item-tree-bullet_outer-circle {
+.item-tree-spool_outer-circle {
   width: var(--bullet-outer-circle-diameter);
   height: var(--bullet-outer-circle-diameter);
   border-radius: 50%;
@@ -69,7 +72,7 @@
 }
 
 /* アイテムツリーのバレットの内側の円 */
-.item-tree-bullet_inner-circle {
+.item-tree-spool_inner-circle {
   width: var(--bullet-inner-circle-diameter);
   height: var(--bullet-inner-circle-diameter);
   border-radius: 50%;
