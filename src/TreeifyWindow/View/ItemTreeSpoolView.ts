@@ -14,7 +14,11 @@ export type ItemTreeSpoolViewModel = {
 /** アイテムツリーのバレットとインデント */
 export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateResult {
   return html`<div class="item-tree-spool" @click=${viewModel.onClick}>
-    <div class="item-tree-spool_indent-area"><div class="item-tree-spool_indent-line"></div></div>
+    ${viewModel.bulletState === BulletState.NO_CHILDREN
+      ? undefined
+      : html`<div class="item-tree-spool_indent-area">
+          <div class="item-tree-spool_indent-line"></div>
+        </div>`}
     <div class="item-tree-spool_bullet-area">
       ${viewModel.bulletState === BulletState.FOLDED
         ? html`<div class="item-tree-spool_outer-circle"></div>`
