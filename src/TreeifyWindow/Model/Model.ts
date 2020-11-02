@@ -52,6 +52,7 @@ export class Model {
           childItemIds: List.of(1, 2),
           parentItemIds: List.of(),
           isFolded: false,
+          timestamp: 1604284090000,
         },
         1: {
           itemId: 1,
@@ -59,6 +60,7 @@ export class Model {
           childItemIds: List.of(3),
           parentItemIds: List.of(0),
           isFolded: false,
+          timestamp: 1604284090001,
         },
         2: {
           itemId: 2,
@@ -66,6 +68,7 @@ export class Model {
           childItemIds: List.of(4),
           parentItemIds: List.of(0),
           isFolded: true,
+          timestamp: 1604284090002,
         },
         3: {
           itemId: 3,
@@ -73,6 +76,7 @@ export class Model {
           childItemIds: List.of(),
           parentItemIds: List.of(1),
           isFolded: false,
+          timestamp: 1604284090003,
         },
         4: {
           itemId: 4,
@@ -80,6 +84,7 @@ export class Model {
           childItemIds: List.of(),
           parentItemIds: List.of(2),
           isFolded: false,
+          timestamp: 1604284090004,
         },
       },
       textItems: {
