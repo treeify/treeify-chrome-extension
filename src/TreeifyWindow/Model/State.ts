@@ -1,6 +1,7 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
+import {Timestamp} from 'src/Common/Timestamp'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
@@ -23,6 +24,8 @@ export type Item = {
   childItemIds: List<ItemId>
   parentItemIds: List<ItemId>
   isFolded: boolean
+  /** 足跡表示機能で使われるタイムスタンプ */
+  timestamp: Timestamp
 }
 
 /** テキストアイテムが固有で持つデータの型 */
