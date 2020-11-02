@@ -115,6 +115,7 @@ export class Model {
       activeItemPath: null,
       itemTreeInputBinding: {
         '0000Tab': new Command('indentItem'),
+        '0100Tab': new Command('unindentItem'),
       },
     }
   }

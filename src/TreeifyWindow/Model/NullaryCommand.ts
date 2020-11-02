@@ -10,6 +10,7 @@ export namespace NullaryCommand {
   export const functions: {[name: string]: () => void} = {
     toggleFolded,
     indentItem,
+    unindentItem,
   }
 
   /** アクティブアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
@@ -47,5 +48,27 @@ export namespace NullaryCommand {
 
     // アクティブアイテムパスを移動先に更新する
     NextState.setActiveItemPath(prevSiblingItemPath.createChildItemPath(activeItemPath.itemId))
+  }
+
+  /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
+  export function unindentItem() {
+    const activeItemPath = NextState.getActiveItemPath()
+    if (activeItemPath === null) return
+
+    // 親または親の親が居ない場合は何もしない
+    if (activeItemPath.parent === undefined) return
+    if (activeItemPath.parent.parent === undefined) return
+
+    // 既存の親子関係を削除
+    const activeItemId = activeItemPath.itemId
+    NextState.removeItemGraphEdge(activeItemPath.parent.itemId, activeItemId)
+
+    // 親の弟として配置する
+    NextState.insertNextSiblingItem(activeItemPath.parent, activeItemId)
+
+    NextState.updateItemTimestamp(activeItemPath.itemId)
+
+    // アクティブアイテムパスを移動先に更新する
+    NextState.setActiveItemPath(activeItemPath.parent.createSiblingItemPath(activeItemId)!!)
   }
 }
