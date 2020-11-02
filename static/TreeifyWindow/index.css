@@ -16,11 +16,11 @@
   --item-tree-indent-area-width: var(--calculated-item-tree-line-height);
 
   /* バレットの外側の円の直径 */
-  --bullet-outer-circle-diameter: 100%;
+  --bullet-outer-circle-diameter: 90%;
   /* バレットの外側の円の色 */
   --bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの内側の円の直径 */
-  --bullet-inner-circle-diameter: 35%;
+  --bullet-inner-circle-diameter: 30%;
   /* バレットの内側の円の色 */
   --bullet-inner-circle-color: hsl(0, 0%, 20%);
 
