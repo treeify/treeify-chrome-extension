@@ -23,6 +23,13 @@
   --bullet-inner-circle-diameter: 35%;
   /* バレットの内側の円の色 */
   --bullet-inner-circle-color: hsl(0, 0%, 20%);
+
+  /* インデントラインの太さ */
+  --indent-line-width: 1px;
+  /* インデントラインの色 */
+  --indent-line-color: hsl(0, 0%, 90%);
+  /* インデントラインの色（ホバー時） */
+  --indent-line-hover-color: hsl(0, 0%, 70%);
 }
 
 .item-tree-root {
@@ -48,7 +55,8 @@
 
 /* アイテムツリーのバレットとインデントのルート要素 */
 .item-tree-spool {
-  /*cursor: pointer;*/
+  position: relative;
+  cursor: pointer;
 }
 
 .item-tree-spool_bullet-area {
@@ -83,6 +91,27 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+/* インデント領域 */
+.item-tree-spool_indent-area {
+  position: absolute;
+  top: calc(var(--item-tree-indent-area-width) / 2);
+  height: calc(100% - var(--item-tree-indent-area-width) / 2);
+  width: 100%;
+}
+
+/* インデントライン */
+.item-tree-spool_indent-line {
+  background-color: var(--indent-line-color);
+  width: var(--indent-line-width);
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* バレットとインデントの領域のホバー時のインデントライン */
+.item-tree-spool:hover .item-tree-spool_indent-line {
+  background-color: var(--indent-line-hover-color);
 }
 
 .item-tree-text-content {
