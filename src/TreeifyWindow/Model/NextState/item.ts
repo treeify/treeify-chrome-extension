@@ -1,5 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
+import {Timestamp} from 'src/Common/Timestamp'
 import {Mutation, PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
@@ -36,6 +37,11 @@ export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
 export function setItemProperty(itemId: ItemId, propertyName: keyof Item, value: any) {
   const propertyKeys = PropertyPath.of('items', itemId, propertyName)
   getBatchizer().postMutation(propertyKeys, new Mutation.Set(value))
+}
+
+/** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
+export function updateItemTimestamp(itemId: ItemId) {
+  setItemProperty(itemId, 'timestamp', Timestamp.now())
 }
 
 /**

@@ -9,5 +9,6 @@ export namespace NullaryCommand {
 
     const activeItemId = activeItemPath.itemId
     NextState.setItemProperty(activeItemId, 'isFolded', !NextState.getItemIsFolded(activeItemId))
+    NextState.updateItemTimestamp(activeItemId)
   }
 }
