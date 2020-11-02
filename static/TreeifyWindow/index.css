@@ -1,15 +1,40 @@
 :root {
+  --item-tree-base-font-size: 18px;
+
+  /*
+  アイテムツリーのテキスト全般に適用されるline-height。
+  階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
+  */
+  --item-tree-line-height: 1.3;
+  /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+  --item-tree-font-size-multiplicator: 97%;
+
+  /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
+  --calculated-item-tree-line-height: calc(1em * var(--item-tree-line-height));
+
   /** インデント領域の幅 */
-  --item-tree-indent-area-width: 14px;
+  --item-tree-indent-area-width: var(--calculated-item-tree-line-height);
 
   /* バレットの外側の円の直径 */
-  --bullet-outer-circle-diameter: 14px;
+  --bullet-outer-circle-diameter: 90%;
   /* バレットの外側の円の色 */
   --bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの内側の円の直径 */
-  --bullet-inner-circle-diameter: 5px;
+  --bullet-inner-circle-diameter: 30%;
   /* バレットの内側の円の色 */
   --bullet-inner-circle-color: hsl(0, 0%, 20%);
+
+  /* インデントラインの太さ */
+  --indent-line-width: 1px;
+  /* インデントラインの色 */
+  --indent-line-color: hsl(0, 0%, 90%);
+  /* インデントラインの色（ホバー時） */
+  --indent-line-hover-color: hsl(0, 0%, 70%);
+}
+
+.item-tree-root {
+  font-size: var(--item-tree-base-font-size);
+  line-height: var(--item-tree-line-height);
 }
 
 .item-tree-node {
@@ -17,15 +42,31 @@
   grid-template-columns: var(--item-tree-indent-area-width) 1fr;
 }
 
-/* アイテムツリーのバレットコンポーネントのルート要素 */
-.item-tree-bullet {
-  width: 100%;
-  height: 100%;
+.item-tree-node_children-area {
+  font-size: var(--item-tree-font-size-multiplicator);
+}
+
+.item-tree-node_spool-area {
+  grid-row: 1 / 3;
+
+  display: flex;
+  justify-content: center;
+}
+
+/* アイテムツリーのバレットとインデントのルート要素 */
+.item-tree-spool {
+  position: relative;
+  cursor: pointer;
+}
+
+.item-tree-spool_bullet-area {
+  width: var(--item-tree-indent-area-width);
+  height: var(--item-tree-indent-area-width);
   position: relative;
 }
 
 /* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
-.item-tree-bullet_outer-circle {
+.item-tree-spool_outer-circle {
   width: var(--bullet-outer-circle-diameter);
   height: var(--bullet-outer-circle-diameter);
   border-radius: 50%;
@@ -39,7 +80,7 @@
 }
 
 /* アイテムツリーのバレットの内側の円 */
-.item-tree-bullet_inner-circle {
+.item-tree-spool_inner-circle {
   width: var(--bullet-inner-circle-diameter);
   height: var(--bullet-inner-circle-diameter);
   border-radius: 50%;
@@ -52,8 +93,28 @@
   transform: translate(-50%, -50%);
 }
 
+/* インデント領域 */
+.item-tree-spool_indent-area {
+  position: absolute;
+  top: calc(var(--item-tree-indent-area-width) / 2);
+  height: calc(100% - var(--item-tree-indent-area-width) / 2);
+  width: 100%;
+}
+
+/* インデントライン */
+.item-tree-spool_indent-line {
+  background-color: var(--indent-line-color);
+  width: var(--indent-line-width);
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* バレットとインデントの領域のホバー時のインデントライン */
+.item-tree-spool:hover .item-tree-spool_indent-line {
+  background-color: var(--indent-line-hover-color);
+}
+
 .item-tree-text-content {
-  font-size: 15px;
   /* contenteditableな要素のフォーカス時の枠線を非表示 */
   outline: 0 solid transparent;
 }

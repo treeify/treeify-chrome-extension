@@ -1,35 +1,28 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {
-  ItemTreeBulletView,
-  ItemTreeBulletViewModel,
-} from 'src/TreeifyWindow/View/ItemTreeBulletView'
-import {
   ItemTreeContentView,
   ItemTreeContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTreeContentView'
+import {ItemTreeSpoolView, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
 
 export type ItemTreeNodeViewModel = {
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
-  bulletViewModel: ItemTreeBulletViewModel
+  spoolViewModel: ItemTreeSpoolViewModel
 }
 
 /** アイテムツリーの各アイテムのルートView */
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
-  // TODO: バレットを表示する
-  // TODO: インデントラインを表示する
   return html`<div class="item-tree-node">
-    <!-- バレット領域 -->
-    <div class="item-tree-node-bullet-area">${ItemTreeBulletView(viewModel.bulletViewModel)}</div>
+    <!-- バレットとインデントラインの領域 -->
+    <div class="item-tree-node_spool-area">${ItemTreeSpoolView(viewModel.spoolViewModel)}</div>
     <!-- コンテンツ領域 -->
     <div class="item-tree-node-content-area">
       ${ItemTreeContentView(viewModel.contentViewModel)}
     </div>
-    <!-- インデント領域 -->
-    <div class="item-tree-node-indent-area"></div>
     <!-- 子リスト領域 -->
-    <div class="item-tree-node-children-area">
+    <div class="item-tree-node_children-area">
       ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
     </div>
   </div>`

@@ -6,10 +6,10 @@ import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {Item, State} from 'src/TreeifyWindow/Model/State'
-import {BulletState, ItemTreeBulletViewModel} from 'src/TreeifyWindow/View/ItemTreeBulletView'
 import {ItemTreeContentViewModel} from 'src/TreeifyWindow/View/ItemTreeContentView'
 import {ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
 import {ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
+import {BulletState, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
 import {RootViewModel} from 'src/TreeifyWindow/View/RootView'
 
 export function createRootViewModel(state: State): RootViewModel {
@@ -31,7 +31,7 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
   const visibleChildItemIds: List<ItemId> = item.isFolded ? List.of() : item.childItemIds
 
   return {
-    bulletViewModel: createItemTreeBulletViewModel(itemPath, item),
+    spoolViewModel: createItemTreeSpoolViewModel(itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
@@ -68,7 +68,7 @@ function createItemTreeContentViewModel(
   }
 }
 
-function createItemTreeBulletViewModel(itemPath: ItemPath, item: Item): ItemTreeBulletViewModel {
+function createItemTreeSpoolViewModel(itemPath: ItemPath, item: Item): ItemTreeSpoolViewModel {
   const onClick = () => {
     NextState.setActiveItemPath(itemPath)
     NullaryCommand.toggleFolded()
