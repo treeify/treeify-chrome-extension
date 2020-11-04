@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/Common/basicType'
+import {ItemId, ItemType, StableTabId} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {Command} from 'src/TreeifyWindow/Model/Command'
@@ -10,6 +10,7 @@ export type State = {
   /** キーの型はItemIdと書きたいが、TypeScriptの仕様上numberとしか書けない */
   items: {[index: number]: Item}
   textItems: {[index: number]: TextItem}
+  webPageItems: {[index: number]: WebPageItem}
   nextNewItemId: ItemId
   activePageId: ItemId
   activeItemPath: ItemPath | null
@@ -38,4 +39,19 @@ export type Item = {
 export type TextItem = {
   itemId: ItemId
   domishObjects: List<DomishObject>
+}
+
+/** ウェブページアイテムが固有で持つデータの型 */
+export type WebPageItem = {
+  itemId: ItemId
+  /**
+   * このアイテムと対応するタブのID。
+   * 対応するタブがない場合はnull。
+   */
+  stableTabId: StableTabId | null
+  url: string
+  // タブを閉じた後もファビコンを表示するために、このオブジェクトで保持する
+  faviconUrl: string
+  // タブを閉じた後もタイトルを表示するために、このオブジェクトで保持する
+  tabTitle: string
 }

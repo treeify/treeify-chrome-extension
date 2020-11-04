@@ -63,6 +63,11 @@ function createItemTreeContentViewModel(
           NextState.commit()
         },
       }
+    case ItemType.WEB_PAGE:
+      return {
+        itemType: ItemType.WEB_PAGE,
+        title: state.webPageItems[itemPath.itemId].tabTitle,
+      }
     default:
       assertNeverType(itemType)
   }
