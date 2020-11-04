@@ -1,4 +1,3 @@
-import equal from 'fast-deep-equal/es6'
 import {List} from 'immutable'
 
 /**
@@ -100,21 +99,6 @@ export class Batchizer {
   clearPostedMutations() {
     this.mutationsWeakMap = new WeakMap<ShadowObject, List<Mutation>>()
     this.shadowObject = {}
-  }
-
-  /**
-   * 値が変化した全てのプロパティのキーを返す。
-   * 値の同値性判定にはdeepEqualityを用いる。
-   */
-  *getAllModifiedPropertyPath(): Generator<PropertyPath> {
-    const propertyPath = Batchizer.yieldPropertyPath(this.shadowObject, PropertyPath.of())
-    for (const propertyKey of propertyPath) {
-      const oldValue = this.getOriginalValue(propertyKey)
-      const newValue = this.getDerivedValue(propertyKey)
-      if (!equal(oldValue, newValue)) {
-        yield propertyKey
-      }
-    }
   }
 
   // ShadowObjectを探索し、全てのPropertyPathを返す
