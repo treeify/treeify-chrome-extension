@@ -11,6 +11,7 @@ export namespace NullaryCommand {
     toggleFolded,
     indentItem,
     unindentItem,
+    moveItemUpward,
   }
 
   /** アクティブアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
@@ -70,5 +71,50 @@ export namespace NullaryCommand {
 
     // アクティブアイテムパスを移動先に更新する
     NextState.setActiveItemPath(activeItemPath.parent.createSiblingItemPath(activeItemId)!!)
+  }
+
+  /**
+   * アイテムをドキュメント順で1つ上に移動するコマンド。
+   * 親が居ない場合など、そのような移動ができない場合は何もしない。
+   */
+  export function moveItemUpward() {
+    const activeItemPath = NextState.getActiveItemPath()
+    if (activeItemPath === null) return
+
+    const aboveItemPath = NextState.findAboveItemPath(activeItemPath)
+    // 1つ上のアイテムが存在しない場合は何もしない
+    if (aboveItemPath === undefined) return
+    // 1つ上のアイテムがアクティブページである場合も何もしない
+    if (aboveItemPath.parentItemId === undefined) return
+
+    // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
+    // 兄弟リスト内に同一アイテムが複数存在する状況は（NextStateの途中状態だったとしても）許容しない。
+    // なぜならindexOfなどで不具合が起こることが目に見えているから。
+    // そのため、旧エッジ削除の前に新エッジ追加を行ってはならない。
+    // 一方、新エッジ追加の前に旧エッジ削除を行おうとしても、
+    // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
+    // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
+
+    if (aboveItemPath.parentItemId === activeItemPath.parentItemId) {
+      // 1つ上のアイテムが兄である場合、兄弟リスト内を兄方向に1つ移動する
+      NextState.moveToPrevSibling(activeItemPath)
+
+      NextState.updateItemTimestamp(activeItemPath.itemId)
+
+      // 兄弟リスト内での入れ替えだけならアクティブアイテムパスは変化しないので更新不要
+    } else {
+      // 1つ上のアイテムの兄になるようアクティブアイテムを配置
+      NextState.insertPrevSiblingItem(aboveItemPath, activeItemPath.itemId)
+
+      // 既存の親子関係を削除
+      NextState.removeItemGraphEdge(activeItemPath.parentItemId!!, activeItemPath.itemId)
+
+      NextState.updateItemTimestamp(activeItemPath.itemId)
+
+      // アクティブアイテムパスを移動先に更新する
+      const newActiveItemPath = aboveItemPath.createSiblingItemPath(activeItemPath.itemId)
+      assertNonUndefined(newActiveItemPath)
+      NextState.setActiveItemPath(newActiveItemPath)
+    }
   }
 }
