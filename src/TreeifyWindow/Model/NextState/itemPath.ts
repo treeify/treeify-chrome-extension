@@ -16,7 +16,7 @@ export function setActiveItemPath(itemPath: ItemPath | null) {
 }
 
 /**
- * 1つ上のアイテムのアイテムパスを返す。
+ * ドキュメント順で1つ上のアイテムのアイテムパスを返す。
  * 例えば
  * A
  * | B
@@ -25,8 +25,6 @@ export function setActiveItemPath(itemPath: ItemPath | null) {
  * というツリーにおいてDの上のアイテムはCであり、Cの上のアイテムはBである。
  *
  * アクティブページには1つ上のアイテムが存在しないのでundefinedを返す。
- *
- * 「上の行のアイテム」と呼びたいところだが、複数行の可能性があるのでその呼び方は避ける。
  */
 export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
   // 親が居ない場合（アクティブページの場合）は上のアイテムは存在しない
@@ -43,7 +41,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
 }
 
 /**
- * 1つ下のアイテムのアイテムパスを返す。
+ * ドキュメント順で1つ下のアイテムのアイテムパスを返す。
  * 例えば
  * A
  * | B
@@ -52,8 +50,6 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  * というツリーにおいてBの下のアイテムはCであり、Cの下のアイテムはDである。
  *
  * 該当アイテムが存在しない場合はundefinedを返す。
- *
- * 「下の行のアイテム」と呼びたいところだが、複数行の可能性があるのでその呼び方は避ける。
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   const firstChildItemId = NextState.getDisplayingChildItemIds(itemPath.itemId).first(undefined)

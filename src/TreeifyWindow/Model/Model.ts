@@ -1,6 +1,7 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
+import {Command} from 'src/TreeifyWindow/Model/Command'
 import {State} from 'src/TreeifyWindow/Model/State'
 
 export class Model {
@@ -112,6 +113,12 @@ export class Model {
       nextNewItemId: 5,
       activePageId: 0,
       activeItemPath: null,
+      itemTreeInputBinding: {
+        '0000Tab': new Command('indentItem'),
+        '0100Tab': new Command('unindentItem'),
+        '1000ArrowUp': new Command('moveItemUpward'),
+        '1000ArrowDown': new Command('moveItemDownward'),
+      },
     }
   }
 }
