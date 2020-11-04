@@ -12,6 +12,7 @@ export namespace NullaryCommand {
     indentItem,
     unindentItem,
     moveItemUpward,
+    moveItemDownward,
   }
 
   /** アクティブアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
@@ -114,6 +115,70 @@ export namespace NullaryCommand {
       // アクティブアイテムパスを移動先に更新する
       const newActiveItemPath = aboveItemPath.createSiblingItemPath(activeItemPath.itemId)
       assertNonUndefined(newActiveItemPath)
+      NextState.setActiveItemPath(newActiveItemPath)
+    }
+  }
+
+  /**
+   * ドキュメント順でアイテムを1つ下に移動するコマンド。
+   * すでに下端の場合など、そのような移動ができない場合は何もしない。
+   */
+  export function moveItemDownward() {
+    const activeItemPath = NextState.getActiveItemPath()
+    if (activeItemPath === null) return
+
+    // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
+    const firstFollowingItemPath = NextState.findFirstFollowingItemPath(activeItemPath)
+    // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
+    if (firstFollowingItemPath === undefined) return
+
+    if (NextState.getDisplayingChildItemIds(firstFollowingItemPath.itemId).isEmpty()) {
+      // 1つ下のアイテムが子を表示していない場合
+
+      // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
+      // 兄弟リスト内に同一アイテムが複数存在する状況は（NextStateの途中状態だったとしても）許容しない。
+      // なぜならindexOfなどで不具合が起こることが目に見えているから。
+      // そのため、旧エッジ削除の前に新エッジ追加を行ってはならない。
+      // 一方、新エッジ追加の前に旧エッジ削除を行おうとしても、
+      // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
+      // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
+
+      if (firstFollowingItemPath.parentItemId === activeItemPath.parentItemId) {
+        // 兄弟リスト内を弟方向に1つ移動する
+        NextState.moveToNextSibling(activeItemPath)
+
+        NextState.updateItemTimestamp(activeItemPath.itemId)
+
+        // 兄弟リスト内での入れ替えだけならアクティブアイテムパスは変化しないので更新不要
+      } else {
+        // 弟になるようアクティブアイテムを配置
+        NextState.insertNextSiblingItem(firstFollowingItemPath, activeItemPath.itemId)
+
+        // 既存の親子関係を削除
+        NextState.removeItemGraphEdge(activeItemPath.parentItemId!!, activeItemPath.itemId)
+
+        NextState.updateItemTimestamp(activeItemPath.itemId)
+
+        // アクティブアイテムパスを移動先に更新する
+        const newActiveItemPath = firstFollowingItemPath.createSiblingItemPath(
+          activeItemPath.itemId
+        )
+        assertNonUndefined(newActiveItemPath)
+        NextState.setActiveItemPath(newActiveItemPath)
+      }
+    } else {
+      // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
+
+      // 最初の子になるようアクティブアイテムを配置
+      NextState.insertFirstChildItem(firstFollowingItemPath, activeItemPath.itemId)
+
+      // 既存の親子関係を削除
+      NextState.removeItemGraphEdge(activeItemPath.parentItemId!!, activeItemPath.itemId)
+
+      NextState.updateItemTimestamp(activeItemPath.itemId)
+
+      // アクティブアイテムパスを移動先に更新する
+      const newActiveItemPath = firstFollowingItemPath.createChildItemPath(activeItemPath.itemId)
       NextState.setActiveItemPath(newActiveItemPath)
     }
   }

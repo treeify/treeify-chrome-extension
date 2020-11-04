@@ -117,6 +117,7 @@ export class Model {
         '0000Tab': new Command('indentItem'),
         '0100Tab': new Command('unindentItem'),
         '1000ArrowUp': new Command('moveItemUpward'),
+        '1000ArrowDown': new Command('moveItemDownward'),
       },
     }
   }
