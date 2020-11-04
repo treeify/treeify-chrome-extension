@@ -27,13 +27,6 @@ export class Model {
 
   /** Stateへの変更を確定する */
   commit() {
-    const modifiedPropertyPath = [...this.nextState.getAllModifiedPropertyPath()]
-    if (modifiedPropertyPath.length === 0) {
-      // 空コミット時
-      this.nextState.commit()
-      return
-    }
-
     this.nextState.commit()
     for (const stateChangeListener of this.stateChangeListeners) {
       stateChangeListener(this.currentState)
