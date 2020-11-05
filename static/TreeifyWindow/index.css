@@ -30,6 +30,9 @@
   --indent-line-color: hsl(0, 0%, 90%);
   /* インデントラインの色（ホバー時） */
   --indent-line-hover-color: hsl(0, 0%, 70%);
+
+  /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
+  --item-tree-favicon-size: 1em;
 }
 
 .item-tree-root {
@@ -114,7 +117,27 @@
   background-color: var(--indent-line-hover-color);
 }
 
+/* テキストアイテムのコンテンツ領域のルート */
 .item-tree-text-content {
   /* contenteditableな要素のフォーカス時の枠線を非表示 */
   outline: 0 solid transparent;
+}
+
+/* ウェブページアイテムのコンテンツ領域のルート */
+.item-tree-web-page-content {
+  /* ファビコンとタイトルなどを横並びにする */
+  display: flex;
+  align-items: center;
+}
+
+/* ウェブページアイテムのファビコン */
+.item-tree-web-page-content_favicon {
+  width: var(--item-tree-favicon-size);
+  height: var(--item-tree-favicon-size);
+}
+
+/* ウェブページアイテムのタイトル */
+.item-tree-web-page-content_title {
+  /* テキスト折り返しを禁止 */
+  white-space: nowrap;
 }
