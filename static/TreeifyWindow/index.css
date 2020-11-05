@@ -128,6 +128,9 @@
   /* ファビコンとタイトルなどを横並びにする */
   display: flex;
   align-items: center;
+
+  /* フォーカス時の枠線を非表示 */
+  outline: 0 solid transparent;
 }
 
 /* ウェブページアイテムのファビコン */

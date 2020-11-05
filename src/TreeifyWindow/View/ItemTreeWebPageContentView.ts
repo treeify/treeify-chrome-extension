@@ -11,7 +11,7 @@ export type ItemTreeWebPageContentViewModel = {
 export function ItemTreeWebPageContentView(
   viewModel: ItemTreeWebPageContentViewModel
 ): TemplateResult {
-  return html`<div class="item-tree-web-page-content">
+  return html`<div class="item-tree-web-page-content" tabindex="0">
     <img class="item-tree-web-page-content_favicon" src=${viewModel.faviconUrl} />
     <div class="item-tree-web-page-content_title">${viewModel.title}</div>
   </div>`
