@@ -81,7 +81,7 @@ export class Batchizer {
   }
 
   /** Mutation.Setを作成・追加するユーティリティメソッド */
-  set(propertyPath: PropertyPath, value: any) {
+  postSetMutation(propertyPath: PropertyPath, value: any) {
     this.postMutation(propertyPath, new Mutation.Set(value))
   }
 

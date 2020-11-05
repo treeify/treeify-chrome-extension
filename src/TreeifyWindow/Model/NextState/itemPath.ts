@@ -1,4 +1,4 @@
-import {Mutation, PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 
@@ -9,10 +9,7 @@ export function getActiveItemPath(): ItemPath | null {
 
 /** アクティブアイテムパスを上書きする */
 export function setActiveItemPath(itemPath: ItemPath | null) {
-  NextState.getBatchizer().postMutation(
-    PropertyPath.of('activeItemPath'),
-    new Mutation.Set(itemPath)
-  )
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('activeItemPath'), itemPath)
 }
 
 /**
