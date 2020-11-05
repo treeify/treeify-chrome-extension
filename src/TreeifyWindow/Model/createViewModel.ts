@@ -63,6 +63,12 @@ function createItemTreeContentViewModel(
           NextState.commit()
         },
       }
+    case ItemType.WEB_PAGE:
+      return {
+        itemType: ItemType.WEB_PAGE,
+        title: state.webPageItems[itemPath.itemId].tabTitle,
+        faviconUrl: state.webPageItems[itemPath.itemId].faviconUrl,
+      }
     default:
       assertNeverType(itemType)
   }

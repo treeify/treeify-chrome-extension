@@ -43,7 +43,7 @@ export class Model {
         0: {
           itemId: 0,
           itemType: ItemType.TEXT,
-          childItemIds: List.of(1, 2),
+          childItemIds: List.of(1, 2, 5),
           parentItemIds: List.of(),
           isFolded: false,
           timestamp: 1604284090000,
@@ -80,6 +80,14 @@ export class Model {
           isFolded: false,
           timestamp: 1604284090004,
         },
+        5: {
+          itemId: 5,
+          itemType: ItemType.WEB_PAGE,
+          childItemIds: List.of(),
+          parentItemIds: List.of(0),
+          isFolded: false,
+          timestamp: 1604284090005,
+        },
       },
       textItems: {
         0: {
@@ -103,7 +111,16 @@ export class Model {
           domishObjects: List.of({type: 'text', textContent: 'invisible child'}),
         },
       },
-      nextNewItemId: 5,
+      webPageItems: {
+        5: {
+          itemId: 5,
+          stableTabId: null,
+          url: 'https://ao-system.net/favicon/',
+          faviconUrl: 'https://ao-system.net/favicon.ico',
+          tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
+        },
+      },
+      nextNewItemId: 6,
       activePageId: 0,
       activeItemPath: null,
       itemTreeInputBinding: {

@@ -15,4 +15,11 @@ export type ItemId = integer
 
 export enum ItemType {
   TEXT = 'Text',
+  WEB_PAGE = 'Web page',
 }
+
+/**
+ * Chromeの本来のタブID（chrome.tabs.Tab型のidプロパティ）はブラウザ再起動やタブのdiscardで変化してしまう。
+ * そこで、代わりに独自のタブIDを用いてタブを識別する。
+ */
+export type StableTabId = integer
