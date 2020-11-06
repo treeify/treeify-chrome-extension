@@ -13,6 +13,7 @@ export namespace NullaryCommand {
     unindentItem,
     moveItemUpward,
     moveItemDownward,
+    deleteItem,
     insertLineBreak,
   }
 
@@ -182,6 +183,25 @@ export namespace NullaryCommand {
       const newActiveItemPath = firstFollowingItemPath.createChildItemPath(activeItemPath.itemId)
       NextState.setActiveItemPath(newActiveItemPath)
     }
+  }
+
+  /**
+   * アイテムを削除するコマンド。
+   * アクティブアイテムがアクティブページの場合は何もしない。
+   */
+  export function deleteItem() {
+    const activeItemPath = NextState.getActiveItemPath()
+    if (activeItemPath === null) return
+
+    // アクティブページを削除しようとしている場合、何もしない
+    if (activeItemPath.parent == null) return
+
+    // 新たなアクティブアイテムとして上のアイテムを指定
+    const aboveItemPath = NextState.findAboveItemPath(activeItemPath)
+    assertNonUndefined(aboveItemPath)
+    NextState.setActiveItemPath(aboveItemPath)
+
+    NextState.deleteItem(activeItemPath.itemId)
   }
 
   /** contenteditableな要素で改行を実行する */

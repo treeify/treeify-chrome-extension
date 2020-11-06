@@ -1,10 +1,49 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
+import {assertNeverType} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
 import {Item} from 'src/TreeifyWindow/Model/State'
+
+/**
+ * 指定されたアイテムに関するデータを削除する。
+ * 削除によって親の数が0になった子アイテムも再帰的に削除する。
+ * キャレットの移動（アクティブアイテムの変更）は行わない。
+ */
+export function deleteItem(itemId: ItemId) {
+  for (const childItemId of NextState.getChildItemIds(itemId)) {
+    if (NextState.getParentItemIds(childItemId).size === 1) {
+      // 親を1つしか持たない子アイテムは再帰的に削除する
+      deleteItem(childItemId)
+    } else {
+      // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
+      modifyParentItems(childItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+    }
+  }
+
+  // 削除されるアイテムを親アイテムの子リストから削除する
+  for (const parentItemId of NextState.getParentItemIds(itemId)) {
+    modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+  }
+
+  // アイテムタイプごとのデータを削除する
+  const itemType = NextState.getItemType(itemId)
+  switch (itemType) {
+    case ItemType.TEXT:
+      NextState.deleteProperty(PropertyPath.of('textItems', itemId))
+      break
+    case ItemType.WEB_PAGE:
+      NextState.deleteProperty(PropertyPath.of('webPageItems', itemId))
+      break
+    default:
+      assertNeverType(itemType)
+  }
+
+  NextState.deleteProperty(PropertyPath.of('items', itemId))
+}
 
 /** 指定されたアイテムのアイテムタイプを返す */
 export function getItemType(itemId: ItemId): ItemType {
