@@ -13,8 +13,13 @@ export function commit() {
   Model.instance.commit()
 }
 
+/** 指定されたプロパティを削除する */
+export function deleteProperty(propertyKeys: PropertyPath) {
+  getBatchizer().postSetMutation(propertyKeys, undefined)
+}
+
 /** アイテムツリーのInputBindingからコマンドを取得する */
 export function getItemTreeCommand(inputId: InputId): Command | undefined {
-  const propertyKeys = PropertyPath.of('itemTreeInputBinding', inputId)
-  return NextState.getBatchizer().getDerivedValue(propertyKeys)
+  const propertyPath = PropertyPath.of('itemTreeInputBinding', inputId)
+  return NextState.getBatchizer().getDerivedValue(propertyPath)
 }
