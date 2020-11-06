@@ -1,10 +1,15 @@
 import {List} from 'immutable'
-import {ItemId} from 'src/Common/basicType'
+import {ItemId, ItemType} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
 import {Item} from 'src/TreeifyWindow/Model/State'
+
+/** 指定されたアイテムのアイテムタイプを返す */
+export function getItemType(itemId: ItemId): ItemType {
+  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'itemType'))
+}
 
 /** 指定されたアイテムの子アイテムIDリストを返す */
 export function getChildItemIds(itemId: ItemId): List<ItemId> {

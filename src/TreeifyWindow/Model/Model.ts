@@ -128,6 +128,7 @@ export class Model {
         '0100Tab': new Command('unindentItem'),
         '1000ArrowUp': new Command('moveItemUpward'),
         '1000ArrowDown': new Command('moveItemDownward'),
+        '0100Enter': new Command('insertLineBreak'),
       },
     }
   }
