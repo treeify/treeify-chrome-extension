@@ -13,6 +13,7 @@ export namespace NullaryCommand {
     unindentItem,
     moveItemUpward,
     moveItemDownward,
+    insertLineBreak,
   }
 
   /** アクティブアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
@@ -181,5 +182,10 @@ export namespace NullaryCommand {
       const newActiveItemPath = firstFollowingItemPath.createChildItemPath(activeItemPath.itemId)
       NextState.setActiveItemPath(newActiveItemPath)
     }
+  }
+
+  /** contenteditableな要素で改行を実行する */
+  export function insertLineBreak() {
+    document.execCommand('insertLineBreak')
   }
 }
