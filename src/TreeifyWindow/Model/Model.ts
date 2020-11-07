@@ -51,7 +51,7 @@ export class Model {
         1: {
           itemId: 1,
           itemType: ItemType.TEXT,
-          childItemIds: List.of(3),
+          childItemIds: List.of(3, 6),
           parentItemIds: List.of(0),
           isFolded: false,
           timestamp: 1604284090001,
@@ -88,6 +88,14 @@ export class Model {
           isFolded: false,
           timestamp: 1604284090005,
         },
+        6: {
+          itemId: 6,
+          itemType: ItemType.TEXT,
+          childItemIds: List.of(),
+          parentItemIds: List.of(1),
+          isFolded: false,
+          timestamp: 1604284090006,
+        },
       },
       textItems: {
         0: {
@@ -110,6 +118,10 @@ export class Model {
           itemId: 4,
           domishObjects: List.of({type: 'text', textContent: 'invisible child'}),
         },
+        6: {
+          itemId: 6,
+          domishObjects: List.of({type: 'text', textContent: '子ページ'}),
+        },
       },
       webPageItems: {
         5: {
@@ -120,7 +132,11 @@ export class Model {
           tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
         },
       },
-      nextNewItemId: 6,
+      pages: {
+        '0': {},
+        '6': {},
+      },
+      nextNewItemId: 7,
       activePageId: 0,
       activeItemPath: null,
       itemTreeInputBinding: {
