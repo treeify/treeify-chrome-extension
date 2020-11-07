@@ -23,6 +23,8 @@
   --bullet-inner-circle-diameter: 30%;
   /* バレットの内側の円の色 */
   --bullet-inner-circle-color: hsl(0, 0%, 20%);
+  /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
+  --bullet-page-icon-size: 100%;
 
   /* インデントラインの太さ */
   --indent-line-width: 1px;
@@ -96,6 +98,20 @@
   height: var(--bullet-inner-circle-diameter);
   border-radius: 50%;
   background: var(--bullet-inner-circle-color);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ページのバレット */
+.item-tree-spool_page-icon {
+  width: var(--bullet-page-icon-size);
+  height: var(--bullet-page-icon-size);
+  background-color: var(--bullet-inner-circle-color);
+  -webkit-mask-image: url('./page-icon.svg');
 
   /* 中央寄せ */
   position: absolute;

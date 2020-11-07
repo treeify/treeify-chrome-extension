@@ -31,7 +31,7 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
   const visibleChildItemIds: List<ItemId> = item.isFolded ? List.of() : item.childItemIds
 
   return {
-    spoolViewModel: createItemTreeSpoolViewModel(itemPath, item),
+    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
@@ -78,13 +78,22 @@ function createItemTreeContentViewModel(
   }
 }
 
-function createItemTreeSpoolViewModel(itemPath: ItemPath, item: Item): ItemTreeSpoolViewModel {
+function createItemTreeSpoolViewModel(
+  state: State,
+  itemPath: ItemPath,
+  item: Item
+): ItemTreeSpoolViewModel {
   const onClick = () => {
     NextState.setActiveItemPath(itemPath)
     NullaryCommand.toggleFolded()
     NextState.commit()
   }
-  if (item.childItemIds.size === 0) {
+  if (state.pages[item.itemId] !== undefined) {
+    return {
+      bulletState: BulletState.PAGE,
+      onClick,
+    }
+  } else if (item.childItemIds.size === 0) {
     return {
       bulletState: BulletState.NO_CHILDREN,
       onClick,
