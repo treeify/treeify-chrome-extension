@@ -1,4 +1,6 @@
-import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {ItemType} from 'src/Common/basicType'
+import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
+import {DomishObject} from 'src/Common/DomishObject'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 
 /** パラメータを持たないコマンドをまとめる名前空間 */
@@ -13,6 +15,7 @@ export namespace NullaryCommand {
     unindentItem,
     moveItemUpward,
     moveItemDownward,
+    enterKeyDefault,
     deleteItem,
     insertLineBreak,
   }
@@ -185,6 +188,76 @@ export namespace NullaryCommand {
     }
   }
 
+  /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
+  export function enterKeyDefault() {
+    const activeItemPath = NextState.getActiveItemPath()
+    if (activeItemPath === null) return
+
+    if (NextState.getItemType(activeItemPath.itemId) === ItemType.TEXT) {
+      // アクティブアイテムがテキストアイテムの場合
+
+      assertNonNull(document.activeElement)
+      const selection = getSelection()
+      assertNonNull(selection)
+
+      // TODO: キャレット位置による分岐を追加する
+
+      if (!NextState.getDisplayingChildItemIds(activeItemPath.itemId).isEmpty()) {
+        // もし子を表示しているなら
+
+        // キャレットより後ろのテキストをカットする
+        const range = selection.getRangeAt(0)
+        range.setEndAfter(document.activeElement.lastChild!)
+        const domishObjects = DomishObject.fromChildren(range.extractContents())
+
+        // 新規アイテムを最初の子として追加する
+        const newItemId = NextState.createTextItem()
+        NextState.insertFirstChildItem(activeItemPath, newItemId)
+        NextState.setTextItemDomishObjects(newItemId, domishObjects)
+
+        // アクティブアイテムを更新する
+        NextState.setActiveItemPath(activeItemPath.createChildItemPath(newItemId))
+        // TODO: キャレット位置を更新する
+      } else {
+        // もし子を表示していないなら
+
+        // キャレットより後ろのテキストをカットする
+        const range = selection.getRangeAt(0)
+        range.setEndAfter(document.activeElement.lastChild!)
+        const domishObjects = DomishObject.fromChildren(range.extractContents())
+
+        // 新規アイテムを弟として追加する
+        const newItemId = NextState.createTextItem()
+        NextState.insertNextSiblingItem(activeItemPath, newItemId)
+        NextState.setTextItemDomishObjects(newItemId, domishObjects)
+
+        // アクティブアイテムを更新する
+        NextState.setActiveItemPath(activeItemPath.createSiblingItemPath(newItemId)!!)
+        // TODO: キャレット位置を更新する
+      }
+    } else {
+      // アクティブアイテムがテキストアイテム以外の場合
+
+      if (!NextState.getDisplayingChildItemIds(activeItemPath.itemId).isEmpty()) {
+        // もし子を表示しているなら
+        // 新規アイテムを最初の子として追加する
+        const newItemId = NextState.createTextItem()
+        NextState.insertFirstChildItem(activeItemPath, newItemId)
+
+        // アクティブアイテムを更新する
+        NextState.setActiveItemPath(activeItemPath.createChildItemPath(newItemId))
+      } else {
+        // もし子を表示していないなら
+        // 新規アイテムを弟として追加する
+        const newItemId = NextState.createTextItem()
+        NextState.insertNextSiblingItem(activeItemPath, newItemId)
+
+        // アクティブアイテムを更新する
+        NextState.setActiveItemPath(activeItemPath.createSiblingItemPath(newItemId)!!)
+      }
+    }
+  }
+
   /**
    * アイテムを削除するコマンド。
    * アクティブアイテムがアクティブページの場合は何もしない。
@@ -194,7 +267,7 @@ export namespace NullaryCommand {
     if (activeItemPath === null) return
 
     // アクティブページを削除しようとしている場合、何もしない
-    if (activeItemPath.parent == null) return
+    if (activeItemPath.parent === null) return
 
     // 新たなアクティブアイテムとして上のアイテムを指定
     const aboveItemPath = NextState.findAboveItemPath(activeItemPath)
