@@ -233,3 +233,13 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId) {
   // アイテムの親リストから親アイテムを削除する
   modifyParentItems(itemId, (itemIds) => itemIds.remove(itemIds.indexOf(parentItemId)))
 }
+
+/** 次に使うべき新しいアイテムIDを返す */
+export function getNextNewItemId(): ItemId {
+  return getBatchizer().getDerivedValue(PropertyPath.of('nextNewItemId'))
+}
+
+/** 次に使うべき新しいアイテムIDを設定する */
+export function setNextNewItemId(itemId: ItemId) {
+  getBatchizer().postSetMutation(PropertyPath.of('nextNewItemId'), itemId)
+}
