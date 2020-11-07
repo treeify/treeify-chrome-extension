@@ -48,6 +48,11 @@
   grid-template-columns: var(--item-tree-indent-area-width) 1fr;
 }
 
+.item-tree-node-content-area:focus-within {
+  /* アクティブアイテムの強調表示 */
+  background: var(--active-item-background-color);
+}
+
 .item-tree-node_children-area {
   font-size: var(--item-tree-font-size-multiplicator);
 }
@@ -69,11 +74,6 @@
   width: var(--item-tree-indent-area-width);
   height: var(--item-tree-indent-area-width);
   position: relative;
-}
-
-.item-tree-node-content-area:focus-within {
-  /* アクティブアイテムの強調表示 */
-  background: var(--active-item-background-color);
 }
 
 /* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
