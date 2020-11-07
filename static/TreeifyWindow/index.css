@@ -129,6 +129,9 @@
 .item-tree-text-content {
   /* contenteditableな要素のフォーカス時の枠線を非表示 */
   outline: 0 solid transparent;
+
+  /* テキスト折り返しを禁止 */
+  white-space: nowrap;
 }
 
 /* ウェブページアイテムのコンテンツ領域のルート */
