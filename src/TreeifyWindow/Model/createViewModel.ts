@@ -68,6 +68,10 @@ function createItemTreeContentViewModel(
         itemType: ItemType.WEB_PAGE,
         title: state.webPageItems[itemPath.itemId].tabTitle,
         faviconUrl: state.webPageItems[itemPath.itemId].faviconUrl,
+        onFocus: (event) => {
+          NextState.setActiveItemPath(itemPath)
+          NextState.commit()
+        },
       }
     default:
       assertNeverType(itemType)
