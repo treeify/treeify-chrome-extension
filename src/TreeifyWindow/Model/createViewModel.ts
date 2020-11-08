@@ -28,7 +28,7 @@ function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel {
 // 再帰的にアイテムツリーのViewModelを作る
 function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTreeNodeViewModel {
   const item = state.items[itemPath.itemId]
-  const visibleChildItemIds: List<ItemId> = item.isFolded ? List.of() : item.childItemIds
+  const visibleChildItemIds = getVisibleChildItemIds(state, itemPath)
 
   return {
     isActivePage: !itemPath.hasParent(),
@@ -38,6 +38,15 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
       return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
     }),
   }
+}
+
+function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
+  const item = state.items[itemPath.itemId]
+  const isPage = state.pages[itemPath.itemId] !== undefined
+  if (isPage) {
+    return itemPath.hasParent() ? List.of() : item.childItemIds
+  }
+  return item.isFolded ? List.of() : item.childItemIds
 }
 
 function createItemTreeContentViewModel(
