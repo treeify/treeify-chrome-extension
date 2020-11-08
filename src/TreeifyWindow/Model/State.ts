@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId, ItemType, StableTabId} from 'src/Common/basicType'
+import {integer, ItemId, ItemType, StableTabId} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {Command} from 'src/TreeifyWindow/Model/Command'
@@ -15,6 +15,7 @@ export type State = {
   nextNewItemId: ItemId
   activePageId: ItemId
   activeItemPath: ItemPath | null
+  itemTreeTextItemSelection: TextItemSelection | null
   /**
    * キーボードやマウスでの入力とコマンドの対応付け。
    * キーの型はInputIdと書きたいが、TypeScriptの仕様上stringとしか書けない。
@@ -59,3 +60,9 @@ export type WebPageItem = {
 
 /** 各ページが持つデータの型 */
 export type Page = {}
+
+/** テキストアイテムのcontenteditableにおけるキャレット位置 */
+export type TextItemSelection = {
+  focusOffset: integer
+  anchorOffset: integer
+}
