@@ -7,6 +7,7 @@ export type ItemTreeTextContentViewModel = {
   itemType: ItemType.TEXT
   domishObjects: List<DomishObject>
   onInput: (event: InputEvent) => void
+  onCompositionEnd: (event: CompositionEvent) => void
   onFocus: (event: FocusEvent) => void
 }
 
@@ -18,6 +19,7 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
     class="item-tree-text-content"
     contenteditable
     @input=${viewModel.onInput}
+    @compositionend=${viewModel.onCompositionEnd}
     @focus=${viewModel.onFocus}
   >${(DomishObject.toTemplateResult(viewModel.domishObjects))}</div>`
 }
