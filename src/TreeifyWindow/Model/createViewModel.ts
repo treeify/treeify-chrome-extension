@@ -61,8 +61,17 @@ function createItemTreeContentViewModel(
         itemType: ItemType.TEXT,
         domishObjects: state.textItems[itemPath.itemId].domishObjects,
         onInput: (event) => {
-          // contenteditableな要素の編集時、Stateに反映する
+          // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
+          if (!event.isComposing && event.target instanceof Node) {
+            // contenteditableな要素のinnerHTMLをModelに反映する
+            const domishObjects = DomishObject.fromChildren(event.target)
+            NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+            NextState.commit()
+          }
+        },
+        onCompositionEnd: (event) => {
           if (event.target instanceof Node) {
+            // contenteditableな要素のinnerHTMLをModelに反映する
             const domishObjects = DomishObject.fromChildren(event.target)
             NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
             NextState.commit()
