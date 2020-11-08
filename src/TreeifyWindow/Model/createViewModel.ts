@@ -94,9 +94,15 @@ function createItemTreeSpoolViewModel(
   item: Item
 ): ItemTreeSpoolViewModel {
   const onClick = () => {
-    NextState.setActiveItemPath(itemPath)
-    NullaryCommand.toggleFolded()
-    NextState.commit()
+    if (NextState.isPage(itemPath.itemId)) {
+      // ページアイコンのクリック時はアクティブページを切り替える
+      NextState.setActivePageId(itemPath.itemId)
+      NextState.commit()
+    } else {
+      NextState.setActiveItemPath(itemPath)
+      NullaryCommand.toggleFolded()
+      NextState.commit()
+    }
   }
   if (state.pages[item.itemId] !== undefined) {
     return {
