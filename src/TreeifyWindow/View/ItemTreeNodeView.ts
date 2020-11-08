@@ -17,13 +17,15 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   return html`<div class="item-tree-node">
     <!-- バレットとインデントラインの領域 -->
     <div class="item-tree-node_spool-area">${ItemTreeSpoolView(viewModel.spoolViewModel)}</div>
-    <!-- コンテンツ領域 -->
-    <div class="item-tree-node-content-area">
-      ${ItemTreeContentView(viewModel.contentViewModel)}
-    </div>
-    <!-- 子リスト領域 -->
-    <div class="item-tree-node_children-area">
-      ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
+    <div class="item-tree-node-content-and-children-area">
+      <!-- コンテンツ領域 -->
+      <div class="item-tree-node-content-area">
+        ${ItemTreeContentView(viewModel.contentViewModel)}
+      </div>
+      <!-- 子リスト領域 -->
+      <div class="item-tree-node_children-area">
+        ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
+      </div>
     </div>
   </div>`
 }

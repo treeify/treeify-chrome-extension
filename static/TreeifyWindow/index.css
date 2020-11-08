@@ -46,10 +46,15 @@
 }
 
 .item-tree-node {
-  display: grid;
-  grid-template-columns: var(--item-tree-indent-area-width) 1fr;
+  display: flex;
 }
 
+.item-tree-node-content-and-children-area {
+  /* コンテンツ領域を右端まで伸ばす */
+  flex-grow: 1;
+}
+
+/* フォーカス時のコンテンツ領域 */
 .item-tree-node-content-area:focus-within {
   /* アクティブアイテムの強調表示 */
   background: var(--active-item-background-color);
@@ -59,15 +64,10 @@
   font-size: var(--item-tree-font-size-multiplicator);
 }
 
-.item-tree-node_spool-area {
-  grid-row: 1 / 3;
-
-  display: flex;
-  justify-content: center;
-}
-
 /* アイテムツリーのバレットとインデントのルート要素 */
 .item-tree-spool {
+  width: var(--item-tree-indent-area-width);
+  height: 100%;
   position: relative;
   cursor: pointer;
 }
