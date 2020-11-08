@@ -18,6 +18,7 @@ export namespace NullaryCommand {
     enterKeyDefault,
     deleteItem,
     insertLineBreak,
+    togglePaged,
   }
 
   /** アクティブアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
@@ -280,5 +281,20 @@ export namespace NullaryCommand {
   /** contenteditableな要素で改行を実行する */
   export function insertLineBreak() {
     document.execCommand('insertLineBreak')
+  }
+
+  /**
+   * アクティブアイテムがページなら非ページ化する。
+   * アクティブアイテムが非ページならページ化する。
+   */
+  export function togglePaged() {
+    const activeItemPath = NextState.getActiveItemPath()
+    if (activeItemPath === null) return
+
+    if (NextState.isPage(activeItemPath.itemId)) {
+      NextState.becomeNonPage(activeItemPath.itemId)
+    } else {
+      NextState.becomePage(activeItemPath.itemId)
+    }
   }
 }
