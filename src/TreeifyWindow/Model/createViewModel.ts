@@ -31,6 +31,7 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
   const visibleChildItemIds: List<ItemId> = item.isFolded ? List.of() : item.childItemIds
 
   return {
+    isActivePage: !itemPath.hasParent(),
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
