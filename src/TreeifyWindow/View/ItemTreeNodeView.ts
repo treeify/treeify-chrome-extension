@@ -7,6 +7,7 @@ import {
 import {ItemTreeSpoolView, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
 
 export type ItemTreeNodeViewModel = {
+  isActivePage: boolean
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
@@ -15,15 +16,23 @@ export type ItemTreeNodeViewModel = {
 /** アイテムツリーの各アイテムのルートView */
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
   return html`<div class="item-tree-node">
-    <!-- バレットとインデントラインの領域 -->
-    <div class="item-tree-node_spool-area">${ItemTreeSpoolView(viewModel.spoolViewModel)}</div>
-    <!-- コンテンツ領域 -->
-    <div class="item-tree-node-content-area">
-      ${ItemTreeContentView(viewModel.contentViewModel)}
-    </div>
-    <!-- 子リスト領域 -->
-    <div class="item-tree-node_children-area">
-      ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
+    ${viewModel.isActivePage
+      ? undefined
+      : html`
+          <!-- バレットとインデントラインの領域 -->
+          <div class="item-tree-node_spool-area">
+            ${ItemTreeSpoolView(viewModel.spoolViewModel)}
+          </div>
+        `}
+    <div class="item-tree-node-content-and-children-area">
+      <!-- コンテンツ領域 -->
+      <div class="item-tree-node-content-area">
+        ${ItemTreeContentView(viewModel.contentViewModel)}
+      </div>
+      <!-- 子リスト領域 -->
+      <div class="item-tree-node_children-area">
+        ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
+      </div>
     </div>
   </div>`
 }

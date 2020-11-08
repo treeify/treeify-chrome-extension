@@ -11,6 +11,7 @@ export type State = {
   items: {[index: number]: Item}
   textItems: {[index: number]: TextItem}
   webPageItems: {[index: number]: WebPageItem}
+  pages: {[index: number]: Page}
   nextNewItemId: ItemId
   activePageId: ItemId
   activeItemPath: ItemPath | null
@@ -55,3 +56,6 @@ export type WebPageItem = {
   // タブを閉じた後もタイトルを表示するために、このオブジェクトで保持する
   tabTitle: string
 }
+
+/** 各ページが持つデータの型 */
+export type Page = {}

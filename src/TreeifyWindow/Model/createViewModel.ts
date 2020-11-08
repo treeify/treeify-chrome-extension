@@ -28,15 +28,25 @@ function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel {
 // 再帰的にアイテムツリーのViewModelを作る
 function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTreeNodeViewModel {
   const item = state.items[itemPath.itemId]
-  const visibleChildItemIds: List<ItemId> = item.isFolded ? List.of() : item.childItemIds
+  const visibleChildItemIds = getVisibleChildItemIds(state, itemPath)
 
   return {
-    spoolViewModel: createItemTreeSpoolViewModel(itemPath, item),
+    isActivePage: !itemPath.hasParent(),
+    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
     }),
   }
+}
+
+function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
+  const item = state.items[itemPath.itemId]
+  const isPage = state.pages[itemPath.itemId] !== undefined
+  if (isPage) {
+    return itemPath.hasParent() ? List.of() : item.childItemIds
+  }
+  return item.isFolded ? List.of() : item.childItemIds
 }
 
 function createItemTreeContentViewModel(
@@ -78,13 +88,22 @@ function createItemTreeContentViewModel(
   }
 }
 
-function createItemTreeSpoolViewModel(itemPath: ItemPath, item: Item): ItemTreeSpoolViewModel {
+function createItemTreeSpoolViewModel(
+  state: State,
+  itemPath: ItemPath,
+  item: Item
+): ItemTreeSpoolViewModel {
   const onClick = () => {
     NextState.setActiveItemPath(itemPath)
     NullaryCommand.toggleFolded()
     NextState.commit()
   }
-  if (item.childItemIds.size === 0) {
+  if (state.pages[item.itemId] !== undefined) {
+    return {
+      bulletState: BulletState.PAGE,
+      onClick,
+    }
+  } else if (item.childItemIds.size === 0) {
     return {
       bulletState: BulletState.NO_CHILDREN,
       onClick,
