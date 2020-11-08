@@ -12,8 +12,10 @@ export type ItemTreeWebPageContentViewModel = {
 export function ItemTreeWebPageContentView(
   viewModel: ItemTreeWebPageContentViewModel
 ): TemplateResult {
+  const faviconUrl =
+    viewModel.faviconUrl.length > 0 ? viewModel.faviconUrl : './default-favicon.svg'
   return html`<div class="item-tree-web-page-content" tabindex="0" @focus=${viewModel.onFocus}>
-    <img class="item-tree-web-page-content_favicon" src=${viewModel.faviconUrl} />
+    <img class="item-tree-web-page-content_favicon" src=${faviconUrl} />
     <div class="item-tree-web-page-content_title">${viewModel.title}</div>
   </div>`
 }
