@@ -12,9 +12,6 @@
   /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
   --calculated-item-tree-line-height: calc(1em * var(--item-tree-line-height));
 
-  /** インデント領域の幅 */
-  --item-tree-indent-area-width: var(--calculated-item-tree-line-height);
-
   /* バレットの外側の円の直径 */
   --bullet-outer-circle-diameter: 90%;
   /* バレットの外側の円の色 */
@@ -46,6 +43,7 @@
 }
 
 .item-tree-node {
+  /* バレットやインデントの領域とその他の領域を水平に並べる */
   display: flex;
 }
 
@@ -61,20 +59,24 @@
 }
 
 .item-tree-node_children-area {
+  /* 階層の深さに応じてフォントサイズを小さくする */
   font-size: var(--item-tree-font-size-multiplicator);
 }
 
 /* アイテムツリーのバレットとインデントのルート要素 */
 .item-tree-spool {
-  width: var(--item-tree-indent-area-width);
+  width: var(--calculated-item-tree-line-height);
   height: 100%;
+  /* インデントラインをバレットの裏まで描画するための設定 */
   position: relative;
+
   cursor: pointer;
 }
 
 .item-tree-spool_bullet-area {
-  width: var(--item-tree-indent-area-width);
-  height: var(--item-tree-indent-area-width);
+  width: var(--calculated-item-tree-line-height);
+  height: var(--calculated-item-tree-line-height);
+  /* 外側の円と内側の円を重ねて描画するための設定 */
   position: relative;
 }
 
@@ -110,6 +112,8 @@
 .item-tree-spool_page-icon {
   width: var(--bullet-page-icon-size);
   height: var(--bullet-page-icon-size);
+
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
   background-color: var(--bullet-inner-circle-color);
   -webkit-mask-image: url('./page-icon.svg');
 
@@ -123,8 +127,9 @@
 /* インデント領域 */
 .item-tree-spool_indent-area {
   position: absolute;
-  top: calc(var(--item-tree-indent-area-width) / 2);
-  height: calc(100% - var(--item-tree-indent-area-width) / 2);
+  /* バレットの中心のY座標から子リストの下端までの領域にする */
+  top: calc(var(--calculated-item-tree-line-height) / 2);
+  height: calc(100% - var(--calculated-item-tree-line-height) / 2);
   width: 100%;
 }
 
