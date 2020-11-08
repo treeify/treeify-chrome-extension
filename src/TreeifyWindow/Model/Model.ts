@@ -139,6 +139,7 @@ export class Model {
       nextNewItemId: 7,
       activePageId: 0,
       activeItemPath: null,
+      itemTreeTextItemSelection: null,
       itemTreeInputBinding: {
         '0000Tab': new Command('indentItem'),
         '0100Tab': new Command('unindentItem'),
