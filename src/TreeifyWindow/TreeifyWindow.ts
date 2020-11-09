@@ -1,5 +1,5 @@
 import CreateData = chrome.windows.CreateData
-import {integer} from 'src/Common/basicType'
+import {integer, StableTab} from 'src/Common/basicType'
 
 export namespace TreeifyWindow {
   /**
@@ -23,6 +23,11 @@ export namespace TreeifyWindow {
         left: 0,
       })
     }
+  }
+
+  /** Treeifyウィンドウが既に存在するならtrueを返す */
+  export async function exists(): Promise<boolean> {
+    return (await findWindowId()) !== undefined
   }
 
   /**
@@ -60,5 +65,18 @@ export namespace TreeifyWindow {
     return new Promise((resolve, reject) => {
       chrome.windows.update(windowId, {focused: true}, () => resolve())
     })
+  }
+
+  /** Treeifyウィンドウ宛のメッセージを送信する */
+  export function sendMessage(message: Message) {
+    chrome.runtime.sendMessage(message)
+  }
+
+  /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
+  export type Message = OnTabCreated
+
+  export type OnTabCreated = {
+    type: 'OnTabCreated'
+    stableTab: StableTab
   }
 }
