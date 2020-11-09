@@ -23,3 +23,7 @@ export enum ItemType {
  * そこで、代わりに独自のタブIDを用いてタブを識別する。
  */
 export type StableTabId = integer
+
+export type StableTab = chrome.tabs.Tab & {
+  stableTabId: StableTabId
+}
