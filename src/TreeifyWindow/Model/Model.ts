@@ -130,6 +130,8 @@ export class Model {
           url: 'https://ao-system.net/favicon/',
           faviconUrl: 'https://ao-system.net/favicon.ico',
           tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
+          titleReplaceInputPattern: '',
+          titleReplaceOutputPattern: '',
         },
       },
       pages: {
