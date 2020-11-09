@@ -5,7 +5,7 @@ import {DomishObject} from 'src/Common/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
-import {Item, State} from 'src/TreeifyWindow/Model/State'
+import {Item, State, WebPageItem} from 'src/TreeifyWindow/Model/State'
 import {ItemTreeContentViewModel} from 'src/TreeifyWindow/View/ItemTreeContentView'
 import {ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
 import {ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
@@ -83,10 +83,11 @@ function createItemTreeContentViewModel(
         },
       }
     case ItemType.WEB_PAGE:
+      const webPageItem = state.webPageItems[itemPath.itemId]
       return {
         itemType: ItemType.WEB_PAGE,
-        title: state.webPageItems[itemPath.itemId].tabTitle,
-        faviconUrl: state.webPageItems[itemPath.itemId].faviconUrl,
+        title: webPageItemTitle(webPageItem),
+        faviconUrl: webPageItem.faviconUrl,
         onFocus: (event) => {
           NextState.setActiveItemPath(itemPath)
           NextState.commit()
@@ -94,6 +95,17 @@ function createItemTreeContentViewModel(
       }
     default:
       assertNeverType(itemType)
+  }
+}
+
+// 正規表現で置換されたタイトルを返す。
+// 正規表現にエラーがあった場合はタブのタイトルを返す。
+function webPageItemTitle(webPageItem: WebPageItem): string {
+  try {
+    const regExp = new RegExp(webPageItem.titleReplaceInputPattern)
+    return webPageItem.tabTitle.replace(regExp, webPageItem.titleReplaceOutputPattern)
+  } catch {
+    return webPageItem.tabTitle
   }
 }
 

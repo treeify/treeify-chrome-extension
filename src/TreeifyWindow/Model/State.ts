@@ -52,10 +52,27 @@ export type WebPageItem = {
    */
   stableTabId: StableTabId | null
   url: string
-  // タブを閉じた後もファビコンを表示するために、このオブジェクトで保持する
+  /**
+   * ファビコンのURL。
+   * 指定なしの場合は空文字列。
+   * タブを閉じた後もファビコンを表示するために、このオブジェクトで保持する。
+   */
   faviconUrl: string
-  // タブを閉じた後もタイトルを表示するために、このオブジェクトで保持する
+  /**
+   * タブのタイトル。
+   * タブを閉じた後もタイトルを表示するために、このオブジェクトで保持する。
+   */
   tabTitle: string
+  /**
+   * 正規表現によるタイトル置換の入力パターン。
+   * 例えば"(.*)"や""などが入る。
+   */
+  titleReplaceInputPattern: string
+  /**
+   * 正規表現によるタイトル置換の出力パターン。
+   * 例えば"$1"や""などが入る。
+   */
+  titleReplaceOutputPattern: string
 }
 
 /** 各ページが持つデータの型 */
