@@ -42,7 +42,7 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
       const inputId = InputId.fromMouseEvent(event)
       if (inputId === '0000MouseButton1') {
         event.preventDefault()
-        NextState.setActiveItemPath(itemPath)
+        NextState.setFocusedItemPath(itemPath)
         NullaryCommand.deleteItem()
         NextState.commit()
       }
@@ -88,7 +88,7 @@ function createItemTreeContentViewModel(
           }
         },
         onFocus: (event) => {
-          NextState.setActiveItemPath(itemPath)
+          NextState.setFocusedItemPath(itemPath)
           NextState.commit()
         },
       }
@@ -99,7 +99,7 @@ function createItemTreeContentViewModel(
         title: webPageItemTitle(webPageItem),
         faviconUrl: webPageItem.faviconUrl,
         onFocus: (event) => {
-          NextState.setActiveItemPath(itemPath)
+          NextState.setFocusedItemPath(itemPath)
           NextState.commit()
         },
       }
@@ -130,7 +130,7 @@ function createItemTreeSpoolViewModel(
       NextState.setActivePageId(itemPath.itemId)
       NextState.commit()
     } else {
-      NextState.setActiveItemPath(itemPath)
+      NextState.setFocusedItemPath(itemPath)
       NullaryCommand.toggleFolded()
       NextState.commit()
     }

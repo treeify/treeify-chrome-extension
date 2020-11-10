@@ -14,7 +14,7 @@ export type State = {
   pages: {[index: number]: Page}
   nextNewItemId: ItemId
   activePageId: ItemId
-  activeItemPath: ItemPath | null
+  focusedItemPath: ItemPath | null
   itemTreeTextItemSelection: TextItemSelection | null
   /**
    * キーボードやマウスでの入力とコマンドの対応付け。
