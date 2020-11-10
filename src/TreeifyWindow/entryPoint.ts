@@ -43,7 +43,7 @@ function getFocusOffset(): integer | undefined {
     const selection = document.getSelection()
     if (selection === null || selection.focusNode === null) return undefined
 
-    return distance(document.activeElement, selection.focusNode, selection.focusOffset)
+    return getDistance(document.activeElement, selection.focusNode, selection.focusOffset)
   } else {
     return undefined
   }
@@ -59,13 +59,13 @@ function getAnchorOffset(): integer | undefined {
     const selection = document.getSelection()
     if (selection === null || selection.anchorNode === null) return undefined
 
-    return distance(document.activeElement, selection.anchorNode, selection.anchorOffset)
+    return getDistance(document.activeElement, selection.anchorNode, selection.anchorOffset)
   } else {
     return undefined
   }
 }
 
-function distance(node: Node, targetNode: Node, targetOffset: integer = 0): integer {
+function getDistance(node: Node, targetNode: Node, targetOffset: integer = 0): integer {
   const range = document.createRange()
   range.setStart(node, 0)
   range.setEnd(targetNode, targetOffset)
