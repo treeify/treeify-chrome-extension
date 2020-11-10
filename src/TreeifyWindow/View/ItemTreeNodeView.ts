@@ -11,6 +11,7 @@ export type ItemTreeNodeViewModel = {
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
+  onMouseDownContentArea: (event: MouseEvent) => void
 }
 
 /** アイテムツリーの各アイテムのルートView */
@@ -26,7 +27,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
         `}
     <div class="item-tree-node-content-and-children-area">
       <!-- コンテンツ領域 -->
-      <div class="item-tree-node-content-area">
+      <div class="item-tree-node-content-area" @mousedown=${viewModel.onMouseDownContentArea}>
         ${ItemTreeContentView(viewModel.contentViewModel)}
       </div>
       <!-- 子リスト領域 -->

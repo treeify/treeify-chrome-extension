@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
+import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
@@ -37,6 +38,15 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
     }),
+    onMouseDownContentArea: (event: MouseEvent) => {
+      const inputId = InputId.fromMouseEvent(event)
+      if (inputId === '0000MouseButton1') {
+        event.preventDefault()
+        NextState.setActiveItemPath(itemPath)
+        NullaryCommand.deleteItem()
+        NextState.commit()
+      }
+    },
   }
 }
 
