@@ -36,8 +36,8 @@ function onPaste(event: ClipboardEvent) {
   document.execCommand('insertText', false, text)
 }
 
-// フォーカスが外れたらアクティブアイテムをnullにする
+// フォーカスが外れたらフォーカスアイテムをnullにする
 function onFocusOut(event: FocusEvent) {
-  NextState.setActiveItemPath(null)
+  NextState.setFocusedItemPath(null)
   NextState.commit()
 }

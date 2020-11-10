@@ -30,8 +30,8 @@
   /* インデントラインの色（ホバー時） */
   --indent-line-hover-color: hsl(0, 0%, 70%);
 
-  /* アクティブアイテムの背景色 */
-  --active-item-background-color: hsla(240, 100%, 50%, 0.06);
+  /* フォーカスアイテムの背景色 */
+  --focused-item-background-color: hsla(240, 100%, 50%, 0.06);
 
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
@@ -54,8 +54,8 @@
 
 /* フォーカス時のコンテンツ領域 */
 .item-tree-node-content-area:focus-within {
-  /* アクティブアイテムの強調表示 */
-  background: var(--active-item-background-color);
+  /* フォーカスアイテムの強調表示 */
+  background: var(--focused-item-background-color);
 }
 
 .item-tree-node_children-area {

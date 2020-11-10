@@ -2,14 +2,14 @@ import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 
-/** アクティブアイテムパスを返す */
-export function getActiveItemPath(): ItemPath | null {
-  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('activeItemPath'))
+/** フォーカスアイテムパスを返す */
+export function getFocusedItemPath(): ItemPath | null {
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('focusedItemPath'))
 }
 
-/** アクティブアイテムパスを上書きする */
-export function setActiveItemPath(itemPath: ItemPath | null) {
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('activeItemPath'), itemPath)
+/** フォーカスアイテムパスを上書きする */
+export function setFocusedItemPath(itemPath: ItemPath | null) {
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('focusedItemPath'), itemPath)
 }
 
 /**
