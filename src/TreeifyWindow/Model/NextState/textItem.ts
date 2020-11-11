@@ -22,8 +22,8 @@ export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List
 }
 
 /**
- * 新しいテキストアイテムを作成する。
- * このメソッドはアイテムの配置（親子関係の設定）は行わない。
+ * 新しい空のテキストアイテムを作成し、NextStateに登録する。
+ * ただしアイテムの配置（親子関係の設定）は行わない。
  */
 export function createTextItem(): ItemId {
   const newItemId = NextState.getNextNewItemId()
