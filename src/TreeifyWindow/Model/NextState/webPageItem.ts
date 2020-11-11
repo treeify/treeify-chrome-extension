@@ -37,3 +37,16 @@ export function createWebPageItem(): ItemId {
 
   return newItemId
 }
+
+/** ウェブページアイテムのタブタイトルを設定する */
+export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('webPageItems', itemId, 'tabTitle'),
+    tabTitle
+  )
+}
+
+/** ウェブページアイテムのURLを設定する */
+export function setWebPageItemUrl(itemId: ItemId, url: string) {
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('webPageItems', itemId, 'url'), url)
+}

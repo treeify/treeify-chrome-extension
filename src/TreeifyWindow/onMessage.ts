@@ -7,6 +7,9 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
     case 'OnTabCreated':
       // ウェブページアイテムを作る
       const newWebPageItemId = NextState.createWebPageItem()
+      NextState.setWebPageItemTabTitle(newWebPageItemId, message.stableTab.title ?? '')
+      const url = message.stableTab.url || message.stableTab.pendingUrl || ''
+      NextState.setWebPageItemUrl(newWebPageItemId, url)
 
       const focusedItemPath = NextState.getFocusedItemPath()
       // TODO: 残念ながら新しいタブを開いたときフォーカスアイテムはnullになっているので下記分岐は無意味
