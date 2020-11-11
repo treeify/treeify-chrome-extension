@@ -21,5 +21,5 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
     @input=${viewModel.onInput}
     @compositionend=${viewModel.onCompositionEnd}
     @focus=${viewModel.onFocus}
-  >${(DomishObject.toTemplateResult(viewModel.domishObjects))}</div>`
+  >${(DomishObject.toDocumentFragment(viewModel.domishObjects))}</div>`
 }

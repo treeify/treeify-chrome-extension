@@ -1,5 +1,4 @@
 import {List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
 import {assertNeverType} from 'src/Common/Debug/assert'
 
 /**
@@ -33,24 +32,35 @@ export namespace DomishObject {
     textContent: string
   }
 
-  /** DomishObjectをlit-htmlでDOM要素に変換する（厳密にはDOMではないが） */
-  export function toTemplateResult(value: DomishObject | List<DomishObject>): TemplateResult {
+  /**
+   * DomishObjectをDOM要素に変換する。
+   * 本来ならlit-htmlで描画したいところだが、contenteditableな要素のinnerHTMLをlit-htmlで描画すると編集時にエラーが出てしまう。
+   * https://github.com/Polymer/lit-html/issues/293#issuecomment-421491355
+   */
+  export function toDocumentFragment(value: DomishObject | List<DomishObject>): DocumentFragment {
+    const templateElement = document.createElement('template')
+    templateElement.innerHTML = toHtml(value)
+    return templateElement.content
+  }
+
+  // DomishObjectをHTML文字列に変換する
+  function toHtml(value: DomishObject | List<DomishObject>): string {
     if (value instanceof List) {
       const domishObjects = value as List<DomishObject>
-      return html`${domishObjects.map(toTemplateResult)}`
+      return domishObjects.map(toHtml).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
         case 'b':
-          return html`<b>${domishObject.children.map(toTemplateResult)}</b>`
+          return `<b>${toHtml(domishObject.children)}</b>`
         case 'u':
-          return html`<u>${domishObject.children.map(toTemplateResult)}</u>`
+          return `<u>${toHtml(domishObject.children)}</u>`
         case 'i':
-          return html`<i>${domishObject.children.map(toTemplateResult)}</i>`
+          return `<i>${toHtml(domishObject.children)}</i>`
         case 'br':
-          return html`<br />`
+          return `<br>`
         case 'text':
-          return html`${domishObject.textContent}`
+          return domishObject.textContent
         default:
           assertNeverType(domishObject)
       }
