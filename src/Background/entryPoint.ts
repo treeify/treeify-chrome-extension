@@ -1,8 +1,5 @@
-import {StableTab} from 'src/Common/basicType'
+import {onCreated, processExistingTabs} from 'src/Background/tabsEventListener'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-
-// TODO: 永続化された値で初期化する
-let nextNewStableTabId = 1
 
 entryPoint()
 
@@ -21,21 +18,9 @@ async function entryPoint() {
     }
   })
 
+  // この時点で既に存在するタブをTreeify側で把握する
+  await processExistingTabs()
+
   // タブイベントの監視を開始
-  chrome.tabs.onCreated.addListener(async (tab) => {
-    const stableTab: StableTab = {
-      stableTabId: nextNewStableTabId++,
-      ...tab,
-    }
-
-    if (await TreeifyWindow.exists()) {
-      // TODO: Treeifyウィンドウが存在したとしてもready状態かどうかは分からないのでは？
-
-      // Treeifyウィンドウが存在するときはイベントを転送する
-      TreeifyWindow.sendMessage({
-        type: 'OnTabCreated',
-        stableTab,
-      })
-    }
-  })
+  chrome.tabs.onCreated.addListener(onCreated)
 }

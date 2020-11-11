@@ -26,4 +26,6 @@ export type StableTabId = integer
 
 export type StableTab = chrome.tabs.Tab & {
   stableTabId: StableTabId
+  /** このタブを開いた元のタブ */
+  opener: StableTabId | null
 }

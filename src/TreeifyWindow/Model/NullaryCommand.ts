@@ -46,7 +46,7 @@ export namespace NullaryCommand {
     NextState.setItemProperty(prevSiblingItemPath.itemId, 'isFolded', false)
 
     // 兄の最後の子になるようフォーカスアイテムを配置
-    NextState.insertLastChildItem(prevSiblingItemPath, focusedItemPath.itemId)
+    NextState.insertLastChildItem(prevSiblingItemPath.itemId, focusedItemPath.itemId)
 
     // 既存の親子関係を削除
     assertNonUndefined(focusedItemPath.parentItemId)
@@ -176,7 +176,7 @@ export namespace NullaryCommand {
       // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
 
       // 最初の子になるようフォーカスアイテムを配置
-      NextState.insertFirstChildItem(firstFollowingItemPath, focusedItemPath.itemId)
+      NextState.insertFirstChildItem(firstFollowingItemPath.itemId, focusedItemPath.itemId)
 
       // 既存の親子関係を削除
       NextState.removeItemGraphEdge(focusedItemPath.parentItemId!!, focusedItemPath.itemId)
@@ -213,7 +213,7 @@ export namespace NullaryCommand {
 
         // 新規アイテムを最初の子として追加する
         const newItemId = NextState.createTextItem()
-        NextState.insertFirstChildItem(focusedItemPath, newItemId)
+        NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // フォーカスアイテムを更新する
@@ -243,7 +243,7 @@ export namespace NullaryCommand {
         // もし子を表示しているなら
         // 新規アイテムを最初の子として追加する
         const newItemId = NextState.createTextItem()
-        NextState.insertFirstChildItem(focusedItemPath, newItemId)
+        NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
 
         // フォーカスアイテムを更新する
         NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
