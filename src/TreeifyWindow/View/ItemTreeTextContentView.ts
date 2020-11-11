@@ -15,16 +15,21 @@ export type ItemTreeTextContentViewModel = {
 
 /** テキストアイテムのコンテンツ領域のView */
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel): TemplateResult {
+  // contenteditableな要素のinnerHTMLは原則としてlit-htmlで描画するべきでないので、自前でDOM要素を作る
+  const contentEditableElement = document.createElement('div')
+  contentEditableElement.id = ItemTreeTextContentView.domElementId(viewModel.itemPath)
+  contentEditableElement.className = 'item-tree-text-content_content-editable'
+  contentEditableElement.setAttribute('contenteditable', 'true')
+  contentEditableElement.appendChild(DomishObject.toDocumentFragment(viewModel.domishObjects))
+  contentEditableElement.addEventListener('input', viewModel.onInput as any)
+  contentEditableElement.addEventListener('compositionend', viewModel.onCompositionEnd as any)
+  contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
+
   // ↓innerHTMLに空白テキストノードが入るとキャレット位置の計算が難しくなるのでその対策
   // prettier-ignore
   return html`<div
     class="item-tree-text-content"
-    contenteditable
-    id=${ItemTreeTextContentView.domElementId(viewModel.itemPath)}
-    @input=${viewModel.onInput}
-    @compositionend=${viewModel.onCompositionEnd}
-    @focus=${viewModel.onFocus}
-  >${(DomishObject.toDocumentFragment(viewModel.domishObjects))}</div>`
+  >${contentEditableElement}</div>`
 }
 
 export namespace ItemTreeTextContentView {
