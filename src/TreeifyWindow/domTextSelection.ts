@@ -2,8 +2,7 @@ import {integer} from 'src/Common/basicType'
 
 /**
  * contenteditableな要素の先頭から現在のfocusまでの文字数を取得する。
- * 改行は1文字としてカウントしない。空白はカウントする。
- * ※改行をカウントしないので、n行目の行末とn+1行目の行頭が同じ戻り値になる点に注意
+ * 改行も1文字としてカウントする。
  */
 export function getFocusOffset(): integer | undefined {
   if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {
@@ -18,8 +17,7 @@ export function getFocusOffset(): integer | undefined {
 
 /**
  * contenteditableな要素の先頭から現在のanchorまでの文字数を取得する。
- * 改行は1文字としてカウントしない。空白はカウントする。
- * ※改行をカウントしないので、n行目の行末とn+1行目の行頭が同じ戻り値になる点に注意
+ * 改行も1文字としてカウントする。
  */
 export function getAnchorOffset(): integer | undefined {
   if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {
@@ -36,5 +34,16 @@ function getDistance(node: Node, targetNode: Node, targetOffset: integer = 0): i
   const range = document.createRange()
   range.setStart(node, 0)
   range.setEnd(targetNode, targetOffset)
-  return range.toString().length
+  return range.toString().length + countBrElements(range.cloneContents())
+}
+
+// Nodeに含まれるbr要素の数を返す
+function countBrElements(node: Node): integer {
+  if (node instanceof HTMLBRElement) {
+    return 1
+  }
+
+  return Array.from(node.childNodes)
+    .map(countBrElements)
+    .reduce((a: integer, x) => a + x, 0)
 }
