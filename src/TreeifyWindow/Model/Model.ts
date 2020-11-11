@@ -25,12 +25,20 @@ export class Model {
     return this.singletonInstance
   }
 
-  /** Stateへの変更を確定する */
+  /** Stateへの変更を確定し、Viewに通知する */
   commit() {
     this.nextState.commit()
     for (const stateChangeListener of this.stateChangeListeners) {
       stateChangeListener(this.currentState)
     }
+  }
+
+  /**
+   * Stateへの変更を確定する。Viewには通知しない。
+   * このメソッドは状態を持つView内で起こった状態変化をModelに反映するために用いられる。
+   */
+  commitSilently() {
+    this.nextState.commit()
   }
 
   addStateChangeListener(listener: (newState: State) => void) {

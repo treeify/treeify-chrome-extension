@@ -22,7 +22,7 @@ document.addEventListener('selectionchange', (event) => {
   const anchorOffset = getAnchorOffset()
   if (focusOffset === undefined || anchorOffset === undefined) {
     NextState.setItemTreeTextItemSelection(null)
-    NextState.commit()
+    NextState.commitSilently()
     return
   }
 
@@ -30,7 +30,7 @@ document.addEventListener('selectionchange', (event) => {
     focusOffset,
     anchorOffset,
   })
-  NextState.commit()
+  NextState.commitSilently()
 })
 
 /**

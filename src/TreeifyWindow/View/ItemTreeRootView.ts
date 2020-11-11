@@ -39,5 +39,5 @@ function onPaste(event: ClipboardEvent) {
 // フォーカスが外れたらフォーカスアイテムをnullにする
 function onFocusOut(event: FocusEvent) {
   NextState.setFocusedItemPath(null)
-  NextState.commit()
+  NextState.commitSilently()
 }
