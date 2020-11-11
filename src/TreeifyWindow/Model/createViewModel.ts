@@ -89,7 +89,7 @@ function createItemTreeContentViewModel(
         },
         onFocus: (event) => {
           NextState.setFocusedItemPath(itemPath)
-          NextState.commit()
+          NextState.commitSilently()
         },
       }
     case ItemType.WEB_PAGE:
