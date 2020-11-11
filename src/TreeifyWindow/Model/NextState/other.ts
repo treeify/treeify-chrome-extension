@@ -9,9 +9,17 @@ export function getBatchizer(): Batchizer {
   return Model.instance.nextState
 }
 
-/** NextStateへの全ての変更を確定し、ModelのStateを書き換える */
+/**
+ * NextStateへの全ての変更を確定し、ModelのStateを書き換える。
+ * さらにそれをViewに通知する。
+ */
 export function commit() {
   Model.instance.commit()
+}
+
+/** NextStateへの全ての変更を確定し、ModelのStateを書き換える */
+export function commitSilently() {
+  Model.instance.commitSilently()
 }
 
 /** 指定されたプロパティを削除する */
