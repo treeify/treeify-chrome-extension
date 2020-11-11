@@ -78,8 +78,16 @@ export type WebPageItem = {
 /** 各ページが持つデータの型 */
 export type Page = {}
 
-/** テキストアイテムのcontenteditableにおけるキャレット位置 */
+/** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
 export type TextItemSelection = {
-  focusOffset: integer
-  anchorOffset: integer
+  /**
+   * getSelectionで取得できるfocusNode&focusOffsetの位置を表す値。
+   * contenteditableな要素の先頭からfocus位置までの文字数（改行を含む）。
+   */
+  focusDistance: integer
+  /**
+   * getSelectionで取得できるanchorNode&anchorOffsetの位置を表す値。
+   * contenteditableな要素の先頭からanchor位置までの文字数（改行を含む）。
+   */
+  anchorDistance: integer
 }

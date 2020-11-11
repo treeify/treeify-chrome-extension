@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -68,11 +69,15 @@ function createItemTreeContentViewModel(
   switch (itemType) {
     case ItemType.TEXT:
       return {
+        itemPath,
         itemType: ItemType.TEXT,
         domishObjects: state.textItems[itemPath.itemId].domishObjects,
         onInput: (event) => {
           // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
           if (!event.isComposing && event.target instanceof Node) {
+            // 最新のキャレット位置をModelに反映する
+            NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+
             // contenteditableな要素のinnerHTMLをModelに反映する
             const domishObjects = DomishObject.fromChildren(event.target)
             NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
