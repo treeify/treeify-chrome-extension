@@ -69,6 +69,7 @@ function createItemTreeContentViewModel(
   switch (itemType) {
     case ItemType.TEXT:
       return {
+        itemPath,
         itemType: ItemType.TEXT,
         domishObjects: state.textItems[itemPath.itemId].domishObjects,
         onInput: (event) => {
