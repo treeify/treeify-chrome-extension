@@ -18,7 +18,7 @@ export function getTextItemSelectionFromDom(): TextItemSelection | undefined {
       selection.anchorNode,
       selection.anchorOffset
     )
-    return {focusOffset: focusDistance, anchorOffset: anchorDistance}
+    return {focusDistance, anchorDistance}
   } else {
     return undefined
   }
