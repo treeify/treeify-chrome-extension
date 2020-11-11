@@ -9,6 +9,22 @@ let nextNewStableTabId = 1
 // StableTabの集まりに対するオンメモリインデックスの1つ
 const stableTabMapFromTabId = new Map<integer, StableTab>()
 
+/** 現時点で存在するタブの情報を収集し、必要に応じてStableTabIdの発行などを行う */
+export async function processExistingTabs() {
+  const allTabs = await getAllNormalTabs()
+  for (const tab of allTabs) {
+    await onCreated(tab)
+  }
+}
+
+async function getAllNormalTabs(): Promise<Tab[]> {
+  return new Promise((resolve) => {
+    chrome.windows.getAll({populate: true, windowTypes: ['normal']}, (windows) => {
+      resolve(windows.flatMap((window) => window.tabs ?? []))
+    })
+  })
+}
+
 export async function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
