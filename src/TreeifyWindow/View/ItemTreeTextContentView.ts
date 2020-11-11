@@ -25,11 +25,7 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
   contentEditableElement.addEventListener('compositionend', viewModel.onCompositionEnd as any)
   contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
 
-  // ↓innerHTMLに空白テキストノードが入るとキャレット位置の計算が難しくなるのでその対策
-  // prettier-ignore
-  return html`<div
-    class="item-tree-text-content"
-  >${contentEditableElement}</div>`
+  return html`<div class="item-tree-text-content">${contentEditableElement}</div>`
 }
 
 export namespace ItemTreeTextContentView {
