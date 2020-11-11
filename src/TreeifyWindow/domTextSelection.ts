@@ -1,30 +1,24 @@
 import {integer} from 'src/Common/basicType'
+import {TextItemSelection} from 'src/TreeifyWindow/Model/State'
 
-/**
- * contenteditableな要素の先頭から現在のfocusまでの文字数を取得する。
- * 改行も1文字としてカウントする。
- */
-export function getFocusOffset(): integer | undefined {
+export function getTextItemSelectionFromDom(): TextItemSelection | undefined {
   if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {
     const selection = document.getSelection()
-    if (selection === null || selection.focusNode === null) return undefined
+    if (selection === null || selection.focusNode === null || selection.anchorNode === null) {
+      return undefined
+    }
 
-    return getDistance(document.activeElement, selection.focusNode, selection.focusOffset)
-  } else {
-    return undefined
-  }
-}
-
-/**
- * contenteditableな要素の先頭から現在のanchorまでの文字数を取得する。
- * 改行も1文字としてカウントする。
- */
-export function getAnchorOffset(): integer | undefined {
-  if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {
-    const selection = document.getSelection()
-    if (selection === null || selection.anchorNode === null) return undefined
-
-    return getDistance(document.activeElement, selection.anchorNode, selection.anchorOffset)
+    const focusDistance = getDistance(
+      document.activeElement,
+      selection.focusNode,
+      selection.focusOffset
+    )
+    const anchorDistance = getDistance(
+      document.activeElement,
+      selection.anchorNode,
+      selection.anchorOffset
+    )
+    return {focusOffset: focusDistance, anchorOffset: anchorDistance}
   } else {
     return undefined
   }

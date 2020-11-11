@@ -1,5 +1,5 @@
 import {render} from 'lit-html'
-import {getAnchorOffset, getFocusOffset} from 'src/TreeifyWindow/domTextSelection'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {createRootViewModel} from 'src/TreeifyWindow/Model/createViewModel'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -18,16 +18,6 @@ chrome.runtime.onMessage.addListener(onMessage)
 
 // テキストアイテム内のキャレット位置の監視用
 document.addEventListener('selectionchange', (event) => {
-  const focusOffset = getFocusOffset()
-  const anchorOffset = getAnchorOffset()
-  if (focusOffset === undefined || anchorOffset === undefined) {
-    NextState.setItemTreeTextItemSelection(null)
-    NextState.commitSilently()
-    return
-  }
-  NextState.setItemTreeTextItemSelection({
-    focusOffset,
-    anchorOffset,
-  })
+  NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
   NextState.commitSilently()
 })

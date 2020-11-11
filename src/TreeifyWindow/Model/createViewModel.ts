@@ -2,7 +2,7 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {getAnchorOffset, getFocusOffset} from 'src/TreeifyWindow/domTextSelection'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -75,17 +75,7 @@ function createItemTreeContentViewModel(
           // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
           if (!event.isComposing && event.target instanceof Node) {
             // 最新のキャレット位置をModelに反映する
-            const focusOffset = getFocusOffset()
-            const anchorOffset = getAnchorOffset()
-            if (focusOffset === undefined || anchorOffset === undefined) {
-              NextState.setItemTreeTextItemSelection(null)
-              NextState.commit()
-              return
-            }
-            NextState.setItemTreeTextItemSelection({
-              focusOffset,
-              anchorOffset,
-            })
+            NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
 
             // contenteditableな要素のinnerHTMLをModelに反映する
             const domishObjects = DomishObject.fromChildren(event.target)
