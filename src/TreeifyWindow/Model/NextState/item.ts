@@ -108,29 +108,29 @@ export function modifyParentItems(itemId: ItemId, f: (itemIds: List<ItemId>) => 
 /**
  * あるアイテムの最初の子になるようアイテムを子リストに追加する。
  * 整合性が取れるように親アイテムリストも修正する。
- * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの最初の子になる
+ * @param itemId このアイテムの最初の子として追加する
  * @param newItemId 最初の子として追加されるアイテム
  */
-export function insertFirstChildItem(itemPath: ItemPath, newItemId: ItemId) {
+export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId) {
   // 子リストの先頭に追加する
-  modifyChildItems(itemPath.itemId, (itemIds) => itemIds.unshift(newItemId))
+  modifyChildItems(itemId, (itemIds) => itemIds.unshift(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(itemPath.itemId))
+  modifyParentItems(newItemId, (itemIds) => itemIds.push(itemId))
 }
 
 /**
  * あるアイテムの最後の子になるようアイテムを子リストに追加する。
  * 整合性が取れるように親アイテムリストも修正する。
- * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの最後の子になる
+ * @param itemId このアイテムの最後の子として追加する
  * @param newItemId 最後の子として追加されるアイテム
  */
-export function insertLastChildItem(itemPath: ItemPath, newItemId: ItemId) {
+export function insertLastChildItem(itemId: ItemId, newItemId: ItemId) {
   // 子リストの先頭に追加する
-  modifyChildItems(itemPath.itemId, (itemIds) => itemIds.push(newItemId))
+  modifyChildItems(itemId, (itemIds) => itemIds.push(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(itemPath.itemId))
+  modifyParentItems(newItemId, (itemIds) => itemIds.push(itemId))
 }
 
 /**
