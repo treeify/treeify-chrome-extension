@@ -87,9 +87,12 @@ export class Batchizer {
 
   /** 全てのMutationを適用し、stateを変更する */
   commit() {
-    const propertyPath = Batchizer.yieldPropertyPath(this.shadowObject, PropertyPath.of())
-    for (const propertyKey of propertyPath) {
-      this.setOriginalValue(propertyKey, this.getDerivedValue(propertyKey))
+    const propertyPaths = Batchizer.yieldPropertyPath(this.shadowObject, PropertyPath.of())
+    for (const propertyPath of propertyPaths) {
+      // TODO: ちょっとした最適化の余地あり（getMutationsが2回呼ばれる）
+      if (!this.getMutations(propertyPath).isEmpty()) {
+        this.setOriginalValue(propertyPath, this.getDerivedValue(propertyPath))
+      }
     }
 
     this.clearPostedMutations()
