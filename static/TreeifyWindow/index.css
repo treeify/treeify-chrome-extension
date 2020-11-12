@@ -146,8 +146,8 @@
   background-color: var(--indent-line-hover-color);
 }
 
-/* テキストアイテムのコンテンツ領域のルート */
-.item-tree-text-content {
+/* テキストアイテムのcontenteditableな要素 */
+.item-tree-text-content_content-editable {
   /* contenteditableな要素のフォーカス時の枠線を非表示 */
   outline: 0 solid transparent;
 
