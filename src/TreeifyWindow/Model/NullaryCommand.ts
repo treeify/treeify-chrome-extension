@@ -216,9 +216,9 @@ export namespace NullaryCommand {
         NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
-        // フォーカスアイテムを更新する
+        // キャレット位置を更新する
         NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
-        // TODO: キャレット位置を更新する
+        NextState.setItemTreeTextItemSelection({focusDistance: 0, anchorDistance: 0})
       } else {
         // もし子を表示していないなら
 
@@ -232,9 +232,9 @@ export namespace NullaryCommand {
         NextState.insertNextSiblingItem(focusedItemPath, newItemId)
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
-        // フォーカスアイテムを更新する
+        // キャレット位置を更新する
         NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
-        // TODO: キャレット位置を更新する
+        NextState.setItemTreeTextItemSelection({focusDistance: 0, anchorDistance: 0})
       }
     } else {
       // フォーカスアイテムがテキストアイテム以外の場合
