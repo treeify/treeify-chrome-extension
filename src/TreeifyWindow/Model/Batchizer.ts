@@ -89,7 +89,10 @@ export class Batchizer {
   commit() {
     const propertyPaths = Batchizer.yieldPropertyPath(this.shadowObject, PropertyPath.of())
     for (const propertyPath of propertyPaths) {
-      this.setOriginalValue(propertyPath, this.getDerivedValue(propertyPath))
+      // TODO: ちょっとした最適化の余地あり（getMutationsが2回呼ばれる）
+      if (!this.getMutations(propertyPath).isEmpty()) {
+        this.setOriginalValue(propertyPath, this.getDerivedValue(propertyPath))
+      }
     }
 
     this.clearPostedMutations()
