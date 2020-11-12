@@ -32,6 +32,8 @@
 
   /* フォーカスアイテムの背景色 */
   --focused-item-background-color: hsla(240, 100%, 50%, 0.06);
+  /* マウスホバーアイテムの背景色 */
+  --mouse-hover-item-background-color: hsla(240, 100%, 50%, 0.03);
 
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
@@ -50,6 +52,12 @@
 .item-tree-node-content-and-children-area {
   /* コンテンツ領域を右端まで伸ばす */
   flex-grow: 1;
+}
+
+/* マウスホバー時のコンテンツ領域 */
+.item-tree-node-content-area:hover {
+  /* マウスホバーアイテムの強調表示 */
+  background: var(--mouse-hover-item-background-color);
 }
 
 /* フォーカス時のコンテンツ領域 */
