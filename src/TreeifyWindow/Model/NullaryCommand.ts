@@ -201,40 +201,63 @@ export namespace NullaryCommand {
       const selection = getSelection()
       assertNonNull(selection)
 
-      // TODO: キャレット位置による分岐を追加する
+      const characterCount = DomishObject.countCharacters(
+        NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+      )
+      const textItemSelection = NextState.getItemTreeTextItemSelection()
+      assertNonNull(textItemSelection)
+      if (textItemSelection.focusDistance < characterCount / 2) {
+        // キャレット位置が前半なら
 
-      if (!NextState.getDisplayingChildItemIds(focusedItemPath.itemId).isEmpty()) {
-        // もし子を表示しているなら
-
-        // キャレットより後ろのテキストをカットする
+        // キャレットより前のテキストをカットする
         const range = selection.getRangeAt(0)
-        range.setEndAfter(document.activeElement.lastChild!)
+        range.setStartBefore(document.activeElement.firstChild!)
         const domishObjects = DomishObject.fromChildren(range.extractContents())
 
-        // 新規アイテムを最初の子として追加する
+        // 新規アイテムを兄として追加する
         const newItemId = NextState.createTextItem()
-        NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
-        NextState.setTextItemDomishObjects(newItemId, domishObjects)
-
-        // キャレット位置を更新する
-        NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
-        NextState.setItemTreeTextItemCaretDistance(0)
-      } else {
-        // もし子を表示していないなら
-
-        // キャレットより後ろのテキストをカットする
-        const range = selection.getRangeAt(0)
-        range.setEndAfter(document.activeElement.lastChild!)
-        const domishObjects = DomishObject.fromChildren(range.extractContents())
-
-        // 新規アイテムを弟として追加する
-        const newItemId = NextState.createTextItem()
-        NextState.insertNextSiblingItem(focusedItemPath, newItemId)
+        NextState.insertPrevSiblingItem(focusedItemPath, newItemId)
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
         NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
         NextState.setItemTreeTextItemCaretDistance(0)
+      } else {
+        // キャレット位置が後半なら
+
+        if (!NextState.getDisplayingChildItemIds(focusedItemPath.itemId).isEmpty()) {
+          // もし子を表示しているなら
+
+          // キャレットより後ろのテキストをカットする
+          const range = selection.getRangeAt(0)
+          range.setEndAfter(document.activeElement.lastChild!)
+          const domishObjects = DomishObject.fromChildren(range.extractContents())
+
+          // 新規アイテムを最初の子として追加する
+          const newItemId = NextState.createTextItem()
+          NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+          NextState.setTextItemDomishObjects(newItemId, domishObjects)
+
+          // キャレット位置を更新する
+          NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+          NextState.setItemTreeTextItemCaretDistance(0)
+        } else {
+          // もし子を表示していないなら
+
+          // キャレットより後ろのテキストをカットする
+          const range = selection.getRangeAt(0)
+          range.setEndAfter(document.activeElement.lastChild!)
+          const domishObjects = DomishObject.fromChildren(range.extractContents())
+
+          // 新規アイテムを弟として追加する
+          const newItemId = NextState.createTextItem()
+          NextState.insertNextSiblingItem(focusedItemPath, newItemId)
+          NextState.setTextItemDomishObjects(newItemId, domishObjects)
+
+          // キャレット位置を更新する
+          NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
+          NextState.setItemTreeTextItemCaretDistance(0)
+        }
       }
     } else {
       // フォーカスアイテムがテキストアイテム以外の場合
