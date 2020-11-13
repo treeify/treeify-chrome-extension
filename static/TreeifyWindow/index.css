@@ -13,15 +13,15 @@
   --calculated-item-tree-line-height: calc(1em * var(--item-tree-line-height));
 
   /* バレットの外側の円の直径 */
-  --bullet-outer-circle-diameter: 90%;
+  --bullet-outer-circle-diameter: 1em;
   /* バレットの外側の円の色 */
   --bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの内側の円の直径 */
-  --bullet-inner-circle-diameter: 30%;
+  --bullet-inner-circle-diameter: 0.4em;
   /* バレットの内側の円の色 */
   --bullet-inner-circle-color: hsl(0, 0%, 20%);
   /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
-  --bullet-page-icon-size: 100%;
+  --bullet-page-icon-size: 1em;
 
   /* インデントラインの太さ */
   --indent-line-width: 1px;
