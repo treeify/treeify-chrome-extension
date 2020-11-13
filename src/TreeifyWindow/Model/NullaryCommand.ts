@@ -218,7 +218,7 @@ export namespace NullaryCommand {
 
         // キャレット位置を更新する
         NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
-        NextState.setItemTreeTextItemSelection({focusDistance: 0, anchorDistance: 0})
+        NextState.setItemTreeTextItemCaretDistance(0)
       } else {
         // もし子を表示していないなら
 
@@ -234,7 +234,7 @@ export namespace NullaryCommand {
 
         // キャレット位置を更新する
         NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
-        NextState.setItemTreeTextItemSelection({focusDistance: 0, anchorDistance: 0})
+        NextState.setItemTreeTextItemCaretDistance(0)
       }
     } else {
       // フォーカスアイテムがテキストアイテム以外の場合
