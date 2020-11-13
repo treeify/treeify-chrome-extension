@@ -3,6 +3,7 @@ import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath
@@ -17,7 +18,7 @@ export type ItemTreeTextContentViewModel = {
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel): TemplateResult {
   // contenteditableな要素のinnerHTMLは原則としてlit-htmlで描画するべきでないので、自前でDOM要素を作る
   const contentEditableElement = document.createElement('div')
-  contentEditableElement.id = ItemTreeTextContentView.domElementId(viewModel.itemPath)
+  contentEditableElement.id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   contentEditableElement.className = 'item-tree-text-content_content-editable'
   contentEditableElement.setAttribute('contenteditable', 'true')
   contentEditableElement.appendChild(DomishObject.toDocumentFragment(viewModel.domishObjects))
@@ -26,11 +27,4 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
   contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
 
   return html`<div class="item-tree-text-content">${contentEditableElement}</div>`
-}
-
-export namespace ItemTreeTextContentView {
-  /** DOM描画後にキャレット位置を設定するために用いる */
-  export function domElementId(itemPath: ItemPath): string {
-    return `ItemTreeTextContentView:${itemPath.toString()}`
-  }
 }

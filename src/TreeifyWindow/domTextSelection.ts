@@ -115,3 +115,20 @@ function getCharacterCount(node: Node): integer {
   range.selectNode(node)
   return range.toString().length + countBrElements(range.cloneContents())
 }
+
+/**
+ * キャレットがある行の行番号を返す（0オリジン）。
+ * テキスト選択中の動作は未定義。
+ */
+export function getCaretLineNumber(): integer | undefined {
+  if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {
+    const selection = document.getSelection()
+    if (selection === null) return undefined
+
+    const range = selection.getRangeAt(0).cloneRange()
+    range.setStart(document.activeElement, 0)
+    return countBrElements(range.cloneContents())
+  } else {
+    return undefined
+  }
+}

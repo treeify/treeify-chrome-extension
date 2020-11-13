@@ -100,6 +100,7 @@ function createItemTreeContentViewModel(
     case ItemType.WEB_PAGE:
       const webPageItem = state.webPageItems[itemPath.itemId]
       return {
+        itemPath,
         itemType: ItemType.WEB_PAGE,
         title: webPageItemTitle(webPageItem),
         faviconUrl: webPageItem.faviconUrl,

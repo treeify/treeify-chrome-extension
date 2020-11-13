@@ -1,6 +1,7 @@
 import {TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
+import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {
   ItemTreeWebPageContentView,
   ItemTreeWebPageContentViewModel,
@@ -20,5 +21,12 @@ export function ItemTreeContentView(viewModel: ItemTreeContentViewModel): Templa
       return ItemTreeWebPageContentView(viewModel)
     default:
       assertNeverType(viewModel)
+  }
+}
+
+export namespace ItemTreeContentView {
+  /** DOM描画後にフォーカスを設定するために用いる */
+  export function focusableDomElementId(itemPath: ItemPath): string {
+    return `focusable:${itemPath.toString()}`
   }
 }
