@@ -4,7 +4,7 @@ import {createRootViewModel} from 'src/TreeifyWindow/Model/createViewModel'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {onMessage} from 'src/TreeifyWindow/onMessage'
-import {ItemTreeTextContentView} from 'src/TreeifyWindow/View/ItemTreeTextContentView'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
 import {RootView} from 'src/TreeifyWindow/View/RootView'
 
 const spaRoot = document.getElementById('spa-root')!
@@ -17,12 +17,17 @@ Model.instance.addStateChangeListener((newState) => {
 
   render(RootView(createRootViewModel(newState)), spaRoot)
 
-  // キャレット位置をModelからViewに反映する
-  if (newState.itemTreeTextItemSelection !== null && focusedItemPath !== null) {
-    const id = ItemTreeTextContentView.domElementId(focusedItemPath)
-    const contentEditable = document.getElementById(id)
-    if (contentEditable !== null) {
-      setDomSelection(contentEditable, newState.itemTreeTextItemSelection)
+  if (focusedItemPath !== null) {
+    const id = ItemTreeContentView.focusableDomElementId(focusedItemPath)
+    const focusableElement = document.getElementById(id)
+    if (focusableElement !== null) {
+      if (newState.itemTreeTextItemSelection !== null) {
+        // キャレット位置をModelからViewに反映する
+        setDomSelection(focusableElement, newState.itemTreeTextItemSelection)
+      } else {
+        // フォーカスアイテムをModelからViewに反映する
+        focusableElement.focus()
+      }
     }
   }
 })
