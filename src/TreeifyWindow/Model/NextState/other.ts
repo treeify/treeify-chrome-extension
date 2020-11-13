@@ -1,3 +1,4 @@
+import {integer} from 'src/Common/basicType'
 import {Batchizer, PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {Command} from 'src/TreeifyWindow/Model/Command'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
@@ -27,12 +28,22 @@ export function deleteProperty(propertyKeys: PropertyPath) {
   getBatchizer().postSetMutation(propertyKeys, undefined)
 }
 
+/** テキストアイテムのキャレット位置（テキスト選択範囲）を返す */
+export function getItemTreeTextItemSelection(): TextItemSelection | null {
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('itemTreeTextItemSelection'))
+}
+
 /** テキストアイテムのキャレット位置（テキスト選択範囲）を設定する */
 export function setItemTreeTextItemSelection(textItemSelection: TextItemSelection | null) {
   return NextState.getBatchizer().postSetMutation(
     PropertyPath.of('itemTreeTextItemSelection'),
     textItemSelection
   )
+}
+
+/** テキストアイテムのキャレット位置を設定する */
+export function setItemTreeTextItemCaretDistance(distance: integer) {
+  setItemTreeTextItemSelection({focusDistance: distance, anchorDistance: distance})
 }
 
 /** アイテムツリーのInputBindingからコマンドを取得する */

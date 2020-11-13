@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {integer} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
 
 /**
@@ -109,5 +110,29 @@ export namespace DomishObject {
       return undefined
     }
     return undefined
+  }
+
+  /** 改行（br要素）を含む文字数を返す */
+  export function countCharacters(value: DomishObject | List<DomishObject>): integer {
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      return domishObjects.map(countCharacters).reduce((a: integer, x) => a + x, 0)
+    } else {
+      const domishObject = value as DomishObject
+      switch (domishObject.type) {
+        case 'b':
+          return countCharacters(domishObject.children)
+        case 'u':
+          return countCharacters(domishObject.children)
+        case 'i':
+          return countCharacters(domishObject.children)
+        case 'br':
+          return 1
+        case 'text':
+          return domishObject.textContent.length
+        default:
+          return assertNeverType(domishObject)
+      }
+    }
   }
 }
