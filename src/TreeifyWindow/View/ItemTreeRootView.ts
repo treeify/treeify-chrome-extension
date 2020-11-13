@@ -28,6 +28,9 @@ function onKeyDown(event: KeyboardEvent) {
     case '0000ArrowLeft':
       onArrowLeft(event)
       break
+    case '0000ArrowRight':
+      onArrowRight(event)
+      break
   }
 
   const command = NextState.getItemTreeCommand(inputId)
@@ -67,6 +70,43 @@ function onArrowLeft(event: KeyboardEvent) {
     const characterCount = DomishObject.countCharacters(domishObjects)
     NextState.setItemTreeTextItemCaretDistance(characterCount)
     NextState.setFocusedItemPath(aboveItemPath)
+    NextState.commit()
+  }
+}
+
+/**
+ * →キー押下時の処理
+ * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
+ */
+function onArrowRight(event: KeyboardEvent) {
+  const textItemSelection = NextState.getItemTreeTextItemSelection()
+  // テキストアイテムにフォーカスが当たっていないときは何もしない
+  if (textItemSelection === null) return
+
+  const focusedItemPath = NextState.getFocusedItemPath()
+  assertNonNull(focusedItemPath)
+
+  const belowItemPath = NextState.findBelowItemPath(focusedItemPath)
+  // 下のアイテムが存在しない場合はブラウザの挙動に任せる
+  if (belowItemPath === undefined) return
+
+  const domishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+  const characterCount = DomishObject.countCharacters(domishObjects)
+
+  // キャレット位置が末尾以外のときはブラウザの挙動に任せる
+  if (
+    textItemSelection.focusDistance < characterCount ||
+    textItemSelection.anchorDistance < characterCount
+  ) {
+    return
+  }
+
+  const belowItemType = NextState.getItemType(belowItemPath.itemId)
+  if (belowItemType === ItemType.TEXT) {
+    // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
+    event.preventDefault()
+    NextState.setItemTreeTextItemCaretDistance(0)
+    NextState.setFocusedItemPath(belowItemPath)
     NextState.commit()
   }
 }
