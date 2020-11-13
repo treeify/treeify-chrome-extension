@@ -4,6 +4,7 @@ import {assertNonNull} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
 import {getCaretLineNumber} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
+import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {ItemTreeNodeView, ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
 
@@ -120,12 +121,6 @@ function onArrowRight(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowUp(event: KeyboardEvent) {
-  const caretLineNumber = getCaretLineNumber()
-  // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
-  if (caretLineNumber === undefined || caretLineNumber > 0) {
-    return
-  }
-
   const focusedItemPath = NextState.getFocusedItemPath()
   assertNonNull(focusedItemPath)
 
@@ -133,10 +128,24 @@ function onArrowUp(event: KeyboardEvent) {
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
+  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
+    // フォーカスアイテムがテキストアイテムの場合
+
+    const caretLineNumber = getCaretLineNumber()
+    // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
+    if (caretLineNumber === undefined || caretLineNumber > 0) {
+      return
+    }
+  }
+
+  event.preventDefault()
+  moveFocusToAboveItem(aboveItemPath)
+}
+
+function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
   if (aboveItemType === ItemType.TEXT) {
     // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
-    event.preventDefault()
     const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
     const characterCount = DomishObject.countCharacters(domishObjects)
     NextState.setItemTreeTextItemCaretDistance(characterCount)
@@ -144,7 +153,6 @@ function onArrowUp(event: KeyboardEvent) {
     NextState.commit()
   } else {
     // 上のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
-    event.preventDefault()
     NextState.setItemTreeTextItemSelection(null)
     NextState.setFocusedItemPath(aboveItemPath)
     NextState.commit()
