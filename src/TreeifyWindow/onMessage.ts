@@ -24,6 +24,7 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
   NextState.setWebPageItemTabTitle(newWebPageItemId, message.stableTab.title ?? '')
   const url = message.stableTab.url || message.stableTab.pendingUrl || ''
   NextState.setWebPageItemUrl(newWebPageItemId, url)
+  NextState.setWebPageItemFaviconUrl(newWebPageItemId, message.stableTab.favIconUrl ?? '')
 
   const focusedItemPath = NextState.getFocusedItemPath()
   // TODO: 残念ながら新しいタブを開いたときフォーカスアイテムはnullになっているので下記分岐は無意味
@@ -48,6 +49,7 @@ function onTabUpdated(message: TreeifyWindow.OnTabUpdated) {
   NextState.setWebPageItemTabTitle(itemId, message.stableTab.title ?? '')
   const url = message.stableTab.url || message.stableTab.pendingUrl || ''
   NextState.setWebPageItemUrl(itemId, url)
+  NextState.setWebPageItemFaviconUrl(itemId, message.stableTab.favIconUrl ?? '')
 
   NextState.commit()
 }

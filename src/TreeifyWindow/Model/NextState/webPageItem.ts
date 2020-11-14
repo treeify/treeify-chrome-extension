@@ -64,3 +64,11 @@ export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
 export function setWebPageItemUrl(itemId: ItemId, url: string) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('webPageItems', itemId, 'url'), url)
 }
+
+/** ウェブページアイテムのファビコンURLを設定する */
+export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('webPageItems', itemId, 'faviconUrl'),
+    url
+  )
+}
