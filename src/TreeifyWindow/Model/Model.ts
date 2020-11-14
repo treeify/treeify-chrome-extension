@@ -159,6 +159,7 @@ export class Model {
         '1000d': new Command('deleteItem'),
         '0100Enter': new Command('insertLineBreak'),
       },
+      stableTabs: {},
     }
   }
 }
