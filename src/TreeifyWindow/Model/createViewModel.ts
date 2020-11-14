@@ -1,10 +1,11 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
-import {assertNeverType} from 'src/Common/Debug/assert'
+import {assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {Item, State, WebPageItem} from 'src/TreeifyWindow/Model/State'
@@ -107,6 +108,16 @@ function createItemTreeContentViewModel(
         onFocus: (event) => {
           NextState.setFocusedItemPath(itemPath)
           NextState.commit()
+        },
+        onClickTitle: (event) => {
+          const stableTabId = Model.instance.currentState.webPageItems[itemPath.itemId].stableTabId
+          if (stableTabId !== null) {
+            // クリックされたウェブページアイテムに対応するタブを最前面化する
+            const stableTab = Model.instance.currentState.stableTabs[stableTabId]
+            assertNonUndefined(stableTab.id)
+            chrome.tabs.update(stableTab.id, {active: true})
+            chrome.windows.update(stableTab.windowId, {focused: true})
+          }
         },
       }
     default:

@@ -9,6 +9,7 @@ export type ItemTreeWebPageContentViewModel = {
   title: string
   faviconUrl: string
   onFocus: (event: FocusEvent) => void
+  onClickTitle: (event: MouseEvent) => void
 }
 
 /** ウェブページアイテムのコンテンツ領域のView */
@@ -25,6 +26,8 @@ export function ItemTreeWebPageContentView(
     @focus=${viewModel.onFocus}
   >
     <img class="item-tree-web-page-content_favicon" src=${faviconUrl} />
-    <div class="item-tree-web-page-content_title">${viewModel.title}</div>
+    <div class="item-tree-web-page-content_title" @click="${viewModel.onClickTitle}">
+      ${viewModel.title}
+    </div>
   </div>`
 }
