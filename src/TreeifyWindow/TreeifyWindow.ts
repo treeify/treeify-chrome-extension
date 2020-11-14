@@ -2,6 +2,8 @@ import CreateData = chrome.windows.CreateData
 import {integer, StableTab} from 'src/Common/basicType'
 
 export namespace TreeifyWindow {
+  import TabChangeInfo = chrome.tabs.TabChangeInfo
+
   /**
    * Treeifyウィンドウを開く。
    * すでに開かれている場合はTreeifyウィンドウをフォーカス（最前面化）する。
@@ -73,10 +75,15 @@ export namespace TreeifyWindow {
   }
 
   /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
-  export type Message = OnTabCreated
+  export type Message = OnTabCreated | OnTabUpdated
 
   export type OnTabCreated = {
     type: 'OnTabCreated'
+    stableTab: StableTab
+  }
+  export type OnTabUpdated = {
+    type: 'OnTabUpdated'
+    changeInfo: TabChangeInfo
     stableTab: StableTab
   }
 }

@@ -2,6 +2,7 @@ import {integer, StableTab} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import Tab = chrome.tabs.Tab
+import TabChangeInfo = chrome.tabs.TabChangeInfo
 
 // TODO: 永続化された値で初期化する
 let nextNewStableTabId = 1
@@ -44,6 +45,29 @@ export async function onCreated(tab: Tab) {
     // Treeifyウィンドウが存在するときはイベントを転送する
     TreeifyWindow.sendMessage({
       type: 'OnTabCreated',
+      stableTab,
+    })
+  }
+}
+
+export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
+  assertNonUndefined(tab.id)
+
+  const existingStableTab = stableTabMapFromTabId.get(tab.id)
+  assertNonUndefined(existingStableTab)
+  const stableTab: StableTab = {
+    stableTabId: existingStableTab.stableTabId,
+    opener: existingStableTab.opener,
+    ...tab,
+  }
+
+  if (await TreeifyWindow.exists()) {
+    // TODO: Treeifyウィンドウが存在したとしてもready状態かどうかは分からないのでは？
+
+    // Treeifyウィンドウが存在するときはイベントを転送する
+    TreeifyWindow.sendMessage({
+      type: 'OnTabUpdated',
+      changeInfo,
       stableTab,
     })
   }
