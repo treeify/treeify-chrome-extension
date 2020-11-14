@@ -2,7 +2,7 @@ import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {getCaretLineNumber} from 'src/TreeifyWindow/domTextSelection'
+import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -36,6 +36,9 @@ function onKeyDown(event: KeyboardEvent) {
     case '0000ArrowUp':
       onArrowUp(event)
       break
+    case '0000ArrowDown':
+      onArrowDown(event)
+      break
   }
 
   const command = NextState.getItemTreeCommand(inputId)
@@ -47,7 +50,7 @@ function onKeyDown(event: KeyboardEvent) {
 }
 
 /**
- * ←キー押下時の処理
+ * ←キー押下時の処理。
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowLeft(event: KeyboardEvent) {
@@ -80,7 +83,7 @@ function onArrowLeft(event: KeyboardEvent) {
 }
 
 /**
- * →キー押下時の処理
+ * →キー押下時の処理。
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowRight(event: KeyboardEvent) {
@@ -117,7 +120,7 @@ function onArrowRight(event: KeyboardEvent) {
 }
 
 /**
- * ↑キー押下時の処理
+ * ↑キー押下時の処理。
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowUp(event: KeyboardEvent) {
@@ -155,6 +158,53 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     // 上のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
     NextState.setItemTreeTextItemSelection(null)
     NextState.setFocusedItemPath(aboveItemPath)
+    NextState.commit()
+  }
+}
+
+/**
+ * ↓キー押下時の処理。
+ * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
+ */
+function onArrowDown(event: KeyboardEvent) {
+  const focusedItemPath = NextState.getFocusedItemPath()
+  assertNonNull(focusedItemPath)
+
+  const belowItemPath = NextState.findBelowItemPath(focusedItemPath)
+  // 下のアイテムが存在しない場合はブラウザの挙動に任せる
+  if (belowItemPath === undefined) return
+
+  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
+    // フォーカスアイテムがテキストアイテムの場合
+
+    const caretLineNumber = getCaretLineNumber()
+    assertNonNull(document.activeElement)
+    const brElementCount = countBrElements(document.activeElement)
+    // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
+    if (
+      caretLineNumber === undefined ||
+      brElementCount === undefined ||
+      caretLineNumber < brElementCount
+    ) {
+      return
+    }
+  }
+
+  event.preventDefault()
+  moveFocusToBelowItem(belowItemPath)
+}
+
+function moveFocusToBelowItem(belowItemPath: ItemPath) {
+  const aboveItemType = NextState.getItemType(belowItemPath.itemId)
+  if (aboveItemType === ItemType.TEXT) {
+    // 下のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
+    NextState.setItemTreeTextItemCaretDistance(0)
+    NextState.setFocusedItemPath(belowItemPath)
+    NextState.commit()
+  } else {
+    // 下のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
+    NextState.setItemTreeTextItemSelection(null)
+    NextState.setFocusedItemPath(belowItemPath)
     NextState.commit()
   }
 }

@@ -42,7 +42,7 @@ function getDistance(node: Node, targetNode: Node, targetOffset: integer = 0): i
 }
 
 // Nodeに含まれるbr要素の数を返す
-function countBrElements(node: Node): integer {
+export function countBrElements(node: Node): integer {
   if (node instanceof HTMLBRElement) {
     return 1
   }
