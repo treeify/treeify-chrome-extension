@@ -213,6 +213,10 @@ export namespace NullaryCommand {
         const range = selection.getRangeAt(0)
         range.setStartBefore(document.activeElement.firstChild!)
         const domishObjects = DomishObject.fromChildren(range.extractContents())
+        NextState.setTextItemDomishObjects(
+          focusedItemPath.itemId,
+          DomishObject.fromChildren(document.activeElement)
+        )
 
         // 新規アイテムを兄として追加する
         const newItemId = NextState.createTextItem()
@@ -232,6 +236,10 @@ export namespace NullaryCommand {
           const range = selection.getRangeAt(0)
           range.setEndAfter(document.activeElement.lastChild!)
           const domishObjects = DomishObject.fromChildren(range.extractContents())
+          NextState.setTextItemDomishObjects(
+            focusedItemPath.itemId,
+            DomishObject.fromChildren(document.activeElement)
+          )
 
           // 新規アイテムを最初の子として追加する
           const newItemId = NextState.createTextItem()
@@ -248,6 +256,10 @@ export namespace NullaryCommand {
           const range = selection.getRangeAt(0)
           range.setEndAfter(document.activeElement.lastChild!)
           const domishObjects = DomishObject.fromChildren(range.extractContents())
+          NextState.setTextItemDomishObjects(
+            focusedItemPath.itemId,
+            DomishObject.fromChildren(document.activeElement)
+          )
 
           // 新規アイテムを弟として追加する
           const newItemId = NextState.createTextItem()
