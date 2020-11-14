@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/Common/basicType'
+import {ItemId, ItemType, StableTabId} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
@@ -36,6 +36,20 @@ export function createWebPageItem(): ItemId {
   NextState.setNextNewItemId(newItemId + 1)
 
   return newItemId
+}
+
+/** ウェブページアイテムのタブタイトルを設定する */
+export function setWebPageItemStableTabId(itemId: ItemId, stableTabId: StableTabId) {
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('webPageItems', itemId, 'stableTabId'),
+    stableTabId
+  )
+
+  // 逆引き用インデックスを更新
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('stableTabIdToItemId', stableTabId),
+    itemId
+  )
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
