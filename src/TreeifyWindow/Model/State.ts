@@ -22,6 +22,8 @@ export type State = {
    */
   itemTreeInputBinding: {[inputId: string]: Command}
   stableTabs: {[index: number]: StableTab}
+  /** StableTabIdからItemIdを逆引きするためのオンメモリインデックス */
+  stableTabIdToItemId: {[stableTabId: number]: ItemId}
 }
 
 /**

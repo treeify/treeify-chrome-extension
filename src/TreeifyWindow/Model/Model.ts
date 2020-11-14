@@ -160,6 +160,7 @@ export class Model {
         '0100Enter': new Command('insertLineBreak'),
       },
       stableTabs: {},
+      stableTabIdToItemId: {},
     }
   }
 }

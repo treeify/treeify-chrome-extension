@@ -8,6 +8,9 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
     case 'OnTabCreated':
       onTabCreated(message)
       break
+    case 'OnTabUpdated':
+      onTabUpdated(message)
+      break
   }
 }
 
@@ -32,6 +35,19 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
     const activePageId = NextState.getActivePageId()
     NextState.insertFirstChildItem(activePageId, newWebPageItemId)
   }
+
+  NextState.commit()
+}
+
+function onTabUpdated(message: TreeifyWindow.OnTabUpdated) {
+  // タブのデータをModelに登録
+  Model.instance.currentState.stableTabs[message.stableTab.stableTabId] = message.stableTab
+
+  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTab.stableTabId]
+  NextState.setWebPageItemStableTabId(itemId, message.stableTab.stableTabId)
+  NextState.setWebPageItemTabTitle(itemId, message.stableTab.title ?? '')
+  const url = message.stableTab.url || message.stableTab.pendingUrl || ''
+  NextState.setWebPageItemUrl(itemId, url)
 
   NextState.commit()
 }

@@ -44,6 +44,12 @@ export function setWebPageItemStableTabId(itemId: ItemId, stableTabId: StableTab
     PropertyPath.of('webPageItems', itemId, 'stableTabId'),
     stableTabId
   )
+
+  // 逆引き用インデックスを更新
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('stableTabIdToItemId', stableTabId),
+    itemId
+  )
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
