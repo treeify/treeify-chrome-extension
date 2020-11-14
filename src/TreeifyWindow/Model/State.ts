@@ -8,10 +8,10 @@ import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
   /** キーの型はItemIdと書きたいが、TypeScriptの仕様上numberとしか書けない */
-  items: {[index: number]: Item}
-  textItems: {[index: number]: TextItem}
-  webPageItems: {[index: number]: WebPageItem}
-  pages: {[index: number]: Page}
+  items: {[itemId: number]: Item}
+  textItems: {[itemId: number]: TextItem}
+  webPageItems: {[itemId: number]: WebPageItem}
+  pages: {[itemId: number]: Page}
   nextNewItemId: ItemId
   activePageId: ItemId
   focusedItemPath: ItemPath | null
@@ -21,7 +21,7 @@ export type State = {
    * キーの型はInputIdと書きたいが、TypeScriptの仕様上stringとしか書けない。
    */
   itemTreeInputBinding: {[inputId: string]: Command}
-  stableTabs: {[index: number]: StableTab}
+  stableTabs: {[stableTabId: number]: StableTab}
   /** StableTabIdからItemIdを逆引きするためのオンメモリインデックス */
   stableTabIdToItemId: {[stableTabId: number]: ItemId}
 }
