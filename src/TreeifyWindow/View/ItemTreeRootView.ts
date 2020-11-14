@@ -146,20 +146,17 @@ function onArrowUp(event: KeyboardEvent) {
 }
 
 function moveFocusToAboveItem(aboveItemPath: ItemPath) {
-  const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
-  if (aboveItemType === ItemType.TEXT) {
+  if (NextState.getItemType(aboveItemPath.itemId) === ItemType.TEXT) {
     // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
     const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
-    const characterCount = DomishObject.countCharacters(domishObjects)
-    NextState.setItemTreeTextItemCaretDistance(characterCount)
-    NextState.setFocusedItemPath(aboveItemPath)
-    NextState.commit()
+    NextState.setItemTreeTextItemCaretDistance(DomishObject.countCharacters(domishObjects))
   } else {
     // 上のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
     NextState.setItemTreeTextItemSelection(null)
-    NextState.setFocusedItemPath(aboveItemPath)
-    NextState.commit()
   }
+
+  NextState.setFocusedItemPath(aboveItemPath)
+  NextState.commit()
 }
 
 /**
@@ -195,18 +192,15 @@ function onArrowDown(event: KeyboardEvent) {
 }
 
 function moveFocusToBelowItem(belowItemPath: ItemPath) {
-  const aboveItemType = NextState.getItemType(belowItemPath.itemId)
-  if (aboveItemType === ItemType.TEXT) {
-    // 下のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
+  if (NextState.getItemType(belowItemPath.itemId) === ItemType.TEXT) {
+    // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
     NextState.setItemTreeTextItemCaretDistance(0)
-    NextState.setFocusedItemPath(belowItemPath)
-    NextState.commit()
   } else {
     // 下のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
     NextState.setItemTreeTextItemSelection(null)
-    NextState.setFocusedItemPath(belowItemPath)
-    NextState.commit()
   }
+  NextState.setFocusedItemPath(belowItemPath)
+  NextState.commit()
 }
 
 // ペースト時にプレーンテキスト化する
