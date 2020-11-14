@@ -183,4 +183,6 @@
 .item-tree-web-page-content_title {
   /* テキスト折り返しを禁止 */
   white-space: nowrap;
+
+  cursor: default;
 }
