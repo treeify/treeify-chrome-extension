@@ -3,6 +3,7 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import Tab = chrome.tabs.Tab
 import TabChangeInfo = chrome.tabs.TabChangeInfo
+import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 
 // TODO: 永続化された値で初期化する
 let nextNewStableTabId = 1
@@ -69,6 +70,21 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
       type: 'OnTabUpdated',
       changeInfo,
       stableTab,
+    })
+  }
+}
+
+export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
+  const existingStableTab = stableTabMapFromTabId.get(tabId)
+  assertNonUndefined(existingStableTab)
+
+  if (await TreeifyWindow.exists()) {
+    // TODO: Treeifyウィンドウが存在したとしてもready状態かどうかは分からないのでは？
+
+    // Treeifyウィンドウが存在するときはイベントを転送する
+    TreeifyWindow.sendMessage({
+      type: 'OnTabClosed',
+      stableTabId: existingStableTab.stableTabId,
     })
   }
 }

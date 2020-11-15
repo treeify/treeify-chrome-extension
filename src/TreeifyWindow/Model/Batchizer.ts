@@ -85,6 +85,11 @@ export class Batchizer {
     this.postMutation(propertyPath, new Mutation.Set(value))
   }
 
+  /** 指定されたプロパティを削除する */
+  deleteProperty(propertyPath: PropertyPath) {
+    this.postSetMutation(propertyPath, undefined)
+  }
+
   /** 全てのMutationを適用し、stateを変更する */
   commit() {
     const propertyPaths = Batchizer.yieldPropertyPath(this.shadowObject, PropertyPath.of())
