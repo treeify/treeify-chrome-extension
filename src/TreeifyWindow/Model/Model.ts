@@ -165,6 +165,7 @@ export class Model {
         '0000Enter': new Command('enterKeyDefault'),
         '1000d': new Command('deleteItem'),
         '0100Enter': new Command('insertLineBreak'),
+        '1000Enter': new Command('toggleGrayedOut'),
       },
       stableTabs: {},
       stableTabIdToItemId: {},

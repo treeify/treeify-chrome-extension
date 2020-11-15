@@ -314,3 +314,14 @@ export function togglePaged() {
     NextState.becomePage(focusedItemPath.itemId)
   }
 }
+
+/**
+ * グレーアウトする。
+ * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
+ */
+export function toggleGrayedOut() {
+  const focusedItemPath = NextState.getFocusedItemPath()
+  if (focusedItemPath === null) return
+
+  NextState.toggleCssClass(focusedItemPath.itemId, 'grayed-out-item')
+}
