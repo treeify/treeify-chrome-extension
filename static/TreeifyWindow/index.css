@@ -37,6 +37,9 @@
 
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
+
+  /* アンロード済みウェブページアイテムのopacity */
+  --unloaded-web-page-item-opacity: 40%;
 }
 
 .item-tree-root {
@@ -185,4 +188,14 @@
   white-space: nowrap;
 
   cursor: default;
+}
+
+/* アンロード済みウェブページアイテムのタイトルのグレーアウト */
+.item-tree-web-page-content_title.unloaded-item {
+  opacity: var(--unloaded-web-page-item-opacity);
+}
+
+/* アンロード済みウェブページアイテムのファビコンのグレーアウト */
+.item-tree-web-page-content_favicon.unloaded-item {
+  opacity: var(--unloaded-web-page-item-opacity);
 }

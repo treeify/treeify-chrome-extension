@@ -105,6 +105,7 @@ function createItemTreeContentViewModel(
         itemType: ItemType.WEB_PAGE,
         title: webPageItemTitle(webPageItem),
         faviconUrl: webPageItem.faviconUrl,
+        isUnloaded: webPageItem.stableTabId === null,
         onFocus: (event) => {
           NextState.setFocusedItemPath(itemPath)
           NextState.commit()
