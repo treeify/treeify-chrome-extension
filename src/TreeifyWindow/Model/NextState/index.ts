@@ -1,7 +1,4 @@
-/**
- * ModelのnextStateを操作するメソッドを集約するための名前空間。
- * 肥大化した際に複数ファイルに分割できるようにクラスではなく名前空間にしてある。
- */
+/** ModelのnextStateを操作するメソッドを集約するための名前空間 */
 import * as NextState from 'src/TreeifyWindow/Model/NextState/all'
 
 export {NextState}
