@@ -35,6 +35,7 @@ export function createTextItem(): ItemId {
     parentItemIds: List.of(),
     isFolded: false,
     timestamp: Timestamp.now(),
+    cssClasses: List.of(),
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('items', newItemId), newItem)
 

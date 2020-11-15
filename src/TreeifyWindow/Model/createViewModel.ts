@@ -35,6 +35,7 @@ function createItemTreeNodeViewModel(state: State, itemPath: ItemPath): ItemTree
 
   return {
     isActivePage: !itemPath.hasParent(),
+    cssClasses: item.cssClasses,
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
