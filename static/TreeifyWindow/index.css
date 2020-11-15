@@ -180,6 +180,9 @@
 .item-tree-web-page-content_favicon {
   width: var(--item-tree-favicon-size);
   height: var(--item-tree-favicon-size);
+
+  /* クリックして操作できることを示す */
+  cursor: pointer;
 }
 
 /* ウェブページアイテムのタイトル */

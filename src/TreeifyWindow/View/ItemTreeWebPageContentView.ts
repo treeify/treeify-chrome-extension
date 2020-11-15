@@ -12,6 +12,7 @@ export type ItemTreeWebPageContentViewModel = {
   isUnloaded: boolean
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
+  onClickFavicon: (event: MouseEvent) => void
 }
 
 /** ウェブページアイテムのコンテンツ領域のView */
@@ -33,6 +34,7 @@ export function ItemTreeWebPageContentView(
         'unloaded-item': viewModel.isUnloaded,
       })}
       src=${faviconUrl}
+      @click=${viewModel.onClickFavicon}
     />
     <div
       class=${classMap({
