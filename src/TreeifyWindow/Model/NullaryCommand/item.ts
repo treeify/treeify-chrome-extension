@@ -188,7 +188,17 @@ export function enterKeyDefault() {
     )
     const textItemSelection = NextState.getItemTreeTextItemSelection()
     assertNonNull(textItemSelection)
-    if (textItemSelection.focusDistance < characterCount / 2) {
+    if (characterCount === 0) {
+      // 空のテキストアイテムなら
+
+      // 新規アイテムを兄として追加する
+      const newItemId = NextState.createTextItem()
+      NextState.insertNextSiblingItem(focusedItemPath, newItemId)
+
+      // キャレット位置を更新する
+      NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
+      NextState.setItemTreeTextItemCaretDistance(0)
+    } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
 
       // キャレットより前のテキストをカットする
