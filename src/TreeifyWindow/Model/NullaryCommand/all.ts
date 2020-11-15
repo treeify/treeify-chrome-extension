@@ -9,6 +9,7 @@ import {
   togglePaged,
   unindentItem,
 } from 'src/TreeifyWindow/Model/NullaryCommand/item'
+import {unloadItem} from 'src/TreeifyWindow/Model/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Model/NullaryCommand/item'
 
@@ -26,4 +27,5 @@ export const functions: {[name: string]: () => void} = {
   deleteItem,
   insertLineBreak,
   togglePaged,
+  unloadItem,
 }

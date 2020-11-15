@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId, ItemType, StableTabId} from 'src/Common/basicType'
+import {integer, ItemId, ItemType, StableTabId} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
@@ -71,4 +71,14 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
     PropertyPath.of('webPageItems', itemId, 'faviconUrl'),
     url
   )
+}
+
+/** ウェブページアイテムと紐付いているタブのIDを返す */
+export function getWebPageItemTabId(itemId: ItemId): integer | undefined {
+  const stableTabId = NextState.getBatchizer().getDerivedValue(
+    PropertyPath.of('webPageItems', itemId, 'stableTabId')
+  )
+  if (stableTabId === null) return undefined
+
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('stableTabs', stableTabId, 'id'))
 }
