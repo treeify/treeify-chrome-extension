@@ -1,5 +1,7 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
+import {repeat} from 'lit-html/directives/repeat'
+import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {
   ItemTreeContentView,
   ItemTreeContentViewModel,
@@ -7,6 +9,7 @@ import {
 import {ItemTreeSpoolView, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
 
 export type ItemTreeNodeViewModel = {
+  itemPath: ItemPath
   isActivePage: boolean
   cssClasses: List<string>
   contentViewModel: ItemTreeContentViewModel
@@ -33,7 +36,11 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       </div>
       <!-- 子リスト領域 -->
       <div class="item-tree-node_children-area">
-        ${viewModel.childItemViewModels.map(ItemTreeNodeView)}
+        ${repeat(
+          viewModel.childItemViewModels,
+          (itemViewModel) => itemViewModel.itemPath.toString(),
+          ItemTreeNodeView
+        )}
       </div>
     </div>
   </div>`
