@@ -1,4 +1,5 @@
 import MessageSender = chrome.runtime.MessageSender
+import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
@@ -10,6 +11,9 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
       break
     case 'OnTabUpdated':
       onTabUpdated(message)
+      break
+    case 'OnTabClosed':
+      onTabClosed(message)
       break
   }
 }
@@ -50,6 +54,16 @@ function onTabUpdated(message: TreeifyWindow.OnTabUpdated) {
   const url = message.stableTab.url || message.stableTab.pendingUrl || ''
   NextState.setWebPageItemUrl(itemId, url)
   NextState.setWebPageItemFaviconUrl(itemId, message.stableTab.favIconUrl ?? '')
+
+  NextState.commit()
+}
+
+function onTabClosed(message: TreeifyWindow.OnTabClosed) {
+  // Modelのタブデータを削除
+  NextState.getBatchizer().deleteProperty(PropertyPath.of('stableTabs', message.stableTabId))
+
+  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTabId]
+  NextState.setWebPageItemStableTabId(itemId, null)
 
   NextState.commit()
 }

@@ -39,17 +39,35 @@ export function createWebPageItem(): ItemId {
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
-export function setWebPageItemStableTabId(itemId: ItemId, stableTabId: StableTabId) {
-  NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('webPageItems', itemId, 'stableTabId'),
-    stableTabId
-  )
+export function setWebPageItemStableTabId(itemId: ItemId, stableTabId: StableTabId | null) {
+  if (stableTabId !== null) {
+    NextState.getBatchizer().postSetMutation(
+      PropertyPath.of('webPageItems', itemId, 'stableTabId'),
+      stableTabId
+    )
 
-  // 逆引き用インデックスを更新
-  NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('stableTabIdToItemId', stableTabId),
-    itemId
-  )
+    // 逆引き用インデックスを更新
+    NextState.getBatchizer().postSetMutation(
+      PropertyPath.of('stableTabIdToItemId', stableTabId),
+      itemId
+    )
+  } else {
+    const oldStableTabId = NextState.getBatchizer().getDerivedValue(
+      PropertyPath.of('webPageItems', itemId, 'stableTabId')
+    )
+
+    NextState.getBatchizer().postSetMutation(
+      PropertyPath.of('webPageItems', itemId, 'stableTabId'),
+      null
+    )
+
+    if (oldStableTabId !== undefined) {
+      // 逆引き用インデックスを更新
+      NextState.getBatchizer().deleteProperty(
+        PropertyPath.of('stableTabIdToItemId', oldStableTabId)
+      )
+    }
+  }
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
