@@ -1,4 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
+import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/Common/basicType'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
@@ -8,6 +9,7 @@ export type ItemTreeWebPageContentViewModel = {
   itemType: ItemType.WEB_PAGE
   title: string
   faviconUrl: string
+  isUnloaded: boolean
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
 }
@@ -25,8 +27,20 @@ export function ItemTreeWebPageContentView(
     tabindex="0"
     @focus=${viewModel.onFocus}
   >
-    <img class="item-tree-web-page-content_favicon" src=${faviconUrl} />
-    <div class="item-tree-web-page-content_title" @click="${viewModel.onClickTitle}">
+    <img
+      class=${classMap({
+        'item-tree-web-page-content_favicon': true,
+        'unloaded-item': viewModel.isUnloaded,
+      })}
+      src=${faviconUrl}
+    />
+    <div
+      class=${classMap({
+        'item-tree-web-page-content_title': true,
+        'unloaded-item': viewModel.isUnloaded,
+      })}
+      @click="${viewModel.onClickTitle}"
+    >
       ${viewModel.title}
     </div>
   </div>`
