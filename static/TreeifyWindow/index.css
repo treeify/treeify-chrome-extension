@@ -35,6 +35,9 @@
   /* マウスホバーアイテムの背景色 */
   --mouse-hover-item-background-color: hsla(240, 100%, 50%, 0.03);
 
+  /* グレーアウト状態のアイテムのopacity */
+  --grayed-out-item-opacity: 25%;
+
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
 
@@ -55,6 +58,11 @@
 .item-tree-node-content-and-children-area {
   /* コンテンツ領域を右端まで伸ばす */
   flex-grow: 1;
+}
+
+/* グレーアウト状態のアイテム */
+.grayed-out-item {
+  opacity: var(--grayed-out-item-opacity);
 }
 
 /* マウスホバー時のコンテンツ領域 */

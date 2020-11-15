@@ -91,7 +91,7 @@ export class Model {
           parentItemIds: List.of(2),
           isFolded: false,
           timestamp: 1604284090004,
-          cssClasses: List.of(),
+          cssClasses: List.of('grayed-out-item'),
         },
         5: {
           itemId: 5,
