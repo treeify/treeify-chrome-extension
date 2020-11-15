@@ -8,6 +8,7 @@ import {ItemTreeSpoolView, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/
 
 export type ItemTreeNodeViewModel = {
   isActivePage: boolean
+  cssClasses: List<string>
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
@@ -16,7 +17,7 @@ export type ItemTreeNodeViewModel = {
 
 /** アイテムツリーの各アイテムのルートView */
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
-  return html`<div class="item-tree-node">
+  return html`<div class=${viewModel.cssClasses.unshift('item-tree-node').join(' ')}>
     ${viewModel.isActivePage
       ? undefined
       : html`

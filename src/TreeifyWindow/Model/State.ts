@@ -38,6 +38,7 @@ export type Item = {
   isFolded: boolean
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
+  cssClasses: List<string>
 }
 
 /** テキストアイテムが固有で持つデータの型 */

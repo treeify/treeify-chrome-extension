@@ -55,6 +55,7 @@ export class Model {
           parentItemIds: List.of(),
           isFolded: false,
           timestamp: 1604284090000,
+          cssClasses: List.of(),
         },
         1: {
           itemId: 1,
@@ -63,6 +64,7 @@ export class Model {
           parentItemIds: List.of(0),
           isFolded: false,
           timestamp: 1604284090001,
+          cssClasses: List.of(),
         },
         2: {
           itemId: 2,
@@ -71,6 +73,7 @@ export class Model {
           parentItemIds: List.of(0),
           isFolded: true,
           timestamp: 1604284090002,
+          cssClasses: List.of(),
         },
         3: {
           itemId: 3,
@@ -79,6 +82,7 @@ export class Model {
           parentItemIds: List.of(1),
           isFolded: false,
           timestamp: 1604284090003,
+          cssClasses: List.of(),
         },
         4: {
           itemId: 4,
@@ -87,6 +91,7 @@ export class Model {
           parentItemIds: List.of(2),
           isFolded: false,
           timestamp: 1604284090004,
+          cssClasses: List.of('grayed-out-item'),
         },
         5: {
           itemId: 5,
@@ -95,6 +100,7 @@ export class Model {
           parentItemIds: List.of(0),
           isFolded: false,
           timestamp: 1604284090005,
+          cssClasses: List.of(),
         },
         6: {
           itemId: 6,
@@ -103,6 +109,7 @@ export class Model {
           parentItemIds: List.of(1),
           isFolded: false,
           timestamp: 1604284090006,
+          cssClasses: List.of(),
         },
       },
       textItems: {
@@ -158,6 +165,7 @@ export class Model {
         '0000Enter': new Command('enterKeyDefault'),
         '1000d': new Command('deleteItem'),
         '0100Enter': new Command('insertLineBreak'),
+        '1000Enter': new Command('toggleGrayedOut'),
       },
       stableTabs: {},
       stableTabIdToItemId: {},

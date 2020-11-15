@@ -6,6 +6,7 @@ import {
   moveItemDownward,
   moveItemUpward,
   toggleFolded,
+  toggleGrayedOut,
   togglePaged,
   unindentItem,
 } from 'src/TreeifyWindow/Model/NullaryCommand/item'
@@ -28,5 +29,6 @@ export const functions: {[name: string]: () => void} = {
   deleteItem,
   insertLineBreak,
   togglePaged,
+  toggleGrayedOut,
   unloadItem,
 }

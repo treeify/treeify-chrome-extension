@@ -243,3 +243,18 @@ export function getNextNewItemId(): ItemId {
 export function setNextNewItemId(itemId: ItemId) {
   getBatchizer().postSetMutation(PropertyPath.of('nextNewItemId'), itemId)
 }
+
+/**
+ * CSSクラスを追加する。
+ * 既に追加済みなら削除する。
+ */
+export function toggleCssClass(itemId: ItemId, cssClass: string) {
+  const propertyPath = PropertyPath.of('items', itemId, 'cssClasses')
+  const cssClasses: List<string> = getBatchizer().getDerivedValue(propertyPath)
+  const index = cssClasses.indexOf(cssClass)
+  if (index === -1) {
+    getBatchizer().postSetMutation(propertyPath, cssClasses.push(cssClass))
+  } else {
+    getBatchizer().postSetMutation(propertyPath, cssClasses.remove(index))
+  }
+}
