@@ -111,6 +111,8 @@ function createItemTreeContentViewModel(
           NextState.commit()
         },
         onClickTitle: (event) => {
+          NextState.setFocusedItemPath(itemPath)
+
           const stableTabId = Model.instance.currentState.webPageItems[itemPath.itemId].stableTabId
           if (stableTabId !== null) {
             // クリックされたウェブページアイテムに対応するタブを最前面化する
@@ -118,6 +120,17 @@ function createItemTreeContentViewModel(
             assertNonUndefined(stableTab.id)
             chrome.tabs.update(stableTab.id, {active: true})
             chrome.windows.update(stableTab.windowId, {focused: true})
+          }
+        },
+        onClickFavicon: (event) => {
+          NextState.setFocusedItemPath(itemPath)
+
+          switch (InputId.fromMouseEvent(event)) {
+            case '0000MouseButton0':
+              event.preventDefault()
+              NullaryCommand.unloadItem()
+              NextState.commit()
+              break
           }
         },
       }
