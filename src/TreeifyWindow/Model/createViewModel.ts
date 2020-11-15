@@ -5,6 +5,7 @@ import {DomishObject} from 'src/Common/DomishObject'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {Item, State, WebPageItem} from 'src/TreeifyWindow/Model/State'
@@ -120,12 +121,20 @@ function createItemTreeWebPageContentViewModel(
   itemPath: ItemPath
 ): ItemTreeWebPageContentViewModel {
   const webPageItem = state.webPageItems[itemPath.itemId]
+  const stableTabId = Model.instance.currentState.webPageItems[itemPath.itemId].stableTabId
+
+  const isAudible =
+    stableTabId !== null
+      ? Model.instance.currentState.stableTabs[stableTabId].audible === true
+      : false
+
   return {
     itemPath,
     itemType: ItemType.WEB_PAGE,
     title: webPageItemTitle(webPageItem),
     faviconUrl: webPageItem.faviconUrl,
     isUnloaded: webPageItem.stableTabId === null,
+    isAudible,
     onFocus: (event) => {
       NextState.setFocusedItemPath(itemPath)
       NextState.commit()
