@@ -79,6 +79,11 @@ export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
   )
 }
 
+/** ウェブページアイテムのURLを返す */
+export function getWebPageItemUrl(itemId: ItemId): string {
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('webPageItems', itemId, 'url'))
+}
+
 /** ウェブページアイテムのURLを設定する */
 export function setWebPageItemUrl(itemId: ItemId, url: string) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('webPageItems', itemId, 'url'), url)

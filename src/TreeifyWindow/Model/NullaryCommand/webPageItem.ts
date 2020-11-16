@@ -1,3 +1,5 @@
+import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 
 /** ウェブページアイテムのアンロード操作 */
@@ -9,4 +11,29 @@ export function unloadItem() {
   const tabId = NextState.getWebPageItemTabId(focusedItemPath.itemId)
   if (tabId === undefined) return
   chrome.tabs.remove(tabId)
+}
+
+/**
+ * ウェブページアイテムに対応するタブを最前面化する。
+ * 存在しない場合はタブを開く。
+ */
+export function browseWebPageItem() {
+  const focusedItemPath = NextState.getFocusedItemPath()
+  if (focusedItemPath === null) return
+
+  const stableTabId = Model.instance.currentState.webPageItems[focusedItemPath.itemId].stableTabId
+  if (stableTabId !== null) {
+    // クリックされたウェブページアイテムに対応するタブを最前面化する
+    const stableTab = Model.instance.currentState.stableTabs[stableTabId]
+    assertNonUndefined(stableTab.id)
+    chrome.tabs.update(stableTab.id, {active: true})
+    chrome.windows.update(stableTab.windowId, {focused: true})
+  } else {
+    // 対応するタブがなければ開く
+    // TODO: アイテムIDとの紐付け
+    chrome.tabs.create({
+      url: NextState.getWebPageItemUrl(focusedItemPath.itemId),
+      active: true,
+    })
+  }
 }
