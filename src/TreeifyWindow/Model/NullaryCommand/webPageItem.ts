@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -23,17 +24,16 @@ export function browseWebPageItem() {
 
   const stableTabId = Model.instance.currentState.webPageItems[focusedItemPath.itemId].stableTabId
   if (stableTabId !== null) {
-    // クリックされたウェブページアイテムに対応するタブを最前面化する
+    // ウェブページアイテムに対応するタブを最前面化する
     const stableTab = Model.instance.currentState.stableTabs[stableTabId]
     assertNonUndefined(stableTab.id)
     chrome.tabs.update(stableTab.id, {active: true})
     chrome.windows.update(stableTab.windowId, {focused: true})
   } else {
     // 対応するタブがなければ開く
-    // TODO: アイテムIDとの紐付け
-    chrome.tabs.create({
-      url: NextState.getWebPageItemUrl(focusedItemPath.itemId),
-      active: true,
-    })
+    const url = NextState.getWebPageItemUrl(focusedItemPath.itemId)
+    const itemIds = Model.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+    Model.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(focusedItemPath.itemId))
+    chrome.tabs.create({url, active: true})
   }
 }
