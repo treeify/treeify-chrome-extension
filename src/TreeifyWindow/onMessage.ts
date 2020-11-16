@@ -24,11 +24,7 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
 
   // ウェブページアイテムを作る
   const newWebPageItemId = NextState.createWebPageItem()
-  NextState.setWebPageItemStableTabId(newWebPageItemId, message.stableTab.stableTabId)
-  NextState.setWebPageItemTabTitle(newWebPageItemId, message.stableTab.title ?? '')
-  const url = message.stableTab.url || message.stableTab.pendingUrl || ''
-  NextState.setWebPageItemUrl(newWebPageItemId, url)
-  NextState.setWebPageItemFaviconUrl(newWebPageItemId, message.stableTab.favIconUrl ?? '')
+  reflectInWebPageItem(newWebPageItemId, message.stableTab)
 
   const focusedItemPath = NextState.getFocusedItemPath()
   // TODO: 残念ながら新しいタブを開いたときフォーカスアイテムはnullになっているので下記分岐は無意味
@@ -49,13 +45,18 @@ function onTabUpdated(message: TreeifyWindow.OnTabUpdated) {
   Model.instance.currentState.stableTabs[message.stableTab.stableTabId] = message.stableTab
 
   const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTab.stableTabId]
-  NextState.setWebPageItemStableTabId(itemId, message.stableTab.stableTabId)
-  NextState.setWebPageItemTabTitle(itemId, message.stableTab.title ?? '')
-  const url = message.stableTab.url || message.stableTab.pendingUrl || ''
-  NextState.setWebPageItemUrl(itemId, url)
-  NextState.setWebPageItemFaviconUrl(itemId, message.stableTab.favIconUrl ?? '')
+  reflectInWebPageItem(itemId, message.stableTab)
 
   NextState.commit()
+}
+
+// stableTabの情報をウェブページアイテムに転写する
+function reflectInWebPageItem(itemId: ItemId, stableTab: StableTab) {
+  NextState.setWebPageItemStableTabId(itemId, stableTab.stableTabId)
+  NextState.setWebPageItemTabTitle(itemId, stableTab.title ?? '')
+  const url = stableTab.url || stableTab.pendingUrl || ''
+  NextState.setWebPageItemUrl(itemId, url)
+  NextState.setWebPageItemFaviconUrl(itemId, stableTab.favIconUrl ?? '')
 }
 
 function onTabClosed(message: TreeifyWindow.OnTabClosed) {
