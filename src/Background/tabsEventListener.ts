@@ -1,15 +1,10 @@
+import {BackgroundPageState} from 'src/Background/BackgroundPageState'
 import {integer, StableTab} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import Tab = chrome.tabs.Tab
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
-
-// TODO: 永続化された値で初期化する
-let nextNewStableTabId = 1
-
-// StableTabの集まりに対するオンメモリインデックスの1つ
-const stableTabMapFromTabId = new Map<integer, StableTab>()
 
 /** 現時点で存在するタブの情報を収集し、必要に応じてStableTabIdの発行などを行う */
 export async function processExistingTabs() {
@@ -30,11 +25,12 @@ async function getAllNormalTabs(): Promise<Tab[]> {
 export async function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
+  const stableTabMapFromTabId = BackgroundPageState.instance.stableTabMapFromTabId
   const openerStableTab =
     tab.openerTabId !== undefined ? stableTabMapFromTabId.get(tab.openerTabId) : undefined
 
   const stableTab: StableTab = {
-    stableTabId: nextNewStableTabId++,
+    stableTabId: BackgroundPageState.instance.nextNewStableTabId++,
     opener: openerStableTab?.stableTabId ?? null,
     ...tab,
   }
@@ -54,6 +50,7 @@ export async function onCreated(tab: Tab) {
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   assertNonUndefined(tab.id)
 
+  const stableTabMapFromTabId = BackgroundPageState.instance.stableTabMapFromTabId
   const existingStableTab = stableTabMapFromTabId.get(tab.id)
   assertNonUndefined(existingStableTab)
   const stableTab: StableTab = {
@@ -75,6 +72,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
 }
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
+  const stableTabMapFromTabId = BackgroundPageState.instance.stableTabMapFromTabId
   const existingStableTab = stableTabMapFromTabId.get(tabId)
   assertNonUndefined(existingStableTab)
 
