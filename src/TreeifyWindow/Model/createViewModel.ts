@@ -123,6 +123,10 @@ function createItemTreeWebPageContentViewModel(
   const webPageItem = state.webPageItems[itemPath.itemId]
   const stableTabId = Model.instance.currentState.webPageItems[itemPath.itemId].stableTabId
 
+  const isLoading =
+    stableTabId !== null
+      ? Model.instance.currentState.stableTabs[stableTabId].status === 'loading'
+      : false
   const isAudible =
     stableTabId !== null
       ? Model.instance.currentState.stableTabs[stableTabId].audible === true
@@ -133,6 +137,7 @@ function createItemTreeWebPageContentViewModel(
     itemType: ItemType.WEB_PAGE,
     title: webPageItemTitle(webPageItem),
     faviconUrl: webPageItem.faviconUrl,
+    isLoading,
     isUnloaded: webPageItem.stableTabId === null,
     isAudible,
     onFocus: (event) => {

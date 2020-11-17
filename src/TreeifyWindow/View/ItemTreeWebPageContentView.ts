@@ -9,6 +9,7 @@ export type ItemTreeWebPageContentViewModel = {
   itemType: ItemType.WEB_PAGE
   title: string
   faviconUrl: string
+  isLoading: boolean
   isUnloaded: boolean
   isAudible: boolean
   onFocus: (event: FocusEvent) => void
@@ -29,14 +30,18 @@ export function ItemTreeWebPageContentView(
     tabindex="0"
     @focus=${viewModel.onFocus}
   >
-    <img
-      class=${classMap({
-        'item-tree-web-page-content_favicon': true,
-        'unloaded-item': viewModel.isUnloaded,
-      })}
-      src=${faviconUrl}
-      @click=${viewModel.onClickFavicon}
-    />
+    ${viewModel.isLoading
+      ? html`<div class="item-tree-web-page-content_favicon loading-indicator" />`
+      : html`
+          <img
+            class=${classMap({
+              'item-tree-web-page-content_favicon': true,
+              'unloaded-item': viewModel.isUnloaded,
+            })}
+            src=${faviconUrl}
+            @click=${viewModel.onClickFavicon}
+          />
+        `}
     <div
       class=${classMap({
         'item-tree-web-page-content_title': true,
