@@ -22,7 +22,7 @@ export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateRe
       : undefined}
     <div class="item-tree-spool_bullet-area">
       ${viewModel.bulletState === BulletState.PAGE
-        ? html`<img class="item-tree-spool_page-icon"></img>`
+        ? html`<div class="item-tree-spool_page-icon" />`
         : html`
             ${viewModel.bulletState === BulletState.FOLDED
               ? html`<div class="item-tree-spool_outer-circle"></div>`

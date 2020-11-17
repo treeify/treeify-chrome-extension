@@ -10,6 +10,7 @@ export type ItemTreeWebPageContentViewModel = {
   title: string
   faviconUrl: string
   isUnloaded: boolean
+  isAudible: boolean
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
@@ -45,5 +46,8 @@ export function ItemTreeWebPageContentView(
     >
       ${viewModel.title}
     </div>
+    ${viewModel.isAudible
+      ? html`<div class="item-tree-web-page-content_audible-icon" />`
+      : undefined}
   </div>`
 }

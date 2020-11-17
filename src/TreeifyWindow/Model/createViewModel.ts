@@ -5,6 +5,7 @@ import {DomishObject} from 'src/Common/DomishObject'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {Item, State, WebPageItem} from 'src/TreeifyWindow/Model/State'
@@ -12,6 +13,8 @@ import {ItemTreeContentViewModel} from 'src/TreeifyWindow/View/ItemTreeContentVi
 import {ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
 import {ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
 import {BulletState, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
+import {ItemTreeTextContentViewModel} from 'src/TreeifyWindow/View/ItemTreeTextContentView'
+import {ItemTreeWebPageContentViewModel} from 'src/TreeifyWindow/View/ItemTreeWebPageContentView'
 import {RootViewModel} from 'src/TreeifyWindow/View/RootView'
 
 export function createRootViewModel(state: State): RootViewModel {
@@ -70,65 +73,87 @@ function createItemTreeContentViewModel(
   // アイテムタイプごとの固有部分を追加して返す
   switch (itemType) {
     case ItemType.TEXT:
-      return {
-        itemPath,
-        itemType: ItemType.TEXT,
-        domishObjects: state.textItems[itemPath.itemId].domishObjects,
-        onInput: (event) => {
-          // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
-          if (!event.isComposing && event.target instanceof Node) {
-            // 最新のキャレット位置をModelに反映する
-            NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
-
-            // contenteditableな要素のinnerHTMLをModelに反映する
-            const domishObjects = DomishObject.fromChildren(event.target)
-            NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
-            NextState.commit()
-          }
-        },
-        onCompositionEnd: (event) => {
-          if (event.target instanceof Node) {
-            // contenteditableな要素のinnerHTMLをModelに反映する
-            const domishObjects = DomishObject.fromChildren(event.target)
-            NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
-            NextState.commit()
-          }
-        },
-        onFocus: (event) => {
-          NextState.setFocusedItemPath(itemPath)
-          NextState.commitSilently()
-        },
-      }
+      return createItemTreeTextContentViewModel(state, itemPath)
     case ItemType.WEB_PAGE:
-      const webPageItem = state.webPageItems[itemPath.itemId]
-      return {
-        itemPath,
-        itemType: ItemType.WEB_PAGE,
-        title: webPageItemTitle(webPageItem),
-        faviconUrl: webPageItem.faviconUrl,
-        isUnloaded: webPageItem.stableTabId === null,
-        onFocus: (event) => {
-          NextState.setFocusedItemPath(itemPath)
-          NextState.commit()
-        },
-        onClickTitle: (event) => {
-          NextState.setFocusedItemPath(itemPath)
-          NullaryCommand.browseWebPageItem()
-        },
-        onClickFavicon: (event) => {
-          NextState.setFocusedItemPath(itemPath)
-
-          switch (InputId.fromMouseEvent(event)) {
-            case '0000MouseButton0':
-              event.preventDefault()
-              NullaryCommand.unloadItem()
-              NextState.commit()
-              break
-          }
-        },
-      }
+      return createItemTreeWebPageContentViewModel(state, itemPath)
     default:
       assertNeverType(itemType)
+  }
+}
+
+function createItemTreeTextContentViewModel(
+  state: State,
+  itemPath: ItemPath
+): ItemTreeTextContentViewModel {
+  return {
+    itemPath,
+    itemType: ItemType.TEXT,
+    domishObjects: state.textItems[itemPath.itemId].domishObjects,
+    onInput: (event) => {
+      // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
+      if (!event.isComposing && event.target instanceof Node) {
+        // 最新のキャレット位置をModelに反映する
+        NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+
+        // contenteditableな要素のinnerHTMLをModelに反映する
+        const domishObjects = DomishObject.fromChildren(event.target)
+        NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+        NextState.commit()
+      }
+    },
+    onCompositionEnd: (event) => {
+      if (event.target instanceof Node) {
+        // contenteditableな要素のinnerHTMLをModelに反映する
+        const domishObjects = DomishObject.fromChildren(event.target)
+        NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+        NextState.commit()
+      }
+    },
+    onFocus: (event) => {
+      NextState.setFocusedItemPath(itemPath)
+      NextState.commitSilently()
+    },
+  }
+}
+
+function createItemTreeWebPageContentViewModel(
+  state: State,
+  itemPath: ItemPath
+): ItemTreeWebPageContentViewModel {
+  const webPageItem = state.webPageItems[itemPath.itemId]
+  const stableTabId = Model.instance.currentState.webPageItems[itemPath.itemId].stableTabId
+
+  const isAudible =
+    stableTabId !== null
+      ? Model.instance.currentState.stableTabs[stableTabId].audible === true
+      : false
+
+  return {
+    itemPath,
+    itemType: ItemType.WEB_PAGE,
+    title: webPageItemTitle(webPageItem),
+    faviconUrl: webPageItem.faviconUrl,
+    isUnloaded: webPageItem.stableTabId === null,
+    isAudible,
+    onFocus: (event) => {
+      NextState.setFocusedItemPath(itemPath)
+      NextState.commit()
+    },
+    onClickTitle: (event) => {
+      NextState.setFocusedItemPath(itemPath)
+      NullaryCommand.browseWebPageItem()
+    },
+    onClickFavicon: (event) => {
+      NextState.setFocusedItemPath(itemPath)
+
+      switch (InputId.fromMouseEvent(event)) {
+        case '0000MouseButton0':
+          event.preventDefault()
+          NullaryCommand.unloadItem()
+          NextState.commit()
+          break
+      }
+    },
   }
 }
 
