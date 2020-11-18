@@ -190,9 +190,30 @@
 .item-tree-web-page-content_favicon {
   width: var(--item-tree-favicon-size);
   height: var(--item-tree-favicon-size);
+  /* 横幅が縮まないよう設定 */
+  flex-shrink: 0;
 
   /* クリックして操作できることを示す */
   cursor: pointer;
+}
+
+/* ローディングインジケータ */
+.loading-indicator {
+  border-radius: 50%;
+  border-top: 4px solid hsl(200, 0%, 30%);
+  border-right: 4px solid hsl(200, 0%, 70%);
+  border-bottom: 4px solid hsl(200, 0%, 70%);
+  border-left: 4px solid hsl(200, 0%, 70%);
+  box-sizing: border-box;
+  animation: rotation 0.8s infinite linear;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* ウェブページアイテムの音がなっていることを示すアイコン */
