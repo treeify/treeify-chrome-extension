@@ -106,6 +106,7 @@ function createItemTreeTextContentViewModel(
         // contenteditableな要素のinnerHTMLをModelに反映する
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+        NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
         NextState.commit()
       }
     },
