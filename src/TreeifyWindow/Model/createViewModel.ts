@@ -19,6 +19,7 @@ import {RootViewModel} from 'src/TreeifyWindow/View/RootView'
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
+    leftSidebarViewMode: {},
     itemTreeRootViewModel: createItemTreeRootViewModel(state),
   }
 }
