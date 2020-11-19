@@ -12,6 +12,7 @@ export type State = {
   textItems: {[itemId: number]: TextItem}
   webPageItems: {[itemId: number]: WebPageItem}
   pages: {[itemId: number]: Page}
+  moutedPages: {[itemId: number]: MountedPage}
   nextNewItemId: ItemId
   activePageId: ItemId
   focusedItemPath: ItemPath | null
@@ -81,6 +82,12 @@ export type WebPageItem = {
 
 /** 各ページが持つデータの型 */
 export type Page = {}
+
+/**
+ * マウントされたページが持つデータの型。
+ * マウントされたページとは、ページツリーに表示される全てのページのこと。
+ */
+export type MountedPage = {}
 
 /** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
 export type TextItemSelection = {

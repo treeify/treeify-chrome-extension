@@ -15,11 +15,36 @@ import {ItemTreeRootViewModel} from 'src/TreeifyWindow/View/ItemTreeRootView'
 import {BulletState, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
 import {ItemTreeTextContentViewModel} from 'src/TreeifyWindow/View/ItemTreeTextContentView'
 import {ItemTreeWebPageContentViewModel} from 'src/TreeifyWindow/View/ItemTreeWebPageContentView'
+import {PageTreeContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
+import {PageTreeNodeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
 import {RootViewModel} from 'src/TreeifyWindow/View/RootView'
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
+    leftSidebarViewMode: {
+      pageTreeNodeViewModel: createPageTreeRootViewModel(state),
+    },
     itemTreeRootViewModel: createItemTreeRootViewModel(state),
+  }
+}
+
+function createPageTreeRootViewModel(state: State): PageTreeNodeViewModel {
+  return {
+    contentViewModel: createPageTreeContentViewModel(state, 0),
+  }
+}
+
+function createPageTreeContentViewModel(state: State, itemId: ItemId): PageTreeContentViewModel {
+  switch (state.items[itemId].itemType) {
+    case ItemType.TEXT:
+      return {
+        itemType: ItemType.TEXT,
+        domishObjects: state.textItems[itemId].domishObjects,
+      }
+    case ItemType.WEB_PAGE:
+      return {
+        itemType: ItemType.WEB_PAGE,
+      }
   }
 }
 

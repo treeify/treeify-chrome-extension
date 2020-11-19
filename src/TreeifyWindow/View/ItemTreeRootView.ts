@@ -14,14 +14,14 @@ export type ItemTreeRootViewModel = {
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeRootView(viewModel: ItemTreeRootViewModel): TemplateResult {
-  return html`<div
+  return html`<main
     class="item-tree-root"
     @paste=${onPaste}
     @focusout=${onFocusOut}
     @keydown=${onKeyDown}
   >
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
-  </div>`
+  </main>`
 }
 
 function onKeyDown(event: KeyboardEvent) {
