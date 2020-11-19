@@ -1,11 +1,10 @@
 import {render} from 'lit-html'
 import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/domTextSelection'
-import {createRootViewModel} from 'src/TreeifyWindow/Model/createViewModel'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {onMessage} from 'src/TreeifyWindow/onMessage'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
-import {RootView} from 'src/TreeifyWindow/View/RootView'
+import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
 const spaRoot = document.getElementById('spa-root')!
 render(RootView(createRootViewModel(Model.instance.currentState)), spaRoot)

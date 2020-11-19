@@ -1,12 +1,22 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {repeat} from 'lit-html/directives/repeat'
+import {ItemId} from 'src/Common/basicType'
+import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
+import {State} from 'src/TreeifyWindow/Model/State'
 import {
+  createItemTreeContentViewModel,
   ItemTreeContentView,
   ItemTreeContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTreeContentView'
-import {ItemTreeSpoolView, ItemTreeSpoolViewModel} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
+import {
+  createItemTreeSpoolViewModel,
+  ItemTreeSpoolView,
+  ItemTreeSpoolViewModel,
+} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
@@ -16,6 +26,44 @@ export type ItemTreeNodeViewModel = {
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
   onMouseDownContentArea: (event: MouseEvent) => void
+}
+
+// 再帰的にアイテムツリーのViewModelを作る
+export function createItemTreeNodeViewModel(
+  state: State,
+  itemPath: ItemPath
+): ItemTreeNodeViewModel {
+  const item = state.items[itemPath.itemId]
+  const visibleChildItemIds = getVisibleChildItemIds(state, itemPath)
+
+  return {
+    itemPath,
+    isActivePage: !itemPath.hasParent(),
+    cssClasses: item.cssClasses,
+    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
+    contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
+    childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
+      return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
+    }),
+    onMouseDownContentArea: (event: MouseEvent) => {
+      const inputId = InputId.fromMouseEvent(event)
+      if (inputId === '0000MouseButton1') {
+        event.preventDefault()
+        NextState.setFocusedItemPath(itemPath)
+        NullaryCommand.deleteItem()
+        NextState.commit()
+      }
+    },
+  }
+}
+
+function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
+  const item = state.items[itemPath.itemId]
+  const isPage = state.pages[itemPath.itemId] !== undefined
+  if (isPage) {
+    return itemPath.hasParent() ? List.of() : item.childItemIds
+  }
+  return item.isFolded ? List.of() : item.childItemIds
 }
 
 /** アイテムツリーの各アイテムのルートView */

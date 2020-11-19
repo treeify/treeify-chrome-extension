@@ -1,4 +1,8 @@
 import {html, TemplateResult} from 'lit-html'
+import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
+import {Item, State} from 'src/TreeifyWindow/Model/State'
 
 export enum BulletState {
   NO_CHILDREN,
@@ -10,6 +14,40 @@ export enum BulletState {
 export type ItemTreeSpoolViewModel = {
   bulletState: BulletState
   onClick: (event: MouseEvent) => void
+}
+
+export function createItemTreeSpoolViewModel(
+  state: State,
+  itemPath: ItemPath,
+  item: Item
+): ItemTreeSpoolViewModel {
+  const onClick = () => {
+    if (NextState.isPage(itemPath.itemId)) {
+      // ページアイコンのクリック時はアクティブページを切り替える
+      NextState.setActivePageId(itemPath.itemId)
+      NextState.commit()
+    } else {
+      NextState.setFocusedItemPath(itemPath)
+      NullaryCommand.toggleFolded()
+      NextState.commit()
+    }
+  }
+  if (state.pages[item.itemId] !== undefined) {
+    return {
+      bulletState: BulletState.PAGE,
+      onClick,
+    }
+  } else if (item.childItemIds.size === 0) {
+    return {
+      bulletState: BulletState.NO_CHILDREN,
+      onClick,
+    }
+  } else {
+    return {
+      bulletState: item.isFolded ? BulletState.FOLDED : BulletState.UNFOLDED,
+      onClick,
+    }
+  }
 }
 
 /** アイテムツリーのバレットとインデント */
