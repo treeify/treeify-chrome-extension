@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
@@ -6,10 +7,22 @@ import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/domTextSele
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {ItemTreeNodeView, ItemTreeNodeViewModel} from 'src/TreeifyWindow/View/ItemTreeNodeView'
+import {State} from 'src/TreeifyWindow/Model/State'
+import {
+  createItemTreeNodeViewModel,
+  ItemTreeNodeView,
+  ItemTreeNodeViewModel,
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 
 export type ItemTreeRootViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
+}
+
+export function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel {
+  const rootItemPath = new ItemPath(List.of(state.activePageId))
+  return {
+    rootNodeViewModel: createItemTreeNodeViewModel(state, rootItemPath),
+  }
 }
 
 /** アイテムツリーの全体のルートView */
