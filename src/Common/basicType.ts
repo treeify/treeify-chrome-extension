@@ -13,6 +13,17 @@ export type integer = number
  */
 export type ItemId = integer
 
+/**
+ * トップページのアイテムID。
+ * このアイテムは下記の特徴を持つ。
+ * ・インストール時に自動生成される
+ * ・削除されない
+ * ・常に親を持たない
+ * ・常にページである（非ページ化できない）
+ * ・常にマウントされている
+ */
+export const TOP_ITEM_ID = 0
+
 export enum ItemType {
   TEXT = 'Text',
   WEB_PAGE = 'Web page',

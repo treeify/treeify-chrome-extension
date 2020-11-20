@@ -9,6 +9,13 @@ export class ItemPath {
     // TODO: assert(itemIds.size > 0);
   }
 
+  /** パスの始点アイテムのIDを返す */
+  get rootItemId(): ItemId {
+    const itemId = this.itemIds.first(undefined)
+    assertNonUndefined(itemId)
+    return itemId
+  }
+
   /** パスの終点アイテムのIDを返す */
   get itemId(): ItemId {
     const last = this.itemIds.last(undefined)
