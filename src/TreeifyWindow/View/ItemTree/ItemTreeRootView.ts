@@ -12,7 +12,7 @@ import {
   createItemTreeNodeViewModel,
   ItemTreeNodeView,
   ItemTreeNodeViewModel,
-} from 'src/TreeifyWindow/View/ItemTreeNodeView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 
 export type ItemTreeRootViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel

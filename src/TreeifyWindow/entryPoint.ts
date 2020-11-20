@@ -3,7 +3,7 @@ import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/do
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {onMessage} from 'src/TreeifyWindow/onMessage'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
 const spaRoot = document.getElementById('spa-root')!

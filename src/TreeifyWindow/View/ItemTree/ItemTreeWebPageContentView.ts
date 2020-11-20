@@ -7,7 +7,7 @@ import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {State, WebPageItem} from 'src/TreeifyWindow/Model/State'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath

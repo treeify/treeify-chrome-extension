@@ -7,7 +7,7 @@ import {
   createItemTreeWebPageContentViewModel,
   ItemTreeWebPageContentView,
   ItemTreeWebPageContentViewModel,
-} from 'src/TreeifyWindow/View/ItemTreeWebPageContentView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
 import {
   createItemTreeTextContentViewModel,
   ItemTreeTextContentView,

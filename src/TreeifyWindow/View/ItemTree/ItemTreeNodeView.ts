@@ -11,12 +11,12 @@ import {
   createItemTreeContentViewModel,
   ItemTreeContentView,
   ItemTreeContentViewModel,
-} from 'src/TreeifyWindow/View/ItemTreeContentView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createItemTreeSpoolViewModel,
   ItemTreeSpoolView,
   ItemTreeSpoolViewModel,
-} from 'src/TreeifyWindow/View/ItemTreeSpoolView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath

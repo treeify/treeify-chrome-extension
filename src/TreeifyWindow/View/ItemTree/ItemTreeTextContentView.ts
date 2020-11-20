@@ -6,7 +6,7 @@ import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {State} from 'src/TreeifyWindow/Model/State'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTreeContentView'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath

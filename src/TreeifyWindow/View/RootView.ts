@@ -4,7 +4,7 @@ import {
   createItemTreeRootViewModel,
   ItemTreeRootView,
   ItemTreeRootViewModel,
-} from 'src/TreeifyWindow/View/ItemTreeRootView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeRootView'
 import {
   LeftSidebarView,
   LeftSidebarViewModel,
