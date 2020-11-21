@@ -1,0 +1,13 @@
+.left-sidebar {
+  flex-basis: 200px;
+  flex-shrink: 0;
+
+  background-color: hsl(0, 0%, 35%);
+  color: white;
+}
+/* デュアルウィンドウレイアウトでは左サイドバーを非表示 */
+@media screen and (max-width: 700px) {
+  .left-sidebar {
+    display: none;
+  }
+}
