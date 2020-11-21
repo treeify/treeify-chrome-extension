@@ -1,0 +1,245 @@
+:root {
+  --item-tree-base-font-size: 18px;
+
+  /*
+  アイテムツリーのテキスト全般に適用されるline-height。
+  階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
+  */
+  --item-tree-line-height: 1.45;
+  /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+  --item-tree-font-size-multiplicator: 99%;
+
+  /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
+  --calculated-item-tree-line-height: calc(1em * var(--item-tree-line-height));
+
+  /* バレットの外側の円の直径 */
+  --bullet-outer-circle-diameter: 1em;
+  /* バレットの外側の円の色 */
+  --bullet-outer-circle-color: hsl(0, 0%, 80%);
+  /* バレットの内側の円の直径 */
+  --bullet-inner-circle-diameter: 0.4em;
+  /* バレットの内側の円の色 */
+  --bullet-inner-circle-color: hsl(0, 0%, 20%);
+  /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
+  --bullet-page-icon-size: 1em;
+
+  /* インデントラインの太さ */
+  --indent-line-width: 1px;
+  /* インデントラインの色 */
+  --indent-line-color: hsl(0, 0%, 90%);
+  /* インデントラインの色（ホバー時） */
+  --indent-line-hover-color: hsl(0, 0%, 70%);
+
+  /* フォーカスアイテムの背景色 */
+  --focused-item-background-color: hsla(240, 100%, 50%, 0.06);
+  /* マウスホバーアイテムの背景色 */
+  --mouse-hover-item-background-color: hsla(240, 100%, 50%, 0.03);
+
+  /* グレーアウト状態のアイテムのopacity */
+  --grayed-out-item-opacity: 25%;
+
+  /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
+  --item-tree-favicon-size: 1em;
+
+  /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
+  --item-tree-audible-icon-size: 1em;
+  /* ウェブページアイテムの音がなっていることを示すアイコンの色 */
+  --item-tree-audible-icon-color: hsl(0, 0%, 30%);
+
+  /* アンロード済みウェブページアイテムのopacity */
+  --unloaded-web-page-item-opacity: 40%;
+}
+
+.item-tree-root {
+  flex-grow: 1;
+
+  font-size: var(--item-tree-base-font-size);
+  line-height: var(--item-tree-line-height);
+}
+
+.item-tree-node {
+  /* バレットやインデントの領域とその他の領域を水平に並べる */
+  display: flex;
+}
+
+.item-tree-node-content-and-children-area {
+  /* コンテンツ領域を右端まで伸ばす */
+  flex-grow: 1;
+}
+
+/* グレーアウト状態のアイテム */
+.grayed-out-item {
+  opacity: var(--grayed-out-item-opacity);
+}
+
+/* マウスホバー時のコンテンツ領域 */
+.item-tree-node-content-area:hover {
+  /* マウスホバーアイテムの強調表示 */
+  background: var(--mouse-hover-item-background-color);
+}
+
+/* フォーカス時のコンテンツ領域 */
+.item-tree-node-content-area:focus-within {
+  /* フォーカスアイテムの強調表示 */
+  background: var(--focused-item-background-color);
+}
+
+.item-tree-node_children-area {
+  /* 階層の深さに応じてフォントサイズを小さくする */
+  font-size: var(--item-tree-font-size-multiplicator);
+}
+
+/* アイテムツリーのバレットとインデントのルート要素 */
+.item-tree-spool {
+  width: var(--calculated-item-tree-line-height);
+  height: 100%;
+  /* インデントラインをバレットの裏まで描画するための設定 */
+  position: relative;
+
+  cursor: pointer;
+}
+
+.item-tree-spool_bullet-area {
+  width: var(--calculated-item-tree-line-height);
+  height: var(--calculated-item-tree-line-height);
+  /* 外側の円と内側の円を重ねて描画するための設定 */
+  position: relative;
+}
+
+/* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
+.item-tree-spool_outer-circle {
+  width: var(--bullet-outer-circle-diameter);
+  height: var(--bullet-outer-circle-diameter);
+  border-radius: 50%;
+  background: var(--bullet-outer-circle-color);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* アイテムツリーのバレットの内側の円 */
+.item-tree-spool_inner-circle {
+  width: var(--bullet-inner-circle-diameter);
+  height: var(--bullet-inner-circle-diameter);
+  border-radius: 50%;
+  background: var(--bullet-inner-circle-color);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* ページのバレット */
+.item-tree-spool_page-icon {
+  width: var(--bullet-page-icon-size);
+  height: var(--bullet-page-icon-size);
+
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+  background-color: var(--bullet-inner-circle-color);
+  -webkit-mask-image: url('./page-icon.svg');
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* インデント領域 */
+.item-tree-spool_indent-area {
+  position: absolute;
+  /* バレットの中心のY座標から子リストの下端までの領域にする */
+  top: calc(var(--calculated-item-tree-line-height) / 2);
+  height: calc(100% - var(--calculated-item-tree-line-height) / 2);
+  width: 100%;
+}
+
+/* インデントライン */
+.item-tree-spool_indent-line {
+  background-color: var(--indent-line-color);
+  width: var(--indent-line-width);
+  height: 100%;
+  margin: 0 auto;
+}
+
+/* バレットとインデントの領域のホバー時のインデントライン */
+.item-tree-spool:hover .item-tree-spool_indent-line {
+  background-color: var(--indent-line-hover-color);
+}
+
+/* テキストアイテムのcontenteditableな要素 */
+.item-tree-text-content_content-editable {
+  /* contenteditableな要素のフォーカス時の枠線を非表示 */
+  outline: 0 solid transparent;
+}
+
+/* ウェブページアイテムのコンテンツ領域のルート */
+.item-tree-web-page-content {
+  /* ファビコンとタイトルなどを横並びにする */
+  display: flex;
+  align-items: center;
+
+  /* フォーカス時の枠線を非表示 */
+  outline: 0 solid transparent;
+}
+
+/* ウェブページアイテムのファビコン */
+.item-tree-web-page-content_favicon {
+  width: var(--item-tree-favicon-size);
+  height: var(--item-tree-favicon-size);
+  /* 横幅が縮まないよう設定 */
+  flex-shrink: 0;
+
+  /* クリックして操作できることを示す */
+  cursor: pointer;
+}
+
+/* ローディングインジケータ */
+.loading-indicator {
+  border-radius: 50%;
+  border-top: 4px solid hsl(200, 0%, 30%);
+  border-right: 4px solid hsl(200, 0%, 70%);
+  border-bottom: 4px solid hsl(200, 0%, 70%);
+  border-left: 4px solid hsl(200, 0%, 70%);
+  box-sizing: border-box;
+  animation: rotation 0.8s infinite linear;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ウェブページアイテムの音がなっていることを示すアイコン */
+.item-tree-web-page-content_audible-icon {
+  width: var(--item-tree-audible-icon-size);
+  height: var(--item-tree-audible-icon-size);
+  /* 横幅が縮まないよう設定 */
+  flex-shrink: 0;
+
+  background-color: var(--item-tree-audible-icon-color);
+  -webkit-mask-image: url('./audible-icon.svg');
+}
+
+/* ウェブページアイテムのタイトル */
+.item-tree-web-page-content_title {
+  cursor: default;
+}
+
+/* アンロード済みウェブページアイテムのタイトルのグレーアウト */
+.item-tree-web-page-content_title.unloaded-item {
+  opacity: var(--unloaded-web-page-item-opacity);
+}
+
+/* アンロード済みウェブページアイテムのファビコンのグレーアウト */
+.item-tree-web-page-content_favicon.unloaded-item {
+  opacity: var(--unloaded-web-page-item-opacity);
+}
