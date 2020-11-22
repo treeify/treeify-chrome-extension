@@ -12,7 +12,7 @@ export type State = {
   textItems: {[itemId: number]: TextItem}
   webPageItems: {[itemId: number]: WebPageItem}
   pages: {[itemId: number]: Page}
-  moutedPages: {[itemId: number]: MountedPage}
+  mountedPages: {[itemId: number]: MountedPage}
   nextNewItemId: ItemId
   activePageId: ItemId
   focusedItemPath: ItemPath | null

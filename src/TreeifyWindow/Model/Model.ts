@@ -156,7 +156,7 @@ export class Model {
         '0': {},
         '6': {},
       },
-      moutedPages: {
+      mountedPages: {
         '0': {},
       },
       nextNewItemId: 7,
