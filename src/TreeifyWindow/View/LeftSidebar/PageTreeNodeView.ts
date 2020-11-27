@@ -3,6 +3,7 @@ import {html, TemplateResult} from 'lit-html'
 import {integer, ItemId, TOP_ITEM_ID} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {State} from 'src/TreeifyWindow/Model/State'
 import {
   createPageTreeContentViewModel,
@@ -13,6 +14,7 @@ import {
 export type PageTreeNodeViewModel = {
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
+  onClickContentView: () => void
 }
 
 export function createPageTreeRootViewModel(state: State): PageTreeNodeViewModel {
@@ -34,6 +36,10 @@ export function createPageTreeNodeViewModel(
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(state, childPagePath.itemId, pageTreeEdges)
     ),
+    onClickContentView: () => {
+      NextState.setActivePageId(itemId)
+      NextState.commit()
+    },
   }
 }
 
@@ -55,8 +61,10 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 }
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
-  return html`<div>
-    ${PageTreeContentView(viewModel.contentViewModel)}
+  return html`<div class="page-tree-node">
+    <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
+      ${PageTreeContentView(viewModel.contentViewModel)}
+    </div>
     ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
   </div>`
 }
