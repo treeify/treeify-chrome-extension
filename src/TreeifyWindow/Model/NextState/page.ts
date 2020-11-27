@@ -13,6 +13,11 @@ export function setActivePageId(itemId: ItemId) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('activePageId'), itemId)
 }
 
+/** ページをマウントする */
+export function mountPage(itemId: ItemId) {
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('mountedPages', itemId), {})
+}
+
 /** 与えられたアイテムがページかどうかを返す */
 export function isPage(itemId: ItemId) {
   const page = NextState.getBatchizer().getDerivedValue(PropertyPath.of('pages', itemId))

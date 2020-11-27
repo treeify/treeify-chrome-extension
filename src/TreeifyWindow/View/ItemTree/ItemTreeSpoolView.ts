@@ -25,6 +25,7 @@ export function createItemTreeSpoolViewModel(
     if (NextState.isPage(itemPath.itemId)) {
       // ページアイコンのクリック時はアクティブページを切り替える
       NextState.setActivePageId(itemPath.itemId)
+      NextState.mountPage(itemPath.itemId)
       NextState.commit()
     } else {
       NextState.setFocusedItemPath(itemPath)
