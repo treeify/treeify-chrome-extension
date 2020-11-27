@@ -62,7 +62,7 @@
   display: flex;
 }
 
-.item-tree-node-content-and-children-area {
+.item-tree-node_content-and-children-area {
   /* コンテンツ領域を右端まで伸ばす */
   flex-grow: 1;
 }
@@ -73,13 +73,13 @@
 }
 
 /* マウスホバー時のコンテンツ領域 */
-.item-tree-node-content-area:hover {
+.item-tree-node_content-area:hover {
   /* マウスホバーアイテムの強調表示 */
   background: var(--mouse-hover-item-background-color);
 }
 
 /* フォーカス時のコンテンツ領域 */
-.item-tree-node-content-area:focus-within {
+.item-tree-node_content-area:focus-within {
   /* フォーカスアイテムの強調表示 */
   background: var(--focused-item-background-color);
 }

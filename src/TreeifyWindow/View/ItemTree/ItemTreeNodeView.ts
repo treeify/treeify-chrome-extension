@@ -77,9 +77,9 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
             ${ItemTreeSpoolView(viewModel.spoolViewModel)}
           </div>
         `}
-    <div class="item-tree-node-content-and-children-area">
+    <div class="item-tree-node_content-and-children-area">
       <!-- コンテンツ領域 -->
-      <div class="item-tree-node-content-area" @mousedown=${viewModel.onMouseDownContentArea}>
+      <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
         ${ItemTreeContentView(viewModel.contentViewModel)}
       </div>
       <!-- 子リスト領域 -->
