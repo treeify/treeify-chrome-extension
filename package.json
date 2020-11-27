@@ -20,7 +20,7 @@
   "private": true,
   "scripts": {
     "build": "run-p esbuild typeCheck copy",
-    "copy": "cpx static/** dist",
+    "copy": "cpx \"static/**\" dist",
     "esbuild": "node esbuild.js",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "typeCheck": "tsc --noEmit --extendedDiagnostics",
