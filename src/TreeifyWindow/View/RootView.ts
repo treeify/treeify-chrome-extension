@@ -1,10 +1,10 @@
 import {html, TemplateResult} from 'lit-html'
 import {State} from 'src/TreeifyWindow/Model/State'
 import {
-  createItemTreeRootViewModel,
-  ItemTreeRootView,
-  ItemTreeRootViewModel,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeRootView'
+  createItemTreeViewModel,
+  ItemTreeView,
+  ItemTreeViewModel,
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {
   LeftSidebarView,
   LeftSidebarViewModel,
@@ -13,7 +13,7 @@ import {createPageTreeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTr
 
 export type RootViewModel = {
   leftSidebarViewMode: LeftSidebarViewModel
-  itemTreeRootViewModel: ItemTreeRootViewModel
+  itemTreeViewModel: ItemTreeViewModel
 }
 
 export function createRootViewModel(state: State): RootViewModel {
@@ -21,14 +21,13 @@ export function createRootViewModel(state: State): RootViewModel {
     leftSidebarViewMode: {
       pageTreeViewModel: createPageTreeViewModel(state),
     },
-    itemTreeRootViewModel: createItemTreeRootViewModel(state),
+    itemTreeViewModel: createItemTreeViewModel(state),
   }
 }
 
 /** html-litによる動的描画が行われる領域全体のルートView */
 export function RootView(viewModel: RootViewModel): TemplateResult {
   return html`<div class="root">
-    ${LeftSidebarView(viewModel.leftSidebarViewMode)}
-    ${ItemTreeRootView(viewModel.itemTreeRootViewModel)}
+    ${LeftSidebarView(viewModel.leftSidebarViewMode)} ${ItemTreeView(viewModel.itemTreeViewModel)}
   </div>`
 }
