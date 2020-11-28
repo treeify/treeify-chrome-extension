@@ -14,11 +14,11 @@ import {
   ItemTreeNodeViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 
-export type ItemTreeRootViewModel = {
+export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
 }
 
-export function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel {
+export function createItemTreeViewModel(state: State): ItemTreeViewModel {
   const rootItemPath = new ItemPath(List.of(state.activePageId))
   return {
     rootNodeViewModel: createItemTreeNodeViewModel(state, rootItemPath),
@@ -26,9 +26,9 @@ export function createItemTreeRootViewModel(state: State): ItemTreeRootViewModel
 }
 
 /** アイテムツリーの全体のルートView */
-export function ItemTreeRootView(viewModel: ItemTreeRootViewModel): TemplateResult {
+export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
   return html`<main
-    class="item-tree-root"
+    class="item-tree"
     @paste=${onPaste}
     @focusout=${onFocusOut}
     @keydown=${onKeyDown}

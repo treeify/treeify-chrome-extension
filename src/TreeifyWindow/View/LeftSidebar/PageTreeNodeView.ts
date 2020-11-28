@@ -17,7 +17,7 @@ export type PageTreeNodeViewModel = {
   onClickContentView: () => void
 }
 
-export function createPageTreeRootViewModel(state: State): PageTreeNodeViewModel {
+export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
   const itemPaths = Object.keys(state.mountedPages).flatMap((itemId) => [
     ...searchItemPathForMountedPage(state, List.of(parseInt(itemId))),
   ])

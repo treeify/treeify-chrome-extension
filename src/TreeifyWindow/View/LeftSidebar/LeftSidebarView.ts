@@ -1,15 +1,10 @@
 import {html} from 'lit-html'
-import {
-  PageTreeNodeView,
-  PageTreeNodeViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
+import {PageTreeView, PageTreeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 
 export type LeftSidebarViewModel = {
-  pageTreeNodeViewModel: PageTreeNodeViewModel
+  pageTreeViewModel: PageTreeViewModel
 }
 
 export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
-  return html`<aside class="left-sidebar">
-    ${PageTreeNodeView(viewModel.pageTreeNodeViewModel)}
-  </aside>`
+  return html`<aside class="left-sidebar">${PageTreeView(viewModel.pageTreeViewModel)}</aside>`
 }

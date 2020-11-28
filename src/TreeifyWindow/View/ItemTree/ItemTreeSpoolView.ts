@@ -4,16 +4,16 @@ import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {Item, State} from 'src/TreeifyWindow/Model/State'
 
-export enum BulletState {
+export type ItemTreeSpoolViewModel = {
+  bulletState: ItemTreeBulletState
+  onClick: (event: MouseEvent) => void
+}
+
+enum ItemTreeBulletState {
   NO_CHILDREN,
   UNFOLDED,
   FOLDED,
   PAGE,
-}
-
-export type ItemTreeSpoolViewModel = {
-  bulletState: BulletState
-  onClick: (event: MouseEvent) => void
 }
 
 export function createItemTreeSpoolViewModel(
@@ -35,17 +35,17 @@ export function createItemTreeSpoolViewModel(
   }
   if (state.pages[item.itemId] !== undefined) {
     return {
-      bulletState: BulletState.PAGE,
+      bulletState: ItemTreeBulletState.PAGE,
       onClick,
     }
   } else if (item.childItemIds.size === 0) {
     return {
-      bulletState: BulletState.NO_CHILDREN,
+      bulletState: ItemTreeBulletState.NO_CHILDREN,
       onClick,
     }
   } else {
     return {
-      bulletState: item.isFolded ? BulletState.FOLDED : BulletState.UNFOLDED,
+      bulletState: item.isFolded ? ItemTreeBulletState.FOLDED : ItemTreeBulletState.UNFOLDED,
       onClick,
     }
   }
@@ -54,16 +54,16 @@ export function createItemTreeSpoolViewModel(
 /** アイテムツリーのバレットとインデント */
 export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateResult {
   return html`<div class="item-tree-spool" @click=${viewModel.onClick}>
-    ${viewModel.bulletState === BulletState.UNFOLDED
+    ${viewModel.bulletState === ItemTreeBulletState.UNFOLDED
       ? html`<div class="item-tree-spool_indent-area">
           <div class="item-tree-spool_indent-line"></div>
         </div>`
       : undefined}
     <div class="item-tree-spool_bullet-area">
-      ${viewModel.bulletState === BulletState.PAGE
+      ${viewModel.bulletState === ItemTreeBulletState.PAGE
         ? html`<div class="item-tree-spool_page-icon" />`
         : html`
-            ${viewModel.bulletState === BulletState.FOLDED
+            ${viewModel.bulletState === ItemTreeBulletState.FOLDED
               ? html`<div class="item-tree-spool_outer-circle"></div>`
               : undefined}
             <div class="item-tree-spool_inner-circle"></div>

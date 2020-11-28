@@ -1,8 +1,19 @@
+:root {
+  /* 左サイドバーの背景色 */
+  --left-sidebar-background-color: hsl(0, 0%, 23%);
+
+  /* ページツリーのテキスト全般に適用されるline-height */
+  --page-tree-line-height: 1.65;
+
+  /* ページツリーの項目のマウスホバー時の背景色 */
+  --page-tree-hover-item-background-color: hsl(0, 0%, 30%);
+}
+
 .left-sidebar {
   flex-basis: 200px;
   flex-shrink: 0;
 
-  background-color: hsl(0, 0%, 35%);
+  background-color: var(--left-sidebar-background-color);
   color: white;
 }
 /* デュアルウィンドウレイアウトでは左サイドバーを非表示 */
@@ -12,6 +23,15 @@
   }
 }
 
+.page-tree {
+  font-size: 15px;
+  line-height: var(--page-tree-line-height);
+}
+
 .page-tree-node_content-area {
   cursor: default;
+}
+
+.page-tree-node_content-area:hover {
+  background-color: var(--page-tree-hover-item-background-color);
 }
