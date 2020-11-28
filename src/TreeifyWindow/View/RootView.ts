@@ -9,7 +9,7 @@ import {
   LeftSidebarView,
   LeftSidebarViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
-import {createPageTreeRootViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
+import {createPageTreeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 
 export type RootViewModel = {
   leftSidebarViewMode: LeftSidebarViewModel
@@ -19,7 +19,7 @@ export type RootViewModel = {
 export function createRootViewModel(state: State): RootViewModel {
   return {
     leftSidebarViewMode: {
-      pageTreeNodeViewModel: createPageTreeRootViewModel(state),
+      pageTreeViewModel: createPageTreeViewModel(state),
     },
     itemTreeRootViewModel: createItemTreeRootViewModel(state),
   }
