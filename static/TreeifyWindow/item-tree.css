@@ -10,30 +10,30 @@
   --item-tree-font-size-multiplicator: 99%;
 
   /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-  --calculated-item-tree-line-height: calc(1em * var(--item-tree-line-height));
+  --item-tree-calculated-line-height: calc(1em * var(--item-tree-line-height));
 
   /* バレットの外側の円の直径 */
-  --bullet-outer-circle-diameter: 1em;
+  --item-tree-bullet-outer-circle-diameter: 1em;
   /* バレットの外側の円の色 */
-  --bullet-outer-circle-color: hsl(0, 0%, 80%);
+  --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの内側の円の直径 */
-  --bullet-inner-circle-diameter: 0.4em;
+  --item-tree-bullet-inner-circle-diameter: 0.4em;
   /* バレットの内側の円の色 */
-  --bullet-inner-circle-color: hsl(0, 0%, 20%);
+  --item-tree-bullet-inner-circle-color: hsl(0, 0%, 20%);
   /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
   --bullet-page-icon-size: 1em;
 
   /* インデントラインの太さ */
-  --indent-line-width: 1px;
+  --item-tree-indent-line-width: 1px;
   /* インデントラインの色 */
-  --indent-line-color: hsl(0, 0%, 90%);
+  --item-tree-indent-line-color: hsl(0, 0%, 90%);
   /* インデントラインの色（ホバー時） */
-  --indent-line-hover-color: hsl(0, 0%, 70%);
+  --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
 
   /* フォーカスアイテムの背景色 */
-  --focused-item-background-color: hsla(240, 100%, 50%, 0.06);
+  --item-tree-focused-item-background-color: hsla(240, 100%, 50%, 0.06);
   /* マウスホバーアイテムの背景色 */
-  --mouse-hover-item-background-color: hsla(240, 100%, 50%, 0.03);
+  --item-tree-mouse-hover-item-background-color: hsla(240, 100%, 50%, 0.03);
 
   /* グレーアウト状態のアイテムのopacity */
   --grayed-out-item-opacity: 25%;
@@ -75,13 +75,13 @@
 /* マウスホバー時のコンテンツ領域 */
 .item-tree-node_content-area:hover {
   /* マウスホバーアイテムの強調表示 */
-  background: var(--mouse-hover-item-background-color);
+  background: var(--item-tree-mouse-hover-item-background-color);
 }
 
 /* フォーカス時のコンテンツ領域 */
 .item-tree-node_content-area:focus-within {
   /* フォーカスアイテムの強調表示 */
-  background: var(--focused-item-background-color);
+  background: var(--item-tree-focused-item-background-color);
 }
 
 .item-tree-node_children-area {
@@ -91,7 +91,7 @@
 
 /* アイテムツリーのバレットとインデントのルート要素 */
 .item-tree-spool {
-  width: var(--calculated-item-tree-line-height);
+  width: var(--item-tree-calculated-line-height);
   height: 100%;
   /* インデントラインをバレットの裏まで描画するための設定 */
   position: relative;
@@ -100,18 +100,18 @@
 }
 
 .item-tree-spool_bullet-area {
-  width: var(--calculated-item-tree-line-height);
-  height: var(--calculated-item-tree-line-height);
+  width: var(--item-tree-calculated-line-height);
+  height: var(--item-tree-calculated-line-height);
   /* 外側の円と内側の円を重ねて描画するための設定 */
   position: relative;
 }
 
 /* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
 .item-tree-spool_outer-circle {
-  width: var(--bullet-outer-circle-diameter);
-  height: var(--bullet-outer-circle-diameter);
+  width: var(--item-tree-bullet-outer-circle-diameter);
+  height: var(--item-tree-bullet-outer-circle-diameter);
   border-radius: 50%;
-  background: var(--bullet-outer-circle-color);
+  background: var(--item-tree-bullet-outer-circle-color);
 
   /* 中央寄せ */
   position: absolute;
@@ -122,10 +122,10 @@
 
 /* アイテムツリーのバレットの内側の円 */
 .item-tree-spool_inner-circle {
-  width: var(--bullet-inner-circle-diameter);
-  height: var(--bullet-inner-circle-diameter);
+  width: var(--item-tree-bullet-inner-circle-diameter);
+  height: var(--item-tree-bullet-inner-circle-diameter);
   border-radius: 50%;
-  background: var(--bullet-inner-circle-color);
+  background: var(--item-tree-bullet-inner-circle-color);
 
   /* 中央寄せ */
   position: absolute;
@@ -140,7 +140,7 @@
   height: var(--bullet-page-icon-size);
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background-color: var(--bullet-inner-circle-color);
+  background-color: var(--item-tree-bullet-inner-circle-color);
   -webkit-mask-image: url('./page-icon.svg');
 
   /* 中央寄せ */
@@ -154,22 +154,22 @@
 .item-tree-spool_indent-area {
   position: absolute;
   /* バレットの中心のY座標から子リストの下端までの領域にする */
-  top: calc(var(--calculated-item-tree-line-height) / 2);
-  height: calc(100% - var(--calculated-item-tree-line-height) / 2);
+  top: calc(var(--item-tree-calculated-line-height) / 2);
+  height: calc(100% - var(--item-tree-calculated-line-height) / 2);
   width: 100%;
 }
 
 /* インデントライン */
 .item-tree-spool_indent-line {
-  background-color: var(--indent-line-color);
-  width: var(--indent-line-width);
+  background-color: var(--item-tree-indent-line-color);
+  width: var(--item-tree-indent-line-width);
   height: 100%;
   margin: 0 auto;
 }
 
 /* バレットとインデントの領域のホバー時のインデントライン */
 .item-tree-spool:hover .item-tree-spool_indent-line {
-  background-color: var(--indent-line-hover-color);
+  background-color: var(--item-tree-indent-line-hover-color);
 }
 
 /* テキストアイテムのcontenteditableな要素 */
