@@ -1,3 +1,4 @@
+import {html} from 'lit-html'
 import {State} from 'src/TreeifyWindow/Model/State'
 import {
   createPageTreeRootNodeViewModel,
@@ -16,5 +17,5 @@ export function createPageTreeViewModel(state: State): PageTreeViewModel {
 }
 
 export function PageTreeView(viewModel: PageTreeViewModel) {
-  return PageTreeNodeView(viewModel.pageTreeRootNodeViewModel)
+  return html`<div class="page-tree">${PageTreeNodeView(viewModel.pageTreeRootNodeViewModel)}</div>`
 }

@@ -1,3 +1,8 @@
+:root {
+  /* ページツリーのテキスト全般に適用されるline-height */
+  --page-tree-line-height: 1.65;
+}
+
 .left-sidebar {
   flex-basis: 200px;
   flex-shrink: 0;
@@ -10,6 +15,11 @@
   .left-sidebar {
     display: none;
   }
+}
+
+.page-tree {
+  font-size: 15px;
+  line-height: var(--page-tree-line-height);
 }
 
 .page-tree-node_content-area {
