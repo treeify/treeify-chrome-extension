@@ -4,16 +4,16 @@ import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {Item, State} from 'src/TreeifyWindow/Model/State'
 
-export enum ItemTreeBulletState {
+export type ItemTreeSpoolViewModel = {
+  bulletState: ItemTreeBulletState
+  onClick: (event: MouseEvent) => void
+}
+
+enum ItemTreeBulletState {
   NO_CHILDREN,
   UNFOLDED,
   FOLDED,
   PAGE,
-}
-
-export type ItemTreeSpoolViewModel = {
-  bulletState: ItemTreeBulletState
-  onClick: (event: MouseEvent) => void
 }
 
 export function createItemTreeSpoolViewModel(
