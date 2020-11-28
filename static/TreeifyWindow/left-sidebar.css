@@ -4,6 +4,9 @@
 
   /* ページツリーのテキスト全般に適用されるline-height */
   --page-tree-line-height: 1.65;
+
+  /* ページツリーの項目のマウスホバー時の背景色 */
+  --page-tree-hover-item-background-color: hsl(0, 0%, 30%);
 }
 
 .left-sidebar {
@@ -27,4 +30,8 @@
 
 .page-tree-node_content-area {
   cursor: default;
+}
+
+.page-tree-node_content-area:hover {
+  background-color: var(--page-tree-hover-item-background-color);
 }
