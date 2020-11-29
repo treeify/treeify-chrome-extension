@@ -22,7 +22,8 @@ export function indentItem() {
   // 兄が居ない場合、何もしない
   if (prevSiblingItemPath === undefined) return
 
-  // TODO: 兄がページの場合はアンフォールドできないので、何もしないか、兄を非ページ化してから非ページの場合と同じ処理をする必要がある
+  // 兄がページの場合はアンフォールドできないので何もしない
+  if (NextState.isPage(prevSiblingItemPath.itemId)) return
 
   // 兄をアンフォールドする
   NextState.setItemProperty(prevSiblingItemPath.itemId, 'isFolded', false)
