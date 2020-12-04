@@ -6,6 +6,7 @@ import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
+import {isPage} from 'src/TreeifyWindow/Model/NextState/page'
 import {Item} from 'src/TreeifyWindow/Model/State'
 
 /**
@@ -65,12 +66,14 @@ export function getItemIsFolded(itemId: ItemId): boolean {
   return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'isFolded'))
 }
 
-/**
- * 与えられたアイテムの子アイテムのリストを返す。
- * ただしアンフォールド状態の場合は空リストを返す。
- */
+/** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
 export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
-  if (getItemIsFolded(itemId)) {
+  // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
+  if (NextState.getActivePageId() === itemId) {
+    return getChildItemIds(itemId)
+  }
+  
+  if (getItemIsFolded(itemId) || NextState.isPage(itemId)) {
     return List.of()
   } else {
     return getChildItemIds(itemId)
