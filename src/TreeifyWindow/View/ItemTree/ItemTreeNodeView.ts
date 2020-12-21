@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {repeat} from 'lit-html/directives/repeat'
-import {ItemId} from 'src/Common/basicType'
+import {integer, ItemId} from 'src/Common/basicType'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -22,6 +22,8 @@ export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
   isActivePage: boolean
   cssClasses: List<string>
+  footprintRank: integer | undefined
+  footprintCount: integer
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
@@ -31,6 +33,8 @@ export type ItemTreeNodeViewModel = {
 // 再帰的にアイテムツリーのViewModelを作る
 export function createItemTreeNodeViewModel(
   state: State,
+  footprintRankMap: Map<ItemId, integer>,
+  footprintCount: integer,
   itemPath: ItemPath
 ): ItemTreeNodeViewModel {
   const item = state.items[itemPath.itemId]
@@ -40,10 +44,17 @@ export function createItemTreeNodeViewModel(
     itemPath,
     isActivePage: !itemPath.hasParent(),
     cssClasses: item.cssClasses,
+    footprintRank: footprintRankMap.get(item.itemId),
+    footprintCount: footprintCount,
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
-      return createItemTreeNodeViewModel(state, itemPath.createChildItemPath(childItemId))
+      return createItemTreeNodeViewModel(
+        state,
+        footprintRankMap,
+        footprintCount,
+        itemPath.createChildItemPath(childItemId)
+      )
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
       const inputId = InputId.fromMouseEvent(event)
