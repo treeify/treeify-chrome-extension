@@ -162,6 +162,7 @@ export class Model {
       nextNewItemId: 7,
       activePageId: 0,
       focusedItemPath: null,
+      blurredItemPath: null,
       itemTreeTextItemSelection: null,
       itemTreeInputBinding: {
         '0000Tab': new Command('indentItem'),

@@ -12,6 +12,16 @@ export function setFocusedItemPath(itemPath: ItemPath | null) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('focusedItemPath'), itemPath)
 }
 
+/** フォーカスを失ったアイテムパスを返す */
+export function getBlurredItemPath(): ItemPath | null {
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('blurredItemPath'))
+}
+
+/** フォーカスを失ったアイテムパスを上書きする */
+export function setBlurredItemPath(itemPath: ItemPath | null) {
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('blurredItemPath'), itemPath)
+}
+
 /**
  * ドキュメント順で1つ上のアイテムのアイテムパスを返す。
  * 例えば
