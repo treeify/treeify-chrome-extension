@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
-import {ItemType} from 'src/Common/basicType'
+import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
 import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/domTextSelection'
@@ -20,8 +20,41 @@ export type ItemTreeViewModel = {
 
 export function createItemTreeViewModel(state: State): ItemTreeViewModel {
   const rootItemPath = new ItemPath(List.of(state.activePageId))
+
+  const allDisplayingItemIds = [...getAllDisplayingItemIds(state, state.activePageId)]
+  // 足跡表示数
+  // TODO: 係数をカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
+  const footprintCount = Math.floor(allDisplayingItemIds.length * 0.4)
+
+  // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
+  const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
+    return state.items[b].timestamp - state.items[a].timestamp
+  })
+
+  // 各アイテムに足跡順位を対応付け
+  const footprintRankMap = new Map<ItemId, integer>()
+  for (let i = 0; i < footprintCount; i++) {
+    footprintRankMap.set(sorted[i], i)
+  }
+
   return {
-    rootNodeViewModel: createItemTreeNodeViewModel(state, rootItemPath),
+    rootNodeViewModel: createItemTreeNodeViewModel(
+      state,
+      footprintRankMap,
+      footprintCount,
+      rootItemPath
+    ),
+  }
+}
+
+/**
+ * 全ての子孫と自身のアイテムIDを返す。
+ * ただし（アンフォールドなどの理由で）表示されないアイテムはスキップする。
+ */
+function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemId> {
+  yield itemId
+  for (const childItemId of NextState.getDisplayingChildItemIds(itemId)) {
+    yield* getAllDisplayingItemIds(state, childItemId)
   }
 }
 
