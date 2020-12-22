@@ -1,7 +1,10 @@
+import Color from 'color'
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {repeat} from 'lit-html/directives/repeat'
+import {styleMap} from 'lit-html/directives/style-map'
 import {integer, ItemId} from 'src/Common/basicType'
+import {CssCustomProperty} from 'src/Common/CssCustomProperty'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -79,6 +82,11 @@ function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> 
 
 /** アイテムツリーの各アイテムのルートView */
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
+  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
+  const contentAreaStyle = styleMap({
+    backgroundColor: footprintColor?.toString() ?? '',
+  })
+
   return html`<div class=${viewModel.cssClasses.unshift('item-tree-node').join(' ')}>
     ${viewModel.isActivePage
       ? undefined
@@ -90,7 +98,11 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
         `}
     <div class="item-tree-node_content-and-children-area">
       <!-- コンテンツ領域 -->
-      <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
+      <div
+        class="item-tree-node_content-area"
+        style=${contentAreaStyle}
+        @mousedown=${viewModel.onMouseDownContentArea}
+      >
         ${ItemTreeContentView(viewModel.contentViewModel)}
       </div>
       <!-- 子リスト領域 -->
@@ -103,4 +115,22 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       </div>
     </div>
   </div>`
+}
+
+function calculateFootprintColor(
+  footprintRank: integer | undefined,
+  footprintCount: integer
+): Color | undefined {
+  if (footprintRank === undefined) return undefined
+
+  const strongestColor = CssCustomProperty.getColor('--strongest-footprint-color')
+  const weakestColor = CssCustomProperty.getColor('--weakest-footprint-color')
+
+  if (footprintCount === 1) {
+    return strongestColor
+  }
+
+  // 線形補間する
+  const ratio = footprintRank / (footprintCount - 1)
+  return strongestColor.mix(weakestColor, ratio)
 }
