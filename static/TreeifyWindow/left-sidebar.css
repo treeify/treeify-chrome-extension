@@ -28,10 +28,10 @@
   line-height: var(--page-tree-line-height);
 }
 
-.page-tree-node_content-area {
-  cursor: default;
+.page-tree-node_body-area:hover {
+  background-color: var(--page-tree-hover-item-background-color);
 }
 
-.page-tree-node_content-area:hover {
-  background-color: var(--page-tree-hover-item-background-color);
+.page-tree-node_content-area {
+  cursor: default;
 }

@@ -62,8 +62,10 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
   return html`<div class="page-tree-node">
-    <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
-      ${PageTreeContentView(viewModel.contentViewModel)}
+    <div class="page-tree-node_body-area">
+      <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
+        ${PageTreeContentView(viewModel.contentViewModel)}
+      </div>
     </div>
     ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
   </div>`
