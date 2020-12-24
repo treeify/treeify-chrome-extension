@@ -335,4 +335,16 @@ export function toggleGrayedOut() {
   if (focusedItemPath === null) return
 
   NextState.toggleCssClass(focusedItemPath.itemId, 'grayed-out-item')
+
+  // フォーカスを移動する。
+  // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
+  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(focusedItemPath)
+  if (nextSiblingItemPath !== undefined) {
+    NextState.setFocusedItemPath(nextSiblingItemPath)
+    if (NextState.getItemType(nextSiblingItemPath.itemId) === ItemType.TEXT) {
+      NextState.setItemTreeTextItemCaretDistance(0)
+    } else {
+      NextState.setItemTreeTextItemSelection(null)
+    }
+  }
 }
