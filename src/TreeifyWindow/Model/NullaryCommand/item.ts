@@ -336,6 +336,10 @@ export function toggleGrayedOut() {
 
   NextState.toggleCssClass(focusedItemPath.itemId, 'grayed-out-item')
 
+  // タイムスタンプを更新
+  // TODO: 設定で無効化できるようにする
+  NextState.updateItemTimestamp(focusedItemPath.itemId)
+
   // フォーカスを移動する。
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
   const nextSiblingItemPath = NextState.findFirstFollowingItemPath(focusedItemPath)
