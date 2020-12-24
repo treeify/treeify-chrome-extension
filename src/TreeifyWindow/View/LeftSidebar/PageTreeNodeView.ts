@@ -66,6 +66,7 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
       <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
         ${PageTreeContentView(viewModel.contentViewModel)}
       </div>
+      <div class="page-tree-node_close-button"></div>
     </div>
     ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
   </div>`

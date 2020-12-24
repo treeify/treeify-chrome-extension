@@ -7,6 +7,9 @@
 
   /* ページツリーの項目のマウスホバー時の背景色 */
   --page-tree-hover-item-background-color: hsl(0, 0%, 30%);
+
+  /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
+  --page-tree-close-button-size: 0.9em;
 }
 
 .left-sidebar {
@@ -28,10 +31,39 @@
   line-height: var(--page-tree-line-height);
 }
 
+.page-tree-node_body-area {
+  display: flex;
+  align-items: center;
+}
+
 .page-tree-node_body-area:hover {
   background-color: var(--page-tree-hover-item-background-color);
 }
 
 .page-tree-node_content-area {
+  flex-grow: 1;
+
   cursor: default;
+}
+
+.page-tree-node_close-button {
+  flex-basis: var(--page-tree-close-button-size);
+  height: var(--page-tree-close-button-size);
+
+  /* 横幅が縮まないよう設定 */
+  flex-shrink: 0;
+
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+  background-color: hsl(0, 0%, 80%);
+  -webkit-mask-image: url('close-icon.svg');
+
+  /* マウスホバー時にのみ表示 */
+  display: none;
+
+  /* ボタンであることを示す */
+  cursor: pointer;
+}
+.page-tree-node_body-area:hover .page-tree-node_close-button {
+  /* マウスホバー時にのみ表示 */
+  display: initial;
 }
