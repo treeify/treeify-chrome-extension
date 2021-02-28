@@ -34,6 +34,8 @@ export function createItemTreeTextContentViewModel(
         // contenteditableな要素のinnerHTMLをModelに反映する
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+
+        NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
       }
     },
@@ -43,6 +45,8 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
         NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+
+        NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
       }
     },
