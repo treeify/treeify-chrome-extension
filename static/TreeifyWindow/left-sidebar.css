@@ -16,6 +16,9 @@
   flex-basis: 200px;
   flex-shrink: 0;
 
+  /* サイドバーやアイテムツリーは独立してスクロール可能とする */
+  overflow: auto;
+
   background-color: var(--left-sidebar-background-color);
   color: white;
 }
