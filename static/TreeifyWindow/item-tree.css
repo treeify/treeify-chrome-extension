@@ -236,6 +236,9 @@
 
 /* ウェブページアイテムのタイトル */
 .item-tree-web-page-content_title {
+  /* クリック当たり判定を右端まで伸ばす */
+  flex-grow: 1;
+
   cursor: default;
 }
 
