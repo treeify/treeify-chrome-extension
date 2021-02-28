@@ -11,7 +11,7 @@
   },
   "browser_action": {
     "default_icon": {
-      "19": "image/app-icon/19px.png"
+      "19": "app-icon/19px.png"
     },
     "default_title": "Treeify",
     "default_popup": "BrowserAction/index.html"
@@ -36,9 +36,9 @@
     }
   },
   "icons": {
-    "16": "image/app-icon/16px.png",
-    "48": "image/app-icon/48px.png",
-    "128": "image/app-icon/128px.png"
+    "16": "app-icon/16px.png",
+    "48": "app-icon/48px.png",
+    "128": "app-icon/128px.png"
   },
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "permissions": [
