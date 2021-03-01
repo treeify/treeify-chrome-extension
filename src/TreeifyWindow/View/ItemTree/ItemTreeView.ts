@@ -22,9 +22,9 @@ export function createItemTreeViewModel(state: State): ItemTreeViewModel {
   const rootItemPath = new ItemPath(List.of(state.activePageId))
 
   const allDisplayingItemIds = [...getAllDisplayingItemIds(state, state.activePageId)]
-  // 足跡表示数
-  // TODO: 係数をカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
-  const footprintCount = Math.floor(allDisplayingItemIds.length * 0.4)
+  // 足跡表示数を計算
+  // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
+  const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.65))
 
   // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
   const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
