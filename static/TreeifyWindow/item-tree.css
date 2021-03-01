@@ -38,7 +38,7 @@
   /* 最も新しい足跡の色（線形補間の一端） */
   --strongest-footprint-color: hsla(0, 100%, 50%, 0.06);
   /* 最も古い足跡の色（線形補間の一端） */
-  --weakest-footprint-color: hsla(0, 100%, 50%, 0.012);
+  --weakest-footprint-color: hsla(0, 100%, 50%, 0.03);
 
   /* グレーアウト状態のアイテムのopacity */
   --grayed-out-item-opacity: 25%;
