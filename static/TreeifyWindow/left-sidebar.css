@@ -8,6 +8,9 @@
   /* ページツリーの項目のマウスホバー時の背景色 */
   --page-tree-hover-item-background-color: hsl(0, 0%, 30%);
 
+  /* ページツリーのアクティブページの背景色 */
+  --page-tree-active-page-background-color: hsl(0, 0%, 40%);
+
   /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
   --page-tree-close-button-size: 0.9em;
 }
@@ -37,6 +40,10 @@
 .page-tree-node_body-area {
   display: flex;
   align-items: center;
+}
+.page-tree-node_body-area.active-page {
+  /* アクティブページの強調表示 */
+  background-color: var(--page-tree-active-page-background-color);
 }
 
 .page-tree-node_body-area:hover {

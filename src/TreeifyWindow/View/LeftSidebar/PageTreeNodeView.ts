@@ -1,5 +1,6 @@
 import {Collection, List, Seq} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
+import {classMap} from 'lit-html/directives/class-map'
 import {integer, ItemId, TOP_ITEM_ID} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
@@ -15,6 +16,7 @@ export type PageTreeNodeViewModel = {
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
   onClickContentView: () => void
+  isActivePage: boolean
 }
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
@@ -40,6 +42,7 @@ export function createPageTreeNodeViewModel(
       NextState.setActivePageId(itemId)
       NextState.commit()
     },
+    isActivePage: state.activePageId === itemId,
   }
 }
 
@@ -62,7 +65,12 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
   return html`<div class="page-tree-node">
-    <div class="page-tree-node_body-area">
+    <div
+      class=${classMap({
+        'page-tree-node_body-area': true,
+        'active-page': viewModel.isActivePage,
+      })}
+    >
       <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
         ${PageTreeContentView(viewModel.contentViewModel)}
       </div>
