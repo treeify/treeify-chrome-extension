@@ -64,18 +64,23 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 }
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
-  return html`<div class="page-tree-node">
-    <div
-      class=${classMap({
-        'page-tree-node_body-area': true,
-        'active-page': viewModel.isActivePage,
-      })}
-    >
-      <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
-        ${PageTreeContentView(viewModel.contentViewModel)}
+  return html` <div class="page-tree-node">
+    <div class="page-tree-node_bullet-and-indent-area"></div>
+    <div class="page-tree-node_body-and-children-area">
+      <div
+        class=${classMap({
+          'page-tree-node_body-area': true,
+          'active-page': viewModel.isActivePage,
+        })}
+      >
+        <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
+          ${PageTreeContentView(viewModel.contentViewModel)}
+        </div>
+        <div class="page-tree-node_close-button"></div>
       </div>
-      <div class="page-tree-node_close-button"></div>
+      <div class="page-tree-node_children-area">
+        ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
+      </div>
     </div>
-    ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
   </div>`
 }

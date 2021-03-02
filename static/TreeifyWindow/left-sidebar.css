@@ -37,6 +37,17 @@
   line-height: var(--page-tree-line-height);
 }
 
+.page-tree-node {
+  /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
+  display: flex;
+}
+
+.page-tree-node_body-and-children-area {
+  /* コンテンツ領域を右端まで伸ばす */
+  flex-grow: 1;
+}
+
+/* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
 .page-tree-node_body-area {
   display: flex;
   align-items: center;
