@@ -22,6 +22,11 @@ export function setBlurredItemPath(itemPath: ItemPath | null) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('blurredItemPath'), itemPath)
 }
 
+/** 現在フォーカスを持っているアイテムパスまたは最後にフォーカスを持っていたアイテムパスを返す。 */
+export function getLastFocusedItemPath(): ItemPath | null {
+  return NextState.getFocusedItemPath() ?? NextState.getBlurredItemPath()
+}
+
 /**
  * ドキュメント順で1つ上のアイテムのアイテムパスを返す。
  * 例えば
