@@ -34,8 +34,7 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
     const newWebPageItemId = NextState.createWebPageItem()
     reflectInWebPageItem(newWebPageItemId, message.stableTab)
 
-    const focusedItemPath = NextState.getFocusedItemPath()
-    // TODO: 残念ながら新しいタブを開いたときフォーカスアイテムはnullになっているので下記分岐は無意味
+    const focusedItemPath = NextState.getLastFocusedItemPath()
     if (focusedItemPath !== null) {
       // フォーカスアイテムの最初の子として追加する
       NextState.insertFirstChildItem(focusedItemPath.itemId, newWebPageItemId)
