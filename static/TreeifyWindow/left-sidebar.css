@@ -5,6 +5,16 @@
   /* ページツリーのテキスト全般に適用されるline-height */
   --page-tree-line-height: 1.65;
 
+  /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
+  --page-tree-calculated-line-height: calc(1em * var(--item-tree-line-height));
+
+  /* インデントラインの太さ */
+  --page-tree-indent-line-width: 1px;
+  /* インデントラインの色 */
+  --page-tree-indent-line-color: hsl(0, 0%, 50%);
+  /* インデントラインの色（ホバー時） */
+  --page-tree-indent-line-hover-color: hsl(0, 0%, 70%);
+
   /* ページツリーの項目のマウスホバー時の背景色 */
   --page-tree-hover-item-background-color: hsl(0, 0%, 30%);
 
@@ -37,6 +47,46 @@
   line-height: var(--page-tree-line-height);
 }
 
+.page-tree-node {
+  /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
+  display: flex;
+}
+
+.page-tree-bullet-and-indent {
+  /* インデント領域の位置指定のため */
+  position: relative;
+
+  width: var(--page-tree-calculated-line-height);
+  height: 100%;
+}
+
+/* インデント領域 */
+.page-tree-bullet-and-indent_indent-area {
+  position: absolute;
+  /* バレットの中心のY座標から子リストの下端までの領域にする */
+  top: calc(var(--page-tree-calculated-line-height) / 2);
+  height: calc(100% - var(--page-tree-calculated-line-height) / 2);
+  width: 100%;
+}
+
+/* インデントライン */
+.page-tree-bullet-and-indent_indent-line {
+  background-color: var(--page-tree-indent-line-color);
+  width: var(--page-tree-indent-line-width);
+  height: 100%;
+  margin: 0 auto;
+}
+/* ホバー時のインデントライン */
+.page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_indent-line {
+  background-color: var(--page-tree-indent-line-hover-color);
+}
+
+.page-tree-node_body-and-children-area {
+  /* コンテンツ領域を右端まで伸ばす */
+  flex-grow: 1;
+}
+
+/* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
 .page-tree-node_body-area {
   display: flex;
   align-items: center;

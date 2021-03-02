@@ -7,12 +7,18 @@ import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {State} from 'src/TreeifyWindow/Model/State'
 import {
+  createPageTreeBulletAndIndentViewModel,
+  PageTreeBulletAndIndentView,
+  PageTreeBulletAndIndentViewModel,
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
+import {
   createPageTreeContentViewModel,
   PageTreeContentView,
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
 
 export type PageTreeNodeViewModel = {
+  bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
   onClickContentView: () => void
@@ -33,7 +39,9 @@ export function createPageTreeNodeViewModel(
   pageTreeEdges: Seq.Keyed<ItemId, Collection<integer, ItemPath>>
 ): PageTreeNodeViewModel {
   const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
+  const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
   return {
+    bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
     contentViewModel: createPageTreeContentViewModel(state, itemId),
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(state, childPagePath.itemId, pageTreeEdges)
@@ -64,18 +72,25 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 }
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
-  return html`<div class="page-tree-node">
-    <div
-      class=${classMap({
-        'page-tree-node_body-area': true,
-        'active-page': viewModel.isActivePage,
-      })}
-    >
-      <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
-        ${PageTreeContentView(viewModel.contentViewModel)}
-      </div>
-      <div class="page-tree-node_close-button"></div>
+  return html` <div class="page-tree-node">
+    <div class="page-tree-node_bullet-and-indent-area">
+      ${PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel)}
     </div>
-    ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
+    <div class="page-tree-node_body-and-children-area">
+      <div
+        class=${classMap({
+          'page-tree-node_body-area': true,
+          'active-page': viewModel.isActivePage,
+        })}
+      >
+        <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
+          ${PageTreeContentView(viewModel.contentViewModel)}
+        </div>
+        <div class="page-tree-node_close-button"></div>
+      </div>
+      <div class="page-tree-node_children-area">
+        ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
+      </div>
+    </div>
   </div>`
 }
