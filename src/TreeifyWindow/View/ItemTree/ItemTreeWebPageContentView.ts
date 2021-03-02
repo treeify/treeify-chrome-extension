@@ -20,6 +20,7 @@ export type ItemTreeWebPageContentViewModel = {
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
+  onBlur: (event: FocusEvent) => void
 }
 
 export function createItemTreeWebPageContentViewModel(
@@ -48,7 +49,13 @@ export function createItemTreeWebPageContentViewModel(
     isAudible,
     onFocus: (event) => {
       NextState.setFocusedItemPath(itemPath)
-      NextState.commit()
+      NextState.setBlurredItemPath(null)
+      NextState.commitSilently()
+    },
+    onBlur: (event) => {
+      NextState.setBlurredItemPath(itemPath)
+      NextState.setFocusedItemPath(null)
+      NextState.commitSilently()
     },
     onClickTitle: (event) => {
       NextState.setFocusedItemPath(itemPath)
@@ -91,6 +98,7 @@ export function ItemTreeWebPageContentView(
     id=${id}
     tabindex="0"
     @focus=${viewModel.onFocus}
+    @blur=${viewModel.onBlur}
   >
     ${viewModel.isLoading
       ? html`<div class="item-tree-web-page-content_favicon loading-indicator" />`
