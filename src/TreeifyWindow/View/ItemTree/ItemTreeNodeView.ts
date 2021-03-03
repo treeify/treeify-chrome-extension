@@ -97,13 +97,12 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           </div>
         `}
     <div class="item-tree-node_content-and-children-area">
-      <!-- コンテンツ領域 -->
-      <div
-        class="item-tree-node_content-area"
-        style=${contentAreaStyle}
-        @mousedown=${viewModel.onMouseDownContentArea}
-      >
-        ${ItemTreeContentView(viewModel.contentViewModel)}
+      <!-- 足跡表示用のレイヤー -->
+      <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
+        <!-- コンテンツ領域 -->
+        <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
+          ${ItemTreeContentView(viewModel.contentViewModel)}
+        </div>
       </div>
       <!-- 子リスト領域 -->
       <div class="item-tree-node_children-area">
