@@ -75,7 +75,7 @@ export namespace TreeifyWindow {
   }
 
   /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
-  export type Message = OnTabCreated | OnTabUpdated | OnTabClosed
+  export type Message = OnTabCreated | OnTabUpdated | OnTabClosed | OnTabActivated
 
   export type OnTabCreated = {
     type: 'OnTabCreated'
@@ -88,6 +88,10 @@ export namespace TreeifyWindow {
   }
   export type OnTabClosed = {
     type: 'OnTabClosed'
+    stableTabId: StableTabId
+  }
+  export type OnTabActivated = {
+    type: 'OnTabActivated'
     stableTabId: StableTabId
   }
 }
