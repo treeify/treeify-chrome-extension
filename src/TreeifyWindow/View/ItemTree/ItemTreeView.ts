@@ -85,6 +85,9 @@ function onKeyDown(event: KeyboardEvent) {
     case '0000ArrowDown':
       onArrowDown(event)
       break
+    case '0000Backspace':
+      onBackspace(event)
+      break
   }
 
   const command = NextState.getItemTreeCommand(inputId)
@@ -247,6 +250,61 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
   }
   NextState.setFocusedItemPath(belowItemPath)
   NextState.commit()
+}
+
+/** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
+function onBackspace(event: KeyboardEvent) {
+  const focusedItemPath = NextState.getFocusedItemPath()
+  assertNonNull(focusedItemPath)
+
+  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
+    // フォーカスアイテムがテキストアイテムの場合
+
+    const selection = NextState.getItemTreeTextItemSelection()
+    assertNonNull(selection)
+    if (selection.focusDistance === 0 && selection.anchorDistance === 0) {
+      // キャレットが先頭にあるなら
+
+      const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
+      // アクティブアイテムなら何もしない
+      if (aboveItemPath === undefined) return
+
+      if (NextState.getItemType(focusedItemPath.itemId) !== ItemType.TEXT) {
+        // 上のアイテムがテキストアイテム以外の場合
+        // TODO: アイテム削除コマンドを実行するのがいいと思う
+      } else {
+        // フォーカスアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
+
+        // テキストを連結
+        const focusedItemDomishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+        const aboveItemDomishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+        // TODO: テキストノード同士が連結されないことが気がかり
+        NextState.setTextItemDomishObjects(
+          aboveItemPath.itemId,
+          aboveItemDomishObjects.concat(focusedItemDomishObjects)
+        )
+
+        // 子リストを連結
+        NextState.modifyChildItems(aboveItemPath.itemId, (childItemIds) =>
+          childItemIds.concat(NextState.getChildItemIds(focusedItemPath.itemId))
+        )
+
+        NextState.deleteItem(focusedItemPath.itemId)
+
+        // 上のアイテムの元の末尾にキャレットを移動する
+        NextState.setFocusedItemPath(aboveItemPath)
+        NextState.setItemTreeTextItemCaretDistance(
+          DomishObject.countCharacters(aboveItemDomishObjects)
+        )
+
+        event.preventDefault()
+        NextState.commit()
+      }
+    }
+  } else {
+    // フォーカスアイテムがテキストアイテム以外の場合
+    // TODO: アイテム削除コマンドを実行するのがいいと思う
+  }
 }
 
 // ペースト時にプレーンテキスト化する
