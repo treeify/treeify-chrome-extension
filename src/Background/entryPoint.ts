@@ -1,4 +1,5 @@
 import {
+  onActivated,
   onCreated,
   onRemoved,
   onUpdated,
@@ -30,4 +31,5 @@ async function entryPoint() {
   chrome.tabs.onCreated.addListener(onCreated)
   chrome.tabs.onUpdated.addListener(onUpdated)
   chrome.tabs.onRemoved.addListener(onRemoved)
+  chrome.tabs.onActivated.addListener(onActivated)
 }

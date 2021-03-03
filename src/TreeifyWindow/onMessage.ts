@@ -18,6 +18,9 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
     case 'OnTabClosed':
       onTabClosed(message)
       break
+    case 'OnTabActivated':
+      onTabActivated(message)
+      break
   }
 }
 
@@ -82,4 +85,12 @@ function onTabClosed(message: TreeifyWindow.OnTabClosed) {
   NextState.setWebPageItemStableTabId(itemId, null)
 
   NextState.commit()
+}
+
+function onTabActivated(message: TreeifyWindow.OnTabActivated) {
+  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTabId]
+  if (itemId !== undefined) {
+    NextState.updateItemTimestamp(itemId)
+    NextState.commit()
+  }
 }

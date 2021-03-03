@@ -3,6 +3,7 @@ import {integer, StableTab} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import Tab = chrome.tabs.Tab
+import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 
@@ -85,4 +86,15 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
       stableTabId: existingStableTab.stableTabId,
     })
   }
+}
+
+export async function onActivated(tabActiveInfo: TabActiveInfo) {
+  const stableTabMapFromTabId = BackgroundPageState.instance.stableTabMapFromTabId
+  const existingStableTab = stableTabMapFromTabId.get(tabActiveInfo.tabId)
+  assertNonUndefined(existingStableTab)
+
+  TreeifyWindow.sendMessage({
+    type: 'OnTabActivated',
+    stableTabId: existingStableTab.stableTabId,
+  })
 }
