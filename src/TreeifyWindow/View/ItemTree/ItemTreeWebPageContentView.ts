@@ -58,8 +58,15 @@ export function createItemTreeWebPageContentViewModel(
       NextState.commitSilently()
     },
     onClickTitle: (event) => {
-      NextState.setFocusedItemPath(itemPath)
-      NullaryCommand.browseWebPageItem()
+      switch (InputId.fromMouseEvent(event)) {
+        case '0000MouseButton0':
+          NextState.setFocusedItemPath(itemPath)
+          NullaryCommand.browseWebPageItem()
+          break
+        case '1000MouseButton0':
+          NextState.setFocusedItemPath(itemPath)
+          NextState.commit()
+      }
     },
     onClickFavicon: (event) => {
       NextState.setFocusedItemPath(itemPath)
