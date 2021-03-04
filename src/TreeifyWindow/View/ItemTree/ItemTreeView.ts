@@ -254,7 +254,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
 
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getFocusedItemPath()
+  const focusedItemPath = NextState.getLastFocusedItemPath()
   assertNonNull(focusedItemPath)
 
   if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
@@ -269,7 +269,7 @@ function onBackspace(event: KeyboardEvent) {
       // アクティブアイテムなら何もしない
       if (aboveItemPath === undefined) return
 
-      if (NextState.getItemType(focusedItemPath.itemId) !== ItemType.TEXT) {
+      if (NextState.getItemType(aboveItemPath.itemId) !== ItemType.TEXT) {
         // 上のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
