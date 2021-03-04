@@ -24,7 +24,7 @@ export function createItemTreeViewModel(state: State): ItemTreeViewModel {
   const allDisplayingItemIds = [...getAllDisplayingItemIds(state, state.activePageId)]
   // 足跡表示数を計算
   // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
-  const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.65))
+  const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.5))
 
   // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
   const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
