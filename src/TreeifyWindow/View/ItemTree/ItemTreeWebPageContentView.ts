@@ -125,7 +125,7 @@ export function ItemTreeWebPageContentView(
         'unloaded-item': viewModel.isUnloaded,
       })}
       title=${viewModel.title}
-      @click="${viewModel.onClickTitle}"
+      @click=${viewModel.onClickTitle}
     >
       ${viewModel.title}
     </div>
