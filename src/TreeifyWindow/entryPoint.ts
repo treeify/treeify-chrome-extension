@@ -20,6 +20,10 @@ Model.instance.addStateChangeListener((newState) => {
     const id = ItemTreeContentView.focusableDomElementId(focusedItemPath)
     const focusableElement = document.getElementById(id)
     if (focusableElement !== null) {
+      // フォーカスアイテムが画面内に入るようスクロールする。
+      // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
+      focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
+
       if (newState.itemTreeTextItemSelection !== null) {
         // キャレット位置をModelからViewに反映する
         setDomSelection(focusableElement, newState.itemTreeTextItemSelection)
