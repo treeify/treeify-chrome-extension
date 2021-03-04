@@ -105,7 +105,7 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
  * @param f 親アイテムリストを受け取って新しい親アイテムリストを返す関数
  */
 export function modifyParentItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  setItemProperty(itemId, 'parentItemIds', f(getChildItemIds(itemId)))
+  setItemProperty(itemId, 'parentItemIds', f(getParentItemIds(itemId)))
 }
 
 /**
