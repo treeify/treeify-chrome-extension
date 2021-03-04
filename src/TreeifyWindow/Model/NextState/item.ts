@@ -6,7 +6,6 @@ import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
-import {isPage} from 'src/TreeifyWindow/Model/NextState/page'
 import {Item} from 'src/TreeifyWindow/Model/State'
 
 /**
@@ -72,7 +71,7 @@ export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
   if (NextState.getActivePageId() === itemId) {
     return getChildItemIds(itemId)
   }
-  
+
   if (getItemIsFolded(itemId) || NextState.isPage(itemId)) {
     return List.of()
   } else {
