@@ -88,6 +88,9 @@ function onKeyDown(event: KeyboardEvent) {
     case '0000Backspace':
       onBackspace(event)
       break
+    case '0000Delete':
+      onDelete(event)
+      break
   }
 
   const command = NextState.getItemTreeCommand(inputId)
@@ -254,7 +257,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
 
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getFocusedItemPath()
+  const focusedItemPath = NextState.getLastFocusedItemPath()
   assertNonNull(focusedItemPath)
 
   if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
@@ -269,7 +272,7 @@ function onBackspace(event: KeyboardEvent) {
       // アクティブアイテムなら何もしない
       if (aboveItemPath === undefined) return
 
-      if (NextState.getItemType(focusedItemPath.itemId) !== ItemType.TEXT) {
+      if (NextState.getItemType(aboveItemPath.itemId) !== ItemType.TEXT) {
         // 上のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
@@ -296,6 +299,57 @@ function onBackspace(event: KeyboardEvent) {
         NextState.setItemTreeTextItemCaretDistance(
           DomishObject.countCharacters(aboveItemDomishObjects)
         )
+
+        event.preventDefault()
+        NextState.commit()
+      }
+    }
+  } else {
+    // フォーカスアイテムがテキストアイテム以外の場合
+    // TODO: アイテム削除コマンドを実行するのがいいと思う
+  }
+}
+
+/** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
+function onDelete(event: KeyboardEvent) {
+  const focusedItemPath = NextState.getLastFocusedItemPath()
+  assertNonNull(focusedItemPath)
+
+  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
+    // フォーカスアイテムがテキストアイテムの場合
+
+    const selection = NextState.getItemTreeTextItemSelection()
+    assertNonNull(selection)
+
+    const focusedItemDomishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+    const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
+    if (selection.focusDistance === characterCount && selection.anchorDistance === characterCount) {
+      // キャレットが末尾にあるなら
+
+      const belowItemPath = NextState.findBelowItemPath(focusedItemPath)
+      // 一番下のアイテムなら何もしない
+      if (belowItemPath === undefined) return
+
+      if (NextState.getItemType(belowItemPath.itemId) !== ItemType.TEXT) {
+        // 下のアイテムがテキストアイテム以外の場合
+        // TODO: アイテム削除コマンドを実行するのがいいと思う
+      } else {
+        // フォーカスアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
+
+        // テキストを連結
+        const belowItemDomishObjects = NextState.getTextItemDomishObjects(belowItemPath.itemId)
+        // TODO: テキストノード同士が連結されないことが気がかり
+        NextState.setTextItemDomishObjects(
+          focusedItemPath.itemId,
+          focusedItemDomishObjects.concat(belowItemDomishObjects)
+        )
+
+        // 子リストを連結
+        NextState.modifyChildItems(focusedItemPath.itemId, (childItemIds) =>
+          childItemIds.concat(NextState.getChildItemIds(belowItemPath.itemId))
+        )
+
+        NextState.deleteItem(belowItemPath.itemId)
 
         event.preventDefault()
         NextState.commit()
