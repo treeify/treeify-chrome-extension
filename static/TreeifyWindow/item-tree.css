@@ -243,6 +243,23 @@
   flex-grow: 1;
 
   cursor: default;
+
+  /*
+  ウェブページアイテムのタイトルの折り返しを防ぐための設定。
+  下記のような設定を試したが、横スクロール可能になってしまう（原因不明）ので別の方針で実現。
+
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+
+  そもそも折り返しを防ぐ理由：
+  (1) ウェブページのタイトルは非常に長い場合もあり、Treeifyウィンドウの横幅によっては何行も専有して邪魔。
+  (2) Chromeはタブ読込中に一瞬だけURLをタイトル扱いする場合がある。
+      その瞬間だけ折り返しが発生し、画面がガクッと動くような印象を与えてしまう。
+  */
+  max-height: var(--item-tree-calculated-line-height);
+  overflow: hidden;
 }
 
 /* アンロード済みウェブページアイテムのタイトルのグレーアウト */
