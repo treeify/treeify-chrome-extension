@@ -192,7 +192,7 @@ export function enterKeyDefault() {
     if (characterCount === 0) {
       // 空のテキストアイテムなら
 
-      // 新規アイテムを兄として追加する
+      // 新規アイテムを弟として追加する
       const newItemId = NextState.createTextItem()
       NextState.insertNextSiblingItem(focusedItemPath, newItemId)
 
