@@ -218,7 +218,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
-      NextState.setItemTreeTextItemCaretDistance(0)
+      NextState.setItemTreeTextItemCaretDistance(DomishObject.countCharacters(domishObjects))
     } else {
       // キャレット位置が後半なら
 
