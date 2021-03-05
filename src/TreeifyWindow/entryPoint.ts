@@ -12,7 +12,7 @@ render(RootView(createRootViewModel(Model.instance.currentState)), spaRoot)
 Model.instance.addStateChangeListener((newState) => {
   // render関数を呼ぶとfocusoutイベントが発生し、focusedItemPathがnullになるケースがある。
   // なのでrender関数を呼ぶ前に取得しておく。
-  const focusedItemPath = newState.focusedItemPath
+  const focusedItemPath = newState.pages[newState.activePageId].focusedItemPath
 
   render(RootView(createRootViewModel(newState)), spaRoot)
 

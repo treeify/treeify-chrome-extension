@@ -15,19 +15,6 @@ export type State = {
   mountedPages: {[itemId: number]: MountedPage}
   nextNewItemId: ItemId
   activePageId: ItemId
-  /** アイテムツリー内でフォーカスを持っているアイテム */
-  focusedItemPath: ItemPath | null
-  /**
-   * アイテムツリー内でフォーカスを失ったアイテム。
-   * このデータは例えばCtrl+Tなどで新しいタブを開いた際にウェブページアイテムをフォーカスアイテムの隣に配置するために用いられる。
-   * というのも新しいタブが開かれた瞬間にblurイベントが発生し、focusedItemPathはnullになってしまうので配置の手がかりを失ってしまうから。
-   * メモ：イベント発生順序は次のようになっている。
-   * (1) （Ctrl+Tなどで）新しいタブが開かれる
-   * (2) Treeifyウィンドウそのものがフォーカスを失う
-   * (3) Treeifyウィンドウがフォーカスを失ったことでblurイベントが発生する
-   * (4) chrome.tabs.onCreatedイベントが発生する
-   */
-  blurredItemPath: ItemPath | null
   itemTreeTextItemSelection: TextItemSelection | null
   /**
    * キーボードやマウスでの入力とコマンドの対応付け。
@@ -93,7 +80,21 @@ export type WebPageItem = {
 }
 
 /** 各ページが持つデータの型 */
-export type Page = {}
+export type Page = {
+  /** アイテムツリー内でフォーカスを持っているアイテム */
+  focusedItemPath: ItemPath | null
+  /**
+   * アイテムツリー内でフォーカスを失ったアイテム。
+   * このデータは例えばCtrl+Tなどで新しいタブを開いた際にウェブページアイテムをフォーカスアイテムの隣に配置するために用いられる。
+   * というのも新しいタブが開かれた瞬間にblurイベントが発生し、focusedItemPathはnullになってしまうので配置の手がかりを失ってしまうから。
+   * メモ：イベント発生順序は次のようになっている。
+   * (1) （Ctrl+Tなどで）新しいタブが開かれる
+   * (2) Treeifyウィンドウそのものがフォーカスを失う
+   * (3) Treeifyウィンドウがフォーカスを失ったことでblurイベントが発生する
+   * (4) chrome.tabs.onCreatedイベントが発生する
+   */
+  blurredItemPath: ItemPath | null
+}
 
 /**
  * マウントされたページが持つデータの型。

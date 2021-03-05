@@ -4,22 +4,32 @@ import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 
 /** フォーカスアイテムパスを返す */
 export function getFocusedItemPath(): ItemPath | null {
-  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('focusedItemPath'))
+  return NextState.getBatchizer().getDerivedValue(
+    PropertyPath.of('pages', NextState.getActivePageId(), 'focusedItemPath')
+  )
 }
 
 /** フォーカスアイテムパスを上書きする */
 export function setFocusedItemPath(itemPath: ItemPath | null) {
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('focusedItemPath'), itemPath)
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('pages', NextState.getActivePageId(), 'focusedItemPath'),
+    itemPath
+  )
 }
 
 /** フォーカスを失ったアイテムパスを返す */
 export function getBlurredItemPath(): ItemPath | null {
-  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('blurredItemPath'))
+  return NextState.getBatchizer().getDerivedValue(
+    PropertyPath.of('pages', NextState.getActivePageId(), 'blurredItemPath')
+  )
 }
 
 /** フォーカスを失ったアイテムパスを上書きする */
 export function setBlurredItemPath(itemPath: ItemPath | null) {
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('blurredItemPath'), itemPath)
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('pages', NextState.getActivePageId(), 'blurredItemPath'),
+    itemPath
+  )
 }
 
 /** 現在フォーカスを持っているアイテムパスまたは最後にフォーカスを持っていたアイテムパスを返す。 */
