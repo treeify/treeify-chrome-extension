@@ -3,6 +3,7 @@ import {List} from 'immutable'
 import {ItemId, StableTab} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
+import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
@@ -39,12 +40,26 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
 
     const focusedItemPath = NextState.getLastFocusedItemPath()
     if (focusedItemPath !== null) {
+      // フォーカスの当たっているアイテムがあるなら、
       // フォーカスアイテムの最初の子として追加する
       NextState.insertFirstChildItem(focusedItemPath.itemId, newWebPageItemId)
+
+      // フォーカスアイテムを更新する
+      if (message.stableTab.active) {
+        const newItemPath = focusedItemPath.createChildItemPath(newWebPageItemId)
+        NextState.setFocusedItemPath(newItemPath)
+      }
     } else {
+      // フォーカスの当たっているアイテムがないなら、
       // アクティブページの最初の子として追加する
       const activePageId = NextState.getActivePageId()
       NextState.insertFirstChildItem(activePageId, newWebPageItemId)
+
+      // フォーカスアイテムを更新する
+      if (message.stableTab.active) {
+        const newItemPath = new ItemPath(List.of(activePageId, newWebPageItemId))
+        NextState.setFocusedItemPath(newItemPath)
+      }
     }
   } else {
     // 既存のウェブページアイテムに対応するタブが開かれた時
