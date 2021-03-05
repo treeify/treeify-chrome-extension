@@ -287,11 +287,13 @@ function onBackspace(event: KeyboardEvent) {
           aboveItemDomishObjects.concat(focusedItemDomishObjects)
         )
 
-        // 子リストを連結
-        NextState.modifyChildItems(aboveItemPath.itemId, (childItemIds) =>
-          childItemIds.concat(NextState.getChildItemIds(focusedItemPath.itemId))
-        )
+        // 子リストを連結するため、子を全て弟としてエッジ追加。
+        // アンインデントに似ているが元のエッジを削除しない点が異なる。
+        for (const childItemId of NextState.getChildItemIds(focusedItemPath.itemId)) {
+          NextState.insertNextSiblingItem(focusedItemPath, childItemId)
+        }
 
+        // ↑の元のエッジごと削除
         NextState.deleteItem(focusedItemPath.itemId)
 
         // 上のアイテムの元の末尾にキャレットを移動する
@@ -344,11 +346,13 @@ function onDelete(event: KeyboardEvent) {
           focusedItemDomishObjects.concat(belowItemDomishObjects)
         )
 
-        // 子リストを連結
-        NextState.modifyChildItems(focusedItemPath.itemId, (childItemIds) =>
-          childItemIds.concat(NextState.getChildItemIds(belowItemPath.itemId))
-        )
+        // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
+        // アンインデントに似ているが元のエッジを削除しない点が異なる。
+        for (const childItemId of NextState.getChildItemIds(belowItemPath.itemId)) {
+          NextState.insertNextSiblingItem(belowItemPath, childItemId)
+        }
 
+        // ↑の元のエッジごと削除
         NextState.deleteItem(belowItemPath.itemId)
 
         event.preventDefault()
