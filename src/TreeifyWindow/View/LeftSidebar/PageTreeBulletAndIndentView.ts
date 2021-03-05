@@ -1,4 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
+import {classMap} from 'lit-html/directives/class-map'
 
 export type PageTreeBulletAndIndentViewModel = {
   bulletState: PageTreeBulletState
@@ -34,6 +35,13 @@ export function PageTreeBulletAndIndentView(
           <div class="page-tree-bullet-and-indent_indent-line"></div>
         </div>`
       : undefined}
-    <div class="page-tree-bullet-and-indent_bullet-area"></div>
+    <div
+      class=${classMap({
+        'page-tree-bullet-and-indent_bullet-area': true,
+        'no-children': viewModel.bulletState === PageTreeBulletState.NO_CHILDREN,
+        unfolded: viewModel.bulletState === PageTreeBulletState.UNFOLDED,
+        folded: viewModel.bulletState === PageTreeBulletState.FOLDED,
+      })}
+    ></div>
   </div>`
 }
