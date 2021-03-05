@@ -189,6 +189,29 @@ export function enterKeyDefault() {
     )
     const textItemSelection = NextState.getItemTreeTextItemSelection()
     assertNonNull(textItemSelection)
+
+    // フォーカスアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
+    if (!focusedItemPath.hasParent()) {
+      // キャレットより後ろのテキストをカットする
+      const range = selection.getRangeAt(0)
+      range.setEndAfter(document.activeElement.lastChild!)
+      const domishObjects = DomishObject.fromChildren(range.extractContents())
+      NextState.setTextItemDomishObjects(
+        focusedItemPath.itemId,
+        DomishObject.fromChildren(document.activeElement)
+      )
+
+      // 新規アイテムを最初の子として追加する
+      const newItemId = NextState.createTextItem()
+      NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+      NextState.setTextItemDomishObjects(newItemId, domishObjects)
+
+      // キャレット位置を更新する
+      NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+      NextState.setItemTreeTextItemCaretDistance(0)
+      return
+    }
+
     if (characterCount === 0) {
       // 空のテキストアイテムなら
 
@@ -266,6 +289,17 @@ export function enterKeyDefault() {
     }
   } else {
     // フォーカスアイテムがテキストアイテム以外の場合
+
+    // フォーカスアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
+    if (!focusedItemPath.hasParent()) {
+      // 新規アイテムを最初の子として追加する
+      const newItemId = NextState.createTextItem()
+      NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+
+      // フォーカスアイテムを更新する
+      NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+      return
+    }
 
     if (!NextState.getDisplayingChildItemIds(focusedItemPath.itemId).isEmpty()) {
       // もし子を表示しているなら
