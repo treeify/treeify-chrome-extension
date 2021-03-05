@@ -1,6 +1,17 @@
 import {StackTrace} from 'src/Common/Debug/StackTrace'
 
 /**
+ * 与えられた論理式がtrueになることを表明する。
+ * もしfalseの場合は例外を投げる。
+ */
+export function assert(value: boolean) {
+  if (!value) {
+    const argString = new StackTrace().getStackFrameAt(1).getArgString()
+    throw new Error(`アサーションエラー: assert(${argString})`)
+  }
+}
+
+/**
  * nullではないことを表明する。
  * もしnullの場合は例外を投げる。
  */
