@@ -1,12 +1,12 @@
 import {is, List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** アイテムの親子関係がなす有向グラフにおけるパス */
 export class ItemPath {
   /** Listの先頭要素がパスの始点、末尾要素が終点として扱われる */
   constructor(readonly itemIds: List<ItemId>) {
-    // TODO: assert(itemIds.size > 0);
+    assert(itemIds.size > 0)
   }
 
   /** パスの始点アイテムのIDを返す */
