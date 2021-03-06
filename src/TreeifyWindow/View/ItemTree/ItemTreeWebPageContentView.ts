@@ -106,19 +106,23 @@ export function ItemTreeWebPageContentView(
     @blur=${viewModel.onBlur}
   >
     ${viewModel.isLoading
-      ? html`<div class="item-tree-web-page-content_favicon loading-indicator" />`
+      ? html`<div
+          class="item-tree-web-page-content_favicon loading-indicator"
+          @click=${viewModel.onClickFavicon}
+        />`
       : viewModel.faviconUrl.length > 0
-      ? html`
-          <img
-            class=${classMap({
-              'item-tree-web-page-content_favicon': true,
-              'unloaded-item': viewModel.isUnloaded,
-            })}
-            src=${viewModel.faviconUrl}
-            @click=${viewModel.onClickFavicon}
-          />
-        `
-      : html`<div class="item-tree-web-page-content_favicon default-favicon" />`}
+      ? html`<img
+          class=${classMap({
+            'item-tree-web-page-content_favicon': true,
+            'unloaded-item': viewModel.isUnloaded,
+          })}
+          src=${viewModel.faviconUrl}
+          @click=${viewModel.onClickFavicon}
+        /> `
+      : html`<div
+          class="item-tree-web-page-content_favicon default-favicon"
+          @click=${viewModel.onClickFavicon}
+        />`}
     <div
       class=${classMap({
         'item-tree-web-page-content_title': true,
