@@ -1,4 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
+import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
@@ -24,21 +25,35 @@ export function createItemTreeSpoolViewModel(
   const bulletState = deriveBulletState(state, item)
 
   const onClick = (event: MouseEvent) => {
-    // TODO: InputIdに応じたコマンドを実行する
+    NextState.setFocusedItemPath(itemPath)
+
+    const inputId = InputId.fromMouseEvent(event)
     switch (bulletState) {
       case ItemTreeBulletState.NO_CHILDREN:
+        break
       case ItemTreeBulletState.UNFOLDED:
+        switch (inputId) {
+          case '0000MouseButton0':
+            NullaryCommand.toggleFolded()
+            break
+        }
+        break
       case ItemTreeBulletState.FOLDED:
-        NextState.setFocusedItemPath(itemPath)
-        NullaryCommand.toggleFolded()
-        NextState.commit()
+        switch (inputId) {
+          case '0000MouseButton0':
+            NullaryCommand.toggleFolded()
+            break
+        }
         break
       case ItemTreeBulletState.PAGE:
-        // ページアイコンのクリック時はアクティブページを切り替える
-        NullaryCommand.showPage()
-        NextState.commit()
+        switch (inputId) {
+          case '0000MouseButton0':
+            NullaryCommand.showPage()
+            break
+        }
         break
     }
+    NextState.commit()
   }
 
   return {bulletState, onClick}
