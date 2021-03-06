@@ -77,6 +77,11 @@ export function createItemTreeWebPageContentViewModel(
           NullaryCommand.unloadSubtree()
           NextState.commit()
           break
+        case '1000MouseButton0':
+          event.preventDefault()
+          NullaryCommand.unloadItem()
+          NextState.commit()
+          break
       }
     },
   }
