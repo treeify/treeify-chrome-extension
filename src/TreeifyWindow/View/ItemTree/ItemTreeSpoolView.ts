@@ -21,33 +21,38 @@ export function createItemTreeSpoolViewModel(
   itemPath: ItemPath,
   item: Item
 ): ItemTreeSpoolViewModel {
-  const onClick = () => {
-    if (NextState.isPage(itemPath.itemId)) {
-      // ページアイコンのクリック時はアクティブページを切り替える
-      NextState.setActivePageId(itemPath.itemId)
-      NextState.mountPage(itemPath.itemId)
-      NextState.commit()
-    } else {
-      NextState.setFocusedItemPath(itemPath)
-      NullaryCommand.toggleFolded()
-      NextState.commit()
+  const bulletState = deriveBulletState(state, item)
+
+  const onClick = (event: MouseEvent) => {
+    // TODO: InputIdに応じたコマンドを実行する
+    switch (bulletState) {
+      case ItemTreeBulletState.NO_CHILDREN:
+      case ItemTreeBulletState.UNFOLDED:
+      case ItemTreeBulletState.FOLDED:
+        NextState.setFocusedItemPath(itemPath)
+        NullaryCommand.toggleFolded()
+        NextState.commit()
+        break
+      case ItemTreeBulletState.PAGE:
+        // ページアイコンのクリック時はアクティブページを切り替える
+        // TODO: コマンド化する
+        NextState.setActivePageId(itemPath.itemId)
+        NextState.mountPage(itemPath.itemId)
+        NextState.commit()
+        break
     }
   }
+
+  return {bulletState, onClick}
+}
+
+function deriveBulletState(state: State, item: Item): ItemTreeBulletState {
   if (state.pages[item.itemId] !== undefined) {
-    return {
-      bulletState: ItemTreeBulletState.PAGE,
-      onClick,
-    }
+    return ItemTreeBulletState.PAGE
   } else if (item.childItemIds.size === 0) {
-    return {
-      bulletState: ItemTreeBulletState.NO_CHILDREN,
-      onClick,
-    }
+    return ItemTreeBulletState.NO_CHILDREN
   } else {
-    return {
-      bulletState: item.isFolded ? ItemTreeBulletState.FOLDED : ItemTreeBulletState.UNFOLDED,
-      onClick,
-    }
+    return item.isFolded ? ItemTreeBulletState.FOLDED : ItemTreeBulletState.UNFOLDED
   }
 }
 
