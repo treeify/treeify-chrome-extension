@@ -35,9 +35,7 @@ export function createItemTreeSpoolViewModel(
         break
       case ItemTreeBulletState.PAGE:
         // ページアイコンのクリック時はアクティブページを切り替える
-        // TODO: コマンド化する
-        NextState.setActivePageId(itemPath.itemId)
-        NextState.mountPage(itemPath.itemId)
+        NullaryCommand.showPage()
         NextState.commit()
         break
     }

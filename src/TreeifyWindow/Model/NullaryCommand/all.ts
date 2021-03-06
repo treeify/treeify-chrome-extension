@@ -5,6 +5,7 @@ import {
   insertLineBreak,
   moveItemDownward,
   moveItemUpward,
+  showPage,
   toggleFolded,
   toggleGrayedOut,
   togglePaged,
@@ -17,7 +18,7 @@ export * from 'src/TreeifyWindow/Model/NullaryCommand/webPageItem'
 
 /**
  * この名前空間で定義される全てのコマンド関数をまとめたオブジェクト。
- * コマンド名からコマンド関数を得るために用いる。
+ * 動的にコマンド名からコマンド関数を得るために用いる。
  */
 export const functions: {[name: string]: () => void} = {
   toggleFolded,
@@ -29,6 +30,7 @@ export const functions: {[name: string]: () => void} = {
   deleteItem,
   insertLineBreak,
   togglePaged,
+  showPage,
   toggleGrayedOut,
   unloadItem,
 }
