@@ -236,6 +236,21 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId) {
   modifyParentItems(itemId, (itemIds) => itemIds.remove(itemIds.indexOf(parentItemId)))
 }
 
+/**
+ * 指定されたアイテムを起点とするサブツリーに含まれるアイテムIDを全て返す。
+ * ただしページは終端ノードとして扱い、その子孫は無視する。
+ */
+export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
+  yield itemId
+
+  // ページは終端ノードとして扱う
+  if (NextState.isPage(itemId)) return
+
+  for (const childItemId of NextState.getChildItemIds(itemId)) {
+    yield* getSubtreeItemIds(childItemId)
+  }
+}
+
 /** 次に使うべき新しいアイテムIDを返す */
 export function getNextNewItemId(): ItemId {
   return getBatchizer().getDerivedValue(PropertyPath.of('nextNewItemId'))

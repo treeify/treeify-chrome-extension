@@ -74,6 +74,11 @@ export function createItemTreeWebPageContentViewModel(
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
           event.preventDefault()
+          NullaryCommand.unloadSubtree()
+          NextState.commit()
+          break
+        case '1000MouseButton0':
+          event.preventDefault()
           NullaryCommand.unloadItem()
           NextState.commit()
           break
