@@ -1,4 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
+import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
@@ -21,33 +22,61 @@ export function createItemTreeSpoolViewModel(
   itemPath: ItemPath,
   item: Item
 ): ItemTreeSpoolViewModel {
-  const onClick = () => {
-    if (NextState.isPage(itemPath.itemId)) {
-      // ページアイコンのクリック時はアクティブページを切り替える
-      NextState.setActivePageId(itemPath.itemId)
-      NextState.mountPage(itemPath.itemId)
-      NextState.commit()
-    } else {
-      NextState.setFocusedItemPath(itemPath)
-      NullaryCommand.toggleFolded()
-      NextState.commit()
+  const bulletState = deriveBulletState(state, item)
+
+  const onClick = (event: MouseEvent) => {
+    NextState.setFocusedItemPath(itemPath)
+
+    const inputId = InputId.fromMouseEvent(event)
+    switch (bulletState) {
+      case ItemTreeBulletState.NO_CHILDREN:
+        switch (inputId) {
+          case '1000MouseButton0':
+            NullaryCommand.becomeAndShowPage()
+            break
+        }
+        break
+      case ItemTreeBulletState.UNFOLDED:
+        switch (inputId) {
+          case '0000MouseButton0':
+            NullaryCommand.toggleFolded()
+            break
+          case '1000MouseButton0':
+            NullaryCommand.becomeAndShowPage()
+            break
+        }
+        break
+      case ItemTreeBulletState.FOLDED:
+        switch (inputId) {
+          case '0000MouseButton0':
+            NullaryCommand.toggleFolded()
+            break
+          case '1000MouseButton0':
+            NullaryCommand.becomeAndShowPage()
+            break
+        }
+        break
+      case ItemTreeBulletState.PAGE:
+        switch (inputId) {
+          case '0000MouseButton0':
+            NullaryCommand.showPage()
+            break
+        }
+        break
     }
+    NextState.commit()
   }
+
+  return {bulletState, onClick}
+}
+
+function deriveBulletState(state: State, item: Item): ItemTreeBulletState {
   if (state.pages[item.itemId] !== undefined) {
-    return {
-      bulletState: ItemTreeBulletState.PAGE,
-      onClick,
-    }
+    return ItemTreeBulletState.PAGE
   } else if (item.childItemIds.size === 0) {
-    return {
-      bulletState: ItemTreeBulletState.NO_CHILDREN,
-      onClick,
-    }
+    return ItemTreeBulletState.NO_CHILDREN
   } else {
-    return {
-      bulletState: item.isFolded ? ItemTreeBulletState.FOLDED : ItemTreeBulletState.UNFOLDED,
-      onClick,
-    }
+    return item.isFolded ? ItemTreeBulletState.FOLDED : ItemTreeBulletState.UNFOLDED
   }
 }
 

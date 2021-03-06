@@ -360,6 +360,27 @@ export function togglePaged() {
   }
 }
 
+/** 対象アイテムがページなら、そのページに切り替える */
+export function showPage() {
+  const focusedItemPath = NextState.getLastFocusedItemPath()
+  if (focusedItemPath === null) return
+
+  if (NextState.isPage(focusedItemPath.itemId)) {
+    NextState.mountPage(focusedItemPath.itemId)
+    NextState.setActivePageId(focusedItemPath.itemId)
+  }
+}
+
+/** 対象アイテムをページ化し、そのページに切り替える */
+export function becomeAndShowPage() {
+  const focusedItemPath = NextState.getLastFocusedItemPath()
+  if (focusedItemPath === null) return
+
+  NextState.becomePage(focusedItemPath.itemId)
+  NextState.mountPage(focusedItemPath.itemId)
+  NextState.setActivePageId(focusedItemPath.itemId)
+}
+
 /**
  * グレーアウトする。
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
