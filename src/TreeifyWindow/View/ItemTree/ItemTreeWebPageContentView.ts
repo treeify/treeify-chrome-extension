@@ -98,8 +98,6 @@ export function ItemTreeWebPageContentView(
   viewModel: ItemTreeWebPageContentViewModel
 ): TemplateResult {
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
-  const faviconUrl =
-    viewModel.faviconUrl.length > 0 ? viewModel.faviconUrl : './default-favicon.svg'
   return html`<div
     class="item-tree-web-page-content"
     id=${id}
@@ -108,17 +106,23 @@ export function ItemTreeWebPageContentView(
     @blur=${viewModel.onBlur}
   >
     ${viewModel.isLoading
-      ? html`<div class="item-tree-web-page-content_favicon loading-indicator" />`
-      : html`
-          <img
-            class=${classMap({
-              'item-tree-web-page-content_favicon': true,
-              'unloaded-item': viewModel.isUnloaded,
-            })}
-            src=${faviconUrl}
-            @click=${viewModel.onClickFavicon}
-          />
-        `}
+      ? html`<div
+          class="item-tree-web-page-content_favicon loading-indicator"
+          @click=${viewModel.onClickFavicon}
+        />`
+      : viewModel.faviconUrl.length > 0
+      ? html`<img
+          class=${classMap({
+            'item-tree-web-page-content_favicon': true,
+            'unloaded-item': viewModel.isUnloaded,
+          })}
+          src=${viewModel.faviconUrl}
+          @click=${viewModel.onClickFavicon}
+        /> `
+      : html`<div
+          class="item-tree-web-page-content_favicon default-favicon"
+          @click=${viewModel.onClickFavicon}
+        />`}
     <div
       class=${classMap({
         'item-tree-web-page-content_title': true,
