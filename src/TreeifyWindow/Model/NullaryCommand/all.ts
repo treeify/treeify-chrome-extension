@@ -1,4 +1,5 @@
 import {
+  becomeAndShowPage,
   deleteItem,
   enterKeyDefault,
   indentItem,
@@ -31,6 +32,7 @@ export const functions: {[name: string]: () => void} = {
   insertLineBreak,
   togglePaged,
   showPage,
+  becomeAndShowPage,
   toggleGrayedOut,
   unloadItem,
 }

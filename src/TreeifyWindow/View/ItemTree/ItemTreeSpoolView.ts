@@ -30,11 +30,19 @@ export function createItemTreeSpoolViewModel(
     const inputId = InputId.fromMouseEvent(event)
     switch (bulletState) {
       case ItemTreeBulletState.NO_CHILDREN:
+        switch (inputId) {
+          case '1000MouseButton0':
+            NullaryCommand.becomeAndShowPage()
+            break
+        }
         break
       case ItemTreeBulletState.UNFOLDED:
         switch (inputId) {
           case '0000MouseButton0':
             NullaryCommand.toggleFolded()
+            break
+          case '1000MouseButton0':
+            NullaryCommand.becomeAndShowPage()
             break
         }
         break
@@ -42,6 +50,9 @@ export function createItemTreeSpoolViewModel(
         switch (inputId) {
           case '0000MouseButton0':
             NullaryCommand.toggleFolded()
+            break
+          case '1000MouseButton0':
+            NullaryCommand.becomeAndShowPage()
             break
         }
         break
