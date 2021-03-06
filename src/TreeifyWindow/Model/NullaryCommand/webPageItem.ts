@@ -14,6 +14,20 @@ export function unloadItem() {
   chrome.tabs.remove(tabId)
 }
 
+/** ウェブページアイテムのサブツリーアンロード操作 */
+export function unloadSubtree() {
+  const focusedItemPath = NextState.getFocusedItemPath()
+  if (focusedItemPath === null) return
+
+  for (const subtreeItemId of NextState.getSubtreeItemIds(focusedItemPath.itemId)) {
+    // 対応するタブがあれば閉じる
+    const tabId = NextState.getWebPageItemTabId(subtreeItemId)
+    if (tabId !== undefined) {
+      chrome.tabs.remove(tabId)
+    }
+  }
+}
+
 /**
  * ウェブページアイテムに対応するタブを最前面化する。
  * 存在しない場合はタブを開く。

@@ -12,7 +12,7 @@ import {
   togglePaged,
   unindentItem,
 } from 'src/TreeifyWindow/Model/NullaryCommand/item'
-import {unloadItem} from 'src/TreeifyWindow/Model/NullaryCommand/webPageItem'
+import {unloadItem, unloadSubtree} from 'src/TreeifyWindow/Model/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Model/NullaryCommand/item'
 export * from 'src/TreeifyWindow/Model/NullaryCommand/webPageItem'
@@ -35,4 +35,5 @@ export const functions: {[name: string]: () => void} = {
   becomeAndShowPage,
   toggleGrayedOut,
   unloadItem,
+  unloadSubtree,
 }
