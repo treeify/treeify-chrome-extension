@@ -13,7 +13,7 @@ export class Model {
   nextState: Batchizer
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
-  readonly urlToItemIdsForTabCreation: Map<string, List<ItemId>> = new Map<string, List<ItemId>>()
+  readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
 
   private constructor() {
     this.currentState = Model.createInitialState()
