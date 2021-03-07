@@ -41,13 +41,26 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
     const focusedItemPath = NextState.getLastFocusedItemPath()
     if (focusedItemPath !== null) {
       // フォーカスの当たっているアイテムがあるなら、
-      // フォーカスアイテムの最初の子として追加する
-      NextState.insertFirstChildItem(focusedItemPath.itemId, newWebPageItemId)
 
-      // フォーカスアイテムを更新する
-      if (message.stableTab.active) {
-        const newItemPath = focusedItemPath.createChildItemPath(newWebPageItemId)
-        NextState.setFocusedItemPath(newItemPath)
+      if (url === 'chrome://newtab/' && focusedItemPath.hasParent()) {
+        // いわゆる「新しいタブ」は弟として追加する
+        NextState.insertNextSiblingItem(focusedItemPath, newWebPageItemId)
+
+        // フォーカスアイテムを更新する
+        if (message.stableTab.active) {
+          const newItemPath = focusedItemPath.createSiblingItemPath(newWebPageItemId)
+          assertNonUndefined(newItemPath)
+          NextState.setFocusedItemPath(newItemPath)
+        }
+      } else {
+        // フォーカスアイテムの最初の子として追加する
+        NextState.insertFirstChildItem(focusedItemPath.itemId, newWebPageItemId)
+
+        // フォーカスアイテムを更新する
+        if (message.stableTab.active) {
+          const newItemPath = focusedItemPath.createChildItemPath(newWebPageItemId)
+          NextState.setFocusedItemPath(newItemPath)
+        }
       }
     } else {
       // フォーカスの当たっているアイテムがないなら、
