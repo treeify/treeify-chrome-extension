@@ -22,6 +22,8 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
     case 'OnTabActivated':
       onTabActivated(message)
       break
+    case 'OnMoveMouseToLeftEnd':
+      onMoveMouseToLeftEnd()
   }
 }
 
@@ -121,4 +123,10 @@ function onTabActivated(message: TreeifyWindow.OnTabActivated) {
     NextState.updateItemTimestamp(itemId)
     NextState.commit()
   }
+}
+
+function onMoveMouseToLeftEnd() {
+  // Treeifyウィンドウを最前面化する
+  // TODO: 誤差だろうけれど最適化の余地が一応ある
+  TreeifyWindow.open()
 }
