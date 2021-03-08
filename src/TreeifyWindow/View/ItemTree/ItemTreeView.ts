@@ -71,6 +71,10 @@ export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
 }
 
 function onKeyDown(event: KeyboardEvent) {
+  // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
+  // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
+  if (event.isComposing) return
+
   const inputId = InputId.fromKeyboardEvent(event)
   switch (inputId) {
     case '0000ArrowLeft':
