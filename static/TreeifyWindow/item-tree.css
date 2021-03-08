@@ -40,8 +40,8 @@
   /* 最も古い足跡の色（線形補間の一端） */
   --weakest-footprint-color: hsl(60, 100%, 95%);
 
-  /* グレーアウト状態のアイテムのopacity */
-  --grayed-out-item-opacity: 25%;
+  /* グレーアウト状態のアイテムの標準的なテキスト色 */
+  --grayed-out-item-text-color: hsl(0, 0%, 75%);
 
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
@@ -73,11 +73,6 @@
 .item-tree-node_content-and-children-area {
   /* コンテンツ領域を右端まで伸ばす */
   flex-grow: 1;
-}
-
-/* グレーアウト状態のアイテム */
-.grayed-out-item {
-  opacity: var(--grayed-out-item-opacity);
 }
 
 /* マウスホバー時のコンテンツ領域 */
@@ -186,6 +181,11 @@
   outline: 0 solid transparent;
 }
 
+/* グレーアウト状態のテキストアイテム */
+.grayed-out-item .item-tree-text-content_content-editable {
+  color: var(--grayed-out-item-text-color);
+}
+
 /* ウェブページアイテムのコンテンツ領域のルート */
 .item-tree-web-page-content {
   /* ファビコンとタイトルなどを横並びにする */
@@ -194,6 +194,11 @@
 
   /* フォーカス時の枠線を非表示 */
   outline: 0 solid transparent;
+}
+
+/* グレーアウト状態のウェブページアイテム */
+.grayed-out-item .item-tree-web-page-content_title {
+  color: var(--grayed-out-item-text-color);
 }
 
 /* ウェブページアイテムのファビコン */
