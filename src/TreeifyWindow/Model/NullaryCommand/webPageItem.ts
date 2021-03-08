@@ -48,6 +48,8 @@ export function browseWebPageItem() {
     const url = NextState.getWebPageItemUrl(focusedItemPath.itemId)
     const itemIds = Model.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
     Model.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(focusedItemPath.itemId))
-    chrome.tabs.create({url, active: true})
+    chrome.tabs.create({url, active: true}, (tab) => {
+      chrome.windows.update(tab.windowId, {focused: true})
+    })
   }
 }
