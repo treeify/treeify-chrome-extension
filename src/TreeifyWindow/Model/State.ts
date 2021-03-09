@@ -68,15 +68,10 @@ export type WebPageItem = {
    */
   tabTitle: string
   /**
-   * 正規表現によるタイトル置換の入力パターン。
-   * 例えば"(.*)"や""などが入る。
+   * タブのタイトルを上書き表示するためのタイトル。
+   * nullの場合はtabTitleがこのウェブページアイテムのタイトルとして扱われる。
    */
-  titleReplaceInputPattern: string
-  /**
-   * 正規表現によるタイトル置換の出力パターン。
-   * 例えば"$1"や""などが入る。
-   */
-  titleReplaceOutputPattern: string
+  title: string | null
 }
 
 /** 各ページが持つデータの型 */

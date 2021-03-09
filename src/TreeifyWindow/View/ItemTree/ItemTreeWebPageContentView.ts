@@ -6,7 +6,7 @@ import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
-import {State, WebPageItem} from 'src/TreeifyWindow/Model/State'
+import {State} from 'src/TreeifyWindow/Model/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type ItemTreeWebPageContentViewModel = {
@@ -42,7 +42,7 @@ export function createItemTreeWebPageContentViewModel(
   return {
     itemPath,
     itemType: ItemType.WEB_PAGE,
-    title: webPageItemTitle(webPageItem),
+    title: webPageItem.title ?? webPageItem.tabTitle,
     faviconUrl: webPageItem.faviconUrl,
     isLoading,
     isUnloaded: webPageItem.stableTabId === null,
@@ -84,17 +84,6 @@ export function createItemTreeWebPageContentViewModel(
           break
       }
     },
-  }
-}
-
-// 正規表現で置換されたタイトルを返す。
-// 正規表現にエラーがあった場合はタブのタイトルを返す。
-function webPageItemTitle(webPageItem: WebPageItem): string {
-  try {
-    const regExp = new RegExp(webPageItem.titleReplaceInputPattern)
-    return webPageItem.tabTitle.replace(regExp, webPageItem.titleReplaceOutputPattern)
-  } catch {
-    return webPageItem.tabTitle
   }
 }
 
