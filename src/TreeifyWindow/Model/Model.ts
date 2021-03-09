@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/Common/basicType'
+import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
 import {Command} from 'src/TreeifyWindow/Model/Command'
 import {State} from 'src/TreeifyWindow/Model/State'
@@ -14,6 +14,12 @@ export class Model {
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+
+  /**
+   * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
+   * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
+   */
+  readonly hardUnloadedTabIds = new Set<integer>()
 
   private constructor() {
     this.currentState = Model.createInitialState()

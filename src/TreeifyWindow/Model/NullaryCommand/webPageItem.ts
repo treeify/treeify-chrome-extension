@@ -8,9 +8,13 @@ export function unloadItem() {
   const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
-  // 対応するタブがあれば閉じる
   const tabId = NextState.getWebPageItemTabId(focusedItemPath.itemId)
+  // 対応するタブがなければ何もしない
   if (tabId === undefined) return
+
+  // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
+  Model.instance.hardUnloadedTabIds.add(tabId)
+
   chrome.tabs.remove(tabId)
 }
 
@@ -20,9 +24,12 @@ export function unloadSubtree() {
   if (focusedItemPath === null) return
 
   for (const subtreeItemId of NextState.getSubtreeItemIds(focusedItemPath.itemId)) {
-    // 対応するタブがあれば閉じる
     const tabId = NextState.getWebPageItemTabId(subtreeItemId)
     if (tabId !== undefined) {
+      // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
+      Model.instance.hardUnloadedTabIds.add(tabId)
+
+      // 対応するタブを閉じる
       chrome.tabs.remove(tabId)
     }
   }

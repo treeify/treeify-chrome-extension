@@ -109,10 +109,21 @@ function reflectInWebPageItem(itemId: ItemId, stableTab: StableTab) {
 
 function onTabClosed(message: TreeifyWindow.OnTabClosed) {
   // Modelのタブデータを削除
-  NextState.getBatchizer().deleteProperty(PropertyPath.of('stableTabs', message.stableTabId))
+  NextState.getBatchizer().deleteProperty(
+    PropertyPath.of('stableTabs', message.stableTab.stableTabId)
+  )
 
-  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTabId]
-  NextState.setWebPageItemStableTabId(itemId, null)
+  assertNonUndefined(message.stableTab.id)
+  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTab.stableTabId]
+  if (Model.instance.hardUnloadedTabIds.has(message.stableTab.id)) {
+    // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムとタブの紐付けを削除する
+    NextState.setWebPageItemStableTabId(itemId, null)
+
+    Model.instance.hardUnloadedTabIds.delete(message.stableTab.id)
+  } else {
+    // TODO: 子孫ごと削除するのはやりすぎ
+    NextState.deleteItem(itemId)
+  }
 
   NextState.commit()
 }
