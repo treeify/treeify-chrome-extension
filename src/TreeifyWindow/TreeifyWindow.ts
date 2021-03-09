@@ -92,7 +92,7 @@ export namespace TreeifyWindow {
   }
   export type OnTabClosed = {
     type: 'OnTabClosed'
-    stableTabId: StableTabId
+    stableTab: StableTab
   }
   export type OnTabActivated = {
     type: 'OnTabActivated'

@@ -83,7 +83,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     // Treeifyウィンドウが存在するときはイベントを転送する
     TreeifyWindow.sendMessage({
       type: 'OnTabClosed',
-      stableTabId: existingStableTab.stableTabId,
+      stableTab: existingStableTab,
     })
   }
 }
