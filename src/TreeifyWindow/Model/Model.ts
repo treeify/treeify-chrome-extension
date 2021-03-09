@@ -153,16 +153,20 @@ export class Model {
         },
       },
       pages: {
-        '0': {},
-        '6': {},
+        '0': {
+          focusedItemPath: null,
+          blurredItemPath: null,
+        },
+        '6': {
+          focusedItemPath: null,
+          blurredItemPath: null,
+        },
       },
       mountedPages: {
         '0': {},
       },
       nextNewItemId: 7,
       activePageId: 0,
-      focusedItemPath: null,
-      blurredItemPath: null,
       itemTreeTextItemSelection: null,
       itemTreeInputBinding: {
         '0000Tab': new Command('indentItem'),
