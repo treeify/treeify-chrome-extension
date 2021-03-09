@@ -29,8 +29,7 @@ export function createWebPageItem(): ItemId {
     url: '',
     faviconUrl: '',
     tabTitle: '',
-    titleReplaceInputPattern: '',
-    titleReplaceOutputPattern: '',
+    title: null,
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('webPageItems', newItemId), webPageItem)
 
