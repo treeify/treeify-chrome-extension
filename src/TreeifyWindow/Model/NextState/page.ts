@@ -17,7 +17,13 @@ export function setActivePageId(itemId: ItemId) {
 
 /** ページをマウントする */
 export function mountPage(itemId: ItemId) {
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('mountedPages', itemId), {})
+  const mountedPageIds: List<ItemId> = NextState.getBatchizer().getDerivedValue(
+    PropertyPath.of('mountedPageIds')
+  )
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('mountedPageIds'),
+    mountedPageIds.push(itemId)
+  )
 }
 
 /** 与えられたアイテムがページかどうかを返す */

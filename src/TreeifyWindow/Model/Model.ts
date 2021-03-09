@@ -167,9 +167,7 @@ export class Model {
           blurredItemPath: null,
         },
       },
-      mountedPages: {
-        '0': {},
-      },
+      mountedPageIds: List.of(0),
       nextNewItemId: 7,
       activePageId: 0,
       itemTreeTextItemSelection: null,

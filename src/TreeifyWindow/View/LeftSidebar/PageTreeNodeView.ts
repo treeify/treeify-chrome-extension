@@ -26,8 +26,8 @@ export type PageTreeNodeViewModel = {
 }
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
-  const itemPaths = Object.keys(state.mountedPages).flatMap((itemId) => [
-    ...searchItemPathForMountedPage(state, List.of(parseInt(itemId))),
+  const itemPaths = state.mountedPageIds.flatMap((itemId) => [
+    ...searchItemPathForMountedPage(state, List.of(itemId)),
   ])
   const pageTreeEdges = List(itemPaths).groupBy((value) => value.rootItemId)
   return createPageTreeNodeViewModel(state, TOP_ITEM_ID, pageTreeEdges)
@@ -61,7 +61,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
   assertNonUndefined(itemId)
 
   // もし他のマウント済みページに到達したら、そのページまでの経路を返す
-  if (itemIds.size > 1 && state.mountedPages[itemId] !== undefined) {
+  if (itemIds.size > 1 && state.mountedPageIds.contains(itemId)) {
     yield new ItemPath(itemIds)
     return
   }
