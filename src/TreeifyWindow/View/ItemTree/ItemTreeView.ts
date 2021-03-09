@@ -110,37 +110,54 @@ function onKeyDown(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowLeft(event: KeyboardEvent) {
-  const textItemSelection = NextState.getItemTreeTextItemSelection()
-  // テキストアイテムにフォーカスが当たっていないときは何もしない
-  if (textItemSelection === null) return
-
-  // キャレット位置が先頭以外のときはブラウザの挙動に任せる
-  if (textItemSelection.focusDistance > 0 || textItemSelection.anchorDistance > 0) {
-    return
-  }
-
   const focusedItemPath = NextState.getFocusedItemPath()
-  assertNonNull(focusedItemPath)
+  if (focusedItemPath === null) return
 
   const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
-  const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
-  if (aboveItemType === ItemType.TEXT) {
-    // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
-    event.preventDefault()
-    const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
-    const characterCount = DomishObject.countCharacters(domishObjects)
-    NextState.setItemTreeTextItemCaretDistance(characterCount)
-    NextState.setFocusedItemPath(aboveItemPath)
-    NextState.commit()
+  const textItemSelection = NextState.getItemTreeTextItemSelection()
+  if (textItemSelection === null) {
+    // フォーカスアイテムが非テキストアイテムだと断定する
+
+    const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
+    if (aboveItemType === ItemType.TEXT) {
+      // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
+      event.preventDefault()
+      const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+      const characterCount = DomishObject.countCharacters(domishObjects)
+      NextState.setItemTreeTextItemCaretDistance(characterCount)
+      NextState.setFocusedItemPath(aboveItemPath)
+      NextState.commit()
+    } else {
+      // 上のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      event.preventDefault()
+      NextState.setFocusedItemPath(aboveItemPath)
+      NextState.commit()
+    }
   } else {
-    // 上のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
-    event.preventDefault()
-    NextState.setItemTreeTextItemSelection(null)
-    NextState.setFocusedItemPath(aboveItemPath)
-    NextState.commit()
+    // キャレット位置が先頭以外のときはブラウザの挙動に任せる
+    if (textItemSelection.focusDistance > 0 || textItemSelection.anchorDistance > 0) {
+      return
+    }
+
+    const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
+    if (aboveItemType === ItemType.TEXT) {
+      // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
+      event.preventDefault()
+      const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+      const characterCount = DomishObject.countCharacters(domishObjects)
+      NextState.setItemTreeTextItemCaretDistance(characterCount)
+      NextState.setFocusedItemPath(aboveItemPath)
+      NextState.commit()
+    } else {
+      // 上のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      event.preventDefault()
+      NextState.setItemTreeTextItemSelection(null)
+      NextState.setFocusedItemPath(aboveItemPath)
+      NextState.commit()
+    }
   }
 }
 
@@ -149,10 +166,6 @@ function onArrowLeft(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowRight(event: KeyboardEvent) {
-  const textItemSelection = NextState.getItemTreeTextItemSelection()
-  // テキストアイテムにフォーカスが当たっていないときは何もしない
-  if (textItemSelection === null) return
-
   const focusedItemPath = NextState.getFocusedItemPath()
   assertNonNull(focusedItemPath)
 
@@ -160,30 +173,49 @@ function onArrowRight(event: KeyboardEvent) {
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  const domishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
-  const characterCount = DomishObject.countCharacters(domishObjects)
+  const textItemSelection = NextState.getItemTreeTextItemSelection()
+  if (textItemSelection === null) {
+    // フォーカスアイテムが非テキストアイテムだと断定する
 
-  // キャレット位置が末尾以外のときはブラウザの挙動に任せる
-  if (
-    textItemSelection.focusDistance < characterCount ||
-    textItemSelection.anchorDistance < characterCount
-  ) {
-    return
-  }
-
-  const belowItemType = NextState.getItemType(belowItemPath.itemId)
-  if (belowItemType === ItemType.TEXT) {
-    // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
-    event.preventDefault()
-    NextState.setItemTreeTextItemCaretDistance(0)
-    NextState.setFocusedItemPath(belowItemPath)
-    NextState.commit()
+    const belowItemType = NextState.getItemType(belowItemPath.itemId)
+    if (belowItemType === ItemType.TEXT) {
+      // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
+      event.preventDefault()
+      NextState.setItemTreeTextItemCaretDistance(0)
+      NextState.setFocusedItemPath(belowItemPath)
+      NextState.commit()
+    } else {
+      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      event.preventDefault()
+      NextState.setFocusedItemPath(belowItemPath)
+      NextState.commit()
+    }
   } else {
-    // 下のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
-    event.preventDefault()
-    NextState.setItemTreeTextItemSelection(null)
-    NextState.setFocusedItemPath(belowItemPath)
-    NextState.commit()
+    const domishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+    const characterCount = DomishObject.countCharacters(domishObjects)
+
+    // キャレット位置が末尾以外のときはブラウザの挙動に任せる
+    if (
+      textItemSelection.focusDistance < characterCount ||
+      textItemSelection.anchorDistance < characterCount
+    ) {
+      return
+    }
+
+    const belowItemType = NextState.getItemType(belowItemPath.itemId)
+    if (belowItemType === ItemType.TEXT) {
+      // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
+      event.preventDefault()
+      NextState.setItemTreeTextItemCaretDistance(0)
+      NextState.setFocusedItemPath(belowItemPath)
+      NextState.commit()
+    } else {
+      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      event.preventDefault()
+      NextState.setItemTreeTextItemSelection(null)
+      NextState.setFocusedItemPath(belowItemPath)
+      NextState.commit()
+    }
   }
 }
 
