@@ -45,6 +45,43 @@ export function deleteItem(itemId: ItemId) {
   NextState.deleteProperty(PropertyPath.of('items', itemId))
 }
 
+/**
+ * 指定されたアイテムに関するデータを削除する。
+ * 子アイテムは親アイテムの子リストに移動する。
+ * キャレットの移動（フォーカスアイテムの変更）は行わない。
+ */
+export function deleteItemItself(itemId: ItemId) {
+  for (const childItemId of NextState.getChildItemIds(itemId)) {
+    // if (NextState.getParentItemIds(childItemId).size === 1) {
+    //   // 親を1つしか持たない子アイテムは再帰的に削除する
+    //   deleteItem(childItemId)
+    // } else {
+    //   // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
+    //   modifyParentItems(childItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+    // }
+  }
+
+  // 削除されるアイテムを親アイテムの子リストから削除する
+  for (const parentItemId of NextState.getParentItemIds(itemId)) {
+    modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+  }
+
+  // アイテムタイプごとのデータを削除する
+  const itemType = NextState.getItemType(itemId)
+  switch (itemType) {
+    case ItemType.TEXT:
+      NextState.deleteProperty(PropertyPath.of('textItems', itemId))
+      break
+    case ItemType.WEB_PAGE:
+      NextState.deleteProperty(PropertyPath.of('webPageItems', itemId))
+      break
+    default:
+      assertNeverType(itemType)
+  }
+
+  NextState.deleteProperty(PropertyPath.of('items', itemId))
+}
+
 /** 指定されたアイテムのアイテムタイプを返す */
 export function getItemType(itemId: ItemId): ItemType {
   return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'itemType'))
