@@ -15,9 +15,29 @@ export function setActivePageId(itemId: ItemId) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('activePageId'), itemId)
 }
 
+/** マウントされているページ群のアイテムIDを返す */
+export function getMountedPageIds(): List<ItemId> {
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('mountedPageIds'))
+}
+
 /** ページをマウントする */
 export function mountPage(itemId: ItemId) {
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('mountedPages', itemId), {})
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('mountedPageIds'),
+    NextState.getMountedPageIds().push(itemId)
+  )
+}
+
+/** ページをアンマウントする */
+export function unmountPage(itemId: ItemId) {
+  const mountedPageIds = NextState.getMountedPageIds()
+  const index = mountedPageIds.indexOf(itemId)
+  if (index !== -1) {
+    NextState.getBatchizer().postSetMutation(
+      PropertyPath.of('mountedPageIds'),
+      mountedPageIds.remove(index)
+    )
+  }
 }
 
 /** 与えられたアイテムがページかどうかを返す */

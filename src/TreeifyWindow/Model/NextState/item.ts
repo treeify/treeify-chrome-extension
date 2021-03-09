@@ -127,6 +127,11 @@ export function setItemProperty(itemId: ItemId, propertyName: keyof Item, value:
   getBatchizer().postSetMutation(PropertyPath.of('items', itemId, propertyName), value)
 }
 
+/** 指定されたアイテムのタイムスタンプを返す */
+export function getItemTimestamp(itemId: ItemId): Timestamp {
+  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'timestamp'))
+}
+
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   setItemProperty(itemId, 'timestamp', Timestamp.now())

@@ -12,7 +12,12 @@ export type State = {
   textItems: {[itemId: number]: TextItem}
   webPageItems: {[itemId: number]: WebPageItem}
   pages: {[itemId: number]: Page}
-  mountedPages: {[itemId: number]: MountedPage}
+  /**
+   * マウントされているページたちのアイテムID。
+   * 今のところ順序に意味はないが将来的に使うかもしれないし、JSONとの相性も考えてSet型ではなくList型とする。
+   * 新しくマウントされたらリストの末尾に追加される。
+   */
+  mountedPageIds: List<ItemId>
   nextNewItemId: ItemId
   activePageId: ItemId
   itemTreeTextItemSelection: TextItemSelection | null
@@ -90,12 +95,6 @@ export type Page = {
    */
   blurredItemPath: ItemPath | null
 }
-
-/**
- * マウントされたページが持つデータの型。
- * マウントされたページとは、ページツリーに表示される全てのページのこと。
- */
-export type MountedPage = {}
 
 /** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
 export type TextItemSelection = {
