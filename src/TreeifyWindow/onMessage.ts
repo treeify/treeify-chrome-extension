@@ -121,8 +121,8 @@ function onTabClosed(message: TreeifyWindow.OnTabClosed) {
 
     Model.instance.hardUnloadedTabIds.delete(message.stableTab.id)
   } else {
-    // TODO: 子孫ごと削除するのはやりすぎ
-    NextState.deleteItem(itemId)
+    // 対応するウェブページアイテムを削除する
+    NextState.deleteItemItself(itemId)
   }
 
   NextState.commit()

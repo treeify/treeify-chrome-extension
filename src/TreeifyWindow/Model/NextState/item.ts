@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
-import {assertNeverType} from 'src/Common/Debug/assert'
+import {assert, assertNeverType} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
@@ -51,19 +51,25 @@ export function deleteItem(itemId: ItemId) {
  * キャレットの移動（フォーカスアイテムの変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
-  for (const childItemId of NextState.getChildItemIds(itemId)) {
-    // if (NextState.getParentItemIds(childItemId).size === 1) {
-    //   // 親を1つしか持たない子アイテムは再帰的に削除する
-    //   deleteItem(childItemId)
-    // } else {
-    //   // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
-    //   modifyParentItems(childItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
-    // }
+  const childItemIds = NextState.getChildItemIds(itemId)
+  const parentItemIds = NextState.getParentItemIds(itemId)
+
+  // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
+  for (const childItemId of childItemIds) {
+    modifyParentItems(childItemId, (itemIds) => {
+      const index = itemIds.indexOf(itemId)
+      assert(index !== -1)
+      return itemIds.splice(index, 1, ...childItemIds)
+    })
   }
 
-  // 削除されるアイテムを親アイテムの子リストから削除する
-  for (const parentItemId of NextState.getParentItemIds(itemId)) {
-    modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+  // 全ての親アイテムの子リストから自身を削除し、代わりに自身の子リストを挿入する
+  for (const parentItemId of parentItemIds) {
+    modifyChildItems(parentItemId, (itemIds) => {
+      const index = itemIds.indexOf(itemId)
+      assert(index !== -1)
+      return itemIds.splice(index, 1, ...childItemIds)
+    })
   }
 
   // アイテムタイプごとのデータを削除する
