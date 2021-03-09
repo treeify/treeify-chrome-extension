@@ -135,6 +135,12 @@ function onArrowLeft(event: KeyboardEvent) {
     NextState.setItemTreeTextItemCaretDistance(characterCount)
     NextState.setFocusedItemPath(aboveItemPath)
     NextState.commit()
+  } else {
+    // 上のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+    event.preventDefault()
+    NextState.setItemTreeTextItemSelection(null)
+    NextState.setFocusedItemPath(aboveItemPath)
+    NextState.commit()
   }
 }
 
@@ -170,6 +176,12 @@ function onArrowRight(event: KeyboardEvent) {
     // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
     event.preventDefault()
     NextState.setItemTreeTextItemCaretDistance(0)
+    NextState.setFocusedItemPath(belowItemPath)
+    NextState.commit()
+  } else {
+    // 下のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+    event.preventDefault()
+    NextState.setItemTreeTextItemSelection(null)
     NextState.setFocusedItemPath(belowItemPath)
     NextState.commit()
   }
