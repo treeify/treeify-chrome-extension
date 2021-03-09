@@ -22,6 +22,7 @@ export type PageTreeNodeViewModel = {
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
   onClickContentView: () => void
+  onClickCloseButton: () => void
   isActivePage: boolean
 }
 
@@ -48,6 +49,24 @@ export function createPageTreeNodeViewModel(
     ),
     onClickContentView: () => {
       NextState.setActivePageId(itemId)
+      NextState.commit()
+    },
+    onClickCloseButton: () => {
+      NextState.unmountPage(itemId)
+
+      // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
+      if (itemId === NextState.getActivePageId()) {
+        const hottestPageId = NextState.getMountedPageIds()
+          .map((pageId) => {
+            return {
+              pageId,
+              timestamp: NextState.getItemTimestamp(pageId),
+            }
+          })
+          .maxBy((a) => a.timestamp)!!.pageId
+        NextState.setActivePageId(hottestPageId)
+      }
+
       NextState.commit()
     },
     isActivePage: state.activePageId === itemId,
@@ -86,7 +105,7 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
         <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
           ${PageTreeContentView(viewModel.contentViewModel)}
         </div>
-        <div class="page-tree-node_close-button"></div>
+        <div class="page-tree-node_close-button" @click=${viewModel.onClickCloseButton}></div>
       </div>
       <div class="page-tree-node_children-area">
         ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
