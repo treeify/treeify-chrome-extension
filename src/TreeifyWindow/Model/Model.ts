@@ -17,21 +17,12 @@ export class Model {
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
 
-  // TODO: コメント
+  /** タブIDからアイテムIDへのMap */
   readonly tabIdToItemId = new Map<TabId, ItemId>()
+  /** アイテムIDからタブIDへのMap */
   readonly itemIdToTabId = new Map<ItemId, TabId>()
+  /** タブIDからTabオブジェクトへのMap */
   readonly tabIdToTab = new Map<TabId, Tab>()
-
-  tieTabAndItem(tabId: TabId, itemId: ItemId) {
-    this.tabIdToItemId.set(tabId, itemId)
-    this.itemIdToTabId.set(itemId, tabId)
-  }
-  untieTabAndItemByTabId(tabId: TabId) {
-    const itemId = this.tabIdToItemId.get(tabId)
-    assertNonUndefined(itemId)
-    this.itemIdToTabId.delete(itemId)
-    this.tabIdToItemId.delete(tabId)
-  }
 
   /**
    * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
@@ -70,6 +61,20 @@ export class Model {
 
   addStateChangeListener(listener: (newState: State) => void) {
     this.stateChangeListeners.add(listener)
+  }
+
+  /** タブIDとアイテムIDを結びつける */
+  tieTabAndItem(tabId: TabId, itemId: ItemId) {
+    this.tabIdToItemId.set(tabId, itemId)
+    this.itemIdToTabId.set(itemId, tabId)
+  }
+
+  /** タブIDとアイテムIDの結びつけを解除する */
+  untieTabAndItemByTabId(tabId: TabId) {
+    const itemId = this.tabIdToItemId.get(tabId)
+    assertNonUndefined(itemId)
+    this.itemIdToTabId.delete(itemId)
+    this.tabIdToItemId.delete(tabId)
   }
 
   private static createInitialState(): State {
