@@ -7,6 +7,7 @@ import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
 import {Item} from 'src/TreeifyWindow/Model/State'
+import {Model} from 'src/TreeifyWindow/Model/Model'
 
 /**
  * 指定されたアイテムに関するデータを削除する。
@@ -27,6 +28,12 @@ export function deleteItem(itemId: ItemId) {
   // 削除されるアイテムを親アイテムの子リストから削除する
   for (const parentItemId of NextState.getParentItemIds(itemId)) {
     modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+  }
+
+  // 対応するタブがあれば閉じる
+  const tabId = Model.instance.itemIdToTabId.get(itemId)
+  if (tabId !== undefined) {
+    chrome.tabs.remove(tabId)
   }
 
   // アイテムタイプごとのデータを削除する
@@ -70,6 +77,12 @@ export function deleteItemItself(itemId: ItemId) {
       assert(index !== -1)
       return itemIds.splice(index, 1, ...childItemIds)
     })
+  }
+
+  // 対応するタブがあれば閉じる
+  const tabId = Model.instance.itemIdToTabId.get(itemId)
+  if (tabId !== undefined) {
+    chrome.tabs.remove(tabId)
   }
 
   // アイテムタイプごとのデータを削除する
