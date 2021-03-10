@@ -1,15 +1,15 @@
 import MessageSender = chrome.runtime.MessageSender
-import Tab = chrome.tabs.Tab
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import {List} from 'immutable'
-import {integer, ItemId} from 'src/Common/basicType'
+import {integer, ItemId, Tab} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import {WebPageItem} from 'src/TreeifyWindow/Model/State'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   switch (message.type) {
@@ -128,4 +128,60 @@ function onMoveMouseToLeftEnd() {
   // Treeifyウィンドウを最前面化する
   // TODO: 誤差だろうけれど最適化の余地が一応ある
   TreeifyWindow.open()
+}
+
+/**
+ * 既存のタブとウェブページアイテムのマッチングを行う。
+ * URLが完全一致しているかどうかで判定する。
+ * TODO: 全タブと全ウェブページアイテムの総当り方式なので計算量が多い
+ */
+export async function matchTabsAndWebPageItems() {
+  const tabs = await getAllNormalTabs()
+  for (const tab of tabs) {
+    assertNonUndefined(tab.id)
+
+    const url = tab.pendingUrl ?? tab.url ?? ''
+    const webPageItem = findWebPageItem(url)
+    if (webPageItem === undefined) {
+      // URLの一致するウェブページアイテムがない場合、
+      // ウェブページアイテムを作る
+      const newWebPageItemId = NextState.createWebPageItem()
+      reflectInWebPageItem(newWebPageItemId, tab)
+      Model.instance.tieTabAndItem(tab.id, newWebPageItemId)
+
+      // アクティブページの最後の子として追加する
+      const activePageId = NextState.getActivePageId()
+      NextState.insertLastChildItem(activePageId, newWebPageItemId)
+    } else {
+      // URLの一致するウェブページアイテムがある場合
+      Model.instance.tieTabAndItem(tab.id, webPageItem.itemId)
+    }
+  }
+
+  // 正当性にやや疑問の残るcommit呼び出しだが、現状の設計では呼ばないとエラーになる
+  NextState.commit()
+}
+
+// 指定されたURLを持つウェブページアイテムを探す。
+// もし複数該当する場合は最初に見つかったものを返す。
+// 見つからなかった場合はundefinedを返す。
+function findWebPageItem(url: string): WebPageItem | undefined {
+  const webPageItems = Model.instance.currentState.webPageItems
+  for (const itemId in webPageItems) {
+    const webPageItem = webPageItems[itemId]
+    if (url === webPageItem.url) {
+      // URLが一致するウェブページアイテムが見つかった場合
+      return webPageItem
+    }
+  }
+  return undefined
+}
+
+// 要するにTreeifyウィンドウを除く全ウィンドウの全タブを返す
+async function getAllNormalTabs(): Promise<Tab[]> {
+  return new Promise((resolve) => {
+    chrome.windows.getAll({populate: true, windowTypes: ['normal']}, (windows) => {
+      resolve(windows.flatMap((window) => window.tabs ?? []))
+    })
+  })
 }

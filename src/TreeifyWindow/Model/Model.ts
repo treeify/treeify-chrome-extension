@@ -1,10 +1,9 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType, TabId} from 'src/Common/basicType'
+import {integer, ItemId, ItemType, Tab, TabId} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
 import {Command} from 'src/TreeifyWindow/Model/Command'
 import {State} from 'src/TreeifyWindow/Model/State'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import Tab = chrome.tabs.Tab
 
 export class Model {
   private static singletonInstance: Model

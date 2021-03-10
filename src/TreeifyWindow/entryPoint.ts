@@ -3,6 +3,7 @@ import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/do
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {
+  matchTabsAndWebPageItems,
   onActivated,
   onCreated,
   onMessage,
@@ -15,6 +16,9 @@ import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 entryPoint()
 
 async function entryPoint() {
+  // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
+  await matchTabsAndWebPageItems()
+
   const spaRoot = document.getElementById('spa-root')!
   render(RootView(createRootViewModel(Model.instance.currentState)), spaRoot)
 

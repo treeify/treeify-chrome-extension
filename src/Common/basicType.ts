@@ -34,3 +34,6 @@ export enum ItemType {
  * 可読性のために導入。
  */
 export type TabId = integer
+
+/** WebStormがなぜかchrome.tabs.*のimportをサジェストしてくれないのでその対策 */
+export type Tab = chrome.tabs.Tab
