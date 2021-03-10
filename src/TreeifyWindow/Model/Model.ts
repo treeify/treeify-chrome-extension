@@ -30,6 +30,9 @@ export class Model {
    */
   readonly hardUnloadedTabIds = new Set<integer>()
 
+  /** データベースファイル */
+  databaseFileHandle: FileSystemFileHandle | undefined
+
   private constructor() {
     this.currentState = Model.createInitialState()
     this.nextState = new Batchizer(this.currentState)
@@ -203,6 +206,7 @@ export class Model {
         '1000Enter': new Command('toggleGrayedOut'),
         '1000d': new Command('deleteItem'),
         '1000p': new Command('togglePaged'),
+        '1000s': new Command('openDatabaseFileDialog'),
       },
     }
   }

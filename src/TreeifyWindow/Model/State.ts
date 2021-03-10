@@ -101,3 +101,17 @@ export type TextItemSelection = {
    */
   anchorDistance: integer
 }
+
+export namespace State {
+  /** StateからJSON文字列を生成する */
+  export function toJsonString(state: State): string {
+    return JSON.stringify(state, replacer)
+  }
+
+  function replacer(this: any, key: string, value: any): any {
+    if (value instanceof List) {
+      return (value as List<unknown>).toArray()
+    }
+    return value
+  }
+}

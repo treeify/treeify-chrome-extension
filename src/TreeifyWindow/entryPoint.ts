@@ -2,6 +2,8 @@ import {render} from 'lit-html'
 import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/domTextSelection'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -10,8 +12,7 @@ import {
   onRemoved,
   onUpdated,
 } from 'src/TreeifyWindow/chromeEventListeners'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
+import {State} from 'src/TreeifyWindow/Model/State'
 
 entryPoint()
 
@@ -46,6 +47,12 @@ async function entryPoint() {
         }
       }
     }
+
+    // データベースファイル書き出し
+    Model.instance.databaseFileHandle?.createWritable()?.then((value) => {
+      value.write(State.toJsonString(newState))
+      value.close()
+    })
   })
 
   // バックグラウンドページなどからのメッセージを受信する
