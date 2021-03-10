@@ -2,8 +2,9 @@ import MessageSender = chrome.runtime.MessageSender
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import TabActiveInfo = chrome.tabs.TabActiveInfo
+import Tab = chrome.tabs.Tab
 import {List} from 'immutable'
-import {integer, ItemId, Tab} from 'src/Common/basicType'
+import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {Model} from 'src/TreeifyWindow/Model/Model'
