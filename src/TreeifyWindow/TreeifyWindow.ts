@@ -1,6 +1,5 @@
 import CreateData = chrome.windows.CreateData
-import TabChangeInfo = chrome.tabs.TabChangeInfo
-import {integer, StableTab, StableTabId} from 'src/Common/basicType'
+import {integer} from 'src/Common/basicType'
 
 export namespace TreeifyWindow {
   /**
@@ -74,30 +73,8 @@ export namespace TreeifyWindow {
   }
 
   /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
-  export type Message =
-    | OnTabCreated
-    | OnTabUpdated
-    | OnTabClosed
-    | OnTabActivated
-    | OnMoveMouseToLeftEnd
+  export type Message = OnMoveMouseToLeftEnd
 
-  export type OnTabCreated = {
-    type: 'OnTabCreated'
-    stableTab: StableTab
-  }
-  export type OnTabUpdated = {
-    type: 'OnTabUpdated'
-    changeInfo: TabChangeInfo
-    stableTab: StableTab
-  }
-  export type OnTabClosed = {
-    type: 'OnTabClosed'
-    stableTab: StableTab
-  }
-  export type OnTabActivated = {
-    type: 'OnTabActivated'
-    stableTabId: StableTabId
-  }
   export type OnMoveMouseToLeftEnd = {
     type: 'OnMoveMouseToLeftEnd'
   }

@@ -8,7 +8,7 @@ export function unloadItem() {
   const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
-  const tabId = NextState.getWebPageItemTabId(focusedItemPath.itemId)
+  const tabId = Model.instance.itemIdToTabId.get(focusedItemPath.itemId)
   // 対応するタブがなければ何もしない
   if (tabId === undefined) return
 
@@ -24,7 +24,7 @@ export function unloadSubtree() {
   if (focusedItemPath === null) return
 
   for (const subtreeItemId of NextState.getSubtreeItemIds(focusedItemPath.itemId)) {
-    const tabId = NextState.getWebPageItemTabId(subtreeItemId)
+    const tabId = Model.instance.itemIdToTabId.get(subtreeItemId)
     if (tabId !== undefined) {
       // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
       Model.instance.hardUnloadedTabIds.add(tabId)
@@ -43,13 +43,14 @@ export function browseWebPageItem() {
   const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
-  const stableTabId = Model.instance.currentState.webPageItems[focusedItemPath.itemId].stableTabId
-  if (stableTabId !== null) {
+  const tabId = Model.instance.itemIdToTabId.get(focusedItemPath.itemId)
+  if (tabId !== undefined) {
     // ウェブページアイテムに対応するタブを最前面化する
-    const stableTab = Model.instance.currentState.stableTabs[stableTabId]
-    assertNonUndefined(stableTab.id)
-    chrome.tabs.update(stableTab.id, {active: true})
-    chrome.windows.update(stableTab.windowId, {focused: true})
+    assertNonUndefined(tabId)
+    chrome.tabs.update(tabId, {active: true})
+    const tab = Model.instance.tabIdToTab.get(tabId)
+    assertNonUndefined(tab)
+    chrome.windows.update(tab.windowId, {focused: true})
   } else {
     // 対応するタブがなければ開く
     const url = NextState.getWebPageItemUrl(focusedItemPath.itemId)

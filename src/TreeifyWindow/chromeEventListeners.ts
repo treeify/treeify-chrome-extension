@@ -1,8 +1,11 @@
 import MessageSender = chrome.runtime.MessageSender
+import Tab = chrome.tabs.Tab
+import TabChangeInfo = chrome.tabs.TabChangeInfo
+import TabRemoveInfo = chrome.tabs.TabRemoveInfo
+import TabActiveInfo = chrome.tabs.TabActiveInfo
 import {List} from 'immutable'
-import {ItemId, StableTab} from 'src/Common/basicType'
+import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
@@ -10,35 +13,26 @@ import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   switch (message.type) {
-    case 'OnTabCreated':
-      onTabCreated(message)
-      break
-    case 'OnTabUpdated':
-      onTabUpdated(message)
-      break
-    case 'OnTabClosed':
-      onTabClosed(message)
-      break
-    case 'OnTabActivated':
-      onTabActivated(message)
-      break
     case 'OnMoveMouseToLeftEnd':
       onMoveMouseToLeftEnd()
+      break
+    // TODO: 網羅性チェックをしていない理由はなんだろう？
   }
 }
 
-function onTabCreated(message: TreeifyWindow.OnTabCreated) {
-  // タブのデータをModelに登録
-  Model.instance.currentState.stableTabs[message.stableTab.stableTabId] = message.stableTab
+export function onCreated(tab: Tab) {
+  // もしこうなるケースがあるならきちんと対応を考えたいのでクラッシュさせる
+  assertNonUndefined(tab.id)
 
-  const url = message.stableTab.url || message.stableTab.pendingUrl || ''
+  const url = tab.url || tab.pendingUrl || ''
   const itemIdsForTabCreation = Model.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
   if (itemIdsForTabCreation.isEmpty()) {
     // タブに対応するウェブページアイテムがない時
 
     // ウェブページアイテムを作る
     const newWebPageItemId = NextState.createWebPageItem()
-    reflectInWebPageItem(newWebPageItemId, message.stableTab)
+    reflectInWebPageItem(newWebPageItemId, tab)
+    Model.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
     const focusedItemPath = NextState.getLastFocusedItemPath()
     if (focusedItemPath !== null) {
@@ -49,7 +43,7 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
         NextState.insertNextSiblingItem(focusedItemPath, newWebPageItemId)
 
         // フォーカスアイテムを更新する
-        if (message.stableTab.active) {
+        if (tab.active) {
           const newItemPath = focusedItemPath.createSiblingItemPath(newWebPageItemId)
           assertNonUndefined(newItemPath)
           NextState.setFocusedItemPath(newItemPath)
@@ -59,7 +53,7 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
         NextState.insertFirstChildItem(focusedItemPath.itemId, newWebPageItemId)
 
         // フォーカスアイテムを更新する
-        if (message.stableTab.active) {
+        if (tab.active) {
           const newItemPath = focusedItemPath.createChildItemPath(newWebPageItemId)
           NextState.setFocusedItemPath(newItemPath)
         }
@@ -71,7 +65,7 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
       NextState.insertFirstChildItem(activePageId, newWebPageItemId)
 
       // フォーカスアイテムを更新する
-      if (message.stableTab.active) {
+      if (tab.active) {
         const newItemPath = new ItemPath(List.of(activePageId, newWebPageItemId))
         NextState.setFocusedItemPath(newItemPath)
       }
@@ -81,55 +75,49 @@ function onTabCreated(message: TreeifyWindow.OnTabCreated) {
 
     const itemId = itemIdsForTabCreation.first(undefined)
     assertNonUndefined(itemId)
-    reflectInWebPageItem(itemId, message.stableTab)
+    reflectInWebPageItem(itemId, tab)
+    Model.instance.tieTabAndItem(tab.id, itemId)
     Model.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
   }
+}
+
+export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
+  const itemId = Model.instance.tabIdToItemId.get(tabId)
+  assertNonUndefined(itemId)
+  reflectInWebPageItem(itemId, tab)
 
   NextState.commit()
 }
 
-function onTabUpdated(message: TreeifyWindow.OnTabUpdated) {
-  // タブのデータをModelに登録
-  Model.instance.currentState.stableTabs[message.stableTab.stableTabId] = message.stableTab
-
-  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTab.stableTabId]
-  reflectInWebPageItem(itemId, message.stableTab)
-
-  NextState.commit()
-}
-
-// stableTabの情報をウェブページアイテムに転写する
-function reflectInWebPageItem(itemId: ItemId, stableTab: StableTab) {
-  NextState.setWebPageItemStableTabId(itemId, stableTab.stableTabId)
-  NextState.setWebPageItemTabTitle(itemId, stableTab.title ?? '')
-  const url = stableTab.url || stableTab.pendingUrl || ''
+// Tabの情報をウェブページアイテムに転写する
+function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
+  if (tab.id !== undefined) {
+    Model.instance.tabIdToTab.set(tab.id, tab)
+  }
+  NextState.setWebPageItemTabTitle(itemId, tab.title ?? '')
+  const url = tab.url || tab.pendingUrl || ''
   NextState.setWebPageItemUrl(itemId, url)
-  NextState.setWebPageItemFaviconUrl(itemId, stableTab.favIconUrl ?? '')
+  NextState.setWebPageItemFaviconUrl(itemId, tab.favIconUrl ?? '')
 }
 
-function onTabClosed(message: TreeifyWindow.OnTabClosed) {
-  // Modelのタブデータを削除
-  NextState.getBatchizer().deleteProperty(
-    PropertyPath.of('stableTabs', message.stableTab.stableTabId)
-  )
+export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
+  const itemId = Model.instance.tabIdToItemId.get(tabId)
+  assertNonUndefined(itemId)
 
-  assertNonUndefined(message.stableTab.id)
-  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTab.stableTabId]
-  if (Model.instance.hardUnloadedTabIds.has(message.stableTab.id)) {
-    // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムとタブの紐付けを削除する
-    NextState.setWebPageItemStableTabId(itemId, null)
-
-    Model.instance.hardUnloadedTabIds.delete(message.stableTab.id)
+  if (Model.instance.hardUnloadedTabIds.has(tabId)) {
+    // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
+    Model.instance.hardUnloadedTabIds.delete(tabId)
   } else {
     // 対応するウェブページアイテムを削除する
     NextState.deleteItemItself(itemId)
   }
 
+  Model.instance.untieTabAndItemByTabId(tabId)
   NextState.commit()
 }
 
-function onTabActivated(message: TreeifyWindow.OnTabActivated) {
-  const itemId = Model.instance.currentState.stableTabIdToItemId[message.stableTabId]
+export async function onActivated(tabActiveInfo: TabActiveInfo) {
+  const itemId = Model.instance.tabIdToItemId.get(tabActiveInfo.tabId)
   if (itemId !== undefined) {
     NextState.updateItemTimestamp(itemId)
     NextState.commit()

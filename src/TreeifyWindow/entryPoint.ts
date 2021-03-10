@@ -2,7 +2,13 @@ import {render} from 'lit-html'
 import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/domTextSelection'
 import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {onMessage} from 'src/TreeifyWindow/onMessage'
+import {
+  onActivated,
+  onCreated,
+  onMessage,
+  onRemoved,
+  onUpdated,
+} from 'src/TreeifyWindow/chromeEventListeners'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
@@ -37,6 +43,12 @@ Model.instance.addStateChangeListener((newState) => {
 
 // バックグラウンドページなどからのメッセージを受信する
 chrome.runtime.onMessage.addListener(onMessage)
+
+// タブイベントの監視を開始
+chrome.tabs.onCreated.addListener(onCreated)
+chrome.tabs.onUpdated.addListener(onUpdated)
+chrome.tabs.onRemoved.addListener(onRemoved)
+chrome.tabs.onActivated.addListener(onActivated)
 
 // テキストアイテム内のキャレット位置の監視用
 document.addEventListener('selectionchange', (event) => {

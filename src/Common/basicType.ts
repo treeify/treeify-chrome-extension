@@ -30,13 +30,7 @@ export enum ItemType {
 }
 
 /**
- * Chromeの本来のタブID（chrome.tabs.Tab型のidプロパティ）はブラウザ再起動やタブのdiscardで変化してしまう。
- * そこで、代わりに独自のタブIDを用いてタブを識別する。
+ * chrome.tabs.Tab型のidプロパティを表す型。
+ * 可読性のために導入。
  */
-export type StableTabId = integer
-
-export type StableTab = chrome.tabs.Tab & {
-  stableTabId: StableTabId
-  /** このタブを開いた元のタブ */
-  opener: StableTabId | null
-}
+export type TabId = integer

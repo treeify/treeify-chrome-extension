@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType, StableTab, StableTabId} from 'src/Common/basicType'
+import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {Command} from 'src/TreeifyWindow/Model/Command'
@@ -26,9 +26,6 @@ export type State = {
    * キーの型はInputIdと書きたいが、TypeScriptの仕様上stringとしか書けない。
    */
   itemTreeInputBinding: {[inputId: string]: Command}
-  stableTabs: {[stableTabId: number]: StableTab}
-  /** StableTabIdからItemIdを逆引きするためのオンメモリインデックス */
-  stableTabIdToItemId: {[stableTabId: number]: ItemId}
 }
 
 /**
@@ -55,11 +52,6 @@ export type TextItem = {
 /** ウェブページアイテムが固有で持つデータの型 */
 export type WebPageItem = {
   itemId: ItemId
-  /**
-   * このアイテムと対応するタブのID。
-   * 対応するタブがない場合はnull。
-   */
-  stableTabId: StableTabId | null
   url: string
   /**
    * ファビコンのURL。

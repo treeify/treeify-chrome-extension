@@ -1,10 +1,3 @@
-import {
-  onActivated,
-  onCreated,
-  onRemoved,
-  onUpdated,
-  processExistingTabs,
-} from 'src/Background/tabsEventListener'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 entryPoint()
@@ -23,13 +16,4 @@ async function entryPoint() {
         break
     }
   })
-
-  // この時点で既に存在するタブをTreeify側で把握する
-  await processExistingTabs()
-
-  // タブイベントの監視を開始
-  chrome.tabs.onCreated.addListener(onCreated)
-  chrome.tabs.onUpdated.addListener(onUpdated)
-  chrome.tabs.onRemoved.addListener(onRemoved)
-  chrome.tabs.onActivated.addListener(onActivated)
 }
