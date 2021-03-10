@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType, StableTabId} from 'src/Common/basicType'
+import {ItemId, ItemType} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
@@ -25,7 +25,6 @@ export function createWebPageItem(): ItemId {
 
   const webPageItem: WebPageItem = {
     itemId: newItemId,
-    stableTabId: null,
     url: '',
     faviconUrl: '',
     tabTitle: '',
@@ -36,38 +35,6 @@ export function createWebPageItem(): ItemId {
   NextState.setNextNewItemId(newItemId + 1)
 
   return newItemId
-}
-
-/** ウェブページアイテムのタブタイトルを設定する */
-export function setWebPageItemStableTabId(itemId: ItemId, stableTabId: StableTabId | null) {
-  if (stableTabId !== null) {
-    NextState.getBatchizer().postSetMutation(
-      PropertyPath.of('webPageItems', itemId, 'stableTabId'),
-      stableTabId
-    )
-
-    // 逆引き用インデックスを更新
-    NextState.getBatchizer().postSetMutation(
-      PropertyPath.of('stableTabIdToItemId', stableTabId),
-      itemId
-    )
-  } else {
-    const oldStableTabId = NextState.getBatchizer().getDerivedValue(
-      PropertyPath.of('webPageItems', itemId, 'stableTabId')
-    )
-
-    NextState.getBatchizer().postSetMutation(
-      PropertyPath.of('webPageItems', itemId, 'stableTabId'),
-      null
-    )
-
-    if (oldStableTabId !== undefined) {
-      // 逆引き用インデックスを更新
-      NextState.getBatchizer().deleteProperty(
-        PropertyPath.of('stableTabIdToItemId', oldStableTabId)
-      )
-    }
-  }
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
@@ -94,14 +61,4 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
     PropertyPath.of('webPageItems', itemId, 'faviconUrl'),
     url
   )
-}
-
-/** ウェブページアイテムと紐付いているタブのIDを返す */
-export function getWebPageItemTabId(itemId: ItemId): integer | undefined {
-  const stableTabId = NextState.getBatchizer().getDerivedValue(
-    PropertyPath.of('webPageItems', itemId, 'stableTabId')
-  )
-  if (stableTabId === null) return undefined
-
-  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('stableTabs', stableTabId, 'id'))
 }

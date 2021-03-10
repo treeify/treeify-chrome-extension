@@ -28,16 +28,12 @@ export function createItemTreeWebPageContentViewModel(
   itemPath: ItemPath
 ): ItemTreeWebPageContentViewModel {
   const webPageItem = state.webPageItems[itemPath.itemId]
-  const stableTabId = Model.instance.currentState.webPageItems[itemPath.itemId].stableTabId
+  const tabId = Model.instance.itemIdToTabId.get(itemPath.itemId)
 
   const isLoading =
-    stableTabId !== null
-      ? Model.instance.currentState.stableTabs[stableTabId].status === 'loading'
-      : false
+    tabId !== undefined ? Model.instance.tabIdToTab.get(tabId)?.status === 'loading' : false
   const isAudible =
-    stableTabId !== null
-      ? Model.instance.currentState.stableTabs[stableTabId].audible === true
-      : false
+    tabId !== undefined ? Model.instance.tabIdToTab.get(tabId)?.audible === true : false
 
   return {
     itemPath,
@@ -45,7 +41,7 @@ export function createItemTreeWebPageContentViewModel(
     title: webPageItem.title ?? webPageItem.tabTitle,
     faviconUrl: webPageItem.faviconUrl,
     isLoading,
-    isUnloaded: webPageItem.stableTabId === null,
+    isUnloaded: tabId === undefined,
     isAudible,
     onFocus: (event) => {
       NextState.setFocusedItemPath(itemPath)

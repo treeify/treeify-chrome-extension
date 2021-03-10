@@ -1,8 +1,10 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType} from 'src/Common/basicType'
+import {integer, ItemId, ItemType, TabId} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
 import {Command} from 'src/TreeifyWindow/Model/Command'
 import {State} from 'src/TreeifyWindow/Model/State'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
+import Tab = chrome.tabs.Tab
 
 export class Model {
   private static singletonInstance: Model
@@ -14,6 +16,22 @@ export class Model {
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+
+  // TODO: コメント
+  readonly tabIdToItemId = new Map<TabId, ItemId>()
+  readonly itemIdToTabId = new Map<ItemId, TabId>()
+  readonly tabIdToTab = new Map<TabId, Tab>()
+
+  tieTabAndItem(tabId: TabId, itemId: ItemId) {
+    this.tabIdToItemId.set(tabId, itemId)
+    this.itemIdToTabId.set(itemId, tabId)
+  }
+  untieTabAndItemByTabId(tabId: TabId) {
+    const itemId = this.tabIdToItemId.get(tabId)
+    assertNonUndefined(itemId)
+    this.itemIdToTabId.delete(itemId)
+    this.tabIdToItemId.delete(tabId)
+  }
 
   /**
    * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
@@ -150,7 +168,6 @@ export class Model {
       webPageItems: {
         5: {
           itemId: 5,
-          stableTabId: null,
           url: 'https://ao-system.net/favicon/',
           faviconUrl: 'https://ao-system.net/favicon.ico',
           tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
@@ -182,8 +199,6 @@ export class Model {
         '1000d': new Command('deleteItem'),
         '1000p': new Command('togglePaged'),
       },
-      stableTabs: {},
-      stableTabIdToItemId: {},
     }
   }
 }
