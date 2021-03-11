@@ -12,6 +12,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {WebPageItem} from 'src/TreeifyWindow/Internal/State'
 import {External} from 'src/TreeifyWindow/External/External'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   switch (message.type) {
@@ -49,6 +50,9 @@ export function onCreated(tab: Tab) {
           const newItemPath = focusedItemPath.createSiblingItemPath(newWebPageItemId)
           assertNonUndefined(newItemPath)
           NextState.setFocusedItemPath(newItemPath)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
         }
       } else {
         // フォーカスアイテムの最初の子として追加する
@@ -58,6 +62,9 @@ export function onCreated(tab: Tab) {
         if (tab.active) {
           const newItemPath = focusedItemPath.createChildItemPath(newWebPageItemId)
           NextState.setFocusedItemPath(newItemPath)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
         }
       }
     } else {
@@ -70,6 +77,7 @@ export function onCreated(tab: Tab) {
       if (tab.active) {
         const newItemPath = new ItemPath(List.of(activePageId, newWebPageItemId))
         NextState.setFocusedItemPath(newItemPath)
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))
       }
     }
   } else {

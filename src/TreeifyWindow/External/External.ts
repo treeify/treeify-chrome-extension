@@ -1,9 +1,8 @@
 import {integer, ItemId, TabId} from 'src/Common/basicType'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import Tab = chrome.tabs.Tab
@@ -22,6 +21,9 @@ export namespace External {
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   export const urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+
+  // 次の描画が完了した際にフォーカスすべきDOM要素のID
+  let pendingFocusElementId: string | undefined
 
   /**
    * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
@@ -53,15 +55,10 @@ export namespace External {
   export function rerender(newState: State) {
     const spaRoot = document.getElementById('spa-root')!
 
-    // render関数を呼ぶとfocusoutイベントが発生し、focusedItemPathがnullになるケースがある。
-    // なのでrender関数を呼ぶ前に取得しておく。
-    const focusedItemPath = newState.pages[newState.activePageId].focusedItemPath
-
     renderWithLitHtml(RootView(createRootViewModel(newState)), spaRoot)
 
-    if (focusedItemPath !== null) {
-      const id = ItemTreeContentView.focusableDomElementId(focusedItemPath)
-      const focusableElement = document.getElementById(id)
+    if (pendingFocusElementId !== undefined) {
+      const focusableElement = document.getElementById(pendingFocusElementId)
       if (focusableElement !== null) {
         // フォーカスアイテムが画面内に入るようスクロールする。
         // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
@@ -77,10 +74,21 @@ export namespace External {
       }
     }
 
+    pendingFocusElementId = undefined
+
     // データベースファイル書き出し
     External.databaseFileHandle?.createWritable()?.then((stream) => {
       stream.write(State.toJsonString(newState))
       stream.close()
     })
+  }
+
+  /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを設定する */
+  export function requestFocusAfterRendering(elementId: string) {
+    // 「1回の描画サイクル内で2回以上フォーカス先が指定されることはあってはならない」という仮定に基づくassert文。
+    // この仮定の正しさにはあまり自信が無いが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
+    assert(pendingFocusElementId === undefined)
+
+    pendingFocusElementId = elementId
   }
 }
