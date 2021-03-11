@@ -1,10 +1,8 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType, TabId} from 'src/Common/basicType'
+import {ItemType} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
 import {Command} from 'src/TreeifyWindow/Model/Command'
 import {State} from 'src/TreeifyWindow/Model/State'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import Tab = chrome.tabs.Tab
 
 export class Model {
   private static singletonInstance: Model
@@ -13,25 +11,6 @@ export class Model {
 
   currentState: State
   nextState: Batchizer
-
-  /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
-  readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
-
-  /** タブIDからアイテムIDへのMap */
-  readonly tabIdToItemId = new Map<TabId, ItemId>()
-  /** アイテムIDからタブIDへのMap */
-  readonly itemIdToTabId = new Map<ItemId, TabId>()
-  /** タブIDからTabオブジェクトへのMap */
-  readonly tabIdToTab = new Map<TabId, Tab>()
-
-  /**
-   * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
-   * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
-   */
-  readonly hardUnloadedTabIds = new Set<integer>()
-
-  /** データベースファイル */
-  databaseFileHandle: FileSystemFileHandle | undefined
 
   private constructor() {
     this.currentState = Model.createInitialState()
@@ -64,20 +43,6 @@ export class Model {
 
   addStateChangeListener(listener: (newState: State) => void) {
     this.stateChangeListeners.add(listener)
-  }
-
-  /** タブIDとアイテムIDを結びつける */
-  tieTabAndItem(tabId: TabId, itemId: ItemId) {
-    this.tabIdToItemId.set(tabId, itemId)
-    this.itemIdToTabId.set(itemId, tabId)
-  }
-
-  /** タブIDとアイテムIDの結びつけを解除する */
-  untieTabAndItemByTabId(tabId: TabId) {
-    const itemId = this.tabIdToItemId.get(tabId)
-    assertNonUndefined(itemId)
-    this.itemIdToTabId.delete(itemId)
-    this.tabIdToItemId.delete(tabId)
   }
 
   private static createInitialState(): State {

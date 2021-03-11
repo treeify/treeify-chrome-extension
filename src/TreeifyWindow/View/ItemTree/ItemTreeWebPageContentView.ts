@@ -3,11 +3,11 @@ import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/Common/basicType'
 import {InputId} from 'src/TreeifyWindow/Model/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {Model} from 'src/TreeifyWindow/Model/Model'
 import {NextState} from 'src/TreeifyWindow/Model/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Model/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {External} from 'src/TreeifyWindow/External/External'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
@@ -28,12 +28,11 @@ export function createItemTreeWebPageContentViewModel(
   itemPath: ItemPath
 ): ItemTreeWebPageContentViewModel {
   const webPageItem = state.webPageItems[itemPath.itemId]
-  const tabId = Model.instance.itemIdToTabId.get(itemPath.itemId)
+  const tabId = External.itemIdToTabId.get(itemPath.itemId)
 
   const isLoading =
-    tabId !== undefined ? Model.instance.tabIdToTab.get(tabId)?.status === 'loading' : false
-  const isAudible =
-    tabId !== undefined ? Model.instance.tabIdToTab.get(tabId)?.audible === true : false
+    tabId !== undefined ? External.tabIdToTab.get(tabId)?.status === 'loading' : false
+  const isAudible = tabId !== undefined ? External.tabIdToTab.get(tabId)?.audible === true : false
 
   return {
     itemPath,

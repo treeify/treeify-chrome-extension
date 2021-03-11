@@ -7,7 +7,7 @@ import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
 import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
 import {Item} from 'src/TreeifyWindow/Model/State'
-import {Model} from 'src/TreeifyWindow/Model/Model'
+import {External} from 'src/TreeifyWindow/External/External'
 
 /**
  * 指定されたアイテムに関するデータを削除する。
@@ -31,7 +31,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = Model.instance.itemIdToTabId.get(itemId)
+  const tabId = External.itemIdToTabId.get(itemId)
   if (tabId !== undefined) {
     chrome.tabs.remove(tabId)
   }
@@ -80,7 +80,7 @@ export function deleteItemItself(itemId: ItemId) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = Model.instance.itemIdToTabId.get(itemId)
+  const tabId = External.itemIdToTabId.get(itemId)
   if (tabId !== undefined) {
     chrome.tabs.remove(tabId)
   }

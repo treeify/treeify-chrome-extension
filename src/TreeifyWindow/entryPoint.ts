@@ -13,6 +13,7 @@ import {
   onUpdated,
 } from 'src/TreeifyWindow/chromeEventListeners'
 import {State} from 'src/TreeifyWindow/Model/State'
+import {External} from 'src/TreeifyWindow/External/External'
 
 entryPoint()
 
@@ -49,7 +50,7 @@ async function entryPoint() {
     }
 
     // データベースファイル書き出し
-    Model.instance.databaseFileHandle?.createWritable()?.then((value) => {
+    External.databaseFileHandle?.createWritable()?.then((value) => {
       value.write(State.toJsonString(newState))
       value.close()
     })
