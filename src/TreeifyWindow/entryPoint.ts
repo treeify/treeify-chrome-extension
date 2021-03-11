@@ -22,9 +22,9 @@ async function entryPoint() {
   await matchTabsAndWebPageItems()
 
   const spaRoot = document.getElementById('spa-root')!
-  render(RootView(createRootViewModel(Model.instance.currentState)), spaRoot)
+  render(RootView(createRootViewModel(Model.currentState)), spaRoot)
 
-  Model.instance.addStateChangeListener((newState) => {
+  Model.addStateChangeListener((newState) => {
     // render関数を呼ぶとfocusoutイベントが発生し、focusedItemPathがnullになるケースがある。
     // なのでrender関数を呼ぶ前に取得しておく。
     const focusedItemPath = newState.pages[newState.activePageId].focusedItemPath

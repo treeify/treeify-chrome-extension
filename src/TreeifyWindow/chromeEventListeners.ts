@@ -168,7 +168,7 @@ export async function matchTabsAndWebPageItems() {
 // もし複数該当する場合は最初に見つかったものを返す。
 // 見つからなかった場合はundefinedを返す。
 function findWebPageItem(url: string): WebPageItem | undefined {
-  const webPageItems = Model.instance.currentState.webPageItems
+  const webPageItems = Model.currentState.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
     if (url === webPageItem.url) {

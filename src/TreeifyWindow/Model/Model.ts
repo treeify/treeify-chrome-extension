@@ -4,32 +4,17 @@ import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
 import {Command} from 'src/TreeifyWindow/Model/Command'
 import {State} from 'src/TreeifyWindow/Model/State'
 
-export class Model {
-  private static singletonInstance: Model
+export namespace Model {
+  const stateChangeListeners = new Set<(newState: State) => void>()
 
-  private readonly stateChangeListeners = new Set<(newState: State) => void>()
-
-  currentState: State
-  nextState: Batchizer
-
-  private constructor() {
-    this.currentState = Model.createInitialState()
-    this.nextState = new Batchizer(this.currentState)
-  }
-
-  /** シングルトンインスタンスを取得する */
-  static get instance(): Model {
-    if (this.singletonInstance === undefined) {
-      this.singletonInstance = new Model()
-    }
-    return this.singletonInstance
-  }
+  export const currentState: State = createInitialState()
+  export const nextState: Batchizer = new Batchizer(currentState)
 
   /** Stateへの変更を確定し、Viewに通知する */
-  commit() {
-    this.nextState.commit()
-    for (const stateChangeListener of this.stateChangeListeners) {
-      stateChangeListener(this.currentState)
+  export function commit() {
+    nextState.commit()
+    for (const stateChangeListener of stateChangeListeners) {
+      stateChangeListener(currentState)
     }
   }
 
@@ -37,15 +22,15 @@ export class Model {
    * Stateへの変更を確定する。Viewには通知しない。
    * このメソッドは状態を持つView内で起こった状態変化をModelに反映するために用いられる。
    */
-  commitSilently() {
-    this.nextState.commit()
+  export function commitSilently() {
+    nextState.commit()
   }
 
-  addStateChangeListener(listener: (newState: State) => void) {
-    this.stateChangeListeners.add(listener)
+  export function addStateChangeListener(listener: (newState: State) => void) {
+    stateChangeListeners.add(listener)
   }
 
-  private static createInitialState(): State {
+  function createInitialState(): State {
     return {
       items: {
         0: {
