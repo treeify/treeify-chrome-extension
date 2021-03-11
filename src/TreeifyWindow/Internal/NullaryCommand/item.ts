@@ -39,8 +39,7 @@ export function indentItem() {
 
   NextState.updateItemTimestamp(targetItemPath.itemId)
 
-  // ターゲットアイテムパスを移動先に更新する
-  NextState.setTargetItemPath(prevSiblingItemPath.createChildItemPath(targetItemPath.itemId))
+  // フォーカスを移動先に更新する
   External.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(
       prevSiblingItemPath.createChildItemPath(targetItemPath.itemId)
@@ -66,8 +65,7 @@ export function unindentItem() {
 
   NextState.updateItemTimestamp(targetItemPath.itemId)
 
-  // ターゲットアイテムパスを移動先に更新する
-  NextState.setTargetItemPath(targetItemPath.parent.createSiblingItemPath(focusedItemId)!!)
+  // フォーカスを移動先に更新する
   External.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(
       targetItemPath.parent.createSiblingItemPath(focusedItemId)!!
@@ -113,10 +111,9 @@ export function moveItemUpward() {
 
     NextState.updateItemTimestamp(targetItemPath.itemId)
 
-    // ターゲットアイテムパスを移動先に更新する
+    // フォーカスを移動先に更新する
     const newTargetItemPath = aboveItemPath.createSiblingItemPath(targetItemPath.itemId)
     assertNonUndefined(newTargetItemPath)
-    NextState.setTargetItemPath(newTargetItemPath)
     External.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newTargetItemPath)
     )
@@ -163,10 +160,9 @@ export function moveItemDownward() {
 
       NextState.updateItemTimestamp(targetItemPath.itemId)
 
-      // ターゲットアイテムパスを移動先に更新する
+      // フォーカスを移動先に更新する
       const newTargetItemPath = firstFollowingItemPath.createSiblingItemPath(targetItemPath.itemId)
       assertNonUndefined(newTargetItemPath)
-      NextState.setTargetItemPath(newTargetItemPath)
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(newTargetItemPath)
       )
@@ -182,9 +178,8 @@ export function moveItemDownward() {
 
     NextState.updateItemTimestamp(targetItemPath.itemId)
 
-    // ターゲットアイテムパスを移動先に更新する
+    // フォーカスを移動先に更新する
     const newTargetItemPath = firstFollowingItemPath.createChildItemPath(targetItemPath.itemId)
-    NextState.setTargetItemPath(newTargetItemPath)
     External.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newTargetItemPath)
     )
@@ -226,7 +221,6 @@ export function enterKeyDefault() {
       NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      NextState.setTargetItemPath(targetItemPath.createChildItemPath(newItemId))
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
       )
@@ -242,7 +236,6 @@ export function enterKeyDefault() {
       NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
       // キャレット位置を更新する
-      NextState.setTargetItemPath(targetItemPath.createSiblingItemPath(newItemId)!!)
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
       )
@@ -265,7 +258,6 @@ export function enterKeyDefault() {
       NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      NextState.setTargetItemPath(targetItemPath.createSiblingItemPath(newItemId)!!)
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
       )
@@ -291,7 +283,6 @@ export function enterKeyDefault() {
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
-        NextState.setTargetItemPath(targetItemPath.createChildItemPath(newItemId))
         External.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
         )
@@ -314,7 +305,6 @@ export function enterKeyDefault() {
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
-        NextState.setTargetItemPath(targetItemPath.createSiblingItemPath(newItemId)!!)
         External.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(
             targetItemPath.createSiblingItemPath(newItemId)!!
@@ -332,8 +322,7 @@ export function enterKeyDefault() {
       const newItemId = NextState.createTextItem()
       NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
 
-      // ターゲットアイテムを更新する
-      NextState.setTargetItemPath(targetItemPath.createChildItemPath(newItemId))
+      // フォーカスアイテムを更新する
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
       )
@@ -346,8 +335,7 @@ export function enterKeyDefault() {
       const newItemId = NextState.createTextItem()
       NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
 
-      // ターゲットアイテムを更新する
-      NextState.setTargetItemPath(targetItemPath.createChildItemPath(newItemId))
+      // フォーカスアイテムを更新する
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
       )
@@ -357,8 +345,7 @@ export function enterKeyDefault() {
       const newItemId = NextState.createTextItem()
       NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
-      // ターゲットアイテムを更新する
-      NextState.setTargetItemPath(targetItemPath.createSiblingItemPath(newItemId)!!)
+      // フォーカスアイテムを更新する
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
       )
@@ -377,10 +364,9 @@ export function deleteItem() {
   // アクティブページを削除しようとしている場合、何もしない
   if (targetItemPath.parent === null) return
 
-  // 新たなターゲットアイテムとして上のアイテムを指定
+  // 上のアイテムをフォーカス
   const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   assertNonUndefined(aboveItemPath)
-  NextState.setTargetItemPath(aboveItemPath)
   External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
 
   NextState.deleteItem(targetItemPath.itemId)
@@ -445,7 +431,6 @@ export function toggleGrayedOut() {
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
   const nextSiblingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
   if (nextSiblingItemPath !== undefined) {
-    NextState.setTargetItemPath(nextSiblingItemPath)
     External.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(nextSiblingItemPath)
     )
