@@ -20,6 +20,15 @@ export namespace External {
   /** タブIDからTabオブジェクトへのMap */
   export const tabIdToTab = new Map<TabId, Tab>()
 
+  /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
+  export const urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+
+  /**
+   * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
+   * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
+   */
+  export const hardUnloadedTabIds = new Set<integer>()
+
   /** タブIDとアイテムIDを結びつける */
   export function tieTabAndItem(tabId: TabId, itemId: ItemId) {
     tabIdToItemId.set(tabId, itemId)
@@ -33,15 +42,6 @@ export namespace External {
     itemIdToTabId.delete(itemId)
     tabIdToItemId.delete(tabId)
   }
-
-  /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
-  export const urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
-
-  /**
-   * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
-   * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
-   */
-  export const hardUnloadedTabIds = new Set<integer>()
 
   /** DOMの初回描画を行う */
   export function render(state: State) {
