@@ -7,6 +7,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {External} from 'src/TreeifyWindow/External/External'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath
@@ -36,6 +37,8 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
 
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(itemPath))
+
         NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
       }
@@ -46,6 +49,8 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
         NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(itemPath))
 
         NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
