@@ -37,7 +37,7 @@ export function onCreated(tab: Tab) {
     reflectInWebPageItem(newWebPageItemId, tab)
     External.tieTabAndItem(tab.id, newWebPageItemId)
 
-    const focusedItemPath = NextState.getLastFocusedItemPath()
+    const focusedItemPath = NextState.getFocusedItemPath()
     if (focusedItemPath !== null) {
       // フォーカスの当たっているアイテムがあるなら、
 

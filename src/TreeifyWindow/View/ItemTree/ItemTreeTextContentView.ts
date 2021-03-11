@@ -16,7 +16,6 @@ export type ItemTreeTextContentViewModel = {
   onInput: (event: InputEvent) => void
   onCompositionEnd: (event: CompositionEvent) => void
   onFocus: (event: FocusEvent) => void
-  onBlur: (event: FocusEvent) => void
 }
 
 export function createItemTreeTextContentViewModel(
@@ -58,12 +57,6 @@ export function createItemTreeTextContentViewModel(
     },
     onFocus: (event) => {
       NextState.setFocusedItemPath(itemPath)
-      NextState.setBlurredItemPath(null)
-      NextState.commitSilently()
-    },
-    onBlur: (event) => {
-      NextState.setBlurredItemPath(itemPath)
-      NextState.setFocusedItemPath(null)
       NextState.commitSilently()
     },
   }
@@ -80,7 +73,6 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
   contentEditableElement.addEventListener('input', viewModel.onInput as any)
   contentEditableElement.addEventListener('compositionend', viewModel.onCompositionEnd as any)
   contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
-  contentEditableElement.addEventListener('blur', viewModel.onBlur as any)
 
   return html`<div class="item-tree-text-content">${contentEditableElement}</div>`
 }

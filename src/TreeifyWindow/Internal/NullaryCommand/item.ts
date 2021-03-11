@@ -7,7 +7,7 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 
 /** フォーカスアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   const focusedItemId = focusedItemPath.itemId
@@ -17,7 +17,7 @@ export function toggleFolded() {
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indentItem() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   const prevSiblingItemPath = NextState.findPrevSiblingItemPath(focusedItemPath)
@@ -50,7 +50,7 @@ export function indentItem() {
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   // 親または親の親が居ない場合は何もしない
@@ -80,7 +80,7 @@ export function unindentItem() {
  * 親が居ない場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemUpward() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
@@ -128,7 +128,7 @@ export function moveItemUpward() {
  * すでに下端の場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemDownward() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
@@ -197,7 +197,7 @@ export function moveItemDownward() {
 
 /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
@@ -381,7 +381,7 @@ export function enterKeyDefault() {
  * フォーカスアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItem() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   // アクティブページを削除しようとしている場合、何もしない
@@ -406,7 +406,7 @@ export function insertLineBreak() {
  * フォーカスアイテムが非ページならページ化する。
  */
 export function togglePaged() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   if (NextState.isPage(focusedItemPath.itemId)) {
@@ -418,7 +418,7 @@ export function togglePaged() {
 
 /** 対象アイテムがページなら、そのページに切り替える */
 export function showPage() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   if (NextState.isPage(focusedItemPath.itemId)) {
@@ -429,7 +429,7 @@ export function showPage() {
 
 /** 対象アイテムをページ化し、そのページに切り替える */
 export function becomeAndShowPage() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   NextState.becomePage(focusedItemPath.itemId)
@@ -442,7 +442,7 @@ export function becomeAndShowPage() {
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   if (focusedItemPath === null) return
 
   NextState.toggleCssClass(focusedItemPath.itemId, 'grayed-out-item')

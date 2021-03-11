@@ -62,12 +62,7 @@ function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemI
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
-  return html`<main
-    class="item-tree"
-    @paste=${onPaste}
-    @focusout=${onFocusOut}
-    @keydown=${onKeyDown}
-  >
+  return html`<main class="item-tree" @paste=${onPaste} @keydown=${onKeyDown}>
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </main>`
 }
@@ -317,7 +312,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
 
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   assertNonNull(focusedItemPath)
 
   if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
@@ -377,7 +372,7 @@ function onBackspace(event: KeyboardEvent) {
 
 /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
+  const focusedItemPath = NextState.getFocusedItemPath()
   assertNonNull(focusedItemPath)
 
   if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
@@ -433,10 +428,4 @@ function onPaste(event: ClipboardEvent) {
   event.preventDefault()
   const text = event.clipboardData?.getData('text/plain')
   document.execCommand('insertText', false, text)
-}
-
-// フォーカスが外れたらフォーカスアイテムをnullにする
-function onFocusOut(event: FocusEvent) {
-  NextState.setFocusedItemPath(null)
-  NextState.commitSilently()
 }

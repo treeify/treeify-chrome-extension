@@ -53,7 +53,6 @@ export function becomePage(itemId: ItemId) {
 
   const page: Page = {
     focusedItemPath: new ItemPath(List.of(itemId)),
-    blurredItemPath: null,
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
 }

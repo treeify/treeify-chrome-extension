@@ -136,11 +136,9 @@ export namespace Internal {
       pages: {
         '0': {
           focusedItemPath: null,
-          blurredItemPath: null,
         },
         '6': {
           focusedItemPath: null,
-          blurredItemPath: null,
         },
       },
       mountedPageIds: List.of(0),
