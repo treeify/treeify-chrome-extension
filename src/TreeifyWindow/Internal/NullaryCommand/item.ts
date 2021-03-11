@@ -103,7 +103,7 @@ export function moveItemUpward() {
 
     NextState.updateItemTimestamp(focusedItemPath.itemId)
 
-    // 兄弟リスト内での入れ替えだけならフォーカスアイテムパスは変化しないので更新不要
+    External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(focusedItemPath))
   } else {
     // 1つ上のアイテムの兄になるようフォーカスアイテムを配置
     NextState.insertPrevSiblingItem(aboveItemPath, focusedItemPath.itemId)
@@ -153,7 +153,9 @@ export function moveItemDownward() {
 
       NextState.updateItemTimestamp(focusedItemPath.itemId)
 
-      // 兄弟リスト内での入れ替えだけならフォーカスアイテムパスは変化しないので更新不要
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(focusedItemPath)
+      )
     } else {
       // 弟になるようフォーカスアイテムを配置
       NextState.insertNextSiblingItem(firstFollowingItemPath, focusedItemPath.itemId)
