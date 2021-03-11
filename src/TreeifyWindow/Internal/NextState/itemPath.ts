@@ -2,17 +2,17 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 
-/** フォーカスアイテムパスを返す */
-export function getFocusedItemPath(): ItemPath | null {
+/** ターゲットアイテムパスを返す */
+export function getTargetItemPath(): ItemPath | null {
   return NextState.getBatchizer().getDerivedValue(
-    PropertyPath.of('pages', NextState.getActivePageId(), 'focusedItemPath')
+    PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath')
   )
 }
 
-/** フォーカスアイテムパスを上書きする */
-export function setFocusedItemPath(itemPath: ItemPath | null) {
+/** ターゲットアイテムパスを上書きする */
+export function setTargetItemPath(itemPath: ItemPath | null) {
   NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('pages', NextState.getActivePageId(), 'focusedItemPath'),
+    PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath'),
     itemPath
   )
 }

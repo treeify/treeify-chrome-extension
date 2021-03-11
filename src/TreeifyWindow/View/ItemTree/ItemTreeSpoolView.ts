@@ -25,7 +25,7 @@ export function createItemTreeSpoolViewModel(
   const bulletState = deriveBulletState(state, item)
 
   const onClick = (event: MouseEvent) => {
-    NextState.setFocusedItemPath(itemPath)
+    NextState.setTargetItemPath(itemPath)
 
     const inputId = InputId.fromMouseEvent(event)
     switch (bulletState) {

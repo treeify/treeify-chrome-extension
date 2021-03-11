@@ -73,8 +73,8 @@ export type WebPageItem = {
 
 /** 各ページが持つデータの型 */
 export type Page = {
-  /** アイテムツリー内でフォーカスを持っているアイテム */
-  focusedItemPath: ItemPath | null
+  /** アイテムツリー内で操作対象となるアイテム */
+  targetItemPath: ItemPath | null
 }
 
 /** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */

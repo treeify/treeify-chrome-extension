@@ -52,7 +52,7 @@ export function becomePage(itemId: ItemId) {
   if (isPage(itemId)) return
 
   const page: Page = {
-    focusedItemPath: new ItemPath(List.of(itemId)),
+    targetItemPath: new ItemPath(List.of(itemId)),
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
 }

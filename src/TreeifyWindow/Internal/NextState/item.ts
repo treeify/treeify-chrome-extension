@@ -12,7 +12,7 @@ import {External} from 'src/TreeifyWindow/External/External'
 /**
  * 指定されたアイテムに関するデータを削除する。
  * 削除によって親の数が0になった子アイテムも再帰的に削除する。
- * キャレットの移動（フォーカスアイテムの変更）は行わない。
+ * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItem(itemId: ItemId) {
   for (const childItemId of NextState.getChildItemIds(itemId)) {
@@ -55,7 +55,7 @@ export function deleteItem(itemId: ItemId) {
 /**
  * 指定されたアイテムに関するデータを削除する。
  * 子アイテムは親アイテムの子リストに移動する。
- * キャレットの移動（フォーカスアイテムの変更）は行わない。
+ * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
   const childItemIds = NextState.getChildItemIds(itemId)

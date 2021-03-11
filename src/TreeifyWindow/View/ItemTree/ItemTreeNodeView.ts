@@ -63,7 +63,7 @@ export function createItemTreeNodeViewModel(
       const inputId = InputId.fromMouseEvent(event)
       if (inputId === '0000MouseButton1') {
         event.preventDefault()
-        NextState.setFocusedItemPath(itemPath)
+        NextState.setTargetItemPath(itemPath)
         NullaryCommand.deleteItem()
         NextState.commit()
       }

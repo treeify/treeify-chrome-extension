@@ -135,10 +135,10 @@ export namespace Internal {
       },
       pages: {
         '0': {
-          focusedItemPath: null,
+          targetItemPath: null,
         },
         '6': {
-          focusedItemPath: null,
+          targetItemPath: null,
         },
       },
       mountedPageIds: List.of(0),

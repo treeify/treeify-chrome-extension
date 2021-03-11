@@ -60,7 +60,7 @@ export namespace External {
     if (pendingFocusElementId !== undefined) {
       const focusableElement = document.getElementById(pendingFocusElementId)
       if (focusableElement !== null) {
-        // フォーカスアイテムが画面内に入るようスクロールする。
+        // ターゲットアイテムが画面内に入るようスクロールする。
         // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
         focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
 
@@ -68,7 +68,7 @@ export namespace External {
           // キャレット位置をModelからViewに反映する
           setDomSelection(focusableElement, newState.itemTreeTextItemSelection)
         } else {
-          // フォーカスアイテムをModelからViewに反映する
+          // ターゲットアイテムをModelからViewに反映する
           focusableElement.focus()
         }
       }

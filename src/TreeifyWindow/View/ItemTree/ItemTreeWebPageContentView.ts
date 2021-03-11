@@ -42,22 +42,22 @@ export function createItemTreeWebPageContentViewModel(
     isUnloaded: tabId === undefined,
     isAudible,
     onFocus: (event) => {
-      NextState.setFocusedItemPath(itemPath)
+      NextState.setTargetItemPath(itemPath)
       NextState.commitSilently()
     },
     onClickTitle: (event) => {
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
-          NextState.setFocusedItemPath(itemPath)
+          NextState.setTargetItemPath(itemPath)
           NullaryCommand.browseWebPageItem()
           break
         case '1000MouseButton0':
-          NextState.setFocusedItemPath(itemPath)
+          NextState.setTargetItemPath(itemPath)
           NextState.commit()
       }
     },
     onClickFavicon: (event) => {
-      NextState.setFocusedItemPath(itemPath)
+      NextState.setTargetItemPath(itemPath)
 
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':

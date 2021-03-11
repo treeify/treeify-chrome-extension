@@ -5,10 +5,10 @@ import {External} from 'src/TreeifyWindow/External/External'
 
 /** ウェブページアイテムのアンロード操作 */
 export function unloadItem() {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  const tabId = External.itemIdToTabId.get(focusedItemPath.itemId)
+  const tabId = External.itemIdToTabId.get(targetItemPath.itemId)
   // 対応するタブがなければ何もしない
   if (tabId === undefined) return
 
@@ -20,10 +20,10 @@ export function unloadItem() {
 
 /** ウェブページアイテムのサブツリーアンロード操作 */
 export function unloadSubtree() {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  for (const subtreeItemId of NextState.getSubtreeItemIds(focusedItemPath.itemId)) {
+  for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemPath.itemId)) {
     const tabId = External.itemIdToTabId.get(subtreeItemId)
     if (tabId !== undefined) {
       // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
@@ -40,10 +40,10 @@ export function unloadSubtree() {
  * 存在しない場合はタブを開く。
  */
 export function browseWebPageItem() {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  const tabId = External.itemIdToTabId.get(focusedItemPath.itemId)
+  const tabId = External.itemIdToTabId.get(targetItemPath.itemId)
   if (tabId !== undefined) {
     // ウェブページアイテムに対応するタブを最前面化する
     assertNonUndefined(tabId)
@@ -53,9 +53,9 @@ export function browseWebPageItem() {
     chrome.windows.update(tab.windowId, {focused: true})
   } else {
     // 対応するタブがなければ開く
-    const url = NextState.getWebPageItemUrl(focusedItemPath.itemId)
+    const url = NextState.getWebPageItemUrl(targetItemPath.itemId)
     const itemIds = External.urlToItemIdsForTabCreation.get(url) ?? List.of()
-    External.urlToItemIdsForTabCreation.set(url, itemIds.push(focusedItemPath.itemId))
+    External.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemPath.itemId))
     chrome.tabs.create({url, active: true}, (tab) => {
       chrome.windows.update(tab.windowId, {focused: true})
     })
