@@ -43,7 +43,7 @@ export function createItemTreeWebPageContentViewModel(
     isAudible,
     onFocus: (event) => {
       NextState.setTargetItemPath(itemPath)
-      NextState.commitSilently()
+      NextState.commit()
     },
     onClickTitle: (event) => {
       switch (InputId.fromMouseEvent(event)) {

@@ -57,7 +57,7 @@ export function createItemTreeTextContentViewModel(
     },
     onFocus: (event) => {
       NextState.setTargetItemPath(itemPath)
-      NextState.commitSilently()
+      NextState.commit()
     },
   }
 }

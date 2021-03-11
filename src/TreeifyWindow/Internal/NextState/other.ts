@@ -18,11 +18,6 @@ export function commit() {
   Internal.commit()
 }
 
-/** NextStateへの全ての変更を確定し、ModelのStateを書き換える */
-export function commitSilently() {
-  Internal.commitSilently()
-}
-
 /** 指定されたプロパティを削除する */
 export function deleteProperty(propertyKeys: PropertyPath) {
   getBatchizer().postSetMutation(propertyKeys, undefined)

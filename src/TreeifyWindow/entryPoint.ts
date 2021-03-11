@@ -35,6 +35,6 @@ async function entryPoint() {
   // テキストアイテム内のキャレット位置の監視用
   document.addEventListener('selectionchange', (event) => {
     NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
-    NextState.commitSilently()
+    NextState.commit()
   })
 }

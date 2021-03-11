@@ -19,14 +19,6 @@ export namespace Internal {
     }
   }
 
-  /**
-   * Stateへの変更を確定する。Viewには通知しない。
-   * このメソッドは状態を持つView内で起こった状態変化をModelに反映するために用いられる。
-   */
-  export function commitSilently() {
-    nextState.commit()
-  }
-
   export function addStateChangeListener(listener: (newState: State) => void) {
     stateChangeListeners.add(listener)
   }
