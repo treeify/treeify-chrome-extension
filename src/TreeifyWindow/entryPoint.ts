@@ -1,5 +1,8 @@
 import {render} from 'lit-html'
-import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/domTextSelection'
+import {
+  getTextItemSelectionFromDom,
+  setDomSelection,
+} from 'src/TreeifyWindow/External/domTextSelection'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
@@ -11,7 +14,7 @@ import {
   onMessage,
   onRemoved,
   onUpdated,
-} from 'src/TreeifyWindow/chromeEventListeners'
+} from 'src/TreeifyWindow/External/chromeEventListeners'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {External} from 'src/TreeifyWindow/External/External'
 
