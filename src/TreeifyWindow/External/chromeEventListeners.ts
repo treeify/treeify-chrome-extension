@@ -45,7 +45,7 @@ export function onCreated(tab: Tab) {
         // いわゆる「新しいタブ」は弟として追加する
         NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
-        // フォーカスアイテムを更新する
+        // フォーカスを移す
         if (tab.active) {
           const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
           assertNonUndefined(newItemPath)
@@ -57,7 +57,7 @@ export function onCreated(tab: Tab) {
         // ターゲットアイテムの最初の子として追加する
         NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
 
-        // フォーカスアイテムを更新する
+        // フォーカスを移す
         if (tab.active) {
           const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
           External.requestFocusAfterRendering(
@@ -71,7 +71,7 @@ export function onCreated(tab: Tab) {
       const activePageId = NextState.getActivePageId()
       NextState.insertFirstChildItem(activePageId, newWebPageItemId)
 
-      // フォーカスアイテムを更新する
+      // フォーカスを移す
       if (tab.active) {
         const newItemPath = new ItemPath(List.of(activePageId, newWebPageItemId))
         External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))

@@ -322,7 +322,7 @@ export function enterKeyDefault() {
       const newItemId = NextState.createTextItem()
       NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
 
-      // フォーカスアイテムを更新する
+      // フォーカスを移す
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
       )
@@ -335,7 +335,7 @@ export function enterKeyDefault() {
       const newItemId = NextState.createTextItem()
       NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
 
-      // フォーカスアイテムを更新する
+      // フォーカスを移す
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
       )
@@ -345,7 +345,7 @@ export function enterKeyDefault() {
       const newItemId = NextState.createTextItem()
       NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
-      // フォーカスアイテムを更新する
+      // フォーカスを移す
       External.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
       )
