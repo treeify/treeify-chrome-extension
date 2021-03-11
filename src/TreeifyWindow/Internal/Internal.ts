@@ -1,10 +1,11 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
-import {Batchizer} from 'src/TreeifyWindow/Model/Batchizer'
-import {Command} from 'src/TreeifyWindow/Model/Command'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {Batchizer} from 'src/TreeifyWindow/Internal/Batchizer'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
+import {State} from 'src/TreeifyWindow/Internal/State'
 
-export namespace Model {
+/** TODO: コメント */
+export namespace Internal {
   const stateChangeListeners = new Set<(newState: State) => void>()
 
   export const currentState: State = createInitialState()

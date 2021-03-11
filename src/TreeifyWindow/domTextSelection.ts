@@ -1,5 +1,5 @@
 import {integer} from 'src/Common/basicType'
-import {TextItemSelection} from 'src/TreeifyWindow/Model/State'
+import {TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 
 export function getTextItemSelectionFromDom(): TextItemSelection | undefined {
   if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {

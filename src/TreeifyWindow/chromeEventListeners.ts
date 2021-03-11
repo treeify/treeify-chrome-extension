@@ -6,11 +6,11 @@ import Tab = chrome.tabs.Tab
 import {List} from 'immutable'
 import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {Model} from 'src/TreeifyWindow/Model/Model'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {WebPageItem} from 'src/TreeifyWindow/Model/State'
+import {WebPageItem} from 'src/TreeifyWindow/Internal/State'
 import {External} from 'src/TreeifyWindow/External/External'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
@@ -168,7 +168,7 @@ export async function matchTabsAndWebPageItems() {
 // もし複数該当する場合は最初に見つかったものを返す。
 // 見つからなかった場合はundefinedを返す。
 function findWebPageItem(url: string): WebPageItem | undefined {
-  const webPageItems = Model.currentState.webPageItems
+  const webPageItems = Internal.currentState.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
     if (url === webPageItem.url) {

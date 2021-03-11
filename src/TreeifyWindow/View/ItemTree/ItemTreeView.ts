@@ -4,10 +4,10 @@ import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
 import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/domTextSelection'
-import {InputId} from 'src/TreeifyWindow/Model/InputId'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeNodeViewModel,
   ItemTreeNodeView,

@@ -5,11 +5,11 @@ import {repeat} from 'lit-html/directives/repeat'
 import {styleMap} from 'lit-html/directives/style-map'
 import {integer, ItemId} from 'src/Common/basicType'
 import {CssCustomProperty} from 'src/Common/CssCustomProperty'
-import {InputId} from 'src/TreeifyWindow/Model/InputId'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeContentViewModel,
   ItemTreeContentView,

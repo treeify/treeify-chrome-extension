@@ -1,7 +1,7 @@
 import {render} from 'lit-html'
 import {getTextItemSelectionFromDom, setDomSelection} from 'src/TreeifyWindow/domTextSelection'
-import {Model} from 'src/TreeifyWindow/Model/Model'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 import {
@@ -12,7 +12,7 @@ import {
   onRemoved,
   onUpdated,
 } from 'src/TreeifyWindow/chromeEventListeners'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {External} from 'src/TreeifyWindow/External/External'
 
 entryPoint()
@@ -22,9 +22,9 @@ async function entryPoint() {
   await matchTabsAndWebPageItems()
 
   const spaRoot = document.getElementById('spa-root')!
-  render(RootView(createRootViewModel(Model.currentState)), spaRoot)
+  render(RootView(createRootViewModel(Internal.currentState)), spaRoot)
 
-  Model.addStateChangeListener((newState) => {
+  Internal.addStateChangeListener((newState) => {
     // render関数を呼ぶとfocusoutイベントが発生し、focusedItemPathがnullになるケースがある。
     // なのでrender関数を呼ぶ前に取得しておく。
     const focusedItemPath = newState.pages[newState.activePageId].focusedItemPath

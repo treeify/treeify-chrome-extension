@@ -1,6 +1,6 @@
-import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 
 /** フォーカスアイテムパスを返す */
 export function getFocusedItemPath(): ItemPath | null {

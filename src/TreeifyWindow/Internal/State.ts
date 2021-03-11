@@ -2,8 +2,8 @@ import {List} from 'immutable'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
-import {Command} from 'src/TreeifyWindow/Model/Command'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {

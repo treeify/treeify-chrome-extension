@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {External} from 'src/TreeifyWindow/External/External'
 
 /** ウェブページアイテムのアンロード操作 */

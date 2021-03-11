@@ -1,7 +1,7 @@
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 
 /** フォーカスアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
