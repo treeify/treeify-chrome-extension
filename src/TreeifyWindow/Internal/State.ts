@@ -103,4 +103,23 @@ export namespace State {
     }
     return value
   }
+
+  /**
+   * JSON文字列からStateオブジェクトを生成する。
+   * パースやバリデーションに失敗したらundefinedを返す。
+   */
+  export function fromJsonString(jsonString: string): State | undefined {
+    try {
+      const object = JSON.parse(jsonString, (key, value) => {
+        if (value instanceof Array) {
+          return List(value as Array<undefined>)
+        }
+        return value
+      })
+      // TODO: バリデーションなど
+      return object
+    } catch {
+      return undefined
+    }
+  }
 }
