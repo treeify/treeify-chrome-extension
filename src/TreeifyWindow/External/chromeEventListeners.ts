@@ -24,7 +24,7 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
 }
 
 export function onCreated(tab: Tab) {
-  // もしこうなるケースがあるならきちんと対応を考えたいのでクラッシュさせる
+  // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
   assertNonUndefined(tab.id)
 
   const url = tab.url || tab.pendingUrl || ''
