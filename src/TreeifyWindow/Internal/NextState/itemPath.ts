@@ -3,14 +3,14 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 
 /** ターゲットアイテムパスを返す */
-export function getTargetItemPath(): ItemPath | null {
+export function getTargetItemPath(): ItemPath {
   return NextState.getBatchizer().getDerivedValue(
     PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath')
   )
 }
 
 /** ターゲットアイテムパスを上書きする */
-export function setTargetItemPath(itemPath: ItemPath | null) {
+export function setTargetItemPath(itemPath: ItemPath) {
   NextState.getBatchizer().postSetMutation(
     PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath'),
     itemPath
