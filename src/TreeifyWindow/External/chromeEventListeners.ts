@@ -38,24 +38,47 @@ export function onCreated(tab: Tab) {
 
     const targetItemPath = NextState.getTargetItemPath()
 
-    if (url === 'chrome://newtab/' && targetItemPath.hasParent()) {
-      // いわゆる「新しいタブ」は弟として追加する
-      NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
+    if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
+      if (targetItemPath.hasParent()) {
+        // いわゆる「新しいタブ」は弟として追加する
+        NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
-      // フォーカスを移す
-      if (tab.active) {
-        const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
-        assertNonUndefined(newItemPath)
-        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))
+        // フォーカスを移す
+        if (tab.active) {
+          const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
+          assertNonUndefined(newItemPath)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
+        }
+      } else {
+        // アクティブアイテムの最初の子として追加する
+        NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
+
+        // フォーカスを移す
+        if (tab.active) {
+          const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
+        }
       }
     } else {
-      // ターゲットアイテムの最初の子として追加する
-      NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
+      const openerItemId = External.tabIdToItemId.get(tab.openerTabId)
+      assertNonUndefined(openerItemId)
 
-      // フォーカスを移す
-      if (tab.active) {
-        const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
-        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))
+      // openerの最後の子として追加する
+      NextState.insertLastChildItem(openerItemId, newWebPageItemId)
+
+      // openerがターゲットアイテムなら
+      if (targetItemPath.itemId === openerItemId) {
+        // フォーカスを移す
+        if (tab.active) {
+          const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
+        }
       }
     }
   } else {
