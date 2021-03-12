@@ -6,7 +6,6 @@ import {External} from 'src/TreeifyWindow/External/External'
 /** ウェブページアイテムのアンロード操作 */
 export function unloadItem() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   const tabId = External.itemIdToTabId.get(targetItemPath.itemId)
   // 対応するタブがなければ何もしない
@@ -21,7 +20,6 @@ export function unloadItem() {
 /** ウェブページアイテムのサブツリーアンロード操作 */
 export function unloadSubtree() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemPath.itemId)) {
     const tabId = External.itemIdToTabId.get(subtreeItemId)
@@ -41,7 +39,6 @@ export function unloadSubtree() {
  */
 export function browseWebPageItem() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   const tabId = External.itemIdToTabId.get(targetItemPath.itemId)
   if (tabId !== undefined) {

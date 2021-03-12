@@ -7,10 +7,7 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 
 /** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
-
-  const focusedItemId = targetItemPath.itemId
+  const focusedItemId = NextState.getTargetItemPath().itemId
   NextState.setItemProperty(focusedItemId, 'isFolded', !NextState.getItemIsFolded(focusedItemId))
   NextState.updateItemTimestamp(focusedItemId)
 }
@@ -18,7 +15,6 @@ export function toggleFolded() {
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indentItem() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   const prevSiblingItemPath = NextState.findPrevSiblingItemPath(targetItemPath)
   // 兄が居ない場合、何もしない
@@ -50,7 +46,6 @@ export function indentItem() {
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   // 親または親の親が居ない場合は何もしない
   if (targetItemPath.parent === undefined) return
@@ -79,7 +74,6 @@ export function unindentItem() {
  */
 export function moveItemUpward() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 1つ上のアイテムが存在しない場合は何もしない
@@ -126,7 +120,6 @@ export function moveItemUpward() {
  */
 export function moveItemDownward() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
   const firstFollowingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
@@ -189,7 +182,6 @@ export function moveItemDownward() {
 /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
@@ -359,7 +351,6 @@ export function enterKeyDefault() {
  */
 export function deleteItem() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   // アクティブページを削除しようとしている場合、何もしない
   if (targetItemPath.parent === null) return
@@ -383,7 +374,6 @@ export function insertLineBreak() {
  */
 export function togglePaged() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   if (NextState.isPage(targetItemPath.itemId)) {
     NextState.becomeNonPage(targetItemPath.itemId)
@@ -395,7 +385,6 @@ export function togglePaged() {
 /** 対象アイテムがページなら、そのページに切り替える */
 export function showPage() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   if (NextState.isPage(targetItemPath.itemId)) {
     NextState.mountPage(targetItemPath.itemId)
@@ -406,7 +395,6 @@ export function showPage() {
 /** 対象アイテムをページ化し、そのページに切り替える */
 export function becomeAndShowPage() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   NextState.becomePage(targetItemPath.itemId)
   NextState.mountPage(targetItemPath.itemId)
@@ -419,7 +407,6 @@ export function becomeAndShowPage() {
  */
 export function toggleGrayedOut() {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   NextState.toggleCssClass(targetItemPath.itemId, 'grayed-out-item')
 

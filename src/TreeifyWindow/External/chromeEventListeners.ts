@@ -6,7 +6,6 @@ import Tab = chrome.tabs.Tab
 import {List} from 'immutable'
 import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
@@ -38,42 +37,24 @@ export function onCreated(tab: Tab) {
     External.tieTabAndItem(tab.id, newWebPageItemId)
 
     const targetItemPath = NextState.getTargetItemPath()
-    if (targetItemPath !== null) {
-      // フォーカスの当たっているアイテムがあるなら、
 
-      if (url === 'chrome://newtab/' && targetItemPath.hasParent()) {
-        // いわゆる「新しいタブ」は弟として追加する
-        NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
-
-        // フォーカスを移す
-        if (tab.active) {
-          const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
-          assertNonUndefined(newItemPath)
-          External.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(newItemPath)
-          )
-        }
-      } else {
-        // ターゲットアイテムの最初の子として追加する
-        NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
-
-        // フォーカスを移す
-        if (tab.active) {
-          const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
-          External.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(newItemPath)
-          )
-        }
-      }
-    } else {
-      // フォーカスの当たっているアイテムがないなら、
-      // アクティブページの最初の子として追加する
-      const activePageId = NextState.getActivePageId()
-      NextState.insertFirstChildItem(activePageId, newWebPageItemId)
+    if (url === 'chrome://newtab/' && targetItemPath.hasParent()) {
+      // いわゆる「新しいタブ」は弟として追加する
+      NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
       // フォーカスを移す
       if (tab.active) {
-        const newItemPath = new ItemPath(List.of(activePageId, newWebPageItemId))
+        const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
+        assertNonUndefined(newItemPath)
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))
+      }
+    } else {
+      // ターゲットアイテムの最初の子として追加する
+      NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
+
+      // フォーカスを移す
+      if (tab.active) {
+        const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
         External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))
       }
     }

@@ -108,7 +108,6 @@ function onKeyDown(event: KeyboardEvent) {
  */
 function onArrowLeft(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  if (targetItemPath === null) return
 
   const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる

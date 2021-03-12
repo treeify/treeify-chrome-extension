@@ -3,6 +3,7 @@ import {ItemType} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Internal/Batchizer'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** TODO: コメント */
 export namespace Internal {
@@ -127,10 +128,10 @@ export namespace Internal {
       },
       pages: {
         '0': {
-          targetItemPath: null,
+          targetItemPath: new ItemPath(List.of(0)),
         },
         '6': {
-          targetItemPath: null,
+          targetItemPath: new ItemPath(List.of(6)),
         },
       },
       mountedPageIds: List.of(0),
