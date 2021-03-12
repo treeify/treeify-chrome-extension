@@ -1,7 +1,6 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Internal/Batchizer'
-import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
@@ -170,16 +169,16 @@ export class Internal {
       activePageId: 0,
       itemTreeTextItemSelection: null,
       itemTreeInputBinding: {
-        '0000Tab': new Command('indentItem'),
-        '0100Tab': new Command('unindentItem'),
-        '1000ArrowUp': new Command('moveItemUpward'),
-        '1000ArrowDown': new Command('moveItemDownward'),
-        '0000Enter': new Command('enterKeyDefault'),
-        '0100Enter': new Command('insertLineBreak'),
-        '1000Enter': new Command('toggleGrayedOut'),
-        '1000d': new Command('deleteItem'),
-        '1000p': new Command('togglePaged'),
-        '1000s': new Command('openDatabaseFileDialog'),
+        '0000Tab': {functionName: 'indentItem'},
+        '0100Tab': {functionName: 'unindentItem'},
+        '1000ArrowUp': {functionName: 'moveItemUpward'},
+        '1000ArrowDown': {functionName: 'moveItemDownward'},
+        '0000Enter': {functionName: 'enterKeyDefault'},
+        '0100Enter': {functionName: 'insertLineBreak'},
+        '1000Enter': {functionName: 'toggleGrayedOut'},
+        '1000d': {functionName: 'deleteItem'},
+        '1000p': {functionName: 'togglePaged'},
+        '1000s': {functionName: 'openDatabaseFileDialog'},
       },
     }
   }

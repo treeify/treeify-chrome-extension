@@ -15,6 +15,7 @@ import {
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
@@ -97,7 +98,7 @@ function onKeyDown(event: KeyboardEvent) {
   const command = NextState.getItemTreeCommand(inputId)
   if (command !== undefined) {
     event.preventDefault()
-    command.execute()
+    Command.execute(command)
     NextState.commit()
   }
 }
