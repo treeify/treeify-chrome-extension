@@ -6,25 +6,37 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** TODO: コメント */
-export namespace Internal {
-  const stateChangeListeners = new Set<(newState: State) => void>()
+export class Internal {
+  private static _instance: Internal | undefined
 
-  export const currentState: State = createInitialState()
-  export const nextState: Batchizer = new Batchizer(currentState)
+  private constructor() {}
+
+  /** シングルトンインスタンスを取得する */
+  static get instance(): Internal {
+    if (this._instance === undefined) {
+      this._instance = new Internal()
+    }
+    return this._instance
+  }
+
+  private readonly stateChangeListeners = new Set<(newState: State) => void>()
+
+  readonly currentState: State = Internal.createInitialState()
+  readonly nextState: Batchizer = new Batchizer(this.currentState)
 
   /** Stateへの変更を確定し、Viewに通知する */
-  export function commit() {
-    nextState.commit()
-    for (const stateChangeListener of stateChangeListeners) {
-      stateChangeListener(currentState)
+  commit() {
+    this.nextState.commit()
+    for (const stateChangeListener of this.stateChangeListeners) {
+      stateChangeListener(this.currentState)
     }
   }
 
-  export function addStateChangeListener(listener: (newState: State) => void) {
-    stateChangeListeners.add(listener)
+  addStateChangeListener(listener: (newState: State) => void) {
+    this.stateChangeListeners.add(listener)
   }
 
-  function createInitialState(): State {
+  private static createInitialState(): State {
     return {
       items: {
         0: {
