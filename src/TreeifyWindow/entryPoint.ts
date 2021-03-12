@@ -11,13 +11,15 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {onSelectionChange} from 'src/TreeifyWindow/External/domEventListeners'
 
-entryPoint()
+startup(Internal.createInitialState())
 
-async function entryPoint() {
+async function startup(initialState: State) {
+  Internal.initialize(initialState)
+
   // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
   await matchTabsAndWebPageItems()
 
-  External.instance.render(Internal.instance.currentState)
+  External.instance.render(initialState)
 
   Internal.instance.addStateChangeListener(onStateChange)
 
@@ -34,7 +36,7 @@ async function entryPoint() {
 }
 
 // このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する。
-// セオリーに則り、初期化時とは逆の順番で処理している（特に明確な意味があるわけではない）。
+// セオリーに則り、初期化時とは逆の順番で処理している。
 async function cleanup() {
   document.removeEventListener('selectionchange', onSelectionChange)
 

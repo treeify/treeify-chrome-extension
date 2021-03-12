@@ -4,18 +4,32 @@ import {Batchizer} from 'src/TreeifyWindow/Internal/Batchizer'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** TODO: コメント */
 export class Internal {
   private static _instance: Internal | undefined
 
-  private constructor() {}
+  private constructor(initialState: State) {
+    this.currentState = initialState
+    this.nextState = new Batchizer(this.currentState)
+  }
 
-  /** シングルトンインスタンスを取得する */
+  /**
+   * シングルトンインスタンスを生成する。
+   * 生成されたインスタンスは.instanceで取得できる。
+   */
+  static initialize(initialState: State) {
+    this._instance = new Internal(initialState)
+  }
+
+  /**
+   * シングルトンインスタンスを取得する。
+   * 通常のシングルトンと異なり、インスタンスを自動生成する機能は無いので要注意。
+   * インスタンス未生成の場合はエラー。
+   */
   static get instance(): Internal {
-    if (this._instance === undefined) {
-      this._instance = new Internal()
-    }
+    assertNonUndefined(this._instance)
     return this._instance
   }
 
@@ -41,7 +55,7 @@ export class Internal {
     this.stateChangeListeners.add(listener)
   }
 
-  private static createInitialState(): State {
+  static createInitialState(): State {
     return {
       items: {
         0: {
