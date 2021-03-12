@@ -22,6 +22,11 @@ export class External {
     return this._instance
   }
 
+  /** シングルトンインスタンスを破棄する */
+  static cleanup() {
+    this._instance = undefined
+  }
+
   /** データベースファイル */
   databaseFileHandle: FileSystemFileHandle | undefined
 

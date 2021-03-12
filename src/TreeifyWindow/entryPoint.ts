@@ -1,6 +1,4 @@
-import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -10,6 +8,8 @@ import {
   onUpdated,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
+import {State} from 'src/TreeifyWindow/Internal/State'
+import {onSelectionChange} from 'src/TreeifyWindow/External/domEventListeners'
 
 entryPoint()
 
@@ -19,9 +19,7 @@ async function entryPoint() {
 
   External.instance.render(Internal.instance.currentState)
 
-  Internal.instance.addStateChangeListener((newState) => {
-    External.instance.rerender(newState)
-  })
+  Internal.instance.addStateChangeListener(onStateChange)
 
   // バックグラウンドページなどからのメッセージを受信する
   chrome.runtime.onMessage.addListener(onMessage)
@@ -32,9 +30,25 @@ async function entryPoint() {
   chrome.tabs.onRemoved.addListener(onRemoved)
   chrome.tabs.onActivated.addListener(onActivated)
 
-  // テキストアイテム内のキャレット位置の監視用
-  document.addEventListener('selectionchange', (event) => {
-    NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
-    NextState.commit()
-  })
+  document.addEventListener('selectionchange', onSelectionChange)
+}
+
+// このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する。
+// セオリーに則り、初期化時とは逆の順番で処理している（特に明確な意味があるわけではない）。
+async function cleanup() {
+  document.removeEventListener('selectionchange', onSelectionChange)
+
+  chrome.tabs.onCreated.removeListener(onCreated)
+  chrome.tabs.onUpdated.removeListener(onUpdated)
+  chrome.tabs.onRemoved.removeListener(onRemoved)
+  chrome.tabs.onActivated.removeListener(onActivated)
+
+  chrome.runtime.onMessage.removeListener(onMessage)
+
+  Internal.cleanup()
+  External.cleanup()
+}
+
+function onStateChange(newState: State) {
+  External.instance.rerender(newState)
 }

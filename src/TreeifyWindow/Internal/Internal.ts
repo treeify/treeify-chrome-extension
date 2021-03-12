@@ -19,6 +19,11 @@ export class Internal {
     return this._instance
   }
 
+  /** シングルトンインスタンスを破棄する */
+  static cleanup() {
+    this._instance = undefined
+  }
+
   private readonly stateChangeListeners = new Set<(newState: State) => void>()
 
   readonly currentState: State = Internal.createInitialState()
