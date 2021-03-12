@@ -31,7 +31,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = External.itemIdToTabId.get(itemId)
+  const tabId = External.instance.itemIdToTabId.get(itemId)
   if (tabId !== undefined) {
     chrome.tabs.remove(tabId)
   }
@@ -80,7 +80,7 @@ export function deleteItemItself(itemId: ItemId) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = External.itemIdToTabId.get(itemId)
+  const tabId = External.instance.itemIdToTabId.get(itemId)
   if (tabId !== undefined) {
     chrome.tabs.remove(tabId)
   }

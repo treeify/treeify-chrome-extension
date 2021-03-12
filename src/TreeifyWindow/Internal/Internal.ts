@@ -1,30 +1,60 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
 import {Batchizer} from 'src/TreeifyWindow/Internal/Batchizer'
-import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** TODO: コメント */
-export namespace Internal {
-  const stateChangeListeners = new Set<(newState: State) => void>()
+export class Internal {
+  private static _instance: Internal | undefined
 
-  export const currentState: State = createInitialState()
-  export const nextState: Batchizer = new Batchizer(currentState)
+  private constructor(initialState: State) {
+    this.currentState = initialState
+    this.nextState = new Batchizer(this.currentState)
+  }
+
+  /**
+   * シングルトンインスタンスを生成する。
+   * 生成されたインスタンスは.instanceで取得できる。
+   */
+  static initialize(initialState: State) {
+    this._instance = new Internal(initialState)
+  }
+
+  /**
+   * シングルトンインスタンスを取得する。
+   * 通常のシングルトンと異なり、インスタンスを自動生成する機能は無いので要注意。
+   * インスタンス未生成の場合はエラー。
+   */
+  static get instance(): Internal {
+    assertNonUndefined(this._instance)
+    return this._instance
+  }
+
+  /** シングルトンインスタンスを破棄する */
+  static cleanup() {
+    this._instance = undefined
+  }
+
+  private readonly stateChangeListeners = new Set<(newState: State) => void>()
+
+  readonly currentState: State = Internal.createInitialState()
+  readonly nextState: Batchizer = new Batchizer(this.currentState)
 
   /** Stateへの変更を確定し、Viewに通知する */
-  export function commit() {
-    nextState.commit()
-    for (const stateChangeListener of stateChangeListeners) {
-      stateChangeListener(currentState)
+  commit() {
+    this.nextState.commit()
+    for (const stateChangeListener of this.stateChangeListeners) {
+      stateChangeListener(this.currentState)
     }
   }
 
-  export function addStateChangeListener(listener: (newState: State) => void) {
-    stateChangeListeners.add(listener)
+  addStateChangeListener(listener: (newState: State) => void) {
+    this.stateChangeListeners.add(listener)
   }
 
-  function createInitialState(): State {
+  static createInitialState(): State {
     return {
       items: {
         0: {
@@ -139,16 +169,16 @@ export namespace Internal {
       activePageId: 0,
       itemTreeTextItemSelection: null,
       itemTreeInputBinding: {
-        '0000Tab': new Command('indentItem'),
-        '0100Tab': new Command('unindentItem'),
-        '1000ArrowUp': new Command('moveItemUpward'),
-        '1000ArrowDown': new Command('moveItemDownward'),
-        '0000Enter': new Command('enterKeyDefault'),
-        '0100Enter': new Command('insertLineBreak'),
-        '1000Enter': new Command('toggleGrayedOut'),
-        '1000d': new Command('deleteItem'),
-        '1000p': new Command('togglePaged'),
-        '1000s': new Command('openDatabaseFileDialog'),
+        '0000Tab': {functionName: 'indentItem'},
+        '0100Tab': {functionName: 'unindentItem'},
+        '1000ArrowUp': {functionName: 'moveItemUpward'},
+        '1000ArrowDown': {functionName: 'moveItemDownward'},
+        '0000Enter': {functionName: 'enterKeyDefault'},
+        '0100Enter': {functionName: 'insertLineBreak'},
+        '1000Enter': {functionName: 'toggleGrayedOut'},
+        '1000d': {functionName: 'deleteItem'},
+        '1000p': {functionName: 'togglePaged'},
+        '1000s': {functionName: 'openDatabaseFileDialog'},
       },
     }
   }

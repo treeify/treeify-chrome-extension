@@ -9,19 +9,36 @@ import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomEle
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
-export namespace External {
+export class External {
+  private static _instance: External | undefined
+
+  private constructor() {}
+
+  /** シングルトンインスタンスを取得する */
+  static get instance(): External {
+    if (this._instance === undefined) {
+      this._instance = new External()
+    }
+    return this._instance
+  }
+
+  /** シングルトンインスタンスを破棄する */
+  static cleanup() {
+    this._instance = undefined
+  }
+
   /** データベースファイル */
-  export let databaseFileHandle: FileSystemFileHandle | undefined
+  databaseFileHandle: FileSystemFileHandle | undefined
 
   /** タブIDからアイテムIDへのMap */
-  export const tabIdToItemId = new Map<TabId, ItemId>()
+  readonly tabIdToItemId = new Map<TabId, ItemId>()
   /** アイテムIDからタブIDへのMap */
-  export const itemIdToTabId = new Map<ItemId, TabId>()
+  readonly itemIdToTabId = new Map<ItemId, TabId>()
   /** タブIDからTabオブジェクトへのMap */
-  export const tabIdToTab = new Map<TabId, Tab>()
+  readonly tabIdToTab = new Map<TabId, Tab>()
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
-  export const urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+  readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
 
   /**
    * テキストアイテムのcontenteditableな要素のキャッシュ。
@@ -31,45 +48,45 @@ export namespace External {
    * キャッシュしないと画面更新ごとに全てのcontenteditableな要素が再生成されることになり、
    * パフォーマンスへの悪影響に加えてfocusとselectionが失われる問題に対処しなければならない。
    */
-  export const textItemDomElementCache = new TextItemDomElementCache()
+  readonly textItemDomElementCache = new TextItemDomElementCache()
 
   // 次の描画が完了した際にフォーカスすべきDOM要素のID
-  let pendingFocusElementId: string | undefined
+  pendingFocusElementId: string | undefined
 
   /**
    * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
    * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
    */
-  export const hardUnloadedTabIds = new Set<integer>()
+  readonly hardUnloadedTabIds = new Set<integer>()
 
   /** タブIDとアイテムIDを結びつける */
-  export function tieTabAndItem(tabId: TabId, itemId: ItemId) {
-    tabIdToItemId.set(tabId, itemId)
-    itemIdToTabId.set(itemId, tabId)
+  tieTabAndItem(tabId: TabId, itemId: ItemId) {
+    this.tabIdToItemId.set(tabId, itemId)
+    this.itemIdToTabId.set(itemId, tabId)
   }
 
   /** タブIDとアイテムIDの結びつけを解除する */
-  export function untieTabAndItemByTabId(tabId: TabId) {
-    const itemId = tabIdToItemId.get(tabId)
+  untieTabAndItemByTabId(tabId: TabId) {
+    const itemId = this.tabIdToItemId.get(tabId)
     assertNonUndefined(itemId)
-    itemIdToTabId.delete(itemId)
-    tabIdToItemId.delete(tabId)
+    this.itemIdToTabId.delete(itemId)
+    this.tabIdToItemId.delete(tabId)
   }
 
   /** DOMの初回描画を行う */
-  export function render(state: State) {
+  render(state: State) {
     const spaRoot = document.getElementById('spa-root')!
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
   }
 
   /** DOMを再描画する */
-  export function rerender(newState: State) {
+  rerender(newState: State) {
     const spaRoot = document.getElementById('spa-root')!
 
     renderWithLitHtml(RootView(createRootViewModel(newState)), spaRoot)
 
-    if (pendingFocusElementId !== undefined) {
-      const focusableElement = document.getElementById(pendingFocusElementId)
+    if (this.pendingFocusElementId !== undefined) {
+      const focusableElement = document.getElementById(this.pendingFocusElementId)
       if (focusableElement !== null) {
         // ターゲットアイテムが画面内に入るようスクロールする。
         // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
@@ -85,21 +102,21 @@ export namespace External {
       }
     }
 
-    pendingFocusElementId = undefined
+    this.pendingFocusElementId = undefined
 
     // データベースファイル書き出し
-    External.databaseFileHandle?.createWritable()?.then((stream) => {
+    this.databaseFileHandle?.createWritable()?.then((stream) => {
       stream.write(State.toJsonString(newState))
       stream.close()
     })
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを設定する */
-  export function requestFocusAfterRendering(elementId: string) {
+  requestFocusAfterRendering(elementId: string) {
     // 「1回の描画サイクル内で2回以上フォーカス先が指定されることはあってはならない」という仮定に基づくassert文。
     // この仮定の正しさにはあまり自信が無いが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
-    assert(pendingFocusElementId === undefined)
+    assert(this.pendingFocusElementId === undefined)
 
-    pendingFocusElementId = elementId
+    this.pendingFocusElementId = elementId
   }
 }

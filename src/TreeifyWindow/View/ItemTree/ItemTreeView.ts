@@ -15,6 +15,7 @@ import {
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
@@ -97,7 +98,7 @@ function onKeyDown(event: KeyboardEvent) {
   const command = NextState.getItemTreeCommand(inputId)
   if (command !== undefined) {
     event.preventDefault()
-    command.execute()
+    Command.execute(command)
     NextState.commit()
   }
 }
@@ -124,12 +125,16 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
       NextState.setItemTreeTextItemCaretDistance(characterCount)
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(aboveItemPath)
+      )
       NextState.commit()
     } else {
       // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(aboveItemPath)
+      )
       NextState.commit()
     }
   } else {
@@ -145,13 +150,17 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
       NextState.setItemTreeTextItemCaretDistance(characterCount)
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(aboveItemPath)
+      )
       NextState.commit()
     } else {
       // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
       NextState.setItemTreeTextItemSelection(null)
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(aboveItemPath)
+      )
       NextState.commit()
     }
   }
@@ -178,12 +187,16 @@ function onArrowRight(event: KeyboardEvent) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
       NextState.setItemTreeTextItemCaretDistance(0)
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(belowItemPath)
+      )
       NextState.commit()
     } else {
       // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(belowItemPath)
+      )
       NextState.commit()
     }
   } else {
@@ -203,13 +216,17 @@ function onArrowRight(event: KeyboardEvent) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
       NextState.setItemTreeTextItemCaretDistance(0)
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(belowItemPath)
+      )
       NextState.commit()
     } else {
       // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
       NextState.setItemTreeTextItemSelection(null)
-      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(belowItemPath)
+      )
       NextState.commit()
     }
   }
@@ -251,7 +268,9 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     NextState.setItemTreeTextItemSelection(null)
   }
 
-  External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
+  External.instance.requestFocusAfterRendering(
+    ItemTreeContentView.focusableDomElementId(aboveItemPath)
+  )
   NextState.commit()
 }
 
@@ -295,7 +314,9 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
     // 下のアイテムがテキストアイテム以外の場合、上のアイテムをターゲットアイテムにする
     NextState.setItemTreeTextItemSelection(null)
   }
-  External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
+  External.instance.requestFocusAfterRendering(
+    ItemTreeContentView.focusableDomElementId(belowItemPath)
+  )
   NextState.commit()
 }
 
@@ -341,7 +362,7 @@ function onBackspace(event: KeyboardEvent) {
         NextState.deleteItem(targetItemPath.itemId)
 
         // 上のアイテムの元の末尾にキャレットを移動する
-        External.requestFocusAfterRendering(
+        External.instance.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(aboveItemPath)
         )
         NextState.setItemTreeTextItemCaretDistance(

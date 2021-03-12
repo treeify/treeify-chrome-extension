@@ -7,7 +7,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 import {TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 
 export function getBatchizer(): Batchizer {
-  return Internal.nextState
+  return Internal.instance.nextState
 }
 
 /**
@@ -15,7 +15,7 @@ export function getBatchizer(): Batchizer {
  * さらにそれをViewに通知する。
  */
 export function commit() {
-  Internal.commit()
+  Internal.instance.commit()
 }
 
 /** 指定されたプロパティを削除する */

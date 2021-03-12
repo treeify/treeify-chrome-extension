@@ -1,14 +1,14 @@
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
-/**
- * NullaryCommandとパラメータ付きUnaryCommandを「実行可能なコマンド」として統一的に扱うために導入したクラス。
- */
-export class Command {
-  constructor(public functionName: string, public param?: any) {}
+export type Command = {
+  functionName: string
+  param?: any
+}
 
-  execute() {
+export namespace Command {
+  export function execute(command: Command) {
     // NullaryCommandだった場合のコマンド実行
-    const nullaryCommandFunction = NullaryCommand.functions[this.functionName]
+    const nullaryCommandFunction = NullaryCommand.functions[command.functionName]
     if (nullaryCommandFunction !== undefined) {
       nullaryCommandFunction()
       return
