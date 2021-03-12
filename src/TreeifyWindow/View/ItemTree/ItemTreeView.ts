@@ -3,16 +3,18 @@ import {html, TemplateResult} from 'lit-html'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/domTextSelection'
-import {InputId} from 'src/TreeifyWindow/Model/InputId'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/External/domTextSelection'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeNodeViewModel,
   ItemTreeNodeView,
   ItemTreeNodeViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {External} from 'src/TreeifyWindow/External/External'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
@@ -60,12 +62,7 @@ function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemI
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
-  return html`<main
-    class="item-tree"
-    @paste=${onPaste}
-    @focusout=${onFocusOut}
-    @keydown=${onKeyDown}
-  >
+  return html`<main class="item-tree" @paste=${onPaste} @keydown=${onKeyDown}>
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </main>`
 }
@@ -110,16 +107,16 @@ function onKeyDown(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowLeft(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
+  const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
   const textItemSelection = NextState.getItemTreeTextItemSelection()
   if (textItemSelection === null) {
-    // フォーカスアイテムが非テキストアイテムだと断定する
+    // ターゲットアイテムが非テキストアイテムだと断定する
 
     const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
     if (aboveItemType === ItemType.TEXT) {
@@ -128,12 +125,12 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
       NextState.setItemTreeTextItemCaretDistance(characterCount)
-      NextState.setFocusedItemPath(aboveItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
       NextState.commit()
     } else {
-      // 上のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      NextState.setFocusedItemPath(aboveItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
       NextState.commit()
     }
   } else {
@@ -149,13 +146,13 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
       NextState.setItemTreeTextItemCaretDistance(characterCount)
-      NextState.setFocusedItemPath(aboveItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
       NextState.commit()
     } else {
-      // 上のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
       NextState.setItemTreeTextItemSelection(null)
-      NextState.setFocusedItemPath(aboveItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
       NextState.commit()
     }
   }
@@ -166,32 +163,32 @@ function onArrowLeft(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowRight(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  assertNonNull(focusedItemPath)
+  const targetItemPath = NextState.getTargetItemPath()
+  assertNonNull(targetItemPath)
 
-  const belowItemPath = NextState.findBelowItemPath(focusedItemPath)
+  const belowItemPath = NextState.findBelowItemPath(targetItemPath)
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
   const textItemSelection = NextState.getItemTreeTextItemSelection()
   if (textItemSelection === null) {
-    // フォーカスアイテムが非テキストアイテムだと断定する
+    // ターゲットアイテムが非テキストアイテムだと断定する
 
     const belowItemType = NextState.getItemType(belowItemPath.itemId)
     if (belowItemType === ItemType.TEXT) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
       NextState.setItemTreeTextItemCaretDistance(0)
-      NextState.setFocusedItemPath(belowItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
       NextState.commit()
     } else {
-      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      NextState.setFocusedItemPath(belowItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
       NextState.commit()
     }
   } else {
-    const domishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+    const domishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
     const characterCount = DomishObject.countCharacters(domishObjects)
 
     // キャレット位置が末尾以外のときはブラウザの挙動に任せる
@@ -207,13 +204,13 @@ function onArrowRight(event: KeyboardEvent) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
       NextState.setItemTreeTextItemCaretDistance(0)
-      NextState.setFocusedItemPath(belowItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
       NextState.commit()
     } else {
-      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスアイテムにする
+      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
       NextState.setItemTreeTextItemSelection(null)
-      NextState.setFocusedItemPath(belowItemPath)
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
       NextState.commit()
     }
   }
@@ -224,15 +221,15 @@ function onArrowRight(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowUp(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  assertNonNull(focusedItemPath)
+  const targetItemPath = NextState.getTargetItemPath()
+  assertNonNull(targetItemPath)
 
-  const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
+  const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
-  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
-    // フォーカスアイテムがテキストアイテムの場合
+  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+    // ターゲットアイテムがテキストアイテムの場合
 
     const caretLineNumber = getCaretLineNumber()
     // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
@@ -251,11 +248,11 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
     NextState.setItemTreeTextItemCaretDistance(DomishObject.countCharacters(domishObjects))
   } else {
-    // 上のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
+    // 上のアイテムがテキストアイテム以外の場合、上のアイテムをターゲットアイテムにする
     NextState.setItemTreeTextItemSelection(null)
   }
 
-  NextState.setFocusedItemPath(aboveItemPath)
+  External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
   NextState.commit()
 }
 
@@ -264,15 +261,15 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowDown(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getFocusedItemPath()
-  assertNonNull(focusedItemPath)
+  const targetItemPath = NextState.getTargetItemPath()
+  assertNonNull(targetItemPath)
 
-  const belowItemPath = NextState.findBelowItemPath(focusedItemPath)
+  const belowItemPath = NextState.findBelowItemPath(targetItemPath)
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
-    // フォーカスアイテムがテキストアイテムの場合
+  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+    // ターゲットアイテムがテキストアイテムの場合
 
     const caretLineNumber = getCaretLineNumber()
     assertNonNull(document.activeElement)
@@ -296,27 +293,27 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
     // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
     NextState.setItemTreeTextItemCaretDistance(0)
   } else {
-    // 下のアイテムがテキストアイテム以外の場合、上のアイテムをフォーカスアイテムにする
+    // 下のアイテムがテキストアイテム以外の場合、上のアイテムをターゲットアイテムにする
     NextState.setItemTreeTextItemSelection(null)
   }
-  NextState.setFocusedItemPath(belowItemPath)
+  External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(belowItemPath))
   NextState.commit()
 }
 
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  assertNonNull(focusedItemPath)
+  const targetItemPath = NextState.getTargetItemPath()
+  assertNonNull(targetItemPath)
 
-  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
-    // フォーカスアイテムがテキストアイテムの場合
+  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+    // ターゲットアイテムがテキストアイテムの場合
 
     const selection = NextState.getItemTreeTextItemSelection()
     assertNonNull(selection)
     if (selection.focusDistance === 0 && selection.anchorDistance === 0) {
       // キャレットが先頭にあるなら
 
-      const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
+      const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
       // アクティブアイテムなら何もしない
       if (aboveItemPath === undefined) return
 
@@ -324,10 +321,10 @@ function onBackspace(event: KeyboardEvent) {
         // 上のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
-        // フォーカスアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
+        // ターゲットアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
         // テキストを連結
-        const focusedItemDomishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+        const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
         const aboveItemDomishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
         // TODO: テキストノード同士が連結されないことが気がかり
         NextState.setTextItemDomishObjects(
@@ -337,15 +334,17 @@ function onBackspace(event: KeyboardEvent) {
 
         // 子リストを連結するため、子を全て弟としてエッジ追加。
         // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of NextState.getChildItemIds(focusedItemPath.itemId)) {
-          NextState.insertNextSiblingItem(focusedItemPath, childItemId)
+        for (const childItemId of NextState.getChildItemIds(targetItemPath.itemId)) {
+          NextState.insertNextSiblingItem(targetItemPath, childItemId)
         }
 
         // ↑の元のエッジごと削除
-        NextState.deleteItem(focusedItemPath.itemId)
+        NextState.deleteItem(targetItemPath.itemId)
 
         // 上のアイテムの元の末尾にキャレットを移動する
-        NextState.setFocusedItemPath(aboveItemPath)
+        External.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(aboveItemPath)
+        )
         NextState.setItemTreeTextItemCaretDistance(
           DomishObject.countCharacters(aboveItemDomishObjects)
         )
@@ -355,28 +354,28 @@ function onBackspace(event: KeyboardEvent) {
       }
     }
   } else {
-    // フォーカスアイテムがテキストアイテム以外の場合
+    // ターゲットアイテムがテキストアイテム以外の場合
     // TODO: アイテム削除コマンドを実行するのがいいと思う
   }
 }
 
 /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  assertNonNull(focusedItemPath)
+  const targetItemPath = NextState.getTargetItemPath()
+  assertNonNull(targetItemPath)
 
-  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
-    // フォーカスアイテムがテキストアイテムの場合
+  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+    // ターゲットアイテムがテキストアイテムの場合
 
     const selection = NextState.getItemTreeTextItemSelection()
     assertNonNull(selection)
 
-    const focusedItemDomishObjects = NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+    const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
     const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
     if (selection.focusDistance === characterCount && selection.anchorDistance === characterCount) {
       // キャレットが末尾にあるなら
 
-      const belowItemPath = NextState.findBelowItemPath(focusedItemPath)
+      const belowItemPath = NextState.findBelowItemPath(targetItemPath)
       // 一番下のアイテムなら何もしない
       if (belowItemPath === undefined) return
 
@@ -384,13 +383,13 @@ function onDelete(event: KeyboardEvent) {
         // 下のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
-        // フォーカスアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
+        // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
         // テキストを連結
         const belowItemDomishObjects = NextState.getTextItemDomishObjects(belowItemPath.itemId)
         // TODO: テキストノード同士が連結されないことが気がかり
         NextState.setTextItemDomishObjects(
-          focusedItemPath.itemId,
+          targetItemPath.itemId,
           focusedItemDomishObjects.concat(belowItemDomishObjects)
         )
 
@@ -408,7 +407,7 @@ function onDelete(event: KeyboardEvent) {
       }
     }
   } else {
-    // フォーカスアイテムがテキストアイテム以外の場合
+    // ターゲットアイテムがテキストアイテム以外の場合
     // TODO: アイテム削除コマンドを実行するのがいいと思う
   }
 }
@@ -418,10 +417,4 @@ function onPaste(event: ClipboardEvent) {
   event.preventDefault()
   const text = event.clipboardData?.getData('text/plain')
   document.execCommand('insertText', false, text)
-}
-
-// フォーカスが外れたらフォーカスアイテムをnullにする
-function onFocusOut(event: FocusEvent) {
-  NextState.setFocusedItemPath(null)
-  NextState.commitSilently()
 }

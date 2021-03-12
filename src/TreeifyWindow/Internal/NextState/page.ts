@@ -1,9 +1,9 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
-import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
-import {Page} from 'src/TreeifyWindow/Model/State'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {Page} from 'src/TreeifyWindow/Internal/State'
 
 /** アクティブページを返す */
 export function getActivePageId(): ItemId {
@@ -52,8 +52,7 @@ export function becomePage(itemId: ItemId) {
   if (isPage(itemId)) return
 
   const page: Page = {
-    focusedItemPath: new ItemPath(List.of(itemId)),
-    blurredItemPath: null,
+    targetItemPath: new ItemPath(List.of(itemId)),
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
 }

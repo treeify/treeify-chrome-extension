@@ -1,4 +1,4 @@
-import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
 /**
  * NullaryCommandとパラメータ付きUnaryCommandを「実行可能なコマンド」として統一的に扱うために導入したクラス。

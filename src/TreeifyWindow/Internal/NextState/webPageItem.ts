@@ -1,9 +1,9 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
-import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
-import {Item, WebPageItem} from 'src/TreeifyWindow/Model/State'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {Item, WebPageItem} from 'src/TreeifyWindow/Internal/State'
 
 /**
  * 新しい空のウェブページアイテムを作成し、NextStateに登録する。

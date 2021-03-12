@@ -2,9 +2,9 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
-import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
-import {Item, TextItem} from 'src/TreeifyWindow/Model/State'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {Item, TextItem} from 'src/TreeifyWindow/Internal/State'
 
 /** 指定されたテキストアイテムのdomishObjectsを返す */
 export function getTextItemDomishObjects(itemId: ItemId): List<DomishObject> {

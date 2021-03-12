@@ -2,11 +2,12 @@ import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
-import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/domTextSelection'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {External} from 'src/TreeifyWindow/External/External'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath
@@ -15,7 +16,6 @@ export type ItemTreeTextContentViewModel = {
   onInput: (event: InputEvent) => void
   onCompositionEnd: (event: CompositionEvent) => void
   onFocus: (event: FocusEvent) => void
-  onBlur: (event: FocusEvent) => void
 }
 
 export function createItemTreeTextContentViewModel(
@@ -36,6 +36,8 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
 
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(itemPath))
+
         NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
       }
@@ -47,26 +49,35 @@ export function createItemTreeTextContentViewModel(
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
         NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
 
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(itemPath))
+
         NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
       }
     },
     onFocus: (event) => {
-      NextState.setFocusedItemPath(itemPath)
-      NextState.setBlurredItemPath(null)
-      NextState.commitSilently()
-    },
-    onBlur: (event) => {
-      NextState.setBlurredItemPath(itemPath)
-      NextState.setFocusedItemPath(null)
-      NextState.commitSilently()
+      NextState.setTargetItemPath(itemPath)
+      NextState.commit()
     },
   }
 }
 
-/** テキストアイテムのコンテンツ領域のView */
+/**
+ * テキストアイテムのコンテンツ領域のView
+ * contenteditableな要素はlit-htmlで描画するのが事実上困難なので、
+ * 独自のDOM要素キャッシュを用いている点に注意。
+ */
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel): TemplateResult {
-  // contenteditableな要素のinnerHTMLは原則としてlit-htmlで描画するべきでないので、自前でDOM要素を作る
+  return html`<div class="item-tree-text-content">${getContentEditableElement(viewModel)}</div>`
+}
+
+function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTMLElement {
+  // キャッシュ照会
+  const cached = External.textItemDomElementCache.get(viewModel.itemPath, viewModel.domishObjects)
+  if (cached !== undefined) return cached
+
+  // contenteditableな要素のinnerHTMLは原則としてlit-htmlで描画するべきでないので自前でDOM要素を作る。
+  // 参考：https://github.com/Polymer/lit-html/issues/572
   const contentEditableElement = document.createElement('div')
   contentEditableElement.id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   contentEditableElement.className = 'item-tree-text-content_content-editable'
@@ -75,7 +86,13 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
   contentEditableElement.addEventListener('input', viewModel.onInput as any)
   contentEditableElement.addEventListener('compositionend', viewModel.onCompositionEnd as any)
   contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
-  contentEditableElement.addEventListener('blur', viewModel.onBlur as any)
 
-  return html`<div class="item-tree-text-content">${contentEditableElement}</div>`
+  // キャッシュに登録
+  External.textItemDomElementCache.set(
+    viewModel.itemPath,
+    viewModel.domishObjects,
+    contentEditableElement
+  )
+
+  return contentEditableElement
 }

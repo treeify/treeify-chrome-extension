@@ -2,8 +2,8 @@ import {List} from 'immutable'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
-import {Command} from 'src/TreeifyWindow/Model/Command'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
@@ -73,19 +73,8 @@ export type WebPageItem = {
 
 /** 各ページが持つデータの型 */
 export type Page = {
-  /** アイテムツリー内でフォーカスを持っているアイテム */
-  focusedItemPath: ItemPath | null
-  /**
-   * アイテムツリー内でフォーカスを失ったアイテム。
-   * このデータは例えばCtrl+Tなどで新しいタブを開いた際にウェブページアイテムをフォーカスアイテムの隣に配置するために用いられる。
-   * というのも新しいタブが開かれた瞬間にblurイベントが発生し、focusedItemPathはnullになってしまうので配置の手がかりを失ってしまうから。
-   * メモ：イベント発生順序は次のようになっている。
-   * (1) （Ctrl+Tなどで）新しいタブが開かれる
-   * (2) Treeifyウィンドウそのものがフォーカスを失う
-   * (3) Treeifyウィンドウがフォーカスを失ったことでblurイベントが発生する
-   * (4) chrome.tabs.onCreatedイベントが発生する
-   */
-  blurredItemPath: ItemPath | null
+  /** アイテムツリー内で操作対象となるアイテム */
+  targetItemPath: ItemPath | null
 }
 
 /** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */

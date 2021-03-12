@@ -1,13 +1,13 @@
 import {integer} from 'src/Common/basicType'
-import {Batchizer, PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
-import {Command} from 'src/TreeifyWindow/Model/Command'
-import {InputId} from 'src/TreeifyWindow/Model/InputId'
-import {Model} from 'src/TreeifyWindow/Model/Model'
-import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
-import {TextItemSelection} from 'src/TreeifyWindow/Model/State'
+import {Batchizer, PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 
 export function getBatchizer(): Batchizer {
-  return Model.instance.nextState
+  return Internal.nextState
 }
 
 /**
@@ -15,12 +15,7 @@ export function getBatchizer(): Batchizer {
  * さらにそれをViewに通知する。
  */
 export function commit() {
-  Model.instance.commit()
-}
-
-/** NextStateへの全ての変更を確定し、ModelのStateを書き換える */
-export function commitSilently() {
-  Model.instance.commitSilently()
+  Internal.commit()
 }
 
 /** 指定されたプロパティを削除する */

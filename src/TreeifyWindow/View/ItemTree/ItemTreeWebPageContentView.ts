@@ -1,13 +1,13 @@
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/Common/basicType'
-import {InputId} from 'src/TreeifyWindow/Model/InputId'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {Model} from 'src/TreeifyWindow/Model/Model'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {NullaryCommand} from 'src/TreeifyWindow/Model/NullaryCommand'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {External} from 'src/TreeifyWindow/External/External'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
@@ -20,7 +20,6 @@ export type ItemTreeWebPageContentViewModel = {
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
-  onBlur: (event: FocusEvent) => void
 }
 
 export function createItemTreeWebPageContentViewModel(
@@ -28,12 +27,11 @@ export function createItemTreeWebPageContentViewModel(
   itemPath: ItemPath
 ): ItemTreeWebPageContentViewModel {
   const webPageItem = state.webPageItems[itemPath.itemId]
-  const tabId = Model.instance.itemIdToTabId.get(itemPath.itemId)
+  const tabId = External.itemIdToTabId.get(itemPath.itemId)
 
   const isLoading =
-    tabId !== undefined ? Model.instance.tabIdToTab.get(tabId)?.status === 'loading' : false
-  const isAudible =
-    tabId !== undefined ? Model.instance.tabIdToTab.get(tabId)?.audible === true : false
+    tabId !== undefined ? External.tabIdToTab.get(tabId)?.status === 'loading' : false
+  const isAudible = tabId !== undefined ? External.tabIdToTab.get(tabId)?.audible === true : false
 
   return {
     itemPath,
@@ -44,28 +42,22 @@ export function createItemTreeWebPageContentViewModel(
     isUnloaded: tabId === undefined,
     isAudible,
     onFocus: (event) => {
-      NextState.setFocusedItemPath(itemPath)
-      NextState.setBlurredItemPath(null)
-      NextState.commitSilently()
-    },
-    onBlur: (event) => {
-      NextState.setBlurredItemPath(itemPath)
-      NextState.setFocusedItemPath(null)
-      NextState.commitSilently()
+      NextState.setTargetItemPath(itemPath)
+      NextState.commit()
     },
     onClickTitle: (event) => {
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
-          NextState.setFocusedItemPath(itemPath)
+          NextState.setTargetItemPath(itemPath)
           NullaryCommand.browseWebPageItem()
           break
         case '1000MouseButton0':
-          NextState.setFocusedItemPath(itemPath)
+          NextState.setTargetItemPath(itemPath)
           NextState.commit()
       }
     },
     onClickFavicon: (event) => {
-      NextState.setFocusedItemPath(itemPath)
+      NextState.setTargetItemPath(itemPath)
 
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
@@ -93,7 +85,6 @@ export function ItemTreeWebPageContentView(
     id=${id}
     tabindex="0"
     @focus=${viewModel.onFocus}
-    @blur=${viewModel.onBlur}
   >
     ${viewModel.isLoading
       ? html`<div

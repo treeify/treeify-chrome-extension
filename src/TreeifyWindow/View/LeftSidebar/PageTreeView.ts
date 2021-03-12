@@ -1,5 +1,5 @@
 import {html} from 'lit-html'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeRootNodeViewModel,
   PageTreeNodeView,

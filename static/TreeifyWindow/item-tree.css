@@ -30,7 +30,7 @@
   /* インデントラインの色（ホバー時） */
   --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
 
-  /* フォーカスアイテムの背景色 */
+  /* ターゲットアイテムの背景色 */
   --item-tree-focused-item-background-color: hsl(240, 100%, 95%);
   /* マウスホバーアイテムの背景色 */
   --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 97.5%);
@@ -83,7 +83,7 @@
 
 /* フォーカス時のコンテンツ領域 */
 .item-tree-node_content-area:focus-within {
-  /* フォーカスアイテムの強調表示 */
+  /* ターゲットアイテムの強調表示 */
   background: var(--item-tree-focused-item-background-color);
 }
 

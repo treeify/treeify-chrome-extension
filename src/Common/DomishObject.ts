@@ -33,6 +33,11 @@ export namespace DomishObject {
     textContent: string
   }
 
+  /** 等価性判定 */
+  export function equals(lhs: List<DomishObject>, rhs: List<DomishObject>): boolean {
+    return toHtml(lhs) === toHtml(rhs)
+  }
+
   /**
    * DomishObjectをDOM要素に変換する。
    * 本来ならlit-htmlで描画したいところだが、contenteditableな要素のinnerHTMLをlit-htmlで描画すると編集時にエラーが出てしまう。

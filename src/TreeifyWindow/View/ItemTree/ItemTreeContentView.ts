@@ -1,8 +1,8 @@
 import {TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeWebPageContentViewModel,
   ItemTreeWebPageContentView,

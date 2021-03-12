@@ -3,9 +3,9 @@ import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {integer, ItemId, TOP_ITEM_ID} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeBulletAndIndentViewModel,
   PageTreeBulletAndIndentView,

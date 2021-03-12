@@ -1,5 +1,5 @@
 import {ItemId, ItemType} from 'src/Common/basicType'
-import {State} from 'src/TreeifyWindow/Model/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   PageTreeTextContentView,
   PageTreeTextContentViewModel,

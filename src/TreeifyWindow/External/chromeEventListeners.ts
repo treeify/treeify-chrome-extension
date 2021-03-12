@@ -6,11 +6,13 @@ import Tab = chrome.tabs.Tab
 import {List} from 'immutable'
 import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {Model} from 'src/TreeifyWindow/Model/Model'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {WebPageItem} from 'src/TreeifyWindow/Model/State'
+import {WebPageItem} from 'src/TreeifyWindow/Internal/State'
+import {External} from 'src/TreeifyWindow/External/External'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   switch (message.type) {
@@ -26,37 +28,41 @@ export function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
   const url = tab.url || tab.pendingUrl || ''
-  const itemIdsForTabCreation = Model.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+  const itemIdsForTabCreation = External.urlToItemIdsForTabCreation.get(url) ?? List.of()
   if (itemIdsForTabCreation.isEmpty()) {
     // タブに対応するウェブページアイテムがない時
 
     // ウェブページアイテムを作る
     const newWebPageItemId = NextState.createWebPageItem()
     reflectInWebPageItem(newWebPageItemId, tab)
-    Model.instance.tieTabAndItem(tab.id, newWebPageItemId)
+    External.tieTabAndItem(tab.id, newWebPageItemId)
 
-    const focusedItemPath = NextState.getLastFocusedItemPath()
-    if (focusedItemPath !== null) {
+    const targetItemPath = NextState.getTargetItemPath()
+    if (targetItemPath !== null) {
       // フォーカスの当たっているアイテムがあるなら、
 
-      if (url === 'chrome://newtab/' && focusedItemPath.hasParent()) {
+      if (url === 'chrome://newtab/' && targetItemPath.hasParent()) {
         // いわゆる「新しいタブ」は弟として追加する
-        NextState.insertNextSiblingItem(focusedItemPath, newWebPageItemId)
+        NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
-        // フォーカスアイテムを更新する
+        // フォーカスを移す
         if (tab.active) {
-          const newItemPath = focusedItemPath.createSiblingItemPath(newWebPageItemId)
+          const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
           assertNonUndefined(newItemPath)
-          NextState.setFocusedItemPath(newItemPath)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
         }
       } else {
-        // フォーカスアイテムの最初の子として追加する
-        NextState.insertFirstChildItem(focusedItemPath.itemId, newWebPageItemId)
+        // ターゲットアイテムの最初の子として追加する
+        NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
 
-        // フォーカスアイテムを更新する
+        // フォーカスを移す
         if (tab.active) {
-          const newItemPath = focusedItemPath.createChildItemPath(newWebPageItemId)
-          NextState.setFocusedItemPath(newItemPath)
+          const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+          External.requestFocusAfterRendering(
+            ItemTreeContentView.focusableDomElementId(newItemPath)
+          )
         }
       }
     } else {
@@ -65,10 +71,10 @@ export function onCreated(tab: Tab) {
       const activePageId = NextState.getActivePageId()
       NextState.insertFirstChildItem(activePageId, newWebPageItemId)
 
-      // フォーカスアイテムを更新する
+      // フォーカスを移す
       if (tab.active) {
         const newItemPath = new ItemPath(List.of(activePageId, newWebPageItemId))
-        NextState.setFocusedItemPath(newItemPath)
+        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(newItemPath))
       }
     }
   } else {
@@ -77,13 +83,13 @@ export function onCreated(tab: Tab) {
     const itemId = itemIdsForTabCreation.first(undefined)
     assertNonUndefined(itemId)
     reflectInWebPageItem(itemId, tab)
-    Model.instance.tieTabAndItem(tab.id, itemId)
-    Model.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
+    External.tieTabAndItem(tab.id, itemId)
+    External.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
   }
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  const itemId = Model.instance.tabIdToItemId.get(tabId)
+  const itemId = External.tabIdToItemId.get(tabId)
   assertNonUndefined(itemId)
   reflectInWebPageItem(itemId, tab)
 
@@ -93,7 +99,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
 // Tabの情報をウェブページアイテムに転写する
 function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
-    Model.instance.tabIdToTab.set(tab.id, tab)
+    External.tabIdToTab.set(tab.id, tab)
   }
   NextState.setWebPageItemTabTitle(itemId, tab.title ?? '')
   const url = tab.url || tab.pendingUrl || ''
@@ -102,23 +108,23 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 }
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
-  const itemId = Model.instance.tabIdToItemId.get(tabId)
+  const itemId = External.tabIdToItemId.get(tabId)
   assertNonUndefined(itemId)
 
-  if (Model.instance.hardUnloadedTabIds.has(tabId)) {
+  if (External.hardUnloadedTabIds.has(tabId)) {
     // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
-    Model.instance.hardUnloadedTabIds.delete(tabId)
+    External.hardUnloadedTabIds.delete(tabId)
   } else {
     // 対応するウェブページアイテムを削除する
     NextState.deleteItemItself(itemId)
   }
 
-  Model.instance.untieTabAndItemByTabId(tabId)
+  External.untieTabAndItemByTabId(tabId)
   NextState.commit()
 }
 
 export async function onActivated(tabActiveInfo: TabActiveInfo) {
-  const itemId = Model.instance.tabIdToItemId.get(tabActiveInfo.tabId)
+  const itemId = External.tabIdToItemId.get(tabActiveInfo.tabId)
   if (itemId !== undefined) {
     NextState.updateItemTimestamp(itemId)
     NextState.commit()
@@ -148,14 +154,14 @@ export async function matchTabsAndWebPageItems() {
       // ウェブページアイテムを作る
       const newWebPageItemId = NextState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
-      Model.instance.tieTabAndItem(tab.id, newWebPageItemId)
+      External.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最後の子として追加する
       const activePageId = NextState.getActivePageId()
       NextState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
-      Model.instance.tieTabAndItem(tab.id, webPageItem.itemId)
+      External.tieTabAndItem(tab.id, webPageItem.itemId)
     }
   }
 
@@ -167,7 +173,7 @@ export async function matchTabsAndWebPageItems() {
 // もし複数該当する場合は最初に見つかったものを返す。
 // 見つからなかった場合はundefinedを返す。
 function findWebPageItem(url: string): WebPageItem | undefined {
-  const webPageItems = Model.instance.currentState.webPageItems
+  const webPageItems = Internal.currentState.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
     if (url === webPageItem.url) {

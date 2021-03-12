@@ -2,17 +2,17 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {assert, assertNeverType} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Model/Batchizer'
-import {ItemPath} from 'src/TreeifyWindow/Model/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Model/NextState/index'
-import {getBatchizer} from 'src/TreeifyWindow/Model/NextState/other'
-import {Item} from 'src/TreeifyWindow/Model/State'
-import {Model} from 'src/TreeifyWindow/Model/Model'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {getBatchizer} from 'src/TreeifyWindow/Internal/NextState/other'
+import {Item} from 'src/TreeifyWindow/Internal/State'
+import {External} from 'src/TreeifyWindow/External/External'
 
 /**
  * 指定されたアイテムに関するデータを削除する。
  * 削除によって親の数が0になった子アイテムも再帰的に削除する。
- * キャレットの移動（フォーカスアイテムの変更）は行わない。
+ * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItem(itemId: ItemId) {
   for (const childItemId of NextState.getChildItemIds(itemId)) {
@@ -31,7 +31,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = Model.instance.itemIdToTabId.get(itemId)
+  const tabId = External.itemIdToTabId.get(itemId)
   if (tabId !== undefined) {
     chrome.tabs.remove(tabId)
   }
@@ -55,7 +55,7 @@ export function deleteItem(itemId: ItemId) {
 /**
  * 指定されたアイテムに関するデータを削除する。
  * 子アイテムは親アイテムの子リストに移動する。
- * キャレットの移動（フォーカスアイテムの変更）は行わない。
+ * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
   const childItemIds = NextState.getChildItemIds(itemId)
@@ -80,7 +80,7 @@ export function deleteItemItself(itemId: ItemId) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = Model.instance.itemIdToTabId.get(itemId)
+  const tabId = External.itemIdToTabId.get(itemId)
   if (tabId !== undefined) {
     chrome.tabs.remove(tabId)
   }

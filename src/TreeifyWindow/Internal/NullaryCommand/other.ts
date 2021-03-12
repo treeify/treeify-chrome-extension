@@ -1,4 +1,4 @@
-import {Model} from 'src/TreeifyWindow/Model/Model'
+import {External} from 'src/TreeifyWindow/External/External'
 
 /** データベースファイル選択ダイアログを開く */
 export function openDatabaseFileDialog() {
@@ -8,6 +8,6 @@ export function openDatabaseFileDialog() {
     // この場では戻り値を使わないが、ここで確認ダイアログを出して許可をもらっておく
     await fileHandle.createWritable()
 
-    Model.instance.databaseFileHandle = fileHandle
+    External.databaseFileHandle = fileHandle
   })()
 }

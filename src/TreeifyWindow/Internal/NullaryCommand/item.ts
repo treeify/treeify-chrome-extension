@@ -1,24 +1,26 @@
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {NextState} from 'src/TreeifyWindow/Model/NextState'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {External} from 'src/TreeifyWindow/External/External'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
-/** フォーカスアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
+/** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  const focusedItemId = focusedItemPath.itemId
+  const focusedItemId = targetItemPath.itemId
   NextState.setItemProperty(focusedItemId, 'isFolded', !NextState.getItemIsFolded(focusedItemId))
   NextState.updateItemTimestamp(focusedItemId)
 }
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indentItem() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  const prevSiblingItemPath = NextState.findPrevSiblingItemPath(focusedItemPath)
+  const prevSiblingItemPath = NextState.findPrevSiblingItemPath(targetItemPath)
   // 兄が居ない場合、何もしない
   if (prevSiblingItemPath === undefined) return
 
@@ -28,39 +30,47 @@ export function indentItem() {
   // 兄をアンフォールドする
   NextState.setItemProperty(prevSiblingItemPath.itemId, 'isFolded', false)
 
-  // 兄の最後の子になるようフォーカスアイテムを配置
-  NextState.insertLastChildItem(prevSiblingItemPath.itemId, focusedItemPath.itemId)
+  // 兄の最後の子になるようターゲットアイテムを配置
+  NextState.insertLastChildItem(prevSiblingItemPath.itemId, targetItemPath.itemId)
 
   // 既存の親子関係を削除
-  assertNonUndefined(focusedItemPath.parentItemId)
-  NextState.removeItemGraphEdge(focusedItemPath.parentItemId, focusedItemPath.itemId)
+  assertNonUndefined(targetItemPath.parentItemId)
+  NextState.removeItemGraphEdge(targetItemPath.parentItemId, targetItemPath.itemId)
 
-  NextState.updateItemTimestamp(focusedItemPath.itemId)
+  NextState.updateItemTimestamp(targetItemPath.itemId)
 
-  // フォーカスアイテムパスを移動先に更新する
-  NextState.setFocusedItemPath(prevSiblingItemPath.createChildItemPath(focusedItemPath.itemId))
+  // フォーカスを移動先に更新する
+  External.requestFocusAfterRendering(
+    ItemTreeContentView.focusableDomElementId(
+      prevSiblingItemPath.createChildItemPath(targetItemPath.itemId)
+    )
+  )
 }
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
   // 親または親の親が居ない場合は何もしない
-  if (focusedItemPath.parent === undefined) return
-  if (focusedItemPath.parent.parent === undefined) return
+  if (targetItemPath.parent === undefined) return
+  if (targetItemPath.parent.parent === undefined) return
 
   // 既存の親子関係を削除
-  const focusedItemId = focusedItemPath.itemId
-  NextState.removeItemGraphEdge(focusedItemPath.parent.itemId, focusedItemId)
+  const focusedItemId = targetItemPath.itemId
+  NextState.removeItemGraphEdge(targetItemPath.parent.itemId, focusedItemId)
 
   // 親の弟として配置する
-  NextState.insertNextSiblingItem(focusedItemPath.parent, focusedItemId)
+  NextState.insertNextSiblingItem(targetItemPath.parent, focusedItemId)
 
-  NextState.updateItemTimestamp(focusedItemPath.itemId)
+  NextState.updateItemTimestamp(targetItemPath.itemId)
 
-  // フォーカスアイテムパスを移動先に更新する
-  NextState.setFocusedItemPath(focusedItemPath.parent.createSiblingItemPath(focusedItemId)!!)
+  // フォーカスを移動先に更新する
+  External.requestFocusAfterRendering(
+    ItemTreeContentView.focusableDomElementId(
+      targetItemPath.parent.createSiblingItemPath(focusedItemId)!!
+    )
+  )
 }
 
 /**
@@ -68,10 +78,10 @@ export function unindentItem() {
  * 親が居ない場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemUpward() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
+  const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 1つ上のアイテムが存在しない場合は何もしない
   if (aboveItemPath === undefined) return
   // 1つ上のアイテムがアクティブページである場合も何もしない
@@ -85,26 +95,28 @@ export function moveItemUpward() {
   // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
   // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
 
-  if (aboveItemPath.parentItemId === focusedItemPath.parentItemId) {
+  if (aboveItemPath.parentItemId === targetItemPath.parentItemId) {
     // 1つ上のアイテムが兄である場合、兄弟リスト内を兄方向に1つ移動する
-    NextState.moveToPrevSibling(focusedItemPath)
+    NextState.moveToPrevSibling(targetItemPath)
 
-    NextState.updateItemTimestamp(focusedItemPath.itemId)
+    NextState.updateItemTimestamp(targetItemPath.itemId)
 
-    // 兄弟リスト内での入れ替えだけならフォーカスアイテムパスは変化しないので更新不要
+    External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(targetItemPath))
   } else {
-    // 1つ上のアイテムの兄になるようフォーカスアイテムを配置
-    NextState.insertPrevSiblingItem(aboveItemPath, focusedItemPath.itemId)
+    // 1つ上のアイテムの兄になるようターゲットアイテムを配置
+    NextState.insertPrevSiblingItem(aboveItemPath, targetItemPath.itemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(focusedItemPath.parentItemId!!, focusedItemPath.itemId)
+    NextState.removeItemGraphEdge(targetItemPath.parentItemId!!, targetItemPath.itemId)
 
-    NextState.updateItemTimestamp(focusedItemPath.itemId)
+    NextState.updateItemTimestamp(targetItemPath.itemId)
 
-    // フォーカスアイテムパスを移動先に更新する
-    const newFocusedItemPath = aboveItemPath.createSiblingItemPath(focusedItemPath.itemId)
-    assertNonUndefined(newFocusedItemPath)
-    NextState.setFocusedItemPath(newFocusedItemPath)
+    // フォーカスを移動先に更新する
+    const newTargetItemPath = aboveItemPath.createSiblingItemPath(targetItemPath.itemId)
+    assertNonUndefined(newTargetItemPath)
+    External.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(newTargetItemPath)
+    )
   }
 }
 
@@ -113,11 +125,11 @@ export function moveItemUpward() {
  * すでに下端の場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemDownward() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
-  const firstFollowingItemPath = NextState.findFirstFollowingItemPath(focusedItemPath)
+  const firstFollowingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
   // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
@@ -132,82 +144,86 @@ export function moveItemDownward() {
     // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
     // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
 
-    if (firstFollowingItemPath.parentItemId === focusedItemPath.parentItemId) {
+    if (firstFollowingItemPath.parentItemId === targetItemPath.parentItemId) {
       // 兄弟リスト内を弟方向に1つ移動する
-      NextState.moveToNextSibling(focusedItemPath)
+      NextState.moveToNextSibling(targetItemPath)
 
-      NextState.updateItemTimestamp(focusedItemPath.itemId)
+      NextState.updateItemTimestamp(targetItemPath.itemId)
 
-      // 兄弟リスト内での入れ替えだけならフォーカスアイテムパスは変化しないので更新不要
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(targetItemPath))
     } else {
-      // 弟になるようフォーカスアイテムを配置
-      NextState.insertNextSiblingItem(firstFollowingItemPath, focusedItemPath.itemId)
+      // 弟になるようターゲットアイテムを配置
+      NextState.insertNextSiblingItem(firstFollowingItemPath, targetItemPath.itemId)
 
       // 既存の親子関係を削除
-      NextState.removeItemGraphEdge(focusedItemPath.parentItemId!!, focusedItemPath.itemId)
+      NextState.removeItemGraphEdge(targetItemPath.parentItemId!!, targetItemPath.itemId)
 
-      NextState.updateItemTimestamp(focusedItemPath.itemId)
+      NextState.updateItemTimestamp(targetItemPath.itemId)
 
-      // フォーカスアイテムパスを移動先に更新する
-      const newFocusedItemPath = firstFollowingItemPath.createSiblingItemPath(
-        focusedItemPath.itemId
+      // フォーカスを移動先に更新する
+      const newTargetItemPath = firstFollowingItemPath.createSiblingItemPath(targetItemPath.itemId)
+      assertNonUndefined(newTargetItemPath)
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(newTargetItemPath)
       )
-      assertNonUndefined(newFocusedItemPath)
-      NextState.setFocusedItemPath(newFocusedItemPath)
     }
   } else {
     // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
 
-    // 最初の子になるようフォーカスアイテムを配置
-    NextState.insertFirstChildItem(firstFollowingItemPath.itemId, focusedItemPath.itemId)
+    // 最初の子になるようターゲットアイテムを配置
+    NextState.insertFirstChildItem(firstFollowingItemPath.itemId, targetItemPath.itemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(focusedItemPath.parentItemId!!, focusedItemPath.itemId)
+    NextState.removeItemGraphEdge(targetItemPath.parentItemId!!, targetItemPath.itemId)
 
-    NextState.updateItemTimestamp(focusedItemPath.itemId)
+    NextState.updateItemTimestamp(targetItemPath.itemId)
 
-    // フォーカスアイテムパスを移動先に更新する
-    const newFocusedItemPath = firstFollowingItemPath.createChildItemPath(focusedItemPath.itemId)
-    NextState.setFocusedItemPath(newFocusedItemPath)
+    // フォーカスを移動先に更新する
+    const newTargetItemPath = firstFollowingItemPath.createChildItemPath(targetItemPath.itemId)
+    External.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(newTargetItemPath)
+    )
   }
 }
 
 /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  if (NextState.getItemType(focusedItemPath.itemId) === ItemType.TEXT) {
-    // フォーカスアイテムがテキストアイテムの場合
+  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+    // ターゲットアイテムがテキストアイテムの場合
 
     assertNonNull(document.activeElement)
     const selection = getSelection()
     assertNonNull(selection)
 
     const characterCount = DomishObject.countCharacters(
-      NextState.getTextItemDomishObjects(focusedItemPath.itemId)
+      NextState.getTextItemDomishObjects(targetItemPath.itemId)
     )
     const textItemSelection = NextState.getItemTreeTextItemSelection()
     assertNonNull(textItemSelection)
 
-    // フォーカスアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
-    if (!focusedItemPath.hasParent()) {
+    // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
+    if (!targetItemPath.hasParent()) {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
       const domishObjects = DomishObject.fromChildren(range.extractContents())
       NextState.setTextItemDomishObjects(
-        focusedItemPath.itemId,
+        targetItemPath.itemId,
         DomishObject.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを最初の子として追加する
       const newItemId = NextState.createTextItem()
-      NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+      NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
       NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+      )
       NextState.setItemTreeTextItemCaretDistance(0)
       return
     }
@@ -217,10 +233,12 @@ export function enterKeyDefault() {
 
       // 新規アイテムを弟として追加する
       const newItemId = NextState.createTextItem()
-      NextState.insertNextSiblingItem(focusedItemPath, newItemId)
+      NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
       // キャレット位置を更新する
-      NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
+      )
       NextState.setItemTreeTextItemCaretDistance(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
@@ -230,22 +248,24 @@ export function enterKeyDefault() {
       range.setStartBefore(document.activeElement.firstChild!)
       const domishObjects = DomishObject.fromChildren(range.extractContents())
       NextState.setTextItemDomishObjects(
-        focusedItemPath.itemId,
+        targetItemPath.itemId,
         DomishObject.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを兄として追加する
       const newItemId = NextState.createTextItem()
-      NextState.insertPrevSiblingItem(focusedItemPath, newItemId)
+      NextState.insertPrevSiblingItem(targetItemPath, newItemId)
       NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
+      )
       NextState.setItemTreeTextItemCaretDistance(DomishObject.countCharacters(domishObjects))
     } else {
       // キャレット位置が後半なら
 
-      if (!NextState.getDisplayingChildItemIds(focusedItemPath.itemId).isEmpty()) {
+      if (!NextState.getDisplayingChildItemIds(targetItemPath.itemId).isEmpty()) {
         // もし子を表示しているなら
 
         // キャレットより後ろのテキストをカットする
@@ -253,17 +273,19 @@ export function enterKeyDefault() {
         range.setEndAfter(document.activeElement.lastChild!)
         const domishObjects = DomishObject.fromChildren(range.extractContents())
         NextState.setTextItemDomishObjects(
-          focusedItemPath.itemId,
+          targetItemPath.itemId,
           DomishObject.fromChildren(document.activeElement)
         )
 
         // 新規アイテムを最初の子として追加する
         const newItemId = NextState.createTextItem()
-        NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+        NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
-        NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+        External.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+        )
         NextState.setItemTreeTextItemCaretDistance(0)
       } else {
         // もし子を表示していないなら
@@ -273,71 +295,81 @@ export function enterKeyDefault() {
         range.setEndAfter(document.activeElement.lastChild!)
         const domishObjects = DomishObject.fromChildren(range.extractContents())
         NextState.setTextItemDomishObjects(
-          focusedItemPath.itemId,
+          targetItemPath.itemId,
           DomishObject.fromChildren(document.activeElement)
         )
 
         // 新規アイテムを弟として追加する
         const newItemId = NextState.createTextItem()
-        NextState.insertNextSiblingItem(focusedItemPath, newItemId)
+        NextState.insertNextSiblingItem(targetItemPath, newItemId)
         NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
-        NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
+        External.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(
+            targetItemPath.createSiblingItemPath(newItemId)!!
+          )
+        )
         NextState.setItemTreeTextItemCaretDistance(0)
       }
     }
   } else {
-    // フォーカスアイテムがテキストアイテム以外の場合
+    // ターゲットアイテムがテキストアイテム以外の場合
 
-    // フォーカスアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
-    if (!focusedItemPath.hasParent()) {
+    // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
+    if (!targetItemPath.hasParent()) {
       // 新規アイテムを最初の子として追加する
       const newItemId = NextState.createTextItem()
-      NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+      NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
 
-      // フォーカスアイテムを更新する
-      NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+      // フォーカスを移す
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+      )
       return
     }
 
-    if (!NextState.getDisplayingChildItemIds(focusedItemPath.itemId).isEmpty()) {
+    if (!NextState.getDisplayingChildItemIds(targetItemPath.itemId).isEmpty()) {
       // もし子を表示しているなら
       // 新規アイテムを最初の子として追加する
       const newItemId = NextState.createTextItem()
-      NextState.insertFirstChildItem(focusedItemPath.itemId, newItemId)
+      NextState.insertFirstChildItem(targetItemPath.itemId, newItemId)
 
-      // フォーカスアイテムを更新する
-      NextState.setFocusedItemPath(focusedItemPath.createChildItemPath(newItemId))
+      // フォーカスを移す
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+      )
     } else {
       // もし子を表示していないなら
       // 新規アイテムを弟として追加する
       const newItemId = NextState.createTextItem()
-      NextState.insertNextSiblingItem(focusedItemPath, newItemId)
+      NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
-      // フォーカスアイテムを更新する
-      NextState.setFocusedItemPath(focusedItemPath.createSiblingItemPath(newItemId)!!)
+      // フォーカスを移す
+      External.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
+      )
     }
   }
 }
 
 /**
  * アイテムを削除するコマンド。
- * フォーカスアイテムがアクティブページの場合は何もしない。
+ * ターゲットアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItem() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (focusedItemPath.parent === null) return
+  if (targetItemPath.parent === null) return
 
-  // 新たなフォーカスアイテムとして上のアイテムを指定
-  const aboveItemPath = NextState.findAboveItemPath(focusedItemPath)
+  // 上のアイテムをフォーカス
+  const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   assertNonUndefined(aboveItemPath)
-  NextState.setFocusedItemPath(aboveItemPath)
+  External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(aboveItemPath))
 
-  NextState.deleteItem(focusedItemPath.itemId)
+  NextState.deleteItem(targetItemPath.itemId)
 }
 
 /** contenteditableな要素で改行を実行する */
@@ -346,39 +378,39 @@ export function insertLineBreak() {
 }
 
 /**
- * フォーカスアイテムがページなら非ページ化する。
- * フォーカスアイテムが非ページならページ化する。
+ * ターゲットアイテムがページなら非ページ化する。
+ * ターゲットアイテムが非ページならページ化する。
  */
 export function togglePaged() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  if (NextState.isPage(focusedItemPath.itemId)) {
-    NextState.becomeNonPage(focusedItemPath.itemId)
+  if (NextState.isPage(targetItemPath.itemId)) {
+    NextState.becomeNonPage(targetItemPath.itemId)
   } else {
-    NextState.becomePage(focusedItemPath.itemId)
+    NextState.becomePage(targetItemPath.itemId)
   }
 }
 
 /** 対象アイテムがページなら、そのページに切り替える */
 export function showPage() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  if (NextState.isPage(focusedItemPath.itemId)) {
-    NextState.mountPage(focusedItemPath.itemId)
-    NextState.setActivePageId(focusedItemPath.itemId)
+  if (NextState.isPage(targetItemPath.itemId)) {
+    NextState.mountPage(targetItemPath.itemId)
+    NextState.setActivePageId(targetItemPath.itemId)
   }
 }
 
 /** 対象アイテムをページ化し、そのページに切り替える */
 export function becomeAndShowPage() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  NextState.becomePage(focusedItemPath.itemId)
-  NextState.mountPage(focusedItemPath.itemId)
-  NextState.setActivePageId(focusedItemPath.itemId)
+  NextState.becomePage(targetItemPath.itemId)
+  NextState.mountPage(targetItemPath.itemId)
+  NextState.setActivePageId(targetItemPath.itemId)
 }
 
 /**
@@ -386,20 +418,22 @@ export function becomeAndShowPage() {
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
-  const focusedItemPath = NextState.getLastFocusedItemPath()
-  if (focusedItemPath === null) return
+  const targetItemPath = NextState.getTargetItemPath()
+  if (targetItemPath === null) return
 
-  NextState.toggleCssClass(focusedItemPath.itemId, 'grayed-out-item')
+  NextState.toggleCssClass(targetItemPath.itemId, 'grayed-out-item')
 
   // タイムスタンプを更新
   // TODO: 設定で無効化できるようにする
-  NextState.updateItemTimestamp(focusedItemPath.itemId)
+  NextState.updateItemTimestamp(targetItemPath.itemId)
 
   // フォーカスを移動する。
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
-  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(focusedItemPath)
+  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
   if (nextSiblingItemPath !== undefined) {
-    NextState.setFocusedItemPath(nextSiblingItemPath)
+    External.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(nextSiblingItemPath)
+    )
     if (NextState.getItemType(nextSiblingItemPath.itemId) === ItemType.TEXT) {
       NextState.setItemTreeTextItemCaretDistance(0)
     } else {
