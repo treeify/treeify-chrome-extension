@@ -27,14 +27,14 @@ export function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
   const url = tab.url || tab.pendingUrl || ''
-  const itemIdsForTabCreation = External.urlToItemIdsForTabCreation.get(url) ?? List.of()
+  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
   if (itemIdsForTabCreation.isEmpty()) {
     // タブに対応するウェブページアイテムがない時
 
     // ウェブページアイテムを作る
     const newWebPageItemId = NextState.createWebPageItem()
     reflectInWebPageItem(newWebPageItemId, tab)
-    External.tieTabAndItem(tab.id, newWebPageItemId)
+    External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
     const targetItemPath = NextState.getTargetItemPath()
 
@@ -47,7 +47,7 @@ export function onCreated(tab: Tab) {
         if (tab.active) {
           const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
           assertNonUndefined(newItemPath)
-          External.requestFocusAfterRendering(
+          External.instance.requestFocusAfterRendering(
             ItemTreeContentView.focusableDomElementId(newItemPath)
           )
         }
@@ -58,13 +58,13 @@ export function onCreated(tab: Tab) {
         // フォーカスを移す
         if (tab.active) {
           const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
-          External.requestFocusAfterRendering(
+          External.instance.requestFocusAfterRendering(
             ItemTreeContentView.focusableDomElementId(newItemPath)
           )
         }
       }
     } else {
-      const openerItemId = External.tabIdToItemId.get(tab.openerTabId)
+      const openerItemId = External.instance.tabIdToItemId.get(tab.openerTabId)
       assertNonUndefined(openerItemId)
 
       // openerの最後の子として追加する
@@ -75,7 +75,7 @@ export function onCreated(tab: Tab) {
         // フォーカスを移す
         if (tab.active) {
           const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
-          External.requestFocusAfterRendering(
+          External.instance.requestFocusAfterRendering(
             ItemTreeContentView.focusableDomElementId(newItemPath)
           )
         }
@@ -87,13 +87,13 @@ export function onCreated(tab: Tab) {
     const itemId = itemIdsForTabCreation.first(undefined)
     assertNonUndefined(itemId)
     reflectInWebPageItem(itemId, tab)
-    External.tieTabAndItem(tab.id, itemId)
-    External.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
+    External.instance.tieTabAndItem(tab.id, itemId)
+    External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
   }
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  const itemId = External.tabIdToItemId.get(tabId)
+  const itemId = External.instance.tabIdToItemId.get(tabId)
   assertNonUndefined(itemId)
   reflectInWebPageItem(itemId, tab)
 
@@ -103,7 +103,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
 // Tabの情報をウェブページアイテムに転写する
 function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
-    External.tabIdToTab.set(tab.id, tab)
+    External.instance.tabIdToTab.set(tab.id, tab)
   }
   NextState.setWebPageItemTabTitle(itemId, tab.title ?? '')
   const url = tab.url || tab.pendingUrl || ''
@@ -112,23 +112,23 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 }
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
-  const itemId = External.tabIdToItemId.get(tabId)
+  const itemId = External.instance.tabIdToItemId.get(tabId)
   assertNonUndefined(itemId)
 
-  if (External.hardUnloadedTabIds.has(tabId)) {
+  if (External.instance.hardUnloadedTabIds.has(tabId)) {
     // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
-    External.hardUnloadedTabIds.delete(tabId)
+    External.instance.hardUnloadedTabIds.delete(tabId)
   } else {
     // 対応するウェブページアイテムを削除する
     NextState.deleteItemItself(itemId)
   }
 
-  External.untieTabAndItemByTabId(tabId)
+  External.instance.untieTabAndItemByTabId(tabId)
   NextState.commit()
 }
 
 export async function onActivated(tabActiveInfo: TabActiveInfo) {
-  const itemId = External.tabIdToItemId.get(tabActiveInfo.tabId)
+  const itemId = External.instance.tabIdToItemId.get(tabActiveInfo.tabId)
   if (itemId !== undefined) {
     NextState.updateItemTimestamp(itemId)
     NextState.commit()
@@ -158,14 +158,14 @@ export async function matchTabsAndWebPageItems() {
       // ウェブページアイテムを作る
       const newWebPageItemId = NextState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
-      External.tieTabAndItem(tab.id, newWebPageItemId)
+      External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最後の子として追加する
       const activePageId = NextState.getActivePageId()
       NextState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
-      External.tieTabAndItem(tab.id, webPageItem.itemId)
+      External.instance.tieTabAndItem(tab.id, webPageItem.itemId)
     }
   }
 

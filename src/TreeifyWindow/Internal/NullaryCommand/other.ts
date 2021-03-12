@@ -8,6 +8,6 @@ export function openDatabaseFileDialog() {
     // この場では戻り値を使わないが、ここで確認ダイアログを出して許可をもらっておく
     await fileHandle.createWritable()
 
-    External.databaseFileHandle = fileHandle
+    External.instance.databaseFileHandle = fileHandle
   })()
 }

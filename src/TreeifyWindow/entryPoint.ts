@@ -17,10 +17,10 @@ async function entryPoint() {
   // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
   await matchTabsAndWebPageItems()
 
-  External.render(Internal.instance.currentState)
+  External.instance.render(Internal.instance.currentState)
 
   Internal.instance.addStateChangeListener((newState) => {
-    External.rerender(newState)
+    External.instance.rerender(newState)
   })
 
   // バックグラウンドページなどからのメッセージを受信する

@@ -36,7 +36,9 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
 
-        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(itemPath))
+        External.instance.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(itemPath)
+        )
 
         NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
@@ -49,7 +51,9 @@ export function createItemTreeTextContentViewModel(
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
         NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
 
-        External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(itemPath))
+        External.instance.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(itemPath)
+        )
 
         NextState.updateItemTimestamp(itemPath.itemId)
         NextState.commit()
@@ -73,7 +77,10 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
 
 function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTMLElement {
   // キャッシュ照会
-  const cached = External.textItemDomElementCache.get(viewModel.itemPath, viewModel.domishObjects)
+  const cached = External.instance.textItemDomElementCache.get(
+    viewModel.itemPath,
+    viewModel.domishObjects
+  )
   if (cached !== undefined) return cached
 
   // contenteditableな要素のinnerHTMLは原則としてlit-htmlで描画するべきでないので自前でDOM要素を作る。
@@ -88,7 +95,7 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
   contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
 
   // キャッシュに登録
-  External.textItemDomElementCache.set(
+  External.instance.textItemDomElementCache.set(
     viewModel.itemPath,
     viewModel.domishObjects,
     contentEditableElement
