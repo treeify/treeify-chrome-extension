@@ -5,6 +5,7 @@ import {render as renderWithLitHtml} from 'lit-html'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -21,6 +22,16 @@ export namespace External {
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   export const urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+
+  /**
+   * テキストアイテムのcontenteditableな要素のキャッシュ。
+   * 【キャッシュする理由】
+   * contenteditableな要素はlit-htmlで描画するのが事実上困難なので、自前でDOM要素を生成している。
+   * 参考：https://github.com/Polymer/lit-html/issues/572
+   * キャッシュしないと画面更新ごとに全てのcontenteditableな要素が再生成されることになり、
+   * パフォーマンスへの悪影響に加えてfocusとselectionが失われる問題に対処しなければならない。
+   */
+  export const textItemDomElementCache = new TextItemDomElementCache()
 
   // 次の描画が完了した際にフォーカスすべきDOM要素のID
   let pendingFocusElementId: string | undefined
