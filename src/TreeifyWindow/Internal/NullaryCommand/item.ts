@@ -250,10 +250,8 @@ export function enterKeyDefault() {
       NextState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      External.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
-      )
-      NextState.setItemTreeTextItemCaretDistance(DomishObject.countCharacters(domishObjects))
+      External.requestFocusAfterRendering(ItemTreeContentView.focusableDomElementId(targetItemPath))
+      NextState.setItemTreeTextItemCaretDistance(0)
     } else {
       // キャレット位置が後半なら
 
