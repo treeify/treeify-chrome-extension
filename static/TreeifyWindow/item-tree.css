@@ -26,7 +26,7 @@
   /* インデントラインの太さ */
   --item-tree-indent-line-width: 1px;
   /* インデントラインの色 */
-  --item-tree-indent-line-color: hsl(0, 0%, 90%);
+  --item-tree-indent-line-color: hsl(0, 0%, 88%);
   /* インデントラインの色（ホバー時） */
   --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
 
