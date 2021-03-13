@@ -5,12 +5,17 @@
   アイテムツリーのテキスト全般に適用されるline-height。
   階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
   */
-  --item-tree-line-height: 1.45;
+  --item-tree-line-height: 1.35;
   /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
   --item-tree-font-size-multiplicator: 99%;
 
   /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-  --item-tree-calculated-line-height: calc(1em * var(--item-tree-line-height));
+  --item-tree-calculated-line-height: calc(
+    1em * var(--item-tree-line-height) + var(--item-tree-content-area-vertical-padding)
+  );
+
+  /* コンテンツ領域の上下パディング */
+  --item-tree-content-area-vertical-padding: 2px;
 
   /* バレットの外側の円の直径 */
   --item-tree-bullet-outer-circle-diameter: 1em;
@@ -26,7 +31,7 @@
   /* インデントラインの太さ */
   --item-tree-indent-line-width: 1px;
   /* インデントラインの色 */
-  --item-tree-indent-line-color: hsl(0, 0%, 90%);
+  --item-tree-indent-line-color: hsl(0, 0%, 88%);
   /* インデントラインの色（ホバー時） */
   --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
 
@@ -81,6 +86,10 @@
   background: var(--item-tree-mouse-hover-item-background-color);
 }
 
+/* コンテンツ領域 */
+.item-tree-node_content-area {
+  padding: var(--item-tree-content-area-vertical-padding) 0;
+}
 /* フォーカス時のコンテンツ領域 */
 .item-tree-node_content-area:focus-within {
   /* フォーカスアイテムの強調表示 */
