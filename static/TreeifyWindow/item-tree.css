@@ -10,7 +10,12 @@
   --item-tree-font-size-multiplicator: 99%;
 
   /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-  --item-tree-calculated-line-height: calc(1em * var(--item-tree-line-height));
+  --item-tree-calculated-line-height: calc(
+    1em * var(--item-tree-line-height) + var(--item-tree-content-area-vertical-padding)
+  );
+
+  /* コンテンツ領域の上下パディング */
+  --item-tree-content-area-vertical-padding: 2px;
 
   /* バレットの外側の円の直径 */
   --item-tree-bullet-outer-circle-diameter: 1em;
@@ -83,7 +88,7 @@
 
 /* コンテンツ領域 */
 .item-tree-node_content-area {
-  padding: 2px 0;
+  padding: var(--item-tree-content-area-vertical-padding) 0;
 }
 /* フォーカス時のコンテンツ領域 */
 .item-tree-node_content-area:focus-within {
