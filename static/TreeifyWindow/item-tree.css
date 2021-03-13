@@ -30,15 +30,15 @@
   /* インデントラインの色（ホバー時） */
   --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
 
-  /* ターゲットアイテムの背景色 */
-  --item-tree-focused-item-background-color: hsl(240, 100%, 95%);
+  /* フォーカスアイテムの背景色 */
+  --item-tree-focused-item-background-color: hsl(240, 100%, 98%);
   /* マウスホバーアイテムの背景色 */
-  --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 97.5%);
+  --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
 
   /* 最も新しい足跡の色（線形補間の一端） */
-  --strongest-footprint-color: hsl(0, 100%, 95%);
+  --strongest-footprint-color: hsl(0, 100%, 96.7%);
   /* 最も古い足跡の色（線形補間の一端） */
-  --weakest-footprint-color: hsl(60, 100%, 95%);
+  --weakest-footprint-color: hsl(60, 100%, 96.7%);
 
   /* グレーアウト状態のアイテムの標準的なテキスト色 */
   --grayed-out-item-text-color: hsl(0, 0%, 75%);
@@ -83,7 +83,7 @@
 
 /* フォーカス時のコンテンツ領域 */
 .item-tree-node_content-area:focus-within {
-  /* ターゲットアイテムの強調表示 */
+  /* フォーカスアイテムの強調表示 */
   background: var(--item-tree-focused-item-background-color);
 }
 
