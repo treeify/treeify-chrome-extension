@@ -36,6 +36,15 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
 
+        // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
+        // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
+        // 【具体的な手順】
+        // (1) Aキーを押して「あ」と入力
+        // (2) Spaceキーを押して「亜」に変換（Enterキーは押さない）
+        // (3) Kキーを押して、さらにIキーを押す（つまり「亜」の後ろに「き」と入力しようとする）
+        // →実際にはKキーの入力がなかったことにされ、「亜い」と表示される。
+        External.instance.textItemDomElementCache.updateDomishObjects(itemPath, domishObjects)
+
         External.instance.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(itemPath)
         )
@@ -50,6 +59,15 @@ export function createItemTreeTextContentViewModel(
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
         NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+
+        // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
+        // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
+        // 【具体的な手順】
+        // (1) Aキーを押して「あ」と入力
+        // (2) Spaceキーを押して「亜」に変換（Enterキーは押さない）
+        // (3) Kキーを押して、さらにIキーを押す（つまり「亜」の後ろに「き」と入力しようとする）
+        // →実際にはKキーの入力がなかったことにされ、「亜い」と表示される。
+        External.instance.textItemDomElementCache.updateDomishObjects(itemPath, domishObjects)
 
         External.instance.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(itemPath)
