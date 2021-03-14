@@ -4,9 +4,6 @@ import {External} from 'src/TreeifyWindow/External/External'
 
 /** グローバルなselectionchangeイベントリスナー */
 export function onSelectionChange(event: Event) {
-  const textItemSelection = getTextItemSelectionFromDom()
-  if (textItemSelection !== undefined) {
-    External.instance.requestSelectAfterRendering(textItemSelection)
-  }
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   NextState.commit()
 }
