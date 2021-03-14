@@ -167,7 +167,6 @@ export class Internal {
       mountedPageIds: List.of(0),
       nextNewItemId: 7,
       activePageId: 0,
-      itemTreeTextItemSelection: null,
       itemTreeInputBinding: {
         '0000Tab': {functionName: 'indentItem'},
         '0100Tab': {functionName: 'unindentItem'},

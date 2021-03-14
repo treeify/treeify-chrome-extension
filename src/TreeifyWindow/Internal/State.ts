@@ -20,7 +20,6 @@ export type State = {
   mountedPageIds: List<ItemId>
   nextNewItemId: ItemId
   activePageId: ItemId
-  itemTreeTextItemSelection: TextItemSelection | null
   /**
    * キーボードやマウスでの入力とコマンドの対応付け。
    * キーの型はInputIdと書きたいが、TypeScriptの仕様上stringとしか書けない。

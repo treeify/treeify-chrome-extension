@@ -30,7 +30,10 @@ export function createItemTreeTextContentViewModel(
       // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
       if (!event.isComposing && event.target instanceof Node) {
         // 最新のキャレット位置をModelに反映する
-        NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+        const textItemSelection = getTextItemSelectionFromDom()
+        if (textItemSelection !== undefined) {
+          External.instance.requestSelectAfterRendering(textItemSelection)
+        }
 
         // contenteditableな要素のinnerHTMLをModelに反映する
         const domishObjects = DomishObject.fromChildren(event.target)
@@ -58,7 +61,10 @@ export function createItemTreeTextContentViewModel(
         // contenteditableな要素のinnerHTMLをModelに反映する
         const domishObjects = DomishObject.fromChildren(event.target)
         NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
-        NextState.setItemTreeTextItemSelection(getTextItemSelectionFromDom() ?? null)
+        const textItemSelection = getTextItemSelectionFromDom()
+        if (textItemSelection !== undefined) {
+          External.instance.requestSelectAfterRendering(textItemSelection)
+        }
 
         // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
         // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
