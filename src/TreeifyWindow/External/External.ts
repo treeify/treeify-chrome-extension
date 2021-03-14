@@ -101,9 +101,9 @@ export class External {
       }
     }
 
-    if (this.pendingTextItemSelection !== undefined) {
+    if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
       // キャレット位置、テキスト選択範囲を設定する
-      setDomSelection(document.activeElement!!, this.pendingTextItemSelection)
+      setDomSelection(document.activeElement, this.pendingTextItemSelection)
     }
 
     this.pendingFocusElementId = undefined
