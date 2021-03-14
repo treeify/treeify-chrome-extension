@@ -81,22 +81,22 @@ function onKeyDown(event: KeyboardEvent) {
   switch (inputId) {
     case '0000ArrowLeft':
       onArrowLeft(event)
-      break
+      return
     case '0000ArrowRight':
       onArrowRight(event)
-      break
+      return
     case '0000ArrowUp':
       onArrowUp(event)
-      break
+      return
     case '0000ArrowDown':
       onArrowDown(event)
-      break
+      return
     case '0000Backspace':
       onBackspace(event)
-      break
+      return
     case '0000Delete':
       onDelete(event)
-      break
+      return
   }
 
   const command = NextState.getItemTreeCommand(inputId)
