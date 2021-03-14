@@ -29,6 +29,8 @@ export class External {
 
   /** データベースファイル */
   databaseFileHandle: FileSystemFileHandle | undefined
+  // データベースファイルの書き込み頻度を抑えるための制御変数
+  private isDatabaseFileWritingReserved: boolean = false
 
   /** タブIDからアイテムIDへのMap */
   readonly tabIdToItemId = new Map<TabId, ItemId>()
@@ -106,12 +108,6 @@ export class External {
 
     this.pendingFocusElementId = undefined
     this.pendingTextItemSelection = undefined
-
-    // データベースファイル書き出し
-    this.databaseFileHandle?.createWritable()?.then((stream) => {
-      stream.write(State.toJsonString(newState))
-      stream.close()
-    })
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
@@ -138,5 +134,32 @@ export class External {
   /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
   requestSetCaretDistanceAfterRendering(distance: integer) {
     this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
+  }
+
+  /**
+   * データベースファイルへの上書きを行う。
+   * State変化のたびに書き込んでいるとSSDの寿命を縮める可能性があるので、ある程度の時間間隔をおいて書き込む。
+   * TODO: databaseFileHandleがundefinedのときでも内部機構が動いてしまっている
+   *
+   * 【書き込み量の試算】
+   * データベースファイルが1MBだとする（ヘビーユーザーならこれくらいは余裕で超えてくるはず）。
+   * 1分間あたり平均30回書き込むとする。
+   * ↓
+   * 10時間で1万8千回書き込むことになり、合計書き込み量は18GBとなる。
+   * ファイルまるごと上書きする方式ではどうしても負荷はかかる。
+   */
+  requestOverwriteDatabaseFile(newState: State) {
+    // 前回の書き込みリクエストから一定時間経っていなければ何もしない
+    if (this.isDatabaseFileWritingReserved) return
+
+    // 一定時間のディレイ後にデータベースファイルに書き込む
+    this.isDatabaseFileWritingReserved = true
+    setTimeout(async () => {
+      this.isDatabaseFileWritingReserved = false
+      const stream = await this.databaseFileHandle?.createWritable()
+      await stream?.write(State.toJsonString(newState))
+      await stream?.close()
+    }, 1000)
+    // TODO: ↑ディレイの長さは設定可能であるべきでは？
   }
 }
