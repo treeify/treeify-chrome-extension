@@ -42,6 +42,9 @@ export function indentItem() {
       prevSiblingItemPath.createChildItemPath(targetItemPath.itemId)
     )
   )
+
+  // キャレット位置、テキスト選択範囲を維持する
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 }
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
@@ -67,6 +70,9 @@ export function unindentItem() {
       targetItemPath.parent.createSiblingItemPath(focusedItemId)!!
     )
   )
+
+  // キャレット位置、テキスト選択範囲を維持する
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 }
 
 /**
