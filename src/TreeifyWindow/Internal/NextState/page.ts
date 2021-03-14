@@ -22,9 +22,12 @@ export function getMountedPageIds(): List<ItemId> {
 
 /** ページをマウントする */
 export function mountPage(itemId: ItemId) {
+  const mountedPageIds = NextState.getMountedPageIds()
+  if (mountedPageIds.contains(itemId)) return
+
   NextState.getBatchizer().postSetMutation(
     PropertyPath.of('mountedPageIds'),
-    NextState.getMountedPageIds().push(itemId)
+    mountedPageIds.push(itemId)
   )
 }
 
