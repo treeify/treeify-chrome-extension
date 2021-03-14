@@ -6,6 +6,16 @@ export function toggleBold() {
   execTextEditCommand('bold')
 }
 
+/** 下線のトグルコマンド */
+export function toggleUnderline() {
+  execTextEditCommand('underline')
+}
+
+/** イタリック体のトグルコマンド */
+export function toggleItalic() {
+  execTextEditCommand('italic')
+}
+
 /** 打ち消し線のトグルコマンド */
 export function toggleStrikethrough() {
   execTextEditCommand('strikethrough')
