@@ -123,8 +123,11 @@ export class External {
     this.pendingFocusElementId = elementId
   }
 
-  /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
-  requestSelectAfterRendering(textItemSelection: TextItemSelection) {
+  /**
+   * 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する。
+   * undefinedを指定されても何もしない。
+   */
+  requestSelectAfterRendering(textItemSelection: TextItemSelection | undefined) {
     // 1回の描画サイクル内で2回以上設定されたらエラーにするためのassert文。
     // 別に2回設定されても困るわけではないと思うが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
     assert(this.pendingTextItemSelection === undefined)
