@@ -91,18 +91,17 @@ export class External {
     if (this.pendingFocusElementId !== undefined) {
       const focusableElement = document.getElementById(this.pendingFocusElementId)
       if (focusableElement !== null) {
-        // ターゲットアイテムが画面内に入るようスクロールする。
+        // フォーカスアイテムが画面内に入るようスクロールする。
         // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
         focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
 
-        if (this.pendingTextItemSelection !== undefined) {
-          // キャレット位置をModelからViewに反映する
-          setDomSelection(focusableElement, this.pendingTextItemSelection)
-        } else {
-          // ターゲットアイテムをModelからViewに反映する
-          focusableElement.focus()
-        }
+        focusableElement.focus()
       }
+    }
+
+    if (this.pendingTextItemSelection !== undefined) {
+      // キャレット位置、テキスト選択範囲を設定する
+      setDomSelection(document.activeElement!!, this.pendingTextItemSelection)
     }
 
     this.pendingFocusElementId = undefined
