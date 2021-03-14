@@ -14,7 +14,12 @@ import {
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {unloadItem, unloadSubtree} from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 import {openDatabaseFileDialog} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
-import {toggleBold, toggleStrikethrough} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
+import {
+  toggleBold,
+  toggleItalic,
+  toggleStrikethrough,
+  toggleUnderline,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
@@ -39,6 +44,8 @@ export const functions: {[name: string]: () => void} = {
   becomeAndShowPage,
   toggleGrayedOut,
   toggleBold,
+  toggleUnderline,
+  toggleItalic,
   toggleStrikethrough,
   unloadItem,
   unloadSubtree,

@@ -3,38 +3,38 @@ import {External} from 'src/TreeifyWindow/External/External'
 
 /** 太字のトグルコマンド */
 export function toggleBold() {
-  const textItemSelection = getTextItemSelectionFromDom()
-  // キャレット自体が無い場合（非テキストアイテムがフォーカスされている場合など）は何もしない
-  if (textItemSelection === undefined) return
+  execTextEditCommand('bold')
+}
 
-  if (textItemSelection.anchorDistance === textItemSelection.focusDistance) {
-    // テキストが選択されていない場合、
-    // テキスト全体を選択してから打ち消し線トグルする。
-    document.execCommand('selectAll')
-    document.execCommand('bold')
+/** 下線のトグルコマンド */
+export function toggleUnderline() {
+  execTextEditCommand('underline')
+}
 
-    // 元のキャレット位置に戻す
-    External.instance.requestSelectAfterRendering(textItemSelection)
-  } else {
-    document.execCommand('bold')
-  }
+/** イタリック体のトグルコマンド */
+export function toggleItalic() {
+  execTextEditCommand('italic')
 }
 
 /** 打ち消し線のトグルコマンド */
 export function toggleStrikethrough() {
+  execTextEditCommand('strikethrough')
+}
+
+// テキスト選択範囲に太字や打ち消し線などのテキスト修飾を行う
+function execTextEditCommand(commandName: string) {
   const textItemSelection = getTextItemSelectionFromDom()
   // キャレット自体が無い場合（非テキストアイテムがフォーカスされている場合など）は何もしない
   if (textItemSelection === undefined) return
 
   if (textItemSelection.anchorDistance === textItemSelection.focusDistance) {
-    // テキストが選択されていない場合、
-    // テキスト全体を選択してから打ち消し線トグルする。
+    // テキストが選択されていない場合、テキスト全体を選択してから実行する
     document.execCommand('selectAll')
-    document.execCommand('strikethrough')
+    document.execCommand(commandName)
 
     // 元のキャレット位置に戻す
     External.instance.requestSelectAfterRendering(textItemSelection)
   } else {
-    document.execCommand('strikethrough')
+    document.execCommand(commandName)
   }
 }
