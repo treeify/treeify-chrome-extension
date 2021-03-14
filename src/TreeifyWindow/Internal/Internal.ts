@@ -177,7 +177,8 @@ export class Internal {
         '1000Enter': {functionName: 'toggleGrayedOut'},
         '1000d': {functionName: 'deleteItem'},
         '1000p': {functionName: 'togglePaged'},
-        '1000k': {functionName: 'strikethroughText'},
+        '1000o': {functionName: 'toggleBold'},
+        '1000k': {functionName: 'toggleStrikethrough'},
         '1000s': {functionName: 'openDatabaseFileDialog'},
       },
     }
