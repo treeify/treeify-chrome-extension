@@ -165,6 +165,7 @@ export async function matchTabsAndWebPageItems() {
       NextState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
+      reflectInWebPageItem(webPageItem.itemId, tab)
       External.instance.tieTabAndItem(tab.id, webPageItem.itemId)
     }
   }
