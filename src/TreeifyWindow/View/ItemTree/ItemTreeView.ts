@@ -1,9 +1,13 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
-import {assertNonNull} from 'src/Common/Debug/assert'
+import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {countBrElements, getCaretLineNumber} from 'src/TreeifyWindow/External/domTextSelection'
+import {
+  countBrElements,
+  getCaretLineNumber,
+  getTextItemSelectionFromDom,
+} from 'src/TreeifyWindow/External/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
@@ -114,8 +118,8 @@ function onArrowLeft(event: KeyboardEvent) {
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
-  const textItemSelection = NextState.getItemTreeTextItemSelection()
-  if (textItemSelection === null) {
+  const textItemSelection = getTextItemSelectionFromDom()
+  if (textItemSelection === undefined) {
     // ターゲットアイテムが非テキストアイテムだと断定する
 
     const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
@@ -124,7 +128,7 @@ function onArrowLeft(event: KeyboardEvent) {
       event.preventDefault()
       const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
-      NextState.setItemTreeTextItemCaretDistance(characterCount)
+      External.instance.requestSetCaretDistanceAfterRendering(characterCount)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(aboveItemPath)
       )
@@ -149,7 +153,7 @@ function onArrowLeft(event: KeyboardEvent) {
       event.preventDefault()
       const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
-      NextState.setItemTreeTextItemCaretDistance(characterCount)
+      External.instance.requestSetCaretDistanceAfterRendering(characterCount)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(aboveItemPath)
       )
@@ -157,7 +161,6 @@ function onArrowLeft(event: KeyboardEvent) {
     } else {
       // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      NextState.setItemTreeTextItemSelection(null)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(aboveItemPath)
       )
@@ -178,15 +181,15 @@ function onArrowRight(event: KeyboardEvent) {
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  const textItemSelection = NextState.getItemTreeTextItemSelection()
-  if (textItemSelection === null) {
+  const textItemSelection = getTextItemSelectionFromDom()
+  if (textItemSelection === undefined) {
     // ターゲットアイテムが非テキストアイテムだと断定する
 
     const belowItemType = NextState.getItemType(belowItemPath.itemId)
     if (belowItemType === ItemType.TEXT) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
-      NextState.setItemTreeTextItemCaretDistance(0)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(belowItemPath)
       )
@@ -215,7 +218,7 @@ function onArrowRight(event: KeyboardEvent) {
     if (belowItemType === ItemType.TEXT) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
-      NextState.setItemTreeTextItemCaretDistance(0)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(belowItemPath)
       )
@@ -223,7 +226,6 @@ function onArrowRight(event: KeyboardEvent) {
     } else {
       // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      NextState.setItemTreeTextItemSelection(null)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(belowItemPath)
       )
@@ -262,10 +264,9 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   if (NextState.getItemType(aboveItemPath.itemId) === ItemType.TEXT) {
     // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
     const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
-    NextState.setItemTreeTextItemCaretDistance(DomishObject.countCharacters(domishObjects))
-  } else {
-    // 上のアイテムがテキストアイテム以外の場合、上のアイテムをターゲットアイテムにする
-    NextState.setItemTreeTextItemSelection(null)
+    External.instance.requestSetCaretDistanceAfterRendering(
+      DomishObject.countCharacters(domishObjects)
+    )
   }
 
   External.instance.requestFocusAfterRendering(
@@ -309,10 +310,7 @@ function onArrowDown(event: KeyboardEvent) {
 function moveFocusToBelowItem(belowItemPath: ItemPath) {
   if (NextState.getItemType(belowItemPath.itemId) === ItemType.TEXT) {
     // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
-    NextState.setItemTreeTextItemCaretDistance(0)
-  } else {
-    // 下のアイテムがテキストアイテム以外の場合、上のアイテムをターゲットアイテムにする
-    NextState.setItemTreeTextItemSelection(null)
+    External.instance.requestSetCaretDistanceAfterRendering(0)
   }
   External.instance.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(belowItemPath)
@@ -328,8 +326,8 @@ function onBackspace(event: KeyboardEvent) {
   if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
-    const selection = NextState.getItemTreeTextItemSelection()
-    assertNonNull(selection)
+    const selection = getTextItemSelectionFromDom()
+    assertNonUndefined(selection)
     if (selection.focusDistance === 0 && selection.anchorDistance === 0) {
       // キャレットが先頭にあるなら
 
@@ -365,7 +363,7 @@ function onBackspace(event: KeyboardEvent) {
         External.instance.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(aboveItemPath)
         )
-        NextState.setItemTreeTextItemCaretDistance(
+        External.instance.requestSetCaretDistanceAfterRendering(
           DomishObject.countCharacters(aboveItemDomishObjects)
         )
 
@@ -387,8 +385,8 @@ function onDelete(event: KeyboardEvent) {
   if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
-    const selection = NextState.getItemTreeTextItemSelection()
-    assertNonNull(selection)
+    const selection = getTextItemSelectionFromDom()
+    assertNonUndefined(selection)
 
     const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
     const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)

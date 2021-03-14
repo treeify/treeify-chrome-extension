@@ -4,7 +4,7 @@ import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
-import {State} from 'src/TreeifyWindow/Internal/State'
+import {State, TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import Tab = chrome.tabs.Tab
 
@@ -51,7 +51,10 @@ export class External {
   readonly textItemDomElementCache = new TextItemDomElementCache()
 
   // 次の描画が完了した際にフォーカスすべきDOM要素のID
-  pendingFocusElementId: string | undefined
+  private pendingFocusElementId: string | undefined
+
+  // 次の描画が完了した際に設定すべきテキスト選択範囲
+  private pendingTextItemSelection: TextItemSelection | undefined
 
   /**
    * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
@@ -92,9 +95,9 @@ export class External {
         // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
         focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
 
-        if (newState.itemTreeTextItemSelection !== null) {
+        if (this.pendingTextItemSelection !== undefined) {
           // キャレット位置をModelからViewに反映する
-          setDomSelection(focusableElement, newState.itemTreeTextItemSelection)
+          setDomSelection(focusableElement, this.pendingTextItemSelection)
         } else {
           // ターゲットアイテムをModelからViewに反映する
           focusableElement.focus()
@@ -103,6 +106,7 @@ export class External {
     }
 
     this.pendingFocusElementId = undefined
+    this.pendingTextItemSelection = undefined
 
     // データベースファイル書き出し
     this.databaseFileHandle?.createWritable()?.then((stream) => {
@@ -111,12 +115,26 @@ export class External {
     })
   }
 
-  /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを設定する */
+  /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
   requestFocusAfterRendering(elementId: string) {
-    // 「1回の描画サイクル内で2回以上フォーカス先が指定されることはあってはならない」という仮定に基づくassert文。
-    // この仮定の正しさにはあまり自信が無いが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
+    // 1回の描画サイクル内で2回以上設定されたらエラーにするためのassert文。
+    // 別に2回設定されても困るわけではないと思うが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
     assert(this.pendingFocusElementId === undefined)
 
     this.pendingFocusElementId = elementId
+  }
+
+  /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
+  requestSelectAfterRendering(textItemSelection: TextItemSelection) {
+    // 1回の描画サイクル内で2回以上設定されたらエラーにするためのassert文。
+    // 別に2回設定されても困るわけではないと思うが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
+    assert(this.pendingTextItemSelection === undefined)
+
+    this.pendingTextItemSelection = textItemSelection
+  }
+
+  /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
+  requestSetCaretDistanceAfterRendering(distance: integer) {
+    this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
   }
 }

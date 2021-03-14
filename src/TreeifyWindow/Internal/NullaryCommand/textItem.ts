@@ -1,5 +1,5 @@
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {setItemTreeTextItemSelection} from 'src/TreeifyWindow/Internal/NextState/other'
+import {External} from 'src/TreeifyWindow/External/External'
 
 /** 打ち消し線のトグルコマンド */
 export function strikethroughText() {
@@ -14,7 +14,7 @@ export function strikethroughText() {
     document.execCommand('strikethrough')
 
     // 元のキャレット位置に戻す
-    setItemTreeTextItemSelection(textItemSelection)
+    External.instance.requestSelectAfterRendering(textItemSelection)
   } else {
     // テキストが選択されている場合、選択範囲を打ち消し線トグルする
     document.execCommand('strikethrough')

@@ -4,6 +4,7 @@ import {DomishObject} from 'src/Common/DomishObject'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 
 /** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
@@ -197,8 +198,8 @@ export function enterKeyDefault() {
     const characterCount = DomishObject.countCharacters(
       NextState.getTextItemDomishObjects(targetItemPath.itemId)
     )
-    const textItemSelection = NextState.getItemTreeTextItemSelection()
-    assertNonNull(textItemSelection)
+    const textItemSelection = getTextItemSelectionFromDom()
+    assertNonUndefined(textItemSelection)
 
     // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
     if (!targetItemPath.hasParent()) {
@@ -220,7 +221,7 @@ export function enterKeyDefault() {
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
       )
-      NextState.setItemTreeTextItemCaretDistance(0)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
       return
     }
 
@@ -235,7 +236,7 @@ export function enterKeyDefault() {
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
       )
-      NextState.setItemTreeTextItemCaretDistance(0)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
 
@@ -257,7 +258,7 @@ export function enterKeyDefault() {
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath)
       )
-      NextState.setItemTreeTextItemCaretDistance(0)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
     } else {
       // キャレット位置が後半なら
 
@@ -282,7 +283,7 @@ export function enterKeyDefault() {
         External.instance.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
         )
-        NextState.setItemTreeTextItemCaretDistance(0)
+        External.instance.requestSetCaretDistanceAfterRendering(0)
       } else {
         // もし子を表示していないなら
 
@@ -306,7 +307,7 @@ export function enterKeyDefault() {
             targetItemPath.createSiblingItemPath(newItemId)!!
           )
         )
-        NextState.setItemTreeTextItemCaretDistance(0)
+        External.instance.requestSetCaretDistanceAfterRendering(0)
       }
     }
   } else {
@@ -428,9 +429,7 @@ export function toggleGrayedOut() {
       ItemTreeContentView.focusableDomElementId(nextSiblingItemPath)
     )
     if (NextState.getItemType(nextSiblingItemPath.itemId) === ItemType.TEXT) {
-      NextState.setItemTreeTextItemCaretDistance(0)
-    } else {
-      NextState.setItemTreeTextItemSelection(null)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
     }
   }
 }
