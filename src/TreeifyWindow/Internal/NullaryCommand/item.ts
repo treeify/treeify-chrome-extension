@@ -105,6 +105,9 @@ export function moveItemUpward() {
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(targetItemPath)
     )
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 1つ上のアイテムの兄になるようターゲットアイテムを配置
     NextState.insertPrevSiblingItem(aboveItemPath, targetItemPath.itemId)
@@ -120,6 +123,9 @@ export function moveItemUpward() {
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newTargetItemPath)
     )
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   }
 }
 
@@ -155,6 +161,9 @@ export function moveItemDownward() {
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath)
       )
+
+      // キャレット位置、テキスト選択範囲を維持する
+      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
     } else {
       // 弟になるようターゲットアイテムを配置
       NextState.insertNextSiblingItem(firstFollowingItemPath, targetItemPath.itemId)
@@ -170,6 +179,9 @@ export function moveItemDownward() {
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(newTargetItemPath)
       )
+
+      // キャレット位置、テキスト選択範囲を維持する
+      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
     }
   } else {
     // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
@@ -187,6 +199,9 @@ export function moveItemDownward() {
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newTargetItemPath)
     )
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   }
 }
 
