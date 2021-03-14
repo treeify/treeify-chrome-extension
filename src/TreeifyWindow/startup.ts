@@ -9,7 +9,6 @@ import {
   onUpdated,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
-import {onSelectionChange} from 'src/TreeifyWindow/External/domEventListeners'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -29,15 +28,11 @@ export async function startup(initialState: State) {
   chrome.tabs.onUpdated.addListener(onUpdated)
   chrome.tabs.onRemoved.addListener(onRemoved)
   chrome.tabs.onActivated.addListener(onActivated)
-
-  document.addEventListener('selectionchange', onSelectionChange)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
-
-  document.removeEventListener('selectionchange', onSelectionChange)
 
   chrome.tabs.onCreated.removeListener(onCreated)
   chrome.tabs.onUpdated.removeListener(onUpdated)
