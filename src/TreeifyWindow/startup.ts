@@ -47,5 +47,5 @@ export async function cleanup() {
 
 function onStateChange(newState: State) {
   External.instance.rerender(newState)
-  External.instance.requestOverwriteDatabaseFile(newState)
+  External.instance.requestOverwriteSnapshotFile(newState)
 }

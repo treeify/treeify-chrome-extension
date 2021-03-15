@@ -181,7 +181,7 @@ export class Internal {
         '1000u': {functionName: 'toggleUnderline'},
         '1000i': {functionName: 'toggleItalic'},
         '1000k': {functionName: 'toggleStrikethrough'},
-        '1000s': {functionName: 'openDatabaseFileDialog'},
+        '1000s': {functionName: 'openSnapshotFileDialog'},
       },
     }
   }
