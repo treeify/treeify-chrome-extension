@@ -32,12 +32,14 @@ export async function startup(initialState: State) {
   chrome.tabs.onActivated.addListener(onActivated)
 
   document.addEventListener('copy', onCopy)
+  document.addEventListener('paste', onPaste)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
 
+  document.removeEventListener('paste', onPaste)
   document.removeEventListener('copy', onCopy)
 
   chrome.tabs.onCreated.removeListener(onCreated)
@@ -68,4 +70,11 @@ function onCopy(event: ClipboardEvent) {
     const contentText = NextState.exportAsIndentedText(NextState.getTargetItemPath().itemId)
     event.clipboardData.setData('text/plain', contentText)
   }
+}
+
+// ペースト時にプレーンテキスト化する
+function onPaste(event: ClipboardEvent) {
+  event.preventDefault()
+  const text = event.clipboardData?.getData('text/plain')
+  document.execCommand('insertText', false, text)
 }
