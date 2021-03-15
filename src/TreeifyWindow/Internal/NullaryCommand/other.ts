@@ -2,8 +2,8 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
 
-/** データベースファイル選択ダイアログを開く */
-export function openDatabaseFileDialog() {
+/** スナップショットファイル選択ダイアログを開く */
+export function openSnapshotFileDialog() {
   ;(async () => {
     const [fileHandle] = await showOpenFilePicker()
 
@@ -22,7 +22,7 @@ export function openDatabaseFileDialog() {
       // この場では戻り値を使わないが、ここで確認ダイアログを出して許可をもらっておく
       await fileHandle.createWritable()
 
-      External.instance.databaseFileHandle = fileHandle
+      External.instance.snapshotFileHandle = fileHandle
     }
   })()
 }

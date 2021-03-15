@@ -13,7 +13,7 @@ import {
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {unloadItem, unloadSubtree} from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
-import {openDatabaseFileDialog} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
+import {openSnapshotFileDialog} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
   toggleBold,
   toggleItalic,
@@ -49,5 +49,5 @@ export const functions: {[name: string]: () => void} = {
   toggleStrikethrough,
   unloadItem,
   unloadSubtree,
-  openDatabaseFileDialog,
+  openSnapshotFileDialog,
 }
