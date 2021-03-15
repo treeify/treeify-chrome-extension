@@ -9,7 +9,7 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 export type DomishObject = DomishObject.Element | DomishObject.TextNode
 
 export namespace DomishObject {
-  export type Element = BElement | UElement | IElement | BRElement
+  export type Element = BElement | UElement | IElement | StrikeElement | BRElement
 
   export type BElement = {
     type: 'b'
@@ -21,6 +21,10 @@ export namespace DomishObject {
   }
   export type IElement = {
     type: 'i'
+    children: List<DomishObject>
+  }
+  export type StrikeElement = {
+    type: 'strike'
     children: List<DomishObject>
   }
 
@@ -63,6 +67,8 @@ export namespace DomishObject {
           return `<u>${toHtml(domishObject.children)}</u>`
         case 'i':
           return `<i>${toHtml(domishObject.children)}</i>`
+        case 'strike':
+          return `<strike>${toHtml(domishObject.children)}</strike>`
         case 'br':
           return `<br>`
         case 'text':
@@ -111,6 +117,11 @@ export namespace DomishObject {
             type: 'i',
             children: fromChildren(node),
           }
+        case 'strike':
+          return {
+            type: 'strike',
+            children: fromChildren(node),
+          }
       }
       return undefined
     }
@@ -126,10 +137,9 @@ export namespace DomishObject {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
         case 'b':
-          return countCharacters(domishObject.children)
         case 'u':
-          return countCharacters(domishObject.children)
         case 'i':
+        case 'strike':
           return countCharacters(domishObject.children)
         case 'br':
           return 1
