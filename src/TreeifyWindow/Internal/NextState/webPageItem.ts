@@ -36,6 +36,13 @@ export function createWebPageItem(): ItemId {
   return newItemId
 }
 
+/** ウェブページアイテムのタブタイトルを返す */
+export function getWebPageItemTabTitle(itemId: ItemId): string {
+  return NextState.getBatchizer().getDerivedValue(
+    PropertyPath.of('webPageItems', itemId, 'tabTitle')
+  )
+}
+
 /** ウェブページアイテムのタブタイトルを設定する */
 export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
   NextState.getBatchizer().postSetMutation(
@@ -65,4 +72,9 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
     PropertyPath.of('webPageItems', itemId, 'faviconUrl'),
     url
   )
+}
+
+/** ウェブページアイテムのタイトルを返す */
+export function getWebPageItemTitle(itemId: ItemId): string {
+  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('webPageItems', itemId, 'title'))
 }

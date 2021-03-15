@@ -150,4 +150,30 @@ export namespace DomishObject {
       }
     }
   }
+
+  /**
+   * 単一行のプレーンテキストに変換する。リッチテキスト要素は無視される。
+   * br要素は半角スペースに変換する。
+   */
+  export function toSingleLinePlainText(value: DomishObject | List<DomishObject>): string {
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      return domishObjects.map(toSingleLinePlainText).join('')
+    } else {
+      const domishObject = value as DomishObject
+      switch (domishObject.type) {
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          return toSingleLinePlainText(domishObject.children)
+        case 'br':
+          return ' '
+        case 'text':
+          return domishObject.textContent
+        default:
+          assertNeverType(domishObject)
+      }
+    }
+  }
 }
