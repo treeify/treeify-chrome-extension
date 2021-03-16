@@ -126,7 +126,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     if (External.instance.hardUnloadedTabIds.has(tabId)) {
       // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
       External.instance.hardUnloadedTabIds.delete(tabId)
-    } else {
+    } else if (NextState.isItem(itemId)) {
       // 対応するウェブページアイテムを削除する
       NextState.deleteItemItself(itemId)
     }
