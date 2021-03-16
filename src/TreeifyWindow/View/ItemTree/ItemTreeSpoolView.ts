@@ -4,6 +4,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Item, State} from 'src/TreeifyWindow/Internal/State'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeSpoolViewModel = {
   bulletState: ItemTreeBulletState
@@ -25,46 +26,48 @@ export function createItemTreeSpoolViewModel(
   const bulletState = deriveBulletState(state, item)
 
   const onClick = (event: MouseEvent) => {
-    NextState.setTargetItemPath(itemPath)
+    doWithErrorHandling(() => {
+      NextState.setTargetItemPath(itemPath)
 
-    const inputId = InputId.fromMouseEvent(event)
-    switch (bulletState) {
-      case ItemTreeBulletState.NO_CHILDREN:
-        switch (inputId) {
-          case '1000MouseButton0':
-            NullaryCommand.becomeAndShowPage()
-            break
-        }
-        break
-      case ItemTreeBulletState.UNFOLDED:
-        switch (inputId) {
-          case '0000MouseButton0':
-            NullaryCommand.toggleFolded()
-            break
-          case '1000MouseButton0':
-            NullaryCommand.becomeAndShowPage()
-            break
-        }
-        break
-      case ItemTreeBulletState.FOLDED:
-        switch (inputId) {
-          case '0000MouseButton0':
-            NullaryCommand.toggleFolded()
-            break
-          case '1000MouseButton0':
-            NullaryCommand.becomeAndShowPage()
-            break
-        }
-        break
-      case ItemTreeBulletState.PAGE:
-        switch (inputId) {
-          case '0000MouseButton0':
-            NullaryCommand.showPage()
-            break
-        }
-        break
-    }
-    NextState.commit()
+      const inputId = InputId.fromMouseEvent(event)
+      switch (bulletState) {
+        case ItemTreeBulletState.NO_CHILDREN:
+          switch (inputId) {
+            case '1000MouseButton0':
+              NullaryCommand.becomeAndShowPage()
+              break
+          }
+          break
+        case ItemTreeBulletState.UNFOLDED:
+          switch (inputId) {
+            case '0000MouseButton0':
+              NullaryCommand.toggleFolded()
+              break
+            case '1000MouseButton0':
+              NullaryCommand.becomeAndShowPage()
+              break
+          }
+          break
+        case ItemTreeBulletState.FOLDED:
+          switch (inputId) {
+            case '0000MouseButton0':
+              NullaryCommand.toggleFolded()
+              break
+            case '1000MouseButton0':
+              NullaryCommand.becomeAndShowPage()
+              break
+          }
+          break
+        case ItemTreeBulletState.PAGE:
+          switch (inputId) {
+            case '0000MouseButton0':
+              NullaryCommand.showPage()
+              break
+          }
+          break
+      }
+      NextState.commit()
+    })
   }
 
   return {bulletState, onClick}

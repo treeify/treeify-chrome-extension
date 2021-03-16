@@ -20,6 +20,7 @@ import {
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
@@ -73,38 +74,40 @@ export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
-  // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
-  if (event.isComposing) return
+  doWithErrorHandling(() => {
+    // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
+    // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
+    if (event.isComposing) return
 
-  const inputId = InputId.fromKeyboardEvent(event)
-  switch (inputId) {
-    case '0000ArrowLeft':
-      onArrowLeft(event)
-      return
-    case '0000ArrowRight':
-      onArrowRight(event)
-      return
-    case '0000ArrowUp':
-      onArrowUp(event)
-      return
-    case '0000ArrowDown':
-      onArrowDown(event)
-      return
-    case '0000Backspace':
-      onBackspace(event)
-      return
-    case '0000Delete':
-      onDelete(event)
-      return
-  }
+    const inputId = InputId.fromKeyboardEvent(event)
+    switch (inputId) {
+      case '0000ArrowLeft':
+        onArrowLeft(event)
+        return
+      case '0000ArrowRight':
+        onArrowRight(event)
+        return
+      case '0000ArrowUp':
+        onArrowUp(event)
+        return
+      case '0000ArrowDown':
+        onArrowDown(event)
+        return
+      case '0000Backspace':
+        onBackspace(event)
+        return
+      case '0000Delete':
+        onDelete(event)
+        return
+    }
 
-  const command = NextState.getItemTreeCommand(inputId)
-  if (command !== undefined) {
-    event.preventDefault()
-    Command.execute(command)
-    NextState.commit()
-  }
+    const command = NextState.getItemTreeCommand(inputId)
+    if (command !== undefined) {
+      event.preventDefault()
+      Command.execute(command)
+      NextState.commit()
+    }
+  })
 }
 
 /**
@@ -432,7 +435,9 @@ function onDelete(event: KeyboardEvent) {
 
 // ペースト時にプレーンテキスト化する
 function onPaste(event: ClipboardEvent) {
-  event.preventDefault()
-  const text = event.clipboardData?.getData('text/plain')
-  document.execCommand('insertText', false, text)
+  doWithErrorHandling(() => {
+    event.preventDefault()
+    const text = event.clipboardData?.getData('text/plain')
+    document.execCommand('insertText', false, text)
+  })
 }
