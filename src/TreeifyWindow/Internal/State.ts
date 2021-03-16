@@ -49,7 +49,6 @@ export type TextItem = {
 
 /** ウェブページアイテムが固有で持つデータの型 */
 export type WebPageItem = {
-  itemId: ItemId
   url: string
   /**
    * ファビコンのURL。

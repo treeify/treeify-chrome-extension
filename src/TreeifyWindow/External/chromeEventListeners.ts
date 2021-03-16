@@ -9,7 +9,6 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {WebPageItem} from 'src/TreeifyWindow/Internal/State'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
@@ -163,8 +162,8 @@ export async function matchTabsAndWebPageItems() {
     assertNonUndefined(tab.id)
 
     const url = tab.pendingUrl ?? tab.url ?? ''
-    const webPageItem = findWebPageItem(url)
-    if (webPageItem === undefined) {
+    const webPageItemId = findWebPageItemId(url)
+    if (webPageItemId === undefined) {
       // URLの一致するウェブページアイテムがない場合、
       // ウェブページアイテムを作る
       const newWebPageItemId = NextState.createWebPageItem()
@@ -176,8 +175,8 @@ export async function matchTabsAndWebPageItems() {
       NextState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
-      reflectInWebPageItem(webPageItem.itemId, tab)
-      External.instance.tieTabAndItem(tab.id, webPageItem.itemId)
+      reflectInWebPageItem(webPageItemId, tab)
+      External.instance.tieTabAndItem(tab.id, webPageItemId)
     }
   }
 
@@ -188,13 +187,13 @@ export async function matchTabsAndWebPageItems() {
 // 指定されたURLを持つウェブページアイテムを探す。
 // もし複数該当する場合は最初に見つかったものを返す。
 // 見つからなかった場合はundefinedを返す。
-function findWebPageItem(url: string): WebPageItem | undefined {
+function findWebPageItemId(url: string): ItemId | undefined {
   const webPageItems = Internal.instance.currentState.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
     if (url === webPageItem.url) {
       // URLが一致するウェブページアイテムが見つかった場合
-      return webPageItem
+      return parseInt(itemId)
     }
   }
   return undefined

@@ -143,7 +143,6 @@ export class Internal {
       },
       webPageItems: {
         5: {
-          itemId: 5,
           url: 'https://ao-system.net/favicon/',
           faviconUrl: 'https://ao-system.net/favicon.ico',
           tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
