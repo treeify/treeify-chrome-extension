@@ -16,6 +16,7 @@ import {
   PageTreeContentView,
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
@@ -48,26 +49,30 @@ export function createPageTreeNodeViewModel(
       createPageTreeNodeViewModel(state, childPagePath.itemId, pageTreeEdges)
     ),
     onClickContentView: () => {
-      NextState.setActivePageId(itemId)
-      NextState.commit()
+      doWithErrorHandling(() => {
+        NextState.setActivePageId(itemId)
+        NextState.commit()
+      })
     },
     onClickCloseButton: () => {
-      NextState.unmountPage(itemId)
+      doWithErrorHandling(() => {
+        NextState.unmountPage(itemId)
 
-      // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
-      if (itemId === NextState.getActivePageId()) {
-        const hottestPageId = NextState.getMountedPageIds()
-          .map((pageId) => {
-            return {
-              pageId,
-              timestamp: NextState.getItemTimestamp(pageId),
-            }
-          })
-          .maxBy((a) => a.timestamp)!!.pageId
-        NextState.setActivePageId(hottestPageId)
-      }
+        // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
+        if (itemId === NextState.getActivePageId()) {
+          const hottestPageId = NextState.getMountedPageIds()
+            .map((pageId) => {
+              return {
+                pageId,
+                timestamp: NextState.getItemTimestamp(pageId),
+              }
+            })
+            .maxBy((a) => a.timestamp)!!.pageId
+          NextState.setActivePageId(hottestPageId)
+        }
 
-      NextState.commit()
+        NextState.commit()
+      })
     },
     isActivePage: state.activePageId === itemId,
   }

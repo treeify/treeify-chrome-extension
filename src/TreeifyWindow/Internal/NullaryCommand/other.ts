@@ -1,10 +1,11 @@
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
+import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 
 /** スナップショットファイル選択ダイアログを開く */
 export function openSnapshotFileDialog() {
-  ;(async () => {
+  doAsyncWithErrorHandling(async () => {
     const [fileHandle] = await showOpenFilePicker()
 
     const file = await fileHandle.getFile()
@@ -24,5 +25,5 @@ export function openSnapshotFileDialog() {
 
       External.instance.snapshotFileHandle = fileHandle
     }
-  })()
+  })
 }

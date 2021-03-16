@@ -8,6 +8,7 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
@@ -43,35 +44,41 @@ export function createItemTreeWebPageContentViewModel(
     isUnloaded: tabId === undefined,
     isAudible,
     onFocus: (event) => {
-      NextState.setTargetItemPath(itemPath)
-      NextState.commit()
+      doWithErrorHandling(() => {
+        NextState.setTargetItemPath(itemPath)
+        NextState.commit()
+      })
     },
     onClickTitle: (event) => {
-      switch (InputId.fromMouseEvent(event)) {
-        case '0000MouseButton0':
-          NextState.setTargetItemPath(itemPath)
-          NullaryCommand.browseWebPageItem()
-          break
-        case '1000MouseButton0':
-          NextState.setTargetItemPath(itemPath)
-          NextState.commit()
-      }
+      doWithErrorHandling(() => {
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            NextState.setTargetItemPath(itemPath)
+            NullaryCommand.browseWebPageItem()
+            break
+          case '1000MouseButton0':
+            NextState.setTargetItemPath(itemPath)
+            NextState.commit()
+        }
+      })
     },
     onClickFavicon: (event) => {
-      NextState.setTargetItemPath(itemPath)
+      doWithErrorHandling(() => {
+        NextState.setTargetItemPath(itemPath)
 
-      switch (InputId.fromMouseEvent(event)) {
-        case '0000MouseButton0':
-          event.preventDefault()
-          NullaryCommand.unloadSubtree()
-          NextState.commit()
-          break
-        case '1000MouseButton0':
-          event.preventDefault()
-          NullaryCommand.unloadItem()
-          NextState.commit()
-          break
-      }
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            event.preventDefault()
+            NullaryCommand.unloadSubtree()
+            NextState.commit()
+            break
+          case '1000MouseButton0':
+            event.preventDefault()
+            NullaryCommand.unloadItem()
+            NextState.commit()
+            break
+        }
+      })
     },
   }
 }

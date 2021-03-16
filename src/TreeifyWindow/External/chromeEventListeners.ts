@@ -12,92 +12,99 @@ import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {WebPageItem} from 'src/TreeifyWindow/Internal/State'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
-  switch (message.type) {
-    case 'OnMoveMouseToLeftEnd':
-      onMoveMouseToLeftEnd()
-      break
-    // TODO: 網羅性チェックをしていない理由はなんだろう？
-  }
+  doWithErrorHandling(() => {
+    switch (message.type) {
+      case 'OnMoveMouseToLeftEnd':
+        onMoveMouseToLeftEnd()
+        break
+      // TODO: 網羅性チェックをしていない理由はなんだろう？
+    }
+  })
 }
 
 export function onCreated(tab: Tab) {
-  // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
-  assertNonUndefined(tab.id)
+  doWithErrorHandling(() => {
+    // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
+    assertNonUndefined(tab.id)
 
-  const url = tab.url || tab.pendingUrl || ''
-  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
-  if (itemIdsForTabCreation.isEmpty()) {
-    // タブに対応するウェブページアイテムがない時
+    const url = tab.url || tab.pendingUrl || ''
+    const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+    if (itemIdsForTabCreation.isEmpty()) {
+      // タブに対応するウェブページアイテムがない時
 
-    // ウェブページアイテムを作る
-    const newWebPageItemId = NextState.createWebPageItem()
-    reflectInWebPageItem(newWebPageItemId, tab)
-    External.instance.tieTabAndItem(tab.id, newWebPageItemId)
+      // ウェブページアイテムを作る
+      const newWebPageItemId = NextState.createWebPageItem()
+      reflectInWebPageItem(newWebPageItemId, tab)
+      External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
-    const targetItemPath = NextState.getTargetItemPath()
+      const targetItemPath = NextState.getTargetItemPath()
 
-    if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
-      if (targetItemPath.hasParent()) {
-        // いわゆる「新しいタブ」は弟として追加する
-        NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
+      if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
+        if (targetItemPath.hasParent()) {
+          // いわゆる「新しいタブ」は弟として追加する
+          NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
-        // フォーカスを移す
-        if (tab.active) {
-          const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
-          assertNonUndefined(newItemPath)
-          External.instance.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(newItemPath)
-          )
+          // フォーカスを移す
+          if (tab.active) {
+            const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
+            assertNonUndefined(newItemPath)
+            External.instance.requestFocusAfterRendering(
+              ItemTreeContentView.focusableDomElementId(newItemPath)
+            )
+          }
+        } else {
+          // アクティブアイテムの最初の子として追加する
+          NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
+
+          // フォーカスを移す
+          if (tab.active) {
+            const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+            External.instance.requestFocusAfterRendering(
+              ItemTreeContentView.focusableDomElementId(newItemPath)
+            )
+          }
         }
       } else {
-        // アクティブアイテムの最初の子として追加する
-        NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
+        const openerItemId = External.instance.tabIdToItemId.get(tab.openerTabId)
+        assertNonUndefined(openerItemId)
 
-        // フォーカスを移す
-        if (tab.active) {
-          const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
-          External.instance.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(newItemPath)
-          )
+        // openerの最後の子として追加する
+        NextState.insertLastChildItem(openerItemId, newWebPageItemId)
+
+        // openerがターゲットアイテムなら
+        if (targetItemPath.itemId === openerItemId) {
+          // フォーカスを移す
+          if (tab.active) {
+            const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+            External.instance.requestFocusAfterRendering(
+              ItemTreeContentView.focusableDomElementId(newItemPath)
+            )
+          }
         }
       }
     } else {
-      const openerItemId = External.instance.tabIdToItemId.get(tab.openerTabId)
-      assertNonUndefined(openerItemId)
+      // 既存のウェブページアイテムに対応するタブが開かれた時
 
-      // openerの最後の子として追加する
-      NextState.insertLastChildItem(openerItemId, newWebPageItemId)
-
-      // openerがターゲットアイテムなら
-      if (targetItemPath.itemId === openerItemId) {
-        // フォーカスを移す
-        if (tab.active) {
-          const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
-          External.instance.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(newItemPath)
-          )
-        }
-      }
+      const itemId = itemIdsForTabCreation.first(undefined)
+      assertNonUndefined(itemId)
+      reflectInWebPageItem(itemId, tab)
+      External.instance.tieTabAndItem(tab.id, itemId)
+      External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
     }
-  } else {
-    // 既存のウェブページアイテムに対応するタブが開かれた時
-
-    const itemId = itemIdsForTabCreation.first(undefined)
-    assertNonUndefined(itemId)
-    reflectInWebPageItem(itemId, tab)
-    External.instance.tieTabAndItem(tab.id, itemId)
-    External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
-  }
+  })
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  const itemId = External.instance.tabIdToItemId.get(tabId)
-  assertNonUndefined(itemId)
-  reflectInWebPageItem(itemId, tab)
+  doWithErrorHandling(() => {
+    const itemId = External.instance.tabIdToItemId.get(tabId)
+    assertNonUndefined(itemId)
+    reflectInWebPageItem(itemId, tab)
 
-  NextState.commit()
+    NextState.commit()
+  })
 }
 
 // Tabの情報をウェブページアイテムに転写する
@@ -112,27 +119,31 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 }
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
-  const itemId = External.instance.tabIdToItemId.get(tabId)
-  assertNonUndefined(itemId)
+  doWithErrorHandling(() => {
+    const itemId = External.instance.tabIdToItemId.get(tabId)
+    assertNonUndefined(itemId)
 
-  if (External.instance.hardUnloadedTabIds.has(tabId)) {
-    // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
-    External.instance.hardUnloadedTabIds.delete(tabId)
-  } else {
-    // 対応するウェブページアイテムを削除する
-    NextState.deleteItemItself(itemId)
-  }
+    if (External.instance.hardUnloadedTabIds.has(tabId)) {
+      // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
+      External.instance.hardUnloadedTabIds.delete(tabId)
+    } else {
+      // 対応するウェブページアイテムを削除する
+      NextState.deleteItemItself(itemId)
+    }
 
-  External.instance.untieTabAndItemByTabId(tabId)
-  NextState.commit()
+    External.instance.untieTabAndItemByTabId(tabId)
+    NextState.commit()
+  })
 }
 
 export async function onActivated(tabActiveInfo: TabActiveInfo) {
-  const itemId = External.instance.tabIdToItemId.get(tabActiveInfo.tabId)
-  if (itemId !== undefined) {
-    NextState.updateItemTimestamp(itemId)
-    NextState.commit()
-  }
+  doWithErrorHandling(() => {
+    const itemId = External.instance.tabIdToItemId.get(tabActiveInfo.tabId)
+    if (itemId !== undefined) {
+      NextState.updateItemTimestamp(itemId)
+      NextState.commit()
+    }
+  })
 }
 
 function onMoveMouseToLeftEnd() {

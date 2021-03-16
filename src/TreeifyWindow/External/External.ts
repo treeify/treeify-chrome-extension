@@ -6,6 +6,7 @@ import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {State, TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
+import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -154,11 +155,13 @@ export class External {
 
     // 一定時間のディレイ後にスナップショットファイルに書き込む
     this.isSnapshotFileWritingReserved = true
-    setTimeout(async () => {
-      this.isSnapshotFileWritingReserved = false
-      const stream = await this.snapshotFileHandle?.createWritable()
-      await stream?.write(State.toJsonString(newState))
-      await stream?.close()
+    setTimeout(() => {
+      doAsyncWithErrorHandling(async () => {
+        this.isSnapshotFileWritingReserved = false
+        const stream = await this.snapshotFileHandle?.createWritable()
+        await stream?.write(State.toJsonString(newState))
+        await stream?.close()
+      })
     }, 1000)
     // TODO: ↑ディレイの長さは設定可能であるべきでは？
   }

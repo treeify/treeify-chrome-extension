@@ -20,6 +20,7 @@ import {
   ItemTreeSpoolView,
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
@@ -60,13 +61,15 @@ export function createItemTreeNodeViewModel(
       )
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
-      const inputId = InputId.fromMouseEvent(event)
-      if (inputId === '0000MouseButton1') {
-        event.preventDefault()
-        NextState.setTargetItemPath(itemPath)
-        NullaryCommand.deleteItem()
-        NextState.commit()
-      }
+      doWithErrorHandling(() => {
+        const inputId = InputId.fromMouseEvent(event)
+        if (inputId === '0000MouseButton1') {
+          event.preventDefault()
+          NextState.setTargetItemPath(itemPath)
+          NullaryCommand.deleteItem()
+          NextState.commit()
+        }
+      })
     },
   }
 }
