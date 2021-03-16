@@ -44,13 +44,11 @@ export type Item = {
 
 /** テキストアイテムが固有で持つデータの型 */
 export type TextItem = {
-  itemId: ItemId
   domishObjects: List<DomishObject>
 }
 
 /** ウェブページアイテムが固有で持つデータの型 */
 export type WebPageItem = {
-  itemId: ItemId
   url: string
   /**
    * ファビコンのURL。

@@ -39,10 +39,7 @@ export function createTextItem(): ItemId {
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('items', newItemId), newItem)
 
-  const newTextItem: TextItem = {
-    itemId: newItemId,
-    domishObjects: List.of(),
-  }
+  const newTextItem: TextItem = {domishObjects: List.of()}
   NextState.getBatchizer().postSetMutation(PropertyPath.of('textItems', newItemId), newTextItem)
 
   NextState.setNextNewItemId(newItemId + 1)

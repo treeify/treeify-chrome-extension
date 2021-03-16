@@ -24,7 +24,6 @@ export function createWebPageItem(): ItemId {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('items', newItemId), newItem)
 
   const webPageItem: WebPageItem = {
-    itemId: newItemId,
     url: '',
     faviconUrl: '',
     tabTitle: '',

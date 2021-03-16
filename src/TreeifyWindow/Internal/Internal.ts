@@ -123,33 +123,26 @@ export class Internal {
       },
       textItems: {
         0: {
-          itemId: 0,
           domishObjects: List.of({type: 'text', textContent: 'Top'}),
         },
         1: {
-          itemId: 1,
           domishObjects: List.of({type: 'text', textContent: 'isFolded false'}),
         },
         2: {
-          itemId: 2,
           domishObjects: List.of({type: 'text', textContent: 'isFolded true'}),
         },
         3: {
-          itemId: 3,
           domishObjects: List.of({type: 'text', textContent: 'visible child'}),
         },
         4: {
-          itemId: 4,
           domishObjects: List.of({type: 'text', textContent: 'invisible child'}),
         },
         6: {
-          itemId: 6,
           domishObjects: List.of({type: 'text', textContent: '子ページ'}),
         },
       },
       webPageItems: {
         5: {
-          itemId: 5,
           url: 'https://ao-system.net/favicon/',
           faviconUrl: 'https://ao-system.net/favicon.ico',
           tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
