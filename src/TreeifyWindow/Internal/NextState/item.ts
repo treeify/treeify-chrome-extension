@@ -101,6 +101,11 @@ export function deleteItemItself(itemId: ItemId) {
   NextState.deleteProperty(PropertyPath.of('items', itemId))
 }
 
+/** 指定されたIDのアイテムが存在するかどうかを調べる */
+export function isItem(itemId: ItemId): boolean {
+  return undefined !== getBatchizer().getDerivedValue(PropertyPath.of('items', itemId))
+}
+
 /** 指定されたアイテムのアイテムタイプを返す */
 export function getItemType(itemId: ItemId): ItemType {
   return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'itemType'))
