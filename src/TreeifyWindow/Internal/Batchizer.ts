@@ -27,9 +27,17 @@ export namespace PropertyPath {
   export function of(...args: (keyof any)[]) {
     return List.of(...args)
   }
-}
 
-type ShadowObject = any
+  const delimiter = '/'
+
+  export function toString(propertyPath: PropertyPath): string {
+    return propertyPath.join(delimiter)
+  }
+
+  export function fromString(value: string): PropertyPath {
+    return List(value.split(delimiter))
+  }
+}
 
 /**
  * オブジェクトを書き換えること無く、書き換えたかのように見せかける仕組みを実現するクラス。
@@ -39,40 +47,16 @@ type ShadowObject = any
  * commit()を呼ぶ前にMutation適用後の値を取得するにはgetDerivedPropertyを使う。
  */
 export class Batchizer {
-  /**
-   * 例えばitems[0]とitems["0"]は区別されるので、例えば"items.0"のような文字列ではパスを一意に表現できない。
-   * そこで、PropertyPathを直接キーにできる辞書でList<Mutation>を管理する必要があると判断した。
-   * Map<PropertyPath, List<Mutation>>ではPropertyPathオブジェクトの同値性の問題が厄介なので、
-   * PropertyPathに対して一意に定まるオブジェクトと、そのオブジェクトに紐づくWeakMapを使うことにした。
-   *
-   */
-  private shadowObject: ShadowObject = {}
-  private mutationsWeakMap: WeakMap<ShadowObject, List<Mutation>> = new WeakMap()
+  private mutationsMap: Map<string, List<Mutation>> = new Map()
 
   constructor(readonly state: any) {}
 
-  private getMutations(propertyPath: PropertyPath) {
-    const shadowProperty = Batchizer.getShadowProperty(propertyPath, this.shadowObject)
-    return this.mutationsWeakMap.get(shadowProperty) ?? List.of()
+  private getMutations(propertyPath: PropertyPath): List<Mutation> {
+    return this.mutationsMap.get(PropertyPath.toString(propertyPath)) ?? List.of()
   }
 
   private setMutations(propertyPath: PropertyPath, mutations: List<Mutation>) {
-    const shadowProperty = Batchizer.getShadowProperty(propertyPath, this.shadowObject)
-    this.mutationsWeakMap.set(shadowProperty, mutations)
-  }
-
-  private static getShadowProperty(
-    propertyPath: PropertyPath,
-    shadowObject: ShadowObject
-  ): ShadowObject | undefined {
-    const key = propertyPath.first(undefined)
-    if (key === undefined) return shadowObject
-
-    if (shadowObject[key] === undefined) {
-      shadowObject[key] = {}
-    }
-
-    return this.getShadowProperty(propertyPath.shift(), shadowObject[key])
+    this.mutationsMap.set(PropertyPath.toString(propertyPath), mutations)
   }
 
   /** 指定されたプロパティへのMutationを追加する */
@@ -92,7 +76,7 @@ export class Batchizer {
 
   /** 全てのMutationを適用し、stateを変更する */
   commit() {
-    const propertyPaths = Batchizer.yieldPropertyPath(this.shadowObject, PropertyPath.of())
+    const propertyPaths = this.getAllPropertyPaths()
     for (const propertyPath of propertyPaths) {
       // TODO: ちょっとした最適化の余地あり（getMutationsが2回呼ばれる）
       if (!this.getMutations(propertyPath).isEmpty()) {
@@ -105,19 +89,12 @@ export class Batchizer {
 
   /** 全ての未適用のMutationを破棄する */
   clearPostedMutations() {
-    this.mutationsWeakMap = new WeakMap<ShadowObject, List<Mutation>>()
-    this.shadowObject = {}
+    this.mutationsMap = new Map()
   }
 
-  // ShadowObjectを探索し、全てのPropertyPathを返す
-  private static *yieldPropertyPath(
-    shadowObject: ShadowObject,
-    prefix: PropertyPath
-  ): Generator<PropertyPath> {
-    for (const key of Object.keys(shadowObject)) {
-      yield prefix.push(key)
-      const shadowProperty = shadowObject[key]
-      yield* this.yieldPropertyPath(shadowProperty, prefix.push(key))
+  *getAllPropertyPaths(): Generator<PropertyPath> {
+    for (const key of this.mutationsMap.keys()) {
+      yield PropertyPath.fromString(key)
     }
   }
 
