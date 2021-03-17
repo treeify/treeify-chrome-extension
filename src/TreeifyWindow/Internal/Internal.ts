@@ -176,6 +176,7 @@ export class Internal {
         '1000k': {functionName: 'toggleStrikethrough'},
         '1000s': {functionName: 'openSnapshotFileDialog'},
       },
+      webPageItemTitleSettingDialog: null,
     }
   }
 }
