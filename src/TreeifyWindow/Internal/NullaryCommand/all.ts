@@ -20,6 +20,7 @@ import {
   toggleStrikethrough,
   toggleUnderline,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
+import {edit} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
@@ -49,5 +50,6 @@ export const functions: {[name: string]: () => void} = {
   toggleStrikethrough,
   unloadItem,
   unloadSubtree,
+  edit,
   openSnapshotFileDialog,
 }

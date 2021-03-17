@@ -175,7 +175,9 @@ export class Internal {
         '1000i': {functionName: 'toggleItalic'},
         '1000k': {functionName: 'toggleStrikethrough'},
         '1000s': {functionName: 'openSnapshotFileDialog'},
+        '0000F2': {functionName: 'edit'},
       },
+      webPageItemTitleSettingDialog: null,
     }
   }
 }

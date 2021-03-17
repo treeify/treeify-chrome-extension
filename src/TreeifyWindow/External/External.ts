@@ -7,6 +7,8 @@ import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {State, TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
+import {createFocusTrap} from 'focus-trap'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -109,6 +111,22 @@ export class External {
 
     this.pendingFocusElementId = undefined
     this.pendingTextItemSelection = undefined
+
+    // ウェブページアイテムのタイトル設定ダイアログが表示中ならフォーカストラップを作る
+    const webPageItemTitleSettingDialog = document.getElementById(
+      'web-page-item-title-setting-dialog'
+    )
+    if (webPageItemTitleSettingDialog !== null) {
+      const focusTrap = createFocusTrap(webPageItemTitleSettingDialog, {
+        clickOutsideDeactivates: true,
+        returnFocusOnDeactivate: true,
+        onDeactivate: () => {
+          NextState.setWebPageItemTitleSettingDialog(null)
+          NextState.commit()
+        },
+      })
+      focusTrap.activate()
+    }
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */

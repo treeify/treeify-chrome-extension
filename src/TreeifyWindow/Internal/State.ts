@@ -25,6 +25,8 @@ export type State = {
    * キーの型はInputIdと書きたいが、TypeScriptの仕様上stringとしか書けない。
    */
   itemTreeInputBinding: {[inputId: string]: Command}
+  /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
+  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
 }
 
 /**
@@ -86,6 +88,12 @@ export type TextItemSelection = {
    * contenteditableな要素の先頭からanchor位置までの文字数（改行を含む）。
    */
   anchorDistance: integer
+}
+
+/** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
+export type WebPageItemTitleSettingDialog = {
+  /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
+  targetItemRect: DOMRect
 }
 
 export namespace State {

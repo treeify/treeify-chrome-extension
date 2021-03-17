@@ -10,10 +10,16 @@ import {
   LeftSidebarViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {createPageTreeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
+import {
+  createWebPageItemTitleSettingDialogViewModel,
+  WebPageItemTitleSettingDialogView,
+  WebPageItemTitleSettingDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 
 export type RootViewModel = {
   leftSidebarViewMode: LeftSidebarViewModel
   itemTreeViewModel: ItemTreeViewModel
+  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
 }
 
 export function createRootViewModel(state: State): RootViewModel {
@@ -22,12 +28,18 @@ export function createRootViewModel(state: State): RootViewModel {
       pageTreeViewModel: createPageTreeViewModel(state),
     },
     itemTreeViewModel: createItemTreeViewModel(state),
+    webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
   }
 }
 
 /** html-litによる動的描画が行われる領域全体のルートView */
 export function RootView(viewModel: RootViewModel): TemplateResult {
   return html`<div class="root">
-    ${LeftSidebarView(viewModel.leftSidebarViewMode)} ${ItemTreeView(viewModel.itemTreeViewModel)}
+    <div class="sidebar-layout">
+      ${LeftSidebarView(viewModel.leftSidebarViewMode)}${ItemTreeView(viewModel.itemTreeViewModel)}
+    </div>
+    ${viewModel.webPageItemTitleSettingDialog !== undefined
+      ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
+      : undefined}
   </div>`
 }
