@@ -11,7 +11,9 @@ export function edit() {
     case ItemType.WEB_PAGE:
       // ウェブページアイテムのタイトル設定ダイアログを表示する
       const domElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
-      const domElement = document.getElementById(domElementId)
+      const domElement = document
+        .getElementById(domElementId)
+        ?.querySelector('.item-tree-web-page-content_title')
       if (domElement !== null) {
         NextState.setWebPageItemTitleSettingDialog({
           targetItemRect: domElement.getBoundingClientRect(),
