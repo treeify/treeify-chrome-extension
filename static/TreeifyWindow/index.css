@@ -16,5 +16,22 @@ body {
 
 .root {
   height: 100%;
+  /* ダイアログなどを他の表示物に重ねて表示するための設定 */
+  position: relative;
+}
+
+.sidebar-layout {
+  height: 100%;
+  /* 左サイドバーとアイテムツリーを横に並べる */
   display: flex;
+}
+
+/* ウェブページアイテムのタイトル設定ダイアログ */
+#web-page-item-title-setting-dialog {
+  /* TODO: ウェブページアイテムの位置に合わせたフローティングにできないか？ */
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }

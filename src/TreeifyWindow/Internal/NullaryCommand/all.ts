@@ -12,7 +12,11 @@ import {
   togglePaged,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
-import {unloadItem, unloadSubtree} from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
+import {
+  showWebPageItemTitleSettingDialog,
+  unloadItem,
+  unloadSubtree,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 import {openSnapshotFileDialog} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
   toggleBold,
@@ -49,5 +53,6 @@ export const functions: {[name: string]: () => void} = {
   toggleStrikethrough,
   unloadItem,
   unloadSubtree,
+  showWebPageItemTitleSettingDialog,
   openSnapshotFileDialog,
 }
