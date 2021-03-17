@@ -91,7 +91,10 @@ export type TextItemSelection = {
 }
 
 /** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
-export type WebPageItemTitleSettingDialog = {}
+export type WebPageItemTitleSettingDialog = {
+  /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
+  targetItemRect: DOMRect
+}
 
 export namespace State {
   /** StateからJSON文字列を生成する */
