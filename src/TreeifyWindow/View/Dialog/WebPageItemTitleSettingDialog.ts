@@ -3,6 +3,8 @@ import {styleMap} from 'lit-html/directives/style-map'
 import {html} from 'lit-html'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {External} from 'src/TreeifyWindow/External/External'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
@@ -32,8 +34,9 @@ export function createWebPageItemTitleSettingDialogViewModel(
           // タイトル設定ダイアログを閉じる
           NextState.setWebPageItemTitleSettingDialog(null)
 
-          // TODO: フォーカスを戻す機能を実装する
-          // External.instance.requestFocusAfterRendering()
+          // フォーカスを戻す
+          const domElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+          External.instance.requestFocusAfterRendering(domElementId)
 
           NextState.commit()
         }

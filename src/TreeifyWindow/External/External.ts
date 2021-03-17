@@ -119,6 +119,7 @@ export class External {
     if (webPageItemTitleSettingDialog !== null) {
       const focusTrap = createFocusTrap(webPageItemTitleSettingDialog, {
         clickOutsideDeactivates: true,
+        returnFocusOnDeactivate: true,
         onDeactivate: () => {
           NextState.setWebPageItemTitleSettingDialog(null)
           NextState.commit()
