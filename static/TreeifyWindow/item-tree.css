@@ -84,8 +84,7 @@
 }
 
 /* ハイライト状態のアイテム */
-/* TODO: 子孫アイテムもハイライト表示されてしまっている */
-.highlighted-item .item-tree-node_content-area {
+.highlighted-item {
   background-color: var(--highlighted-item-background-color);
 }
 
@@ -200,7 +199,8 @@
 }
 
 /* グレーアウト状態のテキストアイテム */
-.grayed-out-item .item-tree-text-content_content-editable {
+.grayed-out-item .item-tree-text-content_content-editable,
+.grayed-out-item-children .item-tree-text-content_content-editable {
   color: var(--grayed-out-item-text-color);
 }
 
@@ -215,7 +215,8 @@
 }
 
 /* グレーアウト状態のウェブページアイテム */
-.grayed-out-item .item-tree-web-page-content_title {
+.grayed-out-item .item-tree-web-page-content_title,
+.grayed-out-item-children .item-tree-web-page-content_title {
   color: var(--grayed-out-item-text-color);
 }
 

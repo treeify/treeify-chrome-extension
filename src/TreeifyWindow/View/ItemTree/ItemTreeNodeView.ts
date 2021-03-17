@@ -89,8 +89,9 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   const contentAreaStyle = styleMap({
     backgroundColor: footprintColor?.toString() ?? '',
   })
+  const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 
-  return html`<div class=${viewModel.cssClasses.unshift('item-tree-node').join(' ')}>
+  return html`<div class="item-tree-node">
     ${viewModel.isActivePage
       ? undefined
       : html`
@@ -103,12 +104,15 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
         <!-- コンテンツ領域 -->
-        <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
+        <div
+          class=${viewModel.cssClasses.unshift('item-tree-node_content-area').join(' ')}
+          @mousedown=${viewModel.onMouseDownContentArea}
+        >
           ${ItemTreeContentView(viewModel.contentViewModel)}
         </div>
       </div>
       <!-- 子リスト領域 -->
-      <div class="item-tree-node_children-area">
+      <div class=${childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
         ${repeat(
           viewModel.childItemViewModels,
           (itemViewModel) => itemViewModel.itemPath.toString(),
