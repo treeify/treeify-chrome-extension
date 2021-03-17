@@ -21,6 +21,7 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 import {External} from 'src/TreeifyWindow/External/External'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
@@ -98,6 +99,9 @@ function onKeyDown(event: KeyboardEvent) {
         return
       case '0000Delete':
         onDelete(event)
+        return
+      case '0000 ':
+        onSpace(event)
         return
     }
 
@@ -178,8 +182,6 @@ function onArrowLeft(event: KeyboardEvent) {
  */
 function onArrowRight(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  assertNonNull(targetItemPath)
-
   const belowItemPath = NextState.findBelowItemPath(targetItemPath)
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
@@ -243,8 +245,6 @@ function onArrowRight(event: KeyboardEvent) {
  */
 function onArrowUp(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  assertNonNull(targetItemPath)
-
   const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
@@ -284,8 +284,6 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  */
 function onArrowDown(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  assertNonNull(targetItemPath)
-
   const belowItemPath = NextState.findBelowItemPath(targetItemPath)
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
@@ -324,8 +322,6 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  assertNonNull(targetItemPath)
-
   if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
@@ -383,8 +379,6 @@ function onBackspace(event: KeyboardEvent) {
 /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  assertNonNull(targetItemPath)
-
   if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
@@ -430,6 +424,18 @@ function onDelete(event: KeyboardEvent) {
   } else {
     // ターゲットアイテムがテキストアイテム以外の場合
     // TODO: アイテム削除コマンドを実行するのがいいと思う
+  }
+}
+
+/** アイテムツリー上でSpaceキーを押したときのデフォルトの挙動 */
+function onSpace(event: KeyboardEvent) {
+  const targetItemType = NextState.getItemType(NextState.getTargetItemPath().itemId)
+  if (targetItemType === ItemType.WEB_PAGE) {
+    event.preventDefault()
+
+    // クリックしたのと同じ扱いにする
+    NullaryCommand.browseWebPageItem()
+    NextState.commit()
   }
 }
 
