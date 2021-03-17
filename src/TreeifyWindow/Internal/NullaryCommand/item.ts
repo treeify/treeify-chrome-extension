@@ -430,7 +430,7 @@ export function becomeAndShowPage() {
 }
 
 /**
- * グレーアウトする。
+ * 対象アイテムをグレーアウトする。
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
@@ -453,4 +453,17 @@ export function toggleGrayedOut() {
       External.instance.requestSetCaretDistanceAfterRendering(0)
     }
   }
+}
+
+/**
+ * 対象アイテムをハイライトする。
+ * もし既にハイライト状態なら非ハイライト状態に戻す。
+ */
+export function toggleHighlighted() {
+  const targetItemPath = NextState.getTargetItemPath()
+
+  NextState.toggleCssClass(targetItemPath.itemId, 'highlighted-item')
+
+  // タイムスタンプを更新
+  NextState.updateItemTimestamp(targetItemPath.itemId)
 }

@@ -14,7 +14,7 @@ export function edit() {
       const domElement = document
         .getElementById(domElementId)
         ?.querySelector('.item-tree-web-page-content_title')
-      if (domElement !== null) {
+      if (domElement != null) {
         NextState.setWebPageItemTitleSettingDialog({
           targetItemRect: domElement.getBoundingClientRect(),
         })
