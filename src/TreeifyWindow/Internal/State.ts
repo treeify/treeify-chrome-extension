@@ -41,6 +41,11 @@ export type Item = {
   isFolded: boolean
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
+  /**
+   * このアイテムにアドホックに付与されるCSSクラスのリスト。
+   * 付与されたアイテム本体とその子孫に別々のスタイルを適用できるよう、
+   * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
+   */
   cssClasses: List<string>
 }
 
