@@ -58,8 +58,3 @@ export function browseWebPageItem() {
     })
   }
 }
-
-/** ウェブページアイテムのタイトル設定ダイアログを表示する */
-export function showWebPageItemTitleSettingDialog() {
-  NextState.setWebPageItemTitleSettingDialog({})
-}
