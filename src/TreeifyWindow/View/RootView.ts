@@ -1,5 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
-import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeViewModel,
   ItemTreeView,
@@ -10,12 +10,16 @@ import {
   LeftSidebarViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {createPageTreeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
-import {WebPageItemTitleSettingDialogView} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
+import {
+  createWebPageItemTitleSettingDialogViewModel,
+  WebPageItemTitleSettingDialogView,
+  WebPageItemTitleSettingDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 
 export type RootViewModel = {
   leftSidebarViewMode: LeftSidebarViewModel
   itemTreeViewModel: ItemTreeViewModel
-  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
+  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
 }
 
 export function createRootViewModel(state: State): RootViewModel {
@@ -24,7 +28,7 @@ export function createRootViewModel(state: State): RootViewModel {
       pageTreeViewModel: createPageTreeViewModel(state),
     },
     itemTreeViewModel: createItemTreeViewModel(state),
-    webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+    webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
   }
 }
 
@@ -34,7 +38,7 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
     <div class="sidebar-layout">
       ${LeftSidebarView(viewModel.leftSidebarViewMode)}${ItemTreeView(viewModel.itemTreeViewModel)}
     </div>
-    ${viewModel.webPageItemTitleSettingDialog !== null
+    ${viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
       : undefined}
   </div>`
