@@ -45,6 +45,9 @@
   /* 最も古い足跡の色（線形補間の一端） */
   --weakest-footprint-color: hsl(60, 100%, 96.7%);
 
+  /* ハイライト状態のアイテムの背景色 */
+  --highlighted-item-background-color: hsl(120, 100%, 96.7%);
+
   /* グレーアウト状態のアイテムの標準的なテキスト色 */
   --grayed-out-item-text-color: hsl(0, 0%, 75%);
 
@@ -78,6 +81,12 @@
 .item-tree-node_content-and-children-area {
   /* コンテンツ領域を右端まで伸ばす */
   flex-grow: 1;
+}
+
+/* ハイライト状態のアイテム */
+/* TODO: 子孫アイテムもハイライト表示されてしまっている */
+.highlighted-item .item-tree-node_content-area {
+  background-color: var(--highlighted-item-background-color);
 }
 
 /* マウスホバー時のコンテンツ領域 */

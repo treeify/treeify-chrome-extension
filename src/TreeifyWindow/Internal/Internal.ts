@@ -168,6 +168,7 @@ export class Internal {
         '0000Enter': {functionName: 'enterKeyDefault'},
         '0100Enter': {functionName: 'insertLineBreak'},
         '1000Enter': {functionName: 'toggleGrayedOut'},
+        '1000l': {functionName: 'toggleHighlighted'},
         '1000d': {functionName: 'deleteItem'},
         '1000p': {functionName: 'togglePaged'},
         '1000o': {functionName: 'toggleBold'},
