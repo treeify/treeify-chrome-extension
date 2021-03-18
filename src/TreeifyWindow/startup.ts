@@ -13,6 +13,7 @@ import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSel
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -36,11 +37,15 @@ export async function startup(initialState: State) {
   document.addEventListener('copy', onCopy)
   document.addEventListener('cut', onCut)
   document.addEventListener('paste', onPaste)
+
+  document.addEventListener('mouseenter', onMouseEnter)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
+
+  document.removeEventListener('mouseenter', onMouseEnter)
 
   document.removeEventListener('paste', onPaste)
   document.removeEventListener('cut', onCut)
@@ -106,4 +111,8 @@ function onPaste(event: ClipboardEvent) {
     // 複数行にわたるテキストの場合
     pasteMultilineText(text)
   }
+}
+
+function onMouseEnter(event: MouseEvent) {
+  TreeifyWindow.open()
 }
