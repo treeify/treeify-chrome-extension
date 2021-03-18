@@ -69,7 +69,7 @@ function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemI
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
-  return html`<main class="item-tree" @paste=${onPaste} @keydown=${onKeyDown}>
+  return html`<main class="item-tree" @keydown=${onKeyDown}>
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </main>`
 }
@@ -437,13 +437,4 @@ function onSpace(event: KeyboardEvent) {
     NullaryCommand.browseWebPageItem()
     NextState.commit()
   }
-}
-
-// ペースト時にプレーンテキスト化する
-function onPaste(event: ClipboardEvent) {
-  doWithErrorHandling(() => {
-    event.preventDefault()
-    const text = event.clipboardData?.getData('text/plain')
-    document.execCommand('insertText', false, text)
-  })
 }

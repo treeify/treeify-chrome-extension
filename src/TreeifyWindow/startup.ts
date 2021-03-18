@@ -9,6 +9,9 @@ import {
   onUpdated,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
+import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -28,11 +31,17 @@ export async function startup(initialState: State) {
   chrome.tabs.onUpdated.addListener(onUpdated)
   chrome.tabs.onRemoved.addListener(onRemoved)
   chrome.tabs.onActivated.addListener(onActivated)
+
+  document.addEventListener('copy', onCopy)
+  document.addEventListener('paste', onPaste)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
+
+  document.removeEventListener('paste', onPaste)
+  document.removeEventListener('copy', onCopy)
 
   chrome.tabs.onCreated.removeListener(onCreated)
   chrome.tabs.onUpdated.removeListener(onUpdated)
@@ -48,4 +57,33 @@ export async function cleanup() {
 function onStateChange(newState: State) {
   External.instance.rerender(newState)
   External.instance.requestOverwriteSnapshotFile(newState)
+}
+
+function onCopy(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
+  const textSelection = getTextItemSelectionFromDom()
+  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+  } else {
+    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+    event.preventDefault()
+    const contentText = NextState.exportAsIndentedText(NextState.getTargetItemPath().itemId)
+    event.clipboardData.setData('text/plain', contentText)
+  }
+}
+
+// ペースト時にプレーンテキスト化する
+function onPaste(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
+  event.preventDefault()
+  const text = event.clipboardData.getData('text/plain')
+  if (!text.includes('\n')) {
+    // 1行だけのテキストの場合
+    document.execCommand('insertText', false, text)
+  } else {
+    // 複数行にわたるテキストの場合
+    pasteMultilineText(text)
+  }
 }
