@@ -31,8 +31,48 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
   const itemPaths = state.mountedPageIds.flatMap((itemId) => [
     ...searchItemPathForMountedPage(state, List.of(itemId)),
   ])
-  const pageTreeEdges = List(itemPaths).groupBy((value) => value.rootItemId)
+  const pageTreeEdges = List(itemPaths)
+    .groupBy((value) => value.rootItemId)
+    .map((collection) => {
+      return collection.toList().sortBy((itemPath) => {
+        return toSiblingRankList(itemPath)
+      }, lexicographicalOrder)
+    })
+
   return createPageTreeNodeViewModel(state, TOP_ITEM_ID, pageTreeEdges)
+}
+
+// アイテムパスを兄弟順位リストに変換する
+function toSiblingRankList(itemPath: ItemPath): List<integer> {
+  const siblingRankArray = []
+  const itemIds = itemPath.itemIds
+  for (let i = 1; i < itemIds.size; i++) {
+    const childItemIds = NextState.getChildItemIds(itemIds.get(i - 1)!!)
+    siblingRankArray.push(childItemIds.indexOf(itemIds.get(i)!!))
+  }
+  return List(siblingRankArray)
+}
+
+// 辞書式順序のcomparator
+function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
+  const min = Math.min(lhs.size, rhs.size)
+
+  for (let i = 0; i < min; i++) {
+    const r = rhs.get(i)!!
+    const l = lhs.get(i)!!
+    if (l > r) {
+      return 1
+    } else if (l < r) {
+      return -1
+    }
+  }
+  if (lhs.size === rhs.size) {
+    return 0
+  } else if (lhs.size > rhs.size) {
+    return 1
+  } else {
+    return -1
+  }
 }
 
 export function createPageTreeNodeViewModel(
