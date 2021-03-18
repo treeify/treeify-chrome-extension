@@ -12,6 +12,7 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -33,6 +34,7 @@ export async function startup(initialState: State) {
   chrome.tabs.onActivated.addListener(onActivated)
 
   document.addEventListener('copy', onCopy)
+  document.addEventListener('cut', onCut)
   document.addEventListener('paste', onPaste)
 }
 
@@ -41,6 +43,7 @@ export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
 
   document.removeEventListener('paste', onPaste)
+  document.removeEventListener('cut', onCut)
   document.removeEventListener('copy', onCopy)
 
   chrome.tabs.onCreated.removeListener(onCreated)
@@ -70,6 +73,23 @@ function onCopy(event: ClipboardEvent) {
     event.preventDefault()
     const contentText = NextState.exportAsIndentedText(NextState.getTargetItemPath().itemId)
     event.clipboardData.setData('text/plain', contentText)
+  }
+}
+
+function onCut(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
+  const textSelection = getTextItemSelectionFromDom()
+  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+  } else {
+    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+    event.preventDefault()
+    const contentText = NextState.exportAsIndentedText(NextState.getTargetItemPath().itemId)
+    event.clipboardData.setData('text/plain', contentText)
+
+    NullaryCommand.deleteItem()
+    NextState.commit()
   }
 }
 
