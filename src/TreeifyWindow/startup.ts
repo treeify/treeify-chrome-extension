@@ -11,6 +11,7 @@ import {
 import {External} from 'src/TreeifyWindow/External/External'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -74,7 +75,15 @@ function onCopy(event: ClipboardEvent) {
 
 // ペースト時にプレーンテキスト化する
 function onPaste(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
   event.preventDefault()
-  const text = event.clipboardData?.getData('text/plain')
-  document.execCommand('insertText', false, text)
+  const text = event.clipboardData.getData('text/plain')
+  if (!text.includes('\n')) {
+    // 1行だけのテキストの場合
+    document.execCommand('insertText', false, text)
+  } else {
+    // 複数行にわたるテキストの場合
+    pasteMultilineText(text)
+  }
 }
