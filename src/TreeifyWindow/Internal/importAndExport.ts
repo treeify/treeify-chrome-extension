@@ -5,15 +5,19 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
-export function exportAsIndentedText(itemId: ItemId, indentLevel = 0): string {
-  const line = '  '.repeat(indentLevel) + getContentAsPlainText(itemId) + '\n'
+export function exportAsIndentedText(itemId: ItemId): string {
+  return exportAsIndentedLines(itemId).join('\n')
+}
+
+function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
+  const line = '  '.repeat(indentLevel) + getContentAsPlainText(itemId)
   if (NextState.isPage(itemId)) {
-    return line
+    return List.of(line)
   }
-  const childLines = NextState.getChildItemIds(itemId).map((childItemId) => {
-    return exportAsIndentedText(childItemId, indentLevel + 1)
+  const childLines = NextState.getChildItemIds(itemId).flatMap((childItemId) => {
+    return exportAsIndentedLines(childItemId, indentLevel + 1)
   })
-  return line + childLines.join('')
+  return childLines.unshift(line)
 }
 
 // アイテムタイプごとのフォーマットでコンテンツをプレーンテキスト化する
