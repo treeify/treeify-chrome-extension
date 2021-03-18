@@ -1,14 +1,14 @@
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/Common/basicType'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {External} from 'src/TreeifyWindow/External/External'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {External} from 'src/TreeifyWindow/External/External'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
@@ -69,12 +69,28 @@ export function createItemTreeWebPageContentViewModel(
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             event.preventDefault()
-            NullaryCommand.unloadSubtree()
+
+            if (tabId === undefined) {
+              // アンロード状態の場合
+              NullaryCommand.loadSubtree()
+            } else {
+              // ロード状態の場合
+              NullaryCommand.unloadSubtree()
+            }
+
             NextState.commit()
             break
           case '1000MouseButton0':
             event.preventDefault()
-            NullaryCommand.unloadItem()
+
+            if (tabId === undefined) {
+              // アンロード状態の場合
+              NullaryCommand.loadItem()
+            } else {
+              // ロード状態の場合
+              NullaryCommand.unloadItem()
+            }
+
             NextState.commit()
             break
         }
