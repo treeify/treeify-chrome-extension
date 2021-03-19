@@ -25,7 +25,7 @@
   --page-tree-active-page-background-color: hsl(0, 0%, 40%);
 
   /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
-  --page-tree-close-button-size: 0.9em;
+  --page-tree-close-button-size: 1.1em;
 }
 
 .left-sidebar {
@@ -141,7 +141,7 @@
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
   background-color: hsl(0, 0%, 80%);
-  -webkit-mask-image: url('close-icon.svg');
+  -webkit-mask-image: url('close-icon2.svg');
 
   /* マウスホバー時にのみ表示 */
   display: none;

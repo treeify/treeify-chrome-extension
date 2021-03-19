@@ -32,6 +32,7 @@ export type ItemTreeNodeViewModel = {
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
   onMouseDownContentArea: (event: MouseEvent) => void
+  onClickDeleteButton: (event: MouseEvent) => void
 }
 
 // 再帰的にアイテムツリーのViewModelを作る
@@ -71,6 +72,25 @@ export function createItemTreeNodeViewModel(
         }
       })
     },
+    onClickDeleteButton: (event) => {
+      doWithErrorHandling(() => {
+        const inputId = InputId.fromMouseEvent(event)
+        switch (inputId) {
+          case '0000MouseButton0':
+            event.preventDefault()
+            NextState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItem()
+            NextState.commit()
+            break
+          case '1000MouseButton0':
+            event.preventDefault()
+            NextState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItemItself()
+            NextState.commit()
+            break
+        }
+      })
+    },
   }
 }
 
@@ -100,15 +120,16 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
             ${ItemTreeSpoolView(viewModel.spoolViewModel)}
           </div>
         `}
-    <div class="item-tree-node_content-and-children-area">
+    <div class="item-tree-node_body-and-children-area">
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
-        <!-- コンテンツ領域 -->
-        <div
-          class=${viewModel.cssClasses.unshift('item-tree-node_content-area').join(' ')}
-          @mousedown=${viewModel.onMouseDownContentArea}
-        >
-          ${ItemTreeContentView(viewModel.contentViewModel)}
+        <!-- ボディ領域 -->
+        <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+          <!-- コンテンツ領域 -->
+          <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
+            ${ItemTreeContentView(viewModel.contentViewModel)}
+          </div>
+          <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}></div>
         </div>
       </div>
       <!-- 子リスト領域 -->

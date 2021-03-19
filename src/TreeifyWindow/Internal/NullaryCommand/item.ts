@@ -391,6 +391,37 @@ export function deleteItem() {
   NextState.deleteItem(targetItemPath.itemId)
 }
 
+/**
+ * アイテム単体を削除するコマンド。
+ * 子アイテムは（アンインデントと同じように）親側に繰り上げられる。
+ * ターゲットアイテムがアクティブページの場合は何もしない。
+ */
+export function deleteItemItself() {
+  const targetItemPath = NextState.getTargetItemPath()
+
+  // アクティブページを削除しようとしている場合、何もしない
+  if (targetItemPath.parent === null) return
+
+  const childItemIds = NextState.getChildItemIds(targetItemPath.itemId)
+  if (childItemIds.isEmpty()) {
+    // 上のアイテムをフォーカス
+    const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
+    assertNonUndefined(aboveItemPath)
+    External.instance.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(aboveItemPath)
+    )
+  } else {
+    // 子がいる場合は最初の子をフォーカス
+    const newItemPath = targetItemPath.createSiblingItemPath(childItemIds.first())
+    assertNonUndefined(newItemPath)
+    External.instance.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(newItemPath)
+    )
+  }
+
+  NextState.deleteItemItself(targetItemPath.itemId)
+}
+
 /** contenteditableな要素で改行を実行する */
 export function insertLineBreak() {
   document.execCommand('insertLineBreak')
