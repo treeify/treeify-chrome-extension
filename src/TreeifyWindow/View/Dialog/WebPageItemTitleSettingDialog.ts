@@ -8,6 +8,8 @@ import {External} from 'src/TreeifyWindow/External/External'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
+  /** タイトル入力欄のテキストの初期値 */
+  initialTitle: string
   onKeyDown: (event: KeyboardEvent) => void
 }
 
@@ -20,6 +22,9 @@ export function createWebPageItemTitleSettingDialogViewModel(
 
   return {
     webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+    initialTitle:
+      NextState.getWebPageItemTitle(targetItemPath.itemId) ??
+      NextState.getWebPageItemTabTitle(targetItemPath.itemId),
     onKeyDown: (event) => {
       doWithErrorHandling(() => {
         if (event.isComposing) return
@@ -59,6 +64,7 @@ export function WebPageItemTitleSettingDialogView(
       <input
         type="text"
         class="web-page-item-title-setting-dialog_text-box"
+        value=${viewModel.initialTitle}
         @keydown=${viewModel.onKeyDown}
       />
     </div>

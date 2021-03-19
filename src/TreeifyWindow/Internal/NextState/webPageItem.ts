@@ -75,6 +75,6 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
 }
 
 /** ウェブページアイテムのタイトルを返す */
-export function getWebPageItemTitle(itemId: ItemId): string {
+export function getWebPageItemTitle(itemId: ItemId): string | null {
   return NextState.getBatchizer().getDerivedValue(PropertyPath.of('webPageItems', itemId, 'title'))
 }
