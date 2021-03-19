@@ -3,6 +3,7 @@ import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {integer} from 'src/Common/basicType'
 
 export function getBatchizer(): Batchizer {
   return Internal.instance.nextState
@@ -25,4 +26,8 @@ export function deleteProperty(propertyKeys: PropertyPath) {
 export function getItemTreeCommand(inputId: InputId): Command | undefined {
   const propertyPath = PropertyPath.of('itemTreeInputBinding', inputId)
   return NextState.getBatchizer().getDerivedValue(propertyPath)
+}
+
+export function setTreeifyWindowWidth(width: integer) {
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('treeifyWindowWidth'), width)
 }

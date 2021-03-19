@@ -38,12 +38,6 @@
   background-color: var(--left-sidebar-background-color);
   color: white;
 }
-/* デュアルウィンドウレイアウトでは左サイドバーを非表示 */
-@media screen and (max-width: 700px) {
-  .left-sidebar {
-    display: none;
-  }
-}
 
 .page-tree {
   font-size: 15px;

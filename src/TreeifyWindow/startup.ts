@@ -39,11 +39,15 @@ export async function startup(initialState: State) {
   document.addEventListener('paste', onPaste)
 
   document.addEventListener('mouseenter', onMouseEnter)
+
+  window.addEventListener('resize', onResize)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
+
+  window.removeEventListener('resize', onResize)
 
   document.removeEventListener('mouseenter', onMouseEnter)
 
@@ -115,4 +119,9 @@ function onPaste(event: ClipboardEvent) {
 
 function onMouseEnter(event: MouseEvent) {
   TreeifyWindow.open()
+}
+
+function onResize() {
+  NextState.setTreeifyWindowWidth(window.outerWidth)
+  NextState.commit()
 }
