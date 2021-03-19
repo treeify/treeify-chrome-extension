@@ -27,6 +27,8 @@ export type State = {
   itemTreeInputBinding: {[inputId: string]: Command}
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
+  /** Treeifyウィンドウの幅（px） */
+  treeifyWindowWidth: integer
 }
 
 /**

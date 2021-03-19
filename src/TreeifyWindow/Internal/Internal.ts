@@ -179,6 +179,7 @@ export class Internal {
         '0000F2': {functionName: 'edit'},
       },
       webPageItemTitleSettingDialog: null,
+      treeifyWindowWidth: window.outerWidth,
     }
   }
 }
