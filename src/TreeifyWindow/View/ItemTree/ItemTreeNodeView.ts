@@ -32,6 +32,7 @@ export type ItemTreeNodeViewModel = {
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
   onMouseDownContentArea: (event: MouseEvent) => void
+  onClickDeleteButton: (event: MouseEvent) => void
 }
 
 // 再帰的にアイテムツリーのViewModelを作る
@@ -68,6 +69,25 @@ export function createItemTreeNodeViewModel(
           NextState.setTargetItemPath(itemPath)
           NullaryCommand.deleteItem()
           NextState.commit()
+        }
+      })
+    },
+    onClickDeleteButton: (event) => {
+      doWithErrorHandling(() => {
+        const inputId = InputId.fromMouseEvent(event)
+        switch (inputId) {
+          case '0000MouseButton0':
+            event.preventDefault()
+            NextState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItem()
+            NextState.commit()
+            break
+          case '1000MouseButton0':
+            event.preventDefault()
+            NextState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItemItself()
+            NextState.commit()
+            break
         }
       })
     },
@@ -109,7 +129,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
             ${ItemTreeContentView(viewModel.contentViewModel)}
           </div>
-          <div class="item-tree-node_delete-button"></div>
+          <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}></div>
         </div>
       </div>
       <!-- 子リスト領域 -->

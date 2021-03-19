@@ -2,6 +2,7 @@ import {edit} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
   becomeAndShowPage,
   deleteItem,
+  deleteItemItself,
   enterKeyDefault,
   indentItem,
   insertLineBreak,
@@ -45,6 +46,7 @@ export const functions: {[name: string]: () => void} = {
   moveItemDownward,
   enterKeyDefault,
   deleteItem,
+  deleteItemItself,
   insertLineBreak,
   togglePaged,
   showPage,
