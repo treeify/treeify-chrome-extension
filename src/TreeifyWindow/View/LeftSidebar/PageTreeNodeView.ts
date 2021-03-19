@@ -22,7 +22,7 @@ export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
-  onClickContentView: () => void
+  onClickContentArea: () => void
   onClickCloseButton: () => void
   isActivePage: boolean
 }
@@ -88,9 +88,11 @@ export function createPageTreeNodeViewModel(
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(state, childPagePath.itemId, pageTreeEdges)
     ),
-    onClickContentView: () => {
+    onClickContentArea: () => {
       doWithErrorHandling(() => {
         NextState.setActivePageId(itemId)
+        // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
+        NextState.setIsFloatingLeftSidebarShown(false)
         NextState.commit()
       })
     },
@@ -147,7 +149,7 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
           'active-page': viewModel.isActivePage,
         })}
       >
-        <div class="page-tree-node_content-area" @click=${viewModel.onClickContentView}>
+        <div class="page-tree-node_content-area" @click=${viewModel.onClickContentArea}>
           ${PageTreeContentView(viewModel.contentViewModel)}
         </div>
         <div class="page-tree-node_close-button" @click=${viewModel.onClickCloseButton}></div>
