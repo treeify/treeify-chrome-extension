@@ -126,6 +126,7 @@ function onMouseMove(event: MouseEvent) {
 }
 
 function onResize() {
-  NextState.setTreeifyWindowWidth(window.outerWidth)
+  // window.outerWidthを使うとウィンドウ最大化および最大化解除時に実態と異なる値になる（Macで確認済み）
+  NextState.setTreeifyWindowWidth(window.innerWidth)
   NextState.commit()
 }
