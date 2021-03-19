@@ -113,18 +113,25 @@ export function createItemTreeNodeViewModel(
     },
     onDrop: (event) => {
       doWithErrorHandling(() => {
-        if (event.dataTransfer === null) return
+        if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')
         const draggedItemPath = new ItemPath(List(JSON.parse(data)))
 
+        // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (draggedItemPath.parentItemId === undefined) return
 
         NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
-        // TODO: 周辺状況に応じて移動先を分岐する
-        // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
-        NextState.insertNextSiblingItem(itemPath, draggedItemPath.itemId)
+
+        if (event.offsetY < event.target.offsetHeight / 2) {
+          // ドロップ先座標がコンテンツ領域の上半分の場合
+          NextState.insertPrevSiblingItem(itemPath, draggedItemPath.itemId)
+        } else {
+          // ドロップ先座標がコンテンツ領域の下半分の場合
+          NextState.insertNextSiblingItem(itemPath, draggedItemPath.itemId)
+        }
+
         NextState.updateItemTimestamp(draggedItemPath.itemId)
         NextState.commit()
       })
