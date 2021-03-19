@@ -2,6 +2,9 @@
   /* 左サイドバーの背景色 */
   --left-sidebar-background-color: hsl(0, 0%, 23%);
 
+  /* 左サイドバーの幅 */
+  --left-sidebar-width: 200px;
+
   /* ページツリーのテキスト全般に適用されるline-height */
   --page-tree-line-height: 1.65;
 
@@ -29,7 +32,7 @@
 }
 
 .left-sidebar {
-  flex-basis: 200px;
+  flex-basis: var(--left-sidebar-width);
   flex-shrink: 0;
 
   /* サイドバーやアイテムツリーは独立してスクロール可能とする */
@@ -37,6 +40,18 @@
 
   background-color: var(--left-sidebar-background-color);
   color: white;
+}
+
+/* フローティング型の左サイドバー */
+.left-sidebar.floating {
+  position: fixed;
+  height: 100%;
+  width: var(--left-sidebar-width);
+  /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
+  z-index: 1;
+
+  /* 少しだけ影をつけて立体感を出しておく */
+  box-shadow: 2px 0 3px hsl(0, 0%, 20%);
 }
 
 .page-tree {
