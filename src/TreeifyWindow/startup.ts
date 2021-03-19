@@ -67,7 +67,7 @@ export async function cleanup() {
 
 function onStateChange(newState: State) {
   External.instance.rerender(newState)
-  External.instance.requestOverwriteSnapshotFile(newState)
+  External.instance.requestWriteDataFolder(newState)
 }
 
 function onCopy(event: ClipboardEvent) {

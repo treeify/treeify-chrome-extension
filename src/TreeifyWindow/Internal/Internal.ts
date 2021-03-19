@@ -175,7 +175,7 @@ export class Internal {
         '1000u': {functionName: 'toggleUnderline'},
         '1000i': {functionName: 'toggleItalic'},
         '1000k': {functionName: 'toggleStrikethrough'},
-        '1000s': {functionName: 'openSnapshotFileDialog'},
+        '1000s': {functionName: 'openDataFolderDialog'},
         '0000F2': {functionName: 'edit'},
       },
       webPageItemTitleSettingDialog: null,
