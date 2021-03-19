@@ -24,7 +24,8 @@
       "match_about_blank": true,
       "js": [
         "ContentScript/entryPoint.js"
-      ]
+      ],
+      "run_at": "document_start"
     }
   ],
   "commands": {
@@ -42,6 +43,7 @@
   },
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "permissions": [
-    "tabs"
+    "tabs",
+    "<all_urls>"
   ]
 }
