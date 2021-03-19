@@ -109,6 +109,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
             ${ItemTreeContentView(viewModel.contentViewModel)}
           </div>
+          <div class="item-tree-node_delete-button"></div>
         </div>
       </div>
       <!-- 子リスト領域 -->

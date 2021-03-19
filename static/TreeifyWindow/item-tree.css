@@ -51,6 +51,9 @@
   /* グレーアウト状態のアイテムの標準的なテキスト色 */
   --grayed-out-item-text-color: hsl(0, 0%, 75%);
 
+  /* 削除ボタンのサイズ（正方形の一辺の長さ） */
+  --item-tree-delete-button-size: 0.8em;
+
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
 
@@ -97,11 +100,41 @@
 /* ボディ領域 */
 .item-tree-node_body-area {
   padding: var(--item-tree-body-area-vertical-padding) 0;
+  /* コンテンツ領域とボタン類を横に並べる */
+  display: flex;
 }
 /* フォーカス時のボディ領域 */
 .item-tree-node_body-area:focus-within {
   /* フォーカスアイテムの強調表示 */
   background: var(--item-tree-focused-item-background-color);
+}
+
+/* コンテンツ領域 */
+.item-tree-node_content-area {
+  flex-grow: 1;
+}
+
+/* 各アイテムの削除ボタン */
+.item-tree-node_delete-button {
+  flex-basis: var(--item-tree-delete-button-size);
+  height: var(--item-tree-delete-button-size);
+
+  /* 横幅が縮まないよう設定 */
+  flex-shrink: 0;
+
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+  background-color: hsl(0, 0%, 30%);
+  -webkit-mask-image: url('close-icon.svg');
+
+  /* マウスホバー時にのみ表示 */
+  display: none;
+
+  /* ボタンであることを示す */
+  cursor: pointer;
+}
+.item-tree-node_body-area:hover .item-tree-node_delete-button {
+  /* マウスホバー時にのみ表示 */
+  display: initial;
 }
 
 .item-tree-node_children-area {
