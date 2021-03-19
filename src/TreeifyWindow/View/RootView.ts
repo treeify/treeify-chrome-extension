@@ -17,16 +17,19 @@ import {
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 
 export type RootViewModel = {
-  leftSidebarViewModel: LeftSidebarViewModel
+  leftSidebarViewModel: LeftSidebarViewModel | undefined
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
 }
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
-    leftSidebarViewModel: {
-      pageTreeViewModel: createPageTreeViewModel(state),
-    },
+    leftSidebarViewModel:
+      // Treeifyウィンドウの横幅が画面横幅の50%以上のときは左サイドバーを表示する
+      // TODO: スレッショルドを50%固定ではなく変更可能にする
+      state.treeifyWindowWidth >= screen.width * 0.5
+        ? {pageTreeViewModel: createPageTreeViewModel(state)}
+        : undefined,
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
   }
@@ -36,7 +39,10 @@ export function createRootViewModel(state: State): RootViewModel {
 export function RootView(viewModel: RootViewModel): TemplateResult {
   return html`<div class="root">
     <div class="sidebar-layout">
-      ${LeftSidebarView(viewModel.leftSidebarViewModel)}${ItemTreeView(viewModel.itemTreeViewModel)}
+      ${viewModel.leftSidebarViewModel !== undefined
+        ? LeftSidebarView(viewModel.leftSidebarViewModel)
+        : undefined}
+      ${ItemTreeView(viewModel.itemTreeViewModel)}
     </div>
     ${viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
