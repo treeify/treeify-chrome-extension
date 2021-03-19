@@ -29,6 +29,8 @@ export type State = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
   /** Treeifyウィンドウの幅（px） */
   treeifyWindowWidth: integer
+  /** フローティング型の左サイドバーを表示中かどうか */
+  isFloatingLeftSidebarShown: boolean
 }
 
 /**

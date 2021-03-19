@@ -180,6 +180,7 @@ export class Internal {
       },
       webPageItemTitleSettingDialog: null,
       treeifyWindowWidth: window.outerWidth,
+      isFloatingLeftSidebarShown: false,
     }
   }
 }

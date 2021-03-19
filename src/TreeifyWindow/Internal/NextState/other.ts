@@ -31,3 +31,7 @@ export function getItemTreeCommand(inputId: InputId): Command | undefined {
 export function setTreeifyWindowWidth(width: integer) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('treeifyWindowWidth'), width)
 }
+
+export function setIsFloatingLeftSidebarShown(flag: boolean) {
+  NextState.getBatchizer().postSetMutation(PropertyPath.of('isFloatingLeftSidebarShown'), flag)
+}
