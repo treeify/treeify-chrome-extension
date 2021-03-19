@@ -17,14 +17,14 @@ import {
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 
 export type RootViewModel = {
-  leftSidebarViewMode: LeftSidebarViewModel
+  leftSidebarViewModel: LeftSidebarViewModel
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
 }
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
-    leftSidebarViewMode: {
+    leftSidebarViewModel: {
       pageTreeViewModel: createPageTreeViewModel(state),
     },
     itemTreeViewModel: createItemTreeViewModel(state),
@@ -36,7 +36,7 @@ export function createRootViewModel(state: State): RootViewModel {
 export function RootView(viewModel: RootViewModel): TemplateResult {
   return html`<div class="root">
     <div class="sidebar-layout">
-      ${LeftSidebarView(viewModel.leftSidebarViewMode)}${ItemTreeView(viewModel.itemTreeViewModel)}
+      ${LeftSidebarView(viewModel.leftSidebarViewModel)}${ItemTreeView(viewModel.itemTreeViewModel)}
     </div>
     ${viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
