@@ -13,7 +13,6 @@ import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSel
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -38,7 +37,7 @@ export async function startup(initialState: State) {
   document.addEventListener('cut', onCut)
   document.addEventListener('paste', onPaste)
 
-  document.addEventListener('mouseenter', onMouseEnter)
+  document.addEventListener('mousemove', onMouseMove)
 
   window.addEventListener('resize', onResize)
 }
@@ -49,7 +48,7 @@ export async function cleanup() {
 
   window.removeEventListener('resize', onResize)
 
-  document.removeEventListener('mouseenter', onMouseEnter)
+  document.removeEventListener('mousemove', onMouseMove)
 
   document.removeEventListener('paste', onPaste)
   document.removeEventListener('cut', onCut)
@@ -117,8 +116,13 @@ function onPaste(event: ClipboardEvent) {
   }
 }
 
-function onMouseEnter(event: MouseEvent) {
-  TreeifyWindow.open()
+function onMouseMove(event: MouseEvent) {
+  // マウスカーソルがTreeifyウィンドウ左端かつ画面左端に到達したとき。
+  // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
+  if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
+    NextState.setIsFloatingLeftSidebarShown(true)
+    NextState.commit()
+  }
 }
 
 function onResize() {

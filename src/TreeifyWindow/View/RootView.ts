@@ -6,10 +6,10 @@ import {
   ItemTreeViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {
+  createLeftSidebarViewModel,
   LeftSidebarView,
   LeftSidebarViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
-import {createPageTreeViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 import {
   createWebPageItemTitleSettingDialogViewModel,
   WebPageItemTitleSettingDialogView,
@@ -24,12 +24,7 @@ export type RootViewModel = {
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
-    leftSidebarViewModel:
-      // Treeifyウィンドウの横幅が画面横幅の50%以上のときは左サイドバーを表示する
-      // TODO: スレッショルドを50%固定ではなく変更可能にする
-      state.treeifyWindowWidth >= screen.width * 0.5
-        ? {pageTreeViewModel: createPageTreeViewModel(state)}
-        : undefined,
+    leftSidebarViewModel: createLeftSidebarViewModel(state),
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
   }
