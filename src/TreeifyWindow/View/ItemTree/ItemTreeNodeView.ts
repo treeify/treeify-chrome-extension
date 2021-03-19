@@ -33,6 +33,9 @@ export type ItemTreeNodeViewModel = {
   spoolViewModel: ItemTreeSpoolViewModel
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
+  onDragStart: (event: DragEvent) => void
+  onDragOver: (event: DragEvent) => void
+  onDrop: (event: DragEvent) => void
 }
 
 // 再帰的にアイテムツリーのViewModelを作る
@@ -91,6 +94,41 @@ export function createItemTreeNodeViewModel(
         }
       })
     },
+    onDragStart: (event) => {
+      doWithErrorHandling(() => {
+        if (event.dataTransfer === null) return
+
+        const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+        const domElement = document.getElementById(domElementId)
+        if (domElement === null) return
+        // ドラッグ中にマウスポインターに追随して表示される内容を設定
+        event.dataTransfer.setDragImage(domElement, 0, 0)
+
+        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath.itemIds))
+      })
+    },
+    onDragOver: (event) => {
+      // ドロップを動作させるために必要
+      event.preventDefault()
+    },
+    onDrop: (event) => {
+      doWithErrorHandling(() => {
+        if (event.dataTransfer === null) return
+
+        const data = event.dataTransfer.getData('application/treeify')
+        const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+
+        // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
+        if (draggedItemPath.parentItemId === undefined) return
+
+        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
+        // TODO: 周辺状況に応じて移動先を分岐する
+        // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
+        NextState.insertNextSiblingItem(itemPath, draggedItemPath.itemId)
+        NextState.updateItemTimestamp(draggedItemPath.itemId)
+        NextState.commit()
+      })
+    },
   }
 }
 
@@ -116,7 +154,11 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       ? undefined
       : html`
           <!-- バレットとインデントラインの領域 -->
-          <div class="item-tree-node_spool-area">
+          <div
+            class="item-tree-node_spool-area"
+            draggable="true"
+            @dragstart=${viewModel.onDragStart}
+          >
             ${ItemTreeSpoolView(viewModel.spoolViewModel)}
           </div>
         `}
@@ -124,7 +166,11 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
         <!-- ボディ領域 -->
-        <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+        <div
+          class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}
+          @dragover=${viewModel.onDragOver}
+          @drop=${viewModel.onDrop}
+        >
           <!-- コンテンツ領域 -->
           <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
             ${ItemTreeContentView(viewModel.contentViewModel)}
