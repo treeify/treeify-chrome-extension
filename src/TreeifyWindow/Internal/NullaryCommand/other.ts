@@ -8,7 +8,9 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 /** データフォルダ選択ダイアログを開く */
 export function openDataFolderPicker() {
   doAsyncWithErrorHandling(async () => {
-    const dataFolder = new DataFolder(await showDirectoryPicker())
+    const folderHandle = await showDirectoryPicker()
+    await folderHandle.requestPermission({mode: 'readwrite'})
+    const dataFolder = new DataFolder(folderHandle)
     const state = Chunk.inflateStateFromChunks(await dataFolder.readAllChunks())
     await cleanup()
     // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
