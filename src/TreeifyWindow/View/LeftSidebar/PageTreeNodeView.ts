@@ -27,6 +27,7 @@ export type PageTreeNodeViewModel = {
   onDragOver: (event: DragEvent) => void
   onDrop: (event: DragEvent) => void
   isActivePage: boolean
+  isRoot: boolean
 }
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
@@ -140,8 +141,8 @@ export function createPageTreeNodeViewModel(
         NextState.commit()
       })
     },
-
     isActivePage: state.activePageId === itemId,
+    isRoot: itemId === TOP_ITEM_ID,
   }
 }
 
@@ -164,9 +165,11 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
   return html` <div class="page-tree-node">
-    <div class="page-tree-node_bullet-and-indent-area">
-      ${PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel)}
-    </div>
+    ${!viewModel.isRoot
+      ? html`<div class="page-tree-node_bullet-and-indent-area">
+          ${PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel)}
+        </div>`
+      : undefined}
     <div class="page-tree-node_body-and-children-area">
       <div
         class=${classMap({
