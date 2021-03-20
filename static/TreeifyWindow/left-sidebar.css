@@ -29,6 +29,9 @@
 
   /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
   --page-tree-close-button-size: 1.1em;
+
+  /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
+  --page-tree-favicon-size: 1.0em;
 }
 
 .left-sidebar {
@@ -164,4 +167,15 @@
 .page-tree-node_body-area:hover .page-tree-node_close-button {
   /* マウスホバー時にのみ表示 */
   display: initial;
+}
+
+.page-tree-web-page-content {
+  /* ファビコンとタイトルを横に並べる */
+  display: flex;
+  align-items: center;
+}
+
+.page-tree-web-page-content_favicon {
+  width: var(--page-tree-favicon-size);
+  height: var(--page-tree-favicon-size);
 }
