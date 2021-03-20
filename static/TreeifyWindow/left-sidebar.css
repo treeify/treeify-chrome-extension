@@ -1,6 +1,6 @@
 :root {
   /* 左サイドバーの背景色 */
-  --left-sidebar-background-color: hsl(0, 0%, 23%);
+  --left-sidebar-background-color: hsl(0, 0%, 95%);
 
   /* 左サイドバーの幅 */
   --left-sidebar-width: 200px;
@@ -14,7 +14,7 @@
   /* インデントラインの太さ */
   --page-tree-indent-line-width: 1px;
   /* インデントラインの色 */
-  --page-tree-indent-line-color: hsl(0, 0%, 50%);
+  --page-tree-indent-line-color: hsl(0, 0%, 80%);
   /* インデントラインの色（ホバー時） */
   --page-tree-indent-line-hover-color: hsl(0, 0%, 70%);
 
@@ -22,10 +22,10 @@
   --page-tree-bullet-size: 0.7em;
 
   /* ページツリーの項目のマウスホバー時の背景色 */
-  --page-tree-hover-item-background-color: hsl(0, 0%, 30%);
+  --page-tree-hover-item-background-color: hsl(0, 0%, 90%);
 
   /* ページツリーのアクティブページの背景色 */
-  --page-tree-active-page-background-color: hsl(0, 0%, 40%);
+  --page-tree-active-page-background-color: hsl(0, 0%, 85%);
 
   /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
   --page-tree-close-button-size: 1.1em;
@@ -39,7 +39,6 @@
   overflow: auto;
 
   background-color: var(--left-sidebar-background-color);
-  color: white;
 }
 
 /* フローティング型の左サイドバー */
@@ -51,7 +50,7 @@
   z-index: 1;
 
   /* 少しだけ影をつけて立体感を出しておく */
-  box-shadow: 2px 0 3px hsl(0, 0%, 20%);
+  box-shadow: 2px 0 3px hsl(0, 0%, 50%);
 }
 
 .page-tree {
@@ -149,7 +148,7 @@
   flex-shrink: 0;
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background-color: hsl(0, 0%, 80%);
+  background-color: hsl(0, 0%, 20%);
   -webkit-mask-image: url('close-icon2.svg');
 
   /* マウスホバー時にのみ表示 */
