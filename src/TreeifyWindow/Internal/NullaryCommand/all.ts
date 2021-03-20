@@ -15,7 +15,7 @@ import {
   togglePaged,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
-import {openSnapshotFileDialog} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
+import {openDataFolderPicker} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
   toggleBold,
   toggleItalic,
@@ -62,5 +62,5 @@ export const functions: {[name: string]: () => void} = {
   loadItem,
   loadSubtree,
   edit,
-  openSnapshotFileDialog,
+  openDataFolderDialog: openDataFolderPicker,
 }

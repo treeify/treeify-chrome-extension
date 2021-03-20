@@ -1,29 +1,18 @@
-import {External} from 'src/TreeifyWindow/External/External'
-import {State} from 'src/TreeifyWindow/Internal/State'
-import {cleanup, startup} from 'src/TreeifyWindow/startup'
 import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
+import {External} from 'src/TreeifyWindow/External/External'
+import {DataFolder} from 'src/TreeifyWindow/Internal/NullaryCommand/DataFolder'
+import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
+import {cleanup, startup} from 'src/TreeifyWindow/startup'
+import {State} from 'src/TreeifyWindow/Internal/State'
 
-/** スナップショットファイル選択ダイアログを開く */
-export function openSnapshotFileDialog() {
+/** データフォルダ選択ダイアログを開く */
+export function openDataFolderPicker() {
   doAsyncWithErrorHandling(async () => {
-    const [fileHandle] = await showOpenFilePicker()
-
-    const file = await fileHandle.getFile()
-    const fileContents = await file.text()
-    const state = State.fromJsonString(fileContents)
-    if (state === undefined) {
-      // 読み込みに失敗した場合
-      // TODO: 読み込み失敗をユーザーに伝える
-    } else {
-      // 事実上の再起動を行う。
-      // ただしStateは読み込んだものを使う。
-      await cleanup()
-      await startup(state)
-
-      // この場では戻り値を使わないが、ここで確認ダイアログを出して許可をもらっておく
-      await fileHandle.createWritable()
-
-      External.instance.snapshotFileHandle = fileHandle
-    }
+    const dataFolder = new DataFolder(await showDirectoryPicker())
+    const state = Chunk.inflateStateFromChunks(await dataFolder.readAllChunks())
+    await cleanup()
+    // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+    External.instance.dataFolder = dataFolder
+    await startup(state as State)
   })
 }

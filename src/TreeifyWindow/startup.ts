@@ -13,6 +13,7 @@ import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSel
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -65,9 +66,9 @@ export async function cleanup() {
   External.cleanup()
 }
 
-function onStateChange(newState: State) {
+function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
   External.instance.rerender(newState)
-  External.instance.requestOverwriteSnapshotFile(newState)
+  External.instance.requestWriteDataFolder(newState, mutatedPropertyPaths)
 }
 
 function onCopy(event: ClipboardEvent) {

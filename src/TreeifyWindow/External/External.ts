@@ -6,9 +6,11 @@ import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {State, TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
-import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 import {createFocusTrap} from 'focus-trap'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {DataFolder} from 'src/TreeifyWindow/Internal/NullaryCommand/DataFolder'
+import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -30,10 +32,8 @@ export class External {
     this._instance = undefined
   }
 
-  /** スナップショットファイル */
-  snapshotFileHandle: FileSystemFileHandle | undefined
-  // スナップショットファイルの書き込み頻度を抑えるための制御変数
-  private isSnapshotFileWritingReserved: boolean = false
+  /** データフォルダ */
+  dataFolder: DataFolder | undefined
 
   /** タブIDからアイテムIDへのMap */
   readonly tabIdToItemId = new Map<TabId, ItemId>()
@@ -156,31 +156,14 @@ export class External {
   }
 
   /**
-   * スナップショットファイルへの上書きを行う。
-   * State変化のたびに書き込んでいるとSSDの寿命を縮める可能性があるので、ある程度の時間間隔をおいて書き込む。
-   * TODO: snapshotFileHandleがundefinedのときでも内部機構が動いてしまっている
-   *
-   * 【書き込み量の試算】
-   * スナップショットファイルが1MBだとする（ヘビーユーザーならこれくらいは余裕で超えてくるはず）。
-   * 1分間あたり平均30回書き込むとする。
-   * ↓
-   * 10時間で1万8千回書き込むことになり、合計書き込み量は18GBとなる。
-   * ファイルまるごと上書きする方式ではどうしても負荷はかかる。
+   * データフォルダへの書き込みを行う。
    */
-  requestOverwriteSnapshotFile(newState: State) {
-    // 前回の書き込みリクエストから一定時間経っていなければ何もしない
-    if (this.isSnapshotFileWritingReserved) return
+  requestWriteDataFolder(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
+    if (this.dataFolder === undefined) return
 
-    // 一定時間のディレイ後にスナップショットファイルに書き込む
-    this.isSnapshotFileWritingReserved = true
-    setTimeout(() => {
-      doAsyncWithErrorHandling(async () => {
-        this.isSnapshotFileWritingReserved = false
-        const stream = await this.snapshotFileHandle?.createWritable()
-        await stream?.write(State.toJsonString(newState))
-        await stream?.close()
-      })
-    }, 1000)
-    // TODO: ↑ディレイの長さは設定可能であるべきでは？
+    // 変化のあったチャンクをデータベースに書き込む
+    for (const chunkId of Chunk.extractChunkIds(mutatedPropertyPaths)) {
+      this.dataFolder.writeChunk(Chunk.create(newState, chunkId))
+    }
   }
 }
