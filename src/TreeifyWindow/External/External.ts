@@ -8,6 +8,8 @@ import {State, TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {createFocusTrap} from 'focus-trap'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {DataFolder} from 'src/TreeifyWindow/Internal/NullaryCommand/DataFolder'
+import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -30,7 +32,7 @@ export class External {
   }
 
   /** データフォルダ */
-  dataFolderHandle: FileSystemDirectoryHandle | undefined
+  dataFolder: DataFolder | undefined
 
   /** タブIDからアイテムIDへのMap */
   readonly tabIdToItemId = new Map<TabId, ItemId>()
@@ -155,5 +157,8 @@ export class External {
   /**
    * データフォルダへの書き込みを行う。
    */
-  requestWriteDataFolder(newState: State) {}
+  requestWriteDataFolder(newState: State) {
+    const allChunks = Chunk.createAllChunks(newState)
+    this.dataFolder?.writeChunks(allChunks)
+  }
 }

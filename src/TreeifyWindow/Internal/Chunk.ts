@@ -1,0 +1,101 @@
+import {State} from 'src/TreeifyWindow/Internal/State'
+import {List} from 'immutable'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+
+// 【具体例】
+// "items_0"
+// "nextNewItemId"
+type ChunkId = string
+
+export namespace ChunkId {
+  const delimiter = '_'
+
+  export function toPropertyPath(chunkId: ChunkId): PropertyPath {
+    return List(chunkId.split(delimiter))
+  }
+
+  export function fromPropertyPath(propertyPath: PropertyPath): ChunkId {
+    return propertyPath.join(delimiter)
+  }
+}
+
+/**
+ * Stateの断片を表すデータ型。
+ * シリアライズのために用いられる。
+ * シリアライズしたいだけならStateをまるごとJSON化すれば十分なのだが、
+ * データ量が大きく、差分書き込みに適さない形式なのでチャンクという単位に区切って扱う。
+ */
+export type Chunk = {
+  id: ChunkId
+  json: string
+}
+
+/** チャンク関連のコードをまとめる名前空間 */
+export namespace Chunk {
+  /** Stateオブジェクト全体をチャンクリストに変換する */
+  export function createAllChunks(state: State): List<Chunk> {
+    return List(yieldAllChunkIds(state)).map((chunkId) => {
+      return create(state, chunkId)
+    })
+  }
+
+  // Stateオブジェクトのkeysをenumerateして、チャンクID群を生成する
+  export function* yieldAllChunkIds(state: State): Generator<ChunkId> {
+    // Stateのキーのうち、チャンクを分割するもの
+    const collectionKeys = new Set(['items', 'textItems', 'webPageItems'])
+
+    for (const firstKey of Object.keys(state)) {
+      if (collectionKeys.has(firstKey)) {
+        // @ts-ignore
+        for (const secondKey of Object.keys(state[firstKey])) {
+          yield ChunkId.fromPropertyPath(List.of(firstKey, secondKey))
+        }
+      } else {
+        yield firstKey
+      }
+    }
+  }
+
+  // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。
+  // TODO: setPropertyみたいに再帰関数でやるべきじゃないかな？
+  export function create(state: State, chunkId: ChunkId): Chunk {
+    const propertyPath = ChunkId.toPropertyPath(chunkId)
+    const firstKey = propertyPath.get(0)
+    const secondKey = propertyPath.get(1)
+    // @ts-ignore
+    const rawObject = secondKey === undefined ? state[firstKey] : state[firstKey][secondKey]
+    return {
+      id: chunkId,
+      json: JSON.stringify(rawObject, State.jsonReplacer),
+    }
+  }
+
+  /**
+   * チャンクリストからStateみたいなオブジェクトを作る。
+   * できあがったオブジェクトがStateのスキーマを満たしていることは全く検証・保証しない。
+   */
+  export function inflateStateFromChunks(chunks: List<Chunk>): object {
+    const result = {}
+    for (const chunk of chunks) {
+      setProperty(result, chunk.id, JSON.parse(chunk.json, State.jsonReviver))
+    }
+    return result
+  }
+
+  // a.b.cみたいなネストしたプロパティアクセスでヌルポにならないよう気をつけつつ値を設定する
+  function setProperty(targetObject: any, chunkId: ChunkId, value: any) {
+    const propertyPath = ChunkId.toPropertyPath(chunkId)
+    if (propertyPath.size === 1) {
+      targetObject[propertyPath.get(0)!!] = value
+    } else {
+      if (targetObject[propertyPath.get(0)!!] === undefined) {
+        targetObject[propertyPath.get(0)!!] = {}
+      }
+      setProperty(
+        targetObject[propertyPath.get(0)!!],
+        ChunkId.fromPropertyPath(propertyPath.shift()),
+        value
+      )
+    }
+  }
+}
