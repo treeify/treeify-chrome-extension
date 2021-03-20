@@ -99,7 +99,9 @@ export function onCreated(tab: Tab) {
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   doWithErrorHandling(() => {
     const itemId = External.instance.tabIdToItemId.get(tabId)
-    assertNonUndefined(itemId)
+    // document.titleを変更した際はonUpdatedが呼ばれる。自身に対応するアイテムIDは存在しない
+    if (itemId === undefined) return
+
     reflectInWebPageItem(itemId, tab)
 
     NextState.commit()
