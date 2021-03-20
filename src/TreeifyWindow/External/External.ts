@@ -11,6 +11,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {DataFolder} from 'src/TreeifyWindow/Internal/NullaryCommand/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -85,6 +86,9 @@ export class External {
   render(state: State) {
     const spaRoot = document.getElementById('spa-root')!
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
+
+    // Treeifyウィンドウのタイトルを更新する
+    document.title = this.deriveTreeifyWindowTitle(state)
   }
 
   /** DOMを再描画する */
@@ -127,6 +131,13 @@ export class External {
       })
       focusTrap.activate()
     }
+
+    // Treeifyウィンドウのタイトルを更新する
+    document.title = this.deriveTreeifyWindowTitle(newState)
+  }
+
+  deriveTreeifyWindowTitle(state: State): string {
+    return getContentAsPlainText(state.activePageId)
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */

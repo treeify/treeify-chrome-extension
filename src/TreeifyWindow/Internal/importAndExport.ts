@@ -20,8 +20,8 @@ function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
   return childLines.unshift(line)
 }
 
-// アイテムタイプごとのフォーマットでコンテンツをプレーンテキスト化する
-function getContentAsPlainText(itemId: ItemId): string {
+/** アイテムタイプごとのフォーマットでコンテンツをプレーンテキスト化する */
+export function getContentAsPlainText(itemId: ItemId): string {
   const itemType = NextState.getItemType(itemId)
   switch (itemType) {
     case ItemType.TEXT:
