@@ -123,7 +123,7 @@ export function ItemTreeWebPageContentView(
           })}
           src=${viewModel.faviconUrl}
           @click=${viewModel.onClickFavicon}
-        /> `
+        />`
       : html`<div
           class="item-tree-web-page-content_favicon default-favicon"
           @click=${viewModel.onClickFavicon}

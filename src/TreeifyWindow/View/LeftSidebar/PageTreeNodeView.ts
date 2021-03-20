@@ -164,7 +164,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 }
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
-  return html` <div class="page-tree-node">
+  return html`<div class="page-tree-node">
     ${!viewModel.isRoot
       ? html`<div class="page-tree-node_bullet-and-indent-area">
           ${PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel)}
