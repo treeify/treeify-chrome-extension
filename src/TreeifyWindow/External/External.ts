@@ -163,7 +163,12 @@ export class External {
 
     // 変化のあったチャンクをデータベースに書き込む
     for (const chunkId of Chunk.extractChunkIds(mutatedPropertyPaths)) {
-      this.dataFolder.writeChunk(Chunk.create(newState, chunkId))
+      const chunk = Chunk.create(newState, chunkId)
+      if (chunk !== undefined) {
+        this.dataFolder.writeChunk(chunk)
+      } else {
+        this.dataFolder.deleteFile(chunkId)
+      }
     }
   }
 }

@@ -2,10 +2,12 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {List} from 'immutable'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 
-// 【具体例】
-// "items_0"
-// "nextNewItemId"
-type ChunkId = string
+/**
+ * 【具体例】
+ * "items_0"
+ * "nextNewItemId"
+ */
+export type ChunkId = string
 
 export namespace ChunkId {
   const delimiter = '_'
@@ -36,7 +38,7 @@ export namespace Chunk {
   const collectionKeys = new Set(['items', 'textItems', 'webPageItems'])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
-  export function createAllChunks(state: State): List<Chunk> {
+  export function createAllChunks(state: State): List<Chunk | undefined> {
     return List(yieldAllChunkIds(state)).map((chunkId) => {
       return create(state, chunkId)
     })
@@ -71,16 +73,19 @@ export namespace Chunk {
 
   // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。
   // TODO: setPropertyみたいに再帰関数でやるべきじゃないかな？
-  export function create(state: State, chunkId: ChunkId): Chunk {
+  export function create(state: State, chunkId: ChunkId): Chunk | undefined {
     const propertyPath = ChunkId.toPropertyPath(chunkId)
     const firstKey = propertyPath.get(0)
     const secondKey = propertyPath.get(1)
     // @ts-ignore
     const rawObject = secondKey === undefined ? state[firstKey] : state[firstKey][secondKey]
-    return {
-      id: chunkId,
-      json: JSON.stringify(rawObject, State.jsonReplacer),
+    if (rawObject !== undefined) {
+      return {
+        id: chunkId,
+        json: JSON.stringify(rawObject, State.jsonReplacer),
+      }
     }
+    return undefined
   }
 
   /**

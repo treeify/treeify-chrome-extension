@@ -1,4 +1,4 @@
-import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
+import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {List} from 'immutable'
 
 /**
@@ -44,5 +44,10 @@ export class DataFolder {
     const writableFileStream = await fileHandle.createWritable()
     await writableFileStream.write(chunk.json)
     await writableFileStream.close()
+  }
+
+  async deleteFile(chunkId: ChunkId) {
+    const fileName = `${chunkId}.json`
+    await this.folderHandle.removeEntry(fileName)
   }
 }
