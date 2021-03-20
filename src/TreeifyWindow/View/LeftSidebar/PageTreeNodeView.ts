@@ -24,6 +24,8 @@ export type PageTreeNodeViewModel = {
   childNodeViewModels: List<PageTreeNodeViewModel>
   onClickContentArea: () => void
   onClickCloseButton: () => void
+  onDragOver: (event: DragEvent) => void
+  onDrop: (event: DragEvent) => void
   isActivePage: boolean
 }
 
@@ -116,6 +118,29 @@ export function createPageTreeNodeViewModel(
         NextState.commit()
       })
     },
+    onDragOver: (event) => {
+      // ドロップを動作させるために必要
+      event.preventDefault()
+    },
+    onDrop: (event) => {
+      doWithErrorHandling(() => {
+        if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
+
+        const data = event.dataTransfer.getData('application/treeify')
+        const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+
+        // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
+        // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
+        if (draggedItemPath.parentItemId === undefined) return
+
+        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
+
+        NextState.insertFirstChildItem(itemId, draggedItemPath.itemId)
+        NextState.updateItemTimestamp(draggedItemPath.itemId)
+        NextState.commit()
+      })
+    },
+
     isActivePage: state.activePageId === itemId,
   }
 }
@@ -149,7 +174,12 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
           'active-page': viewModel.isActivePage,
         })}
       >
-        <div class="page-tree-node_content-area" @click=${viewModel.onClickContentArea}>
+        <div
+          class="page-tree-node_content-area"
+          @click=${viewModel.onClickContentArea}
+          @dragover=${viewModel.onDragOver}
+          @drop=${viewModel.onDrop}
+        >
           ${PageTreeContentView(viewModel.contentViewModel)}
         </div>
         <div class="page-tree-node_close-button" @click=${viewModel.onClickCloseButton}></div>
