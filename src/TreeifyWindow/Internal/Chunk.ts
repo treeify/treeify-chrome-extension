@@ -32,6 +32,9 @@ export type Chunk = {
 
 /** チャンク関連のコードをまとめる名前空間 */
 export namespace Chunk {
+  // Stateのキーのうち、チャンクを分割するもの
+  const collectionKeys = new Set(['items', 'textItems', 'webPageItems'])
+
   /** Stateオブジェクト全体をチャンクリストに変換する */
   export function createAllChunks(state: State): List<Chunk> {
     return List(yieldAllChunkIds(state)).map((chunkId) => {
@@ -41,9 +44,6 @@ export namespace Chunk {
 
   // Stateオブジェクトのkeysをenumerateして、チャンクID群を生成する
   export function* yieldAllChunkIds(state: State): Generator<ChunkId> {
-    // Stateのキーのうち、チャンクを分割するもの
-    const collectionKeys = new Set(['items', 'textItems', 'webPageItems'])
-
     for (const firstKey of Object.keys(state)) {
       if (collectionKeys.has(firstKey)) {
         // @ts-ignore
@@ -54,6 +54,19 @@ export namespace Chunk {
         yield firstKey
       }
     }
+  }
+
+  /** Stateに変更を加えた全てのPropertyPath集合から、ChunkIdの集合を生成する */
+  export function extractChunkIds(propertyPaths: Set<PropertyPath>): Set<ChunkId> {
+    const result = new Set<ChunkId>()
+    for (const propertyPath of propertyPaths) {
+      if (collectionKeys.has(propertyPath.get(0)!!.toString())) {
+        result.add(ChunkId.fromPropertyPath(propertyPath.take(2)))
+      } else {
+        result.add(ChunkId.fromPropertyPath(propertyPath.take(1)))
+      }
+    }
+    return result
   }
 
   // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。

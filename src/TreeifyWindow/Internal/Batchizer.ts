@@ -74,17 +74,23 @@ export class Batchizer {
     this.postSetMutation(propertyPath, undefined)
   }
 
-  /** 全てのMutationを適用し、stateを変更する */
-  commit() {
+  /**
+   * 全てのMutationを適用し、stateを変更する。
+   * Mutationを適用した全てのプロパティパスの集合を返す。
+   */
+  commit(): Set<PropertyPath> {
+    const mutatedPropertyPaths = new Set<PropertyPath>()
     const propertyPaths = this.getAllPropertyPaths()
     for (const propertyPath of propertyPaths) {
       // TODO: ちょっとした最適化の余地あり（getMutationsが2回呼ばれる）
       if (!this.getMutations(propertyPath).isEmpty()) {
         this.setOriginalValue(propertyPath, this.getDerivedValue(propertyPath))
+        mutatedPropertyPaths.add(propertyPath)
       }
     }
 
     this.clearPostedMutations()
+    return mutatedPropertyPaths
   }
 
   /** 全ての未適用のMutationを破棄する */

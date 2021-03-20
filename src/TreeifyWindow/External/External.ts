@@ -10,6 +10,7 @@ import {createFocusTrap} from 'focus-trap'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {DataFolder} from 'src/TreeifyWindow/Internal/NullaryCommand/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 import Tab = chrome.tabs.Tab
 
 /** TODO: コメント */
@@ -157,8 +158,12 @@ export class External {
   /**
    * データフォルダへの書き込みを行う。
    */
-  requestWriteDataFolder(newState: State) {
-    const allChunks = Chunk.createAllChunks(newState)
-    this.dataFolder?.writeChunks(allChunks)
+  requestWriteDataFolder(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
+    if (this.dataFolder === undefined) return
+
+    // 変化のあったチャンクをデータベースに書き込む
+    for (const chunkId of Chunk.extractChunkIds(mutatedPropertyPaths)) {
+      this.dataFolder.writeChunk(Chunk.create(newState, chunkId))
+    }
   }
 }
