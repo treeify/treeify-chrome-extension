@@ -138,6 +138,10 @@
   flex-grow: 1;
 
   cursor: default;
+
+  /* ページツリーではテキストは折り返さない */
+  overflow-x: hidden;
+  white-space: nowrap;
 }
 
 .page-tree-node_close-button {
