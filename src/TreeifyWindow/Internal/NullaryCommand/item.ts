@@ -448,6 +448,10 @@ export function showPage() {
   if (NextState.isPage(targetItemPath.itemId)) {
     NextState.mountPage(targetItemPath.itemId)
     NextState.setActivePageId(targetItemPath.itemId)
+
+    // ページ切り替え後はそのページのターゲットアイテムをフォーカス
+    const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+    External.instance.requestFocusAfterRendering(elementId)
   }
 }
 
@@ -458,6 +462,9 @@ export function becomeAndShowPage() {
   NextState.becomePage(targetItemPath.itemId)
   NextState.mountPage(targetItemPath.itemId)
   NextState.setActivePageId(targetItemPath.itemId)
+  // ページ切り替え後はそのページのターゲットアイテムをフォーカス
+  const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+  External.instance.requestFocusAfterRendering(elementId)
 }
 
 /**
