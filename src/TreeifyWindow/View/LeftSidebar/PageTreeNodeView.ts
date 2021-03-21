@@ -17,6 +17,8 @@ import {
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {External} from 'src/TreeifyWindow/External/External'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
@@ -96,6 +98,11 @@ export function createPageTreeNodeViewModel(
         NextState.setActivePageId(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
         NextState.setIsFloatingLeftSidebarShown(false)
+
+        // ページ切り替え後はそのページのターゲットアイテムをフォーカス
+        const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+        External.instance.requestFocusAfterRendering(elementId)
+
         NextState.commit()
       })
     },
@@ -114,6 +121,9 @@ export function createPageTreeNodeViewModel(
             })
             .maxBy((a) => a.timestamp)!!.pageId
           NextState.setActivePageId(hottestPageId)
+          // ページ切り替え後はそのページのターゲットアイテムをフォーカス
+          const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+          External.instance.requestFocusAfterRendering(elementId)
         }
 
         NextState.commit()
