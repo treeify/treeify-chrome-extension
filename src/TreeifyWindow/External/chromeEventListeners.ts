@@ -44,7 +44,7 @@ export function onCreated(tab: Tab) {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
-        if (targetItemPath.hasParent()) {
+        if (ItemPath.hasParent(targetItemPath)) {
           // いわゆる「新しいタブ」は弟として追加する
           NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 

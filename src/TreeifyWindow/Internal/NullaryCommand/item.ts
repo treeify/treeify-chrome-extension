@@ -229,7 +229,7 @@ export function enterKeyDefault() {
     assertNonUndefined(textItemSelection)
 
     // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
-    if (!targetItemPath.hasParent()) {
+    if (!ItemPath.hasParent(targetItemPath)) {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
@@ -341,7 +341,7 @@ export function enterKeyDefault() {
     // ターゲットアイテムがテキストアイテム以外の場合
 
     // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
-    if (!targetItemPath.hasParent()) {
+    if (!ItemPath.hasParent(targetItemPath)) {
       // 新規アイテムを最初の子として追加する
       const newItemId = NextState.createTextItem()
       NextState.insertFirstChildItem(targetItemId, newItemId)

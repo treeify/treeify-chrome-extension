@@ -50,7 +50,7 @@ export function createItemTreeNodeViewModel(
 
   return {
     itemPath,
-    isActivePage: !itemPath.hasParent(),
+    isActivePage: !ItemPath.hasParent(itemPath),
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
@@ -145,7 +145,7 @@ function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> 
   const item = state.items[itemId]
   const isPage = state.pages[itemId] !== undefined
   if (isPage) {
-    return itemPath.hasParent() ? List.of() : item.childItemIds
+    return ItemPath.hasParent(itemPath) ? List.of() : item.childItemIds
   }
   return item.isFolded ? List.of() : item.childItemIds
 }
