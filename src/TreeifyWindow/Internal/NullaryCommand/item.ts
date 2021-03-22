@@ -63,7 +63,7 @@ export function unindentItem() {
 
   // 既存の親子関係を削除
   const focusedItemId = ItemPath.getItemId(targetItemPath)
-  NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!!, focusedItemId)
+  NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, focusedItemId)
 
   // 親の弟として配置する
   NextState.insertNextSiblingItem(parentItemPath, focusedItemId)
@@ -122,7 +122,7 @@ export function moveItemUpward() {
     NextState.insertPrevSiblingItem(aboveItemPath, targetItemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(targetItemParentItemId!!, targetItemId)
+    NextState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
 
     NextState.updateItemTimestamp(targetItemId)
 
@@ -180,7 +180,7 @@ export function moveItemDownward() {
       NextState.insertNextSiblingItem(firstFollowingItemPath, targetItemId)
 
       // 既存の親子関係を削除
-      NextState.removeItemGraphEdge(targetItemParentItemId!!, targetItemId)
+      NextState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
 
       NextState.updateItemTimestamp(targetItemId)
 
@@ -201,7 +201,7 @@ export function moveItemDownward() {
     NextState.insertFirstChildItem(ItemPath.getItemId(firstFollowingItemPath), targetItemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!!, targetItemId)
+    NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
 
     NextState.updateItemTimestamp(targetItemId)
 

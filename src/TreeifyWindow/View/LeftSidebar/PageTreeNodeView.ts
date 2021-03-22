@@ -51,8 +51,8 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
   for (let i = 1; i < itemPath.size; i++) {
-    const childItemIds = NextState.getChildItemIds(itemPath.get(i - 1)!!)
-    siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!!))
+    const childItemIds = NextState.getChildItemIds(itemPath.get(i - 1)!)
+    siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
   }
   return List(siblingRankArray)
 }
@@ -62,8 +62,8 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
   const min = Math.min(lhs.size, rhs.size)
 
   for (let i = 0; i < min; i++) {
-    const r = rhs.get(i)!!
-    const l = lhs.get(i)!!
+    const r = rhs.get(i)!
+    const l = lhs.get(i)!
     if (l > r) {
       return 1
     } else if (l < r) {
@@ -118,7 +118,7 @@ export function createPageTreeNodeViewModel(
                 timestamp: NextState.getItemTimestamp(pageId),
               }
             })
-            .maxBy((a) => a.timestamp)!!.pageId
+            .maxBy((a) => a.timestamp)!.pageId
           NextState.setActivePageId(hottestPageId)
           // ページ切り替え後はそのページのターゲットアイテムをフォーカス
           const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())

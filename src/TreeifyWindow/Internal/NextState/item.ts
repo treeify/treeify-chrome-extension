@@ -224,7 +224,7 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(parentItemId!!))
+  modifyParentItems(newItemId, (itemIds) => itemIds.push(parentItemId!))
 }
 
 /**
@@ -250,7 +250,7 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(parentItemId!!))
+  modifyParentItems(newItemId, (itemIds) => itemIds.push(parentItemId!))
 }
 
 /**
