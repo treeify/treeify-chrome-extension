@@ -37,7 +37,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
     ...searchItemPathForMountedPage(state, List.of(itemId)),
   ])
   const pageTreeEdges = List(itemPaths)
-    .groupBy((value) => value.rootItemId)
+    .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
       return collection.toList().sortBy((itemPath) => {
         return toSiblingRankList(itemPath)
