@@ -104,7 +104,7 @@ export function createItemTreeNodeViewModel(
         // ドラッグ中にマウスポインターに追随して表示される内容を設定
         event.dataTransfer.setDragImage(domElement, 0, 0)
 
-        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath.itemIds))
+        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
       })
     },
     onDragOver: (event) => {

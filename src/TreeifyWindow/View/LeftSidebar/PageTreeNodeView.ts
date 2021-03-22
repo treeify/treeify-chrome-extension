@@ -50,10 +50,9 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
 // アイテムパスを兄弟順位リストに変換する
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
-  const itemIds = itemPath.itemIds
-  for (let i = 1; i < itemIds.size; i++) {
-    const childItemIds = NextState.getChildItemIds(itemIds.get(i - 1)!!)
-    siblingRankArray.push(childItemIds.indexOf(itemIds.get(i)!!))
+  for (let i = 1; i < itemPath.size; i++) {
+    const childItemIds = NextState.getChildItemIds(itemPath.get(i - 1)!!)
+    siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!!))
   }
   return List(siblingRankArray)
 }
