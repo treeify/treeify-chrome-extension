@@ -23,10 +23,11 @@ export function createItemTreeTextContentViewModel(
   state: State,
   itemPath: ItemPath
 ): ItemTreeTextContentViewModel {
+  const itemId = ItemPath.getItemId(itemPath)
   return {
     itemPath,
     itemType: ItemType.TEXT,
-    domishObjects: state.textItems[itemPath.itemId].domishObjects,
+    domishObjects: state.textItems[itemId].domishObjects,
     onInput: (event) => {
       doWithErrorHandling(() => {
         // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
@@ -36,7 +37,7 @@ export function createItemTreeTextContentViewModel(
 
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
-          NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+          NextState.setTextItemDomishObjects(itemId, domishObjects)
 
           // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
           // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
@@ -51,7 +52,7 @@ export function createItemTreeTextContentViewModel(
             ItemTreeContentView.focusableDomElementId(itemPath)
           )
 
-          NextState.updateItemTimestamp(itemPath.itemId)
+          NextState.updateItemTimestamp(itemId)
           NextState.commit()
         }
       })
@@ -61,7 +62,7 @@ export function createItemTreeTextContentViewModel(
         if (event.target instanceof Node) {
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
-          NextState.setTextItemDomishObjects(itemPath.itemId, domishObjects)
+          NextState.setTextItemDomishObjects(itemId, domishObjects)
           External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
           // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
@@ -77,7 +78,7 @@ export function createItemTreeTextContentViewModel(
             ItemTreeContentView.focusableDomElementId(itemPath)
           )
 
-          NextState.updateItemTimestamp(itemPath.itemId)
+          NextState.updateItemTimestamp(itemId)
           NextState.commit()
         }
       })

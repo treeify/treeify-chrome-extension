@@ -37,7 +37,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
     ...searchItemPathForMountedPage(state, List.of(itemId)),
   ])
   const pageTreeEdges = List(itemPaths)
-    .groupBy((value) => value.rootItemId)
+    .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
       return collection.toList().sortBy((itemPath) => {
         return toSiblingRankList(itemPath)
@@ -50,10 +50,9 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
 // アイテムパスを兄弟順位リストに変換する
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
-  const itemIds = itemPath.itemIds
-  for (let i = 1; i < itemIds.size; i++) {
-    const childItemIds = NextState.getChildItemIds(itemIds.get(i - 1)!!)
-    siblingRankArray.push(childItemIds.indexOf(itemIds.get(i)!!))
+  for (let i = 1; i < itemPath.size; i++) {
+    const childItemIds = NextState.getChildItemIds(itemPath.get(i - 1)!)
+    siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
   }
   return List(siblingRankArray)
 }
@@ -63,8 +62,8 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
   const min = Math.min(lhs.size, rhs.size)
 
   for (let i = 0; i < min; i++) {
-    const r = rhs.get(i)!!
-    const l = lhs.get(i)!!
+    const r = rhs.get(i)!
+    const l = lhs.get(i)!
     if (l > r) {
       return 1
     } else if (l < r) {
@@ -91,7 +90,7 @@ export function createPageTreeNodeViewModel(
     bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
     contentViewModel: createPageTreeContentViewModel(state, itemId),
     childNodeViewModels: childPagePaths.map((childPagePath) =>
-      createPageTreeNodeViewModel(state, childPagePath.itemId, pageTreeEdges)
+      createPageTreeNodeViewModel(state, ItemPath.getItemId(childPagePath), pageTreeEdges)
     ),
     onClickContentArea: () => {
       doWithErrorHandling(() => {
@@ -119,7 +118,7 @@ export function createPageTreeNodeViewModel(
                 timestamp: NextState.getItemTimestamp(pageId),
               }
             })
-            .maxBy((a) => a.timestamp)!!.pageId
+            .maxBy((a) => a.timestamp)!.pageId
           NextState.setActivePageId(hottestPageId)
           // ページ切り替え後はそのページのターゲットアイテムをフォーカス
           const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
@@ -138,16 +137,17 @@ export function createPageTreeNodeViewModel(
         if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')
-        const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+        const draggedItemPath: ItemPath = List(JSON.parse(data))
+        const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-        if (draggedItemPath.parentItemId === undefined) return
+        if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
+        NextState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
 
-        NextState.insertFirstChildItem(itemId, draggedItemPath.itemId)
-        NextState.updateItemTimestamp(draggedItemPath.itemId)
+        NextState.insertFirstChildItem(itemId, draggedItemId)
+        NextState.updateItemTimestamp(draggedItemId)
         NextState.commit()
       })
     },
@@ -164,7 +164,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 
   // もし他のマウント済みページに到達したら、そのページまでの経路を返す
   if (itemIds.size > 1 && state.mountedPageIds.contains(itemId)) {
-    yield new ItemPath(itemIds)
+    yield itemIds
     return
   }
 

@@ -45,12 +45,12 @@ export function createItemTreeNodeViewModel(
   footprintCount: integer,
   itemPath: ItemPath
 ): ItemTreeNodeViewModel {
-  const item = state.items[itemPath.itemId]
+  const item = state.items[ItemPath.getItemId(itemPath)]
   const visibleChildItemIds = getVisibleChildItemIds(state, itemPath)
 
   return {
     itemPath,
-    isActivePage: !itemPath.hasParent(),
+    isActivePage: !ItemPath.hasParent(itemPath),
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
@@ -61,7 +61,7 @@ export function createItemTreeNodeViewModel(
         state,
         footprintRankMap,
         footprintCount,
-        itemPath.createChildItemPath(childItemId)
+        itemPath.push(childItemId)
       )
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
@@ -104,7 +104,7 @@ export function createItemTreeNodeViewModel(
         // ドラッグ中にマウスポインターに追随して表示される内容を設定
         event.dataTransfer.setDragImage(domElement, 0, 0)
 
-        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath.itemIds))
+        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
       })
     },
     onDragOver: (event) => {
@@ -116,23 +116,24 @@ export function createItemTreeNodeViewModel(
         if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')
-        const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+        const draggedItemPath: ItemPath = List(JSON.parse(data))
+        const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-        if (draggedItemPath.parentItemId === undefined) return
+        if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
+        NextState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
 
         if (event.offsetY < event.target.offsetHeight / 2) {
           // ドロップ先座標がコンテンツ領域の上半分の場合
-          NextState.insertPrevSiblingItem(itemPath, draggedItemPath.itemId)
+          NextState.insertPrevSiblingItem(itemPath, draggedItemId)
         } else {
           // ドロップ先座標がコンテンツ領域の下半分の場合
-          NextState.insertNextSiblingItem(itemPath, draggedItemPath.itemId)
+          NextState.insertNextSiblingItem(itemPath, draggedItemId)
         }
 
-        NextState.updateItemTimestamp(draggedItemPath.itemId)
+        NextState.updateItemTimestamp(draggedItemId)
         NextState.commit()
       })
     },
@@ -140,10 +141,11 @@ export function createItemTreeNodeViewModel(
 }
 
 function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
-  const item = state.items[itemPath.itemId]
-  const isPage = state.pages[itemPath.itemId] !== undefined
+  const itemId = ItemPath.getItemId(itemPath)
+  const item = state.items[itemId]
+  const isPage = state.pages[itemId] !== undefined
   if (isPage) {
-    return itemPath.hasParent() ? List.of() : item.childItemIds
+    return ItemPath.hasParent(itemPath) ? List.of() : item.childItemIds
   }
   return item.isFolded ? List.of() : item.childItemIds
 }

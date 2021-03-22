@@ -62,7 +62,7 @@ export namespace Chunk {
   export function extractChunkIds(propertyPaths: Set<PropertyPath>): Set<ChunkId> {
     const result = new Set<ChunkId>()
     for (const propertyPath of propertyPaths) {
-      if (collectionKeys.has(propertyPath.get(0)!!.toString())) {
+      if (collectionKeys.has(propertyPath.get(0)!.toString())) {
         result.add(ChunkId.fromPropertyPath(propertyPath.take(2)))
       } else {
         result.add(ChunkId.fromPropertyPath(propertyPath.take(1)))
@@ -104,13 +104,13 @@ export namespace Chunk {
   function setProperty(targetObject: any, chunkId: ChunkId, value: any) {
     const propertyPath = ChunkId.toPropertyPath(chunkId)
     if (propertyPath.size === 1) {
-      targetObject[propertyPath.get(0)!!] = value
+      targetObject[propertyPath.get(0)!] = value
     } else {
-      if (targetObject[propertyPath.get(0)!!] === undefined) {
-        targetObject[propertyPath.get(0)!!] = {}
+      if (targetObject[propertyPath.get(0)!] === undefined) {
+        targetObject[propertyPath.get(0)!] = {}
       }
       setProperty(
-        targetObject[propertyPath.get(0)!!],
+        targetObject[propertyPath.get(0)!],
         ChunkId.fromPropertyPath(propertyPath.shift()),
         value
       )

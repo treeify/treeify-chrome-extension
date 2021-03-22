@@ -12,6 +12,7 @@ import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   doWithErrorHandling(() => {
@@ -40,15 +41,16 @@ export function onCreated(tab: Tab) {
       External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
       const targetItemPath = NextState.getTargetItemPath()
+      const targetItemId = ItemPath.getItemId(targetItemPath)
 
       if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
-        if (targetItemPath.hasParent()) {
+        if (ItemPath.hasParent(targetItemPath)) {
           // いわゆる「新しいタブ」は弟として追加する
           NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
+            const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newWebPageItemId)
             assertNonUndefined(newItemPath)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
@@ -56,11 +58,11 @@ export function onCreated(tab: Tab) {
           }
         } else {
           // アクティブアイテムの最初の子として追加する
-          NextState.insertFirstChildItem(targetItemPath.itemId, newWebPageItemId)
+          NextState.insertFirstChildItem(targetItemId, newWebPageItemId)
 
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+            const newItemPath = targetItemPath.push(newWebPageItemId)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
             )
@@ -74,10 +76,10 @@ export function onCreated(tab: Tab) {
         NextState.insertLastChildItem(openerItemId, newWebPageItemId)
 
         // openerがターゲットアイテムなら
-        if (targetItemPath.itemId === openerItemId) {
+        if (targetItemId === openerItemId) {
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+            const newItemPath = targetItemPath.push(newWebPageItemId)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
             )

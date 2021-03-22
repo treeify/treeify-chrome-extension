@@ -5,6 +5,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
@@ -19,12 +20,12 @@ export function createWebPageItemTitleSettingDialogViewModel(
   if (state.webPageItemTitleSettingDialog === null) return undefined
 
   const targetItemPath = state.pages[state.activePageId].targetItemPath
+  const targetItemId = ItemPath.getItemId(targetItemPath)
 
   return {
     webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
     initialTitle:
-      NextState.getWebPageItemTitle(targetItemPath.itemId) ??
-      NextState.getWebPageItemTabTitle(targetItemPath.itemId),
+      NextState.getWebPageItemTitle(targetItemId) ?? NextState.getWebPageItemTabTitle(targetItemId),
     onKeyDown: (event) => {
       doWithErrorHandling(() => {
         if (event.isComposing) return
@@ -32,9 +33,9 @@ export function createWebPageItemTitleSettingDialogViewModel(
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
           if (event.target.value === '') {
             // 入力欄が空の状態でEnterキーを押したらタイトル設定を削除する
-            NextState.setWebPageItemTitle(targetItemPath.itemId, null)
+            NextState.setWebPageItemTitle(targetItemId, null)
           } else {
-            NextState.setWebPageItemTitle(targetItemPath.itemId, event.target.value)
+            NextState.setWebPageItemTitle(targetItemId, event.target.value)
           }
           // タイトル設定ダイアログを閉じる
           NextState.setWebPageItemTitleSettingDialog(null)

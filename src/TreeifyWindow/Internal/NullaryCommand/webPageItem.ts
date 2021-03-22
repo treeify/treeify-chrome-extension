@@ -2,12 +2,13 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {External} from 'src/TreeifyWindow/External/External'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** ウェブページアイテムのアンロード操作 */
 export function unloadItem() {
   const targetItemPath = NextState.getTargetItemPath()
 
-  const tabId = External.instance.itemIdToTabId.get(targetItemPath.itemId)
+  const tabId = External.instance.itemIdToTabId.get(ItemPath.getItemId(targetItemPath))
   // 対応するタブがなければ何もしない
   if (tabId === undefined) return
 
@@ -19,9 +20,9 @@ export function unloadItem() {
 
 /** ウェブページアイテムのサブツリーアンロード操作 */
 export function unloadSubtree() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
 
-  for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemPath.itemId)) {
+  for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.itemIdToTabId.get(subtreeItemId)
     if (tabId !== undefined) {
       // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
@@ -35,20 +36,21 @@ export function unloadSubtree() {
 
 /** ウェブページアイテムのロード操作 */
 export function loadItem() {
-  const targetItemPath = NextState.getTargetItemPath()
-  const tabId = External.instance.itemIdToTabId.get(targetItemPath.itemId)
+  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const tabId = External.instance.itemIdToTabId.get(targetItemId)
   // 対応するタブがあれば何もしない
   if (tabId !== undefined) return
 
-  const url = NextState.getWebPageItemUrl(targetItemPath.itemId)
+  const url = NextState.getWebPageItemUrl(targetItemId)
   const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
-  External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemPath.itemId))
+  External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
   chrome.tabs.create({url, active: false})
 }
 
 /** ウェブページアイテムのサブツリーロード操作 */
 export function loadSubtree() {
-  for (const subtreeItemId of NextState.getSubtreeItemIds(NextState.getTargetItemPath().itemId)) {
+  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.itemIdToTabId.get(subtreeItemId)
     if (tabId === undefined) {
       const url = NextState.getWebPageItemUrl(subtreeItemId)
@@ -65,8 +67,9 @@ export function loadSubtree() {
  */
 export function browseWebPageItem() {
   const targetItemPath = NextState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  const tabId = External.instance.itemIdToTabId.get(targetItemPath.itemId)
+  const tabId = External.instance.itemIdToTabId.get(targetItemId)
   if (tabId !== undefined) {
     // ウェブページアイテムに対応するタブを最前面化する
     assertNonUndefined(tabId)
@@ -76,9 +79,9 @@ export function browseWebPageItem() {
     chrome.windows.update(tab.windowId, {focused: true})
   } else {
     // 対応するタブがなければ開く
-    const url = NextState.getWebPageItemUrl(targetItemPath.itemId)
+    const url = NextState.getWebPageItemUrl(targetItemId)
     const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
-    External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemPath.itemId))
+    External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
     chrome.tabs.create({url, active: true}, (tab) => {
       chrome.windows.update(tab.windowId, {focused: true})
     })

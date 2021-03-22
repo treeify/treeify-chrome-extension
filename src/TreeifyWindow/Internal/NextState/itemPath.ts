@@ -29,8 +29,9 @@ export function setTargetItemPath(itemPath: ItemPath) {
  * アクティブページには1つ上のアイテムが存在しないのでundefinedを返す。
  */
 export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
+  const parentItemPath = ItemPath.getParent(itemPath)
   // 親が居ない場合（アクティブページの場合）は上のアイテムは存在しない
-  if (itemPath.parent === undefined) return undefined
+  if (parentItemPath === undefined) return undefined
 
   const prevSiblingItemPath = findPrevSiblingItemPath(itemPath)
   if (prevSiblingItemPath !== undefined) {
@@ -38,7 +39,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
     return getLowerEndItemPath(prevSiblingItemPath)
   } else {
     // 兄が居ない場合は親が該当アイテムである
-    return itemPath.parent
+    return parentItemPath
   }
 }
 
@@ -54,11 +55,12 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  * 該当アイテムが存在しない場合はundefinedを返す。
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const firstChildItemId = NextState.getDisplayingChildItemIds(itemPath.itemId).first(undefined)
+  const itemId = ItemPath.getItemId(itemPath)
+  const firstChildItemId = NextState.getDisplayingChildItemIds(itemId).first(undefined)
   // 表示されているアイテムが存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子アイテムが該当アイテムである
-    return itemPath.createChildItemPath(firstChildItemId)
+    return itemPath.push(firstChildItemId)
   }
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを返す
@@ -74,11 +76,12 @@ export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undef
   // 自身に弟が居る場合は弟を返す
   if (nextSiblingItemPath !== undefined) return nextSiblingItemPath
 
+  const parentItemPath = ItemPath.getParent(itemPath)
   // 親が居ない場合（アクティブページに到達した場合）はfollowingアイテムなしなのでundefinedを返す
-  if (itemPath.parent === undefined) return undefined
+  if (parentItemPath === undefined) return undefined
 
   // 子孫の弟を再帰的に探索する
-  return findFirstFollowingItemPath(itemPath.parent)
+  return findFirstFollowingItemPath(parentItemPath)
 }
 
 /**
@@ -86,16 +89,16 @@ export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undef
  * もし兄が存在しないときはundefinedを返す。
  */
 export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const parentItemPath = itemPath.parent
+  const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath === undefined) return undefined
 
-  const siblingItemIds = NextState.getChildItemIds(parentItemPath.itemId)
+  const siblingItemIds = NextState.getChildItemIds(ItemPath.getItemId(parentItemPath))
 
-  const index = siblingItemIds.indexOf(itemPath.itemId)
+  const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が長男の場合
   if (index === 0) return undefined
 
-  return parentItemPath.createChildItemPath(siblingItemIds.get(index - 1)!)
+  return parentItemPath.push(siblingItemIds.get(index - 1)!)
 }
 
 /**
@@ -103,16 +106,16 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  * もし弟が存在しないときはundefinedを返す。
  */
 export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const parentItemPath = itemPath.parent
+  const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath === undefined) return undefined
 
-  const siblingItemIds = NextState.getChildItemIds(parentItemPath.itemId)
+  const siblingItemIds = NextState.getChildItemIds(ItemPath.getItemId(parentItemPath))
 
-  const index = siblingItemIds.indexOf(itemPath.itemId)
+  const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が末弟の場合
   if (index === siblingItemIds.size - 1) return undefined
 
-  return parentItemPath.createChildItemPath(siblingItemIds.get(index + 1)!)
+  return parentItemPath.push(siblingItemIds.get(index + 1)!)
 }
 
 /**
@@ -125,12 +128,13 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  * というツリーではDが該当する。
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
-  if (NextState.getDisplayingChildItemIds(itemPath.itemId).isEmpty()) {
+  const itemId = ItemPath.getItemId(itemPath)
+  if (NextState.getDisplayingChildItemIds(itemId).isEmpty()) {
     // 子を表示していない場合、このアイテムこそが最も下のアイテムである
     return itemPath
   }
 
-  const childItemIds = NextState.getChildItemIds(itemPath.itemId)
+  const childItemIds = NextState.getChildItemIds(itemId)
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
-  return getLowerEndItemPath(itemPath.createChildItemPath(childItemIds.last()))
+  return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }
