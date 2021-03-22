@@ -50,7 +50,7 @@ export function onCreated(tab: Tab) {
 
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = targetItemPath.createSiblingItemPath(newWebPageItemId)
+            const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newWebPageItemId)
             assertNonUndefined(newItemPath)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
@@ -62,7 +62,7 @@ export function onCreated(tab: Tab) {
 
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+            const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newWebPageItemId)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
             )

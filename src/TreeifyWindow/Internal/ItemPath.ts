@@ -43,8 +43,12 @@ export namespace ItemPath {
   }
 
   /** このItemPathの末尾のItemIdを置き換えることで新しいItemPathを作成する */
-  export function createSiblingItemPath(itemPath: ItemPath, siblingItemId: ItemId): ItemPath {
-    assert(!itemPath.isEmpty())
+  export function createSiblingItemPath(
+    itemPath: ItemPath,
+    siblingItemId: ItemId
+  ): ItemPath | undefined {
+    if (!hasParent(itemPath)) return undefined
+
     return itemPath.set(-1, siblingItemId)
   }
 }

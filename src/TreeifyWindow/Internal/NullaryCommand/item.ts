@@ -42,8 +42,9 @@ export function indentItem() {
   NextState.updateItemTimestamp(targetItemId)
 
   // フォーカスを移動先に更新する
+  const siblingItemPath = ItemPath.createSiblingItemPath(prevSiblingItemPath, targetItemId)
   External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(prevSiblingItemPath.createChildItemPath(targetItemId))
+    ItemTreeContentView.focusableDomElementId(siblingItemPath)
   )
 
   // キャレット位置、テキスト選択範囲を維持する
@@ -69,8 +70,9 @@ export function unindentItem() {
   NextState.updateItemTimestamp(focusedItemId)
 
   // フォーカスを移動先に更新する
+  const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, focusedItemId)!
   External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(parentItemPath.createSiblingItemPath(focusedItemId)!!)
+    ItemTreeContentView.focusableDomElementId(siblingItemPath)
   )
 
   // キャレット位置、テキスト選択範囲を維持する
@@ -121,7 +123,7 @@ export function moveItemUpward() {
     NextState.updateItemTimestamp(targetItemId)
 
     // フォーカスを移動先に更新する
-    const newTargetItemPath = aboveItemPath.createSiblingItemPath(targetItemId)
+    const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
     assertNonUndefined(newTargetItemPath)
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newTargetItemPath)
@@ -178,7 +180,7 @@ export function moveItemDownward() {
       NextState.updateItemTimestamp(targetItemId)
 
       // フォーカスを移動先に更新する
-      const newTargetItemPath = firstFollowingItemPath.createSiblingItemPath(targetItemId)
+      const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
       assertNonUndefined(newTargetItemPath)
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(newTargetItemPath)
@@ -259,8 +261,9 @@ export function enterKeyDefault() {
       NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
       // キャレット位置を更新する
+      const siblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
       External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
+        ItemTreeContentView.focusableDomElementId(siblingItemPath)
       )
       External.instance.requestSetCaretDistanceAfterRendering(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
@@ -330,7 +333,7 @@ export function enterKeyDefault() {
         // キャレット位置を更新する
         External.instance.requestFocusAfterRendering(
           ItemTreeContentView.focusableDomElementId(
-            targetItemPath.createSiblingItemPath(newItemId)!!
+            ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
           )
         )
         External.instance.requestSetCaretDistanceAfterRendering(0)
@@ -369,8 +372,9 @@ export function enterKeyDefault() {
       NextState.insertNextSiblingItem(targetItemPath, newItemId)
 
       // フォーカスを移す
+      const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
       External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.createSiblingItemPath(newItemId)!!)
+        ItemTreeContentView.focusableDomElementId(newItemPath)
       )
     }
   }
@@ -418,7 +422,7 @@ export function deleteItemItself() {
     )
   } else {
     // 子がいる場合は最初の子をフォーカス
-    const newItemPath = targetItemPath.createSiblingItemPath(childItemIds.first())
+    const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds.first())
     assertNonUndefined(newItemPath)
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newItemPath)

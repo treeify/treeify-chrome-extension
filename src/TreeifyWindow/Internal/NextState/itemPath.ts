@@ -60,7 +60,7 @@ export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   // 表示されているアイテムが存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子アイテムが該当アイテムである
-    return itemPath.createChildItemPath(firstChildItemId)
+    return ItemPath.createSiblingItemPath(itemPath, firstChildItemId)
   }
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを返す
@@ -98,7 +98,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が長男の場合
   if (index === 0) return undefined
 
-  return parentItemPath.createChildItemPath(siblingItemIds.get(index - 1)!)
+  return ItemPath.createSiblingItemPath(parentItemPath, siblingItemIds.get(index - 1)!)
 }
 
 /**
@@ -115,7 +115,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が末弟の場合
   if (index === siblingItemIds.size - 1) return undefined
 
-  return parentItemPath.createChildItemPath(siblingItemIds.get(index + 1)!)
+  return ItemPath.createSiblingItemPath(parentItemPath, siblingItemIds.get(index + 1)!)
 }
 
 /**
