@@ -201,7 +201,7 @@ export function moveItemDownward() {
     NextState.updateItemTimestamp(targetItemId)
 
     // フォーカスを移動先に更新する
-    const newTargetItemPath = firstFollowingItemPath.createChildItemPath(targetItemId)
+    const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(newTargetItemPath)
     )
@@ -247,7 +247,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+        ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
       )
       External.instance.requestSetCaretDistanceAfterRendering(0)
       return
@@ -310,7 +310,7 @@ export function enterKeyDefault() {
 
         // キャレット位置を更新する
         External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+          ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
         )
         External.instance.requestSetCaretDistanceAfterRendering(0)
       } else {
@@ -350,7 +350,7 @@ export function enterKeyDefault() {
 
       // フォーカスを移す
       External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+        ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
       )
       return
     }
@@ -363,7 +363,7 @@ export function enterKeyDefault() {
 
       // フォーカスを移す
       External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.createChildItemPath(newItemId))
+        ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
       )
     } else {
       // もし子を表示していないなら

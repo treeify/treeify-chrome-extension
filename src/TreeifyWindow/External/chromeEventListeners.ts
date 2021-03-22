@@ -79,7 +79,7 @@ export function onCreated(tab: Tab) {
         if (targetItemId === openerItemId) {
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = targetItemPath.createChildItemPath(newWebPageItemId)
+            const newItemPath = targetItemPath.push(newWebPageItemId)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
             )

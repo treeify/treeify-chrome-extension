@@ -61,7 +61,7 @@ export function createItemTreeNodeViewModel(
         state,
         footprintRankMap,
         footprintCount,
-        itemPath.createChildItemPath(childItemId)
+        itemPath.push(childItemId)
       )
     }),
     onMouseDownContentArea: (event: MouseEvent) => {

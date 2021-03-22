@@ -37,11 +37,6 @@ export namespace ItemPath {
     }
   }
 
-  /** このItemPathの末尾にItemIdを追加することで新しいItemPathを作成する */
-  export function createChildItemPath(itemPath: ItemPath, childItemId: ItemId): ItemPath {
-    return itemPath.push(childItemId)
-  }
-
   /** このItemPathの末尾のItemIdを置き換えることで新しいItemPathを作成する */
   export function createSiblingItemPath(
     itemPath: ItemPath,

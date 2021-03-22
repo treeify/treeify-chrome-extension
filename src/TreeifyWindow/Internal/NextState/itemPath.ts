@@ -136,5 +136,5 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
 
   const childItemIds = NextState.getChildItemIds(itemId)
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
-  return getLowerEndItemPath(itemPath.createChildItemPath(childItemIds.last()))
+  return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }
