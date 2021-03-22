@@ -66,7 +66,7 @@ export function deleteItemItself(itemId: ItemId) {
     modifyParentItems(childItemId, (itemIds) => {
       const index = itemIds.indexOf(itemId)
       assert(index !== -1)
-      return itemIds.splice(index, 1, ...childItemIds)
+      return itemIds.splice(index, 1, ...parentItemIds)
     })
   }
 
