@@ -53,25 +53,24 @@ export function indentItem() {
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
   const targetItemPath = NextState.getTargetItemPath()
+  const parentItemPath = ItemPath.getParent(targetItemPath)
 
   // 親または親の親が居ない場合は何もしない
-  if (targetItemPath.parent === undefined) return
-  if (targetItemPath.parent.parent === undefined) return
+  if (parentItemPath === undefined) return
+  if (!ItemPath.hasParent(parentItemPath)) return
 
   // 既存の親子関係を削除
   const focusedItemId = ItemPath.getItemId(targetItemPath)
   NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!!, focusedItemId)
 
   // 親の弟として配置する
-  NextState.insertNextSiblingItem(targetItemPath.parent, focusedItemId)
+  NextState.insertNextSiblingItem(parentItemPath, focusedItemId)
 
   NextState.updateItemTimestamp(focusedItemId)
 
   // フォーカスを移動先に更新する
   External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(
-      targetItemPath.parent.createSiblingItemPath(focusedItemId)!!
-    )
+    ItemTreeContentView.focusableDomElementId(parentItemPath.createSiblingItemPath(focusedItemId)!!)
   )
 
   // キャレット位置、テキスト選択範囲を維持する
@@ -385,7 +384,7 @@ export function deleteItem() {
   const targetItemPath = NextState.getTargetItemPath()
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (targetItemPath.parent === null) return
+  if (!ItemPath.hasParent(targetItemPath)) return
 
   // 上のアイテムをフォーカス
   const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
@@ -407,7 +406,7 @@ export function deleteItemItself() {
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (targetItemPath.parent === null) return
+  if (!ItemPath.hasParent(targetItemPath)) return
 
   const childItemIds = NextState.getChildItemIds(targetItemId)
   if (childItemIds.isEmpty()) {

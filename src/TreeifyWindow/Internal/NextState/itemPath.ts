@@ -29,8 +29,9 @@ export function setTargetItemPath(itemPath: ItemPath) {
  * アクティブページには1つ上のアイテムが存在しないのでundefinedを返す。
  */
 export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
+  const parentItemPath = ItemPath.getParent(itemPath)
   // 親が居ない場合（アクティブページの場合）は上のアイテムは存在しない
-  if (itemPath.parent === undefined) return undefined
+  if (parentItemPath === undefined) return undefined
 
   const prevSiblingItemPath = findPrevSiblingItemPath(itemPath)
   if (prevSiblingItemPath !== undefined) {
@@ -38,7 +39,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
     return getLowerEndItemPath(prevSiblingItemPath)
   } else {
     // 兄が居ない場合は親が該当アイテムである
-    return itemPath.parent
+    return parentItemPath
   }
 }
 
@@ -75,11 +76,12 @@ export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undef
   // 自身に弟が居る場合は弟を返す
   if (nextSiblingItemPath !== undefined) return nextSiblingItemPath
 
+  const parentItemPath = ItemPath.getParent(itemPath)
   // 親が居ない場合（アクティブページに到達した場合）はfollowingアイテムなしなのでundefinedを返す
-  if (itemPath.parent === undefined) return undefined
+  if (parentItemPath === undefined) return undefined
 
   // 子孫の弟を再帰的に探索する
-  return findFirstFollowingItemPath(itemPath.parent)
+  return findFirstFollowingItemPath(parentItemPath)
 }
 
 /**
@@ -87,7 +89,7 @@ export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undef
  * もし兄が存在しないときはundefinedを返す。
  */
 export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const parentItemPath = itemPath.parent
+  const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath === undefined) return undefined
 
   const siblingItemIds = NextState.getChildItemIds(ItemPath.getItemId(parentItemPath))
@@ -104,7 +106,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  * もし弟が存在しないときはundefinedを返す。
  */
 export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const parentItemPath = itemPath.parent
+  const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath === undefined) return undefined
 
   const siblingItemIds = NextState.getChildItemIds(ItemPath.getItemId(parentItemPath))
