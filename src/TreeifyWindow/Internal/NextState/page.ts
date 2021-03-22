@@ -19,7 +19,10 @@ export function getMountedPageIds(): List<ItemId> {
   return NextState.getBatchizer().getDerivedValue(PropertyPath.of('mountedPageIds'))
 }
 
-/** ページをマウントする */
+/**
+ * ページをマウントする。
+ * マウント済みの場合は何もしない
+ */
 export function mountPage(itemId: ItemId) {
   const mountedPageIds = NextState.getMountedPageIds()
   if (mountedPageIds.contains(itemId)) return
@@ -30,7 +33,10 @@ export function mountPage(itemId: ItemId) {
   )
 }
 
-/** ページをアンマウントする */
+/**
+ * ページをアンマウントする。
+ * マウントされていない場合は何もしない。
+ */
 export function unmountPage(itemId: ItemId) {
   const mountedPageIds = NextState.getMountedPageIds()
   const index = mountedPageIds.indexOf(itemId)
@@ -59,9 +65,11 @@ export function becomePage(itemId: ItemId) {
   NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
 }
 
-/** 与えられたアイテムを非ページ化する */
+/**
+ * 与えられたアイテムを非ページ化する。
+ * 既に非ページだった場合は何もしない。
+ */
 export function becomeNonPage(itemId: ItemId) {
-  // 既に非ページだった場合は何もしない
   if (!isPage(itemId)) return
 
   NextState.deleteProperty(PropertyPath.of('pages', itemId))
