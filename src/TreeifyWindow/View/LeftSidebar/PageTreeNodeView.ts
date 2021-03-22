@@ -142,9 +142,9 @@ export function createPageTreeNodeViewModel(
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-        if (draggedItemPath.parentItemId === undefined) return
+        if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemId)
+        NextState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
 
         NextState.insertFirstChildItem(itemId, draggedItemId)
         NextState.updateItemTimestamp(draggedItemId)

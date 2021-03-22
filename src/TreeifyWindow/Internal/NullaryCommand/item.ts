@@ -86,12 +86,15 @@ export function unindentItem() {
 export function moveItemUpward() {
   const targetItemPath = NextState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
+  const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
   const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
   // 1つ上のアイテムが存在しない場合は何もしない
   if (aboveItemPath === undefined) return
+
+  const aboveItemParentItemId = ItemPath.getParentItemId(aboveItemPath)
   // 1つ上のアイテムがアクティブページである場合も何もしない
-  if (aboveItemPath.parentItemId === undefined) return
+  if (aboveItemParentItemId === undefined) return
 
   // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
   // 兄弟リスト内に同一アイテムが複数存在する状況は（NextStateの途中状態だったとしても）許容しない。
@@ -101,7 +104,7 @@ export function moveItemUpward() {
   // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
   // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
 
-  if (aboveItemPath.parentItemId === targetItemPath.parentItemId) {
+  if (aboveItemParentItemId === targetItemParentItemId) {
     // 1つ上のアイテムが兄である場合、兄弟リスト内を兄方向に1つ移動する
     NextState.moveToPrevSibling(targetItemPath)
 
@@ -118,7 +121,7 @@ export function moveItemUpward() {
     NextState.insertPrevSiblingItem(aboveItemPath, targetItemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(targetItemPath.parentItemId!!, targetItemId)
+    NextState.removeItemGraphEdge(targetItemParentItemId!!, targetItemId)
 
     NextState.updateItemTimestamp(targetItemId)
 
@@ -141,6 +144,7 @@ export function moveItemUpward() {
 export function moveItemDownward() {
   const targetItemPath = NextState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
+  const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
   const firstFollowingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
@@ -158,7 +162,7 @@ export function moveItemDownward() {
     // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
     // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
 
-    if (firstFollowingItemPath.parentItemId === targetItemPath.parentItemId) {
+    if (ItemPath.getParentItemId(firstFollowingItemPath) === targetItemParentItemId) {
       // 兄弟リスト内を弟方向に1つ移動する
       NextState.moveToNextSibling(targetItemPath)
 
@@ -175,7 +179,7 @@ export function moveItemDownward() {
       NextState.insertNextSiblingItem(firstFollowingItemPath, targetItemId)
 
       // 既存の親子関係を削除
-      NextState.removeItemGraphEdge(targetItemPath.parentItemId!!, targetItemId)
+      NextState.removeItemGraphEdge(targetItemParentItemId!!, targetItemId)
 
       NextState.updateItemTimestamp(targetItemId)
 
@@ -196,7 +200,7 @@ export function moveItemDownward() {
     NextState.insertFirstChildItem(ItemPath.getItemId(firstFollowingItemPath), targetItemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(targetItemPath.parentItemId!!, targetItemId)
+    NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!!, targetItemId)
 
     NextState.updateItemTimestamp(targetItemId)
 

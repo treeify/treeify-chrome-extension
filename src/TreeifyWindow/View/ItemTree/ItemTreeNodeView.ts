@@ -121,9 +121,9 @@ export function createItemTreeNodeViewModel(
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-        if (draggedItemPath.parentItemId === undefined) return
+        if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemId)
+        NextState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
 
         if (event.offsetY < event.target.offsetHeight / 2) {
           // ドロップ先座標がコンテンツ領域の上半分の場合
