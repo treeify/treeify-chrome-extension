@@ -11,7 +11,11 @@ import {
 import {External} from 'src/TreeifyWindow/External/External'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
-import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
+import {
+  createItemFromSingleLineText,
+  detectUrl,
+  pasteMultilineText,
+} from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -115,7 +119,16 @@ function onPaste(event: ClipboardEvent) {
   const text = event.clipboardData.getData('text/plain')
   if (!text.includes('\n')) {
     // 1行だけのテキストの場合
-    document.execCommand('insertText', false, text)
+
+    const url = detectUrl(text)
+    if (url !== undefined) {
+      // URLを含むなら
+      const newItemId = createItemFromSingleLineText(text)
+      NextState.insertNextSiblingItem(NextState.getTargetItemPath(), newItemId)
+      NextState.commit()
+    } else {
+      document.execCommand('insertText', false, text)
+    }
   } else {
     // 複数行にわたるテキストの場合
     pasteMultilineText(text)

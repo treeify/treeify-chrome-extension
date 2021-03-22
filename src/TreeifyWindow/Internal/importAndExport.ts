@@ -137,16 +137,52 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
 }
 
 // TODO: URLが画像かどうか判定するためにasyncにしなければならないかも
-function createItemFromSingleLineText(line: string): ItemId {
-  // TODO: URLが含まれている場合は非テキストアイテムを作る
+export function createItemFromSingleLineText(line: string): ItemId {
+  const url = detectUrl(line)
+  if (url !== undefined) {
+    // URLが含まれている場合
 
-  const itemId = NextState.createTextItem()
-  NextState.setTextItemDomishObjects(
-    itemId,
-    List.of({
-      type: 'text',
-      textContent: line,
-    })
-  )
-  return itemId
+    // ウェブページアイテムを作る
+    const title = line.replace(url, '').trim()
+    const itemId = NextState.createWebPageItem()
+    NextState.setWebPageItemTitle(itemId, title)
+    NextState.setWebPageItemUrl(itemId, url)
+    return itemId
+  } else {
+    // URLが含まれていない場合
+
+    // テキストアイテムを作る
+    const itemId = NextState.createTextItem()
+    NextState.setTextItemDomishObjects(
+      itemId,
+      List.of({
+        type: 'text',
+        textContent: line,
+      })
+    )
+    return itemId
+  }
+}
+
+/**
+ * 与えられたテキストに含まれるURLを返す。
+ * URLが見つからなかった場合はundefinedを返す。
+ * 複数のURLが含まれる場合、最初に出てきたものを返す。
+ * ChromeのタブのURLとして使われる可能性があるので、about:blank と chrome://* はURL扱いする。
+ *
+ * なおURLには仕様上()や[]が含まれていても許される。
+ * そのためMarkdownやScrapboxのリンク記法をこの関数では正しく扱えないので注意。
+ * TODO: いわゆる日本語ドメイン名に対応する
+ */
+export function detectUrl(text: string): string | undefined {
+  if (text.includes('about:blank')) {
+    return 'about:blank'
+  }
+
+  const result = text.match(/(https?|file|chrome):\/\/[\w.,/:;'()\[\]%$&@#?!=+*~\-_]+/)
+  if (result !== null) {
+    return result[0]
+  }
+
+  return undefined
 }
