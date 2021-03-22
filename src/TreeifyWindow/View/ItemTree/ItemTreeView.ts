@@ -125,15 +125,17 @@ function onArrowLeft(event: KeyboardEvent) {
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
+  const aboveItemId = ItemPath.getItemId(aboveItemPath)
+
   const textItemSelection = getTextItemSelectionFromDom()
   if (textItemSelection === undefined) {
     // ターゲットアイテムが非テキストアイテムだと断定する
 
-    const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
+    const aboveItemType = NextState.getItemType(aboveItemId)
     if (aboveItemType === ItemType.TEXT) {
       // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
       event.preventDefault()
-      const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+      const domishObjects = NextState.getTextItemDomishObjects(aboveItemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
       External.instance.requestSetCaretDistanceAfterRendering(characterCount)
       External.instance.requestFocusAfterRendering(
@@ -154,11 +156,11 @@ function onArrowLeft(event: KeyboardEvent) {
       return
     }
 
-    const aboveItemType = NextState.getItemType(aboveItemPath.itemId)
+    const aboveItemType = NextState.getItemType(aboveItemId)
     if (aboveItemType === ItemType.TEXT) {
       // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
       event.preventDefault()
-      const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+      const domishObjects = NextState.getTextItemDomishObjects(aboveItemId)
       const characterCount = DomishObject.countCharacters(domishObjects)
       External.instance.requestSetCaretDistanceAfterRendering(characterCount)
       External.instance.requestFocusAfterRendering(
@@ -186,11 +188,13 @@ function onArrowRight(event: KeyboardEvent) {
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
+  const belowItemId = ItemPath.getItemId(belowItemPath)
+
   const textItemSelection = getTextItemSelectionFromDom()
   if (textItemSelection === undefined) {
     // ターゲットアイテムが非テキストアイテムだと断定する
 
-    const belowItemType = NextState.getItemType(belowItemPath.itemId)
+    const belowItemType = NextState.getItemType(belowItemId)
     if (belowItemType === ItemType.TEXT) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
@@ -208,7 +212,7 @@ function onArrowRight(event: KeyboardEvent) {
       NextState.commit()
     }
   } else {
-    const domishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
+    const domishObjects = NextState.getTextItemDomishObjects(ItemPath.getItemId(targetItemPath))
     const characterCount = DomishObject.countCharacters(domishObjects)
 
     // キャレット位置が末尾以外のときはブラウザの挙動に任せる
@@ -219,7 +223,7 @@ function onArrowRight(event: KeyboardEvent) {
       return
     }
 
-    const belowItemType = NextState.getItemType(belowItemPath.itemId)
+    const belowItemType = NextState.getItemType(belowItemId)
     if (belowItemType === ItemType.TEXT) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
@@ -249,7 +253,7 @@ function onArrowUp(event: KeyboardEvent) {
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
-  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+  if (NextState.getItemType(ItemPath.getItemId(targetItemPath)) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
     const caretLineNumber = getCaretLineNumber()
@@ -264,9 +268,10 @@ function onArrowUp(event: KeyboardEvent) {
 }
 
 function moveFocusToAboveItem(aboveItemPath: ItemPath) {
-  if (NextState.getItemType(aboveItemPath.itemId) === ItemType.TEXT) {
+  const aboveItemId = ItemPath.getItemId(aboveItemPath)
+  if (NextState.getItemType(aboveItemId) === ItemType.TEXT) {
     // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
-    const domishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+    const domishObjects = NextState.getTextItemDomishObjects(aboveItemId)
     External.instance.requestSetCaretDistanceAfterRendering(
       DomishObject.countCharacters(domishObjects)
     )
@@ -288,7 +293,7 @@ function onArrowDown(event: KeyboardEvent) {
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+  if (NextState.getItemType(ItemPath.getItemId(targetItemPath)) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
     const caretLineNumber = getCaretLineNumber()
@@ -309,7 +314,7 @@ function onArrowDown(event: KeyboardEvent) {
 }
 
 function moveFocusToBelowItem(belowItemPath: ItemPath) {
-  if (NextState.getItemType(belowItemPath.itemId) === ItemType.TEXT) {
+  if (NextState.getItemType(ItemPath.getItemId(belowItemPath)) === ItemType.TEXT) {
     // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
     External.instance.requestSetCaretDistanceAfterRendering(0)
   }
@@ -322,7 +327,8 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  if (NextState.getItemType(targetItemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
     const selection = getTextItemSelectionFromDom()
@@ -334,29 +340,31 @@ function onBackspace(event: KeyboardEvent) {
       // アクティブアイテムなら何もしない
       if (aboveItemPath === undefined) return
 
-      if (NextState.getItemType(aboveItemPath.itemId) !== ItemType.TEXT) {
+      const aboveItemId = ItemPath.getItemId(aboveItemPath)
+
+      if (NextState.getItemType(aboveItemId) !== ItemType.TEXT) {
         // 上のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
         // ターゲットアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
         // テキストを連結
-        const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
-        const aboveItemDomishObjects = NextState.getTextItemDomishObjects(aboveItemPath.itemId)
+        const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemId)
+        const aboveItemDomishObjects = NextState.getTextItemDomishObjects(aboveItemId)
         // TODO: テキストノード同士が連結されないことが気がかり
         NextState.setTextItemDomishObjects(
-          aboveItemPath.itemId,
+          aboveItemId,
           aboveItemDomishObjects.concat(focusedItemDomishObjects)
         )
 
         // 子リストを連結するため、子を全て弟としてエッジ追加。
         // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of NextState.getChildItemIds(targetItemPath.itemId)) {
+        for (const childItemId of NextState.getChildItemIds(targetItemId)) {
           NextState.insertNextSiblingItem(targetItemPath, childItemId)
         }
 
         // ↑の元のエッジごと削除
-        NextState.deleteItem(targetItemPath.itemId)
+        NextState.deleteItem(targetItemId)
 
         // 上のアイテムの元の末尾にキャレットを移動する
         External.instance.requestFocusAfterRendering(
@@ -379,13 +387,14 @@ function onBackspace(event: KeyboardEvent) {
 /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
   const targetItemPath = NextState.getTargetItemPath()
-  if (NextState.getItemType(targetItemPath.itemId) === ItemType.TEXT) {
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  if (NextState.getItemType(targetItemId) === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
     const selection = getTextItemSelectionFromDom()
     assertNonUndefined(selection)
 
-    const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemPath.itemId)
+    const focusedItemDomishObjects = NextState.getTextItemDomishObjects(targetItemId)
     const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
     if (selection.focusDistance === characterCount && selection.anchorDistance === characterCount) {
       // キャレットが末尾にあるなら
@@ -394,28 +403,30 @@ function onDelete(event: KeyboardEvent) {
       // 一番下のアイテムなら何もしない
       if (belowItemPath === undefined) return
 
-      if (NextState.getItemType(belowItemPath.itemId) !== ItemType.TEXT) {
+      const belowItemId = ItemPath.getItemId(belowItemPath)
+
+      if (NextState.getItemType(belowItemId) !== ItemType.TEXT) {
         // 下のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
         // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
         // テキストを連結
-        const belowItemDomishObjects = NextState.getTextItemDomishObjects(belowItemPath.itemId)
+        const belowItemDomishObjects = NextState.getTextItemDomishObjects(belowItemId)
         // TODO: テキストノード同士が連結されないことが気がかり
         NextState.setTextItemDomishObjects(
-          targetItemPath.itemId,
+          targetItemId,
           focusedItemDomishObjects.concat(belowItemDomishObjects)
         )
 
         // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
         // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of NextState.getChildItemIds(belowItemPath.itemId)) {
+        for (const childItemId of NextState.getChildItemIds(belowItemId)) {
           NextState.insertNextSiblingItem(belowItemPath, childItemId)
         }
 
         // ↑の元のエッジごと削除
-        NextState.deleteItem(belowItemPath.itemId)
+        NextState.deleteItem(belowItemId)
 
         event.preventDefault()
         NextState.commit()
@@ -429,7 +440,8 @@ function onDelete(event: KeyboardEvent) {
 
 /** アイテムツリー上でSpaceキーを押したときのデフォルトの挙動 */
 function onSpace(event: KeyboardEvent) {
-  const targetItemType = NextState.getItemType(NextState.getTargetItemPath().itemId)
+  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const targetItemType = NextState.getItemType(targetItemId)
   if (targetItemType === ItemType.WEB_PAGE) {
     event.preventDefault()
 

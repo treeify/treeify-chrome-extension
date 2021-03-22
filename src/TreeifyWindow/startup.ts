@@ -14,6 +14,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {pasteMultilineText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -80,7 +81,9 @@ function onCopy(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = NextState.exportAsIndentedText(NextState.getTargetItemPath().itemId)
+    const contentText = NextState.exportAsIndentedText(
+      ItemPath.getItemId(NextState.getTargetItemPath())
+    )
     event.clipboardData.setData('text/plain', contentText)
   }
 }
@@ -94,7 +97,9 @@ function onCut(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = NextState.exportAsIndentedText(NextState.getTargetItemPath().itemId)
+    const contentText = NextState.exportAsIndentedText(
+      ItemPath.getItemId(NextState.getTargetItemPath())
+    )
     event.clipboardData.setData('text/plain', contentText)
 
     NullaryCommand.deleteItem()

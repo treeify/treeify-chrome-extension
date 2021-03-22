@@ -27,8 +27,9 @@ export function createItemTreeWebPageContentViewModel(
   state: State,
   itemPath: ItemPath
 ): ItemTreeWebPageContentViewModel {
-  const webPageItem = state.webPageItems[itemPath.itemId]
-  const tabId = External.instance.itemIdToTabId.get(itemPath.itemId)
+  const itemId = ItemPath.getItemId(itemPath)
+  const webPageItem = state.webPageItems[itemId]
+  const tabId = External.instance.itemIdToTabId.get(itemId)
 
   const isLoading =
     tabId !== undefined ? External.instance.tabIdToTab.get(tabId)?.status === 'loading' : false

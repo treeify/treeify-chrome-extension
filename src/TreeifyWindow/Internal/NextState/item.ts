@@ -209,16 +209,17 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId) {
  * @param newItemId 兄として追加されるアイテム
  */
 export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
+  const itemId = ItemPath.getItemId(itemPath)
   // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
   if (itemPath.parentItemId === undefined) return
 
   const childItemIds = getChildItemIds(itemPath.parentItemId)
   // 親の子リストに自身が含まれない場合、すなわち不正なItemPathの場合は何もしない
-  if (!childItemIds.contains(itemPath.itemId)) return
+  if (!childItemIds.contains(itemId)) return
 
   // 兄として追加する
   modifyChildItems(itemPath.parentItemId, (itemIds) => {
-    return itemIds.insert(itemIds.indexOf(itemPath.itemId), newItemId)
+    return itemIds.insert(itemIds.indexOf(itemId), newItemId)
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
@@ -233,16 +234,17 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
  * @param newItemId 弟として追加されるアイテム
  */
 export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
+  const itemId = ItemPath.getItemId(itemPath)
   // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
   if (itemPath.parentItemId === undefined) return
 
   const childItemIds = getChildItemIds(itemPath.parentItemId)
   // 親の子リストに自身が含まれない場合、すなわち不正なItemPathの場合は何もしない
-  if (!childItemIds.contains(itemPath.itemId)) return
+  if (!childItemIds.contains(itemId)) return
 
   // 弟として追加する
   modifyChildItems(itemPath.parentItemId, (itemIds) => {
-    return itemIds.insert(itemIds.indexOf(itemPath.itemId) + 1, newItemId)
+    return itemIds.insert(itemIds.indexOf(itemId) + 1, newItemId)
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
@@ -255,17 +257,18 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
  * 長男だった場合も何もしない。
  */
 export function moveToPrevSibling(itemPath: ItemPath) {
+  const itemId = ItemPath.getItemId(itemPath)
   // アクティブページである場合は何もしない
   if (itemPath.parentItemId === undefined) return
 
   const siblingItemIds = getChildItemIds(itemPath.parentItemId)
-  const oldIndex = siblingItemIds.indexOf(itemPath.itemId)
+  const oldIndex = siblingItemIds.indexOf(itemId)
   // 長男だった場合は何もしない
   if (oldIndex === 0) return
 
   // 子アイテムリスト内で該当アイテムを1つ移動する
   modifyChildItems(itemPath.parentItemId, (itemIds) =>
-    itemIds.remove(oldIndex).insert(oldIndex - 1, itemPath.itemId)
+    itemIds.remove(oldIndex).insert(oldIndex - 1, itemId)
   )
 }
 
@@ -275,17 +278,18 @@ export function moveToPrevSibling(itemPath: ItemPath) {
  * 末弟だった場合も何もしない。
  */
 export function moveToNextSibling(itemPath: ItemPath) {
+  const itemId = ItemPath.getItemId(itemPath)
   // アクティブページである場合は何もしない
   if (itemPath.parentItemId === undefined) return
 
   const siblingItemIds = getChildItemIds(itemPath.parentItemId)
-  const oldIndex = siblingItemIds.indexOf(itemPath.itemId)
+  const oldIndex = siblingItemIds.indexOf(itemId)
   // 末弟だった場合は何もしない
   if (oldIndex === siblingItemIds.size - 1) return
 
   // 子アイテムリスト内で該当アイテムを1つ移動する
   modifyChildItems(itemPath.parentItemId, (itemIds) =>
-    itemIds.remove(oldIndex).insert(oldIndex + 1, itemPath.itemId)
+    itemIds.remove(oldIndex).insert(oldIndex + 1, itemId)
   )
 }
 

@@ -1,11 +1,12 @@
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {ItemType} from 'src/Common/basicType'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {
   const targetItemPath = NextState.getTargetItemPath()
-  switch (NextState.getItemType(targetItemPath.itemId)) {
+  switch (NextState.getItemType(ItemPath.getItemId(targetItemPath))) {
     case ItemType.TEXT:
       break
     case ItemType.WEB_PAGE:

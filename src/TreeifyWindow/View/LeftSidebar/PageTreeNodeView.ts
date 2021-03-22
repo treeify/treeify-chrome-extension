@@ -90,7 +90,7 @@ export function createPageTreeNodeViewModel(
     bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
     contentViewModel: createPageTreeContentViewModel(state, itemId),
     childNodeViewModels: childPagePaths.map((childPagePath) =>
-      createPageTreeNodeViewModel(state, childPagePath.itemId, pageTreeEdges)
+      createPageTreeNodeViewModel(state, ItemPath.getItemId(childPagePath), pageTreeEdges)
     ),
     onClickContentArea: () => {
       doWithErrorHandling(() => {
@@ -138,15 +138,16 @@ export function createPageTreeNodeViewModel(
 
         const data = event.dataTransfer.getData('application/treeify')
         const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+        const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (draggedItemPath.parentItemId === undefined) return
 
-        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
+        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemId)
 
-        NextState.insertFirstChildItem(itemId, draggedItemPath.itemId)
-        NextState.updateItemTimestamp(draggedItemPath.itemId)
+        NextState.insertFirstChildItem(itemId, draggedItemId)
+        NextState.updateItemTimestamp(draggedItemId)
         NextState.commit()
       })
     },

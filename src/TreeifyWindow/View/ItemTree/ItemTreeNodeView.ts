@@ -45,7 +45,7 @@ export function createItemTreeNodeViewModel(
   footprintCount: integer,
   itemPath: ItemPath
 ): ItemTreeNodeViewModel {
-  const item = state.items[itemPath.itemId]
+  const item = state.items[ItemPath.getItemId(itemPath)]
   const visibleChildItemIds = getVisibleChildItemIds(state, itemPath)
 
   return {
@@ -117,22 +117,23 @@ export function createItemTreeNodeViewModel(
 
         const data = event.dataTransfer.getData('application/treeify')
         const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+        const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (draggedItemPath.parentItemId === undefined) return
 
-        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemPath.itemId)
+        NextState.removeItemGraphEdge(draggedItemPath.parentItemId, draggedItemId)
 
         if (event.offsetY < event.target.offsetHeight / 2) {
           // ドロップ先座標がコンテンツ領域の上半分の場合
-          NextState.insertPrevSiblingItem(itemPath, draggedItemPath.itemId)
+          NextState.insertPrevSiblingItem(itemPath, draggedItemId)
         } else {
           // ドロップ先座標がコンテンツ領域の下半分の場合
-          NextState.insertNextSiblingItem(itemPath, draggedItemPath.itemId)
+          NextState.insertNextSiblingItem(itemPath, draggedItemId)
         }
 
-        NextState.updateItemTimestamp(draggedItemPath.itemId)
+        NextState.updateItemTimestamp(draggedItemId)
         NextState.commit()
       })
     },
@@ -140,8 +141,9 @@ export function createItemTreeNodeViewModel(
 }
 
 function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
-  const item = state.items[itemPath.itemId]
-  const isPage = state.pages[itemPath.itemId] !== undefined
+  const itemId = ItemPath.getItemId(itemPath)
+  const item = state.items[itemId]
+  const isPage = state.pages[itemId] !== undefined
   if (isPage) {
     return itemPath.hasParent() ? List.of() : item.childItemIds
   }
