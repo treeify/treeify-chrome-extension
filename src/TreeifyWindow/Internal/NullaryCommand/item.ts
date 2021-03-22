@@ -9,9 +9,9 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  const focusedItemId = ItemPath.getItemId(NextState.getTargetItemPath())
-  NextState.setItemProperty(focusedItemId, 'isFolded', !NextState.getItemIsFolded(focusedItemId))
-  NextState.updateItemTimestamp(focusedItemId)
+  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  NextState.setItemProperty(targetItemId, 'isFolded', !NextState.getItemIsFolded(targetItemId))
+  NextState.updateItemTimestamp(targetItemId)
 }
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
@@ -60,16 +60,16 @@ export function unindentItem() {
   if (!ItemPath.hasParent(parentItemPath)) return
 
   // 既存の親子関係を削除
-  const focusedItemId = ItemPath.getItemId(targetItemPath)
-  NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, focusedItemId)
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
 
   // 親の弟として配置する
-  NextState.insertNextSiblingItem(parentItemPath, focusedItemId)
+  NextState.insertNextSiblingItem(parentItemPath, targetItemId)
 
-  NextState.updateItemTimestamp(focusedItemId)
+  NextState.updateItemTimestamp(targetItemId)
 
   // フォーカスを移動先に更新する
-  const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, focusedItemId)!
+  const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
   External.instance.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(siblingItemPath)
   )
