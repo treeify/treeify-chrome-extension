@@ -116,7 +116,7 @@ export function createItemTreeNodeViewModel(
         if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')
-        const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+        const draggedItemPath: ItemPath = List(JSON.parse(data))
         const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ

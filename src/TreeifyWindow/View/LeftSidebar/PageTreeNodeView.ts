@@ -137,7 +137,7 @@ export function createPageTreeNodeViewModel(
         if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')
-        const draggedItemPath = new ItemPath(List(JSON.parse(data)))
+        const draggedItemPath: ItemPath = List(JSON.parse(data))
         const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
@@ -164,7 +164,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 
   // もし他のマウント済みページに到達したら、そのページまでの経路を返す
   if (itemIds.size > 1 && state.mountedPageIds.contains(itemId)) {
-    yield new ItemPath(itemIds)
+    yield itemIds
     return
   }
 

@@ -1,7 +1,6 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 import {Page} from 'src/TreeifyWindow/Internal/State'
 
@@ -55,7 +54,7 @@ export function becomePage(itemId: ItemId) {
   if (isPage(itemId)) return
 
   const page: Page = {
-    targetItemPath: new ItemPath(List.of(itemId)),
+    targetItemPath: List.of(itemId),
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
 }

@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
 import {Batchizer, PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** TODO: コメント */
@@ -154,10 +153,10 @@ export class Internal {
       },
       pages: {
         '0': {
-          targetItemPath: new ItemPath(List.of(0)),
+          targetItemPath: List.of(0),
         },
         '6': {
-          targetItemPath: new ItemPath(List.of(6)),
+          targetItemPath: List.of(6),
         },
       },
       mountedPageIds: List.of(0),
