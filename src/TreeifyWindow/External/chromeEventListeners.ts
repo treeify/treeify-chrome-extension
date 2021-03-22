@@ -62,8 +62,7 @@ export function onCreated(tab: Tab) {
 
           // フォーカスを移す
           if (tab.active) {
-            const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newWebPageItemId)
-            assertNonUndefined(newItemPath)
+            const newItemPath = targetItemPath.push(newWebPageItemId)
             External.instance.requestFocusAfterRendering(
               ItemTreeContentView.focusableDomElementId(newItemPath)
             )

@@ -42,10 +42,8 @@ export function indentItem() {
   NextState.updateItemTimestamp(targetItemId)
 
   // フォーカスを移動先に更新する
-  const siblingItemPath = ItemPath.createSiblingItemPath(prevSiblingItemPath, targetItemId)
-  assertNonUndefined(siblingItemPath)
   External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(siblingItemPath)
+    ItemTreeContentView.focusableDomElementId(prevSiblingItemPath.push(targetItemId))
   )
 
   // キャレット位置、テキスト選択範囲を維持する
