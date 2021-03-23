@@ -69,7 +69,14 @@ function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemI
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
-  return html`<main id="item-tree" class="item-tree" tabindex="0" @keydown=${onKeyDown}>
+  return html`<main
+    id="item-tree"
+    class="item-tree"
+    tabindex="0"
+    @keydown=${onKeyDown}
+    @dragover=${onDragOver}
+    @drop=${onDrop}
+  >
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </main>`
 }
@@ -449,4 +456,45 @@ function onSpace(event: KeyboardEvent) {
     NullaryCommand.browseWebPageItem()
     NextState.commit()
   }
+}
+
+function onDragOver(event: DragEvent) {
+  // ドロップを動作させるために必要
+  event.preventDefault()
+}
+
+function onDrop(event: DragEvent) {
+  doWithErrorHandling(() => {
+    if (event.dataTransfer === null) return
+
+    // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
+
+    const data = event.dataTransfer.getData('application/treeify')
+    const draggedItemPath: ItemPath = List(JSON.parse(data))
+    // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
+    const parentItemId = ItemPath.getParentItemId(draggedItemPath)
+    if (parentItemId === undefined) return
+
+    // 全アイテムをリスト化し、Y座標でソート
+    const elements = document.getElementsByClassName('item-tree-node_content-area')
+    const sortedElements = List(elements).sortBy((element) => {
+      return element.getBoundingClientRect().bottom
+    }) as List<HTMLElement>
+
+    // ドロップによって挿入される箇所を線形探索
+    const elementIndex = sortedElements.findIndex((element) => {
+      const rect = element.getBoundingClientRect()
+      const middleY = (rect.top + rect.bottom) / 2
+      return middleY > event.clientY
+    })
+    const itemPath: ItemPath = List(JSON.parse(sortedElements.get(elementIndex)!.dataset.itemPath!))
+
+    const draggedItemId = ItemPath.getItemId(draggedItemPath)
+    // エッジを付け替える
+    NextState.removeItemGraphEdge(parentItemId, draggedItemId)
+    NextState.insertPrevSiblingItem(itemPath, draggedItemId)
+
+    NextState.updateItemTimestamp(draggedItemId)
+    NextState.commit()
+  })
 }
