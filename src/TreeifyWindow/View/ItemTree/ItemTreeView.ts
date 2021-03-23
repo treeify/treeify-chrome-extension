@@ -69,7 +69,7 @@ function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemI
 
 /** アイテムツリーの全体のルートView */
 export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
-  return html`<main class="item-tree" @keydown=${onKeyDown}>
+  return html`<main id="item-tree" class="item-tree" tabindex="0" @keydown=${onKeyDown}>
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </main>`
 }

@@ -181,6 +181,7 @@ export class Internal {
         '1000k': {functionName: 'toggleStrikethrough'},
         '1000s': {functionName: 'openDataFolderDialog'},
         '0000F2': {functionName: 'edit'},
+        '0110ArrowDown': {functionName: 'selectAllBelowItems'},
       },
       webPageItemTitleSettingDialog: null,
       treeifyWindowWidth: window.outerWidth,

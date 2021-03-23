@@ -1,4 +1,4 @@
-import {ItemType} from 'src/Common/basicType'
+import {ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
@@ -519,4 +519,21 @@ export function toggleHighlighted() {
 
   // タイムスタンプを更新
   NextState.updateItemTimestamp(targetItemId)
+}
+
+/**
+ * ターゲットアイテムパスの兄弟リストの中で、現在位置から下端までのアイテムを選択する。
+ * 正確に言うと、ターゲットアイテムを兄弟リストの末尾に設定する。
+ */
+export function selectAllBelowItems() {
+  const targetItemPath = NextState.getTargetItemPath()
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  if (parentItemId === undefined) return
+  const lastSiblingItemId: ItemId = NextState.getChildItemIds(parentItemId).last()
+  const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
+  assertNonUndefined(lastSiblingItemPath)
+  NextState.setTargetItemPathOnly(lastSiblingItemPath)
+
+  // 複数選択中はターゲットアイテムからフォーカスを外す
+  document.getElementById('item-tree')?.focus()
 }
