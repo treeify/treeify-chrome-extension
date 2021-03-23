@@ -154,9 +154,11 @@ export class Internal {
       pages: {
         '0': {
           targetItemPath: List.of(0),
+          anchorItemPath: List.of(0),
         },
         '6': {
           targetItemPath: List.of(6),
+          anchorItemPath: List.of(6),
         },
       },
       mountedPageIds: List.of(0),
@@ -179,6 +181,8 @@ export class Internal {
         '1000k': {functionName: 'toggleStrikethrough'},
         '1000s': {functionName: 'openDataFolderDialog'},
         '0000F2': {functionName: 'edit'},
+        '0110ArrowDown': {functionName: 'selectAllBelowItems'},
+        '0110ArrowUp': {functionName: 'selectAllAboveItems'},
       },
       webPageItemTitleSettingDialog: null,
       treeifyWindowWidth: window.outerWidth,

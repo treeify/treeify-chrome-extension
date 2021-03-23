@@ -1,5 +1,5 @@
 import Color from 'color'
-import {List} from 'immutable'
+import {is, List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {repeat} from 'lit-html/directives/repeat'
 import {styleMap} from 'lit-html/directives/style-map'
@@ -21,10 +21,12 @@ import {
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {classMap} from 'lit-html/directives/class-map'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
   isActivePage: boolean
+  isSelected: boolean
   cssClasses: List<string>
   footprintRank: integer | undefined
   footprintCount: integer
@@ -51,6 +53,7 @@ export function createItemTreeNodeViewModel(
   return {
     itemPath,
     isActivePage: !ItemPath.hasParent(itemPath),
+    isSelected: deriveIsSelected(state, itemPath),
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
@@ -140,6 +143,33 @@ export function createItemTreeNodeViewModel(
   }
 }
 
+function deriveIsSelected(state: State, itemPath: ItemPath): boolean {
+  const targetItemPath = state.pages[state.activePageId].targetItemPath
+  const anchorItemPath = state.pages[state.activePageId].anchorItemPath
+  if (is(targetItemPath, anchorItemPath)) {
+    // そもそも複数範囲されていない場合
+    return false
+  }
+
+  if (!is(itemPath.pop(), targetItemPath.pop())) {
+    // 選択されたアイテムパス群がこのアイテムパスと異なる子リスト上に存在する場合
+    return false
+  }
+
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const anchorItemId = ItemPath.getItemId(anchorItemPath)
+
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  if (parentItemId === undefined) return false
+  const childItemIds = state.items[parentItemId].childItemIds
+  const targetItemIndex = childItemIds.indexOf(targetItemId)
+  const anchorItemIndex = childItemIds.indexOf(anchorItemId)
+  const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))
+  const minIndex = Math.min(targetItemIndex, anchorItemIndex)
+  const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
+  return minIndex <= itemIndex && itemIndex <= maxIndex
+}
+
 function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
@@ -158,7 +188,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   })
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 
-  return html`<div class="item-tree-node">
+  return html`<div class=${classMap({'item-tree-node': true, selected: viewModel.isSelected})}>
     ${viewModel.isActivePage
       ? undefined
       : html`

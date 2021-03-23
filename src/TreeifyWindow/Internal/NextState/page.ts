@@ -61,6 +61,7 @@ export function becomePage(itemId: ItemId) {
 
   const page: Page = {
     targetItemPath: List.of(itemId),
+    anchorItemPath: List.of(itemId),
   }
   NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
 }

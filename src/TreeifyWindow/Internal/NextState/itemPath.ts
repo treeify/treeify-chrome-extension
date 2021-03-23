@@ -9,8 +9,22 @@ export function getTargetItemPath(): ItemPath {
   )
 }
 
-/** ターゲットアイテムパスを上書きする */
+/** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
 export function setTargetItemPath(itemPath: ItemPath) {
+  setTargetItemPathOnly(itemPath)
+  setAnchorItemPath(itemPath)
+}
+
+/** アンカーアイテムパスを上書きする */
+export function setAnchorItemPath(itemPath: ItemPath) {
+  NextState.getBatchizer().postSetMutation(
+    PropertyPath.of('pages', NextState.getActivePageId(), 'anchorItemPath'),
+    itemPath
+  )
+}
+
+/** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
+export function setTargetItemPathOnly(itemPath: ItemPath) {
   NextState.getBatchizer().postSetMutation(
     PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath'),
     itemPath

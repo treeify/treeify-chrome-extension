@@ -40,6 +40,9 @@
   /* マウスホバーアイテムの背景色 */
   --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
 
+  /* 複数選択されたアイテムの背景色 */
+  --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
+
   /* 最も新しい足跡の色（線形補間の一端） */
   --strongest-footprint-color: hsl(0, 100%, 96.7%);
   /* 最も古い足跡の色（線形補間の一端） */
@@ -338,4 +341,14 @@
 /* アンロード済みウェブページアイテムのファビコンのグレーアウト */
 .item-tree-web-page-content_favicon.unloaded-item {
   opacity: var(--unloaded-web-page-item-opacity);
+}
+
+/*
+複数選択されたアイテムの背景色設定。
+他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
+CSSの優先順位のためにファイルの下の方で定義する。
+*/
+.selected.item-tree-node,
+.selected .item-tree-node_body-area {
+  background-color: var(--item-tree-selected-item-background-color);
 }
