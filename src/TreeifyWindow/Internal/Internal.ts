@@ -154,9 +154,11 @@ export class Internal {
       pages: {
         '0': {
           targetItemPath: List.of(0),
+          anchorItemPath: List.of(0),
         },
         '6': {
           targetItemPath: List.of(6),
+          anchorItemPath: List.of(6),
         },
       },
       mountedPageIds: List.of(0),
