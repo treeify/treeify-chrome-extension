@@ -49,6 +49,9 @@ export function deleteItem(itemId: ItemId) {
       assertNeverType(itemType)
   }
 
+  NextState.unmountPage(itemId)
+  NextState.becomeNonPage(itemId)
+
   NextState.deleteProperty(PropertyPath.of('items', itemId))
 }
 
@@ -97,6 +100,9 @@ export function deleteItemItself(itemId: ItemId) {
     default:
       assertNeverType(itemType)
   }
+
+  NextState.unmountPage(itemId)
+  NextState.becomeNonPage(itemId)
 
   NextState.deleteProperty(PropertyPath.of('items', itemId))
 }
