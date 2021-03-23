@@ -485,18 +485,20 @@ export function becomeAndShowPage() {
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
-  const targetItemPath = NextState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const selectedItemPaths = NextState.getSelectedItemPaths()
+  for (const selectedItemPath of selectedItemPaths) {
+    const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-  NextState.toggleCssClass(targetItemId, 'grayed-out-item')
+    NextState.toggleCssClass(targetItemId, 'grayed-out-item')
 
-  // タイムスタンプを更新
-  // TODO: 設定で無効化できるようにする
-  NextState.updateItemTimestamp(targetItemId)
+    // タイムスタンプを更新
+    // TODO: 設定で無効化できるようにする
+    NextState.updateItemTimestamp(targetItemId)
+  }
 
   // フォーカスを移動する。
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
-  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
+  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(selectedItemPaths.last())
   if (nextSiblingItemPath !== undefined) {
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(nextSiblingItemPath)
