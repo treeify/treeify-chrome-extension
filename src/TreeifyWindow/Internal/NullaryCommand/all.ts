@@ -27,10 +27,10 @@ import {
   toggleUnderline,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
 import {
+  hardUnloadItem,
+  hardUnloadSubtree,
   loadItem,
   loadSubtree,
-  unloadItem,
-  unloadSubtree,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
@@ -63,8 +63,8 @@ export const functions: {[name: string]: () => void} = {
   toggleUnderline,
   toggleItalic,
   toggleStrikethrough,
-  unloadItem,
-  unloadSubtree,
+  hardUnloadItem,
+  hardUnloadSubtree,
   loadItem,
   loadSubtree,
   edit,
