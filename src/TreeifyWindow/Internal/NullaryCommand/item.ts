@@ -537,3 +537,20 @@ export function selectAllBelowItems() {
   // 複数選択中はターゲットアイテムからフォーカスを外す
   document.getElementById('item-tree')?.focus()
 }
+
+/**
+ * ターゲットアイテムパスの兄弟リストの中で、現在位置から上端までのアイテムを選択する。
+ * 正確に言うと、ターゲットアイテムを兄弟リストの先頭に設定する。
+ */
+export function selectAllAboveItems() {
+  const targetItemPath = NextState.getTargetItemPath()
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  if (parentItemId === undefined) return
+  const firstSiblingItemId: ItemId = NextState.getChildItemIds(parentItemId).first()
+  const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
+  assertNonUndefined(firstSiblingItemPath)
+  NextState.setTargetItemPathOnly(firstSiblingItemPath)
+
+  // 複数選択中はターゲットアイテムからフォーカスを外す
+  document.getElementById('item-tree')?.focus()
+}
