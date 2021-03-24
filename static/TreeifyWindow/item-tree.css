@@ -96,7 +96,7 @@
 
 /* ハイライト状態のアイテム */
 .highlighted-item {
-  background-color: var(--highlighted-item-background-color);
+  background: var(--highlighted-item-background-color);
 }
 
 /* マウスホバー時のボディ領域 */
@@ -131,7 +131,7 @@
   flex-shrink: 0;
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background-color: hsl(0, 0%, 30%);
+  background: hsl(0, 0%, 30%);
   -webkit-mask-image: url('close-icon.svg');
 
   /* マウスホバー時にのみ表示 */
@@ -201,7 +201,7 @@
   height: var(--bullet-page-icon-size);
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background-color: var(--item-tree-bullet-inner-circle-color);
+  background: var(--item-tree-bullet-inner-circle-color);
   -webkit-mask-image: url('./page-icon.svg');
 
   /* 中央寄せ */
@@ -222,7 +222,7 @@
 
 /* インデントライン */
 .item-tree-spool_indent-line {
-  background-color: var(--item-tree-indent-line-color);
+  background: var(--item-tree-indent-line-color);
   width: var(--item-tree-indent-line-width);
   height: 100%;
   margin: 0 auto;
@@ -230,7 +230,7 @@
 
 /* バレットとインデントの領域のホバー時のインデントライン */
 .item-tree-spool:hover .item-tree-spool_indent-line {
-  background-color: var(--item-tree-indent-line-hover-color);
+  background: var(--item-tree-indent-line-hover-color);
 }
 
 /* テキストアイテムのcontenteditableな要素 */
@@ -274,7 +274,7 @@
 /* デフォルトファビコン */
 .item-tree-web-page-content_favicon.default-favicon {
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background-color: hsl(0, 0%, 30%);
+  background: hsl(0, 0%, 30%);
   -webkit-mask-image: url('./default-favicon.svg');
 }
 
@@ -304,7 +304,7 @@
   /* 横幅が縮まないよう設定 */
   flex-shrink: 0;
 
-  background-color: var(--item-tree-audible-icon-color);
+  background: var(--item-tree-audible-icon-color);
   -webkit-mask-image: url('./audible-icon.svg');
 }
 
@@ -350,5 +350,5 @@ CSSの優先順位のためにファイルの下の方で定義する。
 */
 .selected.item-tree-node,
 .selected .item-tree-node_body-area {
-  background-color: var(--item-tree-selected-item-background-color);
+  background: var(--item-tree-selected-item-background-color);
 }

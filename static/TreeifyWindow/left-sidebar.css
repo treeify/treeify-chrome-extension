@@ -41,7 +41,7 @@
   /* サイドバーやアイテムツリーは独立してスクロール可能とする */
   overflow: auto;
 
-  background-color: var(--left-sidebar-background-color);
+  background: var(--left-sidebar-background-color);
 }
 
 /* フローティング型の左サイドバー */
@@ -92,14 +92,14 @@
 
 /* インデントライン */
 .page-tree-bullet-and-indent_indent-line {
-  background-color: var(--page-tree-indent-line-color);
+  background: var(--page-tree-indent-line-color);
   width: var(--page-tree-indent-line-width);
   height: 100%;
   margin: 0 auto;
 }
 /* ホバー時のインデントライン */
 .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_indent-line {
-  background-color: var(--page-tree-indent-line-hover-color);
+  background: var(--page-tree-indent-line-hover-color);
 }
 
 /* バレットの共通設定 */
@@ -133,11 +133,11 @@
 }
 .page-tree-node_body-area.active-page {
   /* アクティブページの強調表示 */
-  background-color: var(--page-tree-active-page-background-color);
+  background: var(--page-tree-active-page-background-color);
 }
 
 .page-tree-node_body-area:hover {
-  background-color: var(--page-tree-hover-item-background-color);
+  background: var(--page-tree-hover-item-background-color);
 }
 
 .page-tree-node_content-area {
@@ -158,7 +158,7 @@
   flex-shrink: 0;
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background-color: hsl(0, 0%, 20%);
+  background: hsl(0, 0%, 20%);
   -webkit-mask-image: url('close-icon2.svg');
 
   /* マウスホバー時にのみ表示 */
