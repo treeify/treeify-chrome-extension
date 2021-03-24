@@ -1,6 +1,6 @@
 import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 import {External} from 'src/TreeifyWindow/External/External'
-import {DataFolder} from 'src/TreeifyWindow/Internal/NullaryCommand/DataFolder'
+import {DataFolder} from 'src/TreeifyWindow/Internal/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
 import {State} from 'src/TreeifyWindow/Internal/State'
