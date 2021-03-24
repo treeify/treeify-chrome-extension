@@ -151,6 +151,29 @@ export namespace DomishObject {
     }
   }
 
+  /** プレーンテキストに変換する。改行は維持される。 */
+  export function toPlainText(value: DomishObject | List<DomishObject>): string {
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      return domishObjects.map(toPlainText).join('')
+    } else {
+      const domishObject = value as DomishObject
+      switch (domishObject.type) {
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          return toPlainText(domishObject.children)
+        case 'br':
+          return '\n'
+        case 'text':
+          return domishObject.textContent
+        default:
+          assertNeverType(domishObject)
+      }
+    }
+  }
+
   /**
    * 単一行のプレーンテキストに変換する。リッチテキスト要素は無視される。
    * br要素は半角スペースに変換する。
