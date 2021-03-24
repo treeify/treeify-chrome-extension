@@ -36,8 +36,6 @@ export type ItemTreeNodeViewModel = {
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
-  onDragOver: (event: DragEvent) => void
-  onDrop: (event: DragEvent) => void
 }
 
 // 再帰的にアイテムツリーのViewModelを作る
@@ -105,39 +103,9 @@ export function createItemTreeNodeViewModel(
         const domElement = document.getElementById(domElementId)
         if (domElement === null) return
         // ドラッグ中にマウスポインターに追随して表示される内容を設定
-        event.dataTransfer.setDragImage(domElement, 0, 0)
+        event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
 
         event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
-      })
-    },
-    onDragOver: (event) => {
-      // ドロップを動作させるために必要
-      event.preventDefault()
-    },
-    onDrop: (event) => {
-      doWithErrorHandling(() => {
-        if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
-
-        const data = event.dataTransfer.getData('application/treeify')
-        const draggedItemPath: ItemPath = List(JSON.parse(data))
-        const draggedItemId = ItemPath.getItemId(draggedItemPath)
-
-        // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
-        // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-        if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
-
-        NextState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
-
-        if (event.offsetY < event.target.offsetHeight / 2) {
-          // ドロップ先座標がコンテンツ領域の上半分の場合
-          NextState.insertPrevSiblingItem(itemPath, draggedItemId)
-        } else {
-          // ドロップ先座標がコンテンツ領域の下半分の場合
-          NextState.insertNextSiblingItem(itemPath, draggedItemId)
-        }
-
-        NextState.updateItemTimestamp(draggedItemId)
-        NextState.commit()
       })
     },
   }
@@ -205,13 +173,13 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
         <!-- ボディ領域 -->
-        <div
-          class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}
-          @dragover=${viewModel.onDragOver}
-          @drop=${viewModel.onDrop}
-        >
+        <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
           <!-- コンテンツ領域 -->
-          <div class="item-tree-node_content-area" @mousedown=${viewModel.onMouseDownContentArea}>
+          <div
+            data-item-path=${JSON.stringify(viewModel.itemPath.toArray())}
+            class="item-tree-node_content-area"
+            @mousedown=${viewModel.onMouseDownContentArea}
+          >
             ${ItemTreeContentView(viewModel.contentViewModel)}
           </div>
           <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}></div>
