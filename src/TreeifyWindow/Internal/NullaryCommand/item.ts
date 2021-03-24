@@ -496,14 +496,14 @@ export function toggleGrayedOut() {
     NextState.updateItemTimestamp(targetItemId)
   }
 
-  // フォーカスを移動する。
+  // フォーカスを下のアイテムに移動する。
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
-  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(selectedItemPaths.last())
-  if (nextSiblingItemPath !== undefined) {
+  const firstFollowingItemPath = NextState.findFirstFollowingItemPath(selectedItemPaths.last())
+  if (firstFollowingItemPath !== undefined) {
     External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(nextSiblingItemPath)
+      ItemTreeContentView.focusableDomElementId(firstFollowingItemPath)
     )
-    if (NextState.getItemType(ItemPath.getItemId(nextSiblingItemPath)) === ItemType.TEXT) {
+    if (NextState.getItemType(ItemPath.getItemId(firstFollowingItemPath)) === ItemType.TEXT) {
       External.instance.requestSetCaretDistanceAfterRendering(0)
     }
   }
