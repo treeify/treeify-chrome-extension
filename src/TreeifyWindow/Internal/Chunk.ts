@@ -82,7 +82,7 @@ export namespace Chunk {
     if (rawObject !== undefined) {
       return {
         id: chunkId,
-        json: JSON.stringify(rawObject, State.jsonReplacer),
+        json: JSON.stringify(rawObject, State.jsonReplacer, 2),
       }
     }
     return undefined
