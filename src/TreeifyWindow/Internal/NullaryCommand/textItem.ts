@@ -38,3 +38,8 @@ function execTextEditCommand(commandName: string) {
     document.execCommand(commandName)
   }
 }
+
+/** contenteditableな要素で改行を実行する */
+export function insertLineBreak() {
+  document.execCommand('insertLineBreak')
+}
