@@ -7,8 +7,6 @@ import {
   indentItem,
   moveItemDownward,
   moveItemUpward,
-  selectAllAboveItems,
-  selectAllBelowItems,
   showPage,
   toggleFolded,
   toggleGrayedOut,
@@ -16,7 +14,11 @@ import {
   togglePaged,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
-import {openDataFolderPicker} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
+import {
+  openDataFolderPicker,
+  selectAllAboveItems,
+  selectAllBelowItems,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
   insertLineBreak,
   toggleBold,
