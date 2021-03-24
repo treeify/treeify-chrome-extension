@@ -111,31 +111,12 @@ export type WebPageItemTitleSettingDialog = {
 }
 
 export namespace State {
-  /** StateからJSON文字列を生成する */
-  export function toJsonString(state: State): string {
-    return JSON.stringify(state, jsonReplacer)
-  }
-
   /** Stateに対してJSON.stringifyする際に用いるreplacer */
   export function jsonReplacer(this: any, key: string, value: any): any {
     if (value instanceof List) {
       return (value as List<unknown>).toArray()
     }
     return value
-  }
-
-  /**
-   * JSON文字列からStateオブジェクトを生成する。
-   * パースやバリデーションに失敗したらundefinedを返す。
-   */
-  export function fromJsonString(jsonString: string): State | undefined {
-    try {
-      const object = JSON.parse(jsonString, jsonReviver)
-      // TODO: バリデーションなど
-      return object
-    } catch {
-      return undefined
-    }
   }
 
   /** Stateに対してJSON.parseする際に用いるreplacer */
