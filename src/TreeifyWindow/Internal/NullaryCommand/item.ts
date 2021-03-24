@@ -514,13 +514,15 @@ export function toggleGrayedOut() {
  * もし既にハイライト状態なら非ハイライト状態に戻す。
  */
 export function toggleHighlighted() {
-  const targetItemPath = NextState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const selectedItemPaths = NextState.getSelectedItemPaths()
+  for (const selectedItemPath of selectedItemPaths) {
+    const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-  NextState.toggleCssClass(targetItemId, 'highlighted-item')
+    NextState.toggleCssClass(targetItemId, 'highlighted-item')
 
-  // タイムスタンプを更新
-  NextState.updateItemTimestamp(targetItemId)
+    // タイムスタンプを更新
+    NextState.updateItemTimestamp(targetItemId)
+  }
 }
 
 /**
