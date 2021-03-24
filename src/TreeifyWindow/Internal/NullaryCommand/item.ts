@@ -435,11 +435,6 @@ export function deleteItemItself() {
   NextState.deleteItemItself(targetItemId)
 }
 
-/** contenteditableな要素で改行を実行する */
-export function insertLineBreak() {
-  document.execCommand('insertLineBreak')
-}
-
 /**
  * ターゲットアイテムがページなら非ページ化する。
  * ターゲットアイテムが非ページならページ化する。

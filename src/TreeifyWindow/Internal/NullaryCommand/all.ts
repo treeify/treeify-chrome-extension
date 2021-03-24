@@ -5,7 +5,6 @@ import {
   deleteItemItself,
   enterKeyDefault,
   indentItem,
-  insertLineBreak,
   moveItemDownward,
   moveItemUpward,
   selectAllAboveItems,
@@ -19,6 +18,7 @@ import {
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {openDataFolderPicker} from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
+  insertLineBreak,
   toggleBold,
   toggleItalic,
   toggleStrikethrough,
@@ -68,3 +68,4 @@ export const functions: {[name: string]: () => void} = {
   edit,
   openDataFolderDialog: openDataFolderPicker,
 }
+export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
