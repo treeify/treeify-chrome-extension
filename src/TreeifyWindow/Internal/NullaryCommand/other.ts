@@ -9,7 +9,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 
-/** データフォルダ選択ダイアログを開く */
+/** データフォルダピッカーを開く */
 export function openDataFolderPicker() {
   doAsyncWithErrorHandling(async () => {
     const folderHandle = await showDirectoryPicker()
