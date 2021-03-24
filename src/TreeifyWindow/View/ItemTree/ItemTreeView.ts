@@ -7,6 +7,7 @@ import {
   countBrElements,
   getCaretLineNumber,
   getTextItemSelectionFromDom,
+  setDomSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -277,11 +278,42 @@ function onArrowUp(event: KeyboardEvent) {
 function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
   if (NextState.getItemType(aboveItemId) === ItemType.TEXT) {
-    // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
-    const domishObjects = NextState.getTextItemDomishObjects(aboveItemId)
-    External.instance.requestSetCaretDistanceAfterRendering(
-      DomishObject.countCharacters(domishObjects)
-    )
+    // 上のアイテムがテキストアイテムの場合、X座標をできるだけ保つようなキャレット移動を行う
+
+    // 現在のX座標を取得
+    const originalXCoordinate = getCaretXCoordinate()
+    assertNonUndefined(originalXCoordinate)
+
+    // 上のアイテムの最初の行の文字数を取得
+    const aboveItemDomishObjects = NextState.getTextItemDomishObjects(aboveItemId)
+    const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
+    const lastLine = lines[lines.length - 1]
+
+    // 上のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
+    // TODO: 最適化の余地あり。二分探索が可能では？
+    const aboveItemDomElementId = ItemTreeContentView.focusableDomElementId(aboveItemPath)
+    const aboveItemDomElement = document.getElementById(aboveItemDomElementId)
+    assertNonNull(aboveItemDomElement)
+    aboveItemDomElement.focus()
+
+    let i = 0
+    for (; i < lastLine.length; i++) {
+      setCaretPosition(i)
+      if (getCaretXCoordinate()! > originalXCoordinate) {
+        break
+      }
+    }
+    // キャレットのX座標の移動距離が最も小さくなるようなpositionを選ぶ
+    if (i > 0) {
+      // TODO: 最適化の余地あり（setCaretPositionやgetCaretXCoordinateの呼び出し回数）
+      setCaretPosition(i - 1)
+      const firstDistance = Math.abs(originalXCoordinate - getCaretXCoordinate()!)
+      setCaretPosition(i)
+      const secondDistance = Math.abs(originalXCoordinate - getCaretXCoordinate()!)
+      if (firstDistance < secondDistance) {
+        setCaretPosition(i - 1)
+      }
+    }
   }
 
   External.instance.requestFocusAfterRendering(
@@ -321,14 +353,69 @@ function onArrowDown(event: KeyboardEvent) {
 }
 
 function moveFocusToBelowItem(belowItemPath: ItemPath) {
-  if (NextState.getItemType(ItemPath.getItemId(belowItemPath)) === ItemType.TEXT) {
-    // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
-    External.instance.requestSetCaretDistanceAfterRendering(0)
+  const belowItemId = ItemPath.getItemId(belowItemPath)
+  if (NextState.getItemType(belowItemId) === ItemType.TEXT) {
+    // 下のアイテムがテキストアイテムの場合、X座標をできるだけ保つようなキャレット移動を行う
+
+    // 現在のX座標を取得
+    const originalXCoordinate = getCaretXCoordinate()
+    assertNonUndefined(originalXCoordinate)
+
+    // 下のアイテムの最初の行の文字数を取得
+    const belowItemDomishObjects = NextState.getTextItemDomishObjects(belowItemId)
+    const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split('\n')[0]
+
+    // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
+    // TODO: 最適化の余地あり。二分探索が可能では？
+    const belowItemDomElementId = ItemTreeContentView.focusableDomElementId(belowItemPath)
+    const belowItemDomElement = document.getElementById(belowItemDomElementId)
+    assertNonNull(belowItemDomElement)
+    belowItemDomElement.focus()
+
+    let i = 0
+    for (; i < firstLine.length; i++) {
+      setCaretPosition(i)
+      if (getCaretXCoordinate()! > originalXCoordinate) {
+        break
+      }
+    }
+    // キャレットのX座標の移動距離が最も小さくなるようなpositionを選ぶ
+    if (i > 0) {
+      // TODO: 最適化の余地あり（setCaretPositionやgetCaretXCoordinateの呼び出し回数）
+      setCaretPosition(i - 1)
+      const firstDistance = Math.abs(originalXCoordinate - getCaretXCoordinate()!)
+      setCaretPosition(i)
+      const secondDistance = Math.abs(originalXCoordinate - getCaretXCoordinate()!)
+      if (firstDistance < secondDistance) {
+        setCaretPosition(i - 1)
+      }
+    }
   }
   External.instance.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(belowItemPath)
   )
   NextState.commit()
+}
+
+function setCaretPosition(position: integer) {
+  assertNonNull(document.activeElement)
+  setDomSelection(document.activeElement, {
+    focusDistance: position,
+    anchorDistance: position,
+  })
+}
+
+function getCaretXCoordinate(): integer | undefined {
+  const selection = getSelection()
+  if (selection !== null && selection.rangeCount > 0) {
+    if (selection.getRangeAt(0).getBoundingClientRect().left === 0) {
+      // どういうわけかキャレットが先頭に居るときにX座標が0扱いになってしまう問題の対策
+      // TODO: marginなどを入れられると破綻するのでは
+      return document.activeElement?.getBoundingClientRect().left
+    }
+    return selection.getRangeAt(0).getBoundingClientRect().left
+  }
+  return undefined
 }
 
 /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
