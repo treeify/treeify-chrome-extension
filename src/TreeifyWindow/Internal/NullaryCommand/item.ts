@@ -485,23 +485,25 @@ export function becomeAndShowPage() {
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
-  const targetItemPath = NextState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const selectedItemPaths = NextState.getSelectedItemPaths()
+  for (const selectedItemPath of selectedItemPaths) {
+    const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-  NextState.toggleCssClass(targetItemId, 'grayed-out-item')
+    NextState.toggleCssClass(targetItemId, 'grayed-out-item')
 
-  // タイムスタンプを更新
-  // TODO: 設定で無効化できるようにする
-  NextState.updateItemTimestamp(targetItemId)
+    // タイムスタンプを更新
+    // TODO: 設定で無効化できるようにする
+    NextState.updateItemTimestamp(targetItemId)
+  }
 
-  // フォーカスを移動する。
+  // フォーカスを下のアイテムに移動する。
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
-  const nextSiblingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
-  if (nextSiblingItemPath !== undefined) {
+  const firstFollowingItemPath = NextState.findFirstFollowingItemPath(selectedItemPaths.last())
+  if (firstFollowingItemPath !== undefined) {
     External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(nextSiblingItemPath)
+      ItemTreeContentView.focusableDomElementId(firstFollowingItemPath)
     )
-    if (NextState.getItemType(ItemPath.getItemId(nextSiblingItemPath)) === ItemType.TEXT) {
+    if (NextState.getItemType(ItemPath.getItemId(firstFollowingItemPath)) === ItemType.TEXT) {
       External.instance.requestSetCaretDistanceAfterRendering(0)
     }
   }
@@ -512,13 +514,15 @@ export function toggleGrayedOut() {
  * もし既にハイライト状態なら非ハイライト状態に戻す。
  */
 export function toggleHighlighted() {
-  const targetItemPath = NextState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const selectedItemPaths = NextState.getSelectedItemPaths()
+  for (const selectedItemPath of selectedItemPaths) {
+    const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-  NextState.toggleCssClass(targetItemId, 'highlighted-item')
+    NextState.toggleCssClass(targetItemId, 'highlighted-item')
 
-  // タイムスタンプを更新
-  NextState.updateItemTimestamp(targetItemId)
+    // タイムスタンプを更新
+    NextState.updateItemTimestamp(targetItemId)
+  }
 }
 
 /**
