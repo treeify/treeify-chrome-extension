@@ -76,7 +76,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadSubtree()
             } else {
               // ロード状態の場合
-              NullaryCommand.unloadSubtree()
+              NullaryCommand.hardUnloadSubtree()
             }
 
             NextState.commit()
@@ -89,7 +89,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadItem()
             } else {
               // ロード状態の場合
-              NullaryCommand.unloadItem()
+              NullaryCommand.hardUnloadItem()
             }
 
             NextState.commit()

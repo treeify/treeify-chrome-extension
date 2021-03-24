@@ -4,8 +4,8 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
-/** ウェブページアイテムのアンロード操作 */
-export function unloadItem() {
+/** 対象ウェブページアイテムに対応するタブを閉じる */
+export function hardUnloadItem() {
   const targetItemPath = NextState.getTargetItemPath()
 
   const tabId = External.instance.itemIdToTabId.get(ItemPath.getItemId(targetItemPath))
@@ -18,8 +18,8 @@ export function unloadItem() {
   chrome.tabs.remove(tabId)
 }
 
-/** ウェブページアイテムのサブツリーアンロード操作 */
-export function unloadSubtree() {
+/** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブを閉じる */
+export function hardUnloadSubtree() {
   const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
 
   for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemId)) {
