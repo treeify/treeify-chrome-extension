@@ -190,7 +190,6 @@ export class Internal {
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
       },
       webPageItemTitleSettingDialog: null,
-      treeifyWindowWidth: window.outerWidth,
       isFloatingLeftSidebarShown: false,
     }
   }
