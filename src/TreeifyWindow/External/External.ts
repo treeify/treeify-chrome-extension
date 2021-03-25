@@ -165,7 +165,7 @@ export class External {
       if (chunk !== undefined) {
         this.dataFolder.writeChunk(chunk)
       } else {
-        this.dataFolder.deleteFile(chunkId)
+        this.dataFolder.deleteChunk(chunkId)
       }
     }
   }

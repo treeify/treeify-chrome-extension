@@ -12,7 +12,7 @@ export type ChunkId = string
 export namespace ChunkId {
   const delimiter = '_'
 
-  export function toPropertyPath(chunkId: ChunkId): PropertyPath {
+  export function toPropertyPath(chunkId: ChunkId): List<string> {
     return List(chunkId.split(delimiter))
   }
 
