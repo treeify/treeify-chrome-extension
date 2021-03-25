@@ -17,10 +17,9 @@ export function toggleFolded() {
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indentItem() {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
-  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(targetItemPath)
+  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
   // 兄が居ない場合、何もしない
   if (prevSiblingItemPath === undefined) return
 
@@ -32,23 +31,36 @@ export function indentItem() {
   // 兄をアンフォールドする
   CurrentState.setIsFolded(prevSiblingItemId, false)
 
-  // 兄の最後の子になるようターゲットアイテムを配置
-  CurrentState.insertLastChildItem(prevSiblingItemId, targetItemId)
-
-  // 既存の親子関係を削除
-  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  const parentItemId = ItemPath.getParentItemId(prevSiblingItemPath)
   assertNonUndefined(parentItemId)
-  CurrentState.removeItemGraphEdge(parentItemId, targetItemId)
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-  CurrentState.updateItemTimestamp(targetItemId)
+    // 兄の最後の子になるようターゲットアイテムを配置
+    CurrentState.insertLastChildItem(prevSiblingItemId, selectedItemId)
 
-  // フォーカスを移動先に更新する
-  External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(prevSiblingItemPath.push(targetItemId))
-  )
+    // 既存の親子関係を削除
+    CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
 
-  // キャレット位置、テキスト選択範囲を維持する
-  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
+
+  if (selectedItemPaths.size === 1) {
+    // フォーカスを移動先に更新する
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    External.instance.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(prevSiblingItemPath.push(targetItemId))
+    )
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  } else {
+    // 移動先を引き続き選択中にする
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
+    const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
+    CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
+  }
 }
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
