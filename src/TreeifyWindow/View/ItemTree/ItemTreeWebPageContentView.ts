@@ -29,12 +29,16 @@ export function createItemTreeWebPageContentViewModel(
 ): ItemTreeWebPageContentViewModel {
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
-  const tabId = External.instance.itemIdToTabId.get(itemId)
+  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
 
   const isLoading =
-    tabId !== undefined ? External.instance.tabIdToTab.get(tabId)?.status === 'loading' : false
+    tabId !== undefined
+      ? External.instance.tabItemCorrespondence.getTab(tabId)?.status === 'loading'
+      : false
   const isAudible =
-    tabId !== undefined ? External.instance.tabIdToTab.get(tabId)?.audible === true : false
+    tabId !== undefined
+      ? External.instance.tabItemCorrespondence.getTab(tabId)?.audible === true
+      : false
 
   return {
     itemPath,
