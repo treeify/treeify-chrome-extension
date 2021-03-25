@@ -1,8 +1,9 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {Page} from 'src/TreeifyWindow/Internal/State'
+import {Page, State} from 'src/TreeifyWindow/Internal/State'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 
 /** アクティブページを設定する */
 export function setActivePageId(itemId: ItemId) {
@@ -61,4 +62,9 @@ export function becomeNonPage(itemId: ItemId) {
 
   delete Internal.instance.state.pages[itemId]
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
+}
+
+/** Treeifyウィンドウのタイトルとして表示する文字列を返す */
+export function deriveTreeifyWindowTitle(state: State): string {
+  return getContentAsPlainText(state.activePageId)
 }

@@ -11,7 +11,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 
 /** TODO: コメント */
@@ -80,7 +79,7 @@ export class External {
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
 
     // Treeifyウィンドウのタイトルを更新する
-    document.title = this.deriveTreeifyWindowTitle(state)
+    document.title = CurrentState.deriveTreeifyWindowTitle(state)
   }
 
   /** DOMを再描画する */
@@ -125,11 +124,7 @@ export class External {
     }
 
     // Treeifyウィンドウのタイトルを更新する
-    document.title = this.deriveTreeifyWindowTitle(newState)
-  }
-
-  deriveTreeifyWindowTitle(state: State): string {
-    return getContentAsPlainText(state.activePageId)
+    document.title = CurrentState.deriveTreeifyWindowTitle(newState)
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
