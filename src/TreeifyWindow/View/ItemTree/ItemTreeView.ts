@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import {is, List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
@@ -567,8 +567,6 @@ function onDrop(event: DragEvent) {
   doWithErrorHandling(() => {
     if (event.dataTransfer === null) return
 
-    // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
-
     const data = event.dataTransfer.getData('application/treeify')
     const draggedItemPath: ItemPath = List(JSON.parse(data))
     // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
@@ -588,6 +586,14 @@ function onDrop(event: DragEvent) {
       return middleY > event.clientY
     })
     const itemPath: ItemPath = List(JSON.parse(sortedElements.get(elementIndex)!.dataset.itemPath!))
+
+    if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+      // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
+      // 下記の2パターンが該当する。
+      // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
+      // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
+      return
+    }
 
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
     // エッジを付け替える
