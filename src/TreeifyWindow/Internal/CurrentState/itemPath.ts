@@ -25,18 +25,14 @@ export function getAnchorItemPath(): ItemPath {
 export function setAnchorItemPath(itemPath: ItemPath) {
   const activePageId = Internal.instance.state.activePageId
   Internal.instance.state.pages[activePageId].anchorItemPath = itemPath
-  Internal.instance.mutatedPropertyPaths.add(
-    PropertyPath.of('pages', activePageId, 'anchorItemPath')
-  )
+  Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'anchorItemPath'))
 }
 
 /** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = Internal.instance.state.activePageId
   Internal.instance.state.pages[activePageId].targetItemPath = itemPath
-  Internal.instance.mutatedPropertyPaths.add(
-    PropertyPath.of('pages', activePageId, 'targetItemPath')
-  )
+  Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
 }
 
 /**

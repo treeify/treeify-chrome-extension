@@ -12,10 +12,10 @@ export function commit() {
 
 export function setTreeifyWindowWidth(width: integer) {
   Internal.instance.state.treeifyWindowWidth = width
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('treeifyWindowWidth'))
+  Internal.instance.markAsMutated(PropertyPath.of('treeifyWindowWidth'))
 }
 
 export function setIsFloatingLeftSidebarShown(flag: boolean) {
   Internal.instance.state.isFloatingLeftSidebarShown = flag
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('isFloatingLeftSidebarShown'))
+  Internal.instance.markAsMutated(PropertyPath.of('isFloatingLeftSidebarShown'))
 }

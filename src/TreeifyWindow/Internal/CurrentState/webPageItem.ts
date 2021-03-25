@@ -23,7 +23,7 @@ export function createWebPageItem(): ItemId {
     cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', newItemId))
+  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
   const webPageItem: WebPageItem = {
     url: '',
@@ -32,7 +32,7 @@ export function createWebPageItem(): ItemId {
     title: null,
   }
   Internal.instance.state.webPageItems[newItemId] = webPageItem
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', newItemId))
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', newItemId))
 
   CurrentState.setNextNewItemId(newItemId + 1)
 
@@ -42,29 +42,29 @@ export function createWebPageItem(): ItemId {
 /** StateのwebPageItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteWebPageItemEntry(itemId: ItemId) {
   delete Internal.instance.state.webPageItems[itemId]
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', itemId))
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId))
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
 export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
   Internal.instance.state.webPageItems[itemId].tabTitle = tabTitle
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', itemId, 'tabTitle'))
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'tabTitle'))
 }
 
 /** ウェブページアイテムのタイトルを設定する */
 export function setWebPageItemTitle(itemId: ItemId, title: string | null) {
   Internal.instance.state.webPageItems[itemId].title = title
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', itemId, 'title'))
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'title'))
 }
 
 /** ウェブページアイテムのURLを設定する */
 export function setWebPageItemUrl(itemId: ItemId, url: string) {
   Internal.instance.state.webPageItems[itemId].url = url
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', itemId, 'url'))
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'url'))
 }
 
 /** ウェブページアイテムのファビコンURLを設定する */
 export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
   Internal.instance.state.webPageItems[itemId].faviconUrl = url
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
 }

@@ -9,8 +9,8 @@ export class Internal {
   private static _instance: Internal | undefined
 
   readonly state: State = Internal.createInitialState()
-  readonly mutatedPropertyPaths = new Set<PropertyPath>()
 
+  private readonly mutatedPropertyPaths = new Set<PropertyPath>()
   private readonly stateChangeListeners = new Set<
     (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   >()
@@ -48,6 +48,11 @@ export class Internal {
       stateChangeListener(this.state, this.mutatedPropertyPaths)
     }
     this.mutatedPropertyPaths.clear()
+  }
+
+  /** State内の書き換えた箇所を伝える */
+  markAsMutated(propertyPath: PropertyPath) {
+    this.mutatedPropertyPaths.add(propertyPath)
   }
 
   addStateChangeListener(

@@ -111,7 +111,7 @@ export function deleteItemItself(itemId: ItemId) {
 /** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteItemEntry(itemId: ItemId) {
   delete Internal.instance.state.items[itemId]
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId))
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId))
 }
 
 /** 指定されたIDのアイテムが存在するかどうかを調べる */
@@ -138,13 +138,13 @@ export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
 /** 指定されたアイテムのisFoldedフラグを設定する */
 export function setIsFolded(itemId: ItemId, isFolded: boolean) {
   Internal.instance.state.items[itemId].isFolded = isFolded
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'isFolded'))
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'isFolded'))
 }
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   Internal.instance.state.items[itemId].timestamp = Timestamp.now()
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'timestamp'))
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'timestamp'))
 }
 
 /**
@@ -155,7 +155,7 @@ export function updateItemTimestamp(itemId: ItemId) {
 export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
   const item = Internal.instance.state.items[itemId]
   item.childItemIds = f(item.childItemIds)
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'childItemIds'))
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'childItemIds'))
 }
 
 /**
@@ -166,7 +166,7 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
 export function modifyParentItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
   const item = Internal.instance.state.items[itemId]
   item.parentItemIds = f(item.parentItemIds)
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'parentItemIds'))
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parentItemIds'))
 }
 
 /**
@@ -320,7 +320,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
 /** 次に使うべき新しいアイテムIDを設定する */
 export function setNextNewItemId(itemId: ItemId) {
   Internal.instance.state.nextNewItemId = itemId
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('nextNewItemId'))
+  Internal.instance.markAsMutated(PropertyPath.of('nextNewItemId'))
 }
 
 /**
@@ -337,5 +337,5 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   } else {
     item.cssClasses = cssClasses.remove(index)
   }
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'cssClasses'))
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
 }
