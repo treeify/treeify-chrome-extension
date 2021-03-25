@@ -8,6 +8,7 @@ import {
   PageTreeWebPageContentView,
   PageTreeWebPageContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 
 export type PageTreeContentViewModel =
   | PageTreeTextContentViewModel
@@ -24,11 +25,10 @@ export function createPageTreeContentViewModel(
         domishObjects: state.textItems[itemId].domishObjects,
       }
     case ItemType.WEB_PAGE:
-      const webPageItem = state.webPageItems[itemId]
       return {
         itemType: ItemType.WEB_PAGE,
-        title: webPageItem.title ?? webPageItem.tabTitle,
-        faviconUrl: webPageItem.faviconUrl,
+        title: CurrentState.deriveWebPageItemTitle(itemId),
+        faviconUrl: state.webPageItems[itemId].faviconUrl,
       }
   }
 }

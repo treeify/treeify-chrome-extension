@@ -68,3 +68,8 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
   Internal.instance.state.webPageItems[itemId].faviconUrl = url
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
 }
+
+export function deriveWebPageItemTitle(itemId: ItemId): string {
+  const webPageItem = Internal.instance.state.webPageItems[itemId]
+  return webPageItem.title ?? webPageItem.tabTitle
+}
