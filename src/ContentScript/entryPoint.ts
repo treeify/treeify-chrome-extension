@@ -9,3 +9,9 @@ window.addEventListener('mousemove', (event) => {
     })
   }
 })
+
+document.addEventListener('mouseenter', (event) => {
+  TreeifyWindow.sendMessage({
+    type: 'OnMouseEnter',
+  })
+})

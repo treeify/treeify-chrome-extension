@@ -20,6 +20,11 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
       case 'OnMouseMoveToLeftEnd':
         OnMouseMoveToLeftEnd()
         break
+      case 'OnMouseEnter':
+        // ブラウザウィンドウをフォーカスする
+        assertNonUndefined(sender.tab?.windowId)
+        chrome.windows.update(sender.tab.windowId, {focused: true})
+        break
       // TODO: 網羅性チェックをしていない理由はなんだろう？
     }
   })
