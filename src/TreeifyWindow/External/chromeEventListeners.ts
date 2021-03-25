@@ -13,6 +13,7 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import UAParser from 'ua-parser-js'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   doWithErrorHandling(() => {
@@ -21,9 +22,11 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
         OnMouseMoveToLeftEnd()
         break
       case 'OnMouseEnter':
-        // ブラウザウィンドウをフォーカスする
-        assertNonUndefined(sender.tab?.windowId)
-        chrome.windows.update(sender.tab.windowId, {focused: true})
+        // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
+        if (new UAParser().getOS().name === 'Mac OS') {
+          assertNonUndefined(sender.tab?.windowId)
+          chrome.windows.update(sender.tab.windowId, {focused: true})
+        }
         break
       // TODO: 網羅性チェックをしていない理由はなんだろう？
     }
