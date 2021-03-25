@@ -17,8 +17,8 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   doWithErrorHandling(() => {
     switch (message.type) {
-      case 'OnMoveMouseToLeftEnd':
-        onMoveMouseToLeftEnd()
+      case 'OnMouseMoveToLeftEnd':
+        OnMouseMoveToLeftEnd()
         break
       // TODO: 網羅性チェックをしていない理由はなんだろう？
     }
@@ -149,7 +149,7 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
   })
 }
 
-function onMoveMouseToLeftEnd() {
+function OnMouseMoveToLeftEnd() {
   // Treeifyウィンドウを最前面化する
   // TODO: 誤差だろうけれど最適化の余地が一応ある
   TreeifyWindow.open()
