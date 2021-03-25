@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType} from 'src/Common/basicType'
+import {ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
@@ -27,8 +27,6 @@ export type State = {
   itemTreeInputBinding: {[inputId: string]: Command}
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
-  /** Treeifyウィンドウの幅（px） */
-  treeifyWindowWidth: integer
   /** フローティング型の左サイドバーを表示中かどうか */
   isFloatingLeftSidebarShown: boolean
 }

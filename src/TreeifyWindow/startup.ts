@@ -90,7 +90,6 @@ function onMouseEnter() {
 }
 
 function onResize() {
-  // window.outerWidthを使うとウィンドウ最大化および最大化解除時に実態と異なる値になる（Macで確認済み）
-  CurrentState.setTreeifyWindowWidth(window.innerWidth)
+  // 左サイドバーの表示形態を変更する必要があるかもしれないので再描画する
   CurrentState.commit()
 }
