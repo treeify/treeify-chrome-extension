@@ -10,9 +10,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
   Internal.instance.state.textItems[textItemId].domishObjects = domishObjects
-  Internal.instance.mutatedPropertyPaths.add(
-    PropertyPath.of('textItems', textItemId, 'domishObjects')
-  )
+  Internal.instance.markAsMutated(PropertyPath.of('textItems', textItemId, 'domishObjects'))
 }
 
 /**
@@ -32,11 +30,11 @@ export function createTextItem(): ItemId {
     cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', newItemId))
+  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
   const newTextItem: TextItem = {domishObjects: List.of()}
   Internal.instance.state.textItems[newItemId] = newTextItem
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('textItems', newItemId))
+  Internal.instance.markAsMutated(PropertyPath.of('textItems', newItemId))
 
   CurrentState.setNextNewItemId(newItemId + 1)
 
@@ -46,5 +44,5 @@ export function createTextItem(): ItemId {
 /** StateのtextItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteTextItemEntry(itemId: ItemId) {
   delete Internal.instance.state.textItems[itemId]
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('textItems', itemId))
+  Internal.instance.markAsMutated(PropertyPath.of('textItems', itemId))
 }

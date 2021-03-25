@@ -90,20 +90,6 @@ export type Page = {
   anchorItemPath: ItemPath
 }
 
-/** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
-export type TextItemSelection = {
-  /**
-   * getSelectionで取得できるfocusNode&focusOffsetの位置を表す値。
-   * contenteditableな要素の先頭からfocus位置までの文字数（改行を含む）。
-   */
-  focusDistance: integer
-  /**
-   * getSelectionで取得できるanchorNode&anchorOffsetの位置を表す値。
-   * contenteditableな要素の先頭からanchor位置までの文字数（改行を含む）。
-   */
-  anchorDistance: integer
-}
-
 /** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {
   /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */

@@ -8,6 +8,13 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 export class Internal {
   private static _instance: Internal | undefined
 
+  readonly state: State = Internal.createInitialState()
+
+  private readonly mutatedPropertyPaths = new Set<PropertyPath>()
+  private readonly stateChangeListeners = new Set<
+    (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
+  >()
+
   private constructor(initialState: State) {
     this.state = initialState
   }
@@ -35,18 +42,17 @@ export class Internal {
     this._instance = undefined
   }
 
-  private readonly stateChangeListeners = new Set<
-    (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
-  >()
-  readonly state: State = Internal.createInitialState()
-  readonly mutatedPropertyPaths = new Set<PropertyPath>()
-
   /** Stateへの変更を確定し、stateChangeListenerに通知する */
   commit() {
     for (const stateChangeListener of this.stateChangeListeners) {
       stateChangeListener(this.state, this.mutatedPropertyPaths)
     }
     this.mutatedPropertyPaths.clear()
+  }
+
+  /** State内の書き換えた箇所を伝える */
+  markAsMutated(propertyPath: PropertyPath) {
+    this.mutatedPropertyPaths.add(propertyPath)
   }
 
   addStateChangeListener(

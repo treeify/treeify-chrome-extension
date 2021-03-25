@@ -7,7 +7,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 /** アクティブページを設定する */
 export function setActivePageId(itemId: ItemId) {
   Internal.instance.state.activePageId = itemId
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('activePageId'))
+  Internal.instance.markAsMutated(PropertyPath.of('activePageId'))
 }
 
 /**
@@ -18,7 +18,7 @@ export function mountPage(itemId: ItemId) {
   if (Internal.instance.state.mountedPageIds.contains(itemId)) return
 
   Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('mountedPageIds'))
+  Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 }
 
 /**
@@ -30,7 +30,7 @@ export function unmountPage(itemId: ItemId) {
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
     Internal.instance.state.mountedPageIds = mountedPageIds.remove(index)
-    Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('mountedPageIds'))
+    Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
   }
 }
 
@@ -49,7 +49,7 @@ export function becomePage(itemId: ItemId) {
     anchorItemPath: List.of(itemId),
   }
   Internal.instance.state.pages[itemId] = page
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('pages', itemId))
+  Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
 }
 
 /**
@@ -60,5 +60,5 @@ export function becomeNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
   delete Internal.instance.state.pages[itemId]
-  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('pages', itemId))
+  Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
 }

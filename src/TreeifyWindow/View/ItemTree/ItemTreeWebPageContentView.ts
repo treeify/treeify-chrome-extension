@@ -39,7 +39,7 @@ export function createItemTreeWebPageContentViewModel(
   return {
     itemPath,
     itemType: ItemType.WEB_PAGE,
-    title: webPageItem.title ?? webPageItem.tabTitle,
+    title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading,
     isUnloaded: tabId === undefined,
