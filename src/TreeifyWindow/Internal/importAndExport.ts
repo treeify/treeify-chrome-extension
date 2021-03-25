@@ -4,6 +4,68 @@ import {DomishObject} from 'src/Common/DomishObject'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+
+export function onCopy(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
+  const textSelection = getTextItemSelectionFromDom()
+  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+  } else {
+    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+    event.preventDefault()
+    const contentText = CurrentState.exportAsIndentedText(
+      ItemPath.getItemId(CurrentState.getTargetItemPath())
+    )
+    event.clipboardData.setData('text/plain', contentText)
+  }
+}
+
+export function onCut(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
+  const textSelection = getTextItemSelectionFromDom()
+  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+  } else {
+    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+    event.preventDefault()
+    const contentText = CurrentState.exportAsIndentedText(
+      ItemPath.getItemId(CurrentState.getTargetItemPath())
+    )
+    event.clipboardData.setData('text/plain', contentText)
+
+    NullaryCommand.deleteItem()
+    CurrentState.commit()
+  }
+}
+
+// ペースト時にプレーンテキスト化する
+export function onPaste(event: ClipboardEvent) {
+  if (event.clipboardData === null) return
+
+  event.preventDefault()
+  const text = event.clipboardData.getData('text/plain')
+  if (!text.includes('\n')) {
+    // 1行だけのテキストの場合
+
+    const url = detectUrl(text)
+    if (url !== undefined) {
+      // URLを含むなら
+      const newItemId = createItemFromSingleLineText(text)
+      CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), newItemId)
+      CurrentState.commit()
+    } else {
+      document.execCommand('insertText', false, text)
+    }
+  } else {
+    // 複数行にわたるテキストの場合
+    pasteMultilineText(text)
+  }
+}
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemId: ItemId): string {

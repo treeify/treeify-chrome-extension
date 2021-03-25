@@ -13,12 +13,20 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import UAParser from 'ua-parser-js'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
   doWithErrorHandling(() => {
     switch (message.type) {
-      case 'OnMoveMouseToLeftEnd':
-        onMoveMouseToLeftEnd()
+      case 'OnMouseMoveToLeftEnd':
+        OnMouseMoveToLeftEnd()
+        break
+      case 'OnMouseEnter':
+        // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
+        if (new UAParser().getOS().name === 'Mac OS') {
+          assertNonUndefined(sender.tab?.windowId)
+          chrome.windows.update(sender.tab.windowId, {focused: true})
+        }
         break
       // TODO: 網羅性チェックをしていない理由はなんだろう？
     }
@@ -149,7 +157,7 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
   })
 }
 
-function onMoveMouseToLeftEnd() {
+function OnMouseMoveToLeftEnd() {
   // Treeifyウィンドウを最前面化する
   // TODO: 誤差だろうけれど最適化の余地が一応ある
   TreeifyWindow.open()

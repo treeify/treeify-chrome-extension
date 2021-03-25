@@ -9,16 +9,11 @@ import {
   onUpdated,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
-import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {
-  createItemFromSingleLineText,
-  detectUrl,
-  pasteMultilineText,
-} from 'src/TreeifyWindow/Internal/importAndExport'
-import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {onCopy, onCut, onPaste} from 'src/TreeifyWindow/Internal/importAndExport'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import UAParser from 'ua-parser-js'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -44,6 +39,7 @@ export async function startup(initialState: State) {
   document.addEventListener('paste', onPaste)
 
   document.addEventListener('mousemove', onMouseMove)
+  document.addEventListener('mouseenter', onMouseEnter)
 
   window.addEventListener('resize', onResize)
 }
@@ -54,6 +50,7 @@ export async function cleanup() {
 
   window.removeEventListener('resize', onResize)
 
+  document.removeEventListener('mouseenter', onMouseEnter)
   document.removeEventListener('mousemove', onMouseMove)
 
   document.removeEventListener('paste', onPaste)
@@ -76,71 +73,19 @@ function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>)
   External.instance.requestWriteDataFolder(newState, mutatedPropertyPaths)
 }
 
-function onCopy(event: ClipboardEvent) {
-  if (event.clipboardData === null) return
-
-  const textSelection = getTextItemSelectionFromDom()
-  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
-    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
-  } else {
-    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
-    event.preventDefault()
-    const contentText = CurrentState.exportAsIndentedText(
-      ItemPath.getItemId(CurrentState.getTargetItemPath())
-    )
-    event.clipboardData.setData('text/plain', contentText)
-  }
-}
-
-function onCut(event: ClipboardEvent) {
-  if (event.clipboardData === null) return
-
-  const textSelection = getTextItemSelectionFromDom()
-  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
-    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
-  } else {
-    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
-    event.preventDefault()
-    const contentText = CurrentState.exportAsIndentedText(
-      ItemPath.getItemId(CurrentState.getTargetItemPath())
-    )
-    event.clipboardData.setData('text/plain', contentText)
-
-    NullaryCommand.deleteItem()
-    CurrentState.commit()
-  }
-}
-
-// ペースト時にプレーンテキスト化する
-function onPaste(event: ClipboardEvent) {
-  if (event.clipboardData === null) return
-
-  event.preventDefault()
-  const text = event.clipboardData.getData('text/plain')
-  if (!text.includes('\n')) {
-    // 1行だけのテキストの場合
-
-    const url = detectUrl(text)
-    if (url !== undefined) {
-      // URLを含むなら
-      const newItemId = createItemFromSingleLineText(text)
-      CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), newItemId)
-      CurrentState.commit()
-    } else {
-      document.execCommand('insertText', false, text)
-    }
-  } else {
-    // 複数行にわたるテキストの場合
-    pasteMultilineText(text)
-  }
-}
-
 function onMouseMove(event: MouseEvent) {
   // マウスカーソルがTreeifyウィンドウ左端かつ画面左端に到達したとき。
   // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
   if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
     CurrentState.setIsFloatingLeftSidebarShown(true)
     CurrentState.commit()
+  }
+}
+
+function onMouseEnter() {
+  // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
+  if (new UAParser().getOS().name === 'Mac OS') {
+    TreeifyWindow.open()
   }
 }
 

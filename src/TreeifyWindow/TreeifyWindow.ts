@@ -73,9 +73,13 @@ export namespace TreeifyWindow {
   }
 
   /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
-  export type Message = OnMoveMouseToLeftEnd
+  export type Message = OnMouseMoveToLeftEnd | OnMouseEnter
 
-  export type OnMoveMouseToLeftEnd = {
-    type: 'OnMoveMouseToLeftEnd'
+  export type OnMouseMoveToLeftEnd = {
+    type: 'OnMouseMoveToLeftEnd'
+  }
+
+  export type OnMouseEnter = {
+    type: 'OnMouseEnter'
   }
 }

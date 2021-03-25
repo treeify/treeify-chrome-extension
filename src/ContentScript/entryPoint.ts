@@ -5,7 +5,13 @@ window.addEventListener('mousemove', (event) => {
   // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
   if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
     TreeifyWindow.sendMessage({
-      type: 'OnMoveMouseToLeftEnd',
+      type: 'OnMouseMoveToLeftEnd',
     })
   }
+})
+
+document.addEventListener('mouseenter', (event) => {
+  TreeifyWindow.sendMessage({
+    type: 'OnMouseEnter',
+  })
 })
