@@ -175,7 +175,7 @@ export async function matchTabsAndWebPageItems() {
       External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最後の子として追加する
-      const activePageId = NextState.getActivePageId()
+      const activePageId = Internal.instance.state.activePageId
       NextState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
@@ -192,7 +192,7 @@ export async function matchTabsAndWebPageItems() {
 // もし複数該当する場合は最初に見つかったものを返す。
 // 見つからなかった場合はundefinedを返す。
 function findWebPageItemId(url: string): ItemId | undefined {
-  const webPageItems = Internal.instance.currentState.webPageItems
+  const webPageItems = Internal.instance.state.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
     if (url === webPageItem.url) {

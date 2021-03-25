@@ -6,6 +6,7 @@ import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
@@ -21,11 +22,11 @@ export function createWebPageItemTitleSettingDialogViewModel(
 
   const targetItemPath = state.pages[state.activePageId].targetItemPath
   const targetItemId = ItemPath.getItemId(targetItemPath)
+  const webPageItem = Internal.instance.state.webPageItems[targetItemId]
 
   return {
     webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
-    initialTitle:
-      NextState.getWebPageItemTitle(targetItemId) ?? NextState.getWebPageItemTabTitle(targetItemId),
+    initialTitle: webPageItem.title ?? webPageItem.tabTitle,
     onKeyDown: (event) => {
       doWithErrorHandling(() => {
         if (event.isComposing) return

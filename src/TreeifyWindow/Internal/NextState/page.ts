@@ -1,22 +1,13 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 import {Page} from 'src/TreeifyWindow/Internal/State'
-
-/** アクティブページを返す */
-export function getActivePageId(): ItemId {
-  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('activePageId'))
-}
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** アクティブページを設定する */
 export function setActivePageId(itemId: ItemId) {
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('activePageId'), itemId)
-}
-
-/** マウントされているページ群のアイテムIDを返す */
-export function getMountedPageIds(): List<ItemId> {
-  return NextState.getBatchizer().getDerivedValue(PropertyPath.of('mountedPageIds'))
+  Internal.instance.state.activePageId = itemId
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('activePageId'))
 }
 
 /**
@@ -24,13 +15,10 @@ export function getMountedPageIds(): List<ItemId> {
  * マウント済みの場合は何もしない
  */
 export function mountPage(itemId: ItemId) {
-  const mountedPageIds = NextState.getMountedPageIds()
-  if (mountedPageIds.contains(itemId)) return
+  if (Internal.instance.state.mountedPageIds.contains(itemId)) return
 
-  NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('mountedPageIds'),
-    mountedPageIds.push(itemId)
-  )
+  Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('mountedPageIds'))
 }
 
 /**
@@ -38,20 +26,17 @@ export function mountPage(itemId: ItemId) {
  * マウントされていない場合は何もしない。
  */
 export function unmountPage(itemId: ItemId) {
-  const mountedPageIds = NextState.getMountedPageIds()
+  const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
-    NextState.getBatchizer().postSetMutation(
-      PropertyPath.of('mountedPageIds'),
-      mountedPageIds.remove(index)
-    )
+    Internal.instance.state.mountedPageIds = mountedPageIds.remove(index)
+    Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('mountedPageIds'))
   }
 }
 
 /** 与えられたアイテムがページかどうかを返す */
 export function isPage(itemId: ItemId) {
-  const page = NextState.getBatchizer().getDerivedValue(PropertyPath.of('pages', itemId))
-  return page !== undefined
+  return Internal.instance.state.pages[itemId] !== undefined
 }
 
 /** 与えられたアイテムをページ化する */
@@ -63,7 +48,8 @@ export function becomePage(itemId: ItemId) {
     targetItemPath: List.of(itemId),
     anchorItemPath: List.of(itemId),
   }
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('pages', itemId), page)
+  Internal.instance.state.pages[itemId] = page
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('pages', itemId))
 }
 
 /**
@@ -73,5 +59,6 @@ export function becomePage(itemId: ItemId) {
 export function becomeNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
-  NextState.deleteProperty(PropertyPath.of('pages', itemId))
+  delete Internal.instance.state.pages[itemId]
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('pages', itemId))
 }

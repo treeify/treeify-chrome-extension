@@ -6,11 +6,12 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
   const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
-  NextState.setItemProperty(targetItemId, 'isFolded', !NextState.getItemIsFolded(targetItemId))
+  NextState.setIsFolded(targetItemId, !Internal.instance.state.items[targetItemId].isFolded)
   NextState.updateItemTimestamp(targetItemId)
 }
 
@@ -29,7 +30,7 @@ export function indentItem() {
   if (NextState.isPage(prevSiblingItemId)) return
 
   // 兄をアンフォールドする
-  NextState.setItemProperty(prevSiblingItemId, 'isFolded', false)
+  NextState.setIsFolded(prevSiblingItemId, false)
 
   // 兄の最後の子になるようターゲットアイテムを配置
   NextState.insertLastChildItem(prevSiblingItemId, targetItemId)
@@ -219,7 +220,7 @@ export function enterKeyDefault() {
   const targetItemPath = NextState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  if (NextState.getItemType(targetItemId) === ItemType.TEXT) {
+  if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
     assertNonNull(document.activeElement)
@@ -227,7 +228,7 @@ export function enterKeyDefault() {
     assertNonNull(selection)
 
     const characterCount = DomishObject.countCharacters(
-      NextState.getTextItemDomishObjects(targetItemId)
+      Internal.instance.state.textItems[targetItemId].domishObjects
     )
     const textItemSelection = getTextItemSelectionFromDom()
     assertNonUndefined(textItemSelection)
@@ -415,7 +416,7 @@ export function deleteItemItself() {
   // アクティブページを削除しようとしている場合、何もしない
   if (!ItemPath.hasParent(targetItemPath)) return
 
-  const childItemIds = NextState.getChildItemIds(targetItemId)
+  const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.isEmpty()) {
     // 上のアイテムをフォーカス
     const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
@@ -498,7 +499,8 @@ export function toggleGrayedOut() {
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(firstFollowingItemPath)
     )
-    if (NextState.getItemType(ItemPath.getItemId(firstFollowingItemPath)) === ItemType.TEXT) {
+    const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
+    if (Internal.instance.state.items[firstFollowingItemId].itemType === ItemType.TEXT) {
       External.instance.requestSetCaretDistanceAfterRendering(0)
     }
   }

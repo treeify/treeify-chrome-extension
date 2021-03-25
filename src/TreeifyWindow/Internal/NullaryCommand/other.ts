@@ -8,6 +8,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** データフォルダピッカーを開く */
 export function openDataFolderPicker() {
@@ -31,7 +32,8 @@ export function selectAllBelowItems() {
   const targetItemPath = NextState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
-  const lastSiblingItemId: ItemId = NextState.getChildItemIds(parentItemId).last()
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const lastSiblingItemId: ItemId = siblingItemIds.last()
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(lastSiblingItemPath)
   NextState.setTargetItemPathOnly(lastSiblingItemPath)
@@ -48,7 +50,8 @@ export function selectAllAboveItems() {
   const targetItemPath = NextState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
-  const firstSiblingItemId: ItemId = NextState.getChildItemIds(parentItemId).first()
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const firstSiblingItemId: ItemId = siblingItemIds.first()
   const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
   assertNonUndefined(firstSiblingItemPath)
   NextState.setTargetItemPathOnly(firstSiblingItemPath)

@@ -3,6 +3,7 @@ import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {DomishObject} from 'src/Common/DomishObject'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemId: ItemId): string {
@@ -14,7 +15,7 @@ function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
   if (NextState.isPage(itemId)) {
     return List.of(line)
   }
-  const childLines = NextState.getChildItemIds(itemId).flatMap((childItemId) => {
+  const childLines = Internal.instance.state.items[itemId].childItemIds.flatMap((childItemId) => {
     return exportAsIndentedLines(childItemId, indentLevel + 1)
   })
   return childLines.unshift(line)
@@ -22,14 +23,15 @@ function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
 
 /** アイテムタイプごとのフォーマットでコンテンツをプレーンテキスト化する */
 export function getContentAsPlainText(itemId: ItemId): string {
-  const itemType = NextState.getItemType(itemId)
+  const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      return DomishObject.toSingleLinePlainText(NextState.getTextItemDomishObjects(itemId))
+      const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
+      return DomishObject.toSingleLinePlainText(domishObjects)
     case ItemType.WEB_PAGE:
-      const title =
-        NextState.getWebPageItemTitle(itemId) ?? NextState.getWebPageItemTabTitle(itemId)
-      const url = NextState.getWebPageItemUrl(itemId)
+      const webPageItem = Internal.instance.state.webPageItems[itemId]
+      const title = webPageItem.title ?? webPageItem.title
+      const url = webPageItem.url
       return `${title} ${url}`
     default:
       assertNeverType(itemType)

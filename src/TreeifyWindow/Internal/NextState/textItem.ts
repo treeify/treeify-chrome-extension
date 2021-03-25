@@ -5,19 +5,13 @@ import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 import {Item, TextItem} from 'src/TreeifyWindow/Internal/State'
-
-/** 指定されたテキストアイテムのdomishObjectsを返す */
-export function getTextItemDomishObjects(itemId: ItemId): List<DomishObject> {
-  return NextState.getBatchizer().getDerivedValue(
-    PropertyPath.of('textItems', itemId, 'domishObjects')
-  )
-}
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
-  NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('textItems', textItemId, 'domishObjects'),
-    domishObjects
+  Internal.instance.state.textItems[textItemId].domishObjects = domishObjects
+  Internal.instance.mutatedPropertyPaths.add(
+    PropertyPath.of('textItems', textItemId, 'domishObjects')
   )
 }
 
@@ -26,7 +20,7 @@ export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List
  * ただしアイテムの配置（親子関係の設定）は行わない。
  */
 export function createTextItem(): ItemId {
-  const newItemId = NextState.getNextNewItemId()
+  const newItemId = Internal.instance.state.nextNewItemId
 
   const newItem: Item = {
     itemId: newItemId,
@@ -37,12 +31,20 @@ export function createTextItem(): ItemId {
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
   }
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('items', newItemId), newItem)
+  Internal.instance.state.items[newItemId] = newItem
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', newItemId))
 
   const newTextItem: TextItem = {domishObjects: List.of()}
-  NextState.getBatchizer().postSetMutation(PropertyPath.of('textItems', newItemId), newTextItem)
+  Internal.instance.state.textItems[newItemId] = newTextItem
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('textItems', newItemId))
 
   NextState.setNextNewItemId(newItemId + 1)
 
   return newItemId
+}
+
+/** StateのtextItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+export function deleteTextItemEntry(itemId: ItemId) {
+  delete Internal.instance.state.textItems[itemId]
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('textItems', itemId))
 }

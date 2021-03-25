@@ -19,6 +19,7 @@ import {
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
@@ -51,7 +52,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
   for (let i = 1; i < itemPath.size; i++) {
-    const childItemIds = NextState.getChildItemIds(itemPath.get(i - 1)!)
+    const childItemIds = Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds
     siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
   }
   return List(siblingRankArray)
@@ -110,12 +111,12 @@ export function createPageTreeNodeViewModel(
         NextState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
-        if (itemId === NextState.getActivePageId()) {
-          const hottestPageId = NextState.getMountedPageIds()
+        if (itemId === Internal.instance.state.activePageId) {
+          const hottestPageId = Internal.instance.state.mountedPageIds
             .map((pageId) => {
               return {
                 pageId,
-                timestamp: NextState.getItemTimestamp(pageId),
+                timestamp: Internal.instance.state.items[pageId].timestamp,
               }
             })
             .maxBy((a) => a.timestamp)!.pageId
