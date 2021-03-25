@@ -12,6 +12,8 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {onCopy, onCut, onPaste} from 'src/TreeifyWindow/Internal/importAndExport'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import UAParser from 'ua-parser-js'
 
 export async function startup(initialState: State) {
   Internal.initialize(initialState)
@@ -37,6 +39,7 @@ export async function startup(initialState: State) {
   document.addEventListener('paste', onPaste)
 
   document.addEventListener('mousemove', onMouseMove)
+  document.addEventListener('mouseenter', onMouseEnter)
 
   window.addEventListener('resize', onResize)
 }
@@ -47,6 +50,7 @@ export async function cleanup() {
 
   window.removeEventListener('resize', onResize)
 
+  document.removeEventListener('mouseenter', onMouseEnter)
   document.removeEventListener('mousemove', onMouseMove)
 
   document.removeEventListener('paste', onPaste)
@@ -75,6 +79,13 @@ function onMouseMove(event: MouseEvent) {
   if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
     CurrentState.setIsFloatingLeftSidebarShown(true)
     CurrentState.commit()
+  }
+}
+
+function onMouseEnter() {
+  // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
+  if (new UAParser().getOS().name === 'Mac OS') {
+    TreeifyWindow.open()
   }
 }
 
