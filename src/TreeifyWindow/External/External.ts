@@ -1,5 +1,5 @@
 import {integer, ItemId, TabId} from 'src/Common/basicType'
-import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
+import {assert} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
@@ -12,7 +12,7 @@ import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
-import Tab = chrome.tabs.Tab
+import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 
 /** TODO: コメント */
 export class External {
@@ -36,12 +36,8 @@ export class External {
   /** データフォルダ */
   dataFolder: DataFolder | undefined
 
-  /** タブIDからアイテムIDへのMap */
-  readonly tabIdToItemId = new Map<TabId, ItemId>()
-  /** アイテムIDからタブIDへのMap */
-  readonly itemIdToTabId = new Map<ItemId, TabId>()
-  /** タブIDからTabオブジェクトへのMap */
-  readonly tabIdToTab = new Map<TabId, Tab>()
+  /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
+  readonly tabItemCorrespondence = new TabItemCorrespondence()
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
@@ -70,16 +66,12 @@ export class External {
 
   /** タブIDとアイテムIDを結びつける */
   tieTabAndItem(tabId: TabId, itemId: ItemId) {
-    this.tabIdToItemId.set(tabId, itemId)
-    this.itemIdToTabId.set(itemId, tabId)
+    this.tabItemCorrespondence.tieTabAndItem(tabId, itemId)
   }
 
   /** タブIDとアイテムIDの結びつけを解除する */
   untieTabAndItemByTabId(tabId: TabId) {
-    const itemId = this.tabIdToItemId.get(tabId)
-    assertNonUndefined(itemId)
-    this.itemIdToTabId.delete(itemId)
-    this.tabIdToItemId.delete(tabId)
+    this.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
   }
 
   /** DOMの初回描画を行う */

@@ -77,7 +77,7 @@ export function onCreated(tab: Tab) {
           }
         }
       } else {
-        const openerItemId = External.instance.tabIdToItemId.get(tab.openerTabId)
+        const openerItemId = External.instance.tabItemCorrespondence.getItemIdBy(tab.openerTabId)
         assertNonUndefined(openerItemId)
 
         // openerの最後の子として追加する
@@ -108,7 +108,7 @@ export function onCreated(tab: Tab) {
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   doWithErrorHandling(() => {
-    const itemId = External.instance.tabIdToItemId.get(tabId)
+    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     // document.titleを変更した際はonUpdatedが呼ばれる。自身に対応するアイテムIDは存在しない
     if (itemId === undefined) return
 
@@ -121,7 +121,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
 // Tabの情報をウェブページアイテムに転写する
 function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
-    External.instance.tabIdToTab.set(tab.id, tab)
+    External.instance.tabItemCorrespondence.registerTab(tab.id, tab)
   }
   CurrentState.setWebPageItemTabTitle(itemId, tab.title ?? '')
   const url = tab.url || tab.pendingUrl || ''
@@ -131,7 +131,7 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   doWithErrorHandling(() => {
-    const itemId = External.instance.tabIdToItemId.get(tabId)
+    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     assertNonUndefined(itemId)
 
     if (External.instance.hardUnloadedTabIds.has(tabId)) {
@@ -149,7 +149,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
 
 export async function onActivated(tabActiveInfo: TabActiveInfo) {
   doWithErrorHandling(() => {
-    const itemId = External.instance.tabIdToItemId.get(tabActiveInfo.tabId)
+    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)
       CurrentState.commit()
