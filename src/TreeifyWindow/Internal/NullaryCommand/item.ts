@@ -65,30 +65,43 @@ export function indentItem() {
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const parentItemPath = ItemPath.getParent(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const parentItemPath = ItemPath.getParent(selectedItemPaths.first())
 
   // 親または親の親が居ない場合は何もしない
   if (parentItemPath === undefined) return
   if (!ItemPath.hasParent(parentItemPath)) return
 
-  // 既存の親子関係を削除
-  const targetItemId = ItemPath.getItemId(targetItemPath)
-  CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
+  for (const selectedItemPath of selectedItemPaths) {
+    // 既存の親子関係を削除
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(selectedItemPath)!, selectedItemId)
 
-  // 親の弟として配置する
-  CurrentState.insertNextSiblingItem(parentItemPath, targetItemId)
+    // 親の弟として配置する
+    CurrentState.insertNextSiblingItem(parentItemPath, selectedItemId)
 
-  CurrentState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
 
-  // フォーカスを移動先に更新する
-  const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
-  External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(siblingItemPath)
-  )
+  if (selectedItemPaths.size === 1) {
+    // フォーカスを移動先に更新する
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
+    External.instance.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(siblingItemPath)
+    )
 
-  // キャレット位置、テキスト選択範囲を維持する
-  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  } else {
+    // 移動先を引き続き選択中にする
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    CurrentState.setTargetItemPathOnly(
+      ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
+    )
+    const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
+    CurrentState.setAnchorItemPath(ItemPath.createSiblingItemPath(parentItemPath, anchorItemId)!)
+  }
 }
 
 /**
