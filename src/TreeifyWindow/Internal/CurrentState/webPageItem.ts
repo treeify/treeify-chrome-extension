@@ -2,12 +2,12 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Item, WebPageItem} from 'src/TreeifyWindow/Internal/State'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /**
- * 新しい空のウェブページアイテムを作成し、NextStateに登録する。
+ * 新しい空のウェブページアイテムを作成し、CurrentStateに登録する。
  * ただしアイテムの配置（親子関係の設定）は行わない。
  */
 export function createWebPageItem(): ItemId {
@@ -34,7 +34,7 @@ export function createWebPageItem(): ItemId {
   Internal.instance.state.webPageItems[newItemId] = webPageItem
   Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('webPageItems', newItemId))
 
-  NextState.setNextNewItemId(newItemId + 1)
+  CurrentState.setNextNewItemId(newItemId + 1)
 
   return newItemId
 }

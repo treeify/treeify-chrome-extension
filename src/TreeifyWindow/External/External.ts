@@ -7,7 +7,7 @@ import {setDomSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {State, TextItemSelection} from 'src/TreeifyWindow/Internal/State'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {createFocusTrap} from 'focus-trap'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DataFolder} from 'src/TreeifyWindow/Internal/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -125,8 +125,8 @@ export class External {
         clickOutsideDeactivates: true,
         returnFocusOnDeactivate: true,
         onDeactivate: () => {
-          NextState.setWebPageItemTitleSettingDialog(null)
-          NextState.commit()
+          CurrentState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.commit()
         },
       })
       focusTrap.activate()

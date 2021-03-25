@@ -4,7 +4,7 @@ import {classMap} from 'lit-html/directives/class-map'
 import {integer, ItemId, TOP_ITEM_ID} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeBulletAndIndentViewModel,
@@ -95,20 +95,22 @@ export function createPageTreeNodeViewModel(
     ),
     onClickContentArea: () => {
       doWithErrorHandling(() => {
-        NextState.setActivePageId(itemId)
+        CurrentState.setActivePageId(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
-        NextState.setIsFloatingLeftSidebarShown(false)
+        CurrentState.setIsFloatingLeftSidebarShown(false)
 
         // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-        const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+        const elementId = ItemTreeContentView.focusableDomElementId(
+          CurrentState.getTargetItemPath()
+        )
         External.instance.requestFocusAfterRendering(elementId)
 
-        NextState.commit()
+        CurrentState.commit()
       })
     },
     onClickCloseButton: () => {
       doWithErrorHandling(() => {
-        NextState.unmountPage(itemId)
+        CurrentState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
         if (itemId === Internal.instance.state.activePageId) {
@@ -120,13 +122,15 @@ export function createPageTreeNodeViewModel(
               }
             })
             .maxBy((a) => a.timestamp)!.pageId
-          NextState.setActivePageId(hottestPageId)
+          CurrentState.setActivePageId(hottestPageId)
           // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-          const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+          const elementId = ItemTreeContentView.focusableDomElementId(
+            CurrentState.getTargetItemPath()
+          )
           External.instance.requestFocusAfterRendering(elementId)
         }
 
-        NextState.commit()
+        CurrentState.commit()
       })
     },
     onDragOver: (event) => {
@@ -145,11 +149,11 @@ export function createPageTreeNodeViewModel(
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        NextState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
+        CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
 
-        NextState.insertFirstChildItem(itemId, draggedItemId)
-        NextState.updateItemTimestamp(draggedItemId)
-        NextState.commit()
+        CurrentState.insertFirstChildItem(itemId, draggedItemId)
+        CurrentState.updateItemTimestamp(draggedItemId)
+        CurrentState.commit()
       })
     },
     isActivePage: state.activePageId === itemId,

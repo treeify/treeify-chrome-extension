@@ -1,13 +1,13 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {External} from 'src/TreeifyWindow/External/External'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** 対象ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadItem() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.itemIdToTabId.get(ItemPath.getItemId(targetItemPath))
   // 対応するタブがなければ何もしない
@@ -21,9 +21,9 @@ export function hardUnloadItem() {
 
 /** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadSubtree() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemId)) {
+  for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.itemIdToTabId.get(subtreeItemId)
     if (tabId !== undefined) {
       // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
@@ -37,7 +37,7 @@ export function hardUnloadSubtree() {
 
 /** ウェブページアイテムのロード操作 */
 export function loadItem() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const tabId = External.instance.itemIdToTabId.get(targetItemId)
   // 対応するタブがあれば何もしない
   if (tabId !== undefined) return
@@ -50,8 +50,8 @@ export function loadItem() {
 
 /** ウェブページアイテムのサブツリーロード操作 */
 export function loadSubtree() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
-  for (const subtreeItemId of NextState.getSubtreeItemIds(targetItemId)) {
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.itemIdToTabId.get(subtreeItemId)
     if (tabId === undefined) {
       const url = Internal.instance.state.webPageItems[subtreeItemId].url
@@ -67,7 +67,7 @@ export function loadSubtree() {
  * 存在しない場合はタブを開く。
  */
 export function browseWebPageItem() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   const tabId = External.instance.itemIdToTabId.get(targetItemId)

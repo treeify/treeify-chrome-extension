@@ -3,7 +3,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {integer} from 'src/Common/basicType'
 
 /**
- * NextStateへの全ての変更を確定し、ModelのStateを書き換える。
+ * CurrentStateへの全ての変更を確定し、ModelのStateを書き換える。
  * さらにそれをViewに通知する。
  */
 export function commit() {

@@ -7,7 +7,7 @@ import {integer, ItemId} from 'src/Common/basicType'
 import {CssCustomProperty} from 'src/Common/CssCustomProperty'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
@@ -70,9 +70,9 @@ export function createItemTreeNodeViewModel(
         const inputId = InputId.fromMouseEvent(event)
         if (inputId === '0000MouseButton1') {
           event.preventDefault()
-          NextState.setTargetItemPath(itemPath)
+          CurrentState.setTargetItemPath(itemPath)
           NullaryCommand.deleteItem()
-          NextState.commit()
+          CurrentState.commit()
         }
       })
     },
@@ -82,15 +82,15 @@ export function createItemTreeNodeViewModel(
         switch (inputId) {
           case '0000MouseButton0':
             event.preventDefault()
-            NextState.setTargetItemPath(itemPath)
+            CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.deleteItem()
-            NextState.commit()
+            CurrentState.commit()
             break
           case '1000MouseButton0':
             event.preventDefault()
-            NextState.setTargetItemPath(itemPath)
+            CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.deleteItemItself()
-            NextState.commit()
+            CurrentState.commit()
             break
         }
       })

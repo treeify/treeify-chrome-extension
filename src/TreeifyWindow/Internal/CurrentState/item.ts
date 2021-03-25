@@ -4,7 +4,7 @@ import {assert, assertNeverType} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
@@ -40,19 +40,19 @@ export function deleteItem(itemId: ItemId) {
   const itemType = item.itemType
   switch (itemType) {
     case ItemType.TEXT:
-      NextState.deleteTextItemEntry(itemId)
+      CurrentState.deleteTextItemEntry(itemId)
       break
     case ItemType.WEB_PAGE:
-      NextState.deleteWebPageItemEntry(itemId)
+      CurrentState.deleteWebPageItemEntry(itemId)
       break
     default:
       assertNeverType(itemType)
   }
 
-  NextState.unmountPage(itemId)
-  NextState.becomeNonPage(itemId)
+  CurrentState.unmountPage(itemId)
+  CurrentState.becomeNonPage(itemId)
 
-  NextState.deleteItemEntry(itemId)
+  CurrentState.deleteItemEntry(itemId)
 }
 
 /**
@@ -93,19 +93,19 @@ export function deleteItemItself(itemId: ItemId) {
   const itemType = item.itemType
   switch (itemType) {
     case ItemType.TEXT:
-      NextState.deleteTextItemEntry(itemId)
+      CurrentState.deleteTextItemEntry(itemId)
       break
     case ItemType.WEB_PAGE:
-      NextState.deleteWebPageItemEntry(itemId)
+      CurrentState.deleteWebPageItemEntry(itemId)
       break
     default:
       assertNeverType(itemType)
   }
 
-  NextState.unmountPage(itemId)
-  NextState.becomeNonPage(itemId)
+  CurrentState.unmountPage(itemId)
+  CurrentState.becomeNonPage(itemId)
 
-  NextState.deleteItemEntry(itemId)
+  CurrentState.deleteItemEntry(itemId)
 }
 
 /** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
@@ -128,7 +128,7 @@ export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
     return item.childItemIds
   }
 
-  if (item.isFolded || NextState.isPage(itemId)) {
+  if (item.isFolded || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
     return item.childItemIds
@@ -310,7 +310,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
   // ページは終端ノードとして扱う
-  if (NextState.isPage(itemId)) return
+  if (CurrentState.isPage(itemId)) return
 
   for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
     yield* getSubtreeItemIds(childItemId)

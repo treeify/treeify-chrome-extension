@@ -4,7 +4,7 @@ import {DataFolder} from 'src/TreeifyWindow/Internal/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
@@ -29,14 +29,14 @@ export function openDataFolderPicker() {
  * 正確に言うと、ターゲットアイテムを兄弟リストの末尾に設定する。
  */
 export function selectAllBelowItems() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const lastSiblingItemId: ItemId = siblingItemIds.last()
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(lastSiblingItemPath)
-  NextState.setTargetItemPathOnly(lastSiblingItemPath)
+  CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
 
   // 複数選択中はターゲットアイテムからフォーカスを外す
   document.getElementById('item-tree')?.focus()
@@ -47,14 +47,14 @@ export function selectAllBelowItems() {
  * 正確に言うと、ターゲットアイテムを兄弟リストの先頭に設定する。
  */
 export function selectAllAboveItems() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const firstSiblingItemId: ItemId = siblingItemIds.first()
   const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
   assertNonUndefined(firstSiblingItemPath)
-  NextState.setTargetItemPathOnly(firstSiblingItemPath)
+  CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 
   // 複数選択中はターゲットアイテムからフォーカスを外す
   document.getElementById('item-tree')?.focus()

@@ -1,7 +1,7 @@
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
 import {styleMap} from 'lit-html/directives/style-map'
 import {html} from 'lit-html'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
@@ -34,18 +34,18 @@ export function createWebPageItemTitleSettingDialogViewModel(
         if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
           if (event.target.value === '') {
             // 入力欄が空の状態でEnterキーを押したらタイトル設定を削除する
-            NextState.setWebPageItemTitle(targetItemId, null)
+            CurrentState.setWebPageItemTitle(targetItemId, null)
           } else {
-            NextState.setWebPageItemTitle(targetItemId, event.target.value)
+            CurrentState.setWebPageItemTitle(targetItemId, event.target.value)
           }
           // タイトル設定ダイアログを閉じる
-          NextState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.setWebPageItemTitleSettingDialog(null)
 
           // フォーカスを戻す
           const domElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
           External.instance.requestFocusAfterRendering(domElementId)
 
-          NextState.commit()
+          CurrentState.commit()
         }
       })
     },

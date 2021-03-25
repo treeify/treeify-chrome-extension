@@ -3,7 +3,7 @@ import {ItemId, ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Item, TextItem} from 'src/TreeifyWindow/Internal/State'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
@@ -16,7 +16,7 @@ export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List
 }
 
 /**
- * 新しい空のテキストアイテムを作成し、NextStateに登録する。
+ * 新しい空のテキストアイテムを作成し、CurrentStateに登録する。
  * ただしアイテムの配置（親子関係の設定）は行わない。
  */
 export function createTextItem(): ItemId {
@@ -38,7 +38,7 @@ export function createTextItem(): ItemId {
   Internal.instance.state.textItems[newItemId] = newTextItem
   Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('textItems', newItemId))
 
-  NextState.setNextNewItemId(newItemId + 1)
+  CurrentState.setNextNewItemId(newItemId + 1)
 
   return newItemId
 }

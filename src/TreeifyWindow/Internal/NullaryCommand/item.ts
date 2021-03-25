@@ -1,7 +1,7 @@
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/Common/DomishObject'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
@@ -10,37 +10,37 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
-  NextState.setIsFolded(targetItemId, !Internal.instance.state.items[targetItemId].isFolded)
-  NextState.updateItemTimestamp(targetItemId)
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  CurrentState.setIsFolded(targetItemId, !Internal.instance.state.items[targetItemId].isFolded)
+  CurrentState.updateItemTimestamp(targetItemId)
 }
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indentItem() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  const prevSiblingItemPath = NextState.findPrevSiblingItemPath(targetItemPath)
+  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(targetItemPath)
   // 兄が居ない場合、何もしない
   if (prevSiblingItemPath === undefined) return
 
   const prevSiblingItemId = ItemPath.getItemId(prevSiblingItemPath)
 
   // 兄がページの場合はアンフォールドできないので何もしない
-  if (NextState.isPage(prevSiblingItemId)) return
+  if (CurrentState.isPage(prevSiblingItemId)) return
 
   // 兄をアンフォールドする
-  NextState.setIsFolded(prevSiblingItemId, false)
+  CurrentState.setIsFolded(prevSiblingItemId, false)
 
   // 兄の最後の子になるようターゲットアイテムを配置
-  NextState.insertLastChildItem(prevSiblingItemId, targetItemId)
+  CurrentState.insertLastChildItem(prevSiblingItemId, targetItemId)
 
   // 既存の親子関係を削除
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   assertNonUndefined(parentItemId)
-  NextState.removeItemGraphEdge(parentItemId, targetItemId)
+  CurrentState.removeItemGraphEdge(parentItemId, targetItemId)
 
-  NextState.updateItemTimestamp(targetItemId)
+  CurrentState.updateItemTimestamp(targetItemId)
 
   // フォーカスを移動先に更新する
   External.instance.requestFocusAfterRendering(
@@ -53,7 +53,7 @@ export function indentItem() {
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemPath = ItemPath.getParent(targetItemPath)
 
   // 親または親の親が居ない場合は何もしない
@@ -62,12 +62,12 @@ export function unindentItem() {
 
   // 既存の親子関係を削除
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
+  CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
 
   // 親の弟として配置する
-  NextState.insertNextSiblingItem(parentItemPath, targetItemId)
+  CurrentState.insertNextSiblingItem(parentItemPath, targetItemId)
 
-  NextState.updateItemTimestamp(targetItemId)
+  CurrentState.updateItemTimestamp(targetItemId)
 
   // フォーカスを移動先に更新する
   const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
@@ -84,11 +84,11 @@ export function unindentItem() {
  * 親が居ない場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemUpward() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
-  const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
+  const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
   // 1つ上のアイテムが存在しない場合は何もしない
   if (aboveItemPath === undefined) return
 
@@ -97,7 +97,7 @@ export function moveItemUpward() {
   if (aboveItemParentItemId === undefined) return
 
   // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
-  // 兄弟リスト内に同一アイテムが複数存在する状況は（NextStateの途中状態だったとしても）許容しない。
+  // 兄弟リスト内に同一アイテムが複数存在する状況は（CurrentStateの途中状態だったとしても）許容しない。
   // なぜならindexOfなどで不具合が起こることが目に見えているから。
   // そのため、旧エッジ削除の前に新エッジ追加を行ってはならない。
   // 一方、新エッジ追加の前に旧エッジ削除を行おうとしても、
@@ -106,9 +106,9 @@ export function moveItemUpward() {
 
   if (aboveItemParentItemId === targetItemParentItemId) {
     // 1つ上のアイテムが兄である場合、兄弟リスト内を兄方向に1つ移動する
-    NextState.moveToPrevSibling(targetItemPath)
+    CurrentState.moveToPrevSibling(targetItemPath)
 
-    NextState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(targetItemId)
 
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(targetItemPath)
@@ -118,12 +118,12 @@ export function moveItemUpward() {
     External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 1つ上のアイテムの兄になるようターゲットアイテムを配置
-    NextState.insertPrevSiblingItem(aboveItemPath, targetItemId)
+    CurrentState.insertPrevSiblingItem(aboveItemPath, targetItemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
+    CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
 
-    NextState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(targetItemId)
 
     // フォーカスを移動先に更新する
     const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
@@ -142,20 +142,22 @@ export function moveItemUpward() {
  * すでに下端の場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemDownward() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
-  const firstFollowingItemPath = NextState.findFirstFollowingItemPath(targetItemPath)
+  const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(targetItemPath)
   // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
-  if (NextState.getDisplayingChildItemIds(ItemPath.getItemId(firstFollowingItemPath)).isEmpty()) {
+  if (
+    CurrentState.getDisplayingChildItemIds(ItemPath.getItemId(firstFollowingItemPath)).isEmpty()
+  ) {
     // 1つ下のアイテムが子を表示していない場合
 
     // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
-    // 兄弟リスト内に同一アイテムが複数存在する状況は（NextStateの途中状態だったとしても）許容しない。
+    // 兄弟リスト内に同一アイテムが複数存在する状況は（CurrentStateの途中状態だったとしても）許容しない。
     // なぜならindexOfなどで不具合が起こることが目に見えているから。
     // そのため、旧エッジ削除の前に新エッジ追加を行ってはならない。
     // 一方、新エッジ追加の前に旧エッジ削除を行おうとしても、
@@ -164,9 +166,9 @@ export function moveItemDownward() {
 
     if (ItemPath.getParentItemId(firstFollowingItemPath) === targetItemParentItemId) {
       // 兄弟リスト内を弟方向に1つ移動する
-      NextState.moveToNextSibling(targetItemPath)
+      CurrentState.moveToNextSibling(targetItemPath)
 
-      NextState.updateItemTimestamp(targetItemId)
+      CurrentState.updateItemTimestamp(targetItemId)
 
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(targetItemPath)
@@ -176,12 +178,12 @@ export function moveItemDownward() {
       External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
     } else {
       // 弟になるようターゲットアイテムを配置
-      NextState.insertNextSiblingItem(firstFollowingItemPath, targetItemId)
+      CurrentState.insertNextSiblingItem(firstFollowingItemPath, targetItemId)
 
       // 既存の親子関係を削除
-      NextState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
+      CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
 
-      NextState.updateItemTimestamp(targetItemId)
+      CurrentState.updateItemTimestamp(targetItemId)
 
       // フォーカスを移動先に更新する
       const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
@@ -197,12 +199,12 @@ export function moveItemDownward() {
     // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
 
     // 最初の子になるようターゲットアイテムを配置
-    NextState.insertFirstChildItem(ItemPath.getItemId(firstFollowingItemPath), targetItemId)
+    CurrentState.insertFirstChildItem(ItemPath.getItemId(firstFollowingItemPath), targetItemId)
 
     // 既存の親子関係を削除
-    NextState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
+    CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
 
-    NextState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(targetItemId)
 
     // フォーカスを移動先に更新する
     const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
@@ -217,7 +219,7 @@ export function moveItemDownward() {
 
 /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
@@ -239,15 +241,15 @@ export function enterKeyDefault() {
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
       const domishObjects = DomishObject.fromChildren(range.extractContents())
-      NextState.setTextItemDomishObjects(
+      CurrentState.setTextItemDomishObjects(
         targetItemId,
         DomishObject.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを最初の子として追加する
-      const newItemId = NextState.createTextItem()
-      NextState.insertFirstChildItem(targetItemId, newItemId)
-      NextState.setTextItemDomishObjects(newItemId, domishObjects)
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.insertFirstChildItem(targetItemId, newItemId)
+      CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
       External.instance.requestFocusAfterRendering(
@@ -261,8 +263,8 @@ export function enterKeyDefault() {
       // 空のテキストアイテムなら
 
       // 新規アイテムを弟として追加する
-      const newItemId = NextState.createTextItem()
-      NextState.insertNextSiblingItem(targetItemPath, newItemId)
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
 
       // キャレット位置を更新する
       const siblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
@@ -277,15 +279,15 @@ export function enterKeyDefault() {
       const range = selection.getRangeAt(0)
       range.setStartBefore(document.activeElement.firstChild!)
       const domishObjects = DomishObject.fromChildren(range.extractContents())
-      NextState.setTextItemDomishObjects(
+      CurrentState.setTextItemDomishObjects(
         targetItemId,
         DomishObject.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを兄として追加する
-      const newItemId = NextState.createTextItem()
-      NextState.insertPrevSiblingItem(targetItemPath, newItemId)
-      NextState.setTextItemDomishObjects(newItemId, domishObjects)
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.insertPrevSiblingItem(targetItemPath, newItemId)
+      CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
       External.instance.requestFocusAfterRendering(
@@ -295,22 +297,22 @@ export function enterKeyDefault() {
     } else {
       // キャレット位置が後半なら
 
-      if (!NextState.getDisplayingChildItemIds(targetItemId).isEmpty()) {
+      if (!CurrentState.getDisplayingChildItemIds(targetItemId).isEmpty()) {
         // もし子を表示しているなら
 
         // キャレットより後ろのテキストをカットする
         const range = selection.getRangeAt(0)
         range.setEndAfter(document.activeElement.lastChild!)
         const domishObjects = DomishObject.fromChildren(range.extractContents())
-        NextState.setTextItemDomishObjects(
+        CurrentState.setTextItemDomishObjects(
           targetItemId,
           DomishObject.fromChildren(document.activeElement)
         )
 
         // 新規アイテムを最初の子として追加する
-        const newItemId = NextState.createTextItem()
-        NextState.insertFirstChildItem(targetItemId, newItemId)
-        NextState.setTextItemDomishObjects(newItemId, domishObjects)
+        const newItemId = CurrentState.createTextItem()
+        CurrentState.insertFirstChildItem(targetItemId, newItemId)
+        CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
         External.instance.requestFocusAfterRendering(
@@ -324,15 +326,15 @@ export function enterKeyDefault() {
         const range = selection.getRangeAt(0)
         range.setEndAfter(document.activeElement.lastChild!)
         const domishObjects = DomishObject.fromChildren(range.extractContents())
-        NextState.setTextItemDomishObjects(
+        CurrentState.setTextItemDomishObjects(
           targetItemId,
           DomishObject.fromChildren(document.activeElement)
         )
 
         // 新規アイテムを弟として追加する
-        const newItemId = NextState.createTextItem()
-        NextState.insertNextSiblingItem(targetItemPath, newItemId)
-        NextState.setTextItemDomishObjects(newItemId, domishObjects)
+        const newItemId = CurrentState.createTextItem()
+        CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
+        CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
         External.instance.requestFocusAfterRendering(
@@ -349,8 +351,8 @@ export function enterKeyDefault() {
     // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
     if (!ItemPath.hasParent(targetItemPath)) {
       // 新規アイテムを最初の子として追加する
-      const newItemId = NextState.createTextItem()
-      NextState.insertFirstChildItem(targetItemId, newItemId)
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
       External.instance.requestFocusAfterRendering(
@@ -359,11 +361,11 @@ export function enterKeyDefault() {
       return
     }
 
-    if (!NextState.getDisplayingChildItemIds(targetItemId).isEmpty()) {
+    if (!CurrentState.getDisplayingChildItemIds(targetItemId).isEmpty()) {
       // もし子を表示しているなら
       // 新規アイテムを最初の子として追加する
-      const newItemId = NextState.createTextItem()
-      NextState.insertFirstChildItem(targetItemId, newItemId)
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
       External.instance.requestFocusAfterRendering(
@@ -372,8 +374,8 @@ export function enterKeyDefault() {
     } else {
       // もし子を表示していないなら
       // 新規アイテムを弟として追加する
-      const newItemId = NextState.createTextItem()
-      NextState.insertNextSiblingItem(targetItemPath, newItemId)
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
 
       // フォーカスを移す
       const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
@@ -389,19 +391,19 @@ export function enterKeyDefault() {
  * ターゲットアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItem() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
 
   // アクティブページを削除しようとしている場合、何もしない
   if (!ItemPath.hasParent(targetItemPath)) return
 
   // 上のアイテムをフォーカス
-  const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
+  const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
   assertNonUndefined(aboveItemPath)
   External.instance.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(aboveItemPath)
   )
 
-  NextState.deleteItem(ItemPath.getItemId(targetItemPath))
+  CurrentState.deleteItem(ItemPath.getItemId(targetItemPath))
 }
 
 /**
@@ -410,7 +412,7 @@ export function deleteItem() {
  * ターゲットアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItemItself() {
-  const targetItemPath = NextState.getTargetItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   // アクティブページを削除しようとしている場合、何もしない
@@ -419,7 +421,7 @@ export function deleteItemItself() {
   const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.isEmpty()) {
     // 上のアイテムをフォーカス
-    const aboveItemPath = NextState.findAboveItemPath(targetItemPath)
+    const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(aboveItemPath)
@@ -433,7 +435,7 @@ export function deleteItemItself() {
     )
   }
 
-  NextState.deleteItemItself(targetItemId)
+  CurrentState.deleteItemItself(targetItemId)
 }
 
 /**
@@ -441,38 +443,38 @@ export function deleteItemItself() {
  * ターゲットアイテムが非ページならページ化する。
  */
 export function togglePaged() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  if (NextState.isPage(targetItemId)) {
-    NextState.becomeNonPage(targetItemId)
+  if (CurrentState.isPage(targetItemId)) {
+    CurrentState.becomeNonPage(targetItemId)
   } else {
-    NextState.becomePage(targetItemId)
+    CurrentState.becomePage(targetItemId)
   }
 }
 
 /** 対象アイテムがページなら、そのページに切り替える */
 export function showPage() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  if (NextState.isPage(targetItemId)) {
-    NextState.mountPage(targetItemId)
-    NextState.setActivePageId(targetItemId)
+  if (CurrentState.isPage(targetItemId)) {
+    CurrentState.mountPage(targetItemId)
+    CurrentState.setActivePageId(targetItemId)
 
     // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-    const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+    const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
     External.instance.requestFocusAfterRendering(elementId)
   }
 }
 
 /** 対象アイテムをページ化し、そのページに切り替える */
 export function becomeAndShowPage() {
-  const targetItemId = ItemPath.getItemId(NextState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  NextState.becomePage(targetItemId)
-  NextState.mountPage(targetItemId)
-  NextState.setActivePageId(targetItemId)
+  CurrentState.becomePage(targetItemId)
+  CurrentState.mountPage(targetItemId)
+  CurrentState.setActivePageId(targetItemId)
   // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-  const elementId = ItemTreeContentView.focusableDomElementId(NextState.getTargetItemPath())
+  const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
   External.instance.requestFocusAfterRendering(elementId)
 }
 
@@ -481,20 +483,20 @@ export function becomeAndShowPage() {
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
-  const selectedItemPaths = NextState.getSelectedItemPaths()
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
     const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-    NextState.toggleCssClass(targetItemId, 'grayed-out-item')
+    CurrentState.toggleCssClass(targetItemId, 'grayed-out-item')
 
     // タイムスタンプを更新
     // TODO: 設定で無効化できるようにする
-    NextState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(targetItemId)
   }
 
   // フォーカスを下のアイテムに移動する。
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
-  const firstFollowingItemPath = NextState.findFirstFollowingItemPath(selectedItemPaths.last())
+  const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
   if (firstFollowingItemPath !== undefined) {
     External.instance.requestFocusAfterRendering(
       ItemTreeContentView.focusableDomElementId(firstFollowingItemPath)
@@ -511,13 +513,13 @@ export function toggleGrayedOut() {
  * もし既にハイライト状態なら非ハイライト状態に戻す。
  */
 export function toggleHighlighted() {
-  const selectedItemPaths = NextState.getSelectedItemPaths()
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
     const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-    NextState.toggleCssClass(targetItemId, 'highlighted-item')
+    CurrentState.toggleCssClass(targetItemId, 'highlighted-item')
 
     // タイムスタンプを更新
-    NextState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(targetItemId)
   }
 }

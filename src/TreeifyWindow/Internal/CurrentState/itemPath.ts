@@ -1,6 +1,6 @@
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -45,8 +45,8 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
 export function getSelectedItemPaths(): List<ItemPath> {
-  const targetItemPath = NextState.getTargetItemPath()
-  const anchorItemPath = NextState.getAnchorItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const anchorItemPath = CurrentState.getAnchorItemPath()
   if (is(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
     return List.of(targetItemPath)
@@ -102,7 +102,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   const itemId = ItemPath.getItemId(itemPath)
-  const firstChildItemId = NextState.getDisplayingChildItemIds(itemId).first(undefined)
+  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemId).first(undefined)
   // 表示されているアイテムが存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子アイテムが該当アイテムである
@@ -177,7 +177,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
-  if (NextState.getDisplayingChildItemIds(itemId).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(itemId).isEmpty()) {
     // 子を表示していない場合、このアイテムこそが最も下のアイテムである
     return itemPath
   }

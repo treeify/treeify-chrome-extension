@@ -5,7 +5,7 @@ import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {External} from 'src/TreeifyWindow/External/External'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
@@ -46,26 +46,26 @@ export function createItemTreeWebPageContentViewModel(
     isAudible,
     onFocus: (event) => {
       doWithErrorHandling(() => {
-        NextState.setTargetItemPath(itemPath)
-        NextState.commit()
+        CurrentState.setTargetItemPath(itemPath)
+        CurrentState.commit()
       })
     },
     onClickTitle: (event) => {
       doWithErrorHandling(() => {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
-            NextState.setTargetItemPath(itemPath)
+            CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseWebPageItem()
             break
           case '1000MouseButton0':
-            NextState.setTargetItemPath(itemPath)
-            NextState.commit()
+            CurrentState.setTargetItemPath(itemPath)
+            CurrentState.commit()
         }
       })
     },
     onClickFavicon: (event) => {
       doWithErrorHandling(() => {
-        NextState.setTargetItemPath(itemPath)
+        CurrentState.setTargetItemPath(itemPath)
 
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
@@ -79,7 +79,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.hardUnloadSubtree()
             }
 
-            NextState.commit()
+            CurrentState.commit()
             break
           case '1000MouseButton0':
             event.preventDefault()
@@ -92,7 +92,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.hardUnloadItem()
             }
 
-            NextState.commit()
+            CurrentState.commit()
             break
         }
       })
