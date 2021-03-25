@@ -7,7 +7,7 @@ import {List} from 'immutable'
 import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
@@ -36,17 +36,17 @@ export function onCreated(tab: Tab) {
       // タブに対応するウェブページアイテムがない時
 
       // ウェブページアイテムを作る
-      const newWebPageItemId = NextState.createWebPageItem()
+      const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
       External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
-      const targetItemPath = NextState.getTargetItemPath()
+      const targetItemPath = CurrentState.getTargetItemPath()
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
         if (ItemPath.hasParent(targetItemPath)) {
           // いわゆる「新しいタブ」は弟として追加する
-          NextState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
+          CurrentState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
 
           // フォーカスを移す
           if (tab.active) {
@@ -58,7 +58,7 @@ export function onCreated(tab: Tab) {
           }
         } else {
           // アクティブアイテムの最初の子として追加する
-          NextState.insertFirstChildItem(targetItemId, newWebPageItemId)
+          CurrentState.insertFirstChildItem(targetItemId, newWebPageItemId)
 
           // フォーカスを移す
           if (tab.active) {
@@ -73,7 +73,7 @@ export function onCreated(tab: Tab) {
         assertNonUndefined(openerItemId)
 
         // openerの最後の子として追加する
-        NextState.insertLastChildItem(openerItemId, newWebPageItemId)
+        CurrentState.insertLastChildItem(openerItemId, newWebPageItemId)
 
         // openerがターゲットアイテムなら
         if (targetItemId === openerItemId) {
@@ -106,7 +106,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
 
     reflectInWebPageItem(itemId, tab)
 
-    NextState.commit()
+    CurrentState.commit()
   })
 }
 
@@ -115,10 +115,10 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
     External.instance.tabIdToTab.set(tab.id, tab)
   }
-  NextState.setWebPageItemTabTitle(itemId, tab.title ?? '')
+  CurrentState.setWebPageItemTabTitle(itemId, tab.title ?? '')
   const url = tab.url || tab.pendingUrl || ''
-  NextState.setWebPageItemUrl(itemId, url)
-  NextState.setWebPageItemFaviconUrl(itemId, tab.favIconUrl ?? '')
+  CurrentState.setWebPageItemUrl(itemId, url)
+  CurrentState.setWebPageItemFaviconUrl(itemId, tab.favIconUrl ?? '')
 }
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
@@ -129,13 +129,13 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     if (External.instance.hardUnloadedTabIds.has(tabId)) {
       // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
       External.instance.hardUnloadedTabIds.delete(tabId)
-    } else if (NextState.isItem(itemId)) {
+    } else if (CurrentState.isItem(itemId)) {
       // 対応するウェブページアイテムを削除する
-      NextState.deleteItemItself(itemId)
+      CurrentState.deleteItemItself(itemId)
     }
 
     External.instance.untieTabAndItemByTabId(tabId)
-    NextState.commit()
+    CurrentState.commit()
   })
 }
 
@@ -143,8 +143,8 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
   doWithErrorHandling(() => {
     const itemId = External.instance.tabIdToItemId.get(tabActiveInfo.tabId)
     if (itemId !== undefined) {
-      NextState.updateItemTimestamp(itemId)
-      NextState.commit()
+      CurrentState.updateItemTimestamp(itemId)
+      CurrentState.commit()
     }
   })
 }
@@ -170,13 +170,13 @@ export async function matchTabsAndWebPageItems() {
     if (webPageItemId === undefined) {
       // URLの一致するウェブページアイテムがない場合、
       // ウェブページアイテムを作る
-      const newWebPageItemId = NextState.createWebPageItem()
+      const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
       External.instance.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最後の子として追加する
-      const activePageId = NextState.getActivePageId()
-      NextState.insertLastChildItem(activePageId, newWebPageItemId)
+      const activePageId = Internal.instance.state.activePageId
+      CurrentState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
       reflectInWebPageItem(webPageItemId, tab)
@@ -185,14 +185,14 @@ export async function matchTabsAndWebPageItems() {
   }
 
   // 正当性にやや疑問の残るcommit呼び出しだが、現状の設計では呼ばないとエラーになる
-  NextState.commit()
+  CurrentState.commit()
 }
 
 // 指定されたURLを持つウェブページアイテムを探す。
 // もし複数該当する場合は最初に見つかったものを返す。
 // 見つからなかった場合はundefinedを返す。
 function findWebPageItemId(url: string): ItemId | undefined {
-  const webPageItems = Internal.instance.currentState.webPageItems
+  const webPageItems = Internal.instance.state.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
     if (url === webPageItem.url) {

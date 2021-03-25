@@ -1,14 +1,13 @@
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** ターゲットアイテムパスを返す */
 export function getTargetItemPath(): ItemPath {
-  return NextState.getBatchizer().getDerivedValue(
-    PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath')
-  )
+  return Internal.instance.state.pages[Internal.instance.state.activePageId].targetItemPath
 }
 
 /** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
@@ -19,24 +18,24 @@ export function setTargetItemPath(itemPath: ItemPath) {
 
 /** ターゲットアイテムパスを返す */
 export function getAnchorItemPath(): ItemPath {
-  return NextState.getBatchizer().getDerivedValue(
-    PropertyPath.of('pages', NextState.getActivePageId(), 'anchorItemPath')
-  )
+  return Internal.instance.state.pages[Internal.instance.state.activePageId].anchorItemPath
 }
 
 /** アンカーアイテムパスを上書きする */
 export function setAnchorItemPath(itemPath: ItemPath) {
-  NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('pages', NextState.getActivePageId(), 'anchorItemPath'),
-    itemPath
+  const activePageId = Internal.instance.state.activePageId
+  Internal.instance.state.pages[activePageId].anchorItemPath = itemPath
+  Internal.instance.mutatedPropertyPaths.add(
+    PropertyPath.of('pages', activePageId, 'anchorItemPath')
   )
 }
 
 /** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
-  NextState.getBatchizer().postSetMutation(
-    PropertyPath.of('pages', NextState.getActivePageId(), 'targetItemPath'),
-    itemPath
+  const activePageId = Internal.instance.state.activePageId
+  Internal.instance.state.pages[activePageId].targetItemPath = itemPath
+  Internal.instance.mutatedPropertyPaths.add(
+    PropertyPath.of('pages', activePageId, 'targetItemPath')
   )
 }
 
@@ -46,8 +45,8 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
 export function getSelectedItemPaths(): List<ItemPath> {
-  const targetItemPath = NextState.getTargetItemPath()
-  const anchorItemPath = NextState.getAnchorItemPath()
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const anchorItemPath = CurrentState.getAnchorItemPath()
   if (is(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
     return List.of(targetItemPath)
@@ -55,7 +54,7 @@ export function getSelectedItemPaths(): List<ItemPath> {
 
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   assertNonUndefined(parentItemId)
-  const childItemIds = NextState.getChildItemIds(parentItemId)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
   const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
   const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
@@ -103,7 +102,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   const itemId = ItemPath.getItemId(itemPath)
-  const firstChildItemId = NextState.getDisplayingChildItemIds(itemId).first(undefined)
+  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemId).first(undefined)
   // 表示されているアイテムが存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子アイテムが該当アイテムである
@@ -139,7 +138,8 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath === undefined) return undefined
 
-  const siblingItemIds = NextState.getChildItemIds(ItemPath.getItemId(parentItemPath))
+  const parentItemId = ItemPath.getItemId(parentItemPath)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が長男の場合
@@ -156,7 +156,8 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath === undefined) return undefined
 
-  const siblingItemIds = NextState.getChildItemIds(ItemPath.getItemId(parentItemPath))
+  const parentItemId = ItemPath.getItemId(parentItemPath)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が末弟の場合
@@ -176,12 +177,12 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
-  if (NextState.getDisplayingChildItemIds(itemId).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(itemId).isEmpty()) {
     // 子を表示していない場合、このアイテムこそが最も下のアイテムである
     return itemPath
   }
 
-  const childItemIds = NextState.getChildItemIds(itemId)
+  const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }

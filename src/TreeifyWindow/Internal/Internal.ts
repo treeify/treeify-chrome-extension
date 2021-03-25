@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
-import {Batchizer, PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 
@@ -9,8 +9,7 @@ export class Internal {
   private static _instance: Internal | undefined
 
   private constructor(initialState: State) {
-    this.currentState = initialState
-    this.nextState = new Batchizer(this.currentState)
+    this.state = initialState
   }
 
   /**
@@ -39,15 +38,15 @@ export class Internal {
   private readonly stateChangeListeners = new Set<
     (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   >()
-  readonly currentState: State = Internal.createInitialState()
-  readonly nextState: Batchizer = new Batchizer(this.currentState)
+  readonly state: State = Internal.createInitialState()
+  readonly mutatedPropertyPaths = new Set<PropertyPath>()
 
-  /** Stateへの変更を確定し、Viewに通知する */
+  /** Stateへの変更を確定し、stateChangeListenerに通知する */
   commit() {
-    const mutatedPropertyPaths = this.nextState.commit()
     for (const stateChangeListener of this.stateChangeListeners) {
-      stateChangeListener(this.currentState, mutatedPropertyPaths)
+      stateChangeListener(this.state, this.mutatedPropertyPaths)
     }
+    this.mutatedPropertyPaths.clear()
   }
 
   addStateChangeListener(

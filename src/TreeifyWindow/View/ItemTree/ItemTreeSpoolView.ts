@@ -1,7 +1,7 @@
 import {html, TemplateResult} from 'lit-html'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Item, State} from 'src/TreeifyWindow/Internal/State'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
@@ -27,7 +27,7 @@ export function createItemTreeSpoolViewModel(
 
   const onClick = (event: MouseEvent) => {
     doWithErrorHandling(() => {
-      NextState.setTargetItemPath(itemPath)
+      CurrentState.setTargetItemPath(itemPath)
 
       const inputId = InputId.fromMouseEvent(event)
       switch (bulletState) {
@@ -66,7 +66,7 @@ export function createItemTreeSpoolViewModel(
           }
           break
       }
-      NextState.commit()
+      CurrentState.commit()
     })
   }
 

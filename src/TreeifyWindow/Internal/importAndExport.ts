@@ -1,8 +1,9 @@
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/Common/DomishObject'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemId: ItemId): string {
@@ -11,10 +12,10 @@ export function exportAsIndentedText(itemId: ItemId): string {
 
 function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
   const line = '  '.repeat(indentLevel) + getContentAsPlainText(itemId)
-  if (NextState.isPage(itemId)) {
+  if (CurrentState.isPage(itemId)) {
     return List.of(line)
   }
-  const childLines = NextState.getChildItemIds(itemId).flatMap((childItemId) => {
+  const childLines = Internal.instance.state.items[itemId].childItemIds.flatMap((childItemId) => {
     return exportAsIndentedLines(childItemId, indentLevel + 1)
   })
   return childLines.unshift(line)
@@ -22,14 +23,15 @@ function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
 
 /** アイテムタイプごとのフォーマットでコンテンツをプレーンテキスト化する */
 export function getContentAsPlainText(itemId: ItemId): string {
-  const itemType = NextState.getItemType(itemId)
+  const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      return DomishObject.toSingleLinePlainText(NextState.getTextItemDomishObjects(itemId))
+      const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
+      return DomishObject.toSingleLinePlainText(domishObjects)
     case ItemType.WEB_PAGE:
-      const title =
-        NextState.getWebPageItemTitle(itemId) ?? NextState.getWebPageItemTabTitle(itemId)
-      const url = NextState.getWebPageItemUrl(itemId)
+      const webPageItem = Internal.instance.state.webPageItems[itemId]
+      const title = webPageItem.title ?? webPageItem.title
+      const url = webPageItem.url
       return `${title} ${url}`
     default:
       assertNeverType(itemType)
@@ -46,18 +48,18 @@ export function pasteMultilineText(text: string) {
       // インデント形式のテキストとして認識できた場合
       const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
       for (const rootItemId of rootItemIds.reverse()) {
-        NextState.insertNextSiblingItem(NextState.getTargetItemPath(), rootItemId)
+        CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), rootItemId)
       }
-      NextState.commit()
+      CurrentState.commit()
       return
     }
   }
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
   for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
-    NextState.insertNextSiblingItem(NextState.getTargetItemPath(), itemId)
+    CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), itemId)
   }
-  NextState.commit()
+  CurrentState.commit()
 }
 
 // 指定されたインデント単位のインデント形式テキストかどうか判定する。
@@ -115,7 +117,7 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
     if (indentLevel === itemIds.length) {
       // 前の行よりインデントが1つ深い場合
       const newItemId = createItemFromSingleLineText(line)
-      NextState.insertLastChildItem(itemIds[itemIds.length - 1], newItemId)
+      CurrentState.insertLastChildItem(itemIds[itemIds.length - 1], newItemId)
       itemIds.push(newItemId)
     } else {
       // 前の行とインデントの深さが同じか、それより浅い場合
@@ -128,7 +130,7 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
         itemIds[indentLevel] = newItemId
         rootItemIds.push(newItemId)
       } else {
-        NextState.insertLastChildItem(itemIds[itemIds.length - 2], newItemId)
+        CurrentState.insertLastChildItem(itemIds[itemIds.length - 2], newItemId)
         itemIds[indentLevel] = newItemId
       }
     }
@@ -144,16 +146,16 @@ export function createItemFromSingleLineText(line: string): ItemId {
 
     // ウェブページアイテムを作る
     const title = line.replace(url, '').trim()
-    const itemId = NextState.createWebPageItem()
-    NextState.setWebPageItemTitle(itemId, title)
-    NextState.setWebPageItemUrl(itemId, url)
+    const itemId = CurrentState.createWebPageItem()
+    CurrentState.setWebPageItemTitle(itemId, title)
+    CurrentState.setWebPageItemUrl(itemId, url)
     return itemId
   } else {
     // URLが含まれていない場合
 
     // テキストアイテムを作る
-    const itemId = NextState.createTextItem()
-    NextState.setTextItemDomishObjects(
+    const itemId = CurrentState.createTextItem()
+    CurrentState.setTextItemDomishObjects(
       itemId,
       List.of({
         type: 'text',

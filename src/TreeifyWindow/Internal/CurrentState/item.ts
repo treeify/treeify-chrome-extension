@@ -2,12 +2,11 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {assert, assertNeverType} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
-import {getBatchizer} from 'src/TreeifyWindow/Internal/NextState/other'
-import {Item} from 'src/TreeifyWindow/Internal/State'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {External} from 'src/TreeifyWindow/External/External'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /**
  * 指定されたアイテムに関するデータを削除する。
@@ -15,8 +14,9 @@ import {External} from 'src/TreeifyWindow/External/External'
  * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItem(itemId: ItemId) {
-  for (const childItemId of NextState.getChildItemIds(itemId)) {
-    if (NextState.getParentItemIds(childItemId).size === 1) {
+  const item = Internal.instance.state.items[itemId]
+  for (const childItemId of item.childItemIds) {
+    if (Internal.instance.state.items[childItemId].parentItemIds.size === 1) {
       // 親を1つしか持たない子アイテムは再帰的に削除する
       deleteItem(childItemId)
     } else {
@@ -26,7 +26,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // 削除されるアイテムを親アイテムの子リストから削除する
-  for (const parentItemId of NextState.getParentItemIds(itemId)) {
+  for (const parentItemId of item.parentItemIds) {
     modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
   }
 
@@ -37,22 +37,22 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // アイテムタイプごとのデータを削除する
-  const itemType = NextState.getItemType(itemId)
+  const itemType = item.itemType
   switch (itemType) {
     case ItemType.TEXT:
-      NextState.deleteProperty(PropertyPath.of('textItems', itemId))
+      CurrentState.deleteTextItemEntry(itemId)
       break
     case ItemType.WEB_PAGE:
-      NextState.deleteProperty(PropertyPath.of('webPageItems', itemId))
+      CurrentState.deleteWebPageItemEntry(itemId)
       break
     default:
       assertNeverType(itemType)
   }
 
-  NextState.unmountPage(itemId)
-  NextState.becomeNonPage(itemId)
+  CurrentState.unmountPage(itemId)
+  CurrentState.becomeNonPage(itemId)
 
-  NextState.deleteProperty(PropertyPath.of('items', itemId))
+  CurrentState.deleteItemEntry(itemId)
 }
 
 /**
@@ -61,8 +61,9 @@ export function deleteItem(itemId: ItemId) {
  * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
-  const childItemIds = NextState.getChildItemIds(itemId)
-  const parentItemIds = NextState.getParentItemIds(itemId)
+  const item = Internal.instance.state.items[itemId]
+  const childItemIds = item.childItemIds
+  const parentItemIds = item.parentItemIds
 
   // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
@@ -89,76 +90,61 @@ export function deleteItemItself(itemId: ItemId) {
   }
 
   // アイテムタイプごとのデータを削除する
-  const itemType = NextState.getItemType(itemId)
+  const itemType = item.itemType
   switch (itemType) {
     case ItemType.TEXT:
-      NextState.deleteProperty(PropertyPath.of('textItems', itemId))
+      CurrentState.deleteTextItemEntry(itemId)
       break
     case ItemType.WEB_PAGE:
-      NextState.deleteProperty(PropertyPath.of('webPageItems', itemId))
+      CurrentState.deleteWebPageItemEntry(itemId)
       break
     default:
       assertNeverType(itemType)
   }
 
-  NextState.unmountPage(itemId)
-  NextState.becomeNonPage(itemId)
+  CurrentState.unmountPage(itemId)
+  CurrentState.becomeNonPage(itemId)
 
-  NextState.deleteProperty(PropertyPath.of('items', itemId))
+  CurrentState.deleteItemEntry(itemId)
+}
+
+/** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+export function deleteItemEntry(itemId: ItemId) {
+  delete Internal.instance.state.items[itemId]
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId))
 }
 
 /** 指定されたIDのアイテムが存在するかどうかを調べる */
 export function isItem(itemId: ItemId): boolean {
-  return undefined !== getBatchizer().getDerivedValue(PropertyPath.of('items', itemId))
-}
-
-/** 指定されたアイテムのアイテムタイプを返す */
-export function getItemType(itemId: ItemId): ItemType {
-  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'itemType'))
-}
-
-/** 指定されたアイテムの子アイテムIDリストを返す */
-export function getChildItemIds(itemId: ItemId): List<ItemId> {
-  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'childItemIds'))
-}
-
-/** 指定されたアイテムの親アイテムIDリストを返す */
-export function getParentItemIds(itemId: ItemId): List<ItemId> {
-  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'parentItemIds'))
-}
-
-/** 指定されたアイテムのisFoldedフラグを返す */
-export function getItemIsFolded(itemId: ItemId): boolean {
-  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'isFolded'))
+  return undefined !== Internal.instance.state.items[itemId]
 }
 
 /** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
 export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
+  const item = Internal.instance.state.items[itemId]
+
   // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
-  if (NextState.getActivePageId() === itemId) {
-    return getChildItemIds(itemId)
+  if (Internal.instance.state.activePageId === itemId) {
+    return item.childItemIds
   }
 
-  if (getItemIsFolded(itemId) || NextState.isPage(itemId)) {
+  if (item.isFolded || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
-    return getChildItemIds(itemId)
+    return item.childItemIds
   }
 }
 
-/** 指定されたアイテムの特定のプロパティに値を設定する */
-export function setItemProperty(itemId: ItemId, propertyName: keyof Item, value: any) {
-  getBatchizer().postSetMutation(PropertyPath.of('items', itemId, propertyName), value)
-}
-
-/** 指定されたアイテムのタイムスタンプを返す */
-export function getItemTimestamp(itemId: ItemId): Timestamp {
-  return getBatchizer().getDerivedValue(PropertyPath.of('items', itemId, 'timestamp'))
+/** 指定されたアイテムのisFoldedフラグを設定する */
+export function setIsFolded(itemId: ItemId, isFolded: boolean) {
+  Internal.instance.state.items[itemId].isFolded = isFolded
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'isFolded'))
 }
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
-  setItemProperty(itemId, 'timestamp', Timestamp.now())
+  Internal.instance.state.items[itemId].timestamp = Timestamp.now()
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'timestamp'))
 }
 
 /**
@@ -167,7 +153,9 @@ export function updateItemTimestamp(itemId: ItemId) {
  * @param f 子アイテムリストを受け取って新しい子アイテムリストを返す関数
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  setItemProperty(itemId, 'childItemIds', f(getChildItemIds(itemId)))
+  const item = Internal.instance.state.items[itemId]
+  item.childItemIds = f(item.childItemIds)
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'childItemIds'))
 }
 
 /**
@@ -176,7 +164,9 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
  * @param f 親アイテムリストを受け取って新しい親アイテムリストを返す関数
  */
 export function modifyParentItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  setItemProperty(itemId, 'parentItemIds', f(getParentItemIds(itemId)))
+  const item = Internal.instance.state.items[itemId]
+  item.parentItemIds = f(item.parentItemIds)
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'parentItemIds'))
 }
 
 /**
@@ -220,7 +210,7 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
   if (parentItemId === undefined) return
 
-  const childItemIds = getChildItemIds(parentItemId)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   // 親の子リストに自身が含まれない場合、すなわち不正なItemPathの場合は何もしない
   if (!childItemIds.contains(itemId)) return
 
@@ -246,7 +236,7 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
   if (parentItemId === undefined) return
 
-  const childItemIds = getChildItemIds(parentItemId)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   // 親の子リストに自身が含まれない場合、すなわち不正なItemPathの場合は何もしない
   if (!childItemIds.contains(itemId)) return
 
@@ -270,7 +260,7 @@ export function moveToPrevSibling(itemPath: ItemPath) {
   // アクティブページである場合は何もしない
   if (parentItemId === undefined) return
 
-  const siblingItemIds = getChildItemIds(parentItemId)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const oldIndex = siblingItemIds.indexOf(itemId)
   // 長男だった場合は何もしない
   if (oldIndex === 0) return
@@ -290,7 +280,7 @@ export function moveToNextSibling(itemPath: ItemPath) {
   // アクティブページである場合は何もしない
   if (parentItemId === undefined) return
 
-  const siblingItemIds = getChildItemIds(parentItemId)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const oldIndex = siblingItemIds.indexOf(itemId)
   // 末弟だった場合は何もしない
   if (oldIndex === siblingItemIds.size - 1) return
@@ -320,21 +310,17 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
   // ページは終端ノードとして扱う
-  if (NextState.isPage(itemId)) return
+  if (CurrentState.isPage(itemId)) return
 
-  for (const childItemId of NextState.getChildItemIds(itemId)) {
+  for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
     yield* getSubtreeItemIds(childItemId)
   }
 }
 
-/** 次に使うべき新しいアイテムIDを返す */
-export function getNextNewItemId(): ItemId {
-  return getBatchizer().getDerivedValue(PropertyPath.of('nextNewItemId'))
-}
-
 /** 次に使うべき新しいアイテムIDを設定する */
 export function setNextNewItemId(itemId: ItemId) {
-  getBatchizer().postSetMutation(PropertyPath.of('nextNewItemId'), itemId)
+  Internal.instance.state.nextNewItemId = itemId
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('nextNewItemId'))
 }
 
 /**
@@ -342,12 +328,14 @@ export function setNextNewItemId(itemId: ItemId) {
  * 既に追加済みなら削除する。
  */
 export function toggleCssClass(itemId: ItemId, cssClass: string) {
-  const propertyPath = PropertyPath.of('items', itemId, 'cssClasses')
-  const cssClasses: List<string> = getBatchizer().getDerivedValue(propertyPath)
+  const item = Internal.instance.state.items[itemId]
+  const cssClasses = item.cssClasses
+
   const index = cssClasses.indexOf(cssClass)
   if (index === -1) {
-    getBatchizer().postSetMutation(propertyPath, cssClasses.push(cssClass))
+    item.cssClasses = cssClasses.push(cssClass)
   } else {
-    getBatchizer().postSetMutation(propertyPath, cssClasses.remove(index))
+    item.cssClasses = cssClasses.remove(index)
   }
+  Internal.instance.mutatedPropertyPaths.add(PropertyPath.of('items', itemId, 'cssClasses'))
 }

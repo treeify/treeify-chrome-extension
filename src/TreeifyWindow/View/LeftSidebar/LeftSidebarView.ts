@@ -6,7 +6,7 @@ import {
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {classMap} from 'lit-html/directives/class-map'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 
 export type LeftSidebarViewModel = {
   pageTreeViewModel: PageTreeViewModel
@@ -39,8 +39,8 @@ export function createLeftSidebarViewModel(state: State): LeftSidebarViewModel |
 }
 
 function onMouseLeave() {
-  NextState.setIsFloatingLeftSidebarShown(false)
-  NextState.commit()
+  CurrentState.setIsFloatingLeftSidebarShown(false)
+  CurrentState.commit()
 }
 
 export function LeftSidebarView(viewModel: LeftSidebarViewModel) {

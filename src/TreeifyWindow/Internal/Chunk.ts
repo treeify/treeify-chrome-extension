@@ -1,6 +1,6 @@
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {List} from 'immutable'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 
 /**
  * 【具体例】

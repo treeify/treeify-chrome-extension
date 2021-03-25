@@ -4,7 +4,7 @@ import {ItemType} from 'src/Common/basicType'
 import {DomishObject} from 'src/Common/DomishObject'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
@@ -37,7 +37,7 @@ export function createItemTreeTextContentViewModel(
 
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
-          NextState.setTextItemDomishObjects(itemId, domishObjects)
+          CurrentState.setTextItemDomishObjects(itemId, domishObjects)
 
           // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
           // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
@@ -52,8 +52,8 @@ export function createItemTreeTextContentViewModel(
             ItemTreeContentView.focusableDomElementId(itemPath)
           )
 
-          NextState.updateItemTimestamp(itemId)
-          NextState.commit()
+          CurrentState.updateItemTimestamp(itemId)
+          CurrentState.commit()
         }
       })
     },
@@ -62,7 +62,7 @@ export function createItemTreeTextContentViewModel(
         if (event.target instanceof Node) {
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
-          NextState.setTextItemDomishObjects(itemId, domishObjects)
+          CurrentState.setTextItemDomishObjects(itemId, domishObjects)
           External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
           // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
@@ -78,15 +78,15 @@ export function createItemTreeTextContentViewModel(
             ItemTreeContentView.focusableDomElementId(itemPath)
           )
 
-          NextState.updateItemTimestamp(itemId)
-          NextState.commit()
+          CurrentState.updateItemTimestamp(itemId)
+          CurrentState.commit()
         }
       })
     },
     onFocus: (event) => {
       doWithErrorHandling(() => {
-        NextState.setTargetItemPath(itemPath)
-        NextState.commit()
+        CurrentState.setTargetItemPath(itemPath)
+        CurrentState.commit()
       })
     },
   }

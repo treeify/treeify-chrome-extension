@@ -10,14 +10,14 @@ import {
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {NextState} from 'src/TreeifyWindow/Internal/NextState'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {
   createItemFromSingleLineText,
   detectUrl,
   pasteMultilineText,
 } from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 export async function startup(initialState: State) {
@@ -85,8 +85,8 @@ function onCopy(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = NextState.exportAsIndentedText(
-      ItemPath.getItemId(NextState.getTargetItemPath())
+    const contentText = CurrentState.exportAsIndentedText(
+      ItemPath.getItemId(CurrentState.getTargetItemPath())
     )
     event.clipboardData.setData('text/plain', contentText)
   }
@@ -101,13 +101,13 @@ function onCut(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = NextState.exportAsIndentedText(
-      ItemPath.getItemId(NextState.getTargetItemPath())
+    const contentText = CurrentState.exportAsIndentedText(
+      ItemPath.getItemId(CurrentState.getTargetItemPath())
     )
     event.clipboardData.setData('text/plain', contentText)
 
     NullaryCommand.deleteItem()
-    NextState.commit()
+    CurrentState.commit()
   }
 }
 
@@ -124,8 +124,8 @@ function onPaste(event: ClipboardEvent) {
     if (url !== undefined) {
       // URLを含むなら
       const newItemId = createItemFromSingleLineText(text)
-      NextState.insertNextSiblingItem(NextState.getTargetItemPath(), newItemId)
-      NextState.commit()
+      CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), newItemId)
+      CurrentState.commit()
     } else {
       document.execCommand('insertText', false, text)
     }
@@ -139,13 +139,13 @@ function onMouseMove(event: MouseEvent) {
   // マウスカーソルがTreeifyウィンドウ左端かつ画面左端に到達したとき。
   // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
   if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
-    NextState.setIsFloatingLeftSidebarShown(true)
-    NextState.commit()
+    CurrentState.setIsFloatingLeftSidebarShown(true)
+    CurrentState.commit()
   }
 }
 
 function onResize() {
   // window.outerWidthを使うとウィンドウ最大化および最大化解除時に実態と異なる値になる（Macで確認済み）
-  NextState.setTreeifyWindowWidth(window.innerWidth)
-  NextState.commit()
+  CurrentState.setTreeifyWindowWidth(window.innerWidth)
+  CurrentState.commit()
 }
