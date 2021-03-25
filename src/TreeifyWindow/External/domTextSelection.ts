@@ -1,5 +1,18 @@
 import {integer} from 'src/Common/basicType'
-import {TextItemSelection} from 'src/TreeifyWindow/Internal/State'
+
+/** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
+export type TextItemSelection = {
+  /**
+   * getSelectionで取得できるfocusNode&focusOffsetの位置を表す値。
+   * contenteditableな要素の先頭からfocus位置までの文字数（改行を含む）。
+   */
+  focusDistance: integer
+  /**
+   * getSelectionで取得できるanchorNode&anchorOffsetの位置を表す値。
+   * contenteditableな要素の先頭からanchor位置までの文字数（改行を含む）。
+   */
+  anchorDistance: integer
+}
 
 export function getTextItemSelectionFromDom(): TextItemSelection | undefined {
   if (document.activeElement instanceof HTMLElement && document.activeElement.isContentEditable) {
