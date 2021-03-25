@@ -527,6 +527,14 @@ function onDelete(event: KeyboardEvent) {
         // ↑の元のエッジごと削除
         CurrentState.deleteItem(belowItemId)
 
+        // 元のキャレット位置を維持する
+        External.instance.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(targetItemPath)
+        )
+        External.instance.requestSetCaretDistanceAfterRendering(
+          DomishObject.countCharacters(focusedItemDomishObjects)
+        )
+
         event.preventDefault()
         CurrentState.commit()
       }
