@@ -1,4 +1,4 @@
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {integer} from 'src/Common/basicType'
 

@@ -10,7 +10,7 @@ import {createFocusTrap} from 'focus-trap'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState'
 import {DataFolder} from 'src/TreeifyWindow/Internal/DataFolder'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import Tab = chrome.tabs.Tab
 

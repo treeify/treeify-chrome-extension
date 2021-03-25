@@ -1,4 +1,4 @@
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 

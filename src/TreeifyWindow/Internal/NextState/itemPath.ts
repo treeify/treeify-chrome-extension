@@ -1,4 +1,4 @@
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 import {is, List} from 'immutable'

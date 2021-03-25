@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {NextState} from 'src/TreeifyWindow/Internal/NextState/index'
 import {Item, WebPageItem} from 'src/TreeifyWindow/Internal/State'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'

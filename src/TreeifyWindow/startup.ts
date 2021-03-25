@@ -17,7 +17,7 @@ import {
   pasteMultilineText,
 } from 'src/TreeifyWindow/Internal/importAndExport'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 export async function startup(initialState: State) {

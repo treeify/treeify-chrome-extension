@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/Batchizer'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Page} from 'src/TreeifyWindow/Internal/State'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
