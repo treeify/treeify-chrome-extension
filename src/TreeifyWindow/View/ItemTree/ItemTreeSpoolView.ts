@@ -11,7 +11,7 @@ export type ItemTreeSpoolViewModel = {
   onClick: (event: MouseEvent) => void
 }
 
-enum ItemTreeBulletState {
+export enum ItemTreeBulletState {
   NO_CHILDREN,
   UNFOLDED,
   FOLDED,
@@ -73,7 +73,7 @@ export function createItemTreeSpoolViewModel(
   return {bulletState, onClick}
 }
 
-function deriveBulletState(state: State, item: Item): ItemTreeBulletState {
+export function deriveBulletState(state: State, item: Item): ItemTreeBulletState {
   if (state.pages[item.itemId] !== undefined) {
     return ItemTreeBulletState.PAGE
   } else if (item.childItemIds.size === 0) {

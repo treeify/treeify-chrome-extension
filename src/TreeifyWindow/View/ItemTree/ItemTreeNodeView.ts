@@ -17,11 +17,15 @@ import {
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createItemTreeSpoolViewModel,
+  deriveBulletState,
+  ItemTreeBulletState,
   ItemTreeSpoolView,
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {classMap} from 'lit-html/directives/class-map'
+import {External} from 'src/TreeifyWindow/External/External'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
@@ -30,6 +34,7 @@ export type ItemTreeNodeViewModel = {
   cssClasses: List<string>
   footprintRank: integer | undefined
   footprintCount: integer
+  hiddenTabsCount: integer
   contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
   spoolViewModel: ItemTreeSpoolViewModel
@@ -55,6 +60,7 @@ export function createItemTreeNodeViewModel(
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
+    hiddenTabsCount: countHiddenTabs(state, ItemPath.getItemId(itemPath)),
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
@@ -108,6 +114,49 @@ export function createItemTreeNodeViewModel(
         event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
       })
     },
+  }
+}
+
+function countHiddenTabs(state: State, itemId: ItemId): integer {
+  const bulletState = deriveBulletState(state, state.items[itemId])
+  switch (bulletState) {
+    case ItemTreeBulletState.NO_CHILDREN:
+    case ItemTreeBulletState.UNFOLDED:
+    case ItemTreeBulletState.PAGE:
+      return 0
+    case ItemTreeBulletState.FOLDED:
+      return countTabsInDescendants(state, itemId)
+  }
+}
+
+// 指定されたアイテムの子孫アイテムに対応するタブの数を数える（自分自身に対応するタブはカウントしない）。
+// ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+function countTabsInDescendants(state: State, itemId: ItemId): integer {
+  if (External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined) {
+    return countTabsInSubtree(state, itemId) - 1
+  } else {
+    return countTabsInSubtree(state, itemId)
+  }
+}
+
+// 指定されたアイテムのサブツリーに対応するタブの数を数える。
+// ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+function countTabsInSubtree(state: State, itemId: ItemId): integer {
+  if (CurrentState.isPage(itemId)) {
+    if (External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined) {
+      return 1
+    } else {
+      return 0
+    }
+  }
+
+  const sum = Internal.instance.state.items[itemId].childItemIds
+    .map((childItemId) => countTabsInSubtree(state, childItemId))
+    .reduce((a: integer, x) => a + x, 0)
+  if (External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined) {
+    return 1 + sum
+  } else {
+    return sum
   }
 }
 
@@ -182,6 +231,11 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           >
             ${ItemTreeContentView(viewModel.contentViewModel)}
           </div>
+          <!-- 隠れているタブ数 -->
+          ${viewModel.hiddenTabsCount > 0
+            ? html`<div class="item-tree-node_hidden-tabs-count">${viewModel.hiddenTabsCount}</div>`
+            : undefined}
+          <!-- 削除ボタン -->
           <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}></div>
         </div>
       </div>
