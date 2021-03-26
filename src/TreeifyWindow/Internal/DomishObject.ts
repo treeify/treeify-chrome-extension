@@ -9,7 +9,8 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 export type DomishObject = DomishObject.Element | DomishObject.TextNode
 
 export namespace DomishObject {
-  export type Element = BElement | UElement | IElement | StrikeElement | BRElement
+  export type MarkupElement = BElement | UElement | IElement | StrikeElement
+  export type Element = MarkupElement | BRElement
 
   export type BElement = {
     type: 'b'

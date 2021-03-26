@@ -1,6 +1,6 @@
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {DomishObject} from 'src/Common/DomishObject'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'

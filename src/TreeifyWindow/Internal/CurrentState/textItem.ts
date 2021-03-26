@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
-import {DomishObject} from 'src/Common/DomishObject'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
