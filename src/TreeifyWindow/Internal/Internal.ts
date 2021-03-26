@@ -184,7 +184,7 @@ export class Internal {
         '1000u': {functionName: 'toggleUnderline'},
         '1000i': {functionName: 'toggleItalic'},
         '1000k': {functionName: 'toggleStrikethrough'},
-        '1000s': {functionName: 'openDataFolderDialog'},
+        '1000s': {functionName: 'openDataFolderPicker'},
         '0000F2': {functionName: 'edit'},
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},

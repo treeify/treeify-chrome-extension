@@ -68,6 +68,6 @@ export const functions: {[name: string]: () => void} = {
   loadItem,
   loadSubtree,
   edit,
-  openDataFolderDialog: openDataFolderPicker,
+  openDataFolderPicker,
 }
 export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
