@@ -4,14 +4,14 @@ import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
-  /** キーの型はItemIdと書きたいが、TypeScriptの仕様上numberとしか書けない */
-  items: {[itemId: number]: Item}
-  textItems: {[itemId: number]: TextItem}
-  webPageItems: {[itemId: number]: WebPageItem}
-  pages: {[itemId: number]: Page}
+  items: {[K in ItemId]: Item}
+  textItems: {[K in ItemId]: TextItem}
+  webPageItems: {[K in ItemId]: WebPageItem}
+  pages: {[K in ItemId]: Page}
   /**
    * マウントされているページたちのアイテムID。
    * 今のところ順序に意味はないが将来的に使うかもしれないし、JSONとの相性も考えてSet型ではなくList型とする。
@@ -20,11 +20,8 @@ export type State = {
   mountedPageIds: List<ItemId>
   nextNewItemId: ItemId
   activePageId: ItemId
-  /**
-   * キーボードやマウスでの入力とコマンドの対応付け。
-   * キーの型はInputIdと書きたいが、TypeScriptの仕様上stringとしか書けない。
-   */
-  itemTreeInputBinding: {[inputId: string]: Command}
+  /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */
+  itemTreeInputBinding: {[K in InputId]: Command}
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
   /** フローティング型の左サイドバーを表示中かどうか */
