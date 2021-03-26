@@ -8,7 +8,7 @@ import {
   moveItemDownward,
   moveItemUpward,
   showPage,
-  toggleFolded,
+  toggleCollapsed,
   toggleGrayedOut,
   toggleHighlighted,
   togglePaged,
@@ -43,7 +43,7 @@ export * from 'src/TreeifyWindow/Internal/NullaryCommand/other'
  * 動的にコマンド名からコマンド関数を得るために用いる。
  */
 export const functions: {[name: string]: () => void} = {
-  toggleFolded,
+  toggleCollapsed,
   indentItem,
   unindentItem,
   moveItemUpward,

@@ -8,10 +8,13 @@ import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSel
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
-/** ターゲットアイテムのisFoldedがtrueならfalseに、falseならtrueにするコマンド */
-export function toggleFolded() {
+/** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
+export function toggleCollapsed() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  CurrentState.setIsFolded(targetItemId, !Internal.instance.state.items[targetItemId].isFolded)
+  CurrentState.setIsCollapsed(
+    targetItemId,
+    !Internal.instance.state.items[targetItemId].isCollapsed
+  )
   CurrentState.updateItemTimestamp(targetItemId)
 }
 
@@ -25,11 +28,11 @@ export function indentItem() {
 
   const prevSiblingItemId = ItemPath.getItemId(prevSiblingItemPath)
 
-  // 兄がページの場合はアンフォールドできないので何もしない
+  // 兄がページの場合は展開できないので何もしない
   if (CurrentState.isPage(prevSiblingItemId)) return
 
-  // 兄をアンフォールドする
-  CurrentState.setIsFolded(prevSiblingItemId, false)
+  // 兄を展開する
+  CurrentState.setIsCollapsed(prevSiblingItemId, false)
 
   const parentItemId = ItemPath.getParentItemId(prevSiblingItemPath)
   assertNonUndefined(parentItemId)

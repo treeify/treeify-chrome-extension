@@ -7,8 +7,8 @@ export type PageTreeBulletAndIndentViewModel = {
 
 enum PageTreeBulletState {
   NO_CHILDREN,
-  UNFOLDED,
-  FOLDED,
+  EXPANDED,
+  COLLAPSED,
 }
 
 export function createPageTreeBulletAndIndentViewModel(
@@ -16,7 +16,7 @@ export function createPageTreeBulletAndIndentViewModel(
 ): PageTreeBulletAndIndentViewModel {
   if (hasChildren) {
     return {
-      bulletState: PageTreeBulletState.UNFOLDED,
+      bulletState: PageTreeBulletState.EXPANDED,
     }
   } else {
     return {
@@ -30,7 +30,7 @@ export function PageTreeBulletAndIndentView(
   viewModel: PageTreeBulletAndIndentViewModel
 ): TemplateResult {
   return html`<div class="page-tree-bullet-and-indent">
-    ${viewModel.bulletState === PageTreeBulletState.UNFOLDED
+    ${viewModel.bulletState === PageTreeBulletState.EXPANDED
       ? html`<div class="page-tree-bullet-and-indent_indent-area">
           <div class="page-tree-bullet-and-indent_indent-line"></div>
         </div>`
@@ -39,8 +39,8 @@ export function PageTreeBulletAndIndentView(
       class=${classMap({
         'page-tree-bullet-and-indent_bullet-area': true,
         'no-children': viewModel.bulletState === PageTreeBulletState.NO_CHILDREN,
-        unfolded: viewModel.bulletState === PageTreeBulletState.UNFOLDED,
-        folded: viewModel.bulletState === PageTreeBulletState.FOLDED,
+        expanded: viewModel.bulletState === PageTreeBulletState.EXPANDED,
+        collapsed: viewModel.bulletState === PageTreeBulletState.COLLAPSED,
       })}
     ></div>
   </div>`

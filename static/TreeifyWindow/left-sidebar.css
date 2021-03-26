@@ -113,8 +113,8 @@
   height: var(--page-tree-bullet-size);
 }
 
-/* アンフォールド済み状態のバレット */
-.page-tree-bullet-and-indent_bullet-area.unfolded {
+/* 展開済み状態のバレット */
+.page-tree-bullet-and-indent_bullet-area.expanded {
   /* TODO: 画像待ち */
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
   /*background-color: hsl(0, 0%, 60%);*/

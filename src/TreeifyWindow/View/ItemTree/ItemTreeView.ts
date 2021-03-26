@@ -60,7 +60,7 @@ export function createItemTreeViewModel(state: State): ItemTreeViewModel {
 
 /**
  * 全ての子孫と自身のアイテムIDを返す。
- * ただし（アンフォールドなどの理由で）表示されないアイテムはスキップする。
+ * ただし（折りたたみなどの理由で）表示されないアイテムはスキップする。
  */
 function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemId> {
   yield itemId

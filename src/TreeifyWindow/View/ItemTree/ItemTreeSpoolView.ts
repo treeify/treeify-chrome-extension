@@ -13,8 +13,8 @@ export type ItemTreeSpoolViewModel = {
 
 export enum ItemTreeBulletState {
   NO_CHILDREN,
-  UNFOLDED,
-  FOLDED,
+  EXPANDED,
+  COLLAPSED,
   PAGE,
 }
 
@@ -38,20 +38,20 @@ export function createItemTreeSpoolViewModel(
               break
           }
           break
-        case ItemTreeBulletState.UNFOLDED:
+        case ItemTreeBulletState.EXPANDED:
           switch (inputId) {
             case '0000MouseButton0':
-              NullaryCommand.toggleFolded()
+              NullaryCommand.toggleCollapsed()
               break
             case '1000MouseButton0':
               NullaryCommand.becomeAndShowPage()
               break
           }
           break
-        case ItemTreeBulletState.FOLDED:
+        case ItemTreeBulletState.COLLAPSED:
           switch (inputId) {
             case '0000MouseButton0':
-              NullaryCommand.toggleFolded()
+              NullaryCommand.toggleCollapsed()
               break
             case '1000MouseButton0':
               NullaryCommand.becomeAndShowPage()
@@ -79,14 +79,14 @@ export function deriveBulletState(state: State, item: Item): ItemTreeBulletState
   } else if (item.childItemIds.size === 0) {
     return ItemTreeBulletState.NO_CHILDREN
   } else {
-    return item.isFolded ? ItemTreeBulletState.FOLDED : ItemTreeBulletState.UNFOLDED
+    return item.isCollapsed ? ItemTreeBulletState.COLLAPSED : ItemTreeBulletState.EXPANDED
   }
 }
 
 /** アイテムツリーのバレットとインデント */
 export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateResult {
   return html`<div class="item-tree-spool" @click=${viewModel.onClick}>
-    ${viewModel.bulletState === ItemTreeBulletState.UNFOLDED
+    ${viewModel.bulletState === ItemTreeBulletState.EXPANDED
       ? html`<div class="item-tree-spool_indent-area">
           <div class="item-tree-spool_indent-line"></div>
         </div>`
@@ -95,7 +95,7 @@ export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateRe
       ${viewModel.bulletState === ItemTreeBulletState.PAGE
         ? html`<div class="item-tree-spool_page-icon" />`
         : html`
-            ${viewModel.bulletState === ItemTreeBulletState.FOLDED
+            ${viewModel.bulletState === ItemTreeBulletState.COLLAPSED
               ? html`<div class="item-tree-spool_outer-circle"></div>`
               : undefined}
             <div class="item-tree-spool_inner-circle"></div>

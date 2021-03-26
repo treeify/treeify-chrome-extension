@@ -25,7 +25,7 @@ export function createTextItem(): ItemId {
     itemType: ItemType.TEXT,
     childItemIds: List.of(),
     parentItemIds: List.of(),
-    isFolded: false,
+    isCollapsed: false,
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
   }

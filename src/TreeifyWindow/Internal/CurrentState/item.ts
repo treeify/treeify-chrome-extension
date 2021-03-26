@@ -123,22 +123,22 @@ export function isItem(itemId: ItemId): boolean {
 export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
   const item = Internal.instance.state.items[itemId]
 
-  // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
+  // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
   if (Internal.instance.state.activePageId === itemId) {
     return item.childItemIds
   }
 
-  if (item.isFolded || CurrentState.isPage(itemId)) {
+  if (item.isCollapsed || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
     return item.childItemIds
   }
 }
 
-/** 指定されたアイテムのisFoldedフラグを設定する */
-export function setIsFolded(itemId: ItemId, isFolded: boolean) {
-  Internal.instance.state.items[itemId].isFolded = isFolded
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'isFolded'))
+/** 指定されたアイテムのisCollapsedフラグを設定する */
+export function setIsCollapsed(itemId: ItemId, isCollapsed: boolean) {
+  Internal.instance.state.items[itemId].isCollapsed = isCollapsed
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'isCollapsed'))
 }
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */

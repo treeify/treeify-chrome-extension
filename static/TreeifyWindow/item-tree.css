@@ -180,7 +180,7 @@
   position: relative;
 }
 
-/* アイテムツリーのバレットの外側の円（アンフォールド状態用） */
+/* アイテムツリーのバレットの外側の円（展開状態用） */
 .item-tree-spool_outer-circle {
   width: var(--item-tree-bullet-outer-circle-diameter);
   height: var(--item-tree-bullet-outer-circle-diameter);
