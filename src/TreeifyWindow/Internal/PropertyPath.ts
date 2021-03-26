@@ -2,8 +2,8 @@ import {List} from 'immutable'
 
 /**
  * Stateオブジェクト内の特定の位置を示す値の型。
- * 例えばstate.items[0].isFoldedというプロパティを指すPropertyPathは、
- * List.of('items', 0, 'isFolded')
+ * 例えばstate.items[0].isCollapsedというプロパティを指すPropertyPathは、
+ * List.of('items', 0, 'isCollapsed')
  * である。
  */
 export type PropertyPath = List<keyof any>

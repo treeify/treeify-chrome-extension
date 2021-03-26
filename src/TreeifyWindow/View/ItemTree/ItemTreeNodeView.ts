@@ -121,10 +121,10 @@ function countHiddenTabs(state: State, itemId: ItemId): integer {
   const bulletState = deriveBulletState(state, state.items[itemId])
   switch (bulletState) {
     case ItemTreeBulletState.NO_CHILDREN:
-    case ItemTreeBulletState.UNFOLDED:
+    case ItemTreeBulletState.EXPANDED:
     case ItemTreeBulletState.PAGE:
       return 0
-    case ItemTreeBulletState.FOLDED:
+    case ItemTreeBulletState.COLLAPSED:
       return countTabsInDescendants(state, itemId)
   }
 }
@@ -194,7 +194,7 @@ function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> 
   if (isPage) {
     return ItemPath.hasParent(itemPath) ? List.of() : item.childItemIds
   }
-  return item.isFolded ? List.of() : item.childItemIds
+  return item.isCollapsed ? List.of() : item.childItemIds
 }
 
 /** アイテムツリーの各アイテムのルートView */

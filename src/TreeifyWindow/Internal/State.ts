@@ -37,7 +37,7 @@ export type Item = {
   itemType: ItemType
   childItemIds: List<ItemId>
   parentItemIds: List<ItemId>
-  isFolded: boolean
+  isCollapsed: boolean
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
   /**
