@@ -11,7 +11,7 @@ export type MarkedupText = {
 
 export type TextStyle = {
   /** 装飾の種類を表す文字列 */
-  type: DomishObject.MarkupElement['type']
+  type: 'bold' | 'italic' | 'underline' | 'strikethrough'
   /** プレーンテキスト内での最初の装飾対象文字のindex */
   start: integer
   /** プレーンテキスト内での最後の装飾対象文字のindex + 1 */
@@ -19,6 +19,16 @@ export type TextStyle = {
 }
 
 export namespace MarkedupText {
+  type StyleType = TextStyle['type']
+  type DomishObjectType = DomishObject.MarkupElement['type']
+
+  const domishObjectTypeToTextStyleType: {[K in DomishObjectType]: StyleType} = {
+    b: 'bold',
+    i: 'italic',
+    u: 'underline',
+    strike: 'strikethrough',
+  }
+
   /** List<DomishObject>からMarkedupTextに変換する */
   export function from(domishObjects: List<DomishObject>): MarkedupText {
     const recorder: Recorder = {
@@ -54,7 +64,8 @@ export namespace MarkedupText {
           traverseWithRecording(child, recorder)
         }
         const end = recorder.position
-        recorder.styles.push({type: domishObject.type, start, end})
+        const type = domishObjectTypeToTextStyleType[domishObject.type]
+        recorder.styles.push({type, start, end})
         break
       case 'br':
         recorder.texts.push('\n')
