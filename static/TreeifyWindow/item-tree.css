@@ -122,6 +122,19 @@
   flex-grow: 1;
 }
 
+/* 隠れているタブ数 */
+.item-tree-node_hidden-tabs-count {
+  flex-basis: var(--item-tree-delete-button-size);
+  height: var(--item-tree-delete-button-size);
+
+  /* 横幅が縮まないよう設定 */
+  flex-shrink: 0;
+}
+.item-tree-node_body-area:hover .item-tree-node_hidden-tabs-count {
+  /* マウスホバー時は非表示（削除ボタンが代わりに表示される） */
+  display: none;
+}
+
 /* 各アイテムの削除ボタン */
 .item-tree-node_delete-button {
   flex-basis: var(--item-tree-delete-button-size);
