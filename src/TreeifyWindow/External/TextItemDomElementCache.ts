@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {DomishObject} from 'src/Common/DomishObject'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 

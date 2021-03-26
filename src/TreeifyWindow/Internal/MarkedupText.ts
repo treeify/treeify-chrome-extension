@@ -1,5 +1,5 @@
 import {integer} from 'src/Common/basicType'
-import {DomishObject} from 'src/Common/DomishObject'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {List} from 'immutable'
 import {assertNeverType} from 'src/Common/Debug/assert'
 

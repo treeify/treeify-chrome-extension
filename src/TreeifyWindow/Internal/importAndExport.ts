@@ -1,6 +1,6 @@
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {DomishObject} from 'src/Common/DomishObject'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {List} from 'immutable'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'

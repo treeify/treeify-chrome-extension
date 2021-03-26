@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {html} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
-import {DomishObject} from 'src/Common/DomishObject'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 
 export type PageTreeTextContentViewModel = {
   itemType: ItemType.TEXT
