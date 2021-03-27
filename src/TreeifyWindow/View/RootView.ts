@@ -33,11 +33,14 @@ export function createRootViewModel(state: State): RootViewModel {
 /** html-litによる動的描画が行われる領域全体のルートView */
 export function RootView(viewModel: RootViewModel): TemplateResult {
   return html`<div class="root">
-    <div class="sidebar-layout">
-      ${viewModel.leftSidebarViewModel !== undefined
-        ? LeftSidebarView(viewModel.leftSidebarViewModel)
-        : undefined}
-      ${ItemTreeView(viewModel.itemTreeViewModel)}
+    <div class="toolbar-and-sidebar-layout">
+      <div class="toolbar"></div>
+      <div class="sidebar-layout">
+        ${viewModel.leftSidebarViewModel !== undefined
+          ? LeftSidebarView(viewModel.leftSidebarViewModel)
+          : undefined}
+        ${ItemTreeView(viewModel.itemTreeViewModel)}
+      </div>
     </div>
     ${viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)

@@ -1,6 +1,6 @@
 :root {
   /* 左サイドバーの背景色 */
-  --left-sidebar-background-color: hsl(0, 0%, 95%);
+  --left-sidebar-background-color: hsl(0, 0%, 98%);
 
   /* 左サイドバーの幅 */
   --left-sidebar-width: 200px;
@@ -22,10 +22,10 @@
   --page-tree-bullet-size: 0.7em;
 
   /* ページツリーの項目のマウスホバー時の背景色 */
-  --page-tree-hover-item-background-color: hsl(0, 0%, 90%);
+  --page-tree-hover-item-background-color: hsl(0, 0%, 95%);
 
   /* ページツリーのアクティブページの背景色 */
-  --page-tree-active-page-background-color: hsl(0, 0%, 85%);
+  --page-tree-active-page-background-color: hsl(0, 0%, 90%);
 
   /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
   --page-tree-close-button-size: 1.1em;
@@ -42,6 +42,8 @@
   overflow: auto;
 
   background: var(--left-sidebar-background-color);
+  /* Dynalistを参考にしながら調整した影 */
+  box-shadow: 1.5px 0 3px hsl(0, 0%, 85%);
 }
 
 /* フローティング型の左サイドバー */
@@ -51,9 +53,6 @@
   width: var(--left-sidebar-width);
   /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
   z-index: 1;
-
-  /* 少しだけ影をつけて立体感を出しておく */
-  box-shadow: 2px 0 3px hsl(0, 0%, 50%);
 }
 
 .page-tree {
