@@ -36,7 +36,7 @@ export type Item = {
   itemId: ItemId
   itemType: ItemType
   childItemIds: List<ItemId>
-  parents: List<ItemId>
+  parents: {[K in ItemId]: Edge}
   isCollapsed: boolean
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
@@ -47,6 +47,8 @@ export type Item = {
    */
   cssClasses: List<string>
 }
+
+export type Edge = {}
 
 /** テキストアイテムが固有で持つデータの型 */
 export type TextItem = {

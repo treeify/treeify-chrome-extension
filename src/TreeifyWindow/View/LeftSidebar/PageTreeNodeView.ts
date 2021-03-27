@@ -173,7 +173,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
     return
   }
 
-  for (const parentItemId of state.items[itemId].parents) {
+  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     yield* searchItemPathForMountedPage(state, itemIds.unshift(parentItemId))
   }
 }

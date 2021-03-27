@@ -17,7 +17,7 @@ export function createWebPageItem(): ItemId {
     itemId: newItemId,
     itemType: ItemType.WEB_PAGE,
     childItemIds: List.of(),
-    parents: List.of(),
+    parents: {},
     isCollapsed: false,
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
