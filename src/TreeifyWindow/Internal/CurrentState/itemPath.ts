@@ -97,8 +97,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  * 該当アイテムが存在しない場合はundefinedを返す。
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const itemId = ItemPath.getItemId(itemPath)
-  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemId).first(undefined)
+  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemPath).first(undefined)
   // 表示されているアイテムが存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子アイテムが該当アイテムである
@@ -172,12 +171,12 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  * というツリーではDが該当する。
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
-  const itemId = ItemPath.getItemId(itemPath)
-  if (CurrentState.getDisplayingChildItemIds(itemId).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
     // 子を表示していない場合、このアイテムこそが最も下のアイテムである
     return itemPath
   }
 
+  const itemId = ItemPath.getItemId(itemPath)
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))

@@ -23,7 +23,7 @@ export function createItemTreeSpoolViewModel(
   itemPath: ItemPath,
   item: Item
 ): ItemTreeSpoolViewModel {
-  const bulletState = deriveBulletState(state, item)
+  const bulletState = deriveBulletState(state, itemPath)
 
   const onClick = (event: MouseEvent) => {
     doWithErrorHandling(() => {
@@ -73,13 +73,17 @@ export function createItemTreeSpoolViewModel(
   return {bulletState, onClick}
 }
 
-export function deriveBulletState(state: State, item: Item): ItemTreeBulletState {
-  if (state.pages[item.itemId] !== undefined) {
+export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBulletState {
+  const itemId = ItemPath.getItemId(itemPath)
+  if (state.pages[itemId] !== undefined) {
     return ItemTreeBulletState.PAGE
-  } else if (item.childItemIds.size === 0) {
+  } else if (state.items[itemId].childItemIds.size === 0) {
     return ItemTreeBulletState.NO_CHILDREN
   } else {
-    return item.isCollapsed ? ItemTreeBulletState.COLLAPSED : ItemTreeBulletState.EXPANDED
+    CurrentState.getIsCollapsed(itemPath)
+    return CurrentState.getIsCollapsed(itemPath)
+      ? ItemTreeBulletState.COLLAPSED
+      : ItemTreeBulletState.EXPANDED
   }
 }
 

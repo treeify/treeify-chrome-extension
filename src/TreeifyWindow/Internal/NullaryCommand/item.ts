@@ -10,11 +10,9 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  CurrentState.setIsCollapsed(
-    targetItemId,
-    !Internal.instance.state.items[targetItemId].isCollapsed
-  )
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  CurrentState.setIsCollapsed(targetItemPath, !CurrentState.getIsCollapsed(targetItemPath))
   CurrentState.updateItemTimestamp(targetItemId)
 }
 
@@ -32,7 +30,7 @@ export function indentItem() {
   if (CurrentState.isPage(prevSiblingItemId)) return
 
   // 兄を展開する
-  CurrentState.setIsCollapsed(prevSiblingItemId, false)
+  CurrentState.setIsCollapsed(prevSiblingItemPath, false)
 
   const parentItemId = ItemPath.getParentItemId(prevSiblingItemPath)
   assertNonUndefined(parentItemId)
@@ -179,9 +177,7 @@ export function moveItemDownward() {
   // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
-  if (
-    CurrentState.getDisplayingChildItemIds(ItemPath.getItemId(firstFollowingItemPath)).isEmpty()
-  ) {
+  if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下のアイテムが子を表示していない場合
 
     // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
@@ -325,7 +321,7 @@ export function enterKeyDefault() {
     } else {
       // キャレット位置が後半なら
 
-      if (!CurrentState.getDisplayingChildItemIds(targetItemId).isEmpty()) {
+      if (!CurrentState.getDisplayingChildItemIds(targetItemPath).isEmpty()) {
         // もし子を表示しているなら
 
         // キャレットより後ろのテキストをカットする
@@ -389,7 +385,7 @@ export function enterKeyDefault() {
       return
     }
 
-    if (!CurrentState.getDisplayingChildItemIds(targetItemId).isEmpty()) {
+    if (!CurrentState.getDisplayingChildItemIds(targetItemPath).isEmpty()) {
       // もし子を表示しているなら
       // 新規アイテムを最初の子として追加する
       const newItemId = CurrentState.createTextItem()

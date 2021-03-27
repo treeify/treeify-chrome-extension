@@ -1,6 +1,6 @@
 import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/Common/basicType'
-import {assert, assertNeverType} from 'src/Common/Debug/assert'
+import {integer, ItemId, ItemType} from 'src/Common/basicType'
+import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -16,17 +16,17 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 export function deleteItem(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
   for (const childItemId of item.childItemIds) {
-    if (Internal.instance.state.items[childItemId].parentItemIds.size === 1) {
+    if (CurrentState.countParents(childItemId) === 1) {
       // 親を1つしか持たない子アイテムは再帰的に削除する
       deleteItem(childItemId)
     } else {
       // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
-      modifyParentItems(childItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+      delete Internal.instance.state.items[childItemId].parents[itemId]
     }
   }
 
   // 削除されるアイテムを親アイテムの子リストから削除する
-  for (const parentItemId of item.parentItemIds) {
+  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
   }
 
@@ -63,19 +63,16 @@ export function deleteItem(itemId: ItemId) {
 export function deleteItemItself(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
   const childItemIds = item.childItemIds
-  const parentItemIds = item.parentItemIds
 
   // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
-    modifyParentItems(childItemId, (itemIds) => {
-      const index = itemIds.indexOf(itemId)
-      assert(index !== -1)
-      return itemIds.splice(index, 1, ...parentItemIds)
-    })
+    const parents = Internal.instance.state.items[childItemId].parents
+    delete parents[itemId]
+    Object.assign(parents, item.parents)
   }
 
   // 全ての親アイテムの子リストから自身を削除し、代わりに自身の子リストを挿入する
-  for (const parentItemId of parentItemIds) {
+  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     modifyChildItems(parentItemId, (itemIds) => {
       const index = itemIds.indexOf(itemId)
       assert(index !== -1)
@@ -120,15 +117,16 @@ export function isItem(itemId: ItemId): boolean {
 }
 
 /** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
-export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
+export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
+  const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
   // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
-  if (Internal.instance.state.activePageId === itemId) {
+  if (itemPath.size === 1) {
     return item.childItemIds
   }
 
-  if (item.isCollapsed || CurrentState.isPage(itemId)) {
+  if (CurrentState.getIsCollapsed(itemPath) || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
     return item.childItemIds
@@ -136,15 +134,51 @@ export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
 }
 
 /** 指定されたアイテムのisCollapsedフラグを設定する */
-export function setIsCollapsed(itemId: ItemId, isCollapsed: boolean) {
-  Internal.instance.state.items[itemId].isCollapsed = isCollapsed
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'isCollapsed'))
+export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
+  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed = isCollapsed
+  Internal.instance.markAsMutated(
+    PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
+  )
+}
+
+/**
+ * 指定されたアイテムのisCollapsedフラグを返す。
+ * 親アイテムに依存するのでItemIdではなくItemPathを取る。
+ */
+export function getIsCollapsed(itemPath: ItemPath): boolean {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
+  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   Internal.instance.state.items[itemId].timestamp = Timestamp.now()
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'timestamp'))
+}
+
+/** 指定されたアイテムの親アイテムIDのリストを返す */
+export function getParentItemIds(itemId: ItemId): List<ItemId> {
+  return List(Object.keys(Internal.instance.state.items[itemId].parents).map(parseInt))
+}
+
+/** 指定されたアイテムの親の数を返す */
+export function countParents(itemId: ItemId): integer {
+  return Object.keys(Internal.instance.state.items[itemId].parents).length
+}
+
+/**
+ * 指定されたアイテムに親アイテムを追加する。
+ * isCollapsedやlabelはデフォルト値になる。
+ */
+export function addParent(itemid: ItemId, parentItemId: ItemId) {
+  Internal.instance.state.items[itemid].parents[parentItemId] = {
+    isCollapsed: false,
+  }
 }
 
 /**
@@ -159,17 +193,6 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
 }
 
 /**
- * 指定されたアイテムの親アイテムリストを修正する。
- * @param itemId このアイテムの親アイテムリストを修正する
- * @param f 親アイテムリストを受け取って新しい親アイテムリストを返す関数
- */
-export function modifyParentItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  const item = Internal.instance.state.items[itemId]
-  item.parentItemIds = f(item.parentItemIds)
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parentItemIds'))
-}
-
-/**
  * あるアイテムの最初の子になるようアイテムを子リストに追加する。
  * 整合性が取れるように親アイテムリストも修正する。
  * @param itemId このアイテムの最初の子として追加する
@@ -180,7 +203,7 @@ export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId) {
   modifyChildItems(itemId, (itemIds) => itemIds.unshift(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(itemId))
+  CurrentState.addParent(newItemId, itemId)
 }
 
 /**
@@ -194,7 +217,7 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId) {
   modifyChildItems(itemId, (itemIds) => itemIds.push(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(itemId))
+  CurrentState.addParent(newItemId, itemId)
 }
 
 /**
@@ -220,7 +243,7 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(parentItemId!))
+  CurrentState.addParent(newItemId, parentItemId)
 }
 
 /**
@@ -246,7 +269,7 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  modifyParentItems(newItemId, (itemIds) => itemIds.push(parentItemId!))
+  CurrentState.addParent(newItemId, parentItemId)
 }
 
 /**
@@ -299,7 +322,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId) {
   modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
 
   // アイテムの親リストから親アイテムを削除する
-  modifyParentItems(itemId, (itemIds) => itemIds.remove(itemIds.indexOf(parentItemId)))
+  delete Internal.instance.state.items[itemId].parents[parentItemId]
 }
 
 /**
