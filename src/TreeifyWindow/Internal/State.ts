@@ -36,7 +36,7 @@ export type Item = {
   itemId: ItemId
   itemType: ItemType
   childItemIds: List<ItemId>
-  parentItemIds: List<ItemId>
+  parents: List<ItemId>
   isCollapsed: boolean
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp

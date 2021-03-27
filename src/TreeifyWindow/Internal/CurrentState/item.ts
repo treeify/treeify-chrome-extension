@@ -16,7 +16,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 export function deleteItem(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
   for (const childItemId of item.childItemIds) {
-    if (Internal.instance.state.items[childItemId].parentItemIds.size === 1) {
+    if (Internal.instance.state.items[childItemId].parents.size === 1) {
       // 親を1つしか持たない子アイテムは再帰的に削除する
       deleteItem(childItemId)
     } else {
@@ -26,7 +26,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // 削除されるアイテムを親アイテムの子リストから削除する
-  for (const parentItemId of item.parentItemIds) {
+  for (const parentItemId of item.parents) {
     modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
   }
 
@@ -63,19 +63,19 @@ export function deleteItem(itemId: ItemId) {
 export function deleteItemItself(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
   const childItemIds = item.childItemIds
-  const parentItemIds = item.parentItemIds
+  const parents = item.parents
 
   // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
     modifyParentItems(childItemId, (itemIds) => {
       const index = itemIds.indexOf(itemId)
       assert(index !== -1)
-      return itemIds.splice(index, 1, ...parentItemIds)
+      return itemIds.splice(index, 1, ...parents)
     })
   }
 
   // 全ての親アイテムの子リストから自身を削除し、代わりに自身の子リストを挿入する
-  for (const parentItemId of parentItemIds) {
+  for (const parentItemId of parents) {
     modifyChildItems(parentItemId, (itemIds) => {
       const index = itemIds.indexOf(itemId)
       assert(index !== -1)
@@ -165,8 +165,8 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
  */
 export function modifyParentItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
   const item = Internal.instance.state.items[itemId]
-  item.parentItemIds = f(item.parentItemIds)
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parentItemIds'))
+  item.parents = f(item.parents)
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parents'))
 }
 
 /**
