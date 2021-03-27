@@ -37,7 +37,6 @@ export type Item = {
   itemType: ItemType
   childItemIds: List<ItemId>
   parents: {[K in ItemId]: Edge}
-  isCollapsed: boolean
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
   /**
@@ -48,7 +47,18 @@ export type Item = {
   cssClasses: List<string>
 }
 
-export type Edge = {}
+export type Edge = {
+  /**
+   * 折りたたみ状態か展開状態かのフラグ。
+   *
+   * 【ItemではなくEdgeで持つ理由】
+   * トランスクルードされたアイテムのisCollapsedを変更しても、他の視座に影響を与えずに済む。
+   * アクティブページを表示する際に、そのページがisCollapsedかどうかを気にせず済む。
+   * 正直、具体的なメリットはこれくらいしか思いつかない。
+   * リスクはあるが直感的に面白そうなこちらに賭けてみた。
+   */
+  isCollapsed: boolean
+}
 
 /** テキストアイテムが固有で持つデータの型 */
 export type TextItem = {

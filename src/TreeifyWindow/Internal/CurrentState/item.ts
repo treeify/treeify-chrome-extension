@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
-import {assert, assertNeverType} from 'src/Common/Debug/assert'
+import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -117,15 +117,16 @@ export function isItem(itemId: ItemId): boolean {
 }
 
 /** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
-export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
+export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
+  const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
   // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
-  if (Internal.instance.state.activePageId === itemId) {
+  if (itemPath.size === 1) {
     return item.childItemIds
   }
 
-  if (item.isCollapsed || CurrentState.isPage(itemId)) {
+  if (CurrentState.getIsCollapsed(itemPath) || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
     return item.childItemIds
@@ -133,9 +134,25 @@ export function getDisplayingChildItemIds(itemId: ItemId): List<ItemId> {
 }
 
 /** 指定されたアイテムのisCollapsedフラグを設定する */
-export function setIsCollapsed(itemId: ItemId, isCollapsed: boolean) {
-  Internal.instance.state.items[itemId].isCollapsed = isCollapsed
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'isCollapsed'))
+export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
+  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed = isCollapsed
+  Internal.instance.markAsMutated(
+    PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
+  )
+}
+
+/**
+ * 指定されたアイテムのisCollapsedフラグを返す。
+ * 親アイテムに依存するのでItemIdではなくItemPathを取る。
+ */
+export function getIsCollapsed(itemPath: ItemPath): boolean {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
+  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
@@ -159,7 +176,9 @@ export function countParents(itemId: ItemId): integer {
  * isCollapsedやlabelはデフォルト値になる。
  */
 export function addParent(itemid: ItemId, parentItemId: ItemId) {
-  Internal.instance.state.items[itemid].parents[parentItemId] = {}
+  Internal.instance.state.items[itemid].parents[parentItemId] = {
+    isCollapsed: false,
+  }
 }
 
 /**

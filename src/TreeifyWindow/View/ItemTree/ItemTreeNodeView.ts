@@ -60,7 +60,7 @@ export function createItemTreeNodeViewModel(
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
-    hiddenTabsCount: countHiddenTabs(state, ItemPath.getItemId(itemPath)),
+    hiddenTabsCount: countHiddenTabs(state, itemPath),
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
@@ -117,15 +117,15 @@ export function createItemTreeNodeViewModel(
   }
 }
 
-function countHiddenTabs(state: State, itemId: ItemId): integer {
-  const bulletState = deriveBulletState(state, state.items[itemId])
+function countHiddenTabs(state: State, itemPath: ItemPath): integer {
+  const bulletState = deriveBulletState(state, itemPath)
   switch (bulletState) {
     case ItemTreeBulletState.NO_CHILDREN:
     case ItemTreeBulletState.EXPANDED:
     case ItemTreeBulletState.PAGE:
       return 0
     case ItemTreeBulletState.COLLAPSED:
-      return countTabsInDescendants(state, itemId)
+      return countTabsInDescendants(state, ItemPath.getItemId(itemPath))
   }
 }
 
@@ -194,7 +194,7 @@ function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> 
   if (isPage) {
     return ItemPath.hasParent(itemPath) ? List.of() : item.childItemIds
   }
-  return item.isCollapsed ? List.of() : item.childItemIds
+  return CurrentState.getIsCollapsed(itemPath) ? List.of() : item.childItemIds
 }
 
 /** アイテムツリーの各アイテムのルートView */

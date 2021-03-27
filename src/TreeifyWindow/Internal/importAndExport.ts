@@ -253,24 +253,29 @@ export function detectUrl(text: string): string | undefined {
   return undefined
 }
 
-function toOpmlOutlineElement(itemId: ItemId): Element {
+function toOpmlOutlineElement(itemPath: ItemPath): Element {
+  const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
   return {
     type: 'element',
     name: 'outline',
-    attributes: toOpmlAttributes(itemId),
-    elements: item.childItemIds.map(toOpmlOutlineElement).toArray(),
+    attributes: toOpmlAttributes(itemPath),
+    elements: item.childItemIds
+      .map((childItemId) => toOpmlOutlineElement(itemPath.push(childItemId)))
+      .toArray(),
   }
 }
 
-function toOpmlAttributes(itemId: ItemId): Attributes {
-  const item = Internal.instance.state.items[itemId]
-  const itemType = item.itemType
+function toOpmlAttributes(itemPath: ItemPath): Attributes {
+  const itemId = ItemPath.getItemId(itemPath)
+  const itemType = Internal.instance.state.items[itemId].itemType
 
   const baseAttributes: Attributes = {
-    isCollapsed: item.isCollapsed.toString(),
     isPage: CurrentState.isPage(itemId).toString(),
+  }
+  if (ItemPath.hasParent(itemPath)) {
+    baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
   }
 
   switch (itemType) {
@@ -322,7 +327,7 @@ export function toOpmlString(rootItemId: ItemId): string {
           {
             type: 'element',
             name: 'body',
-            elements: [toOpmlOutlineElement(rootItemId)],
+            elements: [toOpmlOutlineElement(List.of(rootItemId))],
           },
         ],
       },

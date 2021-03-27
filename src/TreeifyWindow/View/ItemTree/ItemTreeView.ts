@@ -32,7 +32,7 @@ export type ItemTreeViewModel = {
 export function createItemTreeViewModel(state: State): ItemTreeViewModel {
   const rootItemPath = List.of(state.activePageId)
 
-  const allDisplayingItemIds = [...getAllDisplayingItemIds(state, state.activePageId)]
+  const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算
   // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
   const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.5))
@@ -62,10 +62,10 @@ export function createItemTreeViewModel(state: State): ItemTreeViewModel {
  * 全ての子孫と自身のアイテムIDを返す。
  * ただし（折りたたみなどの理由で）表示されないアイテムはスキップする。
  */
-function* getAllDisplayingItemIds(state: State, itemId: ItemId): Generator<ItemId> {
-  yield itemId
-  for (const childItemId of CurrentState.getDisplayingChildItemIds(itemId)) {
-    yield* getAllDisplayingItemIds(state, childItemId)
+function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
+  yield ItemPath.getItemId(itemPath)
+  for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
+    yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
   }
 }
 
