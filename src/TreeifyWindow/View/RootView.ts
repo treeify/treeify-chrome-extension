@@ -15,6 +15,8 @@ import {
   WebPageItemTitleSettingDialogView,
   WebPageItemTitleSettingDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
+import {TOP_ITEM_ID} from 'src/Common/basicType'
+import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 
 export type RootViewModel = {
   leftSidebarViewModel: LeftSidebarViewModel | undefined
@@ -34,7 +36,10 @@ export function createRootViewModel(state: State): RootViewModel {
 export function RootView(viewModel: RootViewModel): TemplateResult {
   return html`<div class="root">
     <div class="toolbar-and-sidebar-layout">
-      <div class="toolbar"></div>
+      <div class="toolbar">
+        <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
+        <button @click=${onClickExportButton}>OPMLファイルをエクスポート</button>
+      </div>
       <div class="sidebar-layout">
         ${viewModel.leftSidebarViewModel !== undefined
           ? LeftSidebarView(viewModel.leftSidebarViewModel)
@@ -46,4 +51,14 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
       : undefined}
   </div>`
+}
+
+function onClickExportButton() {
+  const fileName = 'treeify.opml'
+
+  const content = toOpmlString(TOP_ITEM_ID)
+  const aElement = document.createElement('a')
+  aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
+  aElement.download = fileName
+  aElement.click()
 }

@@ -38,6 +38,10 @@ body {
 }
 
 .toolbar {
+  /* ボタンなどを横に並べる */
+  display: flex;
+  align-items: center;
+
   /* 左サイドバーにも影が落ちるように左サイドバーより高くする */
   position: relative;
   z-index: 2;
