@@ -7,6 +7,8 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {Attributes, Element, js2xml} from 'xml-js'
+import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 
 export function onCopy(event: ClipboardEvent) {
   if (event.clipboardData === null) return
@@ -249,4 +251,82 @@ export function detectUrl(text: string): string | undefined {
   }
 
   return undefined
+}
+
+function toOpmlOutlineElement(itemId: ItemId): Element {
+  const item = Internal.instance.state.items[itemId]
+
+  return {
+    type: 'element',
+    name: 'outline',
+    attributes: toOpmlAttributes(itemId),
+    elements: item.childItemIds.map(toOpmlOutlineElement).toArray(),
+  }
+}
+
+function toOpmlAttributes(itemId: ItemId): Attributes {
+  const item = Internal.instance.state.items[itemId]
+  const itemType = item.itemType
+
+  const baseAttributes: Attributes = {
+    isCollapsed: item.isCollapsed.toString(),
+    isPage: CurrentState.isPage(itemId).toString(),
+  }
+
+  switch (itemType) {
+    case ItemType.TEXT:
+      const textItem = Internal.instance.state.textItems[itemId]
+      const markedupText = MarkedupText.from(textItem.domishObjects)
+      baseAttributes.type = 'text'
+      baseAttributes.text = markedupText.text
+      if (!markedupText.styles.isEmpty()) {
+        baseAttributes.styles = JSON.stringify(markedupText.styles.toArray())
+      }
+      return baseAttributes
+    case ItemType.WEB_PAGE:
+      const webPageItem = Internal.instance.state.webPageItems[itemId]
+      baseAttributes.type = 'link'
+      baseAttributes.text = CurrentState.deriveWebPageItemTitle(itemId)
+      baseAttributes.url = webPageItem.url
+      baseAttributes.faviconUrl = webPageItem.faviconUrl
+      if (webPageItem.title !== null) {
+        baseAttributes.title = webPageItem.tabTitle
+      }
+      return baseAttributes
+    default:
+      assertNeverType(itemType)
+  }
+}
+
+/**
+ * 指定されたアイテムとその子孫をOPML 2.0形式に変換する。
+ * ページや折りたたまれたアイテムの子孫も含める。
+ */
+export function toOpmlString(rootItemId: ItemId): string {
+  const xmlObject = {
+    declaration: {
+      attributes: {
+        version: '1.0',
+      },
+    },
+    elements: [
+      {
+        type: 'element',
+        name: 'opml',
+        attributes: {version: '2.0'},
+        elements: [
+          {
+            type: 'element',
+            name: 'head',
+          },
+          {
+            type: 'element',
+            name: 'body',
+            elements: [toOpmlOutlineElement(rootItemId)],
+          },
+        ],
+      },
+    ],
+  }
+  return js2xml(xmlObject, {spaces: 2})
 }
