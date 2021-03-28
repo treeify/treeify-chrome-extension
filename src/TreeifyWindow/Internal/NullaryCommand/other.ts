@@ -9,6 +9,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {List} from 'immutable'
 
 /** データフォルダピッカーを開く */
 export function openDataFolderPicker() {
@@ -16,11 +17,18 @@ export function openDataFolderPicker() {
     const folderHandle = await showDirectoryPicker()
     await folderHandle.requestPermission({mode: 'readwrite'})
     const dataFolder = new DataFolder(folderHandle)
-    const state = Chunk.inflateStateFromChunks(await dataFolder.readAllChunks())
-    await cleanup()
-    // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
-    External.instance.dataFolder = dataFolder
-    await startup(state as State)
+    const chunks = await dataFolder.readAllChunks()
+    if (!chunks.isEmpty()) {
+      const state = Chunk.inflateStateFromChunks(chunks)
+      await cleanup()
+      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+      External.instance.dataFolder = dataFolder
+      await startup(state as State)
+    } else {
+      const allChunks = Chunk.createAllChunks(Internal.instance.state)
+      const filtered = allChunks.filter((chunks) => chunks !== undefined) as List<Chunk>
+      dataFolder.writeChunks(filtered)
+    }
   })
 }
 
