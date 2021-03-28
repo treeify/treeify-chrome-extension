@@ -28,6 +28,7 @@ export function openDataFolderPicker() {
       const allChunks = Chunk.createAllChunks(Internal.instance.state)
       const filtered = allChunks.filter((chunks) => chunks !== undefined) as List<Chunk>
       dataFolder.writeChunks(filtered)
+      External.instance.dataFolder = dataFolder
     }
   })
 }
