@@ -1,18 +1,18 @@
 import MessageSender = chrome.runtime.MessageSender
+import Tab = chrome.tabs.Tab
+import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
-import TabActiveInfo = chrome.tabs.TabActiveInfo
-import Tab = chrome.tabs.Tab
 import {List} from 'immutable'
 import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {External} from 'src/TreeifyWindow/External/External'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {External} from 'src/TreeifyWindow/External/External'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import UAParser from 'ua-parser-js'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
@@ -46,7 +46,7 @@ export function onCreated(tab: Tab) {
       // ウェブページアイテムを作る
       const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
-      External.instance.tieTabAndItem(tab.id, newWebPageItemId)
+      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
       const targetItemPath = CurrentState.getTargetItemPath()
       const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -100,7 +100,7 @@ export function onCreated(tab: Tab) {
       const itemId = itemIdsForTabCreation.first(undefined)
       assertNonUndefined(itemId)
       reflectInWebPageItem(itemId, tab)
-      External.instance.tieTabAndItem(tab.id, itemId)
+      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
       External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
     }
   })
@@ -142,7 +142,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
       CurrentState.deleteItemItself(itemId)
     }
 
-    External.instance.untieTabAndItemByTabId(tabId)
+    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
     CurrentState.commit()
   })
 }
@@ -180,7 +180,7 @@ export async function matchTabsAndWebPageItems() {
       // ウェブページアイテムを作る
       const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
-      External.instance.tieTabAndItem(tab.id, newWebPageItemId)
+      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最後の子として追加する
       const activePageId = Internal.instance.state.activePageId
@@ -188,7 +188,7 @@ export async function matchTabsAndWebPageItems() {
     } else {
       // URLの一致するウェブページアイテムがある場合
       reflectInWebPageItem(webPageItemId, tab)
-      External.instance.tieTabAndItem(tab.id, webPageItemId)
+      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, webPageItemId)
     }
   }
 

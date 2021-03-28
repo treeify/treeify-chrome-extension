@@ -1,17 +1,17 @@
-import {integer, ItemId, TabId} from 'src/Common/basicType'
-import {assert} from 'src/Common/Debug/assert'
+import {createFocusTrap} from 'focus-trap'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
-import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
-import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
-import {State} from 'src/TreeifyWindow/Internal/State'
-import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
-import {createFocusTrap} from 'focus-trap'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {integer, ItemId} from 'src/Common/basicType'
+import {assert} from 'src/Common/Debug/assert'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
-import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
+import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
+import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {State} from 'src/TreeifyWindow/Internal/State'
+import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
 /** TODO: コメント */
 export class External {
@@ -62,16 +62,6 @@ export class External {
    * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
    */
   readonly hardUnloadedTabIds = new Set<integer>()
-
-  /** タブIDとアイテムIDを結びつける */
-  tieTabAndItem(tabId: TabId, itemId: ItemId) {
-    this.tabItemCorrespondence.tieTabAndItem(tabId, itemId)
-  }
-
-  /** タブIDとアイテムIDの結びつけを解除する */
-  untieTabAndItemByTabId(tabId: TabId) {
-    this.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
-  }
 
   /** DOMの初回描画を行う */
   render(state: State) {
