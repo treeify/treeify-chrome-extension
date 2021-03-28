@@ -10,7 +10,6 @@ import {
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {onCopy, onCut, onPaste} from 'src/TreeifyWindow/Internal/importAndExport'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import UAParser from 'ua-parser-js'
@@ -34,10 +33,6 @@ export async function startup(initialState: State) {
   chrome.tabs.onRemoved.addListener(onRemoved)
   chrome.tabs.onActivated.addListener(onActivated)
 
-  document.addEventListener('copy', onCopy)
-  document.addEventListener('cut', onCut)
-  document.addEventListener('paste', onPaste)
-
   document.addEventListener('mousemove', onMouseMove)
   document.addEventListener('mouseenter', onMouseEnter)
 
@@ -52,10 +47,6 @@ export async function cleanup() {
 
   document.removeEventListener('mouseenter', onMouseEnter)
   document.removeEventListener('mousemove', onMouseMove)
-
-  document.removeEventListener('paste', onPaste)
-  document.removeEventListener('cut', onCut)
-  document.removeEventListener('copy', onCopy)
 
   chrome.tabs.onCreated.removeListener(onCreated)
   chrome.tabs.onUpdated.removeListener(onUpdated)
