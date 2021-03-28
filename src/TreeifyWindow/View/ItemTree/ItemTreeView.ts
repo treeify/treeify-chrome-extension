@@ -24,6 +24,7 @@ import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {onCopy, onCut, onPaste} from 'src/TreeifyWindow/Internal/importAndExport'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
@@ -78,6 +79,9 @@ export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
     @keydown=${onKeyDown}
     @dragover=${onDragOver}
     @drop=${onDrop}
+    @copy=${onCopy}
+    @cut=${onCut}
+    @paste=${onPaste}
   >
     ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
   </main>`
