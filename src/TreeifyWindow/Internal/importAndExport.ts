@@ -1,14 +1,14 @@
+import {List} from 'immutable'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
+import {assertNeverType} from 'src/Common/Debug/assert'
+import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
-import {assertNeverType} from 'src/Common/Debug/assert'
-import {List} from 'immutable'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Attributes, Element, js2xml} from 'xml-js'
-import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 
 export function onCopy(event: ClipboardEvent) {
   if (event.clipboardData === null) return
@@ -94,9 +94,8 @@ export function getContentAsPlainText(itemId: ItemId): string {
       return DomishObject.toSingleLinePlainText(domishObjects)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
-      const title = webPageItem.title ?? webPageItem.title
-      const url = webPageItem.url
-      return `${title} ${url}`
+      const title = CurrentState.deriveWebPageItemTitle(itemId)
+      return `${title} ${webPageItem.url}`
     default:
       assertNeverType(itemType)
   }
