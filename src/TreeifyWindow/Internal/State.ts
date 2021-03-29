@@ -20,7 +20,7 @@ export type State = {
   mountedPageIds: List<ItemId>
   /** 削除され再利用されるアイテムID群 */
   availableItemIds: List<ItemId>
-  nextNewItemId: ItemId
+  maxItemId: ItemId
   activePageId: ItemId
   /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */
   itemTreeInputBinding: {[K in InputId]: Command}

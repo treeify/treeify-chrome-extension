@@ -351,10 +351,8 @@ export function obtainNewItemId(): ItemId {
     Internal.instance.markAsMutated(PropertyPath.of('availableItemIds'))
     return last
   } else {
-    const nextNewItemId = Internal.instance.state.nextNewItemId
-    Internal.instance.state.nextNewItemId++
-    Internal.instance.markAsMutated(PropertyPath.of('nextNewItemId'))
-    return nextNewItemId
+    Internal.instance.markAsMutated(PropertyPath.of('maxItemId'))
+    return ++Internal.instance.state.maxItemId
   }
 }
 

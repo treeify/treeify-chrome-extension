@@ -5,7 +5,7 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 /**
  * 【具体例】
  * "items_0"
- * "nextNewItemId"
+ * "maxItemId"
  */
 export type ChunkId = string
 

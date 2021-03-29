@@ -161,7 +161,7 @@ export class Internal {
       },
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
-      nextNewItemId: 7,
+      maxItemId: 6,
       activePageId: 0,
       itemTreeInputBinding: {
         '0000Tab': {functionName: 'indentItem'},
