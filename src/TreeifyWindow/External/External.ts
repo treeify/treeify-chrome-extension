@@ -34,6 +34,12 @@ export class External {
 
   /** データフォルダ */
   dataFolder: DataFolder | undefined
+  // 超短時間での連続書き込みを抑制するための制御用変数
+  private duringWritingDelay: boolean = false
+  // 書き込みディレイ（ミリ秒）
+  private static readonly writingDelay = 500
+  // データフォルダに書き込むべきプロパティパス
+  private readonly pendingMutatedPropertyPaths = new Set<PropertyPath>()
 
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
@@ -149,12 +155,26 @@ export class External {
   requestWriteDataFolder(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
     if (this.dataFolder === undefined) return
 
-    // 変化のあったチャンクをデータベースに書き込む
-    const chunks = []
-    for (const chunkId of Chunk.extractChunkIds(mutatedPropertyPaths)) {
-      const chunk = Chunk.create(newState, chunkId)
-      chunks.push(chunk)
+    for (const mutatedPropertyPath of mutatedPropertyPaths) {
+      this.pendingMutatedPropertyPaths.add(mutatedPropertyPath)
     }
-    this.dataFolder.writeChunks(List(chunks))
+
+    if (!this.duringWritingDelay) {
+      this.duringWritingDelay = true
+      setTimeout(() => {
+        this.duringWritingDelay = false
+
+        if (this.dataFolder === undefined) return
+
+        // 変化のあったチャンクをデータベースに書き込む
+        const chunks = []
+        for (const chunkId of Chunk.extractChunkIds(this.pendingMutatedPropertyPaths)) {
+          const chunk = Chunk.create(newState, chunkId)
+          chunks.push(chunk)
+        }
+        this.pendingMutatedPropertyPaths.clear()
+        this.dataFolder.writeChunks(List(chunks))
+      }, External.writingDelay)
+    }
   }
 }
