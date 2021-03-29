@@ -149,9 +149,7 @@ export class External {
     this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
   }
 
-  /**
-   * データフォルダへの書き込みを行う。
-   */
+  /** データフォルダへの書き込みをリクエストする */
   requestWriteDataFolder(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
     if (this.dataFolder === undefined) return
 
