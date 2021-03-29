@@ -47,13 +47,10 @@ export class DataFolder {
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
   async readAllChunks(): Promise<List<Chunk>> {
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
     const fileNames = await this.getChunkFileNames(DeviceId.get())
 
     // 全チャンクパックファイルを読み込み
-    const chunkPackPromises = fileNames
-      .map((fileName) => chunksFolderPath.push(fileName))
-      .map((filePath) => this.readChunkPackFile(filePath))
+    const chunkPackPromises = fileNames.map((fileName) => this.readChunkPackFile(fileName))
     const chunkPacks = List(await Promise.all(chunkPackPromises))
 
     // 各チャンクパックからチャンクを取り出してList化して返却
@@ -72,15 +69,14 @@ export class DataFolder {
 
   async writeChunks(chunks: List<Chunk>) {
     // チャンクを書き込み先ファイル名によってグルーピング
-    const groupByFileName = chunks.groupBy((chunk) => DataFolder.deriveFileName(chunk.id))
+    const groupByFileName = chunks.groupBy((chunk) => DataFolder.getChunkPackFileName(chunk.id))
     const chunksGroup = groupByFileName.map((collection) => collection.toList())
 
     const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
     // 各ファイルに対して、チャンク群をまとめて書き込み
     for (const [fileName, chunks] of chunksGroup.entries()) {
       // TODO: 各ファイルへの書き込みは並列にやりたい
-      const filePath = chunksFolderPath.push(fileName)
-      const chunkPack = await this.readChunkPackFile(filePath)
+      const chunkPack = await this.readChunkPackFile(fileName)
       for (const chunk of chunks) {
         if (chunk.data !== undefined) {
           chunkPack[chunk.id] = chunk.data
@@ -93,6 +89,7 @@ export class DataFolder {
         const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
         await chunksFolderHandle.removeEntry(fileName)
       } else {
+        const filePath = chunksFolderPath.push(fileName)
         await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
       }
     }
@@ -172,8 +169,9 @@ export class DataFolder {
     return await file.text()
   }
 
-  private async readChunkPackFile(filePath: FilePath): Promise<ChunkPack> {
-    const text = await this.readTextFile(filePath)
+  private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
+    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
+    const text = await this.readTextFile(chunksFolderPath.push(fileName))
     if (text.length === 0) {
       // 空ファイル、もといそもそもファイルが存在しなかった場合
       return {}
@@ -181,7 +179,8 @@ export class DataFolder {
     return JSON.parse(text, State.jsonReviver)
   }
 
-  private static deriveFileName(chunkId: ChunkId): string {
+  // 各チャンクの書き込み先ファイル名を返す
+  private static getChunkPackFileName(chunkId: ChunkId): string {
     const propertyPath = ChunkId.toPropertyPath(chunkId)
     const firstKey = propertyPath.first() as keyof State
     switch (firstKey) {
