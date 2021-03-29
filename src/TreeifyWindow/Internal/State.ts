@@ -18,6 +18,8 @@ export type State = {
    * 新しくマウントされたらリストの末尾に追加される。
    */
   mountedPageIds: List<ItemId>
+  /** 削除され再利用されるアイテムID群 */
+  availableItemIds: List<ItemId>
   nextNewItemId: ItemId
   activePageId: ItemId
   /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */

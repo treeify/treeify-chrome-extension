@@ -18,7 +18,7 @@ export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List
  * ただしアイテムの配置（親子関係の設定）は行わない。
  */
 export function createTextItem(): ItemId {
-  const newItemId = Internal.instance.state.nextNewItemId
+  const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
     itemId: newItemId,
@@ -34,8 +34,6 @@ export function createTextItem(): ItemId {
   const newTextItem: TextItem = {domishObjects: List.of()}
   Internal.instance.state.textItems[newItemId] = newTextItem
   Internal.instance.markAsMutated(PropertyPath.of('textItems', newItemId))
-
-  CurrentState.setNextNewItemId(newItemId + 1)
 
   return newItemId
 }

@@ -11,7 +11,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
  * ただしアイテムの配置（親子関係の設定）は行わない。
  */
 export function createWebPageItem(): ItemId {
-  const newItemId = Internal.instance.state.nextNewItemId
+  const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
     itemId: newItemId,
@@ -32,8 +32,6 @@ export function createWebPageItem(): ItemId {
   }
   Internal.instance.state.webPageItems[newItemId] = webPageItem
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', newItemId))
-
-  CurrentState.setNextNewItemId(newItemId + 1)
 
   return newItemId
 }
