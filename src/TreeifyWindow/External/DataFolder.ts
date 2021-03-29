@@ -4,6 +4,7 @@ import {DeviceId} from 'src/TreeifyWindow/DeviceId'
 import {assert} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/basicType'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import md5 from 'md5'
 
 // データフォルダをルートとするファイルパス。
 // "./"や"../"のような相対ファイルパスの概念はない。
@@ -53,6 +54,9 @@ export class DataFolder {
   private static getChunkPacksFolderPath(deviceId = DeviceId.get()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
   }
+  private static getHashesFilePath(deviceId = DeviceId.get()): FilePath {
+    return this.getDeviceFolderPath(deviceId).push('hashes.json')
+  }
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
   async readAllChunks(): Promise<List<Chunk>> {
@@ -81,10 +85,9 @@ export class DataFolder {
     const groupByFileName = chunks.groupBy((chunk) => DataFolder.getChunkPackFileName(chunk.id))
     const chunksGroup = groupByFileName.map((collection) => collection.toList())
 
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
-    // 各ファイルに対して、チャンク群をまとめて書き込み
-    for (const [fileName, chunks] of chunksGroup.entries()) {
-      // TODO: 各ファイルへの書き込みは並列にやりたい
+    // 各ファイルに書き込むテキストを生成。
+    // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
+    const fileTextPromises = List(chunksGroup.entries()).map(async ([fileName, chunks]) => {
       const chunkPack = await this.readChunkPackFile(fileName)
       for (const chunk of chunks) {
         if (chunk.data !== undefined) {
@@ -94,15 +97,40 @@ export class DataFolder {
           delete chunkPack[chunk.id]
         }
       }
+      if (Object.keys(chunkPack).length > 0) {
+        return [fileName, JSON.stringify(chunkPack, State.jsonReplacer, 2)]
+      } else {
+        // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
+        return [fileName, undefined]
+      }
+    })
+    const fileTexts = (await Promise.all(fileTextPromises)) as [string, string | undefined][]
 
-      if (Object.keys(chunkPack).length === 0) {
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
+    // 各ファイルに書き込む
+    // TODO: 各ファイルへの書き込みは並列にやりたい
+    for (const [fileName, text] of fileTexts) {
+      if (text !== undefined) {
+        const filePath = chunksFolderPath.push(fileName)
+        await this.writeTextFile(filePath, text)
+      } else {
         // チャンクパックが空になった場合はファイルごと削除する
         const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
         await chunksFolderHandle.removeEntry(fileName)
-      } else {
-        await this.writeChunkPackFile(fileName, chunkPack)
       }
     }
+
+    // 各ファイルのMD5を計算し、ハッシュファイルを更新
+    const hashes = await this.readHashesFile()
+    for (const [fileName, text] of fileTexts) {
+      if (text !== undefined) {
+        hashes[fileName] = md5(text)
+      } else {
+        delete hashes[fileName]
+      }
+    }
+    const hashesText = JSON.stringify(hashes, undefined, 2)
+    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -183,14 +211,6 @@ export class DataFolder {
     return await file.text()
   }
 
-  // チャンクパックファイルの内容を上書きする。
-  // ファイルが存在しない場合は作る。
-  private async writeChunkPackFile(fileName: string, chunkPack: ChunkPack) {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
-    const filePath = chunksFolderPath.push(fileName)
-    await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
-  }
-
   // チャンクパックファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
@@ -201,6 +221,17 @@ export class DataFolder {
       return {}
     }
     return JSON.parse(text, State.jsonReviver)
+  }
+
+  // ハッシュファイルの内容を返す。
+  // ファイルが存在しない場合は{}を返す。
+  private async readHashesFile(): Promise<{[K in string]: string}> {
+    const hashedFileContent = await this.readTextFile(DataFolder.getHashesFilePath())
+    if (hashedFileContent.length !== 0) {
+      return JSON.parse(hashedFileContent)
+    } else {
+      return {}
+    }
   }
 
   // 各チャンクの書き込み先ファイル名を返す
