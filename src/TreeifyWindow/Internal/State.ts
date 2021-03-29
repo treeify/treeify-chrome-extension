@@ -87,6 +87,8 @@ export type WebPageItem = {
    * nullの場合はtabTitleがこのウェブページアイテムのタイトルとして扱われる。
    */
   title: string | null
+  /** 未読フラグ */
+  isUnread: boolean
 }
 
 /** 画像アイテムが固有で持つデータの型 */

@@ -28,6 +28,7 @@ export function createWebPageItem(): ItemId {
     faviconUrl: '',
     tabTitle: '',
     title: null,
+    isUnread: false,
   }
   Internal.instance.state.webPageItems[newItemId] = webPageItem
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', newItemId))
