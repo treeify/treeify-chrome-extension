@@ -53,6 +53,7 @@ export function deleteItem(itemId: ItemId) {
   CurrentState.becomeNonPage(itemId)
 
   CurrentState.deleteItemEntry(itemId)
+  CurrentState.recycleItemId(itemId)
 }
 
 /**
@@ -103,6 +104,7 @@ export function deleteItemItself(itemId: ItemId) {
   CurrentState.becomeNonPage(itemId)
 
   CurrentState.deleteItemEntry(itemId)
+  CurrentState.recycleItemId(itemId)
 }
 
 /** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
@@ -340,10 +342,27 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   }
 }
 
-/** 次に使うべき新しいアイテムIDを設定する */
-export function setNextNewItemId(itemId: ItemId) {
-  Internal.instance.state.nextNewItemId = itemId
-  Internal.instance.markAsMutated(PropertyPath.of('nextNewItemId'))
+/** 新しい未使用のアイテムIDを取得・使用開始する */
+export function obtainNewItemId(): ItemId {
+  const availableItemIds = Internal.instance.state.availableItemIds
+  const last = availableItemIds.last(undefined)
+  if (last !== undefined) {
+    Internal.instance.state.availableItemIds = availableItemIds.pop()
+    Internal.instance.markAsMutated(PropertyPath.of('availableItemIds'))
+    return last
+  } else {
+    const nextNewItemId = Internal.instance.state.nextNewItemId
+    Internal.instance.state.nextNewItemId++
+    Internal.instance.markAsMutated(PropertyPath.of('nextNewItemId'))
+    return nextNewItemId
+  }
+}
+
+/** 使われなくなったアイテムIDを登録する */
+export function recycleItemId(itemId: ItemId) {
+  const state = Internal.instance.state
+  state.availableItemIds = state.availableItemIds.push(itemId)
+  Internal.instance.markAsMutated(PropertyPath.of('availableItemIds'))
 }
 
 /**

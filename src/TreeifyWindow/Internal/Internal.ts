@@ -160,6 +160,7 @@ export class Internal {
         },
       },
       mountedPageIds: List.of(0),
+      availableItemIds: List.of(),
       nextNewItemId: 7,
       activePageId: 0,
       itemTreeInputBinding: {

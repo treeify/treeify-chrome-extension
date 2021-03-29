@@ -239,6 +239,8 @@ export class DataFolder {
          */
         return `items${Math.floor(itemId / 100)}.json`
       case 'pages':
+      case 'availableItemIds':
+      case 'nextNewItemId':
       case 'activePageId':
         // ミューテーションされる頻度が非常に高いグループ
         return `${firstKey}.json`
