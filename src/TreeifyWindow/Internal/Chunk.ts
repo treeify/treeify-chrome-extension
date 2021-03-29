@@ -29,7 +29,11 @@ export namespace ChunkId {
  */
 export type Chunk = {
   id: ChunkId
-  json: string
+  /**
+   * ペイロードデータ。
+   * undefinedの場合、このチャンクがエントリーごと削除されている（あるいは削除すべき）ことを意味する。
+   */
+  data: any
 }
 
 /** チャンク関連のコードをまとめる名前空間 */
@@ -73,19 +77,16 @@ export namespace Chunk {
 
   // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。
   // TODO: setPropertyみたいに再帰関数でやるべきじゃないかな？
-  export function create(state: State, chunkId: ChunkId): Chunk | undefined {
+  export function create(state: State, chunkId: ChunkId): Chunk {
     const propertyPath = ChunkId.toPropertyPath(chunkId)
     const firstKey = propertyPath.get(0)
     const secondKey = propertyPath.get(1)
     // @ts-ignore
     const rawObject = secondKey === undefined ? state[firstKey] : state[firstKey][secondKey]
-    if (rawObject !== undefined) {
-      return {
-        id: chunkId,
-        json: JSON.stringify(rawObject, State.jsonReplacer, 2),
-      }
+    return {
+      id: chunkId,
+      data: rawObject,
     }
-    return undefined
   }
 
   /**
@@ -95,7 +96,7 @@ export namespace Chunk {
   export function inflateStateFromChunks(chunks: List<Chunk>): object {
     const result = {}
     for (const chunk of chunks) {
-      setProperty(result, chunk.id, JSON.parse(chunk.json, State.jsonReviver))
+      setProperty(result, chunk.id, chunk.data)
     }
     return result
   }

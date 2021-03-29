@@ -11,6 +11,9 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 // 空リストはデータフォルダ自身を表す。
 type FilePath = List<string>
 
+// キーはchunk.id、値はchunk.data
+type ChunkPack = {[K in ChunkId]: any}
+
 /**
  * Treeifyのデータを格納する専用フォルダ（「データフォルダ」と呼ぶ）を管理するクラス。
  * 普通のアプリなら単一ファイルで書き出すところを、Treeifyではフォルダ内の複数ファイルに書き出す（理由は後述）。
@@ -30,6 +33,14 @@ type FilePath = List<string>
  * デバイス間でのデータ共有のために、他デバイスフォルダから必要に応じて自デバイスフォルダにデータを取り込む形式を取る。
  * この方式では保存データ量が倍増するが、Treeifyのデータ量は元々少ないので数倍になった程度では誤差でしかない。
  * （超ヘビーユーザーでも1デバイス分のデータ量が10MBを超えることはほぼないという試算結果が出ている）
+ *
+ * 【ファイル分割方針】
+ * TreeifyではStateの差分書き込みのためにStateの各部分オブジェクトをChunkという単位に区切って扱う。
+ * 本来ならチャンクとファイルを一対一に対応させるのが理想的な差分書き込みなのだが、
+ * そうするとファイル数が膨大になってしまい、オンラインストレージによる同期速度が極端に遅くなる。
+ * （Googleドライブで実測したところ500ファイルを同期するのに約1分かかる）。
+ * そこで、チャンクとファイルを多対一の関係にしてファイル数を劇的に削減している。
+ * このファイルのことをチャンクパックファイル(ChunkPackFile)と呼ぶ。
  */
 export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
@@ -38,40 +49,59 @@ export class DataFolder {
   private static getDeviceFolderPath(deviceId: DeviceId): FilePath {
     return this.devicesFolderPath.push(deviceId)
   }
-  private static getChunksFolderPath(deviceId: DeviceId): FilePath {
-    return this.getDeviceFolderPath(deviceId).push('Chunks')
+  private static getChunkPacksFolderPath(deviceId: DeviceId): FilePath {
+    return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
   }
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
   async readAllChunks(): Promise<List<Chunk>> {
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
     const fileNames = await this.getChunkFileNames(DeviceId.get())
-    const chunkPromises = fileNames
-      .map((fileName) => chunksFolderPath.push(fileName))
-      .map((filePath) => this.readJsonFile(filePath))
-    return List(await Promise.all(chunkPromises)) as List<Chunk>
+
+    // 全チャンクパックファイルを読み込み
+    const chunkPackPromises = fileNames.map((fileName) => this.readChunkPackFile(fileName))
+    const chunkPacks = List(await Promise.all(chunkPackPromises))
+
+    // 各チャンクパックからチャンクを取り出してList化して返却
+    return chunkPacks.flatMap((chunkPack) => {
+      const chunks = []
+      for (const chunkId in chunkPack) {
+        const chunk: Chunk = {
+          id: chunkId,
+          data: chunkPack[chunkId],
+        }
+        chunks.push(chunk)
+      }
+      return chunks
+    })
   }
 
   async writeChunks(chunks: List<Chunk>) {
-    await Promise.all(chunks.map((chunk) => this.writeChunk(chunk)))
-  }
+    // チャンクを書き込み先ファイル名によってグルーピング
+    const groupByFileName = chunks.groupBy((chunk) => DataFolder.getChunkPackFileName(chunk.id))
+    const chunksGroup = groupByFileName.map((collection) => collection.toList())
 
-  async writeChunk(chunk: Chunk) {
-    const fileName = DataFolder.deriveFileName(chunk.id)
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
-    const chunkFilePath = chunksFolderPath.push(fileName)
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
+    // 各ファイルに対して、チャンク群をまとめて書き込み
+    for (const [fileName, chunks] of chunksGroup.entries()) {
+      // TODO: 各ファイルへの書き込みは並列にやりたい
+      const chunkPack = await this.readChunkPackFile(fileName)
+      for (const chunk of chunks) {
+        if (chunk.data !== undefined) {
+          chunkPack[chunk.id] = chunk.data
+        } else {
+          // チャンクのデータがundefinedであることは、そのチャンクを削除すべきことを意味する（そういう決まり）
+          delete chunkPack[chunk.id]
+        }
+      }
 
-    const fileHandle = await this.getFileHandle(chunkFilePath)
-    const writableFileStream = await fileHandle.createWritable()
-    await writableFileStream.write(JSON.stringify(chunk, State.jsonReplacer))
-    await writableFileStream.close()
-  }
-
-  async deleteChunk(chunkId: ChunkId) {
-    const fileName = DataFolder.deriveFileName(chunkId)
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
-    const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
-    await chunksFolderHandle.removeEntry(fileName)
+      if (Object.keys(chunkPack).length === 0) {
+        // チャンクパックが空になった場合はファイルごと削除する
+        const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
+        await chunksFolderHandle.removeEntry(fileName)
+      } else {
+        await this.writeChunkPackFile(fileName, chunkPack)
+      }
+    }
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -117,7 +147,7 @@ export class DataFolder {
 
   // 全チャンクファイルのファイル名のリストを返す
   private async getChunkFileNames(deviceId = DeviceId.get()): Promise<List<string>> {
-    const chunksFolderPath = DataFolder.getChunksFolderPath(deviceId)
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
     const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
     const fileNames = []
     for await (const fileName of chunksFolderHandle.keys()) {
@@ -135,40 +165,53 @@ export class DataFolder {
     return file.lastModified
   }
 
+  private async writeTextFile(filePath: FilePath, text: string) {
+    const fileHandle = await this.getFileHandle(filePath)
+    const writableFileStream = await fileHandle.createWritable()
+    await writableFileStream.write(text)
+    await writableFileStream.close()
+  }
+
   private async readTextFile(filePath: FilePath): Promise<string> {
     const fileHandle = await this.getFileHandle(filePath)
     const file = await fileHandle.getFile()
     return await file.text()
   }
 
-  private async readJsonFile(filePath: FilePath): Promise<unknown> {
-    const text = await this.readTextFile(filePath)
+  private async writeChunkPackFile(fileName: string, chunkPack: ChunkPack) {
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
+    const filePath = chunksFolderPath.push(fileName)
+    await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
+  }
+
+  private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
+    const text = await this.readTextFile(chunksFolderPath.push(fileName))
+    if (text.length === 0) {
+      // 空ファイル、もといそもそもファイルが存在しなかった場合
+      return {}
+    }
     return JSON.parse(text, State.jsonReviver)
   }
 
-  private static deriveFileName(chunkId: ChunkId): string {
-    return `${chunkId}.json`
-
-    // ↓複数チャンクを1つのファイルにパッキングすることを検討した際のコード。たぶん使うことになるので残しておく
-
-    // const propertyPath = ChunkId.toPropertyPath(chunkId)
-    // const first = propertyPath.first() as keyof State
-    // switch (first) {
-    //   case 'items':
-    //   case 'textItems':
-    //   case 'webPageItems':
-    //     // チャンク数が肥大化するグループ
-    //     // TODO: フラグメンテーション対策に計算式を変えると思う
-    //     const itemId = parseInt(propertyPath.get(1) as string)
-    //     return `${first}${Math.floor(itemId / 100)}.json`
-    //   case 'pages':
-    //   case 'isFloatingLeftSidebarShown':
-    //   case 'activePageId':
-    //     // ミューテーションされる頻度が非常に高いグループ
-    //     return `${first}.json`
-    //   default:
-    //     // その他のグループ
-    //     return `other.json`
-    // }
+  // 各チャンクの書き込み先ファイル名を返す
+  private static getChunkPackFileName(chunkId: ChunkId): string {
+    const propertyPath = ChunkId.toPropertyPath(chunkId)
+    const firstKey = propertyPath.first() as keyof State
+    switch (firstKey) {
+      case 'items':
+      case 'textItems':
+      case 'webPageItems':
+        // チャンク数が肥大化するグループ
+        const itemId = parseInt(propertyPath.get(1)!)
+        return `items${Math.floor(itemId / 100)}.json`
+      case 'pages':
+      case 'activePageId':
+        // ミューテーションされる頻度が非常に高いグループ
+        return `${firstKey}.json`
+      default:
+        // その他のグループ
+        return `other.json`
+    }
   }
 }
