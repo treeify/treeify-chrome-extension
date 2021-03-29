@@ -81,16 +81,17 @@ export class DataFolder {
         if (chunk.data !== undefined) {
           chunkPack[chunk.id] = chunk.data
         } else {
+          // チャンクのデータがundefinedであることは、そのチャンクを削除すべきことを意味する（そういう決まり）
           delete chunkPack[chunk.id]
         }
       }
 
       if (Object.keys(chunkPack).length === 0) {
+        // チャンクパックが空になった場合はファイルごと削除する
         const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
         await chunksFolderHandle.removeEntry(fileName)
       } else {
-        const filePath = chunksFolderPath.push(fileName)
-        await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
+        await this.writeChunkPackFile(fileName, chunkPack)
       }
     }
   }
@@ -167,6 +168,12 @@ export class DataFolder {
     const fileHandle = await this.getFileHandle(filePath)
     const file = await fileHandle.getFile()
     return await file.text()
+  }
+
+  private async writeChunkPackFile(fileName: string, chunkPack: ChunkPack) {
+    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
+    const filePath = chunksFolderPath.push(fileName)
+    await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
   }
 
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {

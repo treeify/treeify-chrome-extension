@@ -29,6 +29,10 @@ export namespace ChunkId {
  */
 export type Chunk = {
   id: ChunkId
+  /**
+   * ペイロードデータ。
+   * undefinedの場合、このチャンクがエントリーごと削除されている（あるいは削除すべき）ことを意味する。
+   */
   data: any
 }
 
