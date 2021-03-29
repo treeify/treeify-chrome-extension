@@ -54,6 +54,9 @@ export class DataFolder {
   private static getChunkPacksFolderPath(deviceId = DeviceId.get()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
   }
+  private static getChunkPackFilePath(fileName: string, deviceId = DeviceId.get()): FilePath {
+    return this.getChunkPacksFolderPath(deviceId).push(fileName)
+  }
   private static getHashesFilePath(deviceId = DeviceId.get()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('hashes.json')
   }
@@ -98,31 +101,29 @@ export class DataFolder {
         }
       }
       if (Object.keys(chunkPack).length > 0) {
-        return [fileName, JSON.stringify(chunkPack, State.jsonReplacer, 2)]
+        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer, 2)}
       } else {
         // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
-        return [fileName, undefined]
+        return {fileName, undefined}
       }
     })
-    const fileTexts = (await Promise.all(fileTextPromises)) as [string, string | undefined][]
+    const fileTexts = await Promise.all(fileTextPromises)
 
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
+    const chunksFolderHandle = await this.getFolderHandle(DataFolder.getChunkPacksFolderPath())
     // 各ファイルに書き込む
     // TODO: 各ファイルへの書き込みは並列にやりたい
-    for (const [fileName, text] of fileTexts) {
+    for (const {fileName, text} of fileTexts) {
       if (text !== undefined) {
-        const filePath = chunksFolderPath.push(fileName)
-        await this.writeTextFile(filePath, text)
+        await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
       } else {
         // チャンクパックが空になった場合はファイルごと削除する
-        const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
         await chunksFolderHandle.removeEntry(fileName)
       }
     }
 
     // 各ファイルのMD5を計算し、ハッシュファイルを更新
     const hashes = await this.readHashesFile()
-    for (const [fileName, text] of fileTexts) {
+    for (const {fileName, text} of fileTexts) {
       if (text !== undefined) {
         hashes[fileName] = md5(text)
       } else {
@@ -193,7 +194,7 @@ export class DataFolder {
 
     // チャンクパックファイル群を自デバイスフォルダに書き込み
     for (const {fileName, text} of chunkPackFileTexts) {
-      await this.writeTextFile(DataFolder.getChunkPacksFolderPath().push(fileName), text)
+      await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
     }
     // ハッシュファイルを自デバイスフォルダに書き込み
     await this.writeTextFile(DataFolder.getHashesFilePath(), hashesFileText)
@@ -265,8 +266,7 @@ export class DataFolder {
   // チャンクパックファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
-    const text = await this.readTextFile(chunksFolderPath.push(fileName))
+    const text = await this.readTextFile(DataFolder.getChunkPackFilePath(fileName))
     if (text.length === 0) {
       // 空ファイル、もといそもそもファイルが存在しなかった場合
       return {}
