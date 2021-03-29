@@ -50,7 +50,7 @@ export class DataFolder {
   private static getDeviceFolderPath(deviceId: DeviceId): FilePath {
     return this.devicesFolderPath.push(deviceId)
   }
-  private static getChunkPacksFolderPath(deviceId: DeviceId): FilePath {
+  private static getChunkPacksFolderPath(deviceId = DeviceId.get()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
   }
 
@@ -81,7 +81,7 @@ export class DataFolder {
     const groupByFileName = chunks.groupBy((chunk) => DataFolder.getChunkPackFileName(chunk.id))
     const chunksGroup = groupByFileName.map((collection) => collection.toList())
 
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
     // 各ファイルに対して、チャンク群をまとめて書き込み
     for (const [fileName, chunks] of chunksGroup.entries()) {
       // TODO: 各ファイルへの書き込みは並列にやりたい
@@ -166,6 +166,8 @@ export class DataFolder {
     return file.lastModified
   }
 
+  // テキストファイルの内容を上書きする。
+  // ファイルが存在しない場合は作る。
   private async writeTextFile(filePath: FilePath, text: string) {
     const fileHandle = await this.getFileHandle(filePath)
     const writableFileStream = await fileHandle.createWritable()
@@ -173,20 +175,26 @@ export class DataFolder {
     await writableFileStream.close()
   }
 
+  // テキストファイルの内容を返す。
+  // ファイルが存在しない場合は空文字列を返す。
   private async readTextFile(filePath: FilePath): Promise<string> {
     const fileHandle = await this.getFileHandle(filePath)
     const file = await fileHandle.getFile()
     return await file.text()
   }
 
+  // チャンクパックファイルの内容を上書きする。
+  // ファイルが存在しない場合は作る。
   private async writeChunkPackFile(fileName: string, chunkPack: ChunkPack) {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
     const filePath = chunksFolderPath.push(fileName)
     await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
   }
 
+  // チャンクパックファイルの内容を返す。
+  // ファイルが存在しない場合は{}を返す。
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath()
     const text = await this.readTextFile(chunksFolderPath.push(fileName))
     if (text.length === 0) {
       // 空ファイル、もといそもそもファイルが存在しなかった場合
