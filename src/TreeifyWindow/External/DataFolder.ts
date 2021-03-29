@@ -4,6 +4,7 @@ import {DeviceId} from 'src/TreeifyWindow/DeviceId'
 import {assert} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/basicType'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import md5 from 'md5'
 
 // データフォルダをルートとするファイルパス。
 // "./"や"../"のような相対ファイルパスの概念はない。
@@ -47,11 +48,17 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   private static devicesFolderPath = List.of('Devices')
-  private static getDeviceFolderPath(deviceId: DeviceId): FilePath {
+  private static getDeviceFolderPath(deviceId = DeviceId.get()): FilePath {
     return this.devicesFolderPath.push(deviceId)
   }
-  private static getChunkPacksFolderPath(deviceId: DeviceId): FilePath {
+  private static getChunkPacksFolderPath(deviceId = DeviceId.get()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
+  }
+  private static getChunkPackFilePath(fileName: string, deviceId = DeviceId.get()): FilePath {
+    return this.getChunkPacksFolderPath(deviceId).push(fileName)
+  }
+  private static getHashesFilePath(deviceId = DeviceId.get()): FilePath {
+    return this.getDeviceFolderPath(deviceId).push('hashes.json')
   }
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
@@ -81,10 +88,9 @@ export class DataFolder {
     const groupByFileName = chunks.groupBy((chunk) => DataFolder.getChunkPackFileName(chunk.id))
     const chunksGroup = groupByFileName.map((collection) => collection.toList())
 
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
-    // 各ファイルに対して、チャンク群をまとめて書き込み
-    for (const [fileName, chunks] of chunksGroup.entries()) {
-      // TODO: 各ファイルへの書き込みは並列にやりたい
+    // 各ファイルに書き込むテキストを生成。
+    // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
+    const fileTextPromises = List(chunksGroup.entries()).map(async ([fileName, chunks]) => {
       const chunkPack = await this.readChunkPackFile(fileName)
       for (const chunk of chunks) {
         if (chunk.data !== undefined) {
@@ -94,15 +100,38 @@ export class DataFolder {
           delete chunkPack[chunk.id]
         }
       }
-
-      if (Object.keys(chunkPack).length === 0) {
-        // チャンクパックが空になった場合はファイルごと削除する
-        const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
-        await chunksFolderHandle.removeEntry(fileName)
+      if (Object.keys(chunkPack).length > 0) {
+        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer, 2)}
       } else {
-        await this.writeChunkPackFile(fileName, chunkPack)
+        // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
+        return {fileName, undefined}
+      }
+    })
+    const fileTexts = await Promise.all(fileTextPromises)
+
+    const chunksFolderHandle = await this.getFolderHandle(DataFolder.getChunkPacksFolderPath())
+    // 各ファイルに書き込む
+    // TODO: 各ファイルへの書き込みは並列にやりたい
+    for (const {fileName, text} of fileTexts) {
+      if (text !== undefined) {
+        await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
+      } else {
+        // チャンクパックが空になった場合はファイルごと削除する
+        await chunksFolderHandle.removeEntry(fileName)
       }
     }
+
+    // 各ファイルのMD5を計算し、ハッシュファイルを更新
+    const hashes = await this.readHashesFile()
+    for (const {fileName, text} of fileTexts) {
+      if (text !== undefined) {
+        hashes[fileName] = md5(text)
+      } else {
+        delete hashes[fileName]
+      }
+    }
+    const hashesText = JSON.stringify(hashes, undefined, 2)
+    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -134,6 +163,43 @@ export class DataFolder {
     return this.getFileHandle(filePath.shift(), nextFolderHandle)
   }
 
+  /** 更新された他デバイスフォルダのデータを自デバイスフォルダに取り込む */
+  async sync() {
+    const mostAdvancedDeviceId = await this.getMostAdvancedDeviceId()
+
+    // まだ誰も書き込んでいない場合は何もしなくていい
+    if (mostAdvancedDeviceId === undefined) return
+
+    // 自デバイスフォルダの更新日時が最も新しいなら何もしなくていい
+    if (mostAdvancedDeviceId === DeviceId.get()) return
+
+    // 自デバイスフォルダ内の全ファイルとフォルダを削除
+    const ownDeviceFolderPath = DataFolder.getDeviceFolderPath()
+    const ownDeviceFolder = await this.getFolderHandle(ownDeviceFolderPath)
+    for await (const entryName of ownDeviceFolder.keys()) {
+      await ownDeviceFolder.removeEntry(entryName, {recursive: true})
+    }
+
+    // 各ファイルを自デバイスフォルダにコピーする準備
+    const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(mostAdvancedDeviceId)
+    const targetChunkFileNames = await this.getChunkFileNames(mostAdvancedDeviceId)
+    const chunkPackFileTextPromises = targetChunkFileNames.map(async (fileName) => {
+      return {fileName, text: await this.readTextFile(targetChunkPacksFolderPath.push(fileName))}
+    })
+    const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
+
+    const targetHashesFilePath = DataFolder.getHashesFilePath(mostAdvancedDeviceId)
+    const hashesFileText = await this.readTextFile(targetHashesFilePath)
+    // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
+
+    // チャンクパックファイル群を自デバイスフォルダに書き込み
+    for (const {fileName, text} of chunkPackFileTexts) {
+      await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
+    }
+    // ハッシュファイルを自デバイスフォルダに書き込み
+    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesFileText)
+  }
+
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
   private async getAllExistingDeviceIds(): Promise<List<DeviceId>> {
     const devicesFolder = await this.getFolderHandle(DataFolder.devicesFolderPath)
@@ -144,6 +210,20 @@ export class DataFolder {
       }
     }
     return List(deviceIds)
+  }
+
+  // 更新日時が最も新しいデバイスフォルダのデバイスIDを返す。
+  // デバイスフォルダが1つも存在しないような場合はundefinedを返す。
+  private async getMostAdvancedDeviceId(): Promise<DeviceId | undefined> {
+    const allDeviceIds = await this.getAllExistingDeviceIds()
+    const lastModifiedPromises = allDeviceIds.map(async (deviceId) => {
+      const lastModified = await this.getLastModified(DataFolder.getHashesFilePath(deviceId))
+      return {deviceId, lastModified}
+    })
+    const latest = List(await Promise.all(lastModifiedPromises)).maxBy(
+      ({deviceId, lastModified}) => lastModified
+    )
+    return latest?.deviceId
   }
 
   // 全チャンクファイルのファイル名のリストを返す
@@ -166,6 +246,8 @@ export class DataFolder {
     return file.lastModified
   }
 
+  // テキストファイルの内容を上書きする。
+  // ファイルが存在しない場合は作る。
   private async writeTextFile(filePath: FilePath, text: string) {
     const fileHandle = await this.getFileHandle(filePath)
     const writableFileStream = await fileHandle.createWritable()
@@ -173,26 +255,34 @@ export class DataFolder {
     await writableFileStream.close()
   }
 
+  // テキストファイルの内容を返す。
+  // ファイルが存在しない場合は空文字列を返す。
   private async readTextFile(filePath: FilePath): Promise<string> {
     const fileHandle = await this.getFileHandle(filePath)
     const file = await fileHandle.getFile()
     return await file.text()
   }
 
-  private async writeChunkPackFile(fileName: string, chunkPack: ChunkPack) {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
-    const filePath = chunksFolderPath.push(fileName)
-    await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
-  }
-
+  // チャンクパックファイルの内容を返す。
+  // ファイルが存在しない場合は{}を返す。
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
-    const text = await this.readTextFile(chunksFolderPath.push(fileName))
+    const text = await this.readTextFile(DataFolder.getChunkPackFilePath(fileName))
     if (text.length === 0) {
       // 空ファイル、もといそもそもファイルが存在しなかった場合
       return {}
     }
     return JSON.parse(text, State.jsonReviver)
+  }
+
+  // ハッシュファイルの内容を返す。
+  // ファイルが存在しない場合は{}を返す。
+  private async readHashesFile(): Promise<{[K in string]: string}> {
+    const hashedFileContent = await this.readTextFile(DataFolder.getHashesFilePath())
+    if (hashedFileContent.length !== 0) {
+      return JSON.parse(hashedFileContent)
+    } else {
+      return {}
+    }
   }
 
   // 各チャンクの書き込み先ファイル名を返す
