@@ -48,7 +48,7 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   private static devicesFolderPath = List.of('Devices')
-  private static getDeviceFolderPath(deviceId: DeviceId): FilePath {
+  private static getDeviceFolderPath(deviceId = DeviceId.get()): FilePath {
     return this.devicesFolderPath.push(deviceId)
   }
   private static getChunkPacksFolderPath(deviceId = DeviceId.get()): FilePath {
@@ -162,6 +162,43 @@ export class DataFolder {
     return this.getFileHandle(filePath.shift(), nextFolderHandle)
   }
 
+  /** 更新された他デバイスフォルダのデータを自デバイスフォルダに取り込む */
+  async sync() {
+    const mostAdvancedDeviceId = await this.getMostAdvancedDeviceId()
+
+    // まだ誰も書き込んでいない場合は何もしなくていい
+    if (mostAdvancedDeviceId === undefined) return
+
+    // 自デバイスフォルダの更新日時が最も新しいなら何もしなくていい
+    if (mostAdvancedDeviceId === DeviceId.get()) return
+
+    // 自デバイスフォルダ内の全ファイルとフォルダを削除
+    const ownDeviceFolderPath = DataFolder.getDeviceFolderPath()
+    const ownDeviceFolder = await this.getFolderHandle(ownDeviceFolderPath)
+    for await (const entryName of ownDeviceFolder.keys()) {
+      await ownDeviceFolder.removeEntry(entryName, {recursive: true})
+    }
+
+    // 各ファイルを自デバイスフォルダにコピーする準備
+    const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(mostAdvancedDeviceId)
+    const targetChunkFileNames = await this.getChunkFileNames(mostAdvancedDeviceId)
+    const chunkPackFileTextPromises = targetChunkFileNames.map(async (fileName) => {
+      return {fileName, text: await this.readTextFile(targetChunkPacksFolderPath.push(fileName))}
+    })
+    const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
+
+    const targetHashesFilePath = DataFolder.getHashesFilePath(mostAdvancedDeviceId)
+    const hashesFileText = await this.readTextFile(targetHashesFilePath)
+    // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
+
+    // チャンクパックファイル群を自デバイスフォルダに書き込み
+    for (const {fileName, text} of chunkPackFileTexts) {
+      await this.writeTextFile(DataFolder.getChunkPacksFolderPath().push(fileName), text)
+    }
+    // ハッシュファイルを自デバイスフォルダに書き込み
+    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesFileText)
+  }
+
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
   private async getAllExistingDeviceIds(): Promise<List<DeviceId>> {
     const devicesFolder = await this.getFolderHandle(DataFolder.devicesFolderPath)
@@ -172,6 +209,20 @@ export class DataFolder {
       }
     }
     return List(deviceIds)
+  }
+
+  // 更新日時が最も新しいデバイスフォルダのデバイスIDを返す。
+  // デバイスフォルダが1つも存在しないような場合はundefinedを返す。
+  private async getMostAdvancedDeviceId(): Promise<DeviceId | undefined> {
+    const allDeviceIds = await this.getAllExistingDeviceIds()
+    const lastModifiedPromises = allDeviceIds.map(async (deviceId) => {
+      const lastModified = await this.getLastModified(DataFolder.getHashesFilePath(deviceId))
+      return {deviceId, lastModified}
+    })
+    const latest = List(await Promise.all(lastModifiedPromises)).maxBy(
+      ({deviceId, lastModified}) => lastModified
+    )
+    return latest?.deviceId
   }
 
   // 全チャンクファイルのファイル名のリストを返す

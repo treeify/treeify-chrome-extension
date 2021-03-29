@@ -17,6 +17,9 @@ export function openDataFolderPicker() {
     const folderHandle = await showDirectoryPicker()
     await folderHandle.requestPermission({mode: 'readwrite'})
     const dataFolder = new DataFolder(folderHandle)
+
+    await dataFolder.sync()
+
     const chunks = await dataFolder.readAllChunks()
     if (!chunks.isEmpty()) {
       const state = Chunk.inflateStateFromChunks(chunks)
