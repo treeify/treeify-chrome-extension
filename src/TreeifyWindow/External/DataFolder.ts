@@ -41,8 +41,8 @@ export class DataFolder {
   private static getDeviceFolderPath(deviceId: DeviceId): FilePath {
     return this.devicesFolderPath.push(deviceId)
   }
-  private static getChunksFolderPath(deviceId: DeviceId): FilePath {
-    return this.getDeviceFolderPath(deviceId).push('Chunks')
+  private static getChunkPacksFolderPath(deviceId: DeviceId): FilePath {
+    return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
   }
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
@@ -72,7 +72,7 @@ export class DataFolder {
     const groupByFileName = chunks.groupBy((chunk) => DataFolder.getChunkPackFileName(chunk.id))
     const chunksGroup = groupByFileName.map((collection) => collection.toList())
 
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
     // 各ファイルに対して、チャンク群をまとめて書き込み
     for (const [fileName, chunks] of chunksGroup.entries()) {
       // TODO: 各ファイルへの書き込みは並列にやりたい
@@ -139,7 +139,7 @@ export class DataFolder {
 
   // 全チャンクファイルのファイル名のリストを返す
   private async getChunkFileNames(deviceId = DeviceId.get()): Promise<List<string>> {
-    const chunksFolderPath = DataFolder.getChunksFolderPath(deviceId)
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
     const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
     const fileNames = []
     for await (const fileName of chunksFolderHandle.keys()) {
@@ -171,13 +171,13 @@ export class DataFolder {
   }
 
   private async writeChunkPackFile(fileName: string, chunkPack: ChunkPack) {
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
     const filePath = chunksFolderPath.push(fileName)
     await this.writeTextFile(filePath, JSON.stringify(chunkPack, State.jsonReplacer, 2))
   }
 
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
-    const chunksFolderPath = DataFolder.getChunksFolderPath(DeviceId.get())
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(DeviceId.get())
     const text = await this.readTextFile(chunksFolderPath.push(fileName))
     if (text.length === 0) {
       // 空ファイル、もといそもそもファイルが存在しなかった場合
