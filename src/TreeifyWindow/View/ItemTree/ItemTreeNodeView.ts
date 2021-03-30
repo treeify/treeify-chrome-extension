@@ -52,7 +52,7 @@ export function createItemTreeNodeViewModel(
   itemPath: ItemPath
 ): ItemTreeNodeViewModel {
   const item = state.items[ItemPath.getItemId(itemPath)]
-  const visibleChildItemIds = getVisibleChildItemIds(state, itemPath)
+  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
 
   return {
     itemPath,
@@ -64,7 +64,7 @@ export function createItemTreeNodeViewModel(
     hiddenTabsCount: countHiddenTabs(state, itemPath),
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
-    childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
+    childItemViewModels: displayingChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(
         state,
         footprintRankMap,
@@ -188,16 +188,6 @@ function deriveIsSelected(state: State, itemPath: ItemPath): boolean {
   const minIndex = Math.min(targetItemIndex, anchorItemIndex)
   const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
   return minIndex <= itemIndex && itemIndex <= maxIndex
-}
-
-function getVisibleChildItemIds(state: State, itemPath: ItemPath): List<ItemId> {
-  const itemId = ItemPath.getItemId(itemPath)
-  const item = state.items[itemId]
-  const isPage = state.pages[itemId] !== undefined
-  if (isPage) {
-    return ItemPath.hasParent(itemPath) ? List.of() : item.childItemIds
-  }
-  return CurrentState.getIsCollapsed(itemPath) ? List.of() : item.childItemIds
 }
 
 /** アイテムツリーの各アイテムのルートView */
