@@ -3,7 +3,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {Item, State} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeSpoolViewModel = {
@@ -20,8 +20,7 @@ export enum ItemTreeBulletState {
 
 export function createItemTreeSpoolViewModel(
   state: State,
-  itemPath: ItemPath,
-  item: Item
+  itemPath: ItemPath
 ): ItemTreeSpoolViewModel {
   const bulletState = deriveBulletState(state, itemPath)
 

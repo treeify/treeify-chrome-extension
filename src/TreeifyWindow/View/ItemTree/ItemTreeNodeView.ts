@@ -61,7 +61,7 @@ export function createItemTreeNodeViewModel(
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),
-    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
+    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(
