@@ -470,9 +470,9 @@ export function togglePaged() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   if (CurrentState.isPage(targetItemId)) {
-    CurrentState.becomeNonPage(targetItemId)
+    CurrentState.turnIntoNonPage(targetItemId)
   } else {
-    CurrentState.becomePage(targetItemId)
+    CurrentState.turnIntoPage(targetItemId)
   }
 }
 
@@ -491,10 +491,10 @@ export function showPage() {
 }
 
 /** 対象アイテムをページ化し、そのページに切り替える */
-export function becomeAndShowPage() {
+export function turnIntoAndShowPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  CurrentState.becomePage(targetItemId)
+  CurrentState.turnIntoPage(targetItemId)
   CurrentState.mountPage(targetItemId)
   CurrentState.setActivePageId(targetItemId)
   // ページ切り替え後はそのページのターゲットアイテムをフォーカス

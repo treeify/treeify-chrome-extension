@@ -41,7 +41,7 @@ export function isPage(itemId: ItemId) {
 }
 
 /** 与えられたアイテムをページ化する */
-export function becomePage(itemId: ItemId) {
+export function turnIntoPage(itemId: ItemId) {
   // 既にページだった場合は何もしない
   if (isPage(itemId)) return
 
@@ -57,7 +57,7 @@ export function becomePage(itemId: ItemId) {
  * 与えられたアイテムを非ページ化する。
  * 既に非ページだった場合は何もしない。
  */
-export function becomeNonPage(itemId: ItemId) {
+export function turnIntoNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
   delete Internal.instance.state.pages[itemId]

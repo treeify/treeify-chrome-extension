@@ -50,7 +50,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   CurrentState.unmountPage(itemId)
-  CurrentState.becomeNonPage(itemId)
+  CurrentState.turnIntoNonPage(itemId)
 
   CurrentState.deleteItemEntry(itemId)
   CurrentState.recycleItemId(itemId)
@@ -101,7 +101,7 @@ export function deleteItemItself(itemId: ItemId) {
   }
 
   CurrentState.unmountPage(itemId)
-  CurrentState.becomeNonPage(itemId)
+  CurrentState.turnIntoNonPage(itemId)
 
   CurrentState.deleteItemEntry(itemId)
   CurrentState.recycleItemId(itemId)
