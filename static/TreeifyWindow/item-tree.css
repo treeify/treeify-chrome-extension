@@ -18,13 +18,13 @@
   --item-tree-body-area-vertical-padding: 2.5px;
 
   /* バレットの外側の円の直径 */
-  --item-tree-bullet-outer-circle-diameter: 1em;
+  --item-tree-bullet-outer-circle-diameter: 1.1em;
   /* バレットの外側の円の色 */
   --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの内側の円の直径 */
-  --item-tree-bullet-inner-circle-diameter: 0.4em;
+  --item-tree-bullet-inner-circle-diameter: 0.45em;
   /* バレットの内側の円の色 */
-  --item-tree-bullet-inner-circle-color: hsl(0, 0%, 20%);
+  --item-tree-bullet-inner-circle-color: hsl(0, 0%, 35%);
   /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
   --bullet-page-icon-size: 1em;
 
