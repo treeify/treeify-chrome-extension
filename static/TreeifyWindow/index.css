@@ -6,6 +6,15 @@
   --toolbar-height: 36px;
   /* ツールバーの背景 */
   --toolbar-background: hsl(0, 0%, 96%);
+
+  /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
+  --toolbar-icon-button-size: 32px;
+  /* ツールバーのボタンのマウスホバー時の背景 */
+  --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
+  /* データフォルダを開くボタンのアイコンのサイズ（正方形の一辺の長さ） */
+  --data-folder-picker-open-button-icon-size: 22px;
+  /* データフォルダを開くボタンのアイコンの色 */
+  --data-folder-picker-open-button-icon-color: hsl(0, 0%, 40%);
 }
 
 html {
@@ -41,6 +50,7 @@ body {
   /* ボタンなどを横に並べる */
   display: flex;
   align-items: center;
+  justify-content: flex-end;
 
   /* 左サイドバーにも影が落ちるように左サイドバーより高くする */
   position: relative;
@@ -52,6 +62,33 @@ body {
   background: var(--toolbar-background);
   /* Dynalistを参考にしながら調整した影 */
   box-shadow: 0 1.5px 3px hsl(0, 0%, 85%);
+}
+
+/* ツールバーのアイコンボタンの共通クラス */
+.toolbar-icon-button {
+  width: var(--toolbar-icon-button-size);
+  height: var(--toolbar-icon-button-size);
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  /* アイコンを上下左右中央寄せにする */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.toolbar-icon-button:hover {
+  background: var(--toolbar-icon-button-hover-background);
+}
+
+/* データフォルダアイコン */
+.data-folder-picker-open-button_icon {
+  width: var(--data-folder-picker-open-button-icon-size);
+  height: var(--data-folder-picker-open-button-icon-size);
+
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+  background: var(--data-folder-picker-open-button-icon-color);
+  -webkit-mask-image: url('folder-icon.svg');
 }
 
 /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
