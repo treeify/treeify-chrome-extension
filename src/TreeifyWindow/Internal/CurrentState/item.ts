@@ -181,6 +181,7 @@ export function addParent(itemid: ItemId, parentItemId: ItemId) {
   Internal.instance.state.items[itemid].parents[parentItemId] = {
     isCollapsed: false,
   }
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemid, 'parents', parentItemId))
 }
 
 /**
@@ -325,6 +326,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId) {
 
   // アイテムの親リストから親アイテムを削除する
   delete Internal.instance.state.items[itemId].parents[parentItemId]
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parents', parentItemId))
 }
 
 /**
