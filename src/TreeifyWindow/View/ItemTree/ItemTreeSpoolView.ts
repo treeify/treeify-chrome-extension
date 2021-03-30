@@ -34,7 +34,7 @@ export function createItemTreeSpoolViewModel(
         case ItemTreeBulletState.NO_CHILDREN:
           switch (inputId) {
             case '1000MouseButton0':
-              NullaryCommand.becomeAndShowPage()
+              NullaryCommand.turnIntoAndShowPage()
               break
           }
           break
@@ -44,7 +44,7 @@ export function createItemTreeSpoolViewModel(
               NullaryCommand.toggleCollapsed()
               break
             case '1000MouseButton0':
-              NullaryCommand.becomeAndShowPage()
+              NullaryCommand.turnIntoAndShowPage()
               break
           }
           break
@@ -54,7 +54,7 @@ export function createItemTreeSpoolViewModel(
               NullaryCommand.toggleCollapsed()
               break
             case '1000MouseButton0':
-              NullaryCommand.becomeAndShowPage()
+              NullaryCommand.turnIntoAndShowPage()
               break
           }
           break

@@ -1,6 +1,5 @@
 import {edit} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
-  becomeAndShowPage,
   deleteItem,
   deleteItemItself,
   enterKeyDefault,
@@ -12,6 +11,7 @@ import {
   toggleGrayedOut,
   toggleHighlighted,
   togglePaged,
+  turnIntoAndShowPage,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {
@@ -56,7 +56,7 @@ export const functions: {[name: string]: () => void} = {
   insertLineBreak,
   togglePaged,
   showPage,
-  becomeAndShowPage,
+  turnIntoAndShowPage,
   toggleGrayedOut,
   toggleHighlighted,
   toggleBold,
