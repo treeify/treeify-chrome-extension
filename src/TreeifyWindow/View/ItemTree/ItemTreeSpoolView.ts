@@ -3,11 +3,18 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {Item, State} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {integer} from 'src/Common/basicType'
+import {styleMap} from 'lit-html/directives/style-map'
 
 export type ItemTreeSpoolViewModel = {
   bulletState: ItemTreeBulletState
+  /**
+   * expand時に表示されるアイテム数。
+   * collapsed状態以外の場合は常に0。
+   */
+  hiddenItemsCount: integer
   onClick: (event: MouseEvent) => void
 }
 
@@ -20,8 +27,7 @@ export enum ItemTreeBulletState {
 
 export function createItemTreeSpoolViewModel(
   state: State,
-  itemPath: ItemPath,
-  item: Item
+  itemPath: ItemPath
 ): ItemTreeSpoolViewModel {
   const bulletState = deriveBulletState(state, itemPath)
 
@@ -70,7 +76,17 @@ export function createItemTreeSpoolViewModel(
     })
   }
 
-  return {bulletState, onClick}
+  return {bulletState, hiddenItemsCount: countHiddenItems(state, itemPath), onClick}
+}
+
+function countHiddenItems(state: State, itemPath: ItemPath): integer {
+  const bulletState = deriveBulletState(state, itemPath)
+  if (bulletState !== ItemTreeBulletState.COLLAPSED) return 0
+
+  const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
+    return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
+  })
+  return counts.size + counts.reduce((a: integer, x) => a + x, 0)
 }
 
 export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBulletState {
@@ -89,6 +105,14 @@ export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBul
 
 /** アイテムツリーのバレットとインデント */
 export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateResult {
+  // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
+  const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
+  const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
+  const outerCircleStyle = styleMap({
+    width: `${outerCircleRadiusEm}em`,
+    height: `${outerCircleRadiusEm}em`,
+  })
+
   return html`<div class="item-tree-spool" @click=${viewModel.onClick}>
     ${viewModel.bulletState === ItemTreeBulletState.EXPANDED
       ? html`<div class="item-tree-spool_indent-area">
@@ -100,7 +124,7 @@ export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateRe
         ? html`<div class="item-tree-spool_page-icon" />`
         : html`
             ${viewModel.bulletState === ItemTreeBulletState.COLLAPSED
-              ? html`<div class="item-tree-spool_outer-circle"></div>`
+              ? html`<div class="item-tree-spool_outer-circle" style=${outerCircleStyle}></div>`
               : undefined}
             <div class="item-tree-spool_inner-circle"></div>
           `}

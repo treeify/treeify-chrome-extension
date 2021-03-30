@@ -26,6 +26,7 @@ import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {classMap} from 'lit-html/directives/class-map'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {assertNeverType} from 'src/Common/Debug/assert'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
@@ -61,7 +62,7 @@ export function createItemTreeNodeViewModel(
     footprintRank: footprintRankMap.get(item.itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),
-    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath, item),
+    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath),
     contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: visibleChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(
@@ -126,6 +127,8 @@ function countHiddenTabs(state: State, itemPath: ItemPath): integer {
       return 0
     case ItemTreeBulletState.COLLAPSED:
       return countTabsInDescendants(state, ItemPath.getItemId(itemPath))
+    default:
+      assertNeverType(bulletState)
   }
 }
 
