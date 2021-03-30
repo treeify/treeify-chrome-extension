@@ -26,6 +26,7 @@ import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {classMap} from 'lit-html/directives/class-map'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {assertNeverType} from 'src/Common/Debug/assert'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
@@ -126,6 +127,8 @@ function countHiddenTabs(state: State, itemPath: ItemPath): integer {
       return 0
     case ItemTreeBulletState.COLLAPSED:
       return countTabsInDescendants(state, ItemPath.getItemId(itemPath))
+    default:
+      assertNeverType(bulletState)
   }
 }
 
