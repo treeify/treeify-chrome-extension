@@ -7,7 +7,7 @@
     "scripts": [
       "Background/entryPoint.js"
     ],
-    "persistent": true
+    "persistent": false
   },
   "browser_action": {
     "default_icon": {
@@ -43,7 +43,6 @@
   },
   "content_security_policy": "script-src 'self'; object-src 'self'",
   "permissions": [
-    "tabs",
-    "<all_urls>"
+    "tabs"
   ]
 }
