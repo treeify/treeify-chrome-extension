@@ -1,4 +1,5 @@
 import {ItemId, ItemType} from 'src/Common/basicType'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   PageTreeTextContentView,
@@ -8,7 +9,6 @@ import {
   PageTreeWebPageContentView,
   PageTreeWebPageContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 
 export type PageTreeContentViewModel =
   | PageTreeTextContentViewModel

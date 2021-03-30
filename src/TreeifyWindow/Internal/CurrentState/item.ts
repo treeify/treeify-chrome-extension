@@ -2,11 +2,11 @@ import {List} from 'immutable'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {External} from 'src/TreeifyWindow/External/External'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 
 /**
  * 指定されたアイテムに関するデータを削除する。

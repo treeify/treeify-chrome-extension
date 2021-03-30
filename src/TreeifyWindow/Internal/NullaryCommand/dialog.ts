@@ -1,8 +1,8 @@
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemType} from 'src/Common/basicType'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {

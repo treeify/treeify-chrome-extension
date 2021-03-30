@@ -3,9 +3,13 @@ import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {integer, ItemId, TOP_ITEM_ID} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createPageTreeBulletAndIndentViewModel,
   PageTreeBulletAndIndentView,
@@ -16,10 +20,6 @@ import {
   PageTreeContentView,
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
-import {External} from 'src/TreeifyWindow/External/External'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel

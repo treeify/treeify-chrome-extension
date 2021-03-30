@@ -1,7 +1,7 @@
 import {List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** テキストアイテムのcontenteditableな要素のキャッシュ */
 export class TextItemDomElementCache {

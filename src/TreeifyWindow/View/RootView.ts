@@ -1,5 +1,12 @@
 import {html, TemplateResult} from 'lit-html'
+import {TOP_ITEM_ID} from 'src/Common/basicType'
+import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {
+  createWebPageItemTitleSettingDialogViewModel,
+  WebPageItemTitleSettingDialogView,
+  WebPageItemTitleSettingDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 import {
   createItemTreeViewModel,
   ItemTreeView,
@@ -10,13 +17,6 @@ import {
   LeftSidebarView,
   LeftSidebarViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
-import {
-  createWebPageItemTitleSettingDialogViewModel,
-  WebPageItemTitleSettingDialogView,
-  WebPageItemTitleSettingDialogViewModel,
-} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
-import {TOP_ITEM_ID} from 'src/Common/basicType'
-import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 
 export type RootViewModel = {
   leftSidebarViewModel: LeftSidebarViewModel | undefined

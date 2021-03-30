@@ -1,9 +1,9 @@
-import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 
 /** ターゲットアイテムパスを返す */
 export function getTargetItemPath(): ItemPath {

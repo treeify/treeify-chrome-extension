@@ -1,6 +1,6 @@
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
 /** ウェブページアイテムのタイトル設定ダイアログの状態を設定する */
 export function setWebPageItemTitleSettingDialog(value: WebPageItemTitleSettingDialog | null) {

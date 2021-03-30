@@ -1,10 +1,10 @@
-import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {List} from 'immutable'
-import {DeviceId} from 'src/TreeifyWindow/DeviceId'
-import {assert} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/basicType'
-import {State} from 'src/TreeifyWindow/Internal/State'
 import md5 from 'md5'
+import {integer} from 'src/Common/basicType'
+import {assert} from 'src/Common/Debug/assert'
+import {DeviceId} from 'src/TreeifyWindow/DeviceId'
+import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
+import {State} from 'src/TreeifyWindow/Internal/State'
 
 // データフォルダをルートとするファイルパス。
 // "./"や"../"のような相対ファイルパスの概念はない。

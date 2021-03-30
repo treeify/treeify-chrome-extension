@@ -1,9 +1,9 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
+import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Page, State} from 'src/TreeifyWindow/Internal/State'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 
 /** アクティブページを設定する */
 export function setActivePageId(itemId: ItemId) {

@@ -1,11 +1,11 @@
-import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
-import {styleMap} from 'lit-html/directives/style-map'
 import {html} from 'lit-html'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {styleMap} from 'lit-html/directives/style-map'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {External} from 'src/TreeifyWindow/External/External'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog

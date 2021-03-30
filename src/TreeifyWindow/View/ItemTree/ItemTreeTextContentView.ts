@@ -1,14 +1,14 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {External} from 'src/TreeifyWindow/External/External'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath

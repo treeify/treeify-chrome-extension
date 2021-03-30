@@ -1,13 +1,18 @@
 import Color from 'color'
 import {is, List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
+import {classMap} from 'lit-html/directives/class-map'
 import {repeat} from 'lit-html/directives/repeat'
 import {styleMap} from 'lit-html/directives/style-map'
 import {integer, ItemId} from 'src/Common/basicType'
 import {CssCustomProperty} from 'src/Common/CssCustomProperty'
-import {InputId} from 'src/TreeifyWindow/Internal/InputId'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {assertNeverType} from 'src/Common/Debug/assert'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
@@ -22,11 +27,6 @@ import {
   ItemTreeSpoolView,
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
-import {classMap} from 'lit-html/directives/class-map'
-import {External} from 'src/TreeifyWindow/External/External'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {assertNeverType} from 'src/Common/Debug/assert'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath

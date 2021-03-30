@@ -2,8 +2,8 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 
 /** 対象ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadItem() {

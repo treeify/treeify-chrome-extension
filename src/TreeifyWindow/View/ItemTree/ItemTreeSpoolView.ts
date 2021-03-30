@@ -1,12 +1,12 @@
 import {html, TemplateResult} from 'lit-html'
+import {styleMap} from 'lit-html/directives/style-map'
+import {integer} from 'src/Common/basicType'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
-import {integer} from 'src/Common/basicType'
-import {styleMap} from 'lit-html/directives/style-map'
 
 export type ItemTreeSpoolViewModel = {
   bulletState: ItemTreeBulletState

@@ -1,8 +1,8 @@
 import {List} from 'immutable'
 import {ItemType} from 'src/Common/basicType'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 /** TODO: コメント */
 export class Internal {

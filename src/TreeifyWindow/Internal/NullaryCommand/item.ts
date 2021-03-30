@@ -1,12 +1,12 @@
 import {ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {External} from 'src/TreeifyWindow/External/External'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {External} from 'src/TreeifyWindow/External/External'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {

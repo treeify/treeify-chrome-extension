@@ -1,11 +1,11 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/Common/basicType'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Timestamp} from 'src/Common/Timestamp'
-import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {Item, TextItem} from 'src/TreeifyWindow/Internal/State'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {Item, TextItem} from 'src/TreeifyWindow/Internal/State'
 
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {

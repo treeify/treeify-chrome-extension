@@ -1,5 +1,3 @@
-import {State} from 'src/TreeifyWindow/Internal/State'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -10,7 +8,9 @@ import {
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import UAParser from 'ua-parser-js'
 

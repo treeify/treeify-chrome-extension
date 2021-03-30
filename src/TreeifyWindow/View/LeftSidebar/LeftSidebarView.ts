@@ -1,12 +1,12 @@
 import {html} from 'lit-html'
+import {classMap} from 'lit-html/directives/class-map'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeViewModel,
   PageTreeView,
   PageTreeViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
-import {State} from 'src/TreeifyWindow/Internal/State'
-import {classMap} from 'lit-html/directives/class-map'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 
 export type LeftSidebarViewModel = {
   pageTreeViewModel: PageTreeViewModel

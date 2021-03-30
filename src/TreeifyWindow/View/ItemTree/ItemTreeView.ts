@@ -2,29 +2,29 @@ import {is, List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {
   countBrElements,
   getCaretLineNumber,
   getTextItemSelectionFromDom,
   setDomSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
-import {InputId} from 'src/TreeifyWindow/Internal/InputId'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {External} from 'src/TreeifyWindow/External/External'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {onCopy, onCut, onPaste} from 'src/TreeifyWindow/Internal/importAndExport'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createItemTreeNodeViewModel,
   ItemTreeNodeView,
   ItemTreeNodeViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {External} from 'src/TreeifyWindow/External/External'
-import {Command} from 'src/TreeifyWindow/Internal/Command'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
-import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {onCopy, onCut, onPaste} from 'src/TreeifyWindow/Internal/importAndExport'
 
 export type ItemTreeViewModel = {
   rootNodeViewModel: ItemTreeNodeViewModel
