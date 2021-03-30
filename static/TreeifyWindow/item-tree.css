@@ -17,8 +17,7 @@
   /* ボディ領域の上下パディング */
   --item-tree-body-area-vertical-padding: 2.5px;
 
-  /* バレットの外側の円の直径 */
-  --item-tree-bullet-outer-circle-diameter: 1.1em;
+  /* バレットの外側の円の直径は{@link ItemTreeSpoolView.ts}で動的に設定している */
   /* バレットの外側の円の色 */
   --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
   /* バレットの外側の円のマウスホバー時の色 */
