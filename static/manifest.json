@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "version": "0.1.0",
   "name": "Treeify",
-  "description": "",
+  "description": "メモ、タブ、ブックマークをまとめてスマートに管理",
   "background": {
     "scripts": [
       "Background/entryPoint.js"
