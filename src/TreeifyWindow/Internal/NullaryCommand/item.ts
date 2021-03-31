@@ -145,11 +145,10 @@ export function moveItemUpward() {
     // キャレット位置、テキスト選択範囲を維持する
     External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
-    // 1つ上のアイテムの兄になるようターゲットアイテムを配置
-    CurrentState.insertPrevSiblingItem(aboveItemPath, targetItemId)
-
     // 既存の親子関係を削除
-    CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
+    const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
+    // 1つ上のアイテムの兄になるようターゲットアイテムを配置
+    CurrentState.insertPrevSiblingItem(aboveItemPath, targetItemId, edge)
 
     CurrentState.updateItemTimestamp(targetItemId)
 
@@ -203,11 +202,10 @@ export function moveItemDownward() {
       // キャレット位置、テキスト選択範囲を維持する
       External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
     } else {
-      // 弟になるようターゲットアイテムを配置
-      CurrentState.insertNextSiblingItem(firstFollowingItemPath, targetItemId)
-
       // 既存の親子関係を削除
-      CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
+      const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
+      // 弟になるようターゲットアイテムを配置
+      CurrentState.insertNextSiblingItem(firstFollowingItemPath, targetItemId, edge)
 
       CurrentState.updateItemTimestamp(targetItemId)
 
@@ -224,11 +222,12 @@ export function moveItemDownward() {
   } else {
     // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
 
-    // 最初の子になるようターゲットアイテムを配置
-    CurrentState.insertFirstChildItem(ItemPath.getItemId(firstFollowingItemPath), targetItemId)
-
+    const parentItemId = ItemPath.getParentItemId(targetItemPath)
+    const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
     // 既存の親子関係を削除
-    CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
+    const edge = CurrentState.removeItemGraphEdge(parentItemId!, targetItemId)
+    // 最初の子になるようターゲットアイテムを配置
+    CurrentState.insertFirstChildItem(firstFollowingItemId, targetItemId, edge)
 
     CurrentState.updateItemTimestamp(targetItemId)
 

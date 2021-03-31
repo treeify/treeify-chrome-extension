@@ -600,8 +600,8 @@ function onDrop(event: DragEvent) {
 
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
     // エッジを付け替える
-    CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-    CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
+    const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+    CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
 
     CurrentState.updateItemTimestamp(draggedItemId)
     CurrentState.commit()
