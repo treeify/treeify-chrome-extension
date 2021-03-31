@@ -471,6 +471,7 @@ export function togglePaged() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   if (CurrentState.isPage(targetItemId)) {
+    CurrentState.unmountPage(targetItemId)
     CurrentState.turnIntoNonPage(targetItemId)
   } else {
     CurrentState.turnIntoPage(targetItemId)
@@ -501,6 +502,18 @@ export function turnIntoAndShowPage() {
   // ページ切り替え後はそのページのターゲットアイテムをフォーカス
   const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
   External.instance.requestFocusAfterRendering(elementId)
+}
+
+/** 対象を非ページ化し、expandする */
+export function turnIntoNonPageAndExpand() {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+
+  CurrentState.unmountPage(targetItemId)
+  CurrentState.turnIntoNonPage(targetItemId)
+
+  CurrentState.setIsCollapsed(targetItemPath, false)
+  CurrentState.updateItemTimestamp(targetItemId)
 }
 
 /**
