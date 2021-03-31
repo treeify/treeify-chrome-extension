@@ -97,7 +97,7 @@ export function createPageTreeNodeViewModel(
       doWithErrorHandling(() => {
         CurrentState.setActivePageId(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
-        CurrentState.setIsFloatingLeftSidebarShown(false)
+        External.instance.shouldFloatingLeftSidebarShown = false
 
         // ページ切り替え後はそのページのターゲットアイテムをフォーカス
         const elementId = ItemTreeContentView.focusableDomElementId(

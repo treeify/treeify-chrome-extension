@@ -67,12 +67,12 @@ function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>)
 
 function onMouseMove(event: MouseEvent) {
   // マウスの位置と動きに応じて左サイドバーを開閉する
-  if (!Internal.instance.state.isFloatingLeftSidebarShown) {
+  if (!External.instance.shouldFloatingLeftSidebarShown) {
     // マウスポインターが画面左端に到達した時。
     // Treeifyウィンドウの左端が画面左端に近くないと発動しない点に注意。
     // 逆に言うと、Treeifyウィンドウが画面左端にぴったりくっついていなくても割とルーズに発動してくれる。
     if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
-      CurrentState.setIsFloatingLeftSidebarShown(true)
+      External.instance.shouldFloatingLeftSidebarShown = true
       CurrentState.commit()
     }
   } else {
@@ -81,7 +81,7 @@ function onMouseMove(event: MouseEvent) {
     if (event.x > leftSidebar.getBoundingClientRect().right) {
       // mouseleaveイベントを使わない理由は、Treeifyウィンドウが画面左端にぴったりくっついていない状況で、
       // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
-      CurrentState.setIsFloatingLeftSidebarShown(false)
+      External.instance.shouldFloatingLeftSidebarShown = false
       CurrentState.commit()
     }
   }

@@ -26,8 +26,6 @@ export type State = {
   itemTreeInputBinding: {[K in InputId]: Command}
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
-  /** フローティング型の左サイドバーを表示中かどうか */
-  isFloatingLeftSidebarShown: boolean
 }
 
 /**
