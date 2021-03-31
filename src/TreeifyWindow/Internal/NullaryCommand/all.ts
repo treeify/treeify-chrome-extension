@@ -12,6 +12,7 @@ import {
   toggleHighlighted,
   togglePaged,
   turnIntoAndShowPage,
+  turnIntoNonPageAndExpand,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {
@@ -57,6 +58,7 @@ export const functions: {[name: string]: () => void} = {
   togglePaged,
   showPage,
   turnIntoAndShowPage,
+  turnIntoNonPageAndExpand,
   toggleGrayedOut,
   toggleHighlighted,
   toggleBold,

@@ -69,6 +69,9 @@ export function createItemTreeSpoolViewModel(
             case '0000MouseButton0':
               NullaryCommand.showPage()
               break
+            case '1000MouseButton0':
+              NullaryCommand.turnIntoNonPageAndExpand()
+              CurrentState.commit()
           }
           break
       }
