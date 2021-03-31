@@ -1,3 +1,4 @@
+import {integer} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {
   matchTabsAndWebPageItems,
@@ -6,6 +7,7 @@ import {
   onMessage,
   onRemoved,
   onUpdated,
+  onWindowFocusChanged,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -16,6 +18,8 @@ import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import UAParser from 'ua-parser-js'
 
 export async function startup(initialState: State) {
+  External.instance.lastFocusedWindowId = await getLastFocusedWindowId()
+
   Internal.initialize(initialState)
 
   // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
@@ -34,6 +38,8 @@ export async function startup(initialState: State) {
   chrome.tabs.onRemoved.addListener(onRemoved)
   chrome.tabs.onActivated.addListener(onActivated)
 
+  chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
+
   document.addEventListener('mousemove', onMouseMove)
   document.addEventListener('mouseenter', onMouseEnter)
 
@@ -48,6 +54,8 @@ export async function cleanup() {
 
   document.removeEventListener('mouseenter', onMouseEnter)
   document.removeEventListener('mousemove', onMouseMove)
+
+  chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
 
   chrome.tabs.onCreated.removeListener(onCreated)
   chrome.tabs.onUpdated.removeListener(onUpdated)
@@ -89,7 +97,10 @@ function onMouseMove(event: MouseEvent) {
 
 function onMouseEnter() {
   // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
-  if (new UAParser().getOS().name === 'Mac OS') {
+  if (
+    new UAParser().getOS().name === 'Mac OS' &&
+    External.instance.lastFocusedWindowId !== chrome.windows.WINDOW_ID_NONE
+  ) {
     TreeifyWindow.open()
   }
 }
@@ -97,4 +108,10 @@ function onMouseEnter() {
 function onResize() {
   // 左サイドバーの表示形態を変更する必要があるかもしれないので再描画する
   CurrentState.commit()
+}
+
+async function getLastFocusedWindowId(): Promise<integer> {
+  return new Promise((resolve, reject) => {
+    chrome.windows.getLastFocused((window) => resolve(window.id))
+  })
 }
