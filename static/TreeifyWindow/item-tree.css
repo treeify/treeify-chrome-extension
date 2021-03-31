@@ -190,8 +190,8 @@
 
 /* アイテムツリーのバレットの外側の円（展開状態用） */
 .item-tree-spool_outer-circle {
-  width: var(--item-tree-bullet-outer-circle-diameter);
-  height: var(--item-tree-bullet-outer-circle-diameter);
+  /* widthとheightがJavaScriptで設定される */
+
   border-radius: 50%;
   background: var(--item-tree-bullet-outer-circle-color);
 
