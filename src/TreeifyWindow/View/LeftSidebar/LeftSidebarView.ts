@@ -1,6 +1,5 @@
 import {html} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeViewModel,
@@ -11,7 +10,6 @@ import {
 export type LeftSidebarViewModel = {
   pageTreeViewModel: PageTreeViewModel
   isFloating: boolean
-  onMouseLeave: () => void
 }
 
 /**
@@ -26,22 +24,15 @@ export function createLeftSidebarViewModel(state: State): LeftSidebarViewModel |
     return {
       pageTreeViewModel: createPageTreeViewModel(state),
       isFloating: false,
-      onMouseLeave,
     }
   } else if (state.isFloatingLeftSidebarShown) {
     return {
       pageTreeViewModel: createPageTreeViewModel(state),
       isFloating: true,
-      onMouseLeave,
     }
   }
 
   return undefined
-}
-
-function onMouseLeave() {
-  CurrentState.setIsFloatingLeftSidebarShown(false)
-  CurrentState.commit()
 }
 
 export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
@@ -50,7 +41,6 @@ export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
       'left-sidebar': true,
       floating: viewModel.isFloating,
     })}
-    @mouseleave=${viewModel.onMouseLeave}
   >
     ${PageTreeView(viewModel.pageTreeViewModel)}
   </aside>`
