@@ -53,6 +53,8 @@
 
   /* ハイライト状態のアイテムのバレットの色 */
   --highlighted-item-bullet-color: hsl(0, 100%, 45%);
+  /* ハイライト状態のアイテムのバレットのマウスホバー時の色 */
+  --highlighted-item-bullet-hover-color: hsl(0, 70%, 45%);
 
   /* グレーアウト状態のアイテムの標準的なテキスト色 */
   --grayed-out-item-text-color: hsl(0, 0%, 75%);
@@ -100,6 +102,9 @@
 /* ハイライト状態のアイテムの強調表示 */
 .highlighted-item .item-tree-spool_inner-circle {
   background: var(--highlighted-item-bullet-color);
+}
+.highlighted-item .item-tree-spool:hover .item-tree-spool_inner-circle {
+  background: var(--highlighted-item-bullet-hover-color);
 }
 
 /* マウスホバー時のボディ領域 */
