@@ -51,7 +51,7 @@ export function selectAllBelowItems() {
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
 
   // 複数選択中はターゲットアイテムからフォーカスを外す
-  document.getElementById('item-tree')?.focus()
+  document.querySelector<HTMLElement>('.item-tree')?.focus()
 }
 
 /**
@@ -69,5 +69,5 @@ export function selectAllAboveItems() {
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 
   // 複数選択中はターゲットアイテムからフォーカスを外す
-  document.getElementById('item-tree')?.focus()
+  document.querySelector<HTMLElement>('.item-tree')?.focus()
 }

@@ -17,7 +17,7 @@ body {
   margin: 0;
 }
 
-#spa-root {
+.spa-root {
   height: 100%;
 }
 
@@ -69,7 +69,7 @@ body {
 }
 
 /* ウェブページアイテムのタイトル設定ダイアログ */
-#web-page-item-title-setting-dialog {
+.web-page-item-title-setting-dialog {
   /*
   ウェブページアイテムの位置に合わせたフローティング。
   left, top, width, heightがJavaScriptで設定される。

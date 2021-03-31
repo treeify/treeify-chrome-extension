@@ -60,7 +60,7 @@ export function WebPageItemTitleSettingDialogView(
     height: `${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px`,
   })
   return html`
-    <div id="web-page-item-title-setting-dialog" style=${style}>
+    <div class="web-page-item-title-setting-dialog" style=${style}>
       <input
         type="text"
         class="web-page-item-title-setting-dialog_text-box"

@@ -2,7 +2,7 @@ import {createFocusTrap} from 'focus-trap'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import {integer, ItemId} from 'src/Common/basicType'
-import {assert} from 'src/Common/Debug/assert'
+import {assert, assertNonNull} from 'src/Common/Debug/assert'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
@@ -71,7 +71,8 @@ export class External {
 
   /** DOMの初回描画を行う */
   render(state: State) {
-    const spaRoot = document.getElementById('spa-root')!
+    const spaRoot = document.querySelector('.spa-root')
+    assertNonNull(spaRoot)
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
 
     // Treeifyウィンドウのタイトルを更新する
@@ -80,8 +81,8 @@ export class External {
 
   /** DOMを再描画する */
   rerender(newState: State) {
-    const spaRoot = document.getElementById('spa-root')!
-
+    const spaRoot = document.querySelector('.spa-root')
+    assertNonNull(spaRoot)
     renderWithLitHtml(RootView(createRootViewModel(newState)), spaRoot)
 
     if (this.pendingFocusElementId !== undefined) {
@@ -104,8 +105,8 @@ export class External {
     this.pendingTextItemSelection = undefined
 
     // ウェブページアイテムのタイトル設定ダイアログが表示中ならフォーカストラップを作る
-    const webPageItemTitleSettingDialog = document.getElementById(
-      'web-page-item-title-setting-dialog'
+    const webPageItemTitleSettingDialog = document.querySelector<HTMLElement>(
+      '.web-page-item-title-setting-dialog'
     )
     if (webPageItemTitleSettingDialog !== null) {
       const focusTrap = createFocusTrap(webPageItemTitleSettingDialog, {
