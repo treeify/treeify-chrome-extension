@@ -47,12 +47,14 @@
   --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
 
   /* 最も新しい足跡の色（線形補間の一端） */
-  --strongest-footprint-color: hsl(0, 100%, 96.7%);
+  --strongest-footprint-color: hsl(0, 100%, 97.3%);
   /* 最も古い足跡の色（線形補間の一端） */
-  --weakest-footprint-color: hsl(60, 100%, 96.7%);
+  --weakest-footprint-color: hsl(60, 100%, 97.3%);
 
-  /* ハイライト状態のアイテムの背景色 */
-  --highlighted-item-background-color: hsl(120, 100%, 96.7%);
+  /* ハイライト状態のアイテムのバレットの色 */
+  --highlighted-item-bullet-color: hsl(0, 100%, 45%);
+  /* ハイライト状態のアイテムのバレットのマウスホバー時の色 */
+  --highlighted-item-bullet-hover-color: hsl(0, 70%, 45%);
 
   /* グレーアウト状態のアイテムの標準的なテキスト色 */
   --grayed-out-item-text-color: hsl(0, 0%, 75%);
@@ -97,9 +99,12 @@
   flex-grow: 1;
 }
 
-/* ハイライト状態のアイテム */
-.highlighted-item {
-  background: var(--highlighted-item-background-color);
+/* ハイライト状態のアイテムの強調表示 */
+.highlighted-item .item-tree-spool_inner-circle {
+  background: var(--highlighted-item-bullet-color);
+}
+.highlighted-item .item-tree-spool:hover .item-tree-spool_inner-circle {
+  background: var(--highlighted-item-bullet-hover-color);
 }
 
 /* マウスホバー時のボディ領域 */

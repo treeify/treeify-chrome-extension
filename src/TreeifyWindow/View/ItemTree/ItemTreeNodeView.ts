@@ -204,7 +204,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       : html`
           <!-- バレットとインデントラインの領域 -->
           <div
-            class="item-tree-node_spool-area"
+            class=${viewModel.cssClasses.unshift('item-tree-node_spool-area').join(' ')}
             draggable="true"
             @dragstart=${viewModel.onDragStart}
           >
