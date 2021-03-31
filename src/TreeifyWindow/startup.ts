@@ -1,3 +1,4 @@
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -65,11 +66,24 @@ function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>)
 }
 
 function onMouseMove(event: MouseEvent) {
-  // マウスカーソルがTreeifyウィンドウ左端かつ画面左端に到達したとき。
-  // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
-  if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
-    CurrentState.setIsFloatingLeftSidebarShown(true)
-    CurrentState.commit()
+  // マウスの位置と動きに応じて左サイドバーを開閉する
+  if (!Internal.instance.state.isFloatingLeftSidebarShown) {
+    // マウスポインターが画面左端に到達した時。
+    // Treeifyウィンドウの左端が画面左端に近くないと発動しない点に注意。
+    // 逆に言うと、Treeifyウィンドウが画面左端にぴったりくっついていなくても割とルーズに発動してくれる。
+    if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
+      CurrentState.setIsFloatingLeftSidebarShown(true)
+      CurrentState.commit()
+    }
+  } else {
+    const leftSidebar = document.querySelector('.left-sidebar')
+    assertNonNull(leftSidebar)
+    if (event.x > leftSidebar.getBoundingClientRect().right) {
+      // mouseleaveイベントを使わない理由は、Treeifyウィンドウが画面左端にぴったりくっついていない状況で、
+      // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
+      CurrentState.setIsFloatingLeftSidebarShown(false)
+      CurrentState.commit()
+    }
   }
 }
 
