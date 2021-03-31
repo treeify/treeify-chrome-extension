@@ -47,9 +47,9 @@
   --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
 
   /* 最も新しい足跡の色（線形補間の一端） */
-  --strongest-footprint-color: hsl(0, 100%, 96.7%);
+  --strongest-footprint-color: hsl(0, 100%, 97.3%);
   /* 最も古い足跡の色（線形補間の一端） */
-  --weakest-footprint-color: hsl(60, 100%, 96.7%);
+  --weakest-footprint-color: hsl(60, 100%, 97.3%);
 
   /* ハイライト状態のアイテムのバレットの色 */
   --highlighted-item-bullet-color: hsl(0, 100%, 45%);
