@@ -133,6 +133,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   doWithErrorHandling(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     assertNonUndefined(itemId)
+    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
 
     if (External.instance.hardUnloadedTabIds.has(tabId)) {
       // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
@@ -142,7 +143,6 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
       CurrentState.deleteItemItself(itemId)
     }
 
-    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
     CurrentState.commit()
   })
 }
