@@ -7,6 +7,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {createDefaultEdge, Edge} from 'src/TreeifyWindow/Internal/State'
 
 /**
  * 指定されたアイテムに関するデータを削除する。
@@ -173,14 +174,9 @@ export function countParents(itemId: ItemId): integer {
   return Object.keys(Internal.instance.state.items[itemId].parents).length
 }
 
-/**
- * 指定されたアイテムに親アイテムを追加する。
- * isCollapsedやlabelはデフォルト値になる。
- */
-export function addParent(itemid: ItemId, parentItemId: ItemId) {
-  Internal.instance.state.items[itemid].parents[parentItemId] = {
-    isCollapsed: false,
-  }
+/** 指定されたアイテムに親アイテムを追加する */
+export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
+  Internal.instance.state.items[itemid].parents[parentItemId] = edge ?? createDefaultEdge()
   Internal.instance.markAsMutated(PropertyPath.of('items', itemid, 'parents', parentItemId))
 }
 
@@ -200,13 +196,14 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
  * 整合性が取れるように親アイテムリストも修正する。
  * @param itemId このアイテムの最初の子として追加する
  * @param newItemId 最初の子として追加されるアイテム
+ * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
-export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId) {
+export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
   // 子リストの先頭に追加する
   modifyChildItems(itemId, (itemIds) => itemIds.unshift(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  CurrentState.addParent(newItemId, itemId)
+  CurrentState.addParent(newItemId, itemId, edge)
 }
 
 /**
@@ -214,13 +211,14 @@ export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId) {
  * 整合性が取れるように親アイテムリストも修正する。
  * @param itemId このアイテムの最後の子として追加する
  * @param newItemId 最後の子として追加されるアイテム
+ * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
-export function insertLastChildItem(itemId: ItemId, newItemId: ItemId) {
-  // 子リストの先頭に追加する
+export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
+  // 子リストの末尾に追加する
   modifyChildItems(itemId, (itemIds) => itemIds.push(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  CurrentState.addParent(newItemId, itemId)
+  CurrentState.addParent(newItemId, itemId, edge)
 }
 
 /**
@@ -229,8 +227,9 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId) {
  * 何らかの理由で兄として追加できない場合は何もしない。
  * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの弟になる
  * @param newItemId 兄として追加されるアイテム
+ * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
-export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
+export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
@@ -246,7 +245,7 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  CurrentState.addParent(newItemId, parentItemId)
+  CurrentState.addParent(newItemId, parentItemId, edge)
 }
 
 /**
@@ -255,8 +254,9 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
  * 何らかの理由で弟として追加できない場合は何もしない。
  * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの弟になる
  * @param newItemId 弟として追加されるアイテム
+ * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
-export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
+export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
@@ -272,7 +272,7 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
-  CurrentState.addParent(newItemId, parentItemId)
+  CurrentState.addParent(newItemId, parentItemId, edge)
 }
 
 /**
@@ -319,14 +319,17 @@ export function moveToNextSibling(itemPath: ItemPath) {
  * アイテムの親子関係グラフにおけるエッジを削除する。
  * もし親の数が0になったとしてもそのアイテムの削除は行わない。
  * 引数のアイテムが親子関係になかった場合の動作は未定義。
+ * 戻り値は削除されたエッジオブジェクト。
  */
-export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId) {
+export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge {
   // 親アイテムの子アイテムリストからアイテムを削除する
   modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
 
+  const edge = Internal.instance.state.items[itemId].parents[parentItemId]
   // アイテムの親リストから親アイテムを削除する
   delete Internal.instance.state.items[itemId].parents[parentItemId]
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parents', parentItemId))
+  return edge
 }
 
 /**

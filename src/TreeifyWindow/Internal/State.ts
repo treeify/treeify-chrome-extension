@@ -61,6 +61,9 @@ export type Edge = {
    */
   isCollapsed: boolean
 }
+export function createDefaultEdge(): Edge {
+  return {isCollapsed: false}
+}
 
 /** テキストアイテムが固有で持つデータの型 */
 export type TextItem = {
