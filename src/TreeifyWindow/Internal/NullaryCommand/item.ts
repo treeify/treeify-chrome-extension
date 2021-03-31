@@ -37,11 +37,10 @@ export function indentItem() {
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-    // 兄の最後の子になるようターゲットアイテムを配置
-    CurrentState.insertLastChildItem(prevSiblingItemId, selectedItemId)
-
     // 既存の親子関係を削除
-    CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
+    const edge = CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
+    // 兄の最後の子になるようターゲットアイテムを配置
+    CurrentState.insertLastChildItem(prevSiblingItemId, selectedItemId, edge)
 
     CurrentState.updateItemTimestamp(selectedItemId)
   }
@@ -74,12 +73,15 @@ export function unindentItem() {
   if (!ItemPath.hasParent(parentItemPath)) return
 
   for (const selectedItemPath of selectedItemPaths) {
-    // 既存の親子関係を削除
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(selectedItemPath)!, selectedItemId)
 
+    // 既存の親子関係を削除
+    const edge = CurrentState.removeItemGraphEdge(
+      ItemPath.getItemId(parentItemPath),
+      selectedItemId
+    )
     // 親の弟として配置する
-    CurrentState.insertNextSiblingItem(parentItemPath, selectedItemId)
+    CurrentState.insertNextSiblingItem(parentItemPath, selectedItemId, edge)
 
     CurrentState.updateItemTimestamp(selectedItemId)
   }
