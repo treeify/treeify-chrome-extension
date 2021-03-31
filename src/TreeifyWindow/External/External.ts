@@ -41,6 +41,9 @@ export class External {
   // データフォルダに書き込むべきプロパティパス
   private readonly pendingMutatedPropertyPaths = new Set<PropertyPath>()
 
+  /** フローティング型の左サイドバーを表示するべきかどうか */
+  shouldFloatingLeftSidebarShown: boolean = false
+
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 

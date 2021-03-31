@@ -1,5 +1,6 @@
 import {html} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
+import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeViewModel,
@@ -25,7 +26,7 @@ export function createLeftSidebarViewModel(state: State): LeftSidebarViewModel |
       pageTreeViewModel: createPageTreeViewModel(state),
       isFloating: false,
     }
-  } else if (state.isFloatingLeftSidebarShown) {
+  } else if (External.instance.shouldFloatingLeftSidebarShown) {
     return {
       pageTreeViewModel: createPageTreeViewModel(state),
       isFloating: true,
