@@ -173,7 +173,7 @@ export class Internal {
         '1000Enter': {functionName: 'toggleGrayedOut'},
         '1000l': {functionName: 'toggleHighlighted'},
         '1000d': {functionName: 'deleteItem'},
-        '1000p': {functionName: 'togglePaged'},
+        '1000p': {functionName: 'toggleCollapsed'},
         '1000o': {functionName: 'toggleBold'},
         '1000u': {functionName: 'toggleUnderline'},
         '1000i': {functionName: 'toggleItalic'},
