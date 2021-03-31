@@ -23,9 +23,17 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
         break
       case 'OnMouseEnter':
         // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
+        // TODO: Windowsでもdocument.visibilityState === 'visible'の条件付きなら実行していいんじゃないか？
         if (new UAParser().getOS().name === 'Mac OS') {
           assertNonUndefined(sender.tab?.windowId)
-          chrome.windows.update(sender.tab.windowId, {focused: true})
+
+          const isInTreeifyWindow =
+            Math.max(screenX, message.x) <= Math.min(screenX + innerWidth, message.x) &&
+            Math.max(screenY, message.y) <= Math.min(screenY + innerHeight, message.y)
+
+          if (!isInTreeifyWindow) {
+            chrome.windows.update(sender.tab.windowId, {focused: true})
+          }
         }
         break
       // TODO: 網羅性チェックをしていない理由はなんだろう？

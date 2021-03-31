@@ -81,5 +81,9 @@ export namespace TreeifyWindow {
 
   export type OnMouseEnter = {
     type: 'OnMouseEnter'
+    /** event.screenX */
+    x: integer
+    /** event.screenY */
+    y: integer
   }
 }
