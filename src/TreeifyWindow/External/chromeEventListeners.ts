@@ -31,7 +31,10 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
             Math.max(screenX, message.x) <= Math.min(screenX + innerWidth, message.x) &&
             Math.max(screenY, message.y) <= Math.min(screenY + innerHeight, message.y)
 
-          if (!isInTreeifyWindow) {
+          if (
+            !isInTreeifyWindow &&
+            External.instance.lastFocusedWindowId !== chrome.windows.WINDOW_ID_NONE
+          ) {
             chrome.windows.update(sender.tab.windowId, {focused: true})
           }
         }
@@ -226,4 +229,8 @@ async function getAllNormalTabs(): Promise<Tab[]> {
       resolve(windows.flatMap((window) => window.tabs ?? []))
     })
   })
+}
+
+export function onWindowFocusChanged(windowId: integer) {
+  External.instance.lastFocusedWindowId = windowId
 }

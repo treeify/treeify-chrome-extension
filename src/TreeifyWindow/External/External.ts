@@ -47,6 +47,8 @@ export class External {
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 
+  lastFocusedWindowId: integer = undefined as any
+
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
 
