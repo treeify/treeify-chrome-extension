@@ -149,9 +149,12 @@ export function createPageTreeNodeViewModel(
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(draggedItemPath)!, draggedItemId)
+        const edge = CurrentState.removeItemGraphEdge(
+          ItemPath.getParentItemId(draggedItemPath)!,
+          draggedItemId
+        )
+        CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
 
-        CurrentState.insertFirstChildItem(itemId, draggedItemId)
         CurrentState.updateItemTimestamp(draggedItemId)
         CurrentState.commit()
       })
