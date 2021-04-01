@@ -138,10 +138,6 @@
   /* 横幅が縮まないよう設定 */
   flex-shrink: 0;
 }
-.item-tree-node_body-area:hover .item-tree-node_hidden-tabs-count {
-  /* マウスホバー時は非表示（削除ボタンが代わりに表示される） */
-  display: none;
-}
 
 /* 各アイテムの削除ボタン */
 .item-tree-node_delete-button {
@@ -156,14 +152,14 @@
   -webkit-mask-image: url('close-icon.svg');
 
   /* マウスホバー時にのみ表示 */
-  display: none;
+  visibility: hidden;
 
   /* ボタンであることを示す */
   cursor: pointer;
 }
 .item-tree-node_body-area:hover .item-tree-node_delete-button {
   /* マウスホバー時にのみ表示 */
-  display: initial;
+  visibility: visible;
 }
 
 .item-tree-node_children-area {
