@@ -72,19 +72,49 @@ body {
 
   cursor: pointer;
 
-  /* アイコンを上下左右中央寄せにする */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  /* アイコンと疑似リップルエフェクトを中央寄せにする */
+  position: relative;
 }
 .toolbar-icon-button:hover {
   background: var(--toolbar-icon-button-hover-background);
+}
+/* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+.toolbar-icon-button::after {
+  content: "";
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+  border-radius: 50%;
+
+  background: hsl(0, 0%, 50%);
+}
+/* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+.toolbar-icon-button:active::after {
+  width: 0;
+  height: 0;
+  opacity: 0.5;
+  transition: opacity 0s, width 0s, height 0s;
 }
 
 /* データフォルダアイコン */
 .data-folder-picker-open-button_icon {
   width: var(--data-folder-picker-open-button-icon-size);
   height: var(--data-folder-picker-open-button-icon-size);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
   background: var(--data-folder-picker-open-button-icon-color);
