@@ -346,7 +346,7 @@ function onArrowDown(event: KeyboardEvent) {
     const caretLineNumber = getCaretLineNumber()
     assertNonNull(document.activeElement)
     const brElementCount = countBrElements(document.activeElement)
-    // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
+    // キャレットが最後の行以外にいるときはブラウザの挙動に任せる
     if (
       caretLineNumber === undefined ||
       brElementCount === undefined ||
