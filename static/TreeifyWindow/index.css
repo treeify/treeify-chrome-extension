@@ -15,6 +15,8 @@
   --data-folder-picker-open-button-icon-size: 22px;
   /* データフォルダを開くボタンのアイコンの色 */
   --data-folder-picker-open-button-icon-color: hsl(0, 0%, 40%);
+  /* データフォルダを既に開いている場合のアイコンの色 */
+  --data-folder-picker-open-button-icon-already-opened-color: hsl(0, 0%, 70%);
 }
 
 html {
@@ -119,6 +121,10 @@ body {
   /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
   background: var(--data-folder-picker-open-button-icon-color);
   -webkit-mask-image: url('folder-icon.svg');
+}
+/* データフォルダが既に開かれている場合 */
+.data-folder-picker-open-button_icon.already-opened {
+  background: var(--data-folder-picker-open-button-icon-already-opened-color);
 }
 
 /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
