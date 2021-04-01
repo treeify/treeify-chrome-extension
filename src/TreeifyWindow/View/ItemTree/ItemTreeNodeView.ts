@@ -229,7 +229,9 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
             ? html`<div class="item-tree-node_hidden-tabs-count">${viewModel.hiddenTabsCount}</div>`
             : undefined}
           <!-- 削除ボタン -->
-          <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}></div>
+          <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}>
+            <div class="item-tree-node_delete-button-icon"></div>
+          </div>
         </div>
       </div>
       <!-- 子リスト領域 -->

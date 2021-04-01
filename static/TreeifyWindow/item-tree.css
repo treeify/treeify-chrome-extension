@@ -141,15 +141,14 @@
 
 /* 各アイテムの削除ボタン */
 .item-tree-node_delete-button {
-  flex-basis: var(--item-tree-delete-button-size);
-  height: var(--item-tree-delete-button-size);
+  flex-basis: var(--item-tree-calculated-line-height);
+  height: var(--item-tree-calculated-line-height);
 
   /* 横幅が縮まないよう設定 */
   flex-shrink: 0;
 
-  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-  background: hsl(0, 0%, 30%);
-  -webkit-mask-image: url('close-icon.svg');
+  /* アイコンと疑似リップルエフェクトを中央寄せにする */
+  position: relative;
 
   /* マウスホバー時にのみ表示 */
   visibility: hidden;
@@ -160,6 +159,21 @@
 .item-tree-node_body-area:hover .item-tree-node_delete-button {
   /* マウスホバー時にのみ表示 */
   visibility: visible;
+}
+
+.item-tree-node_delete-button-icon {
+  width: var(--item-tree-delete-button-size);
+  height: var(--item-tree-delete-button-size);
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+  background: hsl(0, 0%, 30%);
+  -webkit-mask-image: url('close-icon.svg');
 }
 
 .item-tree-node_children-area {
