@@ -61,6 +61,8 @@
 
   /* 削除ボタンのサイズ（正方形の一辺の長さ） */
   --item-tree-delete-button-size: 0.8em;
+  /* 削除ボタンのマウスホバー時の背景 */
+  --item-tree-delete-button-background-hover-color: hsl(0, 0%, 90%);
 
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
@@ -147,6 +149,8 @@
   /* 横幅が縮まないよう設定 */
   flex-shrink: 0;
 
+  border-radius: 50%;
+
   /* アイコンと疑似リップルエフェクトを中央寄せにする */
   position: relative;
 
@@ -159,6 +163,9 @@
 .item-tree-node_body-area:hover .item-tree-node_delete-button {
   /* マウスホバー時にのみ表示 */
   visibility: visible;
+}
+.item-tree-node_delete-button:hover {
+  background: var(--item-tree-delete-button-background-hover-color);
 }
 
 .item-tree-node_delete-button-icon {
