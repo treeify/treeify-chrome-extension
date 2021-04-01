@@ -61,6 +61,29 @@ export class DataFolder {
     return this.getDeviceFolderPath(deviceId).push('hashes.json')
   }
 
+  /**
+   * データフォルダ内のファイル内容のキャッシュ。
+   * KeyはFilePathをjoin('/')した文字列。
+   * Valueはファイルの内容（テキストファイルしか扱っていないのでstring型）。
+   *
+   * 自デバイスフォルダ内のファイル内容しかキャッシュしない想定。
+   * というのも他デバイスのファイルは常に書き換えられる可能性があるので、キャッシュが不整合を起こすから。
+   * （またそもそも他デバイスのファイルを読み込む機会はかなり限られているので恩恵が少なすぎる）。
+   *
+   * このキャッシュを導入した目的は、しっかりawaitしているにも関わらず「書き込み直後に読み込むと
+   * 書き込み内容が反映されていないデータが返ってくる場合がある」という問題の対策。
+   */
+  private fileContentCache = new Map<string, string>()
+  private fetchCache(filePath: FilePath): string | undefined {
+    return this.fileContentCache.get(filePath.join('/'))
+  }
+  private setCacheEntry(filePath: FilePath, fileContent: string) {
+    this.fileContentCache.set(filePath.join('/'), fileContent)
+  }
+  private deleteCacheEntry(filePath: FilePath) {
+    this.fileContentCache.delete(filePath.join('/'))
+  }
+
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
   async readAllChunks(): Promise<List<Chunk>> {
     const fileNames = await this.getChunkFileNames(DeviceId.get())
@@ -113,10 +136,13 @@ export class DataFolder {
     // 各ファイルに書き込む
     // TODO: 各ファイルへの書き込みは並列にやりたい
     for (const {fileName, text} of fileTexts) {
+      const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
       if (text !== undefined) {
-        await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
+        this.setCacheEntry(chunkPackFilePath, text)
+        await this.writeTextFile(chunkPackFilePath, text)
       } else {
         // チャンクパックが空になった場合はファイルごと削除する
+        this.deleteCacheEntry(chunkPackFilePath)
         await chunksFolderHandle.removeEntry(fileName)
       }
     }
@@ -131,7 +157,9 @@ export class DataFolder {
       }
     }
     const hashesText = JSON.stringify(hashes, undefined, 2)
-    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesText)
+    const hashesFilePath = DataFolder.getHashesFilePath()
+    this.setCacheEntry(hashesFilePath, hashesText)
+    await this.writeTextFile(hashesFilePath, hashesText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -246,7 +274,7 @@ export class DataFolder {
     return file.lastModified
   }
 
-  // テキストファイルの内容を上書きする。
+  // テキストファイルの内容を上書きする（キャッシュは更新しない）。
   // ファイルが存在しない場合は作る。
   private async writeTextFile(filePath: FilePath, text: string) {
     const fileHandle = await this.getFileHandle(filePath)
@@ -255,7 +283,7 @@ export class DataFolder {
     await writableFileStream.close()
   }
 
-  // テキストファイルの内容を返す。
+  // テキストファイルを読み込んで内容を返す（キャッシュは無視する）。
   // ファイルが存在しない場合は空文字列を返す。
   private async readTextFile(filePath: FilePath): Promise<string> {
     const fileHandle = await this.getFileHandle(filePath)
@@ -266,20 +294,44 @@ export class DataFolder {
   // チャンクパックファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
   private async readChunkPackFile(fileName: string): Promise<ChunkPack> {
-    const text = await this.readTextFile(DataFolder.getChunkPackFilePath(fileName))
-    if (text.length === 0) {
+    const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
+    const cachedContent = this.fetchCache(chunkPackFilePath)
+    if (cachedContent === undefined) {
+      const fileContent = await this.readTextFile(chunkPackFilePath)
+      this.setCacheEntry(chunkPackFilePath, fileContent)
+
+      if (fileContent.length === 0) {
+        // 空ファイル、もといそもそもファイルが存在しなかった場合
+        return {}
+      }
+      return JSON.parse(fileContent, State.jsonReviver)
+    }
+
+    if (cachedContent.length === 0) {
       // 空ファイル、もといそもそもファイルが存在しなかった場合
       return {}
     }
-    return JSON.parse(text, State.jsonReviver)
+    return JSON.parse(cachedContent, State.jsonReviver)
   }
 
   // ハッシュファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
   private async readHashesFile(): Promise<{[K in string]: string}> {
-    const hashedFileContent = await this.readTextFile(DataFolder.getHashesFilePath())
-    if (hashedFileContent.length !== 0) {
-      return JSON.parse(hashedFileContent)
+    const hashesFilePath = DataFolder.getHashesFilePath()
+    const cachedContent = this.fetchCache(hashesFilePath)
+    if (cachedContent === undefined) {
+      const fileContent = await this.readTextFile(hashesFilePath)
+      this.setCacheEntry(hashesFilePath, fileContent)
+
+      if (fileContent.length !== 0) {
+        return JSON.parse(fileContent)
+      } else {
+        return {}
+      }
+    }
+
+    if (cachedContent.length !== 0) {
+      return JSON.parse(cachedContent)
     } else {
       return {}
     }
