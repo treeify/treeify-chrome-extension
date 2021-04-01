@@ -212,9 +212,6 @@ export async function matchTabsAndWebPageItems() {
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
     }
   }
-
-  // 正当性にやや疑問の残るcommit呼び出しだが、現状の設計では呼ばないとエラーになる
-  CurrentState.commit()
 }
 
 // 指定されたURLを持つウェブページアイテムを探す。
