@@ -177,16 +177,24 @@ function OnMouseMoveToLeftEnd() {
 /**
  * 既存のタブとウェブページアイテムのマッチングを行う。
  * URLが完全一致しているかどうかで判定する。
- * TODO: 全タブと全ウェブページアイテムの総当り方式なので計算量が多い
  */
 export async function matchTabsAndWebPageItems() {
-  const tabs = await getAllNormalTabs()
-  for (const tab of tabs) {
+  // KeyはURL、ValueはそのURLを持つアイテムID
+  const urlToItemIds = new Map<string, List<ItemId>>()
+
+  const webPageItems = Internal.instance.state.webPageItems
+  for (const key in webPageItems) {
+    const itemId = parseInt(key)
+    const url = webPageItems[itemId].url
+    urlToItemIds.set(url, (urlToItemIds.get(url) ?? List.of()).push(itemId))
+  }
+
+  for (const tab of await getAllNormalTabs()) {
     assertNonUndefined(tab.id)
 
     const url = tab.pendingUrl ?? tab.url ?? ''
-    const webPageItemId = findWebPageItemId(url)
-    if (webPageItemId === undefined) {
+    const webPageItemIds = urlToItemIds.get(url)
+    if (webPageItemIds === undefined) {
       // URLの一致するウェブページアイテムがない場合、
       // ウェブページアイテムを作る
       const newWebPageItemId = CurrentState.createWebPageItem()
@@ -198,8 +206,10 @@ export async function matchTabsAndWebPageItems() {
       CurrentState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合
-      reflectInWebPageItem(webPageItemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, webPageItemId)
+      const itemId: ItemId = webPageItemIds.last()
+
+      reflectInWebPageItem(itemId, tab)
+      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
     }
   }
 
