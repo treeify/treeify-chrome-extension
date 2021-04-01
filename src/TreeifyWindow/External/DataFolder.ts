@@ -57,8 +57,8 @@ export class DataFolder {
   private static getChunkPackFilePath(fileName: string, deviceId = DeviceId.get()): FilePath {
     return this.getChunkPacksFolderPath(deviceId).push(fileName)
   }
-  private static getHashesFilePath(deviceId = DeviceId.get()): FilePath {
-    return this.getDeviceFolderPath(deviceId).push('hashes.json')
+  private static getMetadataFilePath(deviceId = DeviceId.get()): FilePath {
+    return this.getDeviceFolderPath(deviceId).push('metadata.json')
   }
 
   /**
@@ -147,8 +147,8 @@ export class DataFolder {
       }
     }
 
-    // 各ファイルのMD5を計算し、ハッシュファイルを更新
-    const hashes = await this.readHashesFile()
+    // 各ファイルのMD5を計算し、メタデータファイルを更新
+    const hashes = await this.readMetadataFile()
     for (const {fileName, text} of fileTexts) {
       if (text !== undefined) {
         hashes[fileName] = md5(text)
@@ -157,9 +157,9 @@ export class DataFolder {
       }
     }
     const hashesText = JSON.stringify(hashes, undefined, 2)
-    const hashesFilePath = DataFolder.getHashesFilePath()
-    this.setCacheEntry(hashesFilePath, hashesText)
-    await this.writeTextFile(hashesFilePath, hashesText)
+    const metadataFilePath = DataFolder.getMetadataFilePath()
+    this.setCacheEntry(metadataFilePath, hashesText)
+    await this.writeTextFile(metadataFilePath, hashesText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -216,16 +216,16 @@ export class DataFolder {
     })
     const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
 
-    const targetHashesFilePath = DataFolder.getHashesFilePath(mostAdvancedDeviceId)
-    const hashesFileText = await this.readTextFile(targetHashesFilePath)
+    const targetMetadataFilePath = DataFolder.getMetadataFilePath(mostAdvancedDeviceId)
+    const metadataFileText = await this.readTextFile(targetMetadataFilePath)
     // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
 
     // チャンクパックファイル群を自デバイスフォルダに書き込み
     for (const {fileName, text} of chunkPackFileTexts) {
       await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
     }
-    // ハッシュファイルを自デバイスフォルダに書き込み
-    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesFileText)
+    // メタデータファイルを自デバイスフォルダに書き込み
+    await this.writeTextFile(DataFolder.getMetadataFilePath(), metadataFileText)
   }
 
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
@@ -245,7 +245,7 @@ export class DataFolder {
   private async getMostAdvancedDeviceId(): Promise<DeviceId | undefined> {
     const allDeviceIds = await this.getAllExistingDeviceIds()
     const lastModifiedPromises = allDeviceIds.map(async (deviceId) => {
-      const lastModified = await this.getLastModified(DataFolder.getHashesFilePath(deviceId))
+      const lastModified = await this.getLastModified(DataFolder.getMetadataFilePath(deviceId))
       return {deviceId, lastModified}
     })
     const latest = List(await Promise.all(lastModifiedPromises)).maxBy(
@@ -314,14 +314,14 @@ export class DataFolder {
     return JSON.parse(cachedContent, State.jsonReviver)
   }
 
-  // ハッシュファイルの内容を返す。
+  // メタデータファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
-  private async readHashesFile(): Promise<{[K in string]: string}> {
-    const hashesFilePath = DataFolder.getHashesFilePath()
-    const cachedContent = this.fetchCache(hashesFilePath)
+  private async readMetadataFile(): Promise<{[K in string]: string}> {
+    const metadataFilePath = DataFolder.getMetadataFilePath()
+    const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
-      const fileContent = await this.readTextFile(hashesFilePath)
-      this.setCacheEntry(hashesFilePath, fileContent)
+      const fileContent = await this.readTextFile(metadataFilePath)
+      this.setCacheEntry(metadataFilePath, fileContent)
 
       if (fileContent.length !== 0) {
         return JSON.parse(fileContent)
