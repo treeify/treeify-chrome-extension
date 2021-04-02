@@ -44,7 +44,9 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
     tabindex="0"
     @focus=${viewModel.onFocus}
   >
-    <img src=${viewModel.url} alt="" />
-    <div>${viewModel.caption}</div>
+    <div class="item-tree-image-content_image-and-caption">
+      <img class="item-tree-image-content_image" src=${viewModel.url} alt="" />
+      <div class="item-tree-image-content_caption">${viewModel.caption}</div>
+    </div>
   </div>`
 }
