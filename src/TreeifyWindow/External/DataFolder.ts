@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import md5 from 'md5'
-import {integer} from 'src/Common/basicType'
 import {assert} from 'src/Common/Debug/assert'
+import {Timestamp} from 'src/Common/Timestamp'
 import {DeviceId} from 'src/TreeifyWindow/DeviceId'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -14,6 +14,13 @@ type FilePath = List<string>
 
 // キーはchunk.id、値はchunk.data
 type ChunkPack = {[K in ChunkId]: any}
+
+// メタデータファイル内のJSONに対応する型
+type Metadata = {
+  timestamp: Timestamp
+  // Keyはファイル名、Valueはハッシュ値
+  hashes: {[K in string]: string}
+}
 
 /**
  * Treeifyのデータを格納する専用フォルダ（「データフォルダ」と呼ぶ）を管理するクラス。
@@ -57,8 +64,8 @@ export class DataFolder {
   private static getChunkPackFilePath(fileName: string, deviceId = DeviceId.get()): FilePath {
     return this.getChunkPacksFolderPath(deviceId).push(fileName)
   }
-  private static getHashesFilePath(deviceId = DeviceId.get()): FilePath {
-    return this.getDeviceFolderPath(deviceId).push('hashes.json')
+  private static getMetadataFilePath(deviceId = DeviceId.get()): FilePath {
+    return this.getDeviceFolderPath(deviceId).push('metadata.json')
   }
 
   /**
@@ -147,8 +154,9 @@ export class DataFolder {
       }
     }
 
-    // 各ファイルのMD5を計算し、ハッシュファイルを更新
-    const hashes = await this.readHashesFile()
+    // 各ファイルのMD5を計算し、メタデータファイルを更新
+    const metadata = await this.readMetadataFile()
+    const hashes = metadata?.hashes ?? {}
     for (const {fileName, text} of fileTexts) {
       if (text !== undefined) {
         hashes[fileName] = md5(text)
@@ -156,10 +164,11 @@ export class DataFolder {
         delete hashes[fileName]
       }
     }
-    const hashesText = JSON.stringify(hashes, undefined, 2)
-    const hashesFilePath = DataFolder.getHashesFilePath()
-    this.setCacheEntry(hashesFilePath, hashesText)
-    await this.writeTextFile(hashesFilePath, hashesText)
+    const newMetadata: Metadata = {timestamp: Timestamp.now(), hashes}
+    const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
+    const metadataFilePath = DataFolder.getMetadataFilePath()
+    this.setCacheEntry(metadataFilePath, newMetadataText)
+    await this.writeTextFile(metadataFilePath, newMetadataText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -216,16 +225,16 @@ export class DataFolder {
     })
     const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
 
-    const targetHashesFilePath = DataFolder.getHashesFilePath(mostAdvancedDeviceId)
-    const hashesFileText = await this.readTextFile(targetHashesFilePath)
+    const targetMetadataFilePath = DataFolder.getMetadataFilePath(mostAdvancedDeviceId)
+    const metadataFileText = await this.readTextFile(targetMetadataFilePath)
     // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
 
     // チャンクパックファイル群を自デバイスフォルダに書き込み
     for (const {fileName, text} of chunkPackFileTexts) {
       await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
     }
-    // ハッシュファイルを自デバイスフォルダに書き込み
-    await this.writeTextFile(DataFolder.getHashesFilePath(), hashesFileText)
+    // メタデータファイルを自デバイスフォルダに書き込み
+    await this.writeTextFile(DataFolder.getMetadataFilePath(), metadataFileText)
   }
 
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
@@ -244,12 +253,12 @@ export class DataFolder {
   // デバイスフォルダが1つも存在しないような場合はundefinedを返す。
   private async getMostAdvancedDeviceId(): Promise<DeviceId | undefined> {
     const allDeviceIds = await this.getAllExistingDeviceIds()
-    const lastModifiedPromises = allDeviceIds.map(async (deviceId) => {
-      const lastModified = await this.getLastModified(DataFolder.getHashesFilePath(deviceId))
-      return {deviceId, lastModified}
+    const timestampPromises = allDeviceIds.map(async (deviceId) => {
+      const metadata = await this.readMetadataFile(deviceId)
+      return {deviceId, timestamp: metadata?.timestamp}
     })
-    const latest = List(await Promise.all(lastModifiedPromises)).maxBy(
-      ({deviceId, lastModified}) => lastModified
+    const latest = List(await Promise.all(timestampPromises)).maxBy(
+      ({deviceId, timestamp}) => timestamp ?? 0
     )
     return latest?.deviceId
   }
@@ -265,13 +274,6 @@ export class DataFolder {
       fileNames.push(fileName)
     }
     return List(fileNames)
-  }
-
-  // 指定されたファイルの最終更新日時を返す
-  private async getLastModified(filePath: FilePath): Promise<integer> {
-    const fileHandle = await this.getFileHandle(filePath)
-    const file = await fileHandle.getFile()
-    return file.lastModified
   }
 
   // テキストファイルの内容を上書きする（キャッシュは更新しない）。
@@ -314,26 +316,26 @@ export class DataFolder {
     return JSON.parse(cachedContent, State.jsonReviver)
   }
 
-  // ハッシュファイルの内容を返す。
+  // メタデータファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
-  private async readHashesFile(): Promise<{[K in string]: string}> {
-    const hashesFilePath = DataFolder.getHashesFilePath()
-    const cachedContent = this.fetchCache(hashesFilePath)
+  private async readMetadataFile(deviceId = DeviceId.get()): Promise<Metadata | undefined> {
+    const metadataFilePath = DataFolder.getMetadataFilePath(deviceId)
+    const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
-      const fileContent = await this.readTextFile(hashesFilePath)
-      this.setCacheEntry(hashesFilePath, fileContent)
+      const fileContent = await this.readTextFile(metadataFilePath)
+      this.setCacheEntry(metadataFilePath, fileContent)
 
       if (fileContent.length !== 0) {
         return JSON.parse(fileContent)
       } else {
-        return {}
+        return undefined
       }
     }
 
     if (cachedContent.length !== 0) {
       return JSON.parse(cachedContent)
     } else {
-      return {}
+      return undefined
     }
   }
 
