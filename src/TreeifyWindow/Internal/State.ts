@@ -11,6 +11,7 @@ export type State = {
   items: {[K in ItemId]: Item}
   textItems: {[K in ItemId]: TextItem}
   webPageItems: {[K in ItemId]: WebPageItem}
+  imageItems: {[K in ItemId]: ImageItem}
   pages: {[K in ItemId]: Page}
   /**
    * マウントされているページたちのアイテムID。
@@ -87,6 +88,12 @@ export type WebPageItem = {
    * nullの場合はtabTitleがこのウェブページアイテムのタイトルとして扱われる。
    */
   title: string | null
+}
+
+/** 画像アイテムが固有で持つデータの型 */
+export type ImageItem = {
+  url: string
+  caption: string
 }
 
 /** 各ページが持つデータの型 */

@@ -96,6 +96,9 @@ export function getContentAsPlainText(itemId: ItemId): string {
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       const title = CurrentState.deriveWebPageItemTitle(itemId)
       return `${title} ${webPageItem.url}`
+    case ItemType.IMAGE:
+      const imageItem = Internal.instance.state.imageItems[itemId]
+      return `${imageItem.caption} ${imageItem.url}`
     default:
       assertNeverType(itemType)
   }
@@ -296,6 +299,12 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       if (webPageItem.title !== null) {
         baseAttributes.title = webPageItem.tabTitle
       }
+      return baseAttributes
+    case ItemType.IMAGE:
+      const imageItem = Internal.instance.state.imageItems[itemId]
+      baseAttributes.type = 'image'
+      baseAttributes.text = imageItem.caption
+      baseAttributes.url = imageItem.url
       return baseAttributes
     default:
       assertNeverType(itemType)

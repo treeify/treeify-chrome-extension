@@ -347,6 +347,7 @@ export class DataFolder {
       case 'items':
       case 'textItems':
       case 'webPageItems':
+      case 'imageItems':
         // チャンク数が肥大化するグループ
 
         const itemId = parseInt(propertyPath.get(1)!)

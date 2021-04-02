@@ -1,4 +1,5 @@
 import {ItemId, ItemType} from 'src/Common/basicType'
+import {assertNeverType} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
@@ -18,7 +19,8 @@ export function createPageTreeContentViewModel(
   state: State,
   itemId: ItemId
 ): PageTreeContentViewModel {
-  switch (state.items[itemId].itemType) {
+  const itemType = state.items[itemId].itemType
+  switch (itemType) {
     case ItemType.TEXT:
       return {
         itemType: ItemType.TEXT,
@@ -30,6 +32,11 @@ export function createPageTreeContentViewModel(
         title: CurrentState.deriveWebPageItemTitle(itemId),
         faviconUrl: state.webPageItems[itemId].faviconUrl,
       }
+    case ItemType.IMAGE:
+      // TODO: 未対応
+      throw new Error('画像アイテムは未対応')
+    default:
+      assertNeverType(itemType)
   }
 }
 

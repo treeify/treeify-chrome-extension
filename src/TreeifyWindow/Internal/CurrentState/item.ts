@@ -46,6 +46,9 @@ export function deleteItem(itemId: ItemId) {
     case ItemType.WEB_PAGE:
       CurrentState.deleteWebPageItemEntry(itemId)
       break
+    case ItemType.IMAGE:
+      CurrentState.deleteImageItemEntry(itemId)
+      break
     default:
       assertNeverType(itemType)
   }
@@ -96,6 +99,9 @@ export function deleteItemItself(itemId: ItemId) {
       break
     case ItemType.WEB_PAGE:
       CurrentState.deleteWebPageItemEntry(itemId)
+      break
+    case ItemType.IMAGE:
+      CurrentState.deleteImageItemEntry(itemId)
       break
     default:
       assertNeverType(itemType)

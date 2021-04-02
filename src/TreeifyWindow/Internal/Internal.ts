@@ -75,7 +75,7 @@ export class Internal {
         1: {
           itemId: 1,
           itemType: ItemType.TEXT,
-          childItemIds: List.of(3, 6),
+          childItemIds: List.of(3, 6, 7),
           parents: {0: {isCollapsed: false}},
           timestamp: 1604284090001,
           cssClasses: List.of(),
@@ -120,6 +120,14 @@ export class Internal {
           timestamp: 1604284090006,
           cssClasses: List.of(),
         },
+        7: {
+          itemId: 7,
+          itemType: ItemType.IMAGE,
+          childItemIds: List.of(),
+          parents: {1: {isCollapsed: false}},
+          timestamp: 1604284090007,
+          cssClasses: List.of(),
+        },
       },
       textItems: {
         0: {
@@ -149,6 +157,13 @@ export class Internal {
           title: null,
         },
       },
+      imageItems: {
+        7: {
+          url:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
+          caption: 'tamias',
+        },
+      },
       pages: {
         '0': {
           targetItemPath: List.of(0),
@@ -161,7 +176,7 @@ export class Internal {
       },
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
-      maxItemId: 6,
+      maxItemId: 7,
       activePageId: 0,
       itemTreeInputBinding: {
         '0000Tab': {functionName: 'indentItem'},

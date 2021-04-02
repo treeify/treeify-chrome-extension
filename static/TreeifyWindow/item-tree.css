@@ -390,6 +390,21 @@
   opacity: var(--unloaded-web-page-item-opacity);
 }
 
+/* 画像アイテムのコンテンツ領域のルート */
+.item-tree-image-content {
+  /* フォーカス時の枠線を非表示 */
+  outline: 0 solid transparent;
+}
+
+/* 画像とキャプションを中央揃えにする */
+.item-tree-image-content_image-and-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* これを指定しないとアイテムツリーの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
+  width: fit-content;
+}
+
 /*
 複数選択されたアイテムの背景色設定。
 他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。

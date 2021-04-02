@@ -4,6 +4,11 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
+  createItemTreeImageContentViewModel,
+  ItemTreeImageContentView,
+  ItemTreeImageContentViewModel,
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
+import {
   createItemTreeWebPageContentViewModel,
   ItemTreeWebPageContentView,
   ItemTreeWebPageContentViewModel,
@@ -17,6 +22,7 @@ import {
 export type ItemTreeContentViewModel =
   | ItemTreeTextContentViewModel
   | ItemTreeWebPageContentViewModel
+  | ItemTreeImageContentViewModel
 
 export function createItemTreeContentViewModel(
   state: State,
@@ -29,6 +35,8 @@ export function createItemTreeContentViewModel(
       return createItemTreeTextContentViewModel(state, itemPath)
     case ItemType.WEB_PAGE:
       return createItemTreeWebPageContentViewModel(state, itemPath)
+    case ItemType.IMAGE:
+      return createItemTreeImageContentViewModel(state, itemPath)
     default:
       assertNeverType(itemType)
   }
@@ -41,6 +49,8 @@ export function ItemTreeContentView(viewModel: ItemTreeContentViewModel): Templa
       return ItemTreeTextContentView(viewModel)
     case ItemType.WEB_PAGE:
       return ItemTreeWebPageContentView(viewModel)
+    case ItemType.IMAGE:
+      return ItemTreeImageContentView(viewModel)
     default:
       assertNeverType(viewModel)
   }

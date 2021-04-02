@@ -39,7 +39,7 @@ export type Chunk = {
 /** チャンク関連のコードをまとめる名前空間 */
 export namespace Chunk {
   // Stateのキーのうち、チャンクを分割するもの
-  const collectionKeys = new Set(['items', 'textItems', 'webPageItems'])
+  const collectionKeys = new Set(['items', 'textItems', 'webPageItems', 'imageItems'])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
   export function createAllChunks(state: State): List<Chunk | undefined> {
