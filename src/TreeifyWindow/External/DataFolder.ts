@@ -15,6 +15,12 @@ type FilePath = List<string>
 // キーはchunk.id、値はchunk.data
 type ChunkPack = {[K in ChunkId]: any}
 
+// メタデータファイル内のJSONに対応する型
+type Metadata = {
+  // Keyはファイル名、Valueはハッシュ値
+  hashes: {[K in string]: string}
+}
+
 /**
  * Treeifyのデータを格納する専用フォルダ（「データフォルダ」と呼ぶ）を管理するクラス。
  * 普通のアプリなら単一ファイルで書き出すところを、Treeifyではフォルダ内の複数ファイルに書き出す（理由は後述）。
@@ -148,18 +154,18 @@ export class DataFolder {
     }
 
     // 各ファイルのMD5を計算し、メタデータファイルを更新
-    const hashes = await this.readMetadataFile()
+    const metadata = await this.readMetadataFile()
     for (const {fileName, text} of fileTexts) {
       if (text !== undefined) {
-        hashes[fileName] = md5(text)
+        metadata.hashes[fileName] = md5(text)
       } else {
-        delete hashes[fileName]
+        delete metadata.hashes[fileName]
       }
     }
-    const hashesText = JSON.stringify(hashes, undefined, 2)
+    const metadataText = JSON.stringify(metadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
-    this.setCacheEntry(metadataFilePath, hashesText)
-    await this.writeTextFile(metadataFilePath, hashesText)
+    this.setCacheEntry(metadataFilePath, metadataText)
+    await this.writeTextFile(metadataFilePath, metadataText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -316,7 +322,7 @@ export class DataFolder {
 
   // メタデータファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
-  private async readMetadataFile(): Promise<{[K in string]: string}> {
+  private async readMetadataFile(): Promise<Metadata> {
     const metadataFilePath = DataFolder.getMetadataFilePath()
     const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
@@ -326,14 +332,14 @@ export class DataFolder {
       if (fileContent.length !== 0) {
         return JSON.parse(fileContent)
       } else {
-        return {}
+        return {hashes: {}}
       }
     }
 
     if (cachedContent.length !== 0) {
       return JSON.parse(cachedContent)
     } else {
-      return {}
+      return {hashes: {}}
     }
   }
 
