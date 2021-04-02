@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import md5 from 'md5'
 import {integer} from 'src/Common/basicType'
 import {assert} from 'src/Common/Debug/assert'
+import {Timestamp} from 'src/Common/Timestamp'
 import {DeviceId} from 'src/TreeifyWindow/DeviceId'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -17,6 +18,7 @@ type ChunkPack = {[K in ChunkId]: any}
 
 // メタデータファイル内のJSONに対応する型
 type Metadata = {
+  timestamp: Timestamp
   // Keyはファイル名、Valueはハッシュ値
   hashes: {[K in string]: string}
 }
@@ -155,17 +157,19 @@ export class DataFolder {
 
     // 各ファイルのMD5を計算し、メタデータファイルを更新
     const metadata = await this.readMetadataFile()
+    const hashes = metadata?.hashes ?? {}
     for (const {fileName, text} of fileTexts) {
       if (text !== undefined) {
-        metadata.hashes[fileName] = md5(text)
+        hashes[fileName] = md5(text)
       } else {
-        delete metadata.hashes[fileName]
+        delete hashes[fileName]
       }
     }
-    const metadataText = JSON.stringify(metadata, undefined, 2)
+    const newMetadata: Metadata = {timestamp: Timestamp.now(), hashes}
+    const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
-    this.setCacheEntry(metadataFilePath, metadataText)
-    await this.writeTextFile(metadataFilePath, metadataText)
+    this.setCacheEntry(metadataFilePath, newMetadataText)
+    await this.writeTextFile(metadataFilePath, newMetadataText)
   }
 
   // 指定されたパスのフォルダハンドルを取得する。
@@ -322,7 +326,7 @@ export class DataFolder {
 
   // メタデータファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
-  private async readMetadataFile(): Promise<Metadata> {
+  private async readMetadataFile(): Promise<Metadata | undefined> {
     const metadataFilePath = DataFolder.getMetadataFilePath()
     const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
@@ -332,14 +336,14 @@ export class DataFolder {
       if (fileContent.length !== 0) {
         return JSON.parse(fileContent)
       } else {
-        return {hashes: {}}
+        return undefined
       }
     }
 
     if (cachedContent.length !== 0) {
       return JSON.parse(cachedContent)
     } else {
-      return {hashes: {}}
+      return undefined
     }
   }
 
