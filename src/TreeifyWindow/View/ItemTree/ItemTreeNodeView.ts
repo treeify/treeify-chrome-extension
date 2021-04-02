@@ -51,7 +51,8 @@ export function createItemTreeNodeViewModel(
   footprintCount: integer,
   itemPath: ItemPath
 ): ItemTreeNodeViewModel {
-  const item = state.items[ItemPath.getItemId(itemPath)]
+  const itemId = ItemPath.getItemId(itemPath)
+  const item = state.items[itemId]
   const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
 
   return {
@@ -59,7 +60,7 @@ export function createItemTreeNodeViewModel(
     isActivePage: !ItemPath.hasParent(itemPath),
     isSelected: deriveIsSelected(state, itemPath),
     cssClasses: item.cssClasses,
-    footprintRank: footprintRankMap.get(item.itemId),
+    footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),
     spoolViewModel: createItemTreeSpoolViewModel(state, itemPath),

@@ -34,7 +34,6 @@ export type State = {
  * つまり、ItemTypeによらず各アイテムが必ず持っているデータ。
  */
 export type Item = {
-  itemId: ItemId
   itemType: ItemType
   childItemIds: List<ItemId>
   parents: {[K in ItemId]: Edge}
