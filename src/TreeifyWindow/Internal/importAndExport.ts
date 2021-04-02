@@ -210,12 +210,25 @@ export function createItemFromSingleLineText(line: string): ItemId {
   if (url !== undefined) {
     // URLが含まれている場合
 
-    // ウェブページアイテムを作る
-    const title = line.replace(url, '').trim()
-    const itemId = CurrentState.createWebPageItem()
-    CurrentState.setWebPageItemTitle(itemId, title)
-    CurrentState.setWebPageItemUrl(itemId, url)
-    return itemId
+    // GyazoのスクリーンショットのURLを判定する。
+    // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
+    const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
+    if (gyazoUrlPattern.test(url)) {
+      // 画像アイテムを作る
+      const title = line.replace(url, '').trim()
+      const itemId = CurrentState.createImageItem()
+      // TODO: Gyazoの画像はpngとは限らない
+      CurrentState.setImageItemUrl(itemId, url + '.png')
+      CurrentState.setImageItemCaption(itemId, title)
+      return itemId
+    } else {
+      // ウェブページアイテムを作る
+      const title = line.replace(url, '').trim()
+      const itemId = CurrentState.createWebPageItem()
+      CurrentState.setWebPageItemTitle(itemId, title)
+      CurrentState.setWebPageItemUrl(itemId, url)
+      return itemId
+    }
   } else {
     // URLが含まれていない場合
 
