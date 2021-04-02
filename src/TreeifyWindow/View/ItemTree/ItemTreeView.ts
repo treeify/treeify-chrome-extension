@@ -4,7 +4,6 @@ import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {
-  getCaretLineNumber,
   getTextItemSelectionFromDom,
   setDomSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
@@ -270,9 +269,14 @@ function onArrowUp(event: KeyboardEvent) {
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
-    const caretLineNumber = getCaretLineNumber()
+    assertNonNull(document.activeElement)
+    const activeElementRect = document.activeElement?.getBoundingClientRect()
+    const selectionRect = getSelection()?.getRangeAt(0)?.getBoundingClientRect()
+    assertNonUndefined(selectionRect)
+
     // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
-    if (caretLineNumber === undefined || caretLineNumber > 0) {
+    const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
+    if (selectionRect.top - activeElementRect.top > parseFloat(fontSize) / 2) {
       return
     }
   }
