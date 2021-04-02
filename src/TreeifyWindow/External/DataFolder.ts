@@ -1,6 +1,5 @@
 import {List} from 'immutable'
 import md5 from 'md5'
-import {integer} from 'src/Common/basicType'
 import {assert} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {DeviceId} from 'src/TreeifyWindow/DeviceId'
@@ -254,12 +253,12 @@ export class DataFolder {
   // デバイスフォルダが1つも存在しないような場合はundefinedを返す。
   private async getMostAdvancedDeviceId(): Promise<DeviceId | undefined> {
     const allDeviceIds = await this.getAllExistingDeviceIds()
-    const lastModifiedPromises = allDeviceIds.map(async (deviceId) => {
-      const lastModified = await this.getLastModified(DataFolder.getMetadataFilePath(deviceId))
-      return {deviceId, lastModified}
+    const timestampPromises = allDeviceIds.map(async (deviceId) => {
+      const metadata = await this.readMetadataFile(deviceId)
+      return {deviceId, timestamp: metadata?.timestamp}
     })
-    const latest = List(await Promise.all(lastModifiedPromises)).maxBy(
-      ({deviceId, lastModified}) => lastModified
+    const latest = List(await Promise.all(timestampPromises)).maxBy(
+      ({deviceId, timestamp}) => timestamp ?? 0
     )
     return latest?.deviceId
   }
@@ -275,13 +274,6 @@ export class DataFolder {
       fileNames.push(fileName)
     }
     return List(fileNames)
-  }
-
-  // 指定されたファイルの最終更新日時を返す
-  private async getLastModified(filePath: FilePath): Promise<integer> {
-    const fileHandle = await this.getFileHandle(filePath)
-    const file = await fileHandle.getFile()
-    return file.lastModified
   }
 
   // テキストファイルの内容を上書きする（キャッシュは更新しない）。
@@ -326,8 +318,8 @@ export class DataFolder {
 
   // メタデータファイルの内容を返す。
   // ファイルが存在しない場合は{}を返す。
-  private async readMetadataFile(): Promise<Metadata | undefined> {
-    const metadataFilePath = DataFolder.getMetadataFilePath()
+  private async readMetadataFile(deviceId = DeviceId.get()): Promise<Metadata | undefined> {
+    const metadataFilePath = DataFolder.getMetadataFilePath(deviceId)
     const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
       const fileContent = await this.readTextFile(metadataFilePath)
