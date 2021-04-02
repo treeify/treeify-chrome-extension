@@ -284,7 +284,7 @@ function toOpmlOutlineElement(itemPath: ItemPath): Element {
 
 function toOpmlAttributes(itemPath: ItemPath): Attributes {
   const itemId = ItemPath.getItemId(itemPath)
-  const itemType = Internal.instance.state.items[itemId].itemType
+  const item = Internal.instance.state.items[itemId]
 
   const baseAttributes: Attributes = {
     isPage: CurrentState.isPage(itemId).toString(),
@@ -292,8 +292,11 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
   }
+  if (!item.cssClasses.isEmpty()) {
+    baseAttributes.cssClass = item.cssClasses.join(' ')
+  }
 
-  switch (itemType) {
+  switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
       const markedupText = MarkedupText.from(textItem.domishObjects)
@@ -320,7 +323,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       baseAttributes.url = imageItem.url
       return baseAttributes
     default:
-      assertNeverType(itemType)
+      assertNeverType(item.itemType)
   }
 }
 
