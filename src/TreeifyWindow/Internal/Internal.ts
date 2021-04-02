@@ -149,6 +149,7 @@ export class Internal {
           title: null,
         },
       },
+      imageItems: {},
       pages: {
         '0': {
           targetItemPath: List.of(0),

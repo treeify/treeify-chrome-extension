@@ -1,6 +1,7 @@
 export * from 'src/TreeifyWindow/Internal/CurrentState/item'
 export * from 'src/TreeifyWindow/Internal/CurrentState/textItem'
 export * from 'src/TreeifyWindow/Internal/CurrentState/webPageItem'
+export * from 'src/TreeifyWindow/Internal/CurrentState/imageItem'
 export * from 'src/TreeifyWindow/Internal/CurrentState/itemPath'
 export * from 'src/TreeifyWindow/Internal/CurrentState/page'
 export * from 'src/TreeifyWindow/Internal/importAndExport'

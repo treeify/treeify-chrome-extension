@@ -27,6 +27,7 @@ export const TOP_ITEM_ID = 0
 export enum ItemType {
   TEXT = 'Text',
   WEB_PAGE = 'Web page',
+  IMAGE = 'Image',
 }
 
 /**

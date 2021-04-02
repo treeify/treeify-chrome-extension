@@ -29,6 +29,9 @@ export function createItemTreeContentViewModel(
       return createItemTreeTextContentViewModel(state, itemPath)
     case ItemType.WEB_PAGE:
       return createItemTreeWebPageContentViewModel(state, itemPath)
+    case ItemType.IMAGE:
+      // TODO: 未対応
+      throw new Error('画像アイテムは未対応')
     default:
       assertNeverType(itemType)
   }
