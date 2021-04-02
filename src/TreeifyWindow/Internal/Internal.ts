@@ -65,7 +65,6 @@ export class Internal {
     return {
       items: {
         0: {
-          itemId: 0,
           itemType: ItemType.TEXT,
           childItemIds: List.of(1, 2, 5),
           parents: {},
@@ -73,7 +72,6 @@ export class Internal {
           cssClasses: List.of(),
         },
         1: {
-          itemId: 1,
           itemType: ItemType.TEXT,
           childItemIds: List.of(3, 6, 7),
           parents: {0: {isCollapsed: false}},
@@ -81,7 +79,6 @@ export class Internal {
           cssClasses: List.of(),
         },
         2: {
-          itemId: 2,
           itemType: ItemType.TEXT,
           childItemIds: List.of(4),
           parents: {0: {isCollapsed: true}},
@@ -89,7 +86,6 @@ export class Internal {
           cssClasses: List.of(),
         },
         3: {
-          itemId: 3,
           itemType: ItemType.TEXT,
           childItemIds: List.of(),
           parents: {1: {isCollapsed: false}},
@@ -97,7 +93,6 @@ export class Internal {
           cssClasses: List.of(),
         },
         4: {
-          itemId: 4,
           itemType: ItemType.TEXT,
           childItemIds: List.of(),
           parents: {2: {isCollapsed: false}},
@@ -105,7 +100,6 @@ export class Internal {
           cssClasses: List.of('grayed-out-item'),
         },
         5: {
-          itemId: 5,
           itemType: ItemType.WEB_PAGE,
           childItemIds: List.of(),
           parents: {0: {isCollapsed: false}},
@@ -113,7 +107,6 @@ export class Internal {
           cssClasses: List.of(),
         },
         6: {
-          itemId: 6,
           itemType: ItemType.TEXT,
           childItemIds: List.of(),
           parents: {1: {isCollapsed: false}},
@@ -121,7 +114,6 @@ export class Internal {
           cssClasses: List.of(),
         },
         7: {
-          itemId: 7,
           itemType: ItemType.IMAGE,
           childItemIds: List.of(),
           parents: {1: {isCollapsed: false}},

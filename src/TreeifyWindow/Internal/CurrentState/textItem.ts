@@ -21,7 +21,6 @@ export function createTextItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemId: newItemId,
     itemType: ItemType.TEXT,
     childItemIds: List.of(),
     parents: {},
