@@ -4,7 +4,6 @@ import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {
-  countBrElements,
   getCaretLineNumber,
   getTextItemSelectionFromDom,
   setDomSelection,
@@ -343,16 +342,25 @@ function onArrowDown(event: KeyboardEvent) {
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
-    const caretLineNumber = getCaretLineNumber()
     assertNonNull(document.activeElement)
-    const brElementCount = countBrElements(document.activeElement)
-    // キャレットが最後の行以外にいるときはブラウザの挙動に任せる
-    if (
-      caretLineNumber === undefined ||
-      brElementCount === undefined ||
-      caretLineNumber < brElementCount
-    ) {
-      return
+    const activeElementRect = document.activeElement?.getBoundingClientRect()
+    const selectionRect = getSelection()?.getRangeAt(0)?.getBoundingClientRect()
+    assertNonUndefined(selectionRect)
+
+    if (selectionRect.bottom === 0) {
+      // どういうわけかキャレットが先頭に居るときにselectionRectの値が全て0になってしまう問題への対処
+
+      const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
+      if (activeElementRect.height >= parseFloat(fontSize) * 2) {
+        // br要素を含むか、あるいは折り返しが起こっている場合はブラウザの挙動に任せる
+        return
+      }
+    } else {
+      // キャレットが最後の行以外にいるときはブラウザの挙動に任せる
+      const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
+      if (activeElementRect.bottom - selectionRect.bottom > parseFloat(fontSize) / 2) {
+        return
+      }
     }
   }
 
