@@ -161,6 +161,7 @@ export class Internal {
         7: {
           url:
             'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
+          caption: 'tamias',
         },
       },
       pages: {

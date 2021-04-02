@@ -8,6 +8,7 @@ export type ItemTreeImageContentViewModel = {
   itemPath: ItemPath
   itemType: ItemType.IMAGE
   url: string
+  caption: string
 }
 
 export function createItemTreeImageContentViewModel(
@@ -21,6 +22,7 @@ export function createItemTreeImageContentViewModel(
     itemPath,
     itemType: ItemType.IMAGE,
     url: imageItem.url,
+    caption: imageItem.caption,
   }
 }
 
@@ -29,5 +31,6 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   return html`<div class="item-tree-image-content" id=${id} tabindex="0">
     <img src=${viewModel.url} alt="" />
+    <div>${viewModel.caption}</div>
   </div>`
 }

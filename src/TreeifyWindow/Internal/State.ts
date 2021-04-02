@@ -93,6 +93,7 @@ export type WebPageItem = {
 /** 画像アイテムが固有で持つデータの型 */
 export type ImageItem = {
   url: string
+  caption: string
 }
 
 /** 各ページが持つデータの型 */

@@ -97,8 +97,8 @@ export function getContentAsPlainText(itemId: ItemId): string {
       const title = CurrentState.deriveWebPageItemTitle(itemId)
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
-      // TODO: 未対応
-      throw new Error('画像アイテムは未対応')
+      const imageItem = Internal.instance.state.imageItems[itemId]
+      return `${imageItem.caption} ${imageItem.url}`
     default:
       assertNeverType(itemType)
   }
@@ -301,8 +301,11 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       }
       return baseAttributes
     case ItemType.IMAGE:
-      // TODO: 未対応
-      throw new Error('画像アイテムは未対応')
+      const imageItem = Internal.instance.state.imageItems[itemId]
+      baseAttributes.type = 'image'
+      baseAttributes.text = imageItem.caption
+      baseAttributes.url = imageItem.url
+      return baseAttributes
     default:
       assertNeverType(itemType)
   }
