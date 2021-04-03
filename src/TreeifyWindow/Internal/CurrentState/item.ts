@@ -374,6 +374,12 @@ export function recycleItemId(itemId: ItemId) {
   Internal.instance.markAsMutated(PropertyPath.of('availableItemIds'))
 }
 
+/** 指定されたアイテムのCSSクラスリストを上書き設定する */
+export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
+  Internal.instance.state.items[itemId].cssClasses = cssClasses
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
+}
+
 /**
  * CSSクラスを追加する。
  * 既に追加済みなら削除する。
