@@ -42,6 +42,7 @@ export type ItemTreeNodeViewModel = {
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
+  onClickHiddenTabsCount: (event: MouseEvent) => void
 }
 
 // 再帰的にアイテムツリーのViewModelを作る
@@ -115,6 +116,11 @@ export function createItemTreeNodeViewModel(
 
         event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
       })
+    },
+    onClickHiddenTabsCount: (event: MouseEvent) => {
+      CurrentState.setTargetItemPath(itemPath)
+      NullaryCommand.hardUnloadSubtree()
+      CurrentState.commit()
     },
   }
 }
@@ -227,7 +233,12 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           </div>
           <!-- 隠れているタブ数 -->
           ${viewModel.hiddenTabsCount > 0
-            ? html`<div class="item-tree-node_hidden-tabs-count">${viewModel.hiddenTabsCount}</div>`
+            ? html`<div
+                class="item-tree-node_hidden-tabs-count"
+                @click=${viewModel.onClickHiddenTabsCount}
+              >
+                ${viewModel.hiddenTabsCount}
+              </div>`
             : undefined}
           <!-- 削除ボタン -->
           <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}>
