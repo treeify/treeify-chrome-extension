@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
-import {assertNeverType} from 'src/Common/Debug/assert'
+import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
@@ -8,7 +8,8 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {Attributes, Element, js2xml} from 'xml-js'
+import {Edge} from 'src/TreeifyWindow/Internal/State'
+import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
   if (event.clipboardData === null) return
@@ -50,7 +51,19 @@ export function onPaste(event: ClipboardEvent) {
   if (event.clipboardData === null) return
 
   event.preventDefault()
+  const targetItemPath = CurrentState.getTargetItemPath()
   const text = event.clipboardData.getData('text/plain')
+
+  const opmlParseResult = tryParseAsOpml(text)
+  if (opmlParseResult !== undefined) {
+    // OPML形式の場合
+    for (const itemAndEdge of opmlParseResult.map(createItemBasedOnOpml).reverse()) {
+      CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
+    }
+    CurrentState.commit()
+    return
+  }
+
   if (!text.includes('\n')) {
     // 1行だけのテキストの場合
 
@@ -58,7 +71,7 @@ export function onPaste(event: ClipboardEvent) {
     if (url !== undefined) {
       // URLを含むなら
       const newItemId = createItemFromSingleLineText(text)
-      CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), newItemId)
+      CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
       CurrentState.commit()
     } else {
       document.execCommand('insertText', false, text)
@@ -358,4 +371,123 @@ export function toOpmlString(rootItemId: ItemId): string {
     ],
   }
   return js2xml(xmlObject, {spaces: 2})
+}
+
+/**
+ * 指定された文字列をOPMLとしてパースしてみる。
+ * 成功したらbody要素直下のoutline要素の配列を返す。
+ * 失敗したらundefinedを返す。
+ * OPML 2.0だと仮定してパースするが、1.0でも偶然パースできることはある。
+ * TODO: head > title要素の内容をスルーしてしまっているが何らかの形で取り込んだ方がいいのでは
+ */
+export function tryParseAsOpml(couldXmlString: string): OutlineElement[] | undefined {
+  try {
+    const documentRoot = xml2js(couldXmlString)
+
+    // バリデーション
+    if (!(documentRoot.elements instanceof Array)) return undefined
+    const opmlElement: Element = documentRoot.elements[0]
+    assert(opmlElement.name === 'opml')
+    if (!(opmlElement.elements instanceof Array)) return undefined
+    const bodyElement = opmlElement.elements.find((element) => element.name === 'body')
+    assertNonUndefined(bodyElement)
+    if (!(bodyElement.elements instanceof Array)) return undefined
+    for (const outlineElement of bodyElement.elements) {
+      assertOutlineElement(outlineElement)
+    }
+
+    return bodyElement.elements as OutlineElement[]
+  } catch {
+    return undefined
+  }
+}
+
+function assertOutlineElement(element: Element): asserts element is OutlineElement {
+  assert(element.name === 'outline')
+  assertNonUndefined(element.attributes)
+  // textはOPML 2.0では必須属性
+  assert(typeof element.attributes.text === 'string')
+
+  if (element.elements instanceof Array) {
+    // 再帰的に子孫をバリデーション
+    for (const child of element.elements) {
+      assertOutlineElement(child)
+    }
+  }
+}
+
+type OutlineElement = Element & {
+  attributes: OutlineAttributes
+  elements: Array<OutlineElement> | undefined
+}
+type OutlineAttributes = Attributes & {
+  text: string
+}
+type ItemAndEdge = {itemId: ItemId; edge: Edge}
+
+/**
+ * パースされたOPMLを元にアイテムを作る。
+ * TODO: テキストアイテムのスタイル（太字、下線など）の取り込みは未実装
+ */
+function createItemBasedOnOpml(element: OutlineElement): ItemAndEdge {
+  const itemId = createBaseItemBasedOnOpml(element)
+
+  const children = element.elements?.map(createItemBasedOnOpml) ?? []
+  CurrentState.modifyChildItems(itemId, () => List(children).map((child) => child.itemId))
+  for (const child of children) {
+    CurrentState.addParent(child.itemId, itemId, child.edge)
+  }
+
+  const attributes = element.attributes
+  if (typeof attributes.cssClass === 'string') {
+    const cssClasses = List(attributes.cssClass.split(' '))
+    CurrentState.setCssClasses(itemId, cssClasses)
+  }
+  if (attributes.isPage === 'true') {
+    CurrentState.turnIntoPage(itemId)
+  }
+
+  if (attributes.isCollapsed === 'true') {
+    return {itemId, edge: {isCollapsed: true}}
+  } else {
+    return {itemId, edge: {isCollapsed: false}}
+  }
+}
+
+function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
+  const attributes = element.attributes
+  switch (attributes.type) {
+    case 'link':
+      const webPageItemId = CurrentState.createWebPageItem()
+      if (typeof attributes.url === 'string') {
+        CurrentState.setWebPageItemUrl(webPageItemId, attributes.url)
+      }
+      if (typeof attributes.faviconUrl === 'string') {
+        CurrentState.setWebPageItemFaviconUrl(webPageItemId, attributes.faviconUrl)
+      }
+      if (typeof attributes.title === 'string') {
+        CurrentState.setWebPageItemTabTitle(webPageItemId, attributes.title)
+        CurrentState.setWebPageItemTitle(webPageItemId, attributes.text)
+      } else {
+        CurrentState.setWebPageItemTabTitle(webPageItemId, attributes.text)
+      }
+      return webPageItemId
+    case 'image':
+      const imageItemId = CurrentState.createImageItem()
+      CurrentState.setImageItemCaption(imageItemId, attributes.text)
+      if (typeof attributes.url === 'string') {
+        CurrentState.setImageItemUrl(imageItemId, attributes.url)
+      }
+      return imageItemId
+    case 'text':
+    default:
+      const textItemId = CurrentState.createTextItem()
+      // TODO: スタイル情報を取り込む
+      const domishObject: DomishObject.TextNode = {
+        type: 'text',
+        textContent: attributes.text,
+      }
+      CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
+      return textItemId
+  }
 }
