@@ -237,7 +237,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
                 class="item-tree-node_hidden-tabs-count"
                 @click=${viewModel.onClickHiddenTabsCount}
               >
-                ${viewModel.hiddenTabsCount}
+                ${Math.min(99, viewModel.hiddenTabsCount)}
               </div>`
             : undefined}
           <!-- 削除ボタン -->
