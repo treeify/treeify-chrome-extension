@@ -61,8 +61,8 @@
 
   /* 削除ボタンのサイズ（正方形の一辺の長さ） */
   --item-tree-delete-button-size: 0.8em;
-  /* 削除ボタンのマウスホバー時の背景 */
-  --item-tree-delete-button-background-hover-color: hsl(0, 0%, 90%);
+  /* 削除ボタンなどのマウスホバー時の背景 */
+  --item-tree-node-button-background-hover-color: hsl(0, 0%, 90%);
 
   /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
   --item-tree-favicon-size: 1em;
@@ -134,11 +134,46 @@
 
 /* 隠れているタブ数 */
 .item-tree-node_hidden-tabs-count {
-  flex-basis: var(--item-tree-delete-button-size);
-  height: var(--item-tree-delete-button-size);
+  flex-basis: var(--item-tree-calculated-line-height);
+  height: var(--item-tree-calculated-line-height);
 
   /* 横幅が縮まないよう設定 */
   flex-shrink: 0;
+
+  position: relative;
+  text-align: center;
+
+  border-radius: 50%;
+  cursor: pointer;
+}
+.item-tree-node_hidden-tabs-count:hover {
+  background: var(--item-tree-node-button-background-hover-color);
+}
+/* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+.item-tree-node_hidden-tabs-count::after {
+  content: '';
+
+  /* 中央寄せ */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+  border-radius: 50%;
+
+  background: hsl(0, 0%, 50%);
+}
+/* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+.item-tree-node_hidden-tabs-count:active::after {
+  width: 0;
+  height: 0;
+  opacity: 0.5;
+  transition: opacity 0s, width 0s, height 0s;
 }
 
 /* 各アイテムの削除ボタン */
@@ -165,7 +200,7 @@
   visibility: visible;
 }
 .item-tree-node_delete-button:hover {
-  background: var(--item-tree-delete-button-background-hover-color);
+  background: var(--item-tree-node-button-background-hover-color);
 }
 
 .item-tree-node_delete-button-icon {
