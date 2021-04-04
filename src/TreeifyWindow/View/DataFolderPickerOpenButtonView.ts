@@ -28,6 +28,6 @@ export function DataFolderPickerOpenButtonView(viewModel: DataFolderPickerOpenBu
 }
 
 function onClick() {
-  NullaryCommand.openDataFolderPicker()
+  NullaryCommand.saveToDataFolder()
   CurrentState.commit()
 }

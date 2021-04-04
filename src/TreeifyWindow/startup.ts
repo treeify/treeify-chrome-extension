@@ -70,7 +70,7 @@ export async function cleanup() {
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
   External.instance.rerender(newState)
-  External.instance.requestWriteDataFolder(newState, mutatedPropertyPaths)
+  External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
 }
 
 function onMouseMove(event: MouseEvent) {

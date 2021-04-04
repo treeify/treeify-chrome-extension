@@ -7,7 +7,6 @@ import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
-import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -34,12 +33,8 @@ export class External {
 
   /** データフォルダ */
   dataFolder: DataFolder | undefined
-  // 超短時間での連続書き込みを抑制するための制御用変数
-  private duringWritingDelay: boolean = false
-  // 書き込みディレイ（ミリ秒）
-  private static readonly writingDelay = 500
   // データフォルダに書き込むべきプロパティパス
-  private readonly pendingMutatedPropertyPaths = new Set<PropertyPath>()
+  readonly pendingMutatedPropertyPaths = new Set<PropertyPath>()
 
   /** フローティング型の左サイドバーを表示するべきかどうか */
   shouldFloatingLeftSidebarShown: boolean = false
@@ -155,30 +150,12 @@ export class External {
     this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
   }
 
-  /** データフォルダへの書き込みをリクエストする */
-  requestWriteDataFolder(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
+  /** データフォルダへの差分書き込みの対象箇所を伝える */
+  postMutatedPropertyPaths(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
     if (this.dataFolder === undefined) return
 
     for (const mutatedPropertyPath of mutatedPropertyPaths) {
       this.pendingMutatedPropertyPaths.add(mutatedPropertyPath)
-    }
-
-    if (!this.duringWritingDelay) {
-      this.duringWritingDelay = true
-      setTimeout(() => {
-        this.duringWritingDelay = false
-
-        if (this.dataFolder === undefined) return
-
-        // 変化のあったチャンクをデータベースに書き込む
-        const chunks = []
-        for (const chunkId of Chunk.extractChunkIds(this.pendingMutatedPropertyPaths)) {
-          const chunk = Chunk.create(newState, chunkId)
-          chunks.push(chunk)
-        }
-        this.pendingMutatedPropertyPaths.clear()
-        this.dataFolder.writeChunks(List(chunks))
-      }, External.writingDelay)
     }
   }
 }
