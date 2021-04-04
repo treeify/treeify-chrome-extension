@@ -5,12 +5,14 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
 export type DataFolderPickerOpenButtonViewModel = {
-  hasDataFolderAlreadyOpened: boolean
+  isGrayedOut: boolean
 }
 
 export function createDataFolderPickerOpenButtonViewModel(): DataFolderPickerOpenButtonViewModel {
   return {
-    hasDataFolderAlreadyOpened: External.instance.dataFolder !== undefined,
+    isGrayedOut:
+      External.instance.dataFolder !== undefined &&
+      External.instance.pendingMutatedPropertyPaths.size === 0,
   }
 }
 
@@ -20,7 +22,7 @@ export function DataFolderPickerOpenButtonView(viewModel: DataFolderPickerOpenBu
       <div
         class=${classMap({
           'data-folder-picker-open-button_icon': true,
-          'already-opened': viewModel.hasDataFolderAlreadyOpened,
+          'grayed-out': viewModel.isGrayedOut,
         })}
       ></div>
     </div>

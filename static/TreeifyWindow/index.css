@@ -15,8 +15,8 @@
   --data-folder-picker-open-button-icon-size: 22px;
   /* データフォルダを開くボタンのアイコンの色 */
   --data-folder-picker-open-button-icon-color: hsl(0, 0%, 40%);
-  /* データフォルダを既に開いている場合のアイコンの色 */
-  --data-folder-picker-open-button-icon-already-opened-color: hsl(0, 0%, 70%);
+  /* データフォルダを開くボタンのアイコンのグレーアウト状態の色 */
+  --data-folder-picker-open-button-icon-grayed-out-color: hsl(0, 0%, 70%);
 }
 
 html {
@@ -82,7 +82,7 @@ body {
 }
 /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
 .toolbar-icon-button::after {
-  content: "";
+  content: '';
 
   /* 中央寄せ */
   position: absolute;
@@ -122,9 +122,9 @@ body {
   background: var(--data-folder-picker-open-button-icon-color);
   -webkit-mask-image: url('folder-icon.svg');
 }
-/* データフォルダが既に開かれている場合 */
-.data-folder-picker-open-button_icon.already-opened {
-  background: var(--data-folder-picker-open-button-icon-already-opened-color);
+/* グレーアウト状態のデータフォルダアイコン */
+.data-folder-picker-open-button_icon.grayed-out {
+  background: var(--data-folder-picker-open-button-icon-grayed-out-color);
 }
 
 /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
