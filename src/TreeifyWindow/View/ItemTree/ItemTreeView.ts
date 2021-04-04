@@ -557,7 +557,7 @@ function onSpace(event: KeyboardEvent) {
     event.preventDefault()
 
     // クリックしたのと同じ扱いにする
-    NullaryCommand.browseWebPageItem()
+    NullaryCommand.browseTab()
     CurrentState.commit()
   }
 }

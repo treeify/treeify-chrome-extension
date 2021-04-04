@@ -68,7 +68,7 @@ export function loadSubtree() {
  * ウェブページアイテムに対応するタブを最前面化する。
  * 存在しない場合はタブを開く。
  */
-export function browseWebPageItem() {
+export function browseTab() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
