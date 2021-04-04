@@ -114,6 +114,8 @@ export function onCreated(tab: Tab) {
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
       External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
     }
+
+    CurrentState.commit()
   })
 }
 
