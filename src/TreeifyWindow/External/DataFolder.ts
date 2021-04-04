@@ -278,22 +278,11 @@ export class DataFolder {
 
   // テキストファイルの内容を上書きする（キャッシュは更新しない）。
   // ファイルが存在しない場合は作る。
-  // 実際の書き込み処理はWeb Workerにやらせる。
-  //
-  // 【Web Workerを使っている理由】
-  // UIスレッドでファイル書き込みを行うと、Windowsではマウスポインターがprogress状態になる。
-  // Treeifyでは自動保存機能によって細かく頻繁に書き込むので、マウスポインターがチカチカしてしまう。
-  // それを防ぐためWeb Workerに書き込ませる。
   private async writeTextFile(filePath: FilePath, text: string) {
     const fileHandle = await this.getFileHandle(filePath)
-    return new Promise<void>((resolve, reject) => {
-      const worker = new Worker('workerEntryPoint.js')
-      worker.addEventListener('message', () => {
-        resolve()
-      })
-
-      worker.postMessage({fileHandle, text})
-    })
+    const writableFileStream = await fileHandle.createWritable()
+    await writableFileStream.write(text)
+    await writableFileStream.close()
   }
 
   // テキストファイルを読み込んで内容を返す（キャッシュは無視する）。
