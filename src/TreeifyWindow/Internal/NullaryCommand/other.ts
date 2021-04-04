@@ -11,29 +11,46 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
 
-/** データフォルダピッカーを開く */
-export function openDataFolderPicker() {
-  doAsyncWithErrorHandling(async () => {
-    const folderHandle = await showDirectoryPicker()
-    await folderHandle.requestPermission({mode: 'readwrite'})
-    const dataFolder = new DataFolder(folderHandle)
-
-    await dataFolder.sync()
-
-    const chunks = await dataFolder.readAllChunks()
-    if (!chunks.isEmpty()) {
-      const state = Chunk.inflateStateFromChunks(chunks)
-      await cleanup()
-      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
-      External.instance.dataFolder = dataFolder
-      await startup(state as State)
-    } else {
-      const allChunks = Chunk.createAllChunks(Internal.instance.state)
-      const filtered = allChunks.filter((chunks) => chunks !== undefined) as List<Chunk>
-      await dataFolder.writeChunks(filtered)
-      External.instance.dataFolder = dataFolder
+/**
+ * データフォルダに現在の状態を書き込む。
+ * もしデータフォルダがまだ開かれていない場合はデータフォルダを開くプロセスを開始する。
+ */
+export function saveToDataFolder() {
+  if (External.instance.dataFolder !== undefined) {
+    // 変化のあったチャンクをデータベースに書き込む
+    const chunks = []
+    for (const chunkId of Chunk.extractChunkIds(External.instance.pendingMutatedPropertyPaths)) {
+      const chunk = Chunk.create(Internal.instance.state, chunkId)
+      chunks.push(chunk)
     }
-  })
+    External.instance.pendingMutatedPropertyPaths.clear()
+    External.instance.dataFolder.writeChunks(List(chunks))
+  } else {
+    // もしデータフォルダがまだ開かれていない場合
+
+    // データフォルダを開くプロセスを開始する
+    doAsyncWithErrorHandling(async () => {
+      const folderHandle = await showDirectoryPicker()
+      await folderHandle.requestPermission({mode: 'readwrite'})
+      const dataFolder = new DataFolder(folderHandle)
+
+      await dataFolder.sync()
+
+      const chunks = await dataFolder.readAllChunks()
+      if (!chunks.isEmpty()) {
+        const state = Chunk.inflateStateFromChunks(chunks)
+        await cleanup()
+        // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+        External.instance.dataFolder = dataFolder
+        await startup(state as State)
+      } else {
+        const allChunks = Chunk.createAllChunks(Internal.instance.state)
+        const filtered = allChunks.filter((chunks) => chunks !== undefined) as List<Chunk>
+        await dataFolder.writeChunks(filtered)
+        External.instance.dataFolder = dataFolder
+      }
+    })
+  }
 }
 
 /**

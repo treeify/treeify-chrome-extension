@@ -6,7 +6,6 @@ build({
     './src/BrowserAction/entryPoint.ts',
     './src/ContentScript/entryPoint.ts',
     './src/TreeifyWindow/entryPoint.ts',
-    './src/TreeifyWindow/workerEntryPoint.ts',
   ],
   outdir: './dist',
   bundle: true,

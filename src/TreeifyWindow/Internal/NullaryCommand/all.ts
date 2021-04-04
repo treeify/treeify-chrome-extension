@@ -16,7 +16,7 @@ import {
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {
-  openDataFolderPicker,
+  saveToDataFolder,
   selectAllAboveItems,
   selectAllBelowItems,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/other'
@@ -70,6 +70,6 @@ export const functions: {[name: string]: () => void} = {
   loadItem,
   loadSubtree,
   edit,
-  openDataFolderPicker,
+  saveToDataFolder,
 }
 export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
