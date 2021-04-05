@@ -55,9 +55,6 @@ export const LeftSidebarViewCss = css`
 
     /* 左サイドバーの幅 */
     --left-sidebar-width: 200px;
-
-    /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
-    --page-tree-favicon-size: 1em;
   }
 
   .left-sidebar {
@@ -79,16 +76,5 @@ export const LeftSidebarViewCss = css`
     width: var(--left-sidebar-width);
     /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
     z-index: 1;
-  }
-
-  .page-tree-web-page-content {
-    /* ファビコンとタイトルを横に並べる */
-    display: flex;
-    align-items: center;
-  }
-
-  .page-tree-web-page-content_favicon {
-    width: var(--page-tree-favicon-size);
-    height: var(--page-tree-favicon-size);
   }
 `

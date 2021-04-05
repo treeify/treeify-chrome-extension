@@ -11,6 +11,7 @@ import {LeftSidebarViewCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebar
 import {PageTreeBulletAndIndentCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
 import {PageTreeNodeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
 import {PageTreeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
+import {PageTreeWebPageContentCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
 import {RootViewCss} from 'src/TreeifyWindow/View/RootView'
 
 /**
@@ -32,6 +33,7 @@ export function generateStyleElementContents() {
     ${PageTreeCss}
     ${PageTreeNodeCss}
     ${PageTreeBulletAndIndentCss}
+    ${PageTreeWebPageContentCss}
     ${ItemTreeViewCss}
     ${ItemTreeNodeViewCss}
     ${ItemTreeSpoolViewCss}
