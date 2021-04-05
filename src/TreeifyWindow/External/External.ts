@@ -10,6 +10,7 @@ import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomEle
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {generateStyleElementContents} from 'src/TreeifyWindow/View/css'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
 /** TODO: コメント */
@@ -71,6 +72,10 @@ export class External {
 
   /** DOMの初回描画を行う */
   render(state: State) {
+    const styleElement = document.querySelector('.style')
+    assertNonNull(styleElement)
+    renderWithLitHtml(generateStyleElementContents(), styleElement)
+
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
@@ -81,6 +86,10 @@ export class External {
 
   /** DOMを再描画する */
   rerender(newState: State) {
+    const styleElement = document.querySelector('.style')
+    assertNonNull(styleElement)
+    renderWithLitHtml(generateStyleElementContents(), styleElement)
+
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
     renderWithLitHtml(RootView(createRootViewModel(newState)), spaRoot)
