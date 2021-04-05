@@ -56,12 +56,6 @@ export const LeftSidebarViewCss = css`
     /* 左サイドバーの幅 */
     --left-sidebar-width: 200px;
 
-    /* ページツリーのテキスト全般に適用されるline-height */
-    --page-tree-line-height: 1.65;
-
-    /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-    --page-tree-calculated-line-height: calc(1em * var(--item-tree-line-height));
-
     /* インデントラインの太さ */
     --page-tree-indent-line-width: 1px;
     /* インデントラインの色 */
@@ -104,14 +98,6 @@ export const LeftSidebarViewCss = css`
     width: var(--left-sidebar-width);
     /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
     z-index: 1;
-  }
-
-  .page-tree {
-    font-size: 15px;
-    line-height: var(--page-tree-line-height);
-
-    /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
-    padding-bottom: 150px;
   }
 
   .page-tree-node {
