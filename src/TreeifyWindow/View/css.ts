@@ -1,4 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
+import {WebPageItemTitleSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 import {ItemTreeImageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
 import {ItemTreeNodeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 import {ItemTreeSpoolViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
@@ -29,5 +30,6 @@ export function generateStyleElementContents() {
     ${ItemTreeTextContentCss}
     ${ItemTreeWebPageContentCss}
     ${ItemTreeImageContentCss}
+    ${WebPageItemTitleSettingDialogCss}
   `
 }

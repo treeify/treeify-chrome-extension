@@ -212,20 +212,4 @@ export const RootViewCss = css`
     /* 左サイドバーとアイテムツリーを横に並べる */
     display: flex;
   }
-
-  /* ウェブページアイテムのタイトル設定ダイアログ */
-  .web-page-item-title-setting-dialog {
-    /*
-    ウェブページアイテムの位置に合わせたフローティング。
-    left, top, width, heightがJavaScriptで設定される。
-    */
-    position: absolute;
-  }
-
-  /* ウェブページアイテムのタイトル設定ダイアログのテキスト入力欄 */
-  .web-page-item-title-setting-dialog_text-box {
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-  }
 `
