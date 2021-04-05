@@ -8,6 +8,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type ItemTreeTextContentViewModel = {
@@ -129,3 +130,17 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
 
   return contentEditableElement
 }
+
+export const ItemTreeTextContentCss = css`
+  /* テキストアイテムのcontenteditableな要素 */
+  .item-tree-text-content_content-editable {
+    /* contenteditableな要素のフォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
+  }
+
+  /* グレーアウト状態のテキストアイテム */
+  .grayed-out-item .item-tree-text-content_content-editable,
+  .grayed-out-item-children .item-tree-text-content_content-editable {
+    color: var(--grayed-out-item-text-color);
+  }
+`

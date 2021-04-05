@@ -5,6 +5,7 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type WebPageItemTitleSettingDialogViewModel = {
@@ -70,3 +71,21 @@ export function WebPageItemTitleSettingDialogView(
     </div>
   `
 }
+
+export const WebPageItemTitleSettingDialogCss = css`
+  /* ウェブページアイテムのタイトル設定ダイアログ */
+  .web-page-item-title-setting-dialog {
+    /*
+    ウェブページアイテムの位置に合わせたフローティング。
+    left, top, width, heightがJavaScriptで設定される。
+    */
+    position: absolute;
+  }
+
+  /* ウェブページアイテムのタイトル設定ダイアログのテキスト入力欄 */
+  .web-page-item-title-setting-dialog_text-box {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+  }
+`

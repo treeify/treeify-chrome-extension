@@ -19,6 +19,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createItemTreeNodeViewModel,
@@ -607,3 +608,37 @@ function onDrop(event: DragEvent) {
     CurrentState.commit()
   })
 }
+
+export const ItemTreeCss = css`
+  :root {
+    --item-tree-base-font-size: 16px;
+
+    /*
+    アイテムツリーのテキスト全般に適用されるline-height。
+    階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
+    */
+    --item-tree-line-height: 1.2;
+    /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+    --item-tree-font-size-multiplicator: 99.5%;
+
+    /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
+    --item-tree-calculated-line-height: calc(
+      1em * var(--item-tree-line-height) + var(--item-tree-body-area-vertical-padding)
+    );
+  }
+
+  .item-tree {
+    flex-grow: 1;
+
+    /* サイドバーやアイテムツリーは独立してスクロール可能とする */
+    overflow: auto;
+
+    font-size: var(--item-tree-base-font-size);
+    line-height: var(--item-tree-line-height);
+
+    padding-left: 15px;
+    padding-top: 15px;
+    /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
+    padding-bottom: 150px;
+  }
+`

@@ -2,6 +2,7 @@ import {html, TemplateResult} from 'lit-html'
 import {TOP_ITEM_ID} from 'src/Common/basicType'
 import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {
   createDataFolderPickerOpenButtonViewModel,
   DataFolderPickerOpenButtonView,
@@ -70,3 +71,119 @@ function onClickExportButton() {
   aElement.download = fileName
   aElement.click()
 }
+
+export const RootCss = css`
+  :root {
+    /* ツールバーの高さ */
+    --toolbar-height: 36px;
+    /* ツールバーの背景 */
+    --toolbar-background: hsl(0, 0%, 96%);
+
+    /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
+    --toolbar-icon-button-size: 32px;
+    /* ツールバーのボタンのマウスホバー時の背景 */
+    --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
+  }
+
+  html {
+    height: 100%;
+  }
+
+  body {
+    height: 100%;
+    margin: 0;
+  }
+
+  .spa-root {
+    height: 100%;
+  }
+
+  .root {
+    height: 100%;
+    /* ダイアログなどを他の表示物に重ねて表示するための設定 */
+    position: relative;
+  }
+
+  /*
+  ツールバーとその他の領域を縦に並べるためのレイアウト。
+  「その他の領域」と言ってもダイアログなどの浮いた存在は含めない（フローティングサイドバーは浮いているがここに含む）。
+  */
+  .toolbar-and-sidebar-layout {
+    width: 100%;
+    /* スクロールされてもツールバーを常に画面上部に表示し続けるための設定 */
+    height: 100%;
+  }
+
+  .toolbar {
+    /* ボタンなどを横に並べる */
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    /* 左サイドバーにも影が落ちるように左サイドバーより高くする */
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    height: var(--toolbar-height);
+
+    background: var(--toolbar-background);
+    /* Dynalistを参考にしながら調整した影 */
+    box-shadow: 0 1.5px 3px hsl(0, 0%, 85%);
+  }
+
+  /* ツールバーのアイコンボタンの共通クラス */
+  .toolbar-icon-button {
+    width: var(--toolbar-icon-button-size);
+    height: var(--toolbar-icon-button-size);
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    /* アイコンと疑似リップルエフェクトを中央寄せにする */
+    position: relative;
+  }
+  .toolbar-icon-button:hover {
+    background: var(--toolbar-icon-button-hover-background);
+  }
+  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+  .toolbar-icon-button::after {
+    content: '';
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+    border-radius: 50%;
+
+    background: hsl(0, 0%, 50%);
+  }
+  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+  .toolbar-icon-button:active::after {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+    transition: opacity 0s, width 0s, height 0s;
+  }
+
+  /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
+  .sidebar-layout {
+    /*
+    アイテムツリーや左サイドバーを縦スクロールしてもツールバーが画面上部に居続けるための設定。
+    .toolbar-and-sidebar-layoutに
+    flex-direction: column;
+    を設定する方針も試したがうまく動かなかった。
+    */
+    height: calc(100% - var(--toolbar-height));
+
+    /* 左サイドバーとアイテムツリーを横に並べる */
+    display: flex;
+  }
+`

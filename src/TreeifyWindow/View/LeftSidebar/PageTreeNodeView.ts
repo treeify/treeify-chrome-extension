@@ -9,6 +9,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createPageTreeBulletAndIndentViewModel,
@@ -211,3 +212,72 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
     </div>
   </div>`
 }
+
+export const PageTreeNodeCss = css`
+  :root {
+    /* ページツリーの項目のマウスホバー時の背景色 */
+    --page-tree-hover-item-background-color: hsl(0, 0%, 95%);
+
+    /* ページツリーのアクティブページの背景色 */
+    --page-tree-active-page-background-color: hsl(0, 0%, 90%);
+
+    /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
+    --page-tree-close-button-size: 1.1em;
+  }
+
+  .page-tree-node {
+    /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
+    display: flex;
+  }
+
+  .page-tree-node_body-and-children-area {
+    /* コンテンツ領域を右端まで伸ばす */
+    flex-grow: 1;
+  }
+
+  /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
+  .page-tree-node_body-area {
+    display: flex;
+    align-items: center;
+  }
+  .page-tree-node_body-area.active-page {
+    /* アクティブページの強調表示 */
+    background: var(--page-tree-active-page-background-color);
+  }
+
+  .page-tree-node_body-area:hover {
+    background: var(--page-tree-hover-item-background-color);
+  }
+
+  .page-tree-node_content-area {
+    flex-grow: 1;
+
+    cursor: default;
+
+    /* ページツリーではテキストは折り返さない */
+    overflow-x: hidden;
+    white-space: nowrap;
+  }
+
+  .page-tree-node_close-button {
+    flex-basis: var(--page-tree-close-button-size);
+    height: var(--page-tree-close-button-size);
+
+    /* 横幅が縮まないよう設定 */
+    flex-shrink: 0;
+
+    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+    background: hsl(0, 0%, 20%);
+    -webkit-mask-image: url('close-icon2.svg');
+
+    /* マウスホバー時にのみ表示 */
+    display: none;
+
+    /* ボタンであることを示す */
+    cursor: pointer;
+  }
+  .page-tree-node_body-area:hover .page-tree-node_close-button {
+    /* マウスホバー時にのみ表示 */
+    display: initial;
+  }
+`

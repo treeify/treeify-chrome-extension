@@ -2,6 +2,7 @@ import {html} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {
   createPageTreeViewModel,
   PageTreeView,
@@ -46,3 +47,34 @@ export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
     ${PageTreeView(viewModel.pageTreeViewModel)}
   </aside>`
 }
+
+export const LeftSidebarCss = css`
+  :root {
+    /* 左サイドバーの背景色 */
+    --left-sidebar-background-color: hsl(0, 0%, 98%);
+
+    /* 左サイドバーの幅 */
+    --left-sidebar-width: 200px;
+  }
+
+  .left-sidebar {
+    flex-basis: var(--left-sidebar-width);
+    flex-shrink: 0;
+
+    /* サイドバーやアイテムツリーは独立してスクロール可能とする */
+    overflow: auto;
+
+    background: var(--left-sidebar-background-color);
+    /* Dynalistを参考にしながら調整した影 */
+    box-shadow: 1.5px 0 3px hsl(0, 0%, 85%);
+  }
+
+  /* フローティング型の左サイドバー */
+  .left-sidebar.floating {
+    position: fixed;
+    height: 100%;
+    width: var(--left-sidebar-width);
+    /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
+    z-index: 1;
+  }
+`
