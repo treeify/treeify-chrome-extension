@@ -1,7 +1,10 @@
 import {html, TemplateResult} from 'lit-html'
+import {ItemTreeImageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
 import {ItemTreeNodeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 import {ItemTreeSpoolViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
+import {ItemTreeTextContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeTextContentView'
 import {ItemTreeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
+import {ItemTreeWebPageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
 import {LeftSidebarViewCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {RootViewCss} from 'src/TreeifyWindow/View/RootView'
 
@@ -23,5 +26,8 @@ export function generateStyleElementContents() {
     ${ItemTreeViewCss}
     ${ItemTreeNodeViewCss}
     ${ItemTreeSpoolViewCss}
+    ${ItemTreeTextContentCss}
+    ${ItemTreeWebPageContentCss}
+    ${ItemTreeImageContentCss}
   `
 }

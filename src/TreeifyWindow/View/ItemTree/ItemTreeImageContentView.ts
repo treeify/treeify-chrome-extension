@@ -4,6 +4,7 @@ import {doWithErrorHandling} from 'src/Common/Debug/report'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type ItemTreeImageContentViewModel = {
@@ -50,3 +51,20 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
     </div>
   </div>`
 }
+
+export const ItemTreeImageContentCss = css`
+  /* 画像アイテムのコンテンツ領域のルート */
+  .item-tree-image-content {
+    /* フォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
+  }
+
+  /* 画像とキャプションを中央揃えにする */
+  .item-tree-image-content_image-and-caption {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* これを指定しないとアイテムツリーの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
+    width: fit-content;
+  }
+`
