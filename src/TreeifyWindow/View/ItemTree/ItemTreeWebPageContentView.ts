@@ -65,6 +65,12 @@ export function createItemTreeWebPageContentViewModel(
           case '1000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
             CurrentState.commit()
+            break
+          case '0010MouseButton0':
+            CurrentState.setTargetItemPath(itemPath)
+            NullaryCommand.browseTabInDualWindowMode()
+            CurrentState.commit()
+            break
         }
       })
     },

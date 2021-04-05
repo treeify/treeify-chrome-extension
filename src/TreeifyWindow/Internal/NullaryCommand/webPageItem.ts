@@ -4,6 +4,7 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 /** 対象ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadItem() {
@@ -89,4 +90,14 @@ export function browseTab() {
       chrome.windows.update(tab.windowId, {focused: true})
     })
   }
+}
+
+/**
+ * デュアルウィンドウモードに変更しつつ、ウェブページアイテムに対応するタブを最前面化する。
+ * 対応するタブが存在しない場合は新たにタブを開く。
+ */
+export function browseTabInDualWindowMode() {
+  TreeifyWindow.toDualWindowMode()
+
+  browseTab()
 }
