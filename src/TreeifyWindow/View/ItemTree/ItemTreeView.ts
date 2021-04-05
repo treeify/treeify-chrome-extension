@@ -609,7 +609,7 @@ function onDrop(event: DragEvent) {
   })
 }
 
-export const ItemTreeViewCss = css`
+export const ItemTreeCss = css`
   :root {
     --item-tree-base-font-size: 16px;
 

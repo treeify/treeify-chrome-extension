@@ -72,7 +72,7 @@ function onClickExportButton() {
   aElement.click()
 }
 
-export const RootViewCss = css`
+export const RootCss = css`
   :root {
     /* ツールバーの高さ */
     --toolbar-height: 36px;

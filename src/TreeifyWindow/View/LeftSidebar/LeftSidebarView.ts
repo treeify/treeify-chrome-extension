@@ -48,7 +48,7 @@ export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
   </aside>`
 }
 
-export const LeftSidebarViewCss = css`
+export const LeftSidebarCss = css`
   :root {
     /* 左サイドバーの背景色 */
     --left-sidebar-background-color: hsl(0, 0%, 98%);

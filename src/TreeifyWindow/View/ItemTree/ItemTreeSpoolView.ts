@@ -136,7 +136,7 @@ export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateRe
   </div>`
 }
 
-export const ItemTreeSpoolViewCss = css`
+export const ItemTreeSpoolCss = css`
   :root {
     /* バレットの外側の円の直径は{@link ItemTreeSpoolView.ts}で動的に設定している */
     /* バレットの外側の円の色 */

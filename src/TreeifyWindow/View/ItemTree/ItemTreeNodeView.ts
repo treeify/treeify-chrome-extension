@@ -277,7 +277,7 @@ function calculateFootprintColor(
   return strongestColor.mix(weakestColor, ratio)
 }
 
-export const ItemTreeNodeViewCss = css`
+export const ItemTreeNodeCss = css`
   :root {
     /* ボディ領域の上下パディング */
     --item-tree-body-area-vertical-padding: 1.5px;

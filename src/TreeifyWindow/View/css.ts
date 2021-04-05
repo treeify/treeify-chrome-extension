@@ -2,17 +2,17 @@ import {html, TemplateResult} from 'lit-html'
 import {DataFolderPickerOpenButtonCss} from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
 import {WebPageItemTitleSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 import {ItemTreeImageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
-import {ItemTreeNodeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
-import {ItemTreeSpoolViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
+import {ItemTreeNodeCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
+import {ItemTreeSpoolCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 import {ItemTreeTextContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeTextContentView'
-import {ItemTreeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
+import {ItemTreeCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {ItemTreeWebPageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
-import {LeftSidebarViewCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
+import {LeftSidebarCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {PageTreeBulletAndIndentCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
 import {PageTreeNodeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
 import {PageTreeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 import {PageTreeWebPageContentCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
-import {RootViewCss} from 'src/TreeifyWindow/View/RootView'
+import {RootCss} from 'src/TreeifyWindow/View/RootView'
 
 /**
  *  WebStormでCSSのシンタックスハイライトや入力補完を効かせるためリネームされた関数。
@@ -27,16 +27,16 @@ export function css(strings: TemplateStringsArray, ...values: unknown[]): Templa
 
 export function generateStyleElementContents() {
   return css`
-    ${RootViewCss}
+    ${RootCss}
     ${DataFolderPickerOpenButtonCss}
-    ${LeftSidebarViewCss}
+    ${LeftSidebarCss}
     ${PageTreeCss}
     ${PageTreeNodeCss}
     ${PageTreeBulletAndIndentCss}
     ${PageTreeWebPageContentCss}
-    ${ItemTreeViewCss}
-    ${ItemTreeNodeViewCss}
-    ${ItemTreeSpoolViewCss}
+    ${ItemTreeCss}
+    ${ItemTreeNodeCss}
+    ${ItemTreeSpoolCss}
     ${ItemTreeTextContentCss}
     ${ItemTreeWebPageContentCss}
     ${ItemTreeImageContentCss}
