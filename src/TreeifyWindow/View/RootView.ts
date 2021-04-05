@@ -83,12 +83,6 @@ export const RootViewCss = css`
     --toolbar-icon-button-size: 32px;
     /* ツールバーのボタンのマウスホバー時の背景 */
     --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
-    /* データフォルダを開くボタンのアイコンのサイズ（正方形の一辺の長さ） */
-    --data-folder-picker-open-button-icon-size: 22px;
-    /* データフォルダを開くボタンのアイコンの色 */
-    --data-folder-picker-open-button-icon-color: hsl(0, 0%, 40%);
-    /* データフォルダを開くボタンのアイコンのグレーアウト状態の色 */
-    --data-folder-picker-open-button-icon-grayed-out-color: hsl(0, 0%, 70%);
   }
 
   html {
@@ -177,26 +171,6 @@ export const RootViewCss = css`
     height: 0;
     opacity: 0.5;
     transition: opacity 0s, width 0s, height 0s;
-  }
-
-  /* データフォルダアイコン */
-  .data-folder-picker-open-button_icon {
-    width: var(--data-folder-picker-open-button-icon-size);
-    height: var(--data-folder-picker-open-button-icon-size);
-
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: var(--data-folder-picker-open-button-icon-color);
-    -webkit-mask-image: url('folder-icon.svg');
-  }
-  /* グレーアウト状態のデータフォルダアイコン */
-  .data-folder-picker-open-button_icon.grayed-out {
-    background: var(--data-folder-picker-open-button-icon-grayed-out-color);
   }
 
   /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
