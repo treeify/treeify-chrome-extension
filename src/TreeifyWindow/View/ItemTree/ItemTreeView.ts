@@ -641,14 +641,4 @@ export const ItemTreeViewCss = css`
     /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
     padding-bottom: 150px;
   }
-
-  /*
-  複数選択されたアイテムの背景色設定。
-  他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
-  CSSの優先順位のためにファイルの下の方で定義する。
-  */
-  .selected.item-tree-node,
-  .selected .item-tree-node_body-area {
-    background: var(--item-tree-selected-item-background-color);
-  }
 `

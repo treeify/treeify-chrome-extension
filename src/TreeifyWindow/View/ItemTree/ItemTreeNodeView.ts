@@ -432,4 +432,14 @@ export const ItemTreeNodeViewCss = css`
     /* 階層の深さに応じてフォントサイズを小さくする */
     font-size: var(--item-tree-font-size-multiplicator);
   }
+
+  /*
+  複数選択されたアイテムの背景色設定。
+  他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
+  CSSの優先順位のためにファイルの下の方で定義する。
+  */
+  .selected.item-tree-node,
+  .selected .item-tree-node_body-area {
+    background: var(--item-tree-selected-item-background-color);
+  }
 `
