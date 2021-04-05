@@ -1,5 +1,6 @@
 import {html, TemplateResult} from 'lit-html'
 import {ItemTreeNodeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
+import {ItemTreeSpoolViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 import {ItemTreeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {LeftSidebarViewCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {RootViewCss} from 'src/TreeifyWindow/View/RootView'
@@ -16,5 +17,11 @@ export function css(strings: TemplateStringsArray, ...values: unknown[]): Templa
 }
 
 export function generateStyleElementContents() {
-  return html`${RootViewCss} ${LeftSidebarViewCss} ${ItemTreeViewCss} ${ItemTreeNodeViewCss}`
+  return css`
+    ${RootViewCss}
+    ${LeftSidebarViewCss}
+    ${ItemTreeViewCss}
+    ${ItemTreeNodeViewCss}
+    ${ItemTreeSpoolViewCss}
+  `
 }
