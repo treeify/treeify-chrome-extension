@@ -1,3 +1,4 @@
+import {html, render} from 'lit-html'
 import {integer} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {
@@ -66,6 +67,10 @@ export async function cleanup() {
 
   Internal.cleanup()
   External.cleanup()
+
+  const spaRoot = document.querySelector('.spa-root')
+  assertNonNull(spaRoot)
+  render(html``, spaRoot)
 }
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
