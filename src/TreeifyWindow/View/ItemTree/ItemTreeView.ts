@@ -626,9 +626,6 @@ export const ItemTreeViewCss = css`
       1em * var(--item-tree-line-height) + var(--item-tree-body-area-vertical-padding)
     );
 
-    /* ボディ領域の上下パディング */
-    --item-tree-body-area-vertical-padding: 1.5px;
-
     /* バレットの外側の円の直径は{@link ItemTreeSpoolView.ts}で動的に設定している */
     /* バレットの外側の円の色 */
     --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
@@ -649,32 +646,6 @@ export const ItemTreeViewCss = css`
     --item-tree-indent-line-color: hsl(0, 0%, 88%);
     /* インデントラインの色（ホバー時） */
     --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
-
-    /* フォーカスアイテムの背景色 */
-    --item-tree-focused-item-background-color: hsl(240, 100%, 98%);
-    /* マウスホバーアイテムの背景色 */
-    --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
-
-    /* 複数選択されたアイテムの背景色 */
-    --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
-
-    /* 最も新しい足跡の色（線形補間の一端） */
-    --strongest-footprint-color: hsl(0, 100%, 97.3%);
-    /* 最も古い足跡の色（線形補間の一端） */
-    --weakest-footprint-color: hsl(60, 100%, 97.3%);
-
-    /* ハイライト状態のアイテムのバレットの色 */
-    --highlighted-item-bullet-color: hsl(0, 100%, 45%);
-    /* ハイライト状態のアイテムのバレットのマウスホバー時の色 */
-    --highlighted-item-bullet-hover-color: hsl(0, 100%, 40%);
-
-    /* グレーアウト状態のアイテムの標準的なテキスト色 */
-    --grayed-out-item-text-color: hsl(0, 0%, 75%);
-
-    /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-    --item-tree-delete-button-size: 0.8em;
-    /* 削除ボタンなどのマウスホバー時の背景 */
-    --item-tree-node-button-background-hover-color: hsl(0, 0%, 90%);
 
     /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
     --item-tree-favicon-size: 1em;
@@ -703,136 +674,12 @@ export const ItemTreeViewCss = css`
     padding-bottom: 150px;
   }
 
-  .item-tree-node {
-    /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
-    display: flex;
-  }
-
-  .item-tree-node_body-and-children-area {
-    /* ボディ領域を右端まで伸ばす */
-    flex-grow: 1;
-  }
-
   /* ハイライト状態のアイテムの強調表示 */
   .highlighted-item .item-tree-spool_inner-circle {
     background: var(--highlighted-item-bullet-color);
   }
   .highlighted-item .item-tree-spool:hover .item-tree-spool_inner-circle {
     background: var(--highlighted-item-bullet-hover-color);
-  }
-
-  /* マウスホバー時のボディ領域 */
-  .item-tree-node_body-area:hover {
-    /* マウスホバーアイテムの強調表示 */
-    background: var(--item-tree-mouse-hover-item-background-color);
-  }
-
-  /* ボディ領域 */
-  .item-tree-node_body-area {
-    padding: var(--item-tree-body-area-vertical-padding) 0;
-    /* コンテンツ領域とボタン類を横に並べる */
-    display: flex;
-  }
-  /* フォーカス時のボディ領域 */
-  .item-tree-node_body-area:focus-within {
-    /* フォーカスアイテムの強調表示 */
-    background: var(--item-tree-focused-item-background-color);
-  }
-
-  /* コンテンツ領域 */
-  .item-tree-node_content-area {
-    flex-grow: 1;
-  }
-
-  /* 隠れているタブ数 */
-  .item-tree-node_hidden-tabs-count {
-    flex-basis: var(--item-tree-calculated-line-height);
-    height: var(--item-tree-calculated-line-height);
-
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
-
-    position: relative;
-    text-align: center;
-
-    border-radius: 50%;
-    cursor: pointer;
-  }
-  .item-tree-node_hidden-tabs-count:hover {
-    background: var(--item-tree-node-button-background-hover-color);
-  }
-  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
-  .item-tree-node_hidden-tabs-count::after {
-    content: '';
-
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-    border-radius: 50%;
-
-    background: hsl(0, 0%, 50%);
-  }
-  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
-  .item-tree-node_hidden-tabs-count:active::after {
-    width: 0;
-    height: 0;
-    opacity: 0.5;
-    transition: opacity 0s, width 0s, height 0s;
-  }
-
-  /* 各アイテムの削除ボタン */
-  .item-tree-node_delete-button {
-    flex-basis: var(--item-tree-calculated-line-height);
-    height: var(--item-tree-calculated-line-height);
-
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    /* アイコンと疑似リップルエフェクトを中央寄せにする */
-    position: relative;
-
-    /* マウスホバー時にのみ表示 */
-    visibility: hidden;
-
-    /* ボタンであることを示す */
-    cursor: pointer;
-  }
-  .item-tree-node_body-area:hover .item-tree-node_delete-button {
-    /* マウスホバー時にのみ表示 */
-    visibility: visible;
-  }
-  .item-tree-node_delete-button:hover {
-    background: var(--item-tree-node-button-background-hover-color);
-  }
-
-  .item-tree-node_delete-button-icon {
-    width: var(--item-tree-delete-button-size);
-    height: var(--item-tree-delete-button-size);
-
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 30%);
-    -webkit-mask-image: url('close-icon.svg');
-  }
-
-  .item-tree-node_children-area {
-    /* 階層の深さに応じてフォントサイズを小さくする */
-    font-size: var(--item-tree-font-size-multiplicator);
   }
 
   /* アイテムツリーのバレットとインデントのルート要素 */
