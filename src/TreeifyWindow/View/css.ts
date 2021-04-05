@@ -9,6 +9,7 @@ import {ItemTreeViewCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {ItemTreeWebPageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
 import {LeftSidebarViewCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {PageTreeBulletAndIndentCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
+import {PageTreeNodeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
 import {PageTreeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 import {RootViewCss} from 'src/TreeifyWindow/View/RootView'
 
@@ -29,6 +30,7 @@ export function generateStyleElementContents() {
     ${DataFolderPickerOpenButtonCss}
     ${LeftSidebarViewCss}
     ${PageTreeCss}
+    ${PageTreeNodeCss}
     ${PageTreeBulletAndIndentCss}
     ${ItemTreeViewCss}
     ${ItemTreeNodeViewCss}
