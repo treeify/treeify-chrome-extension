@@ -2,7 +2,6 @@ import {html, TemplateResult} from 'lit-html'
 import {TOP_ITEM_ID} from 'src/Common/basicType'
 import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {css} from 'src/TreeifyWindow/View/css'
 import {
   createDataFolderPickerOpenButtonViewModel,
@@ -14,6 +13,7 @@ import {
   WebPageItemTitleSettingDialogView,
   WebPageItemTitleSettingDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
+import {FullWindowModeButtonView} from 'src/TreeifyWindow/View/FullWindowModeButtonView'
 import {
   createItemTreeViewModel,
   ItemTreeView,
@@ -48,7 +48,7 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
       <div class="toolbar">
         <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
         <button @click=${onClickExportButton}>OPMLファイルをエクスポート</button>
-        <button @click=${TreeifyWindow.toFullWindowMode}>フルウィンドウモード</button>
+        ${FullWindowModeButtonView()}
         ${DataFolderPickerOpenButtonView(viewModel.dataFolderPickerOpenButtonViewModel)}
       </div>
       <div class="sidebar-layout">
