@@ -1,6 +1,7 @@
 import {html, render} from 'lit-html'
 import {integer} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -111,8 +112,14 @@ function onMouseEnter() {
 }
 
 function onResize() {
-  // 左サイドバーの表示形態を変更する必要があるかもしれないので再描画する
-  CurrentState.commit()
+  doAsyncWithErrorHandling(async () => {
+    // 左サイドバーの表示形態を変更する必要がある場合のために再描画する
+    CurrentState.commit()
+
+    if (await TreeifyWindow.isDualWindowMode()) {
+      TreeifyWindow.writeNarrowWidth(innerWidth)
+    }
+  })
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {

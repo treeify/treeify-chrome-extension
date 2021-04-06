@@ -17,7 +17,7 @@ export namespace TreeifyWindow {
         url: chrome.extension.getURL('TreeifyWindow/index.html'),
         type: 'popup',
         // TODO: ウィンドウの位置やサイズを記憶する
-        width: 400,
+        width: readNarrowWidth() ?? 400,
         height: 1200,
         top: 0,
         left: 0,
@@ -48,6 +48,49 @@ export namespace TreeifyWindow {
         resolve(undefined)
       })
     })
+  }
+
+  /** デュアルウィンドウモードかどうか判定する */
+  export async function isDualWindowMode(): Promise<boolean> {
+    const windows = await getAllNormalWindows()
+    for (const window of windows) {
+      if (window.left === undefined || window.width === undefined) continue
+      if (window.top === undefined || window.height === undefined) continue
+
+      const windowRight = window.left + window.width
+      const windowBottom = window.top + window.height
+      const screenRight = screenX + innerWidth
+      const screenBottom = screenY + innerHeight
+      const hasOverlap =
+        Math.max(screenX, window.left) <= Math.min(screenRight, windowRight) &&
+        Math.max(screenY, window.top) <= Math.min(screenBottom, windowBottom)
+
+      if (!hasOverlap) {
+        // Treeifyウィンドウと重なっていないブラウザウィンドウが1つでもあればデュアルウィンドウモードと判定する
+        return true
+      }
+    }
+
+    return false
+  }
+
+  async function getAllNormalWindows(): Promise<chrome.windows.Window[]> {
+    return new Promise((resolve) => {
+      chrome.windows.getAll({windowTypes: ['normal']}, (windows) => {
+        resolve(windows)
+      })
+    })
+  }
+
+  export function writeNarrowWidth(width: integer) {
+    localStorage.setItem('treeifyWindowNarrowWidth', width.toString())
+  }
+
+  export function readNarrowWidth(): integer | undefined {
+    const savedValue = localStorage.getItem('treeifyWindowNarrowWidth')
+    if (savedValue === null) return undefined
+
+    return parseInt(savedValue)
   }
 
   // chrome.windows.create関数をasync化したユーティリティ関数。
