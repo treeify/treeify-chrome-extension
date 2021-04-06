@@ -3,6 +3,8 @@ import {integer} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 
 export namespace TreeifyWindow {
+  const initialWidth = 400
+
   /**
    * Treeifyウィンドウを開く。
    * すでに開かれている場合はTreeifyウィンドウをフォーカス（最前面化）する。
@@ -17,9 +19,10 @@ export namespace TreeifyWindow {
       await createWindow({
         url: chrome.extension.getURL('TreeifyWindow/index.html'),
         type: 'popup',
-        // TODO: ウィンドウの位置やサイズを記憶する
-        width: readNarrowWidth() ?? 400,
-        height: 1200,
+        // TODO: フルウィンドウモードで終了した場合は、次回起動時もフルウィンドウモードになってほしい気がする
+        state: 'normal',
+        width: readNarrowWidth() ?? initialWidth,
+        height: screen.availHeight,
         top: 0,
         left: 0,
       })
@@ -81,8 +84,7 @@ export namespace TreeifyWindow {
       // Treeifyウィンドウの幅や位置を変更する
       const treeifyWindowId = await findWindowId()
       assertNonUndefined(treeifyWindowId)
-      // TODO: 初期値を定数として定義する
-      const treeifyWindowWidth = readNarrowWidth() ?? 400
+      const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
       chrome.windows.update(treeifyWindowId, {
         state: 'normal',
         left: 0,
