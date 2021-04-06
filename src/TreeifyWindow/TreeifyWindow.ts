@@ -1,6 +1,7 @@
 import CreateData = chrome.windows.CreateData
 import {integer} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import UAParser from 'ua-parser-js'
 
 export namespace TreeifyWindow {
   const initialWidth = 400
@@ -80,29 +81,74 @@ export namespace TreeifyWindow {
 
   /** デュアルウィンドウモードに変更する */
   export async function toDualWindowMode() {
-    if (!(await isDualWindowMode())) {
+    // Treeifyウィンドウの幅や位置を変更する
+    const treeifyWindowId = await findWindowId()
+    assertNonUndefined(treeifyWindowId)
+    const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
+    chrome.windows.update(treeifyWindowId, {
+      state: 'normal',
+      left: 0,
+      top: 0,
+      width: treeifyWindowWidth,
+      height: screen.availHeight,
+    })
+
+    // ブラウザウィンドウの幅や位置を変更する
+    for (const window of await getAllNormalWindows()) {
+      chrome.windows.update(window.id, {
+        state: 'normal',
+        left: treeifyWindowWidth,
+        top: 0,
+        width: screen.availWidth - treeifyWindowWidth,
+        height: screen.availHeight,
+      })
+    }
+  }
+
+  /** フルウィンドウモードに変更する */
+  export async function toFullWindowMode() {
+    if (new UAParser().getOS().name !== 'Mac OS') {
+      // ブラウザウィンドウの幅や位置を変更する
+      for (const window of await getAllNormalWindows()) {
+        chrome.windows.update(window.id, {
+          state: 'maximized',
+          focused: false,
+        })
+      }
+
       // Treeifyウィンドウの幅や位置を変更する
       const treeifyWindowId = await findWindowId()
       assertNonUndefined(treeifyWindowId)
-      const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
       chrome.windows.update(treeifyWindowId, {
-        state: 'normal',
-        left: 0,
-        top: 0,
-        width: treeifyWindowWidth,
-        height: screen.availHeight,
+        state: 'maximized',
+        focused: true,
       })
+    } else {
+      // Macではウィンドウの最大化の概念を他OSと別に扱う
 
       // ブラウザウィンドウの幅や位置を変更する
       for (const window of await getAllNormalWindows()) {
         chrome.windows.update(window.id, {
           state: 'normal',
-          left: treeifyWindowWidth,
+          left: 0,
           top: 0,
-          width: screen.availWidth - treeifyWindowWidth,
+          width: screen.availWidth,
           height: screen.availHeight,
+          focused: false,
         })
       }
+
+      // Treeifyウィンドウの幅や位置を変更する
+      const treeifyWindowId = await findWindowId()
+      assertNonUndefined(treeifyWindowId)
+      chrome.windows.update(treeifyWindowId, {
+        state: 'normal',
+        left: 0,
+        top: 0,
+        width: screen.availWidth,
+        height: screen.availHeight,
+        focused: true,
+      })
     }
   }
 
