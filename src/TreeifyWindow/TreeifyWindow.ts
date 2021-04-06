@@ -80,29 +80,27 @@ export namespace TreeifyWindow {
 
   /** デュアルウィンドウモードに変更する */
   export async function toDualWindowMode() {
-    if (!(await isDualWindowMode())) {
-      // Treeifyウィンドウの幅や位置を変更する
-      const treeifyWindowId = await findWindowId()
-      assertNonUndefined(treeifyWindowId)
-      const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
-      chrome.windows.update(treeifyWindowId, {
+    // Treeifyウィンドウの幅や位置を変更する
+    const treeifyWindowId = await findWindowId()
+    assertNonUndefined(treeifyWindowId)
+    const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
+    chrome.windows.update(treeifyWindowId, {
+      state: 'normal',
+      left: 0,
+      top: 0,
+      width: treeifyWindowWidth,
+      height: screen.availHeight,
+    })
+
+    // ブラウザウィンドウの幅や位置を変更する
+    for (const window of await getAllNormalWindows()) {
+      chrome.windows.update(window.id, {
         state: 'normal',
-        left: 0,
+        left: treeifyWindowWidth,
         top: 0,
-        width: treeifyWindowWidth,
+        width: screen.availWidth - treeifyWindowWidth,
         height: screen.availHeight,
       })
-
-      // ブラウザウィンドウの幅や位置を変更する
-      for (const window of await getAllNormalWindows()) {
-        chrome.windows.update(window.id, {
-          state: 'normal',
-          left: treeifyWindowWidth,
-          top: 0,
-          width: screen.availWidth - treeifyWindowWidth,
-          height: screen.availHeight,
-        })
-      }
     }
   }
 
