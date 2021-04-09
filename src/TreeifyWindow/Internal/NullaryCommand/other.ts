@@ -15,32 +15,7 @@ import {cleanup, startup} from 'src/TreeifyWindow/startup'
  * もしデータフォルダがまだ開かれていない場合はデータフォルダを開くプロセスを開始する。
  */
 export async function saveToDataFolder() {
-  if (External.instance.dataFolder !== undefined) {
-    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
-    if (unknownUpdatedDeviceId === undefined) {
-      // もし自身の知らない他デバイスの更新がなければ（つまり最も単純な自デバイスフォルダ上書き更新のケース）
-
-      // 変化のあったチャンクをデータベースに書き込む
-      const chunks = []
-      for (const chunkId of Chunk.extractChunkIds(External.instance.pendingMutatedPropertyPaths)) {
-        const chunk = Chunk.create(Internal.instance.state, chunkId)
-        chunks.push(chunk)
-      }
-      External.instance.pendingMutatedPropertyPaths.clear()
-      await External.instance.dataFolder.writeChunks(List(chunks))
-    } else {
-      // もし自身の知らない他デバイスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
-
-      const chunks = await External.instance.dataFolder.readAllChunks()
-      const state = Chunk.inflateStateFromChunks(chunks)
-      const dataFolder = External.instance.dataFolder
-      await cleanup()
-      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
-      External.instance.dataFolder = dataFolder
-      await startup(state as State)
-    }
-  } else {
+  if (External.instance.dataFolder === undefined) {
     const folderHandle = await showDirectoryPicker()
     await folderHandle.requestPermission({mode: 'readwrite'})
     External.instance.dataFolder = new DataFolder(folderHandle)
@@ -58,6 +33,31 @@ export async function saveToDataFolder() {
       await startup(state as State)
     } else {
       // もし自身の知らない他デバイスの更新があれば（特に自デバイスフォルダが存在しなければ）
+      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+
+      const chunks = await External.instance.dataFolder.readAllChunks()
+      const state = Chunk.inflateStateFromChunks(chunks)
+      const dataFolder = External.instance.dataFolder
+      await cleanup()
+      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+      External.instance.dataFolder = dataFolder
+      await startup(state as State)
+    }
+  } else {
+    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
+    if (unknownUpdatedDeviceId === undefined) {
+      // もし自身の知らない他デバイスの更新がなければ（つまり最も単純な自デバイスフォルダ上書き更新のケース）
+
+      // 変化のあったチャンクをデータベースに書き込む
+      const chunks = []
+      for (const chunkId of Chunk.extractChunkIds(External.instance.pendingMutatedPropertyPaths)) {
+        const chunk = Chunk.create(Internal.instance.state, chunkId)
+        chunks.push(chunk)
+      }
+      External.instance.pendingMutatedPropertyPaths.clear()
+      await External.instance.dataFolder.writeChunks(List(chunks))
+    } else {
+      // もし自身の知らない他デバイスの更新があれば
       await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
 
       const chunks = await External.instance.dataFolder.readAllChunks()
