@@ -357,7 +357,7 @@ export class DataFolder {
   }
 
   // メタデータファイルの内容を返す。
-  // ファイルが存在しない場合は{}を返す。
+  // ファイルが存在しない場合はundefinedを返す。
   private async readMetadataFile(deviceId = DeviceId.get()): Promise<Metadata | undefined> {
     const metadataFilePath = DataFolder.getMetadataFilePath(deviceId)
     const cachedContent = this.fetchCache(metadataFilePath)
