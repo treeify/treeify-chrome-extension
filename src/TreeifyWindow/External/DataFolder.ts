@@ -275,8 +275,13 @@ export class DataFolder {
    */
   async findUnknownUpdatedDevice(): Promise<DeviceId | undefined> {
     const metadata = await this.readMetadataFile()
-    // この関数は自デバイスフォルダに既に書き込まれていることを前提としているのでassert
-    assertNonUndefined(metadata)
+    if (metadata === undefined) {
+      // 自デバイスフォルダに何も書き込まれていない場合、
+      // タイムスタンプが最も新しいデバイスのIDを返す。
+      const otherDeviceTimestamps = List(Object.entries(await this.getAllOtherDeviceTimestamps()))
+      const latestUpdated = otherDeviceTimestamps.maxBy(([deviceId, timestamp]) => timestamp)
+      return latestUpdated?.[0]
+    }
 
     const otherDeviceIds = await this.getAllOtherDeviceIds()
     const timestampPromises = otherDeviceIds.map(async (deviceId) => {
