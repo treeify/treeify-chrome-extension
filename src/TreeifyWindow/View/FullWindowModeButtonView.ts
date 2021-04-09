@@ -37,7 +37,8 @@ export const FullWindowModeButtonCss = css`
     transform: translate(-50%, -50%);
 
     /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: var(--full-window-mode-button-icon-color) no-repeat center center;
+    background: var(--full-window-mode-button-icon-color);
     -webkit-mask: url('full-window.svg') no-repeat center;
+    -webkit-mask-size: contain;
   }
 `
