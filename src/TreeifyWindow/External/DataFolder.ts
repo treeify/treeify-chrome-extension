@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import md5 from 'md5'
-import {assert} from 'src/Common/Debug/assert'
+import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Timestamp} from 'src/Common/Timestamp'
 import {DeviceId} from 'src/TreeifyWindow/DeviceId'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
@@ -20,6 +20,9 @@ type Metadata = {
   timestamp: Timestamp
   // Keyはファイル名、Valueはハッシュ値
   hashes: {[K in string]: string}
+  // 「このデバイスフォルダは他デバイスの更新をどの範囲まで把握しているか？」を表すためのデータ。
+  // Keyは存在を把握している他デバイスID、Valueは把握している最新の更新タイムスタンプ。
+  known: {[K in DeviceId]: Timestamp}
 }
 
 /**
@@ -164,7 +167,8 @@ export class DataFolder {
         delete hashes[fileName]
       }
     }
-    const newMetadata: Metadata = {timestamp: Timestamp.now(), hashes}
+    const known = metadata?.known ?? {}
+    const newMetadata: Metadata = {timestamp: Timestamp.now(), hashes, known}
     const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
@@ -200,16 +204,11 @@ export class DataFolder {
     return this.getFileHandle(filePath.shift(), nextFolderHandle)
   }
 
-  /** 更新された他デバイスフォルダのデータを自デバイスフォルダに取り込む */
-  async sync() {
-    const mostAdvancedDeviceId = await this.getMostAdvancedDeviceId()
-
-    // まだ誰も書き込んでいない場合は何もしなくていい
-    if (mostAdvancedDeviceId === undefined) return
-
-    // 自デバイスフォルダの更新日時が最も新しいなら何もしなくていい
-    if (mostAdvancedDeviceId === DeviceId.get()) return
-
+  /**
+   * 他デバイスフォルダのデータを自デバイスフォルダに取り込む。
+   * 単純に全ファイルをコピーするだけでなく、メタデータファイルを自デバイス視点で更新する。
+   */
+  async copyFrom(deviceId: DeviceId) {
     // 自デバイスフォルダ内の全ファイルとフォルダを削除
     const ownDeviceFolderPath = DataFolder.getDeviceFolderPath()
     const ownDeviceFolder = await this.getFolderHandle(ownDeviceFolderPath)
@@ -218,15 +217,17 @@ export class DataFolder {
     }
 
     // 各ファイルを自デバイスフォルダにコピーする準備
-    const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(mostAdvancedDeviceId)
-    const targetChunkFileNames = await this.getChunkFileNames(mostAdvancedDeviceId)
+    const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
+    const targetChunkFileNames = await this.getChunkFileNames(deviceId)
     const chunkPackFileTextPromises = targetChunkFileNames.map(async (fileName) => {
       return {fileName, text: await this.readTextFile(targetChunkPacksFolderPath.push(fileName))}
     })
     const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
 
-    const targetMetadataFilePath = DataFolder.getMetadataFilePath(mostAdvancedDeviceId)
-    const metadataFileText = await this.readTextFile(targetMetadataFilePath)
+    // メタデータファイルを更新しつつ取り込み
+    const metadata = await this.readMetadataFile(deviceId)
+    assertNonUndefined(metadata)
+    metadata.known = await this.getAllOtherDeviceTimestamps()
     // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
 
     // チャンクパックファイル群を自デバイスフォルダに書き込み
@@ -234,7 +235,8 @@ export class DataFolder {
       await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
     }
     // メタデータファイルを自デバイスフォルダに書き込み
-    await this.writeTextFile(DataFolder.getMetadataFilePath(), metadataFileText)
+    const newMetadataText = JSON.stringify(metadata, undefined, 2)
+    await this.writeTextFile(DataFolder.getMetadataFilePath(), newMetadataText)
   }
 
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
@@ -249,18 +251,51 @@ export class DataFolder {
     return List(deviceIds)
   }
 
-  // 更新日時が最も新しいデバイスフォルダのデバイスIDを返す。
-  // デバイスフォルダが1つも存在しないような場合はundefinedを返す。
-  private async getMostAdvancedDeviceId(): Promise<DeviceId | undefined> {
-    const allDeviceIds = await this.getAllExistingDeviceIds()
-    const timestampPromises = allDeviceIds.map(async (deviceId) => {
+  // 全ての他デバイスフォルダのフォルダ名もといデバイスIDを返す
+  private async getAllOtherDeviceIds(): Promise<List<DeviceId>> {
+    const deviceIds = await this.getAllExistingDeviceIds()
+    return deviceIds.filter((deviceId) => deviceId !== DeviceId.get())
+  }
+
+  private async getAllOtherDeviceTimestamps(): Promise<{[K in DeviceId]: Timestamp}> {
+    const deviceIds = await this.getAllOtherDeviceIds()
+    const timestampPromises = deviceIds.map(async (deviceId) => {
       const metadata = await this.readMetadataFile(deviceId)
-      return {deviceId, timestamp: metadata?.timestamp}
+      // デバイスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
+      assertNonUndefined(metadata)
+      return [deviceId, metadata.timestamp]
     })
-    const latest = List(await Promise.all(timestampPromises)).maxBy(
-      ({deviceId, timestamp}) => timestamp ?? 0
-    )
-    return latest?.deviceId
+    const entries = await Promise.all(timestampPromises)
+    return Object.fromEntries(entries)
+  }
+
+  /**
+   * 自デバイスが存在を把握していないデバイスフォルダ、または把握していない更新の行われたデバイスフォルダのデバイスIDを返す。
+   * 複数デバイスが該当する場合は、タイムスタンプが最も新しいものを返す。
+   */
+  async findUnknownUpdatedDevice(): Promise<DeviceId | undefined> {
+    const metadata = await this.readMetadataFile()
+    // この関数は自デバイスフォルダに既に書き込まれていることを前提としているのでassert
+    assertNonUndefined(metadata)
+
+    const otherDeviceIds = await this.getAllOtherDeviceIds()
+    const timestampPromises = otherDeviceIds.map(async (deviceId) => {
+      const metadata = await this.readMetadataFile(deviceId)
+      // デバイスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
+      assertNonUndefined(metadata)
+      return {deviceId, timestamp: metadata.timestamp}
+    })
+
+    const timestamps = await Promise.all(timestampPromises)
+    const unknownUpdatedDeviceIds = timestamps.filter(({deviceId, timestamp}) => {
+      const knownUpdateTimestamp = metadata.known[deviceId]
+      if (knownUpdateTimestamp === undefined) {
+        return true
+      }
+      return knownUpdateTimestamp !== timestamp
+    })
+
+    return List(unknownUpdatedDeviceIds).maxBy(({deviceId, timestamp}) => timestamp)?.deviceId
   }
 
   // 全チャンクファイルのファイル名のリストを返す

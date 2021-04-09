@@ -1,7 +1,6 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
@@ -15,41 +14,60 @@ import {cleanup, startup} from 'src/TreeifyWindow/startup'
  * データフォルダに現在の状態を書き込む。
  * もしデータフォルダがまだ開かれていない場合はデータフォルダを開くプロセスを開始する。
  */
-export function saveToDataFolder() {
+export async function saveToDataFolder() {
   if (External.instance.dataFolder !== undefined) {
-    // 変化のあったチャンクをデータベースに書き込む
-    const chunks = []
-    for (const chunkId of Chunk.extractChunkIds(External.instance.pendingMutatedPropertyPaths)) {
-      const chunk = Chunk.create(Internal.instance.state, chunkId)
-      chunks.push(chunk)
-    }
-    External.instance.pendingMutatedPropertyPaths.clear()
-    External.instance.dataFolder.writeChunks(List(chunks))
-  } else {
-    // もしデータフォルダがまだ開かれていない場合
+    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
+    if (unknownUpdatedDeviceId === undefined) {
+      // もし自身の知らない他デバイスの更新がなければ（つまり最も単純な自デバイスフォルダ上書き更新のケース）
 
-    // データフォルダを開くプロセスを開始する
-    doAsyncWithErrorHandling(async () => {
-      const folderHandle = await showDirectoryPicker()
-      await folderHandle.requestPermission({mode: 'readwrite'})
-      const dataFolder = new DataFolder(folderHandle)
-
-      await dataFolder.sync()
-
-      const chunks = await dataFolder.readAllChunks()
-      if (!chunks.isEmpty()) {
-        const state = Chunk.inflateStateFromChunks(chunks)
-        await cleanup()
-        // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
-        External.instance.dataFolder = dataFolder
-        await startup(state as State)
-      } else {
-        const allChunks = Chunk.createAllChunks(Internal.instance.state)
-        const filtered = allChunks.filter((chunks) => chunks !== undefined) as List<Chunk>
-        await dataFolder.writeChunks(filtered)
-        External.instance.dataFolder = dataFolder
+      // 変化のあったチャンクをデータベースに書き込む
+      const chunks = []
+      for (const chunkId of Chunk.extractChunkIds(External.instance.pendingMutatedPropertyPaths)) {
+        const chunk = Chunk.create(Internal.instance.state, chunkId)
+        chunks.push(chunk)
       }
-    })
+      External.instance.pendingMutatedPropertyPaths.clear()
+      await External.instance.dataFolder.writeChunks(List(chunks))
+    } else {
+      // もし自身の知らない他デバイスの更新があれば
+      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+
+      const chunks = await External.instance.dataFolder.readAllChunks()
+      const state = Chunk.inflateStateFromChunks(chunks)
+      const dataFolder = External.instance.dataFolder
+      await cleanup()
+      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+      External.instance.dataFolder = dataFolder
+      await startup(state as State)
+    }
+  } else {
+    const folderHandle = await showDirectoryPicker()
+    await folderHandle.requestPermission({mode: 'readwrite'})
+    External.instance.dataFolder = new DataFolder(folderHandle)
+    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
+    if (unknownUpdatedDeviceId === undefined) {
+      // もし自身の知らない他デバイスの更新がなければ
+
+      // Stateを読み込んで事実上の再起動を行う（それまでの変更は破棄する）
+      const chunks = await External.instance.dataFolder.readAllChunks()
+      const state = Chunk.inflateStateFromChunks(chunks)
+      const dataFolder = External.instance.dataFolder
+      await cleanup()
+      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+      External.instance.dataFolder = dataFolder
+      await startup(state as State)
+    } else {
+      // もし自身の知らない他デバイスの更新があれば（特に自デバイスフォルダが存在しなければ）
+      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+
+      const chunks = await External.instance.dataFolder.readAllChunks()
+      const state = Chunk.inflateStateFromChunks(chunks)
+      const dataFolder = External.instance.dataFolder
+      await cleanup()
+      // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+      External.instance.dataFolder = dataFolder
+      await startup(state as State)
+    }
   }
 }
 
