@@ -54,7 +54,7 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
       <div class="sidebar-layout">
         ${viewModel.leftSidebarViewModel !== undefined
           ? LeftSidebarView(viewModel.leftSidebarViewModel)
-          : undefined}
+          : html`<div class="grid-empty-cell"></div>`}
         ${ItemTreeView(viewModel.itemTreeViewModel)}
       </div>
     </div>
@@ -87,6 +87,10 @@ export const RootCss = css`
     --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
   }
 
+  * {
+    box-sizing: border-box;
+  }
+
   html {
     height: 100%;
   }
@@ -111,9 +115,11 @@ export const RootCss = css`
   「その他の領域」と言ってもダイアログなどの浮いた存在は含めない（フローティングサイドバーは浮いているがここに含む）。
   */
   .toolbar-and-sidebar-layout {
-    width: 100%;
     /* スクロールされてもツールバーを常に画面上部に表示し続けるための設定 */
     height: 100%;
+
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
   .toolbar {
@@ -126,7 +132,6 @@ export const RootCss = css`
     position: relative;
     z-index: 2;
 
-    width: 100%;
     height: var(--toolbar-height);
 
     background: var(--toolbar-background);
@@ -177,15 +182,7 @@ export const RootCss = css`
 
   /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
   .sidebar-layout {
-    /*
-    アイテムツリーや左サイドバーを縦スクロールしてもツールバーが画面上部に居続けるための設定。
-    .toolbar-and-sidebar-layoutに
-    flex-direction: column;
-    を設定する方針も試したがうまく動かなかった。
-    */
-    height: calc(100% - var(--toolbar-height));
-
-    /* 左サイドバーとアイテムツリーを横に並べる */
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
   }
 `

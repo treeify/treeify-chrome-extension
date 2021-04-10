@@ -67,4 +67,10 @@ export const ItemTreeImageContentCss = css`
     /* これを指定しないとアイテムツリーの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
     width: fit-content;
   }
+
+  .item-tree-image-content_image {
+    /* 画像が表示領域の横幅をはみ出さないよう設定 */
+    max-width: 100%;
+    height: auto;
+  }
 `

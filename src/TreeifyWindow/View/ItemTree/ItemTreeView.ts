@@ -628,10 +628,7 @@ export const ItemTreeCss = css`
   }
 
   .item-tree {
-    flex-grow: 1;
-
-    /* サイドバーやアイテムツリーは独立してスクロール可能とする */
-    overflow: auto;
+    overflow-y: auto;
 
     font-size: var(--item-tree-base-font-size);
     line-height: var(--item-tree-line-height);

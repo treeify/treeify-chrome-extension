@@ -173,7 +173,8 @@ export const ItemTreeWebPageContentCss = css`
   /* ウェブページアイテムのコンテンツ領域のルート */
   .item-tree-web-page-content {
     /* ファビコンとタイトルなどを横並びにする */
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
 
     /* フォーカス時の枠線を非表示 */
@@ -190,8 +191,6 @@ export const ItemTreeWebPageContentCss = css`
   .item-tree-web-page-content_favicon {
     width: var(--item-tree-favicon-size);
     height: var(--item-tree-favicon-size);
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
 
     /* クリックして操作できることを示す */
     cursor: pointer;
@@ -226,8 +225,6 @@ export const ItemTreeWebPageContentCss = css`
   .item-tree-web-page-content_audible-icon {
     width: var(--item-tree-audible-icon-size);
     height: var(--item-tree-audible-icon-size);
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
 
     background: var(--item-tree-audible-icon-color);
     -webkit-mask-image: url('./audible-icon.svg');
@@ -235,27 +232,18 @@ export const ItemTreeWebPageContentCss = css`
 
   /* ウェブページアイテムのタイトル */
   .item-tree-web-page-content_title {
-    /* クリック当たり判定を右端まで伸ばす */
-    flex-grow: 1;
-
     cursor: default;
 
     /*
     ウェブページアイテムのタイトルの折り返しを防ぐための設定。
-    下記のような設定を試したが、横スクロール可能になってしまう（原因不明）ので別の方針で実現。
   
+    【折り返しを防ぐ理由】
+    (1) ウェブページのタイトルは非常に長い場合もあり、Treeifyウィンドウの横幅が狭い場合は何行も専有して邪魔。
+    (2) Chromeはタブ読込中に一瞬だけURLをタイトル扱いする場合がある。
+        一般にURLは長い文字列なのでその瞬間だけ折り返しが発生し、画面がガクッと動くような印象を与えてしまう。
+    */
     overflow-x: hidden;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
-  
-    そもそも折り返しを防ぐ理由：
-    (1) ウェブページのタイトルは非常に長い場合もあり、Treeifyウィンドウの横幅によっては何行も専有して邪魔。
-    (2) Chromeはタブ読込中に一瞬だけURLをタイトル扱いする場合がある。
-        その瞬間だけ折り返しが発生し、画面がガクッと動くような印象を与えてしまう。
-    */
-    max-height: var(--item-tree-calculated-line-height);
-    overflow: hidden;
   }
 
   /* アンロード済みウェブページアイテムのタイトルのグレーアウト */

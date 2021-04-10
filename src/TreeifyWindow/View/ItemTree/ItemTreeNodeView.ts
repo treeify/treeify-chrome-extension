@@ -208,7 +208,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
 
   return html`<div class=${classMap({'item-tree-node': true, selected: viewModel.isSelected})}>
     ${viewModel.isActivePage
-      ? undefined
+      ? html`<div class="grid-empty-cell"></div>`
       : html`
           <!-- バレットとインデントラインの領域 -->
           <div
@@ -240,7 +240,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
               >
                 ${Math.min(99, viewModel.hiddenTabsCount)}
               </div>`
-            : undefined}
+            : html`<div class="grid-empty-cell"></div>`}
           <!-- 削除ボタン -->
           <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}>
             <div class="item-tree-node_delete-button-icon"></div>
@@ -311,12 +311,11 @@ export const ItemTreeNodeCss = css`
 
   .item-tree-node {
     /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
   .item-tree-node_body-and-children-area {
-    /* ボディ領域を右端まで伸ばす */
-    flex-grow: 1;
   }
 
   /* マウスホバー時のボディ領域 */
@@ -329,7 +328,8 @@ export const ItemTreeNodeCss = css`
   .item-tree-node_body-area {
     padding: var(--item-tree-body-area-vertical-padding) 0;
     /* コンテンツ領域とボタン類を横に並べる */
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
   }
   /* フォーカス時のボディ領域 */
   .item-tree-node_body-area:focus-within {
@@ -337,18 +337,10 @@ export const ItemTreeNodeCss = css`
     background: var(--item-tree-focused-item-background-color);
   }
 
-  /* コンテンツ領域 */
-  .item-tree-node_content-area {
-    flex-grow: 1;
-  }
-
   /* 隠れているタブ数 */
   .item-tree-node_hidden-tabs-count {
-    flex-basis: var(--item-tree-calculated-line-height);
+    width: var(--item-tree-calculated-line-height);
     height: var(--item-tree-calculated-line-height);
-
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
 
     position: relative;
     text-align: center;
@@ -388,11 +380,8 @@ export const ItemTreeNodeCss = css`
 
   /* 各アイテムの削除ボタン */
   .item-tree-node_delete-button {
-    flex-basis: var(--item-tree-calculated-line-height);
+    width: var(--item-tree-calculated-line-height);
     height: var(--item-tree-calculated-line-height);
-
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
 
     border-radius: 50%;
 
