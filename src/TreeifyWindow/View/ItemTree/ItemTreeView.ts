@@ -294,34 +294,35 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     const originalXCoordinate = getCaretXCoordinate()
     assertNonUndefined(originalXCoordinate)
 
-    // 上のアイテムの最初の行の文字数を取得
+    // 上のアイテムの最後の行の文字数を取得
     const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
     const lastLine = lines[lines.length - 1]
 
-    // 上のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
-    // TODO: 最適化の余地あり。二分探索が可能では？
+    // 上のアイテムに一旦フォーカスする
     const aboveItemDomElementId = ItemTreeContentView.focusableDomElementId(aboveItemPath)
     const aboveItemDomElement = document.getElementById(aboveItemDomElementId)
     assertNonNull(aboveItemDomElement)
     aboveItemDomElement.focus()
 
-    let i = 0
-    for (; i < lastLine.length; i++) {
+    const charactersCount = DomishObject.countCharacters(aboveItemDomishObjects)
+    // キャレット位置を最後の行の右端からスタートし、左にずらしていく
+    let i = charactersCount
+    for (; charactersCount - lastLine.length <= i; i--) {
       setCaretPosition(i)
-      if (getCaretXCoordinate()! > originalXCoordinate) {
+      if (getCaretXCoordinate()! < originalXCoordinate) {
         break
       }
     }
     // キャレットのX座標の移動距離が最も小さくなるようなpositionを選ぶ
-    if (i > 0) {
+    if (i < charactersCount) {
       // TODO: 最適化の余地あり（setCaretPositionやgetCaretXCoordinateの呼び出し回数）
-      setCaretPosition(i - 1)
+      setCaretPosition(i + 1)
       const firstDistance = Math.abs(originalXCoordinate - getCaretXCoordinate()!)
       setCaretPosition(i)
       const secondDistance = Math.abs(originalXCoordinate - getCaretXCoordinate()!)
       if (firstDistance < secondDistance) {
-        setCaretPosition(i - 1)
+        setCaretPosition(i + 1)
       }
     }
   }
