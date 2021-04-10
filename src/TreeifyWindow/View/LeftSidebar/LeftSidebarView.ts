@@ -58,11 +58,10 @@ export const LeftSidebarCss = css`
   }
 
   .left-sidebar {
-    flex-basis: var(--left-sidebar-width);
-    flex-shrink: 0;
+    width: var(--left-sidebar-width);
+    height: 100%;
 
-    /* サイドバーやアイテムツリーは独立してスクロール可能とする */
-    overflow: auto;
+    overflow-y: auto;
 
     background: var(--left-sidebar-background-color);
     /* Dynalistを参考にしながら調整した影 */
@@ -72,8 +71,6 @@ export const LeftSidebarCss = css`
   /* フローティング型の左サイドバー */
   .left-sidebar.floating {
     position: fixed;
-    height: 100%;
-    width: var(--left-sidebar-width);
     /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
     z-index: 1;
   }
