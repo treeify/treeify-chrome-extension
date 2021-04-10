@@ -630,7 +630,7 @@ export const ItemTreeCss = css`
     アイテムツリーのテキスト全般に適用されるline-height。
     階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
     */
-    --item-tree-line-height: 1.2;
+    --item-tree-line-height: 1.45;
     /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
     --item-tree-font-size-multiplicator: 99.5%;
 

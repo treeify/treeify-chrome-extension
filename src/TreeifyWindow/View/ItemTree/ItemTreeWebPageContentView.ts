@@ -152,7 +152,7 @@ export function ItemTreeWebPageContentView(
     </div>
     ${viewModel.isAudible
       ? html`<div class="item-tree-web-page-content_audible-icon" />`
-      : undefined}
+      : html`<div class="grid-empty-cell"></div>`}
   </div>`
 }
 

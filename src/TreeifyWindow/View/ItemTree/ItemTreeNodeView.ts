@@ -280,7 +280,7 @@ function calculateFootprintColor(
 export const ItemTreeNodeCss = css`
   :root {
     /* ボディ領域の上下パディング */
-    --item-tree-body-area-vertical-padding: 1.5px;
+    --item-tree-body-area-vertical-padding: 0.5px;
 
     /* フォーカスアイテムの背景色 */
     --item-tree-focused-item-background-color: hsl(240, 100%, 98%);
