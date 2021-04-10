@@ -72,7 +72,7 @@ export function unindentItem() {
   if (parentItemPath === undefined) return
   if (!ItemPath.hasParent(parentItemPath)) return
 
-  for (const selectedItemPath of selectedItemPaths) {
+  for (const selectedItemPath of selectedItemPaths.reverse()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
     // 既存の親子関係を削除
