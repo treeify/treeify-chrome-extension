@@ -1,7 +1,7 @@
 import {html, TemplateResult} from 'lit-html'
 import {styleMap} from 'lit-html/directives/style-map'
 import {integer} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -33,7 +33,7 @@ export function createItemTreeSpoolViewModel(
   const bulletState = deriveBulletState(state, itemPath)
 
   const onClick = (event: MouseEvent) => {
-    doWithErrorHandling(() => {
+    doWithErrorCapture(() => {
       CurrentState.setTargetItemPath(itemPath)
 
       const inputId = InputId.fromMouseEvent(event)

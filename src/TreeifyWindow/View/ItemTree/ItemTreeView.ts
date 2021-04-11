@@ -2,7 +2,7 @@ import {is, List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
   getTextItemSelectionFromDom,
   setDomSelection,
@@ -86,7 +86,7 @@ export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
     // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
     if (event.isComposing) return
@@ -581,7 +581,7 @@ function onDragOver(event: DragEvent) {
 }
 
 function onDrop(event: DragEvent) {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     if (event.dataTransfer === null) return
 
     const data = event.dataTransfer.getData('application/treeify')

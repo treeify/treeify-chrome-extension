@@ -1,7 +1,7 @@
 import {html, render} from 'lit-html'
 import {integer} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
-import {doAsyncWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
+import {doAsyncWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -112,7 +112,7 @@ function onMouseEnter() {
 }
 
 function onResize() {
-  doAsyncWithErrorHandling(async () => {
+  doAsyncWithErrorCapture(async () => {
     // 左サイドバーの表示形態を変更する必要がある場合のために再描画する
     CurrentState.commit()
 

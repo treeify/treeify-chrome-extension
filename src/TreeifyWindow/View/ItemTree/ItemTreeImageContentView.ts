@@ -1,6 +1,6 @@
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -28,7 +28,7 @@ export function createItemTreeImageContentViewModel(
     url: imageItem.url,
     caption: imageItem.caption,
     onFocus: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
         CurrentState.commit()
       })

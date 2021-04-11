@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -30,7 +30,7 @@ export function createItemTreeTextContentViewModel(
     itemType: ItemType.TEXT,
     domishObjects: state.textItems[itemId].domishObjects,
     onInput: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
         if (!event.isComposing && event.target instanceof Node) {
           // 最新のキャレット位置をModelに反映する
@@ -59,7 +59,7 @@ export function createItemTreeTextContentViewModel(
       })
     },
     onCompositionEnd: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         if (event.target instanceof Node) {
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
@@ -85,7 +85,7 @@ export function createItemTreeTextContentViewModel(
       })
     },
     onFocus: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
         CurrentState.commit()
       })
