@@ -60,7 +60,8 @@ export function createItemTreeWebPageContentViewModel(
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.browseTab()
+            NullaryCommand.browseTabInDualWindowMode()
+            CurrentState.commit()
             break
           case '1000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
@@ -68,7 +69,7 @@ export function createItemTreeWebPageContentViewModel(
             break
           case '0010MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.browseTabInDualWindowMode()
+            NullaryCommand.browseTab()
             CurrentState.commit()
             break
         }
