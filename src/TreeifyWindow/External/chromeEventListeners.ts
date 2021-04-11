@@ -6,7 +6,7 @@ import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import {List} from 'immutable'
 import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'

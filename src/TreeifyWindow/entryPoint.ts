@@ -1,5 +1,5 @@
-import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
 import {DeviceId} from 'src/TreeifyWindow/DeviceId'
+import {doAsyncWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {startup} from 'src/TreeifyWindow/startup'
 

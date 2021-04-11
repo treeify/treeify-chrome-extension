@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'

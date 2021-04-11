@@ -1,6 +1,6 @@
 import {html} from 'lit-html'
 import {styleMap} from 'lit-html/directives/style-map'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'

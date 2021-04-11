@@ -1,5 +1,5 @@
 import {html} from 'lit-html'
-import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
+import {doAsyncWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {css} from 'src/TreeifyWindow/View/css'
 

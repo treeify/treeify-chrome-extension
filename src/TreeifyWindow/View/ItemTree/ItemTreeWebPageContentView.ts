@@ -1,7 +1,7 @@
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'

@@ -1,6 +1,6 @@
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {doWithErrorHandling} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
