@@ -18,21 +18,6 @@ import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 export class External {
   private static _instance: External | undefined
 
-  private constructor() {}
-
-  /** シングルトンインスタンスを取得する */
-  static get instance(): External {
-    if (this._instance === undefined) {
-      this._instance = new External()
-    }
-    return this._instance
-  }
-
-  /** シングルトンインスタンスを破棄する */
-  static cleanup() {
-    this._instance = undefined
-  }
-
   /** データフォルダ */
   dataFolder: DataFolder | undefined
   // データフォルダに書き込むべきプロパティパス
@@ -70,6 +55,21 @@ export class External {
    * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
    */
   readonly hardUnloadedTabIds = new Set<integer>()
+
+  private constructor() {}
+
+  /** シングルトンインスタンスを取得する */
+  static get instance(): External {
+    if (this._instance === undefined) {
+      this._instance = new External()
+    }
+    return this._instance
+  }
+
+  /** シングルトンインスタンスを破棄する */
+  static cleanup() {
+    this._instance = undefined
+  }
 
   /** DOMの初回描画を行う */
   render(state: State) {
