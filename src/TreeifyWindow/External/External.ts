@@ -167,4 +167,8 @@ export class External {
       this.pendingMutatedPropertyPaths.add(mutatedPropertyPath)
     }
   }
+
+  dumpCurrentState() {
+    this.tabItemCorrespondence.dumpCurrentState()
+  }
 }
