@@ -122,10 +122,12 @@ export function onCreated(tab: Tab) {
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   doWithErrorCapture(() => {
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-    // document.titleを変更した際はonUpdatedが呼ばれる。自身に対応するアイテムIDは存在しない
-    if (itemId === undefined) return
+    // Treeifyウィンドウのタブだった場合は何もしない。
+    // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
+    if (tab.url === chrome.extension.getURL('TreeifyWindow/index.html')) return
 
+    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+    assertNonUndefined(itemId)
     reflectInWebPageItem(itemId, tab)
 
     CurrentState.commit()
