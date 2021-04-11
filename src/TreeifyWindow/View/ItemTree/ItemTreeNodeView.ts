@@ -296,11 +296,6 @@ export const ItemTreeNodeCss = css`
     /* 最も古い足跡の色（線形補間の一端） */
     --weakest-footprint-color: hsl(60, 100%, 97.3%);
 
-    /* ハイライト状態のアイテムのバレットの色 */
-    --highlighted-item-bullet-color: hsl(0, 100%, 45%);
-    /* ハイライト状態のアイテムのバレットのマウスホバー時の色 */
-    --highlighted-item-bullet-hover-color: hsl(0, 100%, 40%);
-
     /* グレーアウト状態のアイテムの標準的なテキスト色 */
     --grayed-out-item-text-color: hsl(0, 0%, 75%);
 

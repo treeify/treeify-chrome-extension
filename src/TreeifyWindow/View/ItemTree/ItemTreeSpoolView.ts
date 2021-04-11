@@ -152,6 +152,11 @@ export const ItemTreeSpoolCss = css`
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
     --bullet-page-icon-size: 1em;
 
+    /* ハイライト状態のアイテムのバレットの色 */
+    --highlighted-item-bullet-color: hsl(0, 100%, 45%);
+    /* ハイライト状態のアイテムのバレットのマウスホバー時の色 */
+    --highlighted-item-bullet-hover-color: hsl(0, 100%, 40%);
+
     /* インデントラインの太さ */
     --item-tree-indent-line-width: 1px;
     /* インデントラインの色 */
