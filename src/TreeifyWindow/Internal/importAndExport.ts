@@ -3,6 +3,7 @@ import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/asse
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
+import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -14,6 +15,8 @@ import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
   if (event.clipboardData === null) return
+
+  External.instance.treeifyClipboard = undefined
 
   const textSelection = getTextItemSelectionFromDom()
   if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
@@ -30,6 +33,8 @@ export function onCopy(event: ClipboardEvent) {
 
 export function onCut(event: ClipboardEvent) {
   if (event.clipboardData === null) return
+
+  External.instance.treeifyClipboard = undefined
 
   const textSelection = getTextItemSelectionFromDom()
   if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
@@ -53,11 +58,29 @@ export function onPaste(event: ClipboardEvent) {
 
   event.preventDefault()
   const targetItemPath = CurrentState.getTargetItemPath()
+
+  // 独自クリップボードが空じゃなければ独自クリップボードを優先して貼り付ける
+  if (External.instance.treeifyClipboard !== undefined) {
+    // TODO: 兄弟リスト内に同一アイテムが複数含まれてしまう場合のエラー処理を追加する
+
+    // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
+    for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
+      const initialEdge: Edge = {isCollapsed: true}
+      CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
+    }
+
+    External.instance.treeifyClipboard = undefined
+    CurrentState.commit()
+    return
+  }
+
   const text = event.clipboardData.getData('text/plain')
 
   const opmlParseResult = tryParseAsOpml(text)
+  // OPML形式の場合
   if (opmlParseResult !== undefined) {
-    // OPML形式の場合
     for (const itemAndEdge of opmlParseResult.map(createItemBasedOnOpml).reverse()) {
       CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
     }

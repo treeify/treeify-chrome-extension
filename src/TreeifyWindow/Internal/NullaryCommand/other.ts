@@ -116,3 +116,9 @@ export function selectAllAboveItems() {
   // 複数選択中はターゲットアイテムからフォーカスを外す
   document.querySelector<HTMLElement>('.item-tree')?.focus()
 }
+
+/** トランスクルードするために独自クリップボードに情報を書き込む */
+export function copyForTransclusion() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  External.instance.treeifyClipboard = {selectedItemPaths}
+}

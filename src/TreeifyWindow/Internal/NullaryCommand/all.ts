@@ -16,6 +16,7 @@ import {
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {
+  copyForTransclusion,
   saveToDataFolder,
   selectAllAboveItems,
   selectAllBelowItems,
@@ -51,6 +52,7 @@ export const functions: {[name: string]: () => void} = {
   moveItemDownward,
   selectAllBelowItems,
   selectAllAboveItems,
+  copyForTransclusion,
   enterKeyDefault,
   deleteItem,
   deleteItemItself,
