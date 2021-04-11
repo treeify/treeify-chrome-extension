@@ -4,9 +4,10 @@ import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import {List} from 'immutable'
-import {integer, ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {integer} from 'src/Common/integer'
+import {ItemId} from 'src/TreeifyWindow/basicType'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -16,7 +17,7 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 import UAParser from 'ua-parser-js'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
         OnMouseMoveToLeftEnd()
@@ -45,7 +46,7 @@ export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender)
 }
 
 export function onCreated(tab: Tab) {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
     assertNonUndefined(tab.id)
 
@@ -120,7 +121,7 @@ export function onCreated(tab: Tab) {
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     // document.titleを変更した際はonUpdatedが呼ばれる。自身に対応するアイテムIDは存在しない
     if (itemId === undefined) return
@@ -143,7 +144,7 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 }
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     assertNonUndefined(itemId)
     External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
@@ -161,7 +162,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
 }
 
 export async function onActivated(tabActiveInfo: TabActiveInfo) {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)

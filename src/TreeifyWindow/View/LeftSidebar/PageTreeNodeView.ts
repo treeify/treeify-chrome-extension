@@ -1,9 +1,10 @@
 import {Collection, List, Seq} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
-import {integer, ItemId, TOP_ITEM_ID} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {integer} from 'src/Common/integer'
+import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -95,7 +96,7 @@ export function createPageTreeNodeViewModel(
       createPageTreeNodeViewModel(state, ItemPath.getItemId(childPagePath), pageTreeEdges)
     ),
     onClickContentArea: () => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         CurrentState.setActivePageId(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
         External.instance.shouldFloatingLeftSidebarShown = false
@@ -110,7 +111,7 @@ export function createPageTreeNodeViewModel(
       })
     },
     onClickCloseButton: () => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         CurrentState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
@@ -139,7 +140,7 @@ export function createPageTreeNodeViewModel(
       event.preventDefault()
     },
     onDrop: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')

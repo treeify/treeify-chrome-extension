@@ -1,6 +1,6 @@
 import {List} from 'immutable'
-import {integer} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 
 /** プレーンテキストとそれに対する装飾情報からなるオブジェクトの型 */

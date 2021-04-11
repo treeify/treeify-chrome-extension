@@ -1,7 +1,7 @@
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
-import {ItemType} from 'src/Common/basicType'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {ItemType} from 'src/TreeifyWindow/basicType'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
@@ -50,13 +50,13 @@ export function createItemTreeWebPageContentViewModel(
     isUnloaded: tabId === undefined,
     isAudible,
     onFocus: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
         CurrentState.commit()
       })
     },
     onClickTitle: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
@@ -76,7 +76,7 @@ export function createItemTreeWebPageContentViewModel(
       })
     },
     onClickFavicon: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
 
         switch (InputId.fromMouseEvent(event)) {

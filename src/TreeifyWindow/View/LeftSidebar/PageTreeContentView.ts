@@ -1,5 +1,5 @@
-import {ItemId, ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
+import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {

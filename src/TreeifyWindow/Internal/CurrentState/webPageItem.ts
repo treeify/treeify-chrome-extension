@@ -1,10 +1,10 @@
 import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/Common/basicType'
-import {Timestamp} from 'src/Common/Timestamp'
+import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Item, WebPageItem} from 'src/TreeifyWindow/Internal/State'
+import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
 /**
  * 新しい空のウェブページアイテムを作成し、CurrentStateに登録する。

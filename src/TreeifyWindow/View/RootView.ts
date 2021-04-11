@@ -1,5 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
-import {TOP_ITEM_ID} from 'src/Common/basicType'
+import {TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'

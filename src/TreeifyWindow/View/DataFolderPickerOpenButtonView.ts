@@ -1,6 +1,6 @@
 import {html} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
@@ -32,7 +32,7 @@ export function DataFolderPickerOpenButtonView(viewModel: DataFolderPickerOpenBu
 }
 
 function onClick() {
-  doWithErrorHandling(() => {
+  doWithErrorCapture(() => {
     NullaryCommand.saveToDataFolder()
     CurrentState.commit()
   })

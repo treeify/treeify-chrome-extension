@@ -1,6 +1,6 @@
 import {List} from 'immutable'
-import {ItemId} from 'src/Common/basicType'
 import {assert} from 'src/Common/Debug/assert'
+import {ItemId} from 'src/TreeifyWindow/basicType'
 
 export type ItemPath = List<ItemId>
 

@@ -1,6 +1,7 @@
 import {List} from 'immutable'
-import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
+import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'

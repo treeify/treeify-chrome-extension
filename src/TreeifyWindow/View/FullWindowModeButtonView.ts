@@ -1,5 +1,5 @@
 import {html} from 'lit-html'
-import {doAsyncWithErrorHandling} from 'src/Common/Debug/report'
+import {doAsyncWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {css} from 'src/TreeifyWindow/View/css'
 
@@ -12,7 +12,7 @@ export function FullWindowModeButtonView() {
 }
 
 function onClick() {
-  doAsyncWithErrorHandling(async () => {
+  doAsyncWithErrorCapture(async () => {
     await TreeifyWindow.toFullWindowMode()
   })
 }

@@ -4,10 +4,11 @@ import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {repeat} from 'lit-html/directives/repeat'
 import {styleMap} from 'lit-html/directives/style-map'
-import {integer, ItemId} from 'src/Common/basicType'
-import {CssCustomProperty} from 'src/Common/CssCustomProperty'
 import {assertNeverType} from 'src/Common/Debug/assert'
-import {doWithErrorHandling} from 'src/Common/Debug/report'
+import {integer} from 'src/Common/integer'
+import {ItemId} from 'src/TreeifyWindow/basicType'
+import {CssCustomProperty} from 'src/TreeifyWindow/CssCustomProperty'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
@@ -76,7 +77,7 @@ export function createItemTreeNodeViewModel(
       )
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         const inputId = InputId.fromMouseEvent(event)
         if (inputId === '0000MouseButton1') {
           event.preventDefault()
@@ -87,7 +88,7 @@ export function createItemTreeNodeViewModel(
       })
     },
     onClickDeleteButton: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         const inputId = InputId.fromMouseEvent(event)
         switch (inputId) {
           case '0000MouseButton0':
@@ -106,7 +107,7 @@ export function createItemTreeNodeViewModel(
       })
     },
     onDragStart: (event) => {
-      doWithErrorHandling(() => {
+      doWithErrorCapture(() => {
         if (event.dataTransfer === null) return
 
         const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)

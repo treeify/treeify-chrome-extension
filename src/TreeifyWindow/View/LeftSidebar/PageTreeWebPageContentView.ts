@@ -1,5 +1,5 @@
 import {html} from 'lit-html'
-import {ItemType} from 'src/Common/basicType'
+import {ItemType} from 'src/TreeifyWindow/basicType'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type PageTreeWebPageContentViewModel = {
