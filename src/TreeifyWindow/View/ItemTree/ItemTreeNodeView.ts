@@ -34,6 +34,7 @@ export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
   isActivePage: boolean
   isSelected: boolean
+  isTranscluded: boolean
   cssClasses: List<string>
   footprintRank: integer | undefined
   footprintCount: integer
@@ -62,6 +63,7 @@ export function createItemTreeNodeViewModel(
     itemPath,
     isActivePage: !ItemPath.hasParent(itemPath),
     isSelected: deriveIsSelected(state, itemPath),
+    isTranscluded: Object.keys(item.parents).length > 1,
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
@@ -213,7 +215,11 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       : html`
           <!-- バレットとインデントラインの領域 -->
           <div
-            class=${viewModel.cssClasses.unshift('item-tree-node_spool-area').join(' ')}
+            class=${classMap({
+              'item-tree-node_spool-area': true,
+              transcluded: viewModel.isTranscluded,
+              ...Object.fromEntries(viewModel.cssClasses.map((cssClass) => [cssClass, true])),
+            })}
             draggable="true"
             @dragstart=${viewModel.onDragStart}
           >
