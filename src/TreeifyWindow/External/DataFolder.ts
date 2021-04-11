@@ -236,7 +236,9 @@ export class DataFolder {
     }
     // メタデータファイルを自デバイスフォルダに書き込み
     const newMetadataText = JSON.stringify(metadata, undefined, 2)
-    await this.writeTextFile(DataFolder.getMetadataFilePath(), newMetadataText)
+    const metadataFilePath = DataFolder.getMetadataFilePath()
+    this.setCacheEntry(metadataFilePath, newMetadataText)
+    await this.writeTextFile(metadataFilePath, newMetadataText)
   }
 
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
@@ -272,12 +274,12 @@ export class DataFolder {
   /**
    * 自デバイスが存在を把握していないデバイスフォルダ、または把握していない更新の行われたデバイスフォルダのデバイスIDを返す。
    * 複数デバイスが該当する場合は、タイムスタンプが最も新しいものを返す。
+   * 自デバイスフォルダに何も書き込まれていない場合、タイムスタンプが最も新しいデバイスのIDを返す。
    */
   async findUnknownUpdatedDevice(): Promise<DeviceId | undefined> {
     const metadata = await this.readMetadataFile()
     if (metadata === undefined) {
-      // 自デバイスフォルダに何も書き込まれていない場合、
-      // タイムスタンプが最も新しいデバイスのIDを返す。
+      // 自デバイスフォルダに何も書き込まれていない場合、タイムスタンプが最も新しいデバイスのIDを返す
       const otherDeviceTimestamps = List(Object.entries(await this.getAllOtherDeviceTimestamps()))
       const latestUpdated = otherDeviceTimestamps.maxBy(([deviceId, timestamp]) => timestamp)
       return latestUpdated?.[0]
