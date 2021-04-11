@@ -1,6 +1,6 @@
 import {List} from 'immutable'
-import {ItemId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'

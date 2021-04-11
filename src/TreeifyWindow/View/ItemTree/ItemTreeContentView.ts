@@ -1,6 +1,6 @@
 import {TemplateResult} from 'lit-html'
-import {ItemType} from 'src/Common/basicType'
 import {assertNeverType} from 'src/Common/Debug/assert'
+import {ItemType} from 'src/TreeifyWindow/basicType'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {

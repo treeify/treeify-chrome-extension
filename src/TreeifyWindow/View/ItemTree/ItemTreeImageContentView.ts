@@ -1,5 +1,5 @@
 import {html, TemplateResult} from 'lit-html'
-import {ItemType} from 'src/Common/basicType'
+import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'

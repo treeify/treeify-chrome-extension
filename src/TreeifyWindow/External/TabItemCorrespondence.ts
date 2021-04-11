@@ -1,5 +1,5 @@
-import {ItemId, TabId} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {ItemId, TabId} from 'src/TreeifyWindow/basicType'
 import Tab = chrome.tabs.Tab
 
 /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのクラス */

@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId} from 'src/Common/basicType'
+import {ItemId} from 'src/TreeifyWindow/basicType'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'

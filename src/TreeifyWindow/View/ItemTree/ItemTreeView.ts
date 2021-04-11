@@ -1,7 +1,8 @@
 import {is, List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
-import {integer, ItemId, ItemType} from 'src/Common/basicType'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
+import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
   getTextItemSelectionFromDom,

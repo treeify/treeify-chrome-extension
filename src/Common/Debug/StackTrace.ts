@@ -1,5 +1,5 @@
-import {integer} from 'src/Common/basicType'
 import {SourceFileReader} from 'src/Common/Debug/SourceFileReader'
+import {integer} from 'src/Common/integer'
 
 /**
  * スタックトレースの情報を取得するためのクラス。

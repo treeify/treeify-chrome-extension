@@ -1,4 +1,4 @@
-import {integer} from 'src/Common/basicType'
+import {integer} from 'src/Common/integer'
 
 /** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
 export type TextItemSelection = {

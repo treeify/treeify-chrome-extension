@@ -1,6 +1,6 @@
 import CreateData = chrome.windows.CreateData
-import {integer} from 'src/Common/basicType'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
 import UAParser from 'ua-parser-js'
 
 export namespace TreeifyWindow {

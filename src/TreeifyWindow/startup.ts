@@ -1,6 +1,6 @@
 import {html, render} from 'lit-html'
-import {integer} from 'src/Common/basicType'
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
 import {doAsyncWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
   matchTabsAndWebPageItems,
