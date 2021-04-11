@@ -41,4 +41,11 @@ export class TabItemCorrespondence {
     this.itemIdToTabId.delete(itemId)
     this.tabIdToItemId.delete(tabId)
   }
+
+  dumpCurrentState() {
+    console.groupCollapsed('ダンプ：TabItemCorrespondence#tabIdToTab')
+    const stateString = JSON.stringify(Object.fromEntries(this.tabIdToTab), undefined, 2)
+    console.log(stateString)
+    console.groupEnd()
+  }
 }

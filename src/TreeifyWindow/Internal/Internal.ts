@@ -61,6 +61,13 @@ export class Internal {
     this.stateChangeListeners.add(listener)
   }
 
+  dumpCurrentState() {
+    console.groupCollapsed('ダンプ：Internal#state')
+    const stateString = JSON.stringify(this.state, State.jsonReplacer, 2)
+    console.log(stateString)
+    console.groupEnd()
+  }
+
   static createInitialState(): State {
     return {
       items: {

@@ -1,3 +1,6 @@
+import {External} from 'src/TreeifyWindow/External/External'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+
 /**
  * 予期せぬ例外を補足し、何か有益なことをするための汎用関数。
  * 現在はアラートでエラーを通知するようにしている。
@@ -9,6 +12,7 @@ export function doWithErrorCapture<T>(f: () => T): T {
     return f()
   } catch (e) {
     alert(e)
+    dumpCurrentMemory()
     throw e
   }
 }
@@ -19,6 +23,12 @@ export async function doAsyncWithErrorCapture<T>(f: () => Promise<T>): Promise<T
     return await f()
   } catch (e) {
     alert(e)
+    dumpCurrentMemory()
     throw e
   }
+}
+
+function dumpCurrentMemory() {
+  Internal.instance.dumpCurrentState()
+  External.instance.dumpCurrentState()
 }
