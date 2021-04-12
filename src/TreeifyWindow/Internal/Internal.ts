@@ -164,6 +164,7 @@ export class Internal {
           caption: 'tamias',
         },
       },
+      codeBlockItems: {},
       pages: {
         '0': {
           targetItemPath: List.of(0),
