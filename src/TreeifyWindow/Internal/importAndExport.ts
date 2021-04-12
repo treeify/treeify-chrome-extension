@@ -59,24 +59,28 @@ export function onPaste(event: ClipboardEvent) {
   event.preventDefault()
   const targetItemPath = CurrentState.getTargetItemPath()
 
-  // 独自クリップボードが空じゃなければ独自クリップボードを優先して貼り付ける
-  if (External.instance.treeifyClipboard !== undefined) {
-    // TODO: 兄弟リスト内に同一アイテムが複数含まれてしまう場合のエラー処理を追加する
-
-    // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
-    for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-      const initialEdge: Edge = {isCollapsed: true}
-      CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
-    }
-
-    External.instance.treeifyClipboard = undefined
-    CurrentState.commit()
-    return
-  }
-
   const text = event.clipboardData.getData('text/plain')
+
+  // 独自クリップボードを優先して貼り付ける
+  if (External.instance.treeifyClipboard !== undefined) {
+    // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
+    if (text === External.instance.getTreeifyClipboardHash()) {
+      // TODO: 兄弟リスト内に同一アイテムが複数含まれてしまう場合のエラー処理を追加する
+
+      // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
+      for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+        const selectedItemId = ItemPath.getItemId(selectedItemPath)
+        // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
+        const initialEdge: Edge = {isCollapsed: true}
+        CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
+      }
+
+      CurrentState.commit()
+      return
+    } else {
+      External.instance.treeifyClipboard = undefined
+    }
+  }
 
   const opmlParseResult = tryParseAsOpml(text)
   // OPML形式の場合
