@@ -60,6 +60,11 @@ export function onCreated(tab: Tab) {
       reflectInWebPageItem(newWebPageItemId, tab)
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
+      // タブがバックグラウンドで開かれたら未読フラグを立てる
+      if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
+        CurrentState.setIsUnreadFlag(newWebPageItemId, true)
+      }
+
       const targetItemPath = CurrentState.getTargetItemPath()
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -114,6 +119,11 @@ export function onCreated(tab: Tab) {
       reflectInWebPageItem(itemId, tab)
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
       External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
+
+      // タブがバックグラウンドで開かれたら未読フラグを立てる
+      if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
+        CurrentState.setIsUnreadFlag(itemId, true)
+      }
     }
 
     CurrentState.commit()
@@ -168,6 +178,7 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)
+      CurrentState.setIsUnreadFlag(itemId, false)
       CurrentState.commit()
     }
   })

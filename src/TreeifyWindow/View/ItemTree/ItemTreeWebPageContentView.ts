@@ -18,6 +18,7 @@ export type ItemTreeWebPageContentViewModel = {
   faviconUrl: string
   isLoading: boolean
   isUnloaded: boolean
+  isUnread: boolean
   isAudible: boolean
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
@@ -48,6 +49,7 @@ export function createItemTreeWebPageContentViewModel(
     faviconUrl: webPageItem.faviconUrl,
     isLoading,
     isUnloaded: tabId === undefined,
+    isUnread: webPageItem.isUnread,
     isAudible,
     onFocus: (event) => {
       doWithErrorCapture(() => {
@@ -145,6 +147,7 @@ export function ItemTreeWebPageContentView(
       class=${classMap({
         'item-tree-web-page-content_title': true,
         'unloaded-item': viewModel.isUnloaded,
+        unread: viewModel.isUnread,
       })}
       title=${viewModel.title}
       @click=${viewModel.onClickTitle}
@@ -161,6 +164,9 @@ export const ItemTreeWebPageContentCss = css`
   :root {
     /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
     --item-tree-favicon-size: 1em;
+
+    /* 未読ウェブページアイテムのタイトルの色 */
+    --item-tree-unread-web-page-item-title-color: hsl(240, 50%, 45%);
 
     /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
     --item-tree-audible-icon-size: 1em;
@@ -245,6 +251,11 @@ export const ItemTreeWebPageContentCss = css`
     */
     overflow-x: hidden;
     white-space: nowrap;
+  }
+
+  /* 未読ウェブページアイテムのタイトルの強調表示 */
+  .item-tree-web-page-content_title.unread {
+    color: var(--item-tree-unread-web-page-item-title-color);
   }
 
   /* アンロード済みウェブページアイテムのタイトルのグレーアウト */

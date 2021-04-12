@@ -70,3 +70,9 @@ export function deriveWebPageItemTitle(itemId: ItemId): string {
   const webPageItem = Internal.instance.state.webPageItems[itemId]
   return webPageItem.title ?? webPageItem.tabTitle
 }
+
+/** ウェブページアイテムの未読フラグを上書き設定する */
+export function setIsUnreadFlag(itemId: ItemId, isUnread: boolean) {
+  Internal.instance.state.webPageItems[itemId].isUnread = isUnread
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'isUnread'))
+}
