@@ -325,6 +325,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
 
   const baseAttributes: Attributes = {
     isPage: CurrentState.isPage(itemId).toString(),
+    itemId,
   }
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
