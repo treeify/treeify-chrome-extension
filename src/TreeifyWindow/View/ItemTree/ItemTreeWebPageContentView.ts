@@ -140,7 +140,11 @@ export function ItemTreeWebPageContentView(
           @click=${viewModel.onClickFavicon}
         />`
       : html`<div
-          class="item-tree-web-page-content_favicon default-favicon"
+          class=${classMap({
+            'item-tree-web-page-content_favicon': true,
+            'default-favicon': true,
+            'unloaded-item': viewModel.isUnloaded,
+          })}
           @click=${viewModel.onClickFavicon}
         />`}
     <div
@@ -174,7 +178,7 @@ export const ItemTreeWebPageContentCss = css`
     --item-tree-audible-icon-color: hsl(0, 0%, 30%);
 
     /* アンロード済みウェブページアイテムのopacity */
-    --unloaded-web-page-item-opacity: 40%;
+    --unloaded-web-page-item-opacity: 50%;
   }
 
   /* ウェブページアイテムのコンテンツ領域のルート */
@@ -205,7 +209,7 @@ export const ItemTreeWebPageContentCss = css`
   /* デフォルトファビコン */
   .item-tree-web-page-content_favicon.default-favicon {
     /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 30%);
+    background: hsl(0, 0%, 40%);
     -webkit-mask-image: url('./default-favicon.svg');
   }
 
@@ -260,11 +264,11 @@ export const ItemTreeWebPageContentCss = css`
 
   /* アンロード済みウェブページアイテムのタイトルのグレーアウト */
   .item-tree-web-page-content_title.unloaded-item {
-    opacity: var(--unloaded-web-page-item-opacity);
+    filter: opacity(var(--unloaded-web-page-item-opacity));
   }
 
   /* アンロード済みウェブページアイテムのファビコンのグレーアウト */
   .item-tree-web-page-content_favicon.unloaded-item {
-    opacity: var(--unloaded-web-page-item-opacity);
+    filter: opacity(var(--unloaded-web-page-item-opacity));
   }
 `
