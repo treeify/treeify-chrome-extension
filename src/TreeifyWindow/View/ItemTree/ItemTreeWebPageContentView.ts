@@ -175,7 +175,7 @@ export const ItemTreeWebPageContentCss = css`
     /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
     --item-tree-audible-icon-size: 1em;
     /* ウェブページアイテムの音がなっていることを示すアイコンの色 */
-    --item-tree-audible-icon-color: hsl(0, 0%, 30%);
+    --item-tree-audible-icon-color: hsl(0, 0%, 35%);
 
     /* アンロード済みウェブページアイテムのopacity */
     --unloaded-web-page-item-opacity: 50%;
@@ -238,7 +238,8 @@ export const ItemTreeWebPageContentCss = css`
     height: var(--item-tree-audible-icon-size);
 
     background: var(--item-tree-audible-icon-color);
-    -webkit-mask-image: url('./audible-icon.svg');
+    -webkit-mask: url('./audible-icon.svg');
+    -webkit-mask-size: contain;
   }
 
   /* ウェブページアイテムのタイトル */
