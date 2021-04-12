@@ -1,6 +1,7 @@
 import {createFocusTrap} from 'focus-trap'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
+import md5 from 'md5'
 import {assert, assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
@@ -171,6 +172,13 @@ export class External {
     for (const mutatedPropertyPath of mutatedPropertyPaths) {
       this.pendingMutatedPropertyPaths.add(mutatedPropertyPath)
     }
+  }
+
+  getTreeifyClipboardHash(): string | undefined {
+    if (this.treeifyClipboard === undefined) return undefined
+
+    const jsonString = JSON.stringify(this.treeifyClipboard, State.jsonReplacer)
+    return md5(jsonString)
   }
 
   dumpCurrentState() {
