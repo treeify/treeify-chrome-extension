@@ -9,6 +9,7 @@ import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/dom
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {generateStyleElementContents} from 'src/TreeifyWindow/View/css'
@@ -17,21 +18,6 @@ import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 /** TODO: コメント */
 export class External {
   private static _instance: External | undefined
-
-  private constructor() {}
-
-  /** シングルトンインスタンスを取得する */
-  static get instance(): External {
-    if (this._instance === undefined) {
-      this._instance = new External()
-    }
-    return this._instance
-  }
-
-  /** シングルトンインスタンスを破棄する */
-  static cleanup() {
-    this._instance = undefined
-  }
 
   /** データフォルダ */
   dataFolder: DataFolder | undefined
@@ -48,6 +34,9 @@ export class External {
 
   /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+
+  /** 独自クリップボード */
+  treeifyClipboard: TreeifyClipboard | undefined
 
   /**
    * テキストアイテムのcontenteditableな要素のキャッシュ。
@@ -70,6 +59,21 @@ export class External {
    * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
    */
   readonly hardUnloadedTabIds = new Set<integer>()
+
+  private constructor() {}
+
+  /** シングルトンインスタンスを取得する */
+  static get instance(): External {
+    if (this._instance === undefined) {
+      this._instance = new External()
+    }
+    return this._instance
+  }
+
+  /** シングルトンインスタンスを破棄する */
+  static cleanup() {
+    this._instance = undefined
+  }
 
   /** DOMの初回描画を行う */
   render(state: State) {
@@ -172,4 +176,8 @@ export class External {
   dumpCurrentState() {
     this.tabItemCorrespondence.dumpCurrentState()
   }
+}
+
+type TreeifyClipboard = {
+  selectedItemPaths: List<ItemPath>
 }
