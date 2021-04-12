@@ -73,7 +73,7 @@ export class Internal {
       items: {
         0: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(1, 2, 5),
+          childItemIds: List.of(1, 2, 5, 8),
           parents: {},
           timestamp: 1604284090000,
           cssClasses: List.of(),
@@ -127,6 +127,13 @@ export class Internal {
           timestamp: 1604284090007,
           cssClasses: List.of(),
         },
+        8: {
+          itemType: ItemType.CODE_BLOCK,
+          childItemIds: List.of(),
+          parents: {0: {isCollapsed: false}},
+          timestamp: 1604284090008,
+          cssClasses: List.of(),
+        },
       },
       textItems: {
         0: {
@@ -164,7 +171,16 @@ export class Internal {
           caption: 'tamias',
         },
       },
-      codeBlockItems: {},
+      codeBlockItems: {
+        8: {
+          text: `
+const url = 'https://google.com/'
+if (url.length > 10 || /https:/.test(url)) {
+  console.log(\`OK: \${url.length}\`)
+}
+`,
+        },
+      },
       pages: {
         '0': {
           targetItemPath: List.of(0),
@@ -177,7 +193,7 @@ export class Internal {
       },
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
-      maxItemId: 7,
+      maxItemId: 8,
       activePageId: 0,
       itemTreeInputBinding: {
         '0000Tab': {functionName: 'indentItem'},
