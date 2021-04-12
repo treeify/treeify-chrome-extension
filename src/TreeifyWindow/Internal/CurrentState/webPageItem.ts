@@ -28,6 +28,7 @@ export function createWebPageItem(): ItemId {
     faviconUrl: '',
     tabTitle: '',
     title: null,
+    isUnread: false,
   }
   Internal.instance.state.webPageItems[newItemId] = webPageItem
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', newItemId))
@@ -68,4 +69,10 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
 export function deriveWebPageItemTitle(itemId: ItemId): string {
   const webPageItem = Internal.instance.state.webPageItems[itemId]
   return webPageItem.title ?? webPageItem.tabTitle
+}
+
+/** ウェブページアイテムの未読フラグを上書き設定する */
+export function setIsUnreadFlag(itemId: ItemId, isUnread: boolean) {
+  Internal.instance.state.webPageItems[itemId].isUnread = isUnread
+  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'isUnread'))
 }
