@@ -109,7 +109,7 @@ export class Internal {
         5: {
           itemType: ItemType.WEB_PAGE,
           childItemIds: List.of(),
-          parents: {0: {isCollapsed: false, labels: List.of()}},
+          parents: {0: {isCollapsed: false, labels: List.of('サンプル')}},
           timestamp: 1604284090005,
           cssClasses: List.of(),
         },

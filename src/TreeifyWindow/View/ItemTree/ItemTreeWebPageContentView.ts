@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/TreeifyWindow/basicType'
@@ -10,10 +11,12 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
   itemType: ItemType.WEB_PAGE
+  labels: List<string>
   title: string
   faviconUrl: string
   isLoading: boolean
@@ -44,6 +47,7 @@ export function createItemTreeWebPageContentViewModel(
 
   return {
     itemPath,
+    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.WEB_PAGE,
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
@@ -147,6 +151,11 @@ export function ItemTreeWebPageContentView(
           })}
           @click=${viewModel.onClickFavicon}
         />`}
+    ${!viewModel.labels.isEmpty()
+      ? html`<div class="item-tree-web-page-content_labels">
+          ${viewModel.labels.map((label) => LabelView({text: label}))}
+        </div>`
+      : html`<div class="grid-empty-cell"></div>`}
     <div
       class=${classMap({
         'item-tree-web-page-content_title': true,
@@ -183,16 +192,16 @@ export const ItemTreeWebPageContentCss = css`
 
   /* ウェブページアイテムのコンテンツ領域のルート */
   .item-tree-web-page-content {
-    /* ファビコンとタイトルなどを横並びにする */
+    /* ファビコン、ラベル、タイトル、audibleアイコンを横並びにする */
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
 
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
   }
 
-  /* グレーアウト状態のウェブページアイテム */
+  /* グレーアウト状態のウェブページアイテムのタイトル */
   .grayed-out-item .item-tree-web-page-content_title,
   .grayed-out-item-children .item-tree-web-page-content_title {
     color: var(--grayed-out-item-text-color);
