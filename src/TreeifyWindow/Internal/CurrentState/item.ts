@@ -171,6 +171,20 @@ export function getIsCollapsed(itemPath: ItemPath): boolean {
   return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
+/**
+ * 指定されたアイテムパスのラベルを返す。
+ * 親を持たないアイテムパスの場合、空リストを返す。
+ */
+export function getLabels(itemPath: ItemPath): List<string> {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  if (parentItemId !== undefined) {
+    return Internal.instance.state.items[itemId].parents[parentItemId].labels
+  } else {
+    return List.of()
+  }
+}
+
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   Internal.instance.state.items[itemId].timestamp = Timestamp.now()

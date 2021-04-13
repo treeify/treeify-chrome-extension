@@ -71,7 +71,7 @@ export function onPaste(event: ClipboardEvent) {
       for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
         const selectedItemId = ItemPath.getItemId(selectedItemPath)
         // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-        const initialEdge: Edge = {isCollapsed: true}
+        const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
         CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
       }
 
@@ -486,9 +486,9 @@ function createItemBasedOnOpml(element: OutlineElement): ItemAndEdge {
   }
 
   if (attributes.isCollapsed === 'true') {
-    return {itemId, edge: {isCollapsed: true}}
+    return {itemId, edge: {isCollapsed: true, labels: List.of()}}
   } else {
-    return {itemId, edge: {isCollapsed: false}}
+    return {itemId, edge: {isCollapsed: false, labels: List.of()}}
   }
 }
 
