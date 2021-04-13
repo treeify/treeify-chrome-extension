@@ -12,6 +12,7 @@ export type State = {
   textItems: {[K in ItemId]: TextItem}
   webPageItems: {[K in ItemId]: WebPageItem}
   imageItems: {[K in ItemId]: ImageItem}
+  codeBlockItems: {[K in ItemId]: CodeBlockItem}
   pages: {[K in ItemId]: Page}
   /**
    * マウントされているページたちのアイテムID。
@@ -95,6 +96,12 @@ export type WebPageItem = {
 export type ImageItem = {
   url: string
   caption: string
+}
+
+/** コードブロックアイテムが固有で持つデータの型 */
+export type CodeBlockItem = {
+  code: string
+  language: string
 }
 
 /** 各ページが持つデータの型 */

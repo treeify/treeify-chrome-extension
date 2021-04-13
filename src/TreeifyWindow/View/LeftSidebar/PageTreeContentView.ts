@@ -35,6 +35,9 @@ export function createPageTreeContentViewModel(
     case ItemType.IMAGE:
       // TODO: 未対応
       throw new Error('画像アイテムは未対応')
+    case ItemType.CODE_BLOCK:
+      // TODO: 未対応
+      throw new Error('コードブロックアイテムは未対応')
     default:
       assertNeverType(itemType)
   }

@@ -140,6 +140,10 @@ export function getContentAsPlainText(itemId: ItemId): string {
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       return `${imageItem.caption} ${imageItem.url}`
+    case ItemType.CODE_BLOCK:
+      const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      // 一行目くらいしかまともに表示できるものは見当たらない
+      return codeBlockItem.code.split('\n')[0]
     default:
       assertNeverType(itemType)
   }
@@ -363,6 +367,11 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       baseAttributes.type = 'image'
       baseAttributes.text = imageItem.caption
       baseAttributes.url = imageItem.url
+      return baseAttributes
+    case ItemType.CODE_BLOCK:
+      const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      baseAttributes.type = 'code-block'
+      baseAttributes.text = codeBlockItem.code
       return baseAttributes
     default:
       assertNeverType(item.itemType)

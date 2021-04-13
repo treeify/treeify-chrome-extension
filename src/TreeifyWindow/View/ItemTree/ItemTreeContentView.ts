@@ -4,6 +4,11 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
+  createItemTreeCodeBlockContentViewModel,
+  ItemTreeCodeBlockContentView,
+  ItemTreeCodeBlockContentViewModel,
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentView'
+import {
   createItemTreeImageContentViewModel,
   ItemTreeImageContentView,
   ItemTreeImageContentViewModel,
@@ -23,6 +28,7 @@ export type ItemTreeContentViewModel =
   | ItemTreeTextContentViewModel
   | ItemTreeWebPageContentViewModel
   | ItemTreeImageContentViewModel
+  | ItemTreeCodeBlockContentViewModel
 
 export function createItemTreeContentViewModel(
   state: State,
@@ -37,6 +43,8 @@ export function createItemTreeContentViewModel(
       return createItemTreeWebPageContentViewModel(state, itemPath)
     case ItemType.IMAGE:
       return createItemTreeImageContentViewModel(state, itemPath)
+    case ItemType.CODE_BLOCK:
+      return createItemTreeCodeBlockContentViewModel(state, itemPath)
     default:
       assertNeverType(itemType)
   }
@@ -51,6 +59,8 @@ export function ItemTreeContentView(viewModel: ItemTreeContentViewModel): Templa
       return ItemTreeWebPageContentView(viewModel)
     case ItemType.IMAGE:
       return ItemTreeImageContentView(viewModel)
+    case ItemType.CODE_BLOCK:
+      return ItemTreeCodeBlockContentView(viewModel)
     default:
       assertNeverType(viewModel)
   }

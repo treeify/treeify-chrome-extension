@@ -75,7 +75,7 @@ export async function cleanup() {
 }
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
-  External.instance.rerender(newState)
+  External.instance.render(newState)
   External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
 }
 

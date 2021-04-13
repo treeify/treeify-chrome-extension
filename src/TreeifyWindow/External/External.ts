@@ -86,20 +86,6 @@ export class External {
     assertNonNull(spaRoot)
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
 
-    // Treeifyウィンドウのタイトルを更新する
-    document.title = CurrentState.deriveTreeifyWindowTitle(state)
-  }
-
-  /** DOMを再描画する */
-  rerender(newState: State) {
-    const styleElement = document.querySelector('.style')
-    assertNonNull(styleElement)
-    renderWithLitHtml(generateStyleElementContents(), styleElement)
-
-    const spaRoot = document.querySelector('.spa-root')
-    assertNonNull(spaRoot)
-    renderWithLitHtml(RootView(createRootViewModel(newState)), spaRoot)
-
     if (this.pendingFocusElementId !== undefined) {
       const focusableElement = document.getElementById(this.pendingFocusElementId)
       if (focusableElement !== null) {
@@ -136,7 +122,7 @@ export class External {
     }
 
     // Treeifyウィンドウのタイトルを更新する
-    document.title = CurrentState.deriveTreeifyWindowTitle(newState)
+    document.title = CurrentState.deriveTreeifyWindowTitle(state)
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
