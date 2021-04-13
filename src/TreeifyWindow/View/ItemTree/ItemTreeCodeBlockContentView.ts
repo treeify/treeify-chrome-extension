@@ -10,7 +10,7 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 export type ItemTreeCodeBlockContentViewModel = {
   itemPath: ItemPath
   itemType: ItemType.CODE_BLOCK
-  text: string
+  code: string
   onFocus: (event: FocusEvent) => void
 }
 
@@ -23,7 +23,7 @@ export function createItemTreeCodeBlockContentViewModel(
   return {
     itemPath,
     itemType: ItemType.CODE_BLOCK,
-    text: state.codeBlockItems[itemId].text,
+    code: state.codeBlockItems[itemId].code,
     onFocus: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
@@ -44,7 +44,7 @@ export function ItemTreeCodeBlockContentView(
     tabindex="0"
     @focus=${viewModel.onFocus}
   >
-    <pre><code>${viewModel.text}</code></pre>
+    <pre><code>${viewModel.code}</code></pre>
   </div>`
 }
 

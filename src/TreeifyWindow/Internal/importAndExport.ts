@@ -143,7 +143,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
-      return codeBlockItem.text.split('\n')[0]
+      return codeBlockItem.code.split('\n')[0]
     default:
       assertNeverType(itemType)
   }
@@ -371,7 +371,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       baseAttributes.type = 'code-block'
-      baseAttributes.text = codeBlockItem.text
+      baseAttributes.text = codeBlockItem.code
       return baseAttributes
     default:
       assertNeverType(item.itemType)

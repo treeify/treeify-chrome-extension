@@ -100,7 +100,7 @@ export type ImageItem = {
 
 /** コードブロックアイテムが固有で持つデータの型 */
 export type CodeBlockItem = {
-  text: string
+  code: string
 }
 
 /** 各ページが持つデータの型 */

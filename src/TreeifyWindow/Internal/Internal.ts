@@ -173,7 +173,7 @@ export class Internal {
       },
       codeBlockItems: {
         8: {
-          text: `
+          code: `
 const url = 'https://google.com/'
 if (url.length > 10 || /https:/.test(url)) {
   console.log(\`OK: \${url.length}\`)
