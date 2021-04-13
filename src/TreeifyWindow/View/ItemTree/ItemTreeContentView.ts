@@ -69,6 +69,6 @@ export function ItemTreeContentView(viewModel: ItemTreeContentViewModel): Templa
 export namespace ItemTreeContentView {
   /** DOM描画後にフォーカスを設定するために用いる */
   export function focusableDomElementId(itemPath: ItemPath): string {
-    return `focusable:${itemPath.toString()}`
+    return `focusable:${JSON.stringify(itemPath)}`
   }
 }
