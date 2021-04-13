@@ -365,7 +365,9 @@ export class DataFolder {
     const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
       const fileContent = await this.readTextFile(metadataFilePath)
-      this.setCacheEntry(metadataFilePath, fileContent)
+      if (deviceId === DeviceId.get()) {
+        this.setCacheEntry(metadataFilePath, fileContent)
+      }
 
       if (fileContent.length !== 0) {
         return JSON.parse(fileContent)
