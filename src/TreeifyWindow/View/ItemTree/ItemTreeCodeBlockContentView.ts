@@ -1,3 +1,4 @@
+import hljs from 'highlight.js'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
@@ -11,6 +12,7 @@ export type ItemTreeCodeBlockContentViewModel = {
   itemPath: ItemPath
   itemType: ItemType.CODE_BLOCK
   code: string
+  language: string
   onFocus: (event: FocusEvent) => void
 }
 
@@ -20,10 +22,12 @@ export function createItemTreeCodeBlockContentViewModel(
 ): ItemTreeCodeBlockContentViewModel {
   const itemId = ItemPath.getItemId(itemPath)
 
+  const codeBlockItem = state.codeBlockItems[itemId]
   return {
     itemPath,
     itemType: ItemType.CODE_BLOCK,
-    code: state.codeBlockItems[itemId].code,
+    code: codeBlockItem.code,
+    language: codeBlockItem.language,
     onFocus: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
@@ -37,6 +41,10 @@ export function createItemTreeCodeBlockContentViewModel(
 export function ItemTreeCodeBlockContentView(
   viewModel: ItemTreeCodeBlockContentViewModel
 ): TemplateResult {
+  const highlightResult = hljs.highlight(viewModel.code, {
+    ignoreIllegals: true,
+    language: viewModel.language,
+  })
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   return html`<div
     class="item-tree-code-block-content"
@@ -44,7 +52,7 @@ export function ItemTreeCodeBlockContentView(
     tabindex="0"
     @focus=${viewModel.onFocus}
   >
-    <pre><code>${viewModel.code}</code></pre>
+    <pre><code .innerHTML=${highlightResult.value}></code></pre>
   </div>`
 }
 

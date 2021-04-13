@@ -178,6 +178,7 @@ export class Internal {
             'if (url.length > 10 || /https:/.test(url)) {\n' +
             '  console.log(`OK: ${url.length}`)\n' +
             '}\n',
+          language: 'javascript',
         },
       },
       pages: {

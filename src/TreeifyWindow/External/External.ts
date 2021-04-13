@@ -1,5 +1,4 @@
 import {createFocusTrap} from 'focus-trap'
-import hljs from 'highlight.js'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import md5 from 'md5'
@@ -86,11 +85,6 @@ export class External {
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
     renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
-
-    // シンタックスハイライトを行う
-    for (const codeBlockElement of document.querySelectorAll('pre code')) {
-      hljs.highlightBlock(codeBlockElement as HTMLElement)
-    }
 
     if (this.pendingFocusElementId !== undefined) {
       const focusableElement = document.getElementById(this.pendingFocusElementId)
