@@ -61,5 +61,7 @@ export const ItemTreeCodeBlockContentCss = css`
   .item-tree-code-block-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
+
+    overflow-x: auto;
   }
 `
