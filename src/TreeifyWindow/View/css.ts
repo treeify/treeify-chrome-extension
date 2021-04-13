@@ -9,6 +9,7 @@ import {ItemTreeSpoolCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolVie
 import {ItemTreeTextContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeTextContentView'
 import {ItemTreeCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {ItemTreeWebPageContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
+import {LabelCss} from 'src/TreeifyWindow/View/LabelView'
 import {LeftSidebarCss} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 import {PageTreeBulletAndIndentCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
 import {PageTreeNodeCss} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
@@ -44,6 +45,7 @@ export function generateStyleElementContents() {
     ${ItemTreeWebPageContentCss}
     ${ItemTreeImageContentCss}
     ${ItemTreeCodeBlockContentCss}
+    ${LabelCss}
     ${WebPageItemTitleSettingDialogCss}
   `
 }

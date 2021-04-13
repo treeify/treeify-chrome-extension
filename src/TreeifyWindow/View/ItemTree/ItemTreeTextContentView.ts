@@ -10,10 +10,12 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath
   itemType: ItemType.TEXT
+  labels: List<string>
   domishObjects: List<DomishObject>
   onInput: (event: InputEvent) => void
   onCompositionEnd: (event: CompositionEvent) => void
@@ -27,6 +29,7 @@ export function createItemTreeTextContentViewModel(
   const itemId = ItemPath.getItemId(itemPath)
   return {
     itemPath,
+    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEXT,
     domishObjects: state.textItems[itemId].domishObjects,
     onInput: (event) => {
@@ -99,7 +102,14 @@ export function createItemTreeTextContentViewModel(
  * 独自のDOM要素キャッシュを用いている点に注意。
  */
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel): TemplateResult {
-  return html`<div class="item-tree-text-content">${getContentEditableElement(viewModel)}</div>`
+  return html`<div class="item-tree-text-content">
+    ${!viewModel.labels.isEmpty()
+      ? html`<div class="item-tree-text-content_labels">
+          ${viewModel.labels.map((label) => LabelView({text: label}))}
+        </div>`
+      : undefined}
+    ${getContentEditableElement(viewModel)}
+  </div>`
 }
 
 function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTMLElement {
@@ -132,6 +142,13 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
 }
 
 export const ItemTreeTextContentCss = css`
+  .item-tree-text-content_labels {
+    float: left;
+
+    /* テキストとの間に少し余白を入れないとくっつく */
+    margin-right: 0.1em;
+  }
+
   /* テキストアイテムのcontenteditableな要素 */
   .item-tree-text-content_content-editable {
     /* contenteditableな要素のフォーカス時の枠線を非表示 */
