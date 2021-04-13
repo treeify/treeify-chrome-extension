@@ -232,7 +232,9 @@ export class DataFolder {
 
     // チャンクパックファイル群を自デバイスフォルダに書き込み
     for (const {fileName, text} of chunkPackFileTexts) {
-      await this.writeTextFile(DataFolder.getChunkPackFilePath(fileName), text)
+      const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
+      this.setCacheEntry(chunkPackFilePath, text)
+      await this.writeTextFile(chunkPackFilePath, text)
     }
     // メタデータファイルを自デバイスフォルダに書き込み
     const newMetadataText = JSON.stringify(metadata, undefined, 2)
