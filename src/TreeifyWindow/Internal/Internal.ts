@@ -173,12 +173,11 @@ export class Internal {
       },
       codeBlockItems: {
         8: {
-          code: `
-const url = 'https://google.com/'
-if (url.length > 10 || /https:/.test(url)) {
-  console.log(\`OK: \${url.length}\`)
-}
-`,
+          code:
+            "const url = 'https://google.com/'\n" +
+            'if (url.length > 10 || /https:/.test(url)) {\n' +
+            '  console.log(`OK: ${url.length}`)\n' +
+            '}\n',
         },
       },
       pages: {
