@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
@@ -6,9 +7,11 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 
 export type ItemTreeImageContentViewModel = {
   itemPath: ItemPath
+  labels: List<string>
   itemType: ItemType.IMAGE
   url: string
   caption: string
@@ -24,6 +27,7 @@ export function createItemTreeImageContentViewModel(
 
   return {
     itemPath,
+    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.IMAGE,
     url: imageItem.url,
     caption: imageItem.caption,
@@ -45,6 +49,11 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
     tabindex="0"
     @focus=${viewModel.onFocus}
   >
+    ${!viewModel.labels.isEmpty()
+      ? html`<div class="item-tree-image-content_labels">
+          ${viewModel.labels.map((label) => LabelView({text: label}))}
+        </div>`
+      : undefined}
     <div class="item-tree-image-content_image-and-caption">
       <img class="item-tree-image-content_image" src=${viewModel.url} alt="" />
       <div class="item-tree-image-content_caption">${viewModel.caption}</div>
