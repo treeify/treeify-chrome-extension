@@ -85,9 +85,7 @@ export function onPaste(event: ClipboardEvent) {
   const opmlParseResult = tryParseAsOpml(text)
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
-    const itemIdMap = {}
-    const itemAndEdges = opmlParseResult.map((element) => createItemBasedOnOpml(element, itemIdMap))
-    for (const itemAndEdge of itemAndEdges.reverse()) {
+    for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
       CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
     }
     CurrentState.commit()
@@ -469,6 +467,11 @@ type ItemAndEdge = {itemId: ItemId; edge: Edge}
 // トランスクルージョンを復元するために、OPML内に出現したアイテムIDを記録しておくオブジェクト。
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応するアイテムID。
 type ItemIdMap = {[K in string | number]: ItemId}
+
+function createItemsBasedOnOpml(elements: OutlineElement[]): ItemAndEdge[] {
+  const itemIdMap = {}
+  return elements.map((element) => createItemBasedOnOpml(element, itemIdMap))
+}
 
 /**
  * パースされたOPMLを元にアイテムを作る。
