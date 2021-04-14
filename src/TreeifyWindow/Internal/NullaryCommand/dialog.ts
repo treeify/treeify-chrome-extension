@@ -7,7 +7,8 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {
   const targetItemPath = CurrentState.getTargetItemPath()
-  switch (Internal.instance.state.items[ItemPath.getItemId(targetItemPath)].itemType) {
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  switch (Internal.instance.state.items[targetItemId].itemType) {
     case ItemType.TEXT:
       break
     case ItemType.WEB_PAGE:
@@ -22,6 +23,13 @@ export function edit() {
         })
       }
 
+      break
+    case ItemType.CODE_BLOCK:
+      const codeBlockItem = Internal.instance.state.codeBlockItems[targetItemId]
+      CurrentState.setCodeBlockEditDialog({
+        code: codeBlockItem.code,
+        language: codeBlockItem.language,
+      })
       break
   }
 }
