@@ -374,6 +374,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       baseAttributes.type = 'code-block'
       baseAttributes.text = codeBlockItem.code
+      baseAttributes.language = codeBlockItem.language
       return baseAttributes
     default:
       assertNeverType(item.itemType)
@@ -535,6 +536,13 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
         CurrentState.setImageItemUrl(imageItemId, attributes.url)
       }
       return imageItemId
+    case 'code-block':
+      const codeBlockItemId = CurrentState.createCodeBlockItem()
+      CurrentState.setCodeBlockItemCode(codeBlockItemId, attributes.text)
+      if (typeof attributes.language === 'string') {
+        CurrentState.setCodeBlockItemLanguage(codeBlockItemId, attributes.language)
+      }
+      return codeBlockItemId
     case 'text':
     default:
       const textItemId = CurrentState.createTextItem()

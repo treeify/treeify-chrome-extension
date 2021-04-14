@@ -45,10 +45,6 @@ export function createItemTreeCodeBlockContentViewModel(
 export function ItemTreeCodeBlockContentView(
   viewModel: ItemTreeCodeBlockContentViewModel
 ): TemplateResult {
-  const highlightResult = hljs.highlight(viewModel.code, {
-    ignoreIllegals: true,
-    language: viewModel.language,
-  })
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   return html`<div
     class="item-tree-code-block-content"
@@ -61,8 +57,21 @@ export function ItemTreeCodeBlockContentView(
           ${viewModel.labels.map((label) => LabelView({text: label}))}
         </div>`
       : undefined}
-    <pre><code .innerHTML=${highlightResult.value}></code></pre>
+    <pre><code .innerHTML=${getHighlightedHtml(viewModel.code, viewModel.language)}></code></pre>
   </div>`
+}
+
+function getHighlightedHtml(code: string, language: string): string {
+  // ライブラリが対応していない言語の場合例外が投げられる
+  try {
+    const highlightResult = hljs.highlight(code, {
+      ignoreIllegals: true,
+      language,
+    })
+    return highlightResult.value
+  } catch {
+    return code
+  }
 }
 
 export const ItemTreeCodeBlockContentCss = css`
