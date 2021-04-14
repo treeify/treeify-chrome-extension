@@ -298,14 +298,15 @@ export function createItemFromSingleLineText(line: string): ItemId {
  *
  * なおURLには仕様上()や[]が含まれていても許される。
  * そのためMarkdownやScrapboxのリンク記法をこの関数では正しく扱えないので注意。
- * TODO: いわゆる日本語ドメイン名に対応する
  */
 export function detectUrl(text: string): string | undefined {
   if (text.includes('about:blank')) {
     return 'about:blank'
   }
 
-  const result = text.match(/(https?|file|chrome):\/\/[\w.,/:;'()\[\]%$&@#?!=+*~\-_]+/)
+  const result = text.match(
+    /(https?|file|chrome):\/\/[\w.,/:;'()\[\]%$&@#?!=+*~\-_\p{scx=Hiragana}\p{scx=Katakana}\p{sc=Han}}]+/u
+  )
   if (result !== null) {
     return result[0]
   }
