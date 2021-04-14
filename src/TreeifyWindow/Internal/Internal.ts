@@ -195,7 +195,7 @@ export class Internal {
       availableItemIds: List.of(),
       maxItemId: 8,
       activePageId: 0,
-      itemTreeInputBinding: {
+      itemTreeKeyboardBinding: {
         '0000Tab': {functionName: 'indentItem'},
         '0100Tab': {functionName: 'unindentItem'},
         '1000ArrowUp': {functionName: 'moveItemUpward'},
