@@ -1,4 +1,5 @@
 import CreateData = chrome.windows.CreateData
+import UpdateInfo = chrome.windows.UpdateInfo
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import UAParser from 'ua-parser-js'
@@ -17,16 +18,18 @@ export namespace TreeifyWindow {
       await focusWindow(treeifyWindowId)
     } else {
       // Treeifyウィンドウを開く
-      await createWindow({
-        url: chrome.extension.getURL('TreeifyWindow/index.html'),
-        type: 'popup',
-        // TODO: フルウィンドウモードで終了した場合は、次回起動時もフルウィンドウモードになってほしい気がする
-        state: 'normal',
-        width: readNarrowWidth() ?? initialWidth,
-        height: screen.availHeight,
-        top: 0,
-        left: 0,
-      })
+      await createWindow(
+        fillWindowGaps({
+          url: chrome.extension.getURL('TreeifyWindow/index.html'),
+          type: 'popup',
+          // TODO: フルウィンドウモードで終了した場合は、次回起動時もフルウィンドウモードになってほしい気がする
+          state: 'normal',
+          width: readNarrowWidth() ?? initialWidth,
+          height: screen.availHeight,
+          top: 0,
+          left: 0,
+        })
+      )
     }
   }
 
@@ -85,23 +88,29 @@ export namespace TreeifyWindow {
     const treeifyWindowId = await findWindowId()
     assertNonUndefined(treeifyWindowId)
     const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
-    chrome.windows.update(treeifyWindowId, {
-      state: 'normal',
-      left: 0,
-      top: 0,
-      width: treeifyWindowWidth,
-      height: screen.availHeight,
-    })
+    chrome.windows.update(
+      treeifyWindowId,
+      fillWindowGaps({
+        state: 'normal',
+        left: 0,
+        top: 0,
+        width: treeifyWindowWidth,
+        height: screen.availHeight,
+      })
+    )
 
     // ブラウザウィンドウの幅や位置を変更する
     for (const window of await getAllNormalWindows()) {
-      chrome.windows.update(window.id, {
-        state: 'normal',
-        left: treeifyWindowWidth,
-        top: 0,
-        width: screen.availWidth - treeifyWindowWidth,
-        height: screen.availHeight,
-      })
+      chrome.windows.update(
+        window.id,
+        fillWindowGaps({
+          state: 'normal',
+          left: treeifyWindowWidth,
+          top: 0,
+          width: screen.availWidth - treeifyWindowWidth,
+          height: screen.availHeight,
+        })
+      )
     }
   }
 
@@ -169,6 +178,24 @@ export namespace TreeifyWindow {
     if (savedValue === null) return undefined
 
     return parseInt(savedValue)
+  }
+
+  // Windowsでウィンドウの左端、右端、下端に隙間ができる問題への対策用関数
+  function fillWindowGaps(rawData: UpdateInfo | CreateData): UpdateInfo | CreateData {
+    if (new UAParser().getOS().name === 'Windows') {
+      const cloned = {...rawData}
+      if (cloned.left !== undefined) {
+        cloned.left -= 10
+      }
+      if (cloned.width !== undefined) {
+        cloned.width += 20
+      }
+      if (cloned.height !== undefined) {
+        cloned.height += 10
+      }
+      return cloned
+    }
+    return rawData
   }
 
   // chrome.windows.create関数をasync化したユーティリティ関数。
