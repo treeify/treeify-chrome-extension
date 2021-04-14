@@ -26,6 +26,8 @@ export type State = {
   activePageId: ItemId
   /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */
   itemTreeKeyboardBinding: {[K in InputId]: Command}
+  /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */
+  itemTreeDeleteButtonMouseBinding: {[K in InputId]: Command}
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
 }

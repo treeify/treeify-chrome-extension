@@ -10,6 +10,7 @@ import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CssCustomProperty} from 'src/TreeifyWindow/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
+import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -91,21 +92,18 @@ export function createItemTreeNodeViewModel(
     },
     onClickDeleteButton: (event) => {
       doWithErrorCapture(() => {
+        CurrentState.setTargetItemPath(itemPath)
+        External.instance.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(itemPath)
+        )
+
         const inputId = InputId.fromMouseEvent(event)
-        switch (inputId) {
-          case '0000MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.deleteItem()
-            CurrentState.commit()
-            break
-          case '1000MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.deleteItemItself()
-            CurrentState.commit()
-            break
+        const command: Command | undefined = state.itemTreeDeleteButtonMouseBinding[inputId]
+        if (command !== undefined) {
+          event.preventDefault()
+          Command.execute(command)
         }
+        CurrentState.commit()
       })
     },
     onDragStart: (event) => {

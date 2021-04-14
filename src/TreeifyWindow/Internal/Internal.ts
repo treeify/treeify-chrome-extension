@@ -216,6 +216,10 @@ export class Internal {
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
       },
+      itemTreeDeleteButtonMouseBinding: {
+        '0000MouseButton0': {functionName: 'deleteItem'},
+        '1000MouseButton0': {functionName: 'deleteItemItself'},
+      },
       webPageItemTitleSettingDialog: null,
     }
   }
