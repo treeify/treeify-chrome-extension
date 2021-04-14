@@ -85,7 +85,9 @@ export function onPaste(event: ClipboardEvent) {
   const opmlParseResult = tryParseAsOpml(text)
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
-    for (const itemAndEdge of opmlParseResult.map(createItemBasedOnOpml).reverse()) {
+    const itemIdMap = {}
+    const itemAndEdges = opmlParseResult.map((element) => createItemBasedOnOpml(element, itemIdMap))
+    for (const itemAndEdge of itemAndEdges.reverse()) {
       CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
     }
     CurrentState.commit()
@@ -454,29 +456,45 @@ function assertOutlineElement(element: Element): asserts element is OutlineEleme
   }
 }
 
-type OutlineElement = Element & {
+// typeによる型定義ではelementsのmap時の型でエラーが起こるのでinterfaceを使う
+interface OutlineElement extends Element {
   attributes: OutlineAttributes
-  elements: Array<OutlineElement> | undefined
+  elements?: Array<OutlineElement>
 }
 type OutlineAttributes = Attributes & {
   text: string
 }
 type ItemAndEdge = {itemId: ItemId; edge: Edge}
+// トランスクルージョンを復元するために、OPML内に出現したアイテムIDを記録しておくオブジェクト。
+// KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応するアイテムID。
+type ItemIdMap = {[K in string | number]: ItemId}
 
 /**
  * パースされたOPMLを元にアイテムを作る。
  * TODO: テキストアイテムのスタイル（太字、下線など）の取り込みは未実装
  */
-function createItemBasedOnOpml(element: OutlineElement): ItemAndEdge {
-  const itemId = createBaseItemBasedOnOpml(element)
+function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): ItemAndEdge {
+  const attributes = element.attributes
+  const existingItemId = attributes.itemId !== undefined ? itemIdMap[attributes.itemId] : undefined
+  if (existingItemId !== undefined) {
+    if (attributes.isCollapsed === 'true') {
+      return {itemId: existingItemId, edge: {isCollapsed: true, labels: List.of()}}
+    } else {
+      return {itemId: existingItemId, edge: {isCollapsed: false, labels: List.of()}}
+    }
+  }
 
-  const children = element.elements?.map(createItemBasedOnOpml) ?? []
+  const itemId = createBaseItemBasedOnOpml(element)
+  if (attributes.itemId !== undefined) {
+    itemIdMap[attributes.itemId] = itemId
+  }
+
+  const children = element.elements?.map((child) => createItemBasedOnOpml(child, itemIdMap)) ?? []
   CurrentState.modifyChildItems(itemId, () => List(children).map((child) => child.itemId))
   for (const child of children) {
     CurrentState.addParent(child.itemId, itemId, child.edge)
   }
 
-  const attributes = element.attributes
   if (typeof attributes.cssClass === 'string') {
     const cssClasses = List(attributes.cssClass.split(' '))
     CurrentState.setCssClasses(itemId, cssClasses)
