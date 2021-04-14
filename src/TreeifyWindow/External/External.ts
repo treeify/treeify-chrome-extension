@@ -2,7 +2,7 @@ import {createFocusTrap} from 'focus-trap'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import md5 from 'md5'
-import {assert, assertNonNull} from 'src/Common/Debug/assert'
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
@@ -127,10 +127,6 @@ export class External {
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
   requestFocusAfterRendering(elementId: string) {
-    // 1回の描画サイクル内で2回以上設定されたらエラーにするためのassert文。
-    // 別に2回設定されても困るわけではないと思うが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
-    assert(this.pendingFocusElementId === undefined)
-
     this.pendingFocusElementId = elementId
   }
 
@@ -139,10 +135,6 @@ export class External {
    * undefinedを指定されても何もしない。
    */
   requestSelectAfterRendering(textItemSelection: TextItemSelection | undefined) {
-    // 1回の描画サイクル内で2回以上設定されたらエラーにするためのassert文。
-    // 別に2回設定されても困るわけではないと思うが、考慮漏れや設計破綻を早期発見するためにとりあえずassertしておく。
-    assert(this.pendingTextItemSelection === undefined)
-
     this.pendingTextItemSelection = textItemSelection
   }
 

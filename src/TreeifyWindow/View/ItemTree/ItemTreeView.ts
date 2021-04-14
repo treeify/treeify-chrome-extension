@@ -117,7 +117,7 @@ function onKeyDown(event: KeyboardEvent) {
         return
     }
 
-    const command: Command | undefined = Internal.instance.state.itemTreeInputBinding[inputId]
+    const command: Command | undefined = Internal.instance.state.itemTreeKeyboardBinding[inputId]
     if (command !== undefined) {
       event.preventDefault()
       Command.execute(command)

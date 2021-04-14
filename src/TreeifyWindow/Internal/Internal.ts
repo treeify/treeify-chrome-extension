@@ -195,7 +195,7 @@ export class Internal {
       availableItemIds: List.of(),
       maxItemId: 8,
       activePageId: 0,
-      itemTreeInputBinding: {
+      itemTreeKeyboardBinding: {
         '0000Tab': {functionName: 'indentItem'},
         '0100Tab': {functionName: 'unindentItem'},
         '1000ArrowUp': {functionName: 'moveItemUpward'},
@@ -215,6 +215,10 @@ export class Internal {
         '0000F2': {functionName: 'edit'},
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
+      },
+      itemTreeDeleteButtonMouseBinding: {
+        '0000MouseButton0': {functionName: 'deleteItem'},
+        '1000MouseButton0': {functionName: 'deleteItemItself'},
       },
       webPageItemTitleSettingDialog: null,
     }
