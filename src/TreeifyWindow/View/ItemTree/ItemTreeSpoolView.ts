@@ -153,9 +153,9 @@ export const ItemTreeSpoolCss = css`
     --bullet-page-icon-size: 1em;
 
     /* トランスクルードされたアイテムのバレットの色 */
-    --transcluded-item-bullet-color: hsl(120, 30%, 50%);
+    --transcluded-item-bullet-color: hsl(120, 50%, 35%);
     /* トランスクルードされたアイテムのバレットのマウスホバー時の色 */
-    --transcluded-item-bullet-hover-color: hsl(120, 30%, 45%);
+    --transcluded-item-bullet-hover-color: hsl(120, 50%, 30%);
 
     /* ハイライト状態のアイテムのバレットの色 */
     --highlighted-item-bullet-color: hsl(0, 100%, 45%);
@@ -175,6 +175,12 @@ export const ItemTreeSpoolCss = css`
     background: var(--transcluded-item-bullet-color);
   }
   .transcluded .item-tree-spool:hover .item-tree-spool_inner-circle {
+    background: var(--transcluded-item-bullet-hover-color);
+  }
+  .transcluded .item-tree-spool_page-icon {
+    background: var(--transcluded-item-bullet-color);
+  }
+  .transcluded .item-tree-spool:hover .item-tree-spool_page-icon {
     background: var(--transcluded-item-bullet-hover-color);
   }
 
