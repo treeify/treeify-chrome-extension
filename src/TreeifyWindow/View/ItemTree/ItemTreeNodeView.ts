@@ -225,10 +225,10 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           </div>
         `}
     <div class="item-tree-node_body-and-children-area">
-      <!-- 足跡表示用のレイヤー -->
-      <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
-        <!-- ボディ領域 -->
-        <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+      <!-- ボディ領域 -->
+      <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+        <!-- 足跡表示用のレイヤー -->
+        <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
           <!-- コンテンツ領域 -->
           <div
             data-item-path=${JSON.stringify(viewModel.itemPath.toArray())}
@@ -237,19 +237,19 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           >
             ${ItemTreeContentView(viewModel.contentViewModel)}
           </div>
-          <!-- 隠れているタブ数 -->
-          ${viewModel.hiddenTabsCount > 0
-            ? html`<div
-                class="item-tree-node_hidden-tabs-count"
-                @click=${viewModel.onClickHiddenTabsCount}
-              >
-                ${Math.min(99, viewModel.hiddenTabsCount)}
-              </div>`
-            : html`<div class="grid-empty-cell"></div>`}
-          <!-- 削除ボタン -->
-          <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}>
-            <div class="item-tree-node_delete-button-icon"></div>
-          </div>
+        </div>
+        <!-- 隠れているタブ数 -->
+        ${viewModel.hiddenTabsCount > 0
+          ? html`<div
+              class="item-tree-node_hidden-tabs-count"
+              @click=${viewModel.onClickHiddenTabsCount}
+            >
+              ${Math.min(99, viewModel.hiddenTabsCount)}
+            </div>`
+          : html`<div class="grid-empty-cell"></div>`}
+        <!-- 削除ボタン -->
+        <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}>
+          <div class="item-tree-node_delete-button-icon"></div>
         </div>
       </div>
       <!-- 子リスト領域 -->
@@ -315,15 +315,6 @@ export const ItemTreeNodeCss = css`
     grid-template-columns: auto minmax(0, 1fr);
   }
 
-  .item-tree-node_body-and-children-area {
-  }
-
-  /* マウスホバー時のボディ領域 */
-  .item-tree-node_body-area:hover {
-    /* マウスホバーアイテムの強調表示 */
-    background: var(--item-tree-mouse-hover-item-background-color);
-  }
-
   /* ボディ領域 */
   .item-tree-node_body-area {
     padding: var(--item-tree-body-area-vertical-padding) 0;
@@ -331,8 +322,14 @@ export const ItemTreeNodeCss = css`
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
   }
-  /* フォーカス時のボディ領域 */
-  .item-tree-node_body-area:focus-within {
+
+  /* マウスホバー時のコンテンツ領域 */
+  .item-tree-node_content-area:hover {
+    /* マウスホバーアイテムの強調表示 */
+    background: var(--item-tree-mouse-hover-item-background-color);
+  }
+  /* フォーカス時のコンテンツ領域 */
+  .item-tree-node_content-area:focus-within {
     /* フォーカスアイテムの強調表示 */
     background: var(--item-tree-focused-item-background-color);
   }
