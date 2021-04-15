@@ -48,6 +48,7 @@ export function turnIntoPage(itemId: ItemId) {
   const page: Page = {
     targetItemPath: List.of(itemId),
     anchorItemPath: List.of(itemId),
+    defaultWindowMode: null,
   }
   Internal.instance.state.pages[itemId] = page
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
