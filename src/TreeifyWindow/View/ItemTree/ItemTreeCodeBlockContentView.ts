@@ -82,4 +82,12 @@ export const ItemTreeCodeBlockContentCss = css`
 
     overflow-x: auto;
   }
+
+  .item-tree-code-block-content pre {
+    border: 1px solid hsl(0, 0%, 80%);
+    margin: 0;
+    padding: 0.2em;
+    // これを指定しないとoverflowしたコードがborderからはみ出る
+    min-width: max-content;
+  }
 `
