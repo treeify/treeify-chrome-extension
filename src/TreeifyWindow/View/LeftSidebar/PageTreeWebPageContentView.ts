@@ -23,7 +23,8 @@ export const PageTreeWebPageContentCss = css`
 
   .page-tree-web-page-content {
     /* ファビコンとタイトルを横に並べる */
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
     align-items: center;
   }
 
