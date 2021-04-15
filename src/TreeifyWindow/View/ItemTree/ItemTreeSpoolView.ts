@@ -185,6 +185,12 @@ export const ItemTreeSpoolCss = css`
   .highlighted-item .item-tree-spool:hover .item-tree-spool_inner-circle {
     background: var(--highlighted-item-bullet-hover-color);
   }
+  .highlighted-item .item-tree-spool_page-icon {
+    background: var(--highlighted-item-bullet-color);
+  }
+  .highlighted-item .item-tree-spool:hover .item-tree-spool_page-icon {
+    background: var(--highlighted-item-bullet-hover-color);
+  }
 
   /* アイテムツリーのバレットとインデントのルート要素 */
   .item-tree-spool {
