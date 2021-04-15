@@ -189,7 +189,7 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
       ? html`<div class="page-tree-node_bullet-and-indent-area">
           ${PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel)}
         </div>`
-      : undefined}
+      : html`<div class="grid-empty-cell"></div>`}
     <div class="page-tree-node_body-and-children-area">
       <div
         class=${classMap({
