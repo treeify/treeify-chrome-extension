@@ -121,19 +121,6 @@ export class External {
       focusTrap.activate()
     }
 
-    // ウェブページアイテムのタイトル設定ダイアログが表示中ならフォーカストラップを作る
-    const codeBlockEditDialog = document.querySelector<HTMLElement>('.code-block-edit-dialog')
-    if (codeBlockEditDialog !== null) {
-      const focusTrap = createFocusTrap(codeBlockEditDialog, {
-        returnFocusOnDeactivate: true,
-        onDeactivate: () => {
-          CurrentState.setCodeBlockEditDialog(null)
-          CurrentState.commit()
-        },
-      })
-      focusTrap.activate()
-    }
-
     // Treeifyウィンドウのタイトルを更新する
     document.title = CurrentState.deriveTreeifyWindowTitle(state)
   }
