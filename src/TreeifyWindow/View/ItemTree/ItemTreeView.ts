@@ -311,10 +311,17 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     let i = charactersCount
     for (; charactersCount - lastLine.length <= i; i--) {
       setCaretPosition(i)
-      if (getCaretXCoordinate()! < originalXCoordinate) {
+      const caretXCoordinate = getCaretXCoordinate()!
+      if (caretXCoordinate === originalXCoordinate) {
+        return
+      }
+      if (caretXCoordinate < originalXCoordinate) {
         break
       }
     }
+    // もしi < 0なら既にsetCaretPosition(0)が実行済みなので、このままreturnしていい
+    if (i < 0) return
+
     // キャレットのX座標の移動距離が最も小さくなるようなpositionを選ぶ
     if (i < charactersCount) {
       // TODO: 最適化の余地あり（setCaretPositionやgetCaretXCoordinateの呼び出し回数）
