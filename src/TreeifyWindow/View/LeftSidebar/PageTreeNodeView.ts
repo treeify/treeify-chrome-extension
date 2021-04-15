@@ -228,17 +228,14 @@ export const PageTreeNodeCss = css`
 
   .page-tree-node {
     /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
-    display: flex;
-  }
-
-  .page-tree-node_body-and-children-area {
-    /* コンテンツ領域を右端まで伸ばす */
-    flex-grow: 1;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
   }
 
   /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
   .page-tree-node_body-area {
-    display: flex;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
   }
   .page-tree-node_body-area.active-page {
@@ -251,8 +248,6 @@ export const PageTreeNodeCss = css`
   }
 
   .page-tree-node_content-area {
-    flex-grow: 1;
-
     cursor: default;
 
     /* ページツリーではテキストは折り返さない */
@@ -261,11 +256,8 @@ export const PageTreeNodeCss = css`
   }
 
   .page-tree-node_close-button {
-    flex-basis: var(--page-tree-close-button-size);
+    width: var(--page-tree-close-button-size);
     height: var(--page-tree-close-button-size);
-
-    /* 横幅が縮まないよう設定 */
-    flex-shrink: 0;
 
     /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
     background: hsl(0, 0%, 20%);
