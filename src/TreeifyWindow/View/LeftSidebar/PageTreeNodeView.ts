@@ -11,7 +11,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createPageTreeBulletAndIndentViewModel,
   PageTreeBulletAndIndentView,
@@ -97,16 +96,9 @@ export function createPageTreeNodeViewModel(
     ),
     onClickContentArea: () => {
       doWithErrorCapture(() => {
-        CurrentState.setActivePageId(itemId)
+        CurrentState.switchActivePage(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
         External.instance.shouldFloatingLeftSidebarShown = false
-
-        // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-        const elementId = ItemTreeContentView.focusableDomElementId(
-          CurrentState.getTargetItemPath()
-        )
-        External.instance.requestFocusAfterRendering(elementId)
-
         CurrentState.commit()
       })
     },
@@ -124,12 +116,7 @@ export function createPageTreeNodeViewModel(
               }
             })
             .maxBy((a) => a.timestamp)!.pageId
-          CurrentState.setActivePageId(hottestPageId)
-          // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-          const elementId = ItemTreeContentView.focusableDomElementId(
-            CurrentState.getTargetItemPath()
-          )
-          External.instance.requestFocusAfterRendering(elementId)
+          CurrentState.switchActivePage(hottestPageId)
         }
 
         CurrentState.commit()
