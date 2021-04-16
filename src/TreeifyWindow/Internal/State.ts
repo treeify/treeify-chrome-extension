@@ -123,16 +123,15 @@ export type Page = {
    * テキスト選択におけるanchorと同じ意味合い。
    */
   anchorItemPath: ItemPath
-  /**
-   * このページのデフォルトのウィンドウモード。
-   * ページが切り替えられた際、自動的にウィンドウモードを変更する。
-   * 'keep'は「ウィンドウモードを変更しない」を意味する。
-   * nullの場合、親ページのデフォルトウィンドウモードを再帰的に参照する（CSSのinheritのようなもの）。
-   */
-  defaultWindowMode: DefaultWindowMode | null
+  /** このページのデフォルトのウィンドウモード */
+  defaultWindowMode: DefaultWindowMode
 }
 
-export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep'
+/**
+ * 'keep'の場合、ウィンドウモードの自動変更は行わない。
+ * 'inherit'の場合、親ページのデフォルトウィンドウモードを再帰的に参照する。
+ */
+export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep' | 'inherit'
 
 /** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {

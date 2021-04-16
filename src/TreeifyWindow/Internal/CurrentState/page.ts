@@ -32,7 +32,7 @@ export async function switchActivePage(itemId: ItemId) {
 
 function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
   const page: Page | undefined = Internal.instance.state.pages[itemId]
-  if (page !== undefined && page.defaultWindowMode !== null) {
+  if (page !== undefined && page.defaultWindowMode !== 'inherit') {
     return page.defaultWindowMode
   }
 
@@ -87,7 +87,7 @@ export function turnIntoPage(itemId: ItemId) {
   const page: Page = {
     targetItemPath: List.of(itemId),
     anchorItemPath: List.of(itemId),
-    defaultWindowMode: null,
+    defaultWindowMode: 'inherit',
   }
   Internal.instance.state.pages[itemId] = page
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))

@@ -190,7 +190,7 @@ export class Internal {
         '6': {
           targetItemPath: List.of(6),
           anchorItemPath: List.of(6),
-          defaultWindowMode: null,
+          defaultWindowMode: 'inherit',
         },
       },
       mountedPageIds: List.of(0),
