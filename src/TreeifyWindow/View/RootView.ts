@@ -12,12 +12,12 @@ import {
   CodeBlockItemEditDialogView,
   CodeBlockItemEditDialogViewModel,
   createCodeBlockItemEditDialogViewModel,
-} from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialog'
+} from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogView'
 import {
   createWebPageItemTitleSettingDialogViewModel,
   WebPageItemTitleSettingDialogView,
   WebPageItemTitleSettingDialogViewModel,
-} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
+} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogView'
 import {FullWindowModeButtonView} from 'src/TreeifyWindow/View/FullWindowModeButtonView'
 import {
   createItemTreeViewModel,
