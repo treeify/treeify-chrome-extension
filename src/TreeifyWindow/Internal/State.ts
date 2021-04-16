@@ -28,10 +28,10 @@ export type State = {
   itemTreeKeyboardBinding: {[K in InputId]: Command}
   /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */
   itemTreeDeleteButtonMouseBinding: {[K in InputId]: Command}
-  /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
+  /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
-
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null
+  defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
 }
 
 /**
@@ -145,6 +145,9 @@ export type CodeBlockItemEditDialog = {
   code: string
   language: string
 }
+
+/** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
+export type DefaultWindowModeSettingDialog = {}
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */
