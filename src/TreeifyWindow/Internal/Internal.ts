@@ -221,6 +221,7 @@ export class Internal {
         '1000MouseButton0': {functionName: 'deleteItemItself'},
       },
       webPageItemTitleSettingDialog: null,
+      codeBlockEditDialog: null,
     }
   }
 }

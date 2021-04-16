@@ -9,6 +9,11 @@ import {
   DataFolderPickerOpenButtonViewModel,
 } from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
 import {
+  CodeBlockEditDialogView,
+  CodeBlockEditDialogViewModel,
+  createCodeBlockEditDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/CodeBlockEditDialog'
+import {
   createWebPageItemTitleSettingDialogViewModel,
   WebPageItemTitleSettingDialogView,
   WebPageItemTitleSettingDialogViewModel,
@@ -29,6 +34,7 @@ export type RootViewModel = {
   leftSidebarViewModel: LeftSidebarViewModel | undefined
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
+  codeBlockEditDialogViewModel: CodeBlockEditDialogViewModel | undefined
   dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 }
 
@@ -38,6 +44,7 @@ export function createRootViewModel(state: State): RootViewModel {
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
     dataFolderPickerOpenButtonViewModel: createDataFolderPickerOpenButtonViewModel(),
+    codeBlockEditDialogViewModel: createCodeBlockEditDialogViewModel(state),
   }
 }
 
@@ -60,6 +67,9 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
     </div>
     ${viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
+      : undefined}
+    ${viewModel.codeBlockEditDialogViewModel !== undefined
+      ? CodeBlockEditDialogView(viewModel.codeBlockEditDialogViewModel)
       : undefined}
   </div>`
 }

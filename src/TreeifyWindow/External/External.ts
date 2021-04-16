@@ -1,4 +1,3 @@
-import {createFocusTrap} from 'focus-trap'
 import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import md5 from 'md5'
@@ -104,22 +103,6 @@ export class External {
 
     this.pendingFocusElementId = undefined
     this.pendingTextItemSelection = undefined
-
-    // ウェブページアイテムのタイトル設定ダイアログが表示中ならフォーカストラップを作る
-    const webPageItemTitleSettingDialog = document.querySelector<HTMLElement>(
-      '.web-page-item-title-setting-dialog'
-    )
-    if (webPageItemTitleSettingDialog !== null) {
-      const focusTrap = createFocusTrap(webPageItemTitleSettingDialog, {
-        clickOutsideDeactivates: true,
-        returnFocusOnDeactivate: true,
-        onDeactivate: () => {
-          CurrentState.setWebPageItemTitleSettingDialog(null)
-          CurrentState.commit()
-        },
-      })
-      focusTrap.activate()
-    }
 
     // Treeifyウィンドウのタイトルを更新する
     document.title = CurrentState.deriveTreeifyWindowTitle(state)

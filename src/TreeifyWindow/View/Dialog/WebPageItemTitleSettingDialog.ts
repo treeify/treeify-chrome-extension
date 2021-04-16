@@ -1,12 +1,13 @@
+import {createFocusTrap, FocusTrap} from 'focus-trap'
 import {html} from 'lit-html'
 import {styleMap} from 'lit-html/directives/style-map'
+import {assert} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
-import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
@@ -39,11 +40,11 @@ export function createWebPageItemTitleSettingDialogViewModel(
           }
           // タイトル設定ダイアログを閉じる
           CurrentState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.commit()
+        }
 
-          // フォーカスを戻す
-          const domElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
-          External.instance.requestFocusAfterRendering(domElementId)
-
+        if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+          CurrentState.setWebPageItemTitleSettingDialog(null)
           CurrentState.commit()
         }
       })
@@ -61,20 +62,68 @@ export function WebPageItemTitleSettingDialogView(
     height: `${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px`,
   })
   return html`
-    <div class="web-page-item-title-setting-dialog" style=${style}>
-      <input
-        type="text"
-        class="web-page-item-title-setting-dialog_text-box"
-        value=${viewModel.initialTitle}
-        @keydown=${viewModel.onKeyDown}
-      />
+    <div
+      class="web-page-item-title-setting-dialog"
+      @click=${onClickBackdrop}
+      @DOMNodeInsertedIntoDocument=${onInserted}
+      @DOMNodeRemovedFromDocument=${onRemoved}
+    >
+      <div class="web-page-item-title-setting-dialog_frame" style=${style}>
+        <input
+          type="text"
+          class="web-page-item-title-setting-dialog_text-box"
+          value=${viewModel.initialTitle}
+          @keydown=${viewModel.onKeyDown}
+        />
+      </div>
     </div>
   `
 }
 
+function onClickBackdrop(event: Event) {
+  // ダイアログを閉じる
+  if (event.eventPhase === Event.AT_TARGET) {
+    CurrentState.setWebPageItemTitleSettingDialog(null)
+    CurrentState.commit()
+  }
+}
+
+// onInsertedとonRemovedの間でFocusTrapインスタンスを共有するためのグローバル変数
+let focusTrap: FocusTrap | undefined
+
+function onInserted(event: Event) {
+  // フォーカストラップを作る
+  if (event.target instanceof HTMLElement) {
+    assert(focusTrap === undefined)
+    focusTrap = createFocusTrap(event.target, {
+      returnFocusOnDeactivate: true,
+      // この機能を使うとイベント発生順序の違いにより難解なエラーが起こるので、
+      // ESCキー押下時にダイアログを閉じる処理は自前で実装する。
+      escapeDeactivates: false,
+    })
+    focusTrap.activate()
+  }
+}
+
+function onRemoved(event: Event) {
+  // フォーカストラップを消す
+  if (focusTrap !== undefined) {
+    focusTrap.deactivate()
+    focusTrap = undefined
+  }
+}
+
 export const WebPageItemTitleSettingDialogCss = css`
-  /* ウェブページアイテムのタイトル設定ダイアログ */
   .web-page-item-title-setting-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ウェブページアイテムのタイトル設定ダイアログ */
+  .web-page-item-title-setting-dialog_frame {
     /*
     ウェブページアイテムの位置に合わせたフローティング。
     left, top, width, heightがJavaScriptで設定される。
@@ -84,7 +133,6 @@ export const WebPageItemTitleSettingDialogCss = css`
 
   /* ウェブページアイテムのタイトル設定ダイアログのテキスト入力欄 */
   .web-page-item-title-setting-dialog_text-box {
-    box-sizing: border-box;
     width: 100%;
     height: 100%;
   }

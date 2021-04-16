@@ -30,6 +30,8 @@ export type State = {
   itemTreeDeleteButtonMouseBinding: {[K in InputId]: Command}
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
+
+  codeBlockEditDialog: CodeBlockEditDialog | null
 }
 
 /**
@@ -127,6 +129,12 @@ export type Page = {
 export type WebPageItemTitleSettingDialog = {
   /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
   targetItemRect: DOMRect
+}
+
+/** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
+export type CodeBlockEditDialog = {
+  code: string
+  language: string
 }
 
 export namespace State {
