@@ -25,13 +25,18 @@ export function createCodeBlockItemEditDialogViewModel(
     onClickOkButton: () => {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
+      // コードを更新
       const textarea = document.querySelector<HTMLTextAreaElement>('.code-block-edit-dialog_code')
       assertNonNull(textarea)
       CurrentState.setCodeBlockItemCode(targetItemId, textarea.value)
 
+      // 言語を更新
       const input = document.querySelector<HTMLInputElement>('.code-block-edit-dialog_language')
       assertNonNull(input)
       CurrentState.setCodeBlockItemLanguage(targetItemId, input.value)
+
+      // タイムスタンプを更新
+      CurrentState.updateItemTimestamp(targetItemId)
 
       // ダイアログを閉じる
       CurrentState.setCodeBlockItemEditDialog(null)
