@@ -5,54 +5,59 @@ import {assert, assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {CodeBlockEditDialog, State} from 'src/TreeifyWindow/Internal/State'
+import {CodeBlockItemEditDialog, State} from 'src/TreeifyWindow/Internal/State'
 import {css} from 'src/TreeifyWindow/View/css'
 
-export type CodeBlockEditDialogViewModel = CodeBlockEditDialog & {
+export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
   onClickOkButton: () => void
   onClickCancelButton: () => void
   onClickBackdrop: (event: MouseEvent) => void
 }
 
-export function createCodeBlockEditDialogViewModel(
+export function createCodeBlockItemEditDialogViewModel(
   state: State
-): CodeBlockEditDialogViewModel | undefined {
-  if (state.codeBlockEditDialog === null) return undefined
+): CodeBlockItemEditDialogViewModel | undefined {
+  if (state.codeBlockItemEditDialog === null) return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()
   return {
-    ...state.codeBlockEditDialog,
+    ...state.codeBlockItemEditDialog,
     onClickOkButton: () => {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
+      // コードを更新
       const textarea = document.querySelector<HTMLTextAreaElement>('.code-block-edit-dialog_code')
       assertNonNull(textarea)
       CurrentState.setCodeBlockItemCode(targetItemId, textarea.value)
 
+      // 言語を更新
       const input = document.querySelector<HTMLInputElement>('.code-block-edit-dialog_language')
       assertNonNull(input)
       CurrentState.setCodeBlockItemLanguage(targetItemId, input.value)
 
+      // タイムスタンプを更新
+      CurrentState.updateItemTimestamp(targetItemId)
+
       // ダイアログを閉じる
-      CurrentState.setCodeBlockEditDialog(null)
+      CurrentState.setCodeBlockItemEditDialog(null)
       CurrentState.commit()
     },
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setCodeBlockEditDialog(null)
+      CurrentState.setCodeBlockItemEditDialog(null)
       CurrentState.commit()
     },
     onClickBackdrop: (event: MouseEvent) => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
-        CurrentState.setCodeBlockEditDialog(null)
+        CurrentState.setCodeBlockItemEditDialog(null)
         CurrentState.commit()
       }
     },
   }
 }
 
-export function CodeBlockEditDialogView(viewModel: CodeBlockEditDialogViewModel) {
+export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogViewModel) {
   return html`<div
     class="code-block-edit-dialog"
     @click=${viewModel.onClickBackdrop}
@@ -114,12 +119,12 @@ function onKeyDown(event: KeyboardEvent) {
   if (event.isComposing) return
 
   if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-    CurrentState.setCodeBlockEditDialog(null)
+    CurrentState.setCodeBlockItemEditDialog(null)
     CurrentState.commit()
   }
 }
 
-export const CodeBlockEditDialogCss = css`
+export const CodeBlockItemEditDialogCss = css`
   :root {
     --dialog-border-radius: 5px;
 

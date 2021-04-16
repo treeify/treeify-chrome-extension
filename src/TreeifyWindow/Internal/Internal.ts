@@ -212,6 +212,7 @@ export class Internal {
         '1000k': {functionName: 'toggleStrikethrough'},
         '1000s': {functionName: 'saveToDataFolder'},
         '1100c': {functionName: 'copyForTransclusion'},
+        '1100l': {functionName: 'createEmptyCodeBlockItem'},
         '0000F2': {functionName: 'edit'},
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
@@ -221,7 +222,7 @@ export class Internal {
         '1000MouseButton0': {functionName: 'deleteItemItself'},
       },
       webPageItemTitleSettingDialog: null,
-      codeBlockEditDialog: null,
+      codeBlockItemEditDialog: null,
     }
   }
 }

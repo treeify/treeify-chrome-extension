@@ -1,3 +1,4 @@
+import {createEmptyCodeBlockItem} from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
 import {edit} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
   deleteItem,
@@ -71,6 +72,7 @@ export const functions: {[name: string]: () => void} = {
   hardUnloadSubtree,
   loadItem,
   loadSubtree,
+  createEmptyCodeBlockItem,
   edit,
   saveToDataFolder,
 }

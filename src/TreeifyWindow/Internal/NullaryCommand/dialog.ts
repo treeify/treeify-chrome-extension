@@ -26,7 +26,7 @@ export function edit() {
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[targetItemId]
-      CurrentState.setCodeBlockEditDialog({
+      CurrentState.setCodeBlockItemEditDialog({
         code: codeBlockItem.code,
         language: codeBlockItem.language,
       })
