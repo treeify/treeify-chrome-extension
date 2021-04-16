@@ -95,5 +95,7 @@ export const ItemTreeCodeBlockContentCss = css`
     min-width: max-content;
     // コードが空文字列のときにぺしゃんこにならないよう設定
     min-height: calc(var(--item-tree-calculated-line-height) + 2 * var(--code-block-padding));
+
+    font-size: 90%;
   }
 `
