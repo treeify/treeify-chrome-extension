@@ -342,6 +342,10 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   if (!item.cssClasses.isEmpty()) {
     baseAttributes.cssClass = item.cssClasses.join(' ')
   }
+  const labels = CurrentState.getLabels(itemPath)
+  if (!labels.isEmpty()) {
+    baseAttributes.labels = JSON.stringify(labels.toArray())
+  }
 
   switch (item.itemType) {
     case ItemType.TEXT:
