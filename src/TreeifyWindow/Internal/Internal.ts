@@ -190,7 +190,7 @@ export class Internal {
         '6': {
           targetItemPath: List.of(6),
           anchorItemPath: List.of(6),
-          defaultWindowMode: null,
+          defaultWindowMode: 'inherit',
         },
       },
       mountedPageIds: List.of(0),
@@ -215,6 +215,7 @@ export class Internal {
         '1000s': {functionName: 'saveToDataFolder'},
         '1100c': {functionName: 'copyForTransclusion'},
         '1100l': {functionName: 'createEmptyCodeBlockItem'},
+        '1100w': {functionName: 'showDefaultWindowModeSettingDialog'},
         '0000F2': {functionName: 'edit'},
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
@@ -225,6 +226,7 @@ export class Internal {
       },
       webPageItemTitleSettingDialog: null,
       codeBlockItemEditDialog: null,
+      defaultWindowModeSettingDialog: null,
     }
   }
 }

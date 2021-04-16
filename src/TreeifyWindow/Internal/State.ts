@@ -28,10 +28,10 @@ export type State = {
   itemTreeKeyboardBinding: {[K in InputId]: Command}
   /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */
   itemTreeDeleteButtonMouseBinding: {[K in InputId]: Command}
-  /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
+  /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
-
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null
+  defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
 }
 
 /**
@@ -123,16 +123,15 @@ export type Page = {
    * テキスト選択におけるanchorと同じ意味合い。
    */
   anchorItemPath: ItemPath
-  /**
-   * このページのデフォルトのウィンドウモード。
-   * ページが切り替えられた際、自動的にウィンドウモードを変更する。
-   * 'keep'は「ウィンドウモードを変更しない」を意味する。
-   * nullの場合、親ページのデフォルトウィンドウモードを再帰的に参照する（CSSのinheritのようなもの）。
-   */
-  defaultWindowMode: DefaultWindowMode | null
+  /** このページのデフォルトのウィンドウモード */
+  defaultWindowMode: DefaultWindowMode
 }
 
-export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep'
+/**
+ * 'keep'の場合、ウィンドウモードの自動変更は行わない。
+ * 'inherit'の場合、親ページのデフォルトウィンドウモードを再帰的に参照する。
+ */
+export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep' | 'inherit'
 
 /** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {
@@ -145,6 +144,9 @@ export type CodeBlockItemEditDialog = {
   code: string
   language: string
 }
+
+/** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
+export type DefaultWindowModeSettingDialog = {}
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */
