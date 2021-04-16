@@ -484,11 +484,7 @@ export function showPage() {
 
   if (CurrentState.isPage(targetItemId)) {
     CurrentState.mountPage(targetItemId)
-    CurrentState.setActivePageId(targetItemId)
-
-    // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-    const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
-    External.instance.requestFocusAfterRendering(elementId)
+    CurrentState.switchActivePage(targetItemId)
   }
 }
 
@@ -498,10 +494,7 @@ export function turnIntoAndShowPage() {
 
   CurrentState.turnIntoPage(targetItemId)
   CurrentState.mountPage(targetItemId)
-  CurrentState.setActivePageId(targetItemId)
-  // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-  const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
-  External.instance.requestFocusAfterRendering(elementId)
+  CurrentState.switchActivePage(targetItemId)
 }
 
 /** 対象を非ページ化し、expandする */

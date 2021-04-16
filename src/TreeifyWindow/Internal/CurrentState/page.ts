@@ -1,11 +1,22 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/TreeifyWindow/basicType'
+import {External} from 'src/TreeifyWindow/External/External'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Page, State} from 'src/TreeifyWindow/Internal/State'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
-/** アクティブページを設定する */
+/** アクティブページを切り替える */
+export function switchActivePage(itemId: ItemId) {
+  CurrentState.setActivePageId(itemId)
+  // ページ切り替え後はそのページのターゲットアイテムをフォーカス
+  const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
+  External.instance.requestFocusAfterRendering(elementId)
+}
+
+/** state.activePageIdを設定する */
 export function setActivePageId(itemId: ItemId) {
   Internal.instance.state.activePageId = itemId
   Internal.instance.markAsMutated(PropertyPath.of('activePageId'))
