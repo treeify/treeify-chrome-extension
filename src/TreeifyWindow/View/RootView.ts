@@ -9,10 +9,10 @@ import {
   DataFolderPickerOpenButtonViewModel,
 } from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
 import {
-  CodeBlockEditDialogView,
-  CodeBlockEditDialogViewModel,
-  createCodeBlockEditDialogViewModel,
-} from 'src/TreeifyWindow/View/Dialog/CodeBlockEditDialog'
+  CodeBlockItemEditDialogView,
+  CodeBlockItemEditDialogViewModel,
+  createCodeBlockItemEditDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialog'
 import {
   createWebPageItemTitleSettingDialogViewModel,
   WebPageItemTitleSettingDialogView,
@@ -34,7 +34,7 @@ export type RootViewModel = {
   leftSidebarViewModel: LeftSidebarViewModel | undefined
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-  codeBlockEditDialogViewModel: CodeBlockEditDialogViewModel | undefined
+  codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
   dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 }
 
@@ -44,7 +44,7 @@ export function createRootViewModel(state: State): RootViewModel {
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
     dataFolderPickerOpenButtonViewModel: createDataFolderPickerOpenButtonViewModel(),
-    codeBlockEditDialogViewModel: createCodeBlockEditDialogViewModel(state),
+    codeBlockItemEditDialogViewModel: createCodeBlockItemEditDialogViewModel(state),
   }
 }
 
@@ -68,8 +68,8 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
     ${viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
       : undefined}
-    ${viewModel.codeBlockEditDialogViewModel !== undefined
-      ? CodeBlockEditDialogView(viewModel.codeBlockEditDialogViewModel)
+    ${viewModel.codeBlockItemEditDialogViewModel !== undefined
+      ? CodeBlockItemEditDialogView(viewModel.codeBlockItemEditDialogViewModel)
       : undefined}
   </div>`
 }

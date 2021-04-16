@@ -31,7 +31,7 @@ export type State = {
   /** 非nullならウェブページアイテムのタイトル設定ダイアログが表示される */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
 
-  codeBlockEditDialog: CodeBlockEditDialog | null
+  codeBlockItemEditDialog: CodeBlockItemEditDialog | null
 }
 
 /**
@@ -132,7 +132,7 @@ export type WebPageItemTitleSettingDialog = {
 }
 
 /** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
-export type CodeBlockEditDialog = {
+export type CodeBlockItemEditDialog = {
   code: string
   language: string
 }
