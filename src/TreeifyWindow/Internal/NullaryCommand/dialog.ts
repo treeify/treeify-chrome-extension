@@ -33,3 +33,8 @@ export function edit() {
       break
   }
 }
+
+/** デフォルトウィンドウモード設定ダイアログを表示する */
+export function showDefaultWindowModeSettingDialog() {
+  CurrentState.setDefaultWindowModeSettingDialog({})
+}

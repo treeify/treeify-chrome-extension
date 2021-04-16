@@ -1,5 +1,8 @@
 import {createEmptyCodeBlockItem} from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
-import {edit} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
+import {
+  edit,
+  showDefaultWindowModeSettingDialog,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
   deleteItem,
   deleteItemItself,
@@ -74,6 +77,7 @@ export const functions: {[name: string]: () => void} = {
   loadSubtree,
   createEmptyCodeBlockItem,
   edit,
+  showDefaultWindowModeSettingDialog,
   saveToDataFolder,
 }
 export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'

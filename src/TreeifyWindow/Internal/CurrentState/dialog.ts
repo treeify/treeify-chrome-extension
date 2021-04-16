@@ -2,6 +2,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {
   CodeBlockItemEditDialog,
+  DefaultWindowModeSettingDialog,
   WebPageItemTitleSettingDialog,
 } from 'src/TreeifyWindow/Internal/State'
 
@@ -15,4 +16,10 @@ export function setWebPageItemTitleSettingDialog(value: WebPageItemTitleSettingD
 export function setCodeBlockItemEditDialog(value: CodeBlockItemEditDialog | null) {
   Internal.instance.state.codeBlockItemEditDialog = value
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItemEditDialog'))
+}
+
+/** デフォルトウィンドウモード設定ダイアログの状態を設定する */
+export function setDefaultWindowModeSettingDialog(value: DefaultWindowModeSettingDialog | null) {
+  Internal.instance.state.defaultWindowModeSettingDialog = value
+  Internal.instance.markAsMutated(PropertyPath.of('defaultWindowModeSettingDialog'))
 }

@@ -104,6 +104,11 @@ export function turnIntoNonPage(itemId: ItemId) {
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
 }
 
+export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
+  Internal.instance.state.pages[itemId].defaultWindowMode = value
+  Internal.instance.markAsMutated(PropertyPath.of('pages', itemId, 'defaultWindowMode'))
+}
+
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function deriveTreeifyWindowTitle(state: State): string {
   return getContentAsPlainText(state.activePageId)
