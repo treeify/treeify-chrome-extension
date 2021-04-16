@@ -1,6 +1,7 @@
 import {html, TemplateResult} from 'lit-html'
 import {DataFolderPickerOpenButtonCss} from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
 import {CodeBlockItemEditDialogCss} from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialog'
+import {CommonDialogCss} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 import {WebPageItemTitleSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialog'
 import {FullWindowModeButtonCss} from 'src/TreeifyWindow/View/FullWindowModeButtonView'
 import {ItemTreeCodeBlockContentCss} from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentView'
@@ -47,6 +48,7 @@ export function generateStyleElementContents() {
     ${ItemTreeImageContentCss}
     ${ItemTreeCodeBlockContentCss}
     ${LabelCss}
+    ${CommonDialogCss}
     ${WebPageItemTitleSettingDialogCss}
     ${CodeBlockItemEditDialogCss}
   `
