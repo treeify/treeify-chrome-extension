@@ -129,8 +129,10 @@ export type Page = {
    * 'keep'は「ウィンドウモードを変更しない」を意味する。
    * nullの場合、親ページのデフォルトウィンドウモードを再帰的に参照する（CSSのinheritのようなもの）。
    */
-  defaultWindowMode: 'dual' | 'full' | 'floating' | 'keep' | null
+  defaultWindowMode: DefaultWindowMode | null
 }
+
+export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep'
 
 /** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {

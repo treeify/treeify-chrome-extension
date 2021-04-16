@@ -5,15 +5,43 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {Page, State} from 'src/TreeifyWindow/Internal/State'
+import {DefaultWindowMode, Page, State} from 'src/TreeifyWindow/Internal/State'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 /** アクティブページを切り替える */
-export function switchActivePage(itemId: ItemId) {
+export async function switchActivePage(itemId: ItemId) {
   CurrentState.setActivePageId(itemId)
   // ページ切り替え後はそのページのターゲットアイテムをフォーカス
   const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
   External.instance.requestFocusAfterRendering(elementId)
+
+  // ウィンドウモードの自動切り替え機能
+  switch (deriveDefaultWindowMode(itemId)) {
+    case 'dual':
+      await TreeifyWindow.toDualWindowMode()
+      break
+    case 'full':
+      await TreeifyWindow.toFullWindowMode()
+      break
+    case 'floating':
+      // TODO: フローティングウィンドウモードへの変更は未実装
+      break
+  }
+}
+
+function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
+  const page: Page | undefined = Internal.instance.state.pages[itemId]
+  if (page !== undefined && page.defaultWindowMode !== null) {
+    return page.defaultWindowMode
+  }
+
+  // 設定されていなければ親ページの設定を参照する。
+  // 親ページが複数ある場合の選択は未定義でいいと思うので、適当に選ぶ。
+  const parentItemId: ItemId | undefined = CurrentState.getParentItemIds(itemId).first()
+  if (parentItemId !== undefined) return deriveDefaultWindowMode(parentItemId)
+
+  return 'keep'
 }
 
 /** state.activePageIdを設定する */
