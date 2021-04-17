@@ -24,7 +24,9 @@ export function onCopy(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = CurrentState.exportAsIndentedText(CurrentState.getTargetItemPath())
+    const contentText = CurrentState.getSelectedItemPaths()
+      .map(CurrentState.exportAsIndentedText)
+      .join('\n')
     event.clipboardData.setData('text/plain', contentText)
   }
 }
