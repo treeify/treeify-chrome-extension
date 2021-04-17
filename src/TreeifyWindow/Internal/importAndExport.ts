@@ -24,9 +24,7 @@ export function onCopy(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = CurrentState.exportAsIndentedText(
-      ItemPath.getItemId(CurrentState.getTargetItemPath())
-    )
+    const contentText = CurrentState.exportAsIndentedText(CurrentState.getTargetItemPath())
     event.clipboardData.setData('text/plain', contentText)
   }
 }
@@ -42,9 +40,7 @@ export function onCut(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
-    const contentText = CurrentState.exportAsIndentedText(
-      ItemPath.getItemId(CurrentState.getTargetItemPath())
-    )
+    const contentText = CurrentState.exportAsIndentedText(CurrentState.getTargetItemPath())
     event.clipboardData.setData('text/plain', contentText)
 
     NullaryCommand.deleteItem()
@@ -111,17 +107,15 @@ export function onPaste(event: ClipboardEvent) {
 }
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
-export function exportAsIndentedText(itemId: ItemId): string {
-  return exportAsIndentedLines(itemId).join('\n')
+export function exportAsIndentedText(itemPath: ItemPath): string {
+  return exportAsIndentedLines(itemPath).join('\n')
 }
 
-function exportAsIndentedLines(itemId: ItemId, indentLevel = 0): List<string> {
-  const line = '  '.repeat(indentLevel) + getContentAsPlainText(itemId)
-  if (CurrentState.isPage(itemId)) {
-    return List.of(line)
-  }
-  const childLines = Internal.instance.state.items[itemId].childItemIds.flatMap((childItemId) => {
-    return exportAsIndentedLines(childItemId, indentLevel + 1)
+function exportAsIndentedLines(itemPath: ItemPath, indentLevel = 0): List<string> {
+  const line = '  '.repeat(indentLevel) + getContentAsPlainText(ItemPath.getItemId(itemPath))
+
+  const childLines = CurrentState.getDisplayingChildItemIds(itemPath).flatMap((childItemId) => {
+    return exportAsIndentedLines(itemPath.push(childItemId), indentLevel + 1)
   })
   return childLines.unshift(line)
 }
