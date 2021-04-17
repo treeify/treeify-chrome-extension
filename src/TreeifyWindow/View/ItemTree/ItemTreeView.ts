@@ -109,6 +109,9 @@ function onKeyDown(event: KeyboardEvent) {
       case '0100ArrowUp':
         onShiftArrowUp(event)
         return
+      case '0100ArrowDown':
+        onShiftArrowDown(event)
+        return
       case '0000Backspace':
         onBackspace(event)
         return
@@ -474,6 +477,38 @@ function onShiftArrowUp(event: KeyboardEvent) {
 
   event.preventDefault()
   CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
+  // TODO: ↓この処理はExternalにリクエストする方式にするべきじゃないのか？
+  // 複数選択中はターゲットアイテムからフォーカスを外す
+  document.querySelector<HTMLElement>('.item-tree')?.focus()
+  CurrentState.commit()
+}
+
+/**
+ * Shift+↓キー押下時の処理。アイテムの複数選択を行うためのもの。
+ * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
+ */
+function onShiftArrowDown(event: KeyboardEvent) {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(targetItemPath)
+  // 弟アイテムが存在しない場合はブラウザの挙動に任せる
+  if (nextSiblingItemPath === undefined) return
+
+  if (CurrentState.getSelectedItemPaths().size === 1) {
+    const targetItemId = ItemPath.getItemId(targetItemPath)
+    if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+      // ターゲットアイテムがテキストアイテムの場合
+
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      const charactersCount = DomishObject.countCharacters(domishObjects)
+      const textItemSelection = getTextItemSelectionFromDom()
+      if (textItemSelection?.focusDistance !== charactersCount) {
+        return
+      }
+    }
+  }
+
+  event.preventDefault()
+  CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
   // TODO: ↓この処理はExternalにリクエストする方式にするべきじゃないのか？
   // 複数選択中はターゲットアイテムからフォーカスを外す
   document.querySelector<HTMLElement>('.item-tree')?.focus()
