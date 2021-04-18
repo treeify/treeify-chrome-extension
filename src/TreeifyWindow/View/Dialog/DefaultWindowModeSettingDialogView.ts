@@ -93,5 +93,6 @@ export const DefaultWindowModeSettingDialogCss = css`
   .default-window-mode-setting-dialog_button-area {
     /* ボタン群を右寄せにする */
     margin: 1em 1em 1em auto;
+    width: max-content;
   }
 `
