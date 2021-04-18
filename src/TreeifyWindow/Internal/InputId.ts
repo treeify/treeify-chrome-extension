@@ -22,7 +22,7 @@ export type InputId = string
 
 export namespace InputId {
   export function fromKeyboardEvent(event: KeyboardEvent): InputId {
-    return getModifierKeysId(event) + event.key
+    return getModifierKeysId(event) + event.code
   }
 
   export function fromMouseEvent(event: MouseEvent) {
