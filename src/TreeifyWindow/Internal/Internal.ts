@@ -215,7 +215,7 @@ export class Internal {
         '1000KeyS': {functionName: 'saveToDataFolder'},
         '1100KeyC': {functionName: 'copyForTransclusion'},
         '1100KeyL': {functionName: 'createEmptyCodeBlockItem'},
-        '1100KeyW': {functionName: 'showDefaultWindowModeSettingDialog'},
+        '0010KeyW': {functionName: 'showDefaultWindowModeSettingDialog'},
         '0000F2': {functionName: 'edit'},
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
