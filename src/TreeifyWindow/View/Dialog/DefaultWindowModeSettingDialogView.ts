@@ -61,11 +61,15 @@ export function DefaultWindowModeSettingDialogView(
     content: html`
       <div class="default-window-mode-setting-dialog_content">
         <select class="default-window-mode-setting-dialog_select" size="5">
-          <option value="keep">指定なし</option>
-          <option value="dual">デュアルウィンドウモード</option>
-          <option value="floating">フローティングウィンドウモード</option>
-          <option value="full">フルウィンドウモード</option>
-          <option value="inherit">親ページの設定を継承</option>
+          ${createOption('keep', '指定なし', viewModel.initialDefaultWindowMode)}
+          ${createOption('dual', 'デュアルウィンドウモード', viewModel.initialDefaultWindowMode)}
+          ${createOption(
+            'floating',
+            'フローティングウィンドウモード',
+            viewModel.initialDefaultWindowMode
+          )}
+          ${createOption('full', 'フルウィンドウモード', viewModel.initialDefaultWindowMode)}
+          ${createOption('inherit', '親ページの設定を継承', viewModel.initialDefaultWindowMode)}
         </select>
         <div class="default-window-mode-setting-dialog_button-area">
           <button @click=${viewModel.onClickOkButton}>完了</button>
@@ -79,6 +83,14 @@ export function DefaultWindowModeSettingDialogView(
       CurrentState.commit()
     },
   })
+}
+
+function createOption(value: string, text: string, initialDefaultWindowMode: DefaultWindowMode) {
+  if (initialDefaultWindowMode === value) {
+    return html`<option value="${value}" selected>${text}</option>`
+  } else {
+    return html`<option value="${value}">${text}</option>`
+  }
 }
 
 export const DefaultWindowModeSettingDialogCss = css`
