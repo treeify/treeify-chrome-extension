@@ -35,17 +35,8 @@ export function createItemTreeWebPageContentViewModel(
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
-
-  const isLoading =
-    tabId !== undefined
-      ? External.instance.tabItemCorrespondence.getTab(tabId)?.status === 'loading'
-      : false
-  const isAudible =
-    tabId !== undefined
-      ? External.instance.tabItemCorrespondence.getTab(tabId)?.audible === true
-      : false
-  const isUnloaded =
-    tabId === undefined || External.instance.tabItemCorrespondence.getTab(tabId)?.discarded === true
+  const tab =
+    tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
 
   return {
     itemPath,
@@ -53,10 +44,10 @@ export function createItemTreeWebPageContentViewModel(
     itemType: ItemType.WEB_PAGE,
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
-    isLoading,
-    isUnloaded,
+    isLoading: tab?.status === 'loading',
+    isUnloaded: tab === undefined || tab.discarded,
     isUnread: webPageItem.isUnread,
-    isAudible,
+    isAudible: tab?.audible === true,
     onFocus: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
