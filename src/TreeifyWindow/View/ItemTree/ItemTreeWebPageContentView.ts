@@ -187,7 +187,7 @@ export const ItemTreeWebPageContentCss = css`
     --item-tree-audible-icon-color: hsl(0, 0%, 35%);
 
     /* アンロード済みウェブページアイテムのopacity */
-    --unloaded-web-page-item-opacity: 50%;
+    --unloaded-web-page-item-opacity: 45%;
   }
 
   /* ウェブページアイテムのコンテンツ領域のルート */
