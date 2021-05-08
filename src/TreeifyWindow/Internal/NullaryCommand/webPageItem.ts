@@ -6,6 +6,31 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
+/** 対象ウェブページアイテムに対応するタブをdiscardする */
+export function softUnloadItem() {
+  const targetItemPath = CurrentState.getTargetItemPath()
+
+  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
+    ItemPath.getItemId(targetItemPath)
+  )
+  // 対応するタブがなければ何もしない
+  if (tabId === undefined) return
+
+  chrome.tabs.discard(tabId)
+}
+
+/** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブをdiscardする */
+export function softUnloadSubtree() {
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+
+  for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
+    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+    if (tabId !== undefined) {
+      chrome.tabs.discard(tabId)
+    }
+  }
+}
+
 /** 対象ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -42,7 +67,8 @@ export function hardUnloadSubtree() {
 export function loadItem() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
-  // 対応するタブがあれば何もしない
+  // 対応するタブがあれば何もしない。
+  // discarded状態のタブをバックグラウンドで非discarded化できれば望ましいのだがそのようなAPIが見当たらない。
   if (tabId !== undefined) return
 
   const url = Internal.instance.state.webPageItems[targetItemId].url

@@ -35,15 +35,9 @@ export function createItemTreeWebPageContentViewModel(
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
-
-  const isLoading =
-    tabId !== undefined
-      ? External.instance.tabItemCorrespondence.getTab(tabId)?.status === 'loading'
-      : false
-  const isAudible =
-    tabId !== undefined
-      ? External.instance.tabItemCorrespondence.getTab(tabId)?.audible === true
-      : false
+  const tab =
+    tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
+  const isUnloaded = tab === undefined || tab.discarded
 
   return {
     itemPath,
@@ -51,10 +45,10 @@ export function createItemTreeWebPageContentViewModel(
     itemType: ItemType.WEB_PAGE,
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
-    isLoading,
-    isUnloaded: tabId === undefined,
+    isLoading: tab?.status === 'loading',
+    isUnloaded,
     isUnread: webPageItem.isUnread,
-    isAudible,
+    isAudible: tab?.audible === true,
     onFocus: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
@@ -89,7 +83,33 @@ export function createItemTreeWebPageContentViewModel(
           case '0000MouseButton0':
             event.preventDefault()
 
-            if (tabId === undefined) {
+            if (isUnloaded) {
+              // アンロード状態の場合
+              NullaryCommand.loadSubtree()
+            } else {
+              // ロード状態の場合
+              NullaryCommand.softUnloadSubtree()
+            }
+
+            CurrentState.commit()
+            break
+          case '1000MouseButton0':
+            event.preventDefault()
+
+            if (isUnloaded) {
+              // アンロード状態の場合
+              NullaryCommand.loadItem()
+            } else {
+              // ロード状態の場合
+              NullaryCommand.softUnloadItem()
+            }
+
+            CurrentState.commit()
+            break
+          case '0100MouseButton0':
+            event.preventDefault()
+
+            if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadSubtree()
             } else {
@@ -99,10 +119,10 @@ export function createItemTreeWebPageContentViewModel(
 
             CurrentState.commit()
             break
-          case '1000MouseButton0':
+          case '1100MouseButton0':
             event.preventDefault()
 
-            if (tabId === undefined) {
+            if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadItem()
             } else {
