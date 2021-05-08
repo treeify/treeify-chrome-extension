@@ -288,7 +288,7 @@ export const ItemTreeNodeCss = css`
     --item-tree-body-area-vertical-padding: 0.5px;
 
     /* フォーカスアイテムの背景色 */
-    --item-tree-focused-item-background-color: hsl(240, 100%, 98%);
+    --item-tree-focused-item-background-color: hsl(240, 100%, 96.8%);
     /* マウスホバーアイテムの背景色 */
     --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
 
