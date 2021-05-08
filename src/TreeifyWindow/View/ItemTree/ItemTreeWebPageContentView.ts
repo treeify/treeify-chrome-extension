@@ -88,12 +88,38 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadSubtree()
             } else {
               // ロード状態の場合
-              NullaryCommand.hardUnloadSubtree()
+              NullaryCommand.softUnloadSubtree()
             }
 
             CurrentState.commit()
             break
           case '1000MouseButton0':
+            event.preventDefault()
+
+            if (isUnloaded) {
+              // アンロード状態の場合
+              NullaryCommand.loadItem()
+            } else {
+              // ロード状態の場合
+              NullaryCommand.softUnloadItem()
+            }
+
+            CurrentState.commit()
+            break
+          case '0100MouseButton0':
+            event.preventDefault()
+
+            if (isUnloaded) {
+              // アンロード状態の場合
+              NullaryCommand.loadSubtree()
+            } else {
+              // ロード状態の場合
+              NullaryCommand.hardUnloadSubtree()
+            }
+
+            CurrentState.commit()
+            break
+          case '1100MouseButton0':
             event.preventDefault()
 
             if (isUnloaded) {
