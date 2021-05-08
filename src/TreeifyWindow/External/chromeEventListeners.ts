@@ -7,7 +7,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
-import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
+import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -131,10 +131,16 @@ export function onCreated(tab: Tab) {
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  doWithErrorCapture(() => {
+  doAsyncWithErrorCapture(async () => {
     // Treeifyウィンドウのタブだった場合は何もしない。
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
     if (tab.url === chrome.extension.getURL('TreeifyWindow/index.html')) return
+
+    if (changeInfo.discarded) {
+      // discardされたらタブIDが変わるのでアイテムIDとの対応関係を修正する
+      // TODO: ↓は手抜き実装。最適化の余地あり
+      await matchTabsAndWebPageItems()
+    }
 
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     assertNonUndefined(itemId)
