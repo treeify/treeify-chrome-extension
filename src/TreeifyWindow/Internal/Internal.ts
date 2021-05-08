@@ -213,7 +213,7 @@ export class Internal {
         '1000KeyI': {functionName: 'toggleItalic'},
         '1000KeyK': {functionName: 'toggleStrikethrough'},
         '1000KeyS': {functionName: 'saveToDataFolder'},
-        '1100KeyC': {functionName: 'copyForTransclusion'},
+        '0010KeyC': {functionName: 'copyForTransclusion'},
         '1100KeyL': {functionName: 'createEmptyCodeBlockItem'},
         '0010KeyW': {functionName: 'showDefaultWindowModeSettingDialog'},
         '0000F2': {functionName: 'edit'},
