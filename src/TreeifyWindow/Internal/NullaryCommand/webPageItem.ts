@@ -67,7 +67,8 @@ export function hardUnloadSubtree() {
 export function loadItem() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
-  // 対応するタブがあれば何もしない
+  // 対応するタブがあれば何もしない。
+  // discarded状態のタブをバックグラウンドで非discarded化できれば望ましいのだがそのようなAPIが見当たらない。
   if (tabId !== undefined) return
 
   const url = Internal.instance.state.webPageItems[targetItemId].url
