@@ -37,6 +37,7 @@ export function createItemTreeWebPageContentViewModel(
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
   const tab =
     tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
+  const isUnloaded = tab === undefined || tab.discarded
 
   return {
     itemPath,
@@ -45,7 +46,7 @@ export function createItemTreeWebPageContentViewModel(
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',
-    isUnloaded: tab === undefined || tab.discarded,
+    isUnloaded,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     onFocus: (event) => {
@@ -82,7 +83,7 @@ export function createItemTreeWebPageContentViewModel(
           case '0000MouseButton0':
             event.preventDefault()
 
-            if (tabId === undefined) {
+            if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadSubtree()
             } else {
@@ -95,7 +96,7 @@ export function createItemTreeWebPageContentViewModel(
           case '1000MouseButton0':
             event.preventDefault()
 
-            if (tabId === undefined) {
+            if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadItem()
             } else {
