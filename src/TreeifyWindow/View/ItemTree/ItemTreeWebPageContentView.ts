@@ -44,6 +44,8 @@ export function createItemTreeWebPageContentViewModel(
     tabId !== undefined
       ? External.instance.tabItemCorrespondence.getTab(tabId)?.audible === true
       : false
+  const isUnloaded =
+    tabId === undefined || External.instance.tabItemCorrespondence.getTab(tabId)?.discarded === true
 
   return {
     itemPath,
@@ -52,7 +54,7 @@ export function createItemTreeWebPageContentViewModel(
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading,
-    isUnloaded: tabId === undefined,
+    isUnloaded,
     isUnread: webPageItem.isUnread,
     isAudible,
     onFocus: (event) => {
