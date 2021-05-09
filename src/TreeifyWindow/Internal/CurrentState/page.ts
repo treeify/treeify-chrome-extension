@@ -11,6 +11,12 @@ import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeConte
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
+  // マウントされたページがmountedPageIdsの末尾に来るようにする。
+  // （ページツリーの足跡表示を実現するための処理）
+  unmountPage(itemId)
+  Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
+  Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
+
   CurrentState.setActivePageId(itemId)
   // ページ切り替え後はそのページのターゲットアイテムをフォーカス
   const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
@@ -48,17 +54,6 @@ function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
 export function setActivePageId(itemId: ItemId) {
   Internal.instance.state.activePageId = itemId
   Internal.instance.markAsMutated(PropertyPath.of('activePageId'))
-}
-
-/**
- * ページをマウントする。
- * マウント済みの場合は何もしない
- */
-export function mountPage(itemId: ItemId) {
-  if (Internal.instance.state.mountedPageIds.contains(itemId)) return
-
-  Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
-  Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 }
 
 /**

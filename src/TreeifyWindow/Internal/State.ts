@@ -17,8 +17,7 @@ export type State = {
   workspaces: {[K in WorkspaceId]: Workspace}
   /**
    * マウントされているページたちのアイテムID。
-   * 今のところ順序に意味はないが将来的に使うかもしれないし、JSONとの相性も考えてSet型ではなくList型とする。
-   * 新しくマウントされたらリストの末尾に追加される。
+   * 並び順はアクティブ化された順（アクティブページが末尾）
    */
   mountedPageIds: List<ItemId>
   /** 削除され再利用されるアイテムID群 */
