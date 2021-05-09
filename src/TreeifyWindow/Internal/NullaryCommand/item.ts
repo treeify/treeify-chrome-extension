@@ -242,6 +242,52 @@ export function moveItemDownward() {
   }
 }
 
+/**
+ * 兄弟リスト内でアイテムを上に移動するコマンド。
+ * 兄が居ない場合はmoveItemUpwardコマンドと等価。
+ */
+export function moveItemToPrevSibling() {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(targetItemPath)
+  if (prevSiblingItemPath !== undefined) {
+    CurrentState.moveToPrevSibling(targetItemPath)
+
+    CurrentState.updateItemTimestamp(ItemPath.getItemId(targetItemPath))
+
+    External.instance.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(targetItemPath)
+    )
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  } else {
+    moveItemUpward()
+  }
+}
+
+/**
+ * 兄弟リスト内でアイテムを下に移動するコマンド。
+ * 弟が居ない場合はmoveItemDownwardコマンドと等価。
+ */
+export function moveItemToNextSibling() {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(targetItemPath)
+  if (nextSiblingItemPath !== undefined) {
+    CurrentState.moveToNextSibling(targetItemPath)
+
+    CurrentState.updateItemTimestamp(ItemPath.getItemId(targetItemPath))
+
+    External.instance.requestFocusAfterRendering(
+      ItemTreeContentView.focusableDomElementId(targetItemPath)
+    )
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  } else {
+    moveItemDownward()
+  }
+}
+
 /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
   const targetItemPath = CurrentState.getTargetItemPath()
