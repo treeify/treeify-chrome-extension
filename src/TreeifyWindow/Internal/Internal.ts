@@ -203,6 +203,7 @@ export class Internal {
         '1000ArrowUp': {functionName: 'moveItemUpward'},
         '1000ArrowDown': {functionName: 'moveItemDownward'},
         '1100ArrowUp': {functionName: 'moveItemToPrevSibling'},
+        '1100ArrowDown': {functionName: 'moveItemToNextSibling'},
         '0000Enter': {functionName: 'enterKeyDefault'},
         '0100Enter': {functionName: 'insertLineBreak'},
         '1000Enter': {functionName: 'toggleGrayedOut'},
