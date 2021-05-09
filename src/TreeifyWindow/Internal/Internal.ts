@@ -202,6 +202,7 @@ export class Internal {
         '0100Tab': {functionName: 'unindentItem'},
         '1000ArrowUp': {functionName: 'moveItemUpward'},
         '1000ArrowDown': {functionName: 'moveItemDownward'},
+        '1100ArrowUp': {functionName: 'moveItemToPrevSibling'},
         '0000Enter': {functionName: 'enterKeyDefault'},
         '0100Enter': {functionName: 'insertLineBreak'},
         '1000Enter': {functionName: 'toggleGrayedOut'},
