@@ -8,7 +8,7 @@ import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
 export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
-  onClickOkButton: () => void
+  onClickFinishButton: () => void
   onClickCancelButton: () => void
 }
 
@@ -20,7 +20,7 @@ export function createCodeBlockItemEditDialogViewModel(
   const targetItemPath = CurrentState.getTargetItemPath()
   return {
     ...state.codeBlockItemEditDialog,
-    onClickOkButton: () => {
+    onClickFinishButton: () => {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       // コードを更新
@@ -68,7 +68,7 @@ export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogVi
           ${hljs.listLanguages().map((language) => html`<option value=${language}></option>`)}
         </datalist>
         <div class="code-block-edit-dialog_button-area">
-          <button @click=${viewModel.onClickOkButton}>完了</button>
+          <button @click=${viewModel.onClickFinishButton}>完了</button>
           <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
         </div>
       </div>

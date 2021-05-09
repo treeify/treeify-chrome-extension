@@ -12,7 +12,7 @@ import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
 export type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
   initialDefaultWindowMode: DefaultWindowMode
-  onClickOkButton: () => void
+  onClickFinishButton: () => void
   onClickCancelButton: () => void
 }
 
@@ -30,7 +30,7 @@ export function createDefaultWindowModeSettingDialogViewModel(
   return {
     ...state.defaultWindowModeSettingDialog,
     initialDefaultWindowMode: state.pages[targetPageId].defaultWindowMode,
-    onClickOkButton: () => {
+    onClickFinishButton: () => {
       // デフォルトウィンドウモードを更新
       const select = document.querySelector<HTMLSelectElement>(
         '.default-window-mode-setting-dialog_select'
@@ -72,7 +72,7 @@ export function DefaultWindowModeSettingDialogView(
           ${createOption('inherit', '親ページの設定を継承', viewModel.initialDefaultWindowMode)}
         </select>
         <div class="default-window-mode-setting-dialog_button-area">
-          <button @click=${viewModel.onClickOkButton}>完了</button>
+          <button @click=${viewModel.onClickFinishButton}>完了</button>
           <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
         </div>
       </div>
