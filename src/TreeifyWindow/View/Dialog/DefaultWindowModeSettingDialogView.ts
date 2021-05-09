@@ -68,7 +68,7 @@ export function DefaultWindowModeSettingDialogView(
           <option value="inherit">親ページの設定を継承</option>
         </select>
         <div class="default-window-mode-setting-dialog_button-area">
-          <button @click=${viewModel.onClickOkButton}>OK</button>
+          <button @click=${viewModel.onClickOkButton}>完了</button>
           <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
         </div>
       </div>

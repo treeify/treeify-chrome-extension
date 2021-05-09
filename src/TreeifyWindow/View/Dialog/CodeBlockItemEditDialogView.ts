@@ -68,7 +68,7 @@ export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogVi
           ${hljs.listLanguages().map((language) => html`<option value=${language}></option>`)}
         </datalist>
         <div class="code-block-edit-dialog_button-area">
-          <button @click=${viewModel.onClickOkButton}>OK</button>
+          <button @click=${viewModel.onClickOkButton}>完了</button>
           <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
         </div>
       </div>
