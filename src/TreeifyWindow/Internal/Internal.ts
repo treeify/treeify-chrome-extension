@@ -3,6 +3,7 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
 /** TODO: コメント */
 export class Internal {
@@ -182,15 +183,21 @@ export class Internal {
         },
       },
       pages: {
-        '0': {
+        0: {
           targetItemPath: List.of(0),
           anchorItemPath: List.of(0),
           defaultWindowMode: 'keep',
         },
-        '6': {
+        6: {
           targetItemPath: List.of(6),
           anchorItemPath: List.of(6),
           defaultWindowMode: 'inherit',
+        },
+      },
+      workspaces: {
+        [Timestamp.now()]: {
+          excludedItemIds: List.of(),
+          name: 'ワークスペース1',
         },
       },
       mountedPageIds: List.of(0),

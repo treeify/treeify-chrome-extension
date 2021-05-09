@@ -1,4 +1,5 @@
 import {integer} from 'src/Common/integer'
+import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
 /**
  * アイテムIDの型エイリアス。
@@ -31,3 +32,5 @@ export enum ItemType {
  * 可読性のために導入。
  */
 export type TabId = integer
+
+export type WorkspaceId = Timestamp
