@@ -564,7 +564,7 @@ export function toggleGrayedOut() {
   for (const selectedItemPath of selectedItemPaths) {
     const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-    CurrentState.toggleCssClass(targetItemId, 'grayed-out-item')
+    CurrentState.toggleCssClass(targetItemId, 'grayed-out')
 
     // タイムスタンプを更新
     // TODO: 設定で無効化できるようにする
