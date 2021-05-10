@@ -87,12 +87,19 @@ export function DefaultWindowModeSettingDialogView(
 }
 
 function createOption(value: string, text: string, initialDefaultWindowMode: DefaultWindowMode) {
+  const onClick = () => {
+    const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
+    const inputElement = document.querySelector<HTMLInputElement>(selector)
+    assertNonNull(inputElement)
+    inputElement.checked = true
+  }
+
   if (initialDefaultWindowMode === value) {
-    return html`<div class="default-window-mode-setting-dialog_option">
+    return html`<div class="default-window-mode-setting-dialog_option" @click=${onClick}>
       <input type="radio" name="defaultWindowMode" value=${value} checked />${text}
     </div>`
   } else {
-    return html`<div class="default-window-mode-setting-dialog_option">
+    return html`<div class="default-window-mode-setting-dialog_option" @click=${onClick}>
       <input type="radio" name="defaultWindowMode" value=${value} />
       <div>${text}</div>
     </div>`
@@ -116,6 +123,8 @@ export const DefaultWindowModeSettingDialogCss = css`
     margin-top: 0.1em;
 
     font-size: 14px;
+
+    cursor: pointer;
   }
   .default-window-mode-setting-dialog_option:first-child {
     margin-top: 0;
