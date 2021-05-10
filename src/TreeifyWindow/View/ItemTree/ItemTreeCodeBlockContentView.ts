@@ -98,4 +98,9 @@ export const ItemTreeCodeBlockContentCss = css`
 
     font-size: 90%;
   }
+
+  /* グレーアウト状態のコードブロックアイテム */
+  .grayed-out .item-tree-code-block-content {
+    filter: opacity(50%);
+  }
 `

@@ -156,8 +156,8 @@ export const ItemTreeTextContentCss = css`
   }
 
   /* グレーアウト状態のテキストアイテム */
-  .grayed-out-item .item-tree-text-content_content-editable,
-  .grayed-out-item-children .item-tree-text-content_content-editable {
+  .grayed-out .item-tree-text-content_content-editable,
+  .grayed-out-children .item-tree-text-content_content-editable {
     color: var(--grayed-out-item-text-color);
   }
 `

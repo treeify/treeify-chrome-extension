@@ -105,7 +105,7 @@ export class Internal {
           childItemIds: List.of(),
           parents: {2: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090004,
-          cssClasses: List.of('grayed-out-item'),
+          cssClasses: List.of('grayed-out'),
         },
         5: {
           itemType: ItemType.WEB_PAGE,
