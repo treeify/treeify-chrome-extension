@@ -32,11 +32,12 @@ export function createDefaultWindowModeSettingDialogViewModel(
     initialDefaultWindowMode: state.pages[targetPageId].defaultWindowMode,
     onClickFinishButton: () => {
       // デフォルトウィンドウモードを更新
-      const select = document.querySelector<HTMLSelectElement>(
-        '.default-window-mode-setting-dialog_select'
+      const form = document.querySelector<HTMLFormElement>(
+        '.default-window-mode-setting-dialog_option-list'
       )
-      assertNonNull(select)
-      CurrentState.setDefaultWindowMode(targetPageId, select.value as DefaultWindowMode)
+      assertNonNull(form)
+      const selectedDefaultWindowMode = form.defaultWindowMode.value as DefaultWindowMode
+      CurrentState.setDefaultWindowMode(targetPageId, selectedDefaultWindowMode)
 
       // タイムスタンプを更新
       CurrentState.updateItemTimestamp(targetPageId)
@@ -60,7 +61,7 @@ export function DefaultWindowModeSettingDialogView(
     title: 'デフォルトウィンドウモード設定',
     content: html`
       <div class="default-window-mode-setting-dialog_content">
-        <select class="default-window-mode-setting-dialog_select" size="5">
+        <form class="default-window-mode-setting-dialog_option-list">
           ${createOption('keep', '指定なし', viewModel.initialDefaultWindowMode)}
           ${createOption('dual', 'デュアルウィンドウモード', viewModel.initialDefaultWindowMode)}
           ${createOption(
@@ -70,7 +71,7 @@ export function DefaultWindowModeSettingDialogView(
           )}
           ${createOption('full', 'フルウィンドウモード', viewModel.initialDefaultWindowMode)}
           ${createOption('inherit', '親ページの設定を継承', viewModel.initialDefaultWindowMode)}
-        </select>
+        </form>
         <div class="default-window-mode-setting-dialog_button-area">
           <button @click=${viewModel.onClickFinishButton}>完了</button>
           <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
@@ -87,19 +88,37 @@ export function DefaultWindowModeSettingDialogView(
 
 function createOption(value: string, text: string, initialDefaultWindowMode: DefaultWindowMode) {
   if (initialDefaultWindowMode === value) {
-    return html`<option value="${value}" selected>${text}</option>`
+    return html`<div class="default-window-mode-setting-dialog_option">
+      <input type="radio" name="defaultWindowMode" value=${value} checked />${text}
+    </div>`
   } else {
-    return html`<option value="${value}">${text}</option>`
+    return html`<div class="default-window-mode-setting-dialog_option">
+      <input type="radio" name="defaultWindowMode" value=${value} />
+      <div>${text}</div>
+    </div>`
   }
 }
 
 export const DefaultWindowModeSettingDialogCss = css`
-  .default-window-mode-setting-dialog_select {
+  .default-window-mode-setting-dialog_option-list {
     margin: 1em;
   }
 
-  .default-window-mode-setting-dialog_select option {
-    padding-right: 5em;
+  input[type='radio'][name='defaultWindowMode'] {
+    margin: 0 3px 0 0;
+  }
+
+  /* デフォルトウィンドウモードの選択肢 */
+  .default-window-mode-setting-dialog_option {
+    display: flex;
+    align-items: center;
+
+    margin-top: 0.1em;
+
+    font-size: 14px;
+  }
+  .default-window-mode-setting-dialog_option:first-child {
+    margin-top: 0;
   }
 
   .default-window-mode-setting-dialog_button-area {
