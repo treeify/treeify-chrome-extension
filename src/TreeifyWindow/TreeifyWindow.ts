@@ -121,7 +121,8 @@ export namespace TreeifyWindow {
       for (const window of await getAllNormalWindows()) {
         chrome.windows.update(window.id, {
           state: 'maximized',
-          focused: false,
+          // 画面がちらつくので本当はfocused: falseにしたいのだがstate: 'maximized'と組み合わせるとエラーになるので妥協
+          focused: true,
         })
       }
 
