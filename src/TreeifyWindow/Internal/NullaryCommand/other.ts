@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId} from 'src/TreeifyWindow/basicType'
+import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
@@ -133,4 +133,15 @@ export async function copyForTransclusion() {
       [blob.type]: blob,
     }),
   ])
+}
+
+/**
+ * ターゲットアイテムをワークスペースの除外アイテムリストに入れる。
+ * ただしトップページは除外できない。
+ */
+export function excludeFromCurrentWorkspace() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
+  const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
+  CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())
 }

@@ -23,6 +23,7 @@ import {
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {
   copyForTransclusion,
+  excludeFromCurrentWorkspace,
   saveToDataFolder,
   selectAllAboveItems,
   selectAllBelowItems,
@@ -61,6 +62,7 @@ export const functions: {[name: string]: () => void} = {
   selectAllBelowItems,
   selectAllAboveItems,
   copyForTransclusion,
+  excludeFromCurrentWorkspace,
   enterKeyDefault,
   deleteItem,
   deleteItemItself,
