@@ -82,4 +82,13 @@ export const ItemTreeImageContentCss = css`
     max-width: 100%;
     height: auto;
   }
+  /* グレーアウト状態の画像 */
+  .grayed-out .item-tree-image-content_image {
+    filter: opacity(50%);
+  }
+
+  /* グレーアウト状態のキャプション */
+  .grayed-out .item-tree-image-content_caption {
+    color: hsl(0, 0%, 50%);
+  }
 `
