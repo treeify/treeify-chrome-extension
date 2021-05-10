@@ -1,4 +1,4 @@
-import {Collection, List, Seq} from 'immutable'
+import {Collection, List, Seq, Set} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
@@ -35,9 +35,16 @@ export type PageTreeNodeViewModel = {
 }
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
-  const itemPaths = state.mountedPageIds.flatMap((itemId) => [
-    ...searchItemPathForMountedPage(state, List.of(itemId)),
-  ])
+  const excludedItemIds = CurrentState.getExcludedItemIds()
+  const itemPaths = state.mountedPageIds
+    .filter((pageId) => {
+      // ページが除外アイテムならページツリーには表示しない
+      if (excludedItemIds.contains(pageId)) return false
+
+      // ページの先祖アイテムに除外アイテムが含まれていたらページツリーには表示しない
+      return Set(CurrentState.yieldAncestorItemIds(pageId)).intersect(excludedItemIds).isEmpty()
+    })
+    .flatMap((itemId) => [...searchItemPathForMountedPage(state, List.of(itemId))])
   const pageTreeEdges = itemPaths
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {

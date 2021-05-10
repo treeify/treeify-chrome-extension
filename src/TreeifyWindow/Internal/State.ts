@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
+import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
@@ -14,6 +14,7 @@ export type State = {
   imageItems: {[K in ItemId]: ImageItem}
   codeBlockItems: {[K in ItemId]: CodeBlockItem}
   pages: {[K in ItemId]: Page}
+  workspaces: {[K in WorkspaceId]: Workspace}
   /**
    * マウントされているページたちのアイテムID。
    * 今のところ順序に意味はないが将来的に使うかもしれないし、JSONとの相性も考えてSet型ではなくList型とする。
@@ -125,6 +126,15 @@ export type Page = {
   anchorItemPath: ItemPath
   /** このページのデフォルトのウィンドウモード */
   defaultWindowMode: DefaultWindowMode
+}
+
+export type Workspace = {
+  /**
+   * このワークスペースでページツリーや検索結果から除外したいアイテム群。
+   * これに含まれるアイテムまたはその子孫アイテムはページツリーや検索結果から除外される。
+   */
+  excludedItemIds: List<ItemId>
+  name: string
 }
 
 /**
