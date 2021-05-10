@@ -100,8 +100,7 @@ function createOption(value: string, text: string, initialDefaultWindowMode: Def
     </div>`
   } else {
     return html`<div class="default-window-mode-setting-dialog_option" @click=${onClick}>
-      <input type="radio" name="defaultWindowMode" value=${value} />
-      <div>${text}</div>
+      <input type="radio" name="defaultWindowMode" value=${value} />${text}
     </div>`
   }
 }
