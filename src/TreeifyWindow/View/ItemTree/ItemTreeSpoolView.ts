@@ -185,16 +185,16 @@ export const ItemTreeSpoolCss = css`
   }
 
   /* ハイライト状態のアイテムの強調表示 */
-  .highlighted-item .item-tree-spool_inner-circle {
+  .highlighted .item-tree-spool_inner-circle {
     background: var(--highlighted-item-bullet-color);
   }
-  .highlighted-item .item-tree-spool:hover .item-tree-spool_inner-circle {
+  .highlighted .item-tree-spool:hover .item-tree-spool_inner-circle {
     background: var(--highlighted-item-bullet-hover-color);
   }
-  .highlighted-item .item-tree-spool_page-icon {
+  .highlighted .item-tree-spool_page-icon {
     background: var(--highlighted-item-bullet-color);
   }
-  .highlighted-item .item-tree-spool:hover .item-tree-spool_page-icon {
+  .highlighted .item-tree-spool:hover .item-tree-spool_page-icon {
     background: var(--highlighted-item-bullet-hover-color);
   }
 

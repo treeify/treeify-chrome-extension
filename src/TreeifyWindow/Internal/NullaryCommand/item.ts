@@ -594,7 +594,7 @@ export function toggleHighlighted() {
   for (const selectedItemPath of selectedItemPaths) {
     const targetItemId = ItemPath.getItemId(selectedItemPath)
 
-    CurrentState.toggleCssClass(targetItemId, 'highlighted-item')
+    CurrentState.toggleCssClass(targetItemId, 'highlighted')
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(targetItemId)
