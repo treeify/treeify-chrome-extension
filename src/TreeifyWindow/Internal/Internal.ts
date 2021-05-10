@@ -237,6 +237,7 @@ export class Internal {
       webPageItemTitleSettingDialog: null,
       codeBlockItemEditDialog: null,
       defaultWindowModeSettingDialog: null,
+      workspaceDialog: null,
     }
   }
 }
