@@ -1,9 +1,12 @@
+import Color from 'color'
 import {Collection, List, Seq, Set} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
+import {styleMap} from 'lit-html/directives/style-map'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
+import {CssCustomProperty} from 'src/TreeifyWindow/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -28,6 +31,8 @@ export type PageTreeNodeViewModel = {
   childNodeViewModels: List<PageTreeNodeViewModel>
   isActivePage: boolean
   isRoot: boolean
+  footprintRank: integer | undefined
+  footprintCount: integer
   onClickContentArea: () => void
   onClickCloseButton: () => void
   onDragOver: (event: DragEvent) => void
@@ -36,15 +41,16 @@ export type PageTreeNodeViewModel = {
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
   const excludedItemIds = CurrentState.getExcludedItemIds()
-  const itemPaths = state.mountedPageIds
-    .filter((pageId) => {
-      // ページが除外アイテムならページツリーには表示しない
-      if (excludedItemIds.contains(pageId)) return false
+  const filteredPageIds = state.mountedPageIds.filter((pageId) => {
+    // ページが除外アイテムならページツリーには表示しない
+    if (excludedItemIds.contains(pageId)) return false
 
-      // ページの先祖アイテムに除外アイテムが含まれていたらページツリーには表示しない
-      return Set(CurrentState.yieldAncestorItemIds(pageId)).intersect(excludedItemIds).isEmpty()
-    })
-    .flatMap((itemId) => [...searchItemPathForMountedPage(state, List.of(itemId))])
+    // ページの先祖アイテムに除外アイテムが含まれていたらページツリーには表示しない
+    return Set(CurrentState.yieldAncestorItemIds(pageId)).intersect(excludedItemIds).isEmpty()
+  })
+  const itemPaths = filteredPageIds.flatMap((itemId) => [
+    ...searchItemPathForMountedPage(state, List.of(itemId)),
+  ])
   const pageTreeEdges = itemPaths
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
@@ -53,7 +59,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
       }, lexicographicalOrder)
     })
 
-  return createPageTreeNodeViewModel(state, TOP_ITEM_ID, pageTreeEdges)
+  return createPageTreeNodeViewModel(state, TOP_ITEM_ID, pageTreeEdges, filteredPageIds)
 }
 
 // アイテムパスを兄弟順位リストに変換する
@@ -91,7 +97,8 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
 export function createPageTreeNodeViewModel(
   state: State,
   itemId: ItemId,
-  pageTreeEdges: Seq.Keyed<ItemId, Collection<integer, ItemPath>>
+  pageTreeEdges: Seq.Keyed<ItemId, Collection<integer, ItemPath>>,
+  filteredPageIds: List<ItemId>
 ): PageTreeNodeViewModel {
   const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
@@ -99,10 +106,17 @@ export function createPageTreeNodeViewModel(
     bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
     contentViewModel: createPageTreeContentViewModel(state, itemId),
     childNodeViewModels: childPagePaths.map((childPagePath) =>
-      createPageTreeNodeViewModel(state, ItemPath.getItemId(childPagePath), pageTreeEdges)
+      createPageTreeNodeViewModel(
+        state,
+        ItemPath.getItemId(childPagePath),
+        pageTreeEdges,
+        filteredPageIds
+      )
     ),
     isActivePage: state.activePageId === itemId,
     isRoot: itemId === TOP_ITEM_ID,
+    footprintRank: filteredPageIds.size - filteredPageIds.indexOf(itemId),
+    footprintCount: filteredPageIds.size,
     onClickContentArea: () => {
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
@@ -178,6 +192,11 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 }
 
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
+  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
+  const footprintLayerStyle = styleMap({
+    backgroundColor: footprintColor?.toString() ?? '',
+  })
+
   return html`<div class="page-tree-node">
     ${!viewModel.isRoot
       ? html`<div class="page-tree-node_bullet-and-indent-area">
@@ -185,27 +204,47 @@ export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResu
         </div>`
       : html`<div class="grid-empty-cell"></div>`}
     <div class="page-tree-node_body-and-children-area">
-      <div
-        class=${classMap({
-          'page-tree-node_body-area': true,
-          'active-page': viewModel.isActivePage,
-        })}
-      >
+      <div class="page-tree-node_footprint-layer" style=${footprintLayerStyle}>
         <div
-          class="page-tree-node_content-area"
-          @click=${viewModel.onClickContentArea}
-          @dragover=${viewModel.onDragOver}
-          @drop=${viewModel.onDrop}
+          class=${classMap({
+            'page-tree-node_body-area': true,
+            'active-page': viewModel.isActivePage,
+          })}
         >
-          ${PageTreeContentView(viewModel.contentViewModel)}
+          <div
+            class="page-tree-node_content-area"
+            @click=${viewModel.onClickContentArea}
+            @dragover=${viewModel.onDragOver}
+            @drop=${viewModel.onDrop}
+          >
+            ${PageTreeContentView(viewModel.contentViewModel)}
+          </div>
+          <div class="page-tree-node_close-button" @click=${viewModel.onClickCloseButton}></div>
         </div>
-        <div class="page-tree-node_close-button" @click=${viewModel.onClickCloseButton}></div>
       </div>
       <div class="page-tree-node_children-area">
         ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
       </div>
     </div>
   </div>`
+}
+
+function calculateFootprintColor(
+  footprintRank: integer | undefined,
+  footprintCount: integer
+): Color | undefined {
+  if (footprintRank === undefined) return undefined
+
+  const strongestColor = CssCustomProperty.getColor('--strongest-footprint-color')
+  const weakestColor = CssCustomProperty.getColor('--weakest-footprint-color')
+
+  if (footprintCount === 1) {
+    return strongestColor
+  }
+
+  // 線形補間する
+  const ratio = footprintRank / (footprintCount - 1)
+  return strongestColor.mix(weakestColor, ratio)
 }
 
 export const PageTreeNodeCss = css`
