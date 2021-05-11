@@ -323,6 +323,9 @@ export const ItemTreeNodeCss = css`
     grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
+  .item-tree-node_content-area {
+    height: 100%;
+  }
   /* マウスホバー時のコンテンツ領域 */
   .item-tree-node_content-area:hover {
     /* マウスホバーアイテムの強調表示 */
