@@ -38,7 +38,9 @@ export function getExcludedItemIds(): List<ItemId> {
 export function setExcludedItemIds(itemIds: List<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds = itemIds
-  Internal.instance.markAsMutated(PropertyPath.of('workspaces', currentWorkspaceId))
+  Internal.instance.markAsMutated(
+    PropertyPath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
+  )
 }
 
 /** 先祖アイテムのジェネレーター */
