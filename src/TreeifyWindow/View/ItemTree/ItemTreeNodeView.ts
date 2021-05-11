@@ -202,7 +202,7 @@ function deriveIsSelected(state: State, itemPath: ItemPath): boolean {
 /** アイテムツリーの各アイテムのルートView */
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
   const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const contentAreaStyle = styleMap({
+  const footprintLayerStyle = styleMap({
     backgroundColor: footprintColor?.toString() ?? '',
   })
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
@@ -228,7 +228,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       <!-- ボディ領域 -->
       <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
         <!-- 足跡表示用のレイヤー -->
-        <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
+        <div class="item-tree-node_footprint-layer" style=${footprintLayerStyle}>
           <!-- コンテンツ領域 -->
           <div
             data-item-path=${JSON.stringify(viewModel.itemPath.toArray())}
