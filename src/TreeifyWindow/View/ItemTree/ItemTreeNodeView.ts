@@ -202,7 +202,7 @@ function deriveIsSelected(state: State, itemPath: ItemPath): boolean {
 /** アイテムツリーの各アイテムのルートView */
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
   const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const contentAreaStyle = styleMap({
+  const footprintLayerStyle = styleMap({
     backgroundColor: footprintColor?.toString() ?? '',
   })
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
@@ -228,7 +228,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
       <!-- ボディ領域 -->
       <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
         <!-- 足跡表示用のレイヤー -->
-        <div class="item-tree-node_footprint-layer" style=${contentAreaStyle}>
+        <div class="item-tree-node_footprint-layer" style=${footprintLayerStyle}>
           <!-- コンテンツ領域 -->
           <div
             data-item-path=${JSON.stringify(viewModel.itemPath.toArray())}
@@ -270,8 +270,8 @@ function calculateFootprintColor(
 ): Color | undefined {
   if (footprintRank === undefined) return undefined
 
-  const strongestColor = CssCustomProperty.getColor('--strongest-footprint-color')
-  const weakestColor = CssCustomProperty.getColor('--weakest-footprint-color')
+  const strongestColor = CssCustomProperty.getColor('--item-tree-strongest-footprint-color')
+  const weakestColor = CssCustomProperty.getColor('--item-tree-weakest-footprint-color')
 
   if (footprintCount === 1) {
     return strongestColor
@@ -296,9 +296,9 @@ export const ItemTreeNodeCss = css`
     --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
 
     /* 最も新しい足跡の色（線形補間の一端） */
-    --strongest-footprint-color: hsl(0, 100%, 97.3%);
+    --item-tree-strongest-footprint-color: hsl(0, 100%, 97.3%);
     /* 最も古い足跡の色（線形補間の一端） */
-    --weakest-footprint-color: hsl(60, 100%, 97.3%);
+    --item-tree-weakest-footprint-color: hsl(60, 100%, 97.3%);
 
     /* グレーアウト状態のアイテムの標準的なテキスト色 */
     --grayed-out-item-text-color: hsl(0, 0%, 75%);

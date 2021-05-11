@@ -529,7 +529,6 @@ export function showPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   if (CurrentState.isPage(targetItemId)) {
-    CurrentState.mountPage(targetItemId)
     CurrentState.switchActivePage(targetItemId)
   }
 }
@@ -539,7 +538,6 @@ export function turnIntoAndShowPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   CurrentState.turnIntoPage(targetItemId)
-  CurrentState.mountPage(targetItemId)
   CurrentState.switchActivePage(targetItemId)
 }
 
