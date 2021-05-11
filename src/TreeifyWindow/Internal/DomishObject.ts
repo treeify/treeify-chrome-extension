@@ -50,8 +50,49 @@ export namespace DomishObject {
    */
   export function toDocumentFragment(value: DomishObject | List<DomishObject>): DocumentFragment {
     const templateElement = document.createElement('template')
-    templateElement.innerHTML = toHtml(value)
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      for (const node of domishObjects.map(toDomNode)) {
+        templateElement.content.appendChild(node)
+      }
+    } else {
+      const domishObject = value as DomishObject
+      templateElement.content.appendChild(toDomNode(domishObject))
+    }
     return templateElement.content
+  }
+
+  function toDomNode(domishObject: DomishObject): Node {
+    switch (domishObject.type) {
+      case 'b':
+        const bElement = document.createElement('b')
+        for (const child of domishObject.children) {
+          bElement.appendChild(toDomNode(child))
+        }
+        return bElement
+      case 'u':
+        const uElement = document.createElement('u')
+        for (const child of domishObject.children) {
+          uElement.appendChild(toDomNode(child))
+        }
+        return uElement
+      case 'i':
+        const iElement = document.createElement('i')
+        for (const child of domishObject.children) {
+          iElement.appendChild(toDomNode(child))
+        }
+        return iElement
+      case 'strike':
+        const strikeElement = document.createElement('strike')
+        for (const child of domishObject.children) {
+          strikeElement.appendChild(toDomNode(child))
+        }
+        return strikeElement
+      case 'br':
+        return document.createElement('br')
+      case 'text':
+        return document.createTextNode(domishObject.textContent)
+    }
   }
 
   // DomishObjectをHTML文字列に変換する
