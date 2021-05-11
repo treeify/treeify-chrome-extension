@@ -23,6 +23,11 @@ import {
   WebPageItemTitleSettingDialogView,
   WebPageItemTitleSettingDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogView'
+import {
+  createWorkspaceDialogViewModel,
+  WorkspaceDialogView,
+  WorkspaceDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/WorkspaceDialogView'
 import {FullWindowModeButtonView} from 'src/TreeifyWindow/View/FullWindowModeButtonView'
 import {
   createItemTreeViewModel,
@@ -41,6 +46,7 @@ export type RootViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
+  workspaceDialog: WorkspaceDialogViewModel | undefined
   dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 }
 
@@ -52,6 +58,7 @@ export function createRootViewModel(state: State): RootViewModel {
     dataFolderPickerOpenButtonViewModel: createDataFolderPickerOpenButtonViewModel(),
     codeBlockItemEditDialogViewModel: createCodeBlockItemEditDialogViewModel(state),
     defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogViewModel(state),
+    workspaceDialog: createWorkspaceDialogViewModel(state),
   }
 }
 
@@ -80,6 +87,9 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
       : undefined}
     ${viewModel.defaultWindowModeSettingDialog !== undefined
       ? DefaultWindowModeSettingDialogView(viewModel.defaultWindowModeSettingDialog)
+      : undefined}
+    ${viewModel.workspaceDialog !== undefined
+      ? WorkspaceDialogView(viewModel.workspaceDialog)
       : undefined}
   </div>`
 }

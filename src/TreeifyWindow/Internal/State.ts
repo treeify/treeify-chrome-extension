@@ -33,6 +33,7 @@ export type State = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
+  workspaceDialog: WorkspaceDialog | null
 }
 
 /**
@@ -157,6 +158,8 @@ export type CodeBlockItemEditDialog = {
 
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
 export type DefaultWindowModeSettingDialog = {}
+
+export type WorkspaceDialog = {}
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */

@@ -38,3 +38,8 @@ export function edit() {
 export function showDefaultWindowModeSettingDialog() {
   CurrentState.setDefaultWindowModeSettingDialog({})
 }
+
+/** ワークスペースダイアログを表示する */
+export function showWorkspaceDialog() {
+  CurrentState.setWorkspaceDialog({})
+}

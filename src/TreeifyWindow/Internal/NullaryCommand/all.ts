@@ -2,6 +2,7 @@ import {createEmptyCodeBlockItem} from 'src/TreeifyWindow/Internal/NullaryComman
 import {
   edit,
   showDefaultWindowModeSettingDialog,
+  showWorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
   deleteItem,
@@ -84,6 +85,7 @@ export const functions: {[name: string]: () => void} = {
   createEmptyCodeBlockItem,
   edit,
   showDefaultWindowModeSettingDialog,
+  showWorkspaceDialog,
   saveToDataFolder,
 }
 export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
