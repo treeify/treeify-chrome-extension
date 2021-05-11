@@ -42,7 +42,7 @@ export function WorkspaceDialogView(viewModel: WorkspaceDialogViewModel) {
   return CommonDialogView({
     title: 'ワークスペース',
     content: html`
-      <div class="workspace-dialog_content">
+      <div class="workspace-dialog_content" tabindex="0">
         ${viewModel.workspaces.map(createWorkspaceRow)}
         <div class="workspace-dialog_add-button" @click=${viewModel.onClickAddButton}></div>
         <button class="workspace-dialog_close-button" @click=${closeDialog}>閉じる</button>
@@ -100,6 +100,9 @@ export const WorkspaceDialogCss = css`
 
   .workspace-dialog_content {
     padding: 1em;
+
+    /* フォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
   }
 
   .workspace-dialog_existing-workspace {
