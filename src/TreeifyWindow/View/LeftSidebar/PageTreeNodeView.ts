@@ -26,12 +26,12 @@ export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
+  isActivePage: boolean
+  isRoot: boolean
   onClickContentArea: () => void
   onClickCloseButton: () => void
   onDragOver: (event: DragEvent) => void
   onDrop: (event: DragEvent) => void
-  isActivePage: boolean
-  isRoot: boolean
 }
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
@@ -101,6 +101,8 @@ export function createPageTreeNodeViewModel(
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(state, ItemPath.getItemId(childPagePath), pageTreeEdges)
     ),
+    isActivePage: state.activePageId === itemId,
+    isRoot: itemId === TOP_ITEM_ID,
     onClickContentArea: () => {
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
@@ -155,8 +157,6 @@ export function createPageTreeNodeViewModel(
         CurrentState.commit()
       })
     },
-    isActivePage: state.activePageId === itemId,
-    isRoot: itemId === TOP_ITEM_ID,
   }
 }
 
