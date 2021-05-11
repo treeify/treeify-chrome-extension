@@ -239,6 +239,7 @@ export class Internal {
       codeBlockItemEditDialog: null,
       defaultWindowModeSettingDialog: null,
       workspaceDialog: null,
+      labelEditDialog: null,
     }
   }
 }
