@@ -40,7 +40,7 @@ export namespace DomishObject {
 
   /** 等価性判定 */
   export function equals(lhs: List<DomishObject>, rhs: List<DomishObject>): boolean {
-    return toHtml(lhs) === toHtml(rhs)
+    return toDocumentFragment(lhs).isEqualNode(toDocumentFragment(rhs))
   }
 
   /**
@@ -50,33 +50,48 @@ export namespace DomishObject {
    */
   export function toDocumentFragment(value: DomishObject | List<DomishObject>): DocumentFragment {
     const templateElement = document.createElement('template')
-    templateElement.innerHTML = toHtml(value)
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      for (const node of domishObjects.map(toDomNode)) {
+        templateElement.content.appendChild(node)
+      }
+    } else {
+      const domishObject = value as DomishObject
+      templateElement.content.appendChild(toDomNode(domishObject))
+    }
     return templateElement.content
   }
 
-  // DomishObjectをHTML文字列に変換する
-  function toHtml(value: DomishObject | List<DomishObject>): string {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.map(toHtml).join('')
-    } else {
-      const domishObject = value as DomishObject
-      switch (domishObject.type) {
-        case 'b':
-          return `<b>${toHtml(domishObject.children)}</b>`
-        case 'u':
-          return `<u>${toHtml(domishObject.children)}</u>`
-        case 'i':
-          return `<i>${toHtml(domishObject.children)}</i>`
-        case 'strike':
-          return `<strike>${toHtml(domishObject.children)}</strike>`
-        case 'br':
-          return `<br>`
-        case 'text':
-          return domishObject.textContent
-        default:
-          assertNeverType(domishObject)
-      }
+  function toDomNode(domishObject: DomishObject): Node {
+    switch (domishObject.type) {
+      case 'b':
+        const bElement = document.createElement('b')
+        for (const child of domishObject.children) {
+          bElement.appendChild(toDomNode(child))
+        }
+        return bElement
+      case 'u':
+        const uElement = document.createElement('u')
+        for (const child of domishObject.children) {
+          uElement.appendChild(toDomNode(child))
+        }
+        return uElement
+      case 'i':
+        const iElement = document.createElement('i')
+        for (const child of domishObject.children) {
+          iElement.appendChild(toDomNode(child))
+        }
+        return iElement
+      case 'strike':
+        const strikeElement = document.createElement('strike')
+        for (const child of domishObject.children) {
+          strikeElement.appendChild(toDomNode(child))
+        }
+        return strikeElement
+      case 'br':
+        return document.createElement('br')
+      case 'text':
+        return document.createTextNode(domishObject.textContent)
     }
   }
 
