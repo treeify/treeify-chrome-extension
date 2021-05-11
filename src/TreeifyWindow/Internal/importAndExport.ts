@@ -91,10 +91,14 @@ export function onPaste(event: ClipboardEvent) {
   if (!text.includes('\n')) {
     // 1行だけのテキストの場合
 
-    const url = detectUrl(text)
-    if (url !== undefined) {
-      // URLを含むなら
-      const newItemId = createItemFromSingleLineText(text)
+    // GyazoのスクリーンショットのURLを判定する。
+    // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
+    const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
+    if (gyazoUrlPattern.test(text)) {
+      // GyazoのスクリーンショットのURLなら画像アイテムを作る
+      const newItemId = CurrentState.createImageItem()
+      // TODO: Gyazoの画像はpngとは限らない
+      CurrentState.setImageItemUrl(newItemId, text + '.png')
       CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
       CurrentState.commit()
     } else {
@@ -243,45 +247,17 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
   return List(rootItemIds)
 }
 
-// TODO: URLが画像かどうか判定するためにasyncにしなければならないかも
-export function createItemFromSingleLineText(line: string): ItemId {
-  const url = detectUrl(line)
-  if (url !== undefined) {
-    // URLが含まれている場合
-
-    // GyazoのスクリーンショットのURLを判定する。
-    // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
-    const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
-    if (gyazoUrlPattern.test(url)) {
-      // 画像アイテムを作る
-      const title = line.replace(url, '').trim()
-      const itemId = CurrentState.createImageItem()
-      // TODO: Gyazoの画像はpngとは限らない
-      CurrentState.setImageItemUrl(itemId, url + '.png')
-      CurrentState.setImageItemCaption(itemId, title)
-      return itemId
-    } else {
-      // ウェブページアイテムを作る
-      const title = line.replace(url, '').trim()
-      const itemId = CurrentState.createWebPageItem()
-      CurrentState.setWebPageItemTitle(itemId, title)
-      CurrentState.setWebPageItemUrl(itemId, url)
-      return itemId
-    }
-  } else {
-    // URLが含まれていない場合
-
-    // テキストアイテムを作る
-    const itemId = CurrentState.createTextItem()
-    CurrentState.setTextItemDomishObjects(
-      itemId,
-      List.of({
-        type: 'text',
-        textContent: line,
-      })
-    )
-    return itemId
-  }
+function createItemFromSingleLineText(line: string): ItemId {
+  // テキストアイテムを作る
+  const itemId = CurrentState.createTextItem()
+  CurrentState.setTextItemDomishObjects(
+    itemId,
+    List.of({
+      type: 'text',
+      textContent: line,
+    })
+  )
+  return itemId
 }
 
 /**
