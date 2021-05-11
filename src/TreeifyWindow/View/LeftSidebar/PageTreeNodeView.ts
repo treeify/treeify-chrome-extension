@@ -235,8 +235,8 @@ function calculateFootprintColor(
 ): Color | undefined {
   if (footprintRank === undefined) return undefined
 
-  const strongestColor = CssCustomProperty.getColor('--strongest-footprint-color')
-  const weakestColor = CssCustomProperty.getColor('--weakest-footprint-color')
+  const strongestColor = CssCustomProperty.getColor('--page-tree-strongest-footprint-color')
+  const weakestColor = CssCustomProperty.getColor('--page-tree-weakest-footprint-color')
 
   if (footprintCount === 1) {
     return strongestColor
@@ -254,6 +254,11 @@ export const PageTreeNodeCss = css`
 
     /* ページツリーのアクティブページの背景色 */
     --page-tree-active-page-background-color: hsl(0, 0%, 90%);
+
+    /* 最も新しい足跡の色（線形補間の一端） */
+    --page-tree-strongest-footprint-color: hsl(0, 100%, 97.3%);
+    /* 最も古い足跡の色（線形補間の一端） */
+    --page-tree-weakest-footprint-color: hsl(60, 100%, 97.3%);
 
     /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
     --page-tree-close-button-size: 1.1em;

@@ -270,8 +270,8 @@ function calculateFootprintColor(
 ): Color | undefined {
   if (footprintRank === undefined) return undefined
 
-  const strongestColor = CssCustomProperty.getColor('--strongest-footprint-color')
-  const weakestColor = CssCustomProperty.getColor('--weakest-footprint-color')
+  const strongestColor = CssCustomProperty.getColor('--item-tree-strongest-footprint-color')
+  const weakestColor = CssCustomProperty.getColor('--item-tree-weakest-footprint-color')
 
   if (footprintCount === 1) {
     return strongestColor
@@ -296,9 +296,9 @@ export const ItemTreeNodeCss = css`
     --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
 
     /* 最も新しい足跡の色（線形補間の一端） */
-    --strongest-footprint-color: hsl(0, 100%, 97.3%);
+    --item-tree-strongest-footprint-color: hsl(0, 100%, 97.3%);
     /* 最も古い足跡の色（線形補間の一端） */
-    --weakest-footprint-color: hsl(60, 100%, 97.3%);
+    --item-tree-weakest-footprint-color: hsl(60, 100%, 97.3%);
 
     /* グレーアウト状態のアイテムの標準的なテキスト色 */
     --grayed-out-item-text-color: hsl(0, 0%, 75%);
