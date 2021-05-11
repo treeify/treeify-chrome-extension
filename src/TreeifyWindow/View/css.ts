@@ -3,6 +3,7 @@ import {DataFolderPickerOpenButtonCss} from 'src/TreeifyWindow/View/DataFolderPi
 import {CodeBlockItemEditDialogCss} from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogView'
 import {CommonDialogCss} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 import {DefaultWindowModeSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/DefaultWindowModeSettingDialogView'
+import {LabelEditDialogCss} from 'src/TreeifyWindow/View/Dialog/LabelEditDialogView'
 import {WebPageItemTitleSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogView'
 import {WorkspaceDialogCss} from 'src/TreeifyWindow/View/Dialog/WorkspaceDialogView'
 import {FullWindowModeButtonCss} from 'src/TreeifyWindow/View/FullWindowModeButtonView'
@@ -55,5 +56,6 @@ export function generateStyleElementContents() {
     ${CodeBlockItemEditDialogCss}
     ${DefaultWindowModeSettingDialogCss}
     ${WorkspaceDialogCss}
+    ${LabelEditDialogCss}
   `
 }

@@ -148,6 +148,8 @@ export const WorkspaceDialogCss = css`
   .workspace-dialog_close-button {
     /* 右寄せにする */
     display: block;
-    margin: 0 0 0 auto;
+    margin-left: auto;
+
+    margin-top: 1em;
   }
 `
