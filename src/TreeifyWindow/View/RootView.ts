@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
@@ -107,7 +108,7 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
 function onClickExportButton() {
   const fileName = 'treeify.opml'
 
-  const content = toOpmlString(TOP_ITEM_ID)
+  const content = toOpmlString(List.of(TOP_ITEM_ID))
   const aElement = document.createElement('a')
   aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
   aElement.download = fileName

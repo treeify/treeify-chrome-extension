@@ -24,8 +24,13 @@ export function onCopy(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
+
+    // インデント形式のテキストをクリップボードに入れる
     const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
     event.clipboardData.setData('text/plain', contentText)
+
+    // OPML形式のテキストをクリップボードに入れる
+    event.clipboardData.setData('application/xml', toOpmlString(CurrentState.getTargetItemPath()))
   }
 }
 
@@ -40,8 +45,13 @@ export function onCut(event: ClipboardEvent) {
   } else {
     // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
     event.preventDefault()
+
+    // インデント形式のテキストをクリップボードに入れる
     const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
     event.clipboardData.setData('text/plain', contentText)
+
+    // OPML形式のテキストをクリップボードに入れる
+    event.clipboardData.setData('application/xml', toOpmlString(CurrentState.getTargetItemPath()))
 
     NullaryCommand.deleteItem()
     CurrentState.commit()
@@ -78,7 +88,7 @@ export function onPaste(event: ClipboardEvent) {
     }
   }
 
-  const opmlParseResult = tryParseAsOpml(text)
+  const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
     for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
@@ -108,6 +118,20 @@ export function onPaste(event: ClipboardEvent) {
     // 複数行にわたるテキストの場合
     pasteMultilineText(text)
   }
+}
+
+// OPMLの可能性があるMIMEタイプをいろいろ試してテキストを取り出す
+function getOpmlMimeTypeText(dataTransfer: DataTransfer): string {
+  const textXOpml = dataTransfer.getData('text/x-opml')
+  if (textXOpml !== '') return textXOpml
+
+  const applicationXml = dataTransfer.getData('application/xml')
+  if (applicationXml !== '') return applicationXml
+
+  const textXml = dataTransfer.getData('text/xml')
+  if (textXml !== '') return textXml
+
+  return dataTransfer.getData('text/plain')
 }
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
@@ -358,7 +382,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
  * 指定されたアイテムとその子孫をOPML 2.0形式に変換する。
  * ページや折りたたまれたアイテムの子孫も含める。
  */
-export function toOpmlString(rootItemId: ItemId): string {
+export function toOpmlString(itemPath: ItemPath): string {
   const xmlObject = {
     declaration: {
       attributes: {
@@ -378,7 +402,7 @@ export function toOpmlString(rootItemId: ItemId): string {
           {
             type: 'element',
             name: 'body',
-            elements: [toOpmlOutlineElement(List.of(rootItemId))],
+            elements: [toOpmlOutlineElement(itemPath)],
           },
         ],
       },
