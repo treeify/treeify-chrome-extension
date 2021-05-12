@@ -3,23 +3,10 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 
 /**
- * 【具体例】
- * "items_0"
- * "maxItemId"
+ * データ型の実体としてはPropertyPathと同じだが、
+ * チャンクとして扱われるデータ単位のIDとして使われるPropertyPathを指すエイリアス型。
  */
-export type ChunkId = string
-
-export namespace ChunkId {
-  const delimiter = '_'
-
-  export function toPropertyPath(chunkId: ChunkId): List<string> {
-    return List(chunkId.split(delimiter))
-  }
-
-  export function fromPropertyPath(propertyPath: PropertyPath): ChunkId {
-    return propertyPath.join(delimiter)
-  }
-}
+export type ChunkId = PropertyPath
 
 /**
  * Stateの断片を表すデータ型。
@@ -60,7 +47,7 @@ export namespace Chunk {
       if (collectionKeys.has(firstKey)) {
         // @ts-ignore
         for (const secondKey of Object.keys(state[firstKey])) {
-          yield ChunkId.fromPropertyPath(List.of(firstKey, secondKey))
+          yield PropertyPath.of(firstKey, secondKey)
         }
       } else {
         yield firstKey
@@ -72,10 +59,11 @@ export namespace Chunk {
   export function extractChunkIds(propertyPaths: Set<PropertyPath>): Set<ChunkId> {
     const result = new Set<ChunkId>()
     for (const propertyPath of propertyPaths) {
-      if (collectionKeys.has(propertyPath.get(0)!.toString())) {
-        result.add(ChunkId.fromPropertyPath(propertyPath.take(2)))
+      const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
+      if (collectionKeys.has(propertyKeys.get(0)!.toString())) {
+        result.add(PropertyPath.of(...propertyKeys.take(2)))
       } else {
-        result.add(ChunkId.fromPropertyPath(propertyPath.take(1)))
+        result.add(PropertyPath.of(...propertyKeys.take(1)))
       }
     }
     return result
@@ -84,9 +72,9 @@ export namespace Chunk {
   // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。
   // TODO: setPropertyみたいに再帰関数でやるべきじゃないかな？
   export function create(state: State, chunkId: ChunkId): Chunk {
-    const propertyPath = ChunkId.toPropertyPath(chunkId)
-    const firstKey = propertyPath.get(0)
-    const secondKey = propertyPath.get(1)
+    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+    const firstKey = propertyKeys.get(0)
+    const secondKey = propertyKeys.get(1)
     // @ts-ignore
     const rawObject = secondKey === undefined ? state[firstKey] : state[firstKey][secondKey]
     return {
@@ -107,18 +95,18 @@ export namespace Chunk {
     return result
   }
 
-  // a.b.cみたいなネストしたプロパティアクセスでヌルポにならないよう気をつけつつ値を設定する
+  // a.b.cのようなネストしたプロパティアクセスでヌルポにならないよう気をつけつつ値を設定する
   function setProperty(targetObject: any, chunkId: ChunkId, value: any) {
-    const propertyPath = ChunkId.toPropertyPath(chunkId)
-    if (propertyPath.size === 1) {
-      targetObject[propertyPath.get(0)!] = value
+    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+    if (propertyKeys.size === 1) {
+      targetObject[propertyKeys.get(0)!] = value
     } else {
-      if (targetObject[propertyPath.get(0)!] === undefined) {
-        targetObject[propertyPath.get(0)!] = {}
+      if (targetObject[propertyKeys.get(0)!] === undefined) {
+        targetObject[propertyKeys.get(0)!] = {}
       }
       setProperty(
-        targetObject[propertyPath.get(0)!],
-        ChunkId.fromPropertyPath(propertyPath.shift()),
+        targetObject[propertyKeys.get(0)!],
+        PropertyPath.of(...propertyKeys.shift()),
         value
       )
     }
