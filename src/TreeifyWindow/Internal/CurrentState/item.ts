@@ -185,6 +185,18 @@ export function getLabels(itemPath: ItemPath): List<string> {
   }
 }
 
+/**
+ * 指定されたアイテムパスのラベルを設定する。
+ * 親を持たないアイテムパスの場合、何もしない。
+ */
+export function setLabels(itemPath: ItemPath, labels: List<string>) {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  if (parentItemId !== undefined) {
+    Internal.instance.state.items[itemId].parents[parentItemId].labels = labels
+  }
+}
+
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   Internal.instance.state.items[itemId].timestamp = Timestamp.now()

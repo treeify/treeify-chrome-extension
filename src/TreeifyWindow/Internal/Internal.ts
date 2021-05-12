@@ -228,6 +228,7 @@ export class Internal {
         '0110KeyW': {functionName: 'showWorkspaceDialog'},
         '0010KeyE': {functionName: 'excludeFromCurrentWorkspace'},
         '0000F2': {functionName: 'edit'},
+        '0100F2': {functionName: 'showLabelEditDialog'},
         '0110ArrowDown': {functionName: 'selectAllBelowItems'},
         '0110ArrowUp': {functionName: 'selectAllAboveItems'},
       },
@@ -239,6 +240,7 @@ export class Internal {
       codeBlockItemEditDialog: null,
       defaultWindowModeSettingDialog: null,
       workspaceDialog: null,
+      labelEditDialog: null,
     }
   }
 }

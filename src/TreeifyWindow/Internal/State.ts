@@ -33,6 +33,7 @@ export type State = {
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
   workspaceDialog: WorkspaceDialog | null
+  labelEditDialog: LabelEditDialog | null
 }
 
 /**
@@ -159,6 +160,11 @@ export type CodeBlockItemEditDialog = {
 export type DefaultWindowModeSettingDialog = {}
 
 export type WorkspaceDialog = {}
+
+/** ラベル編集ダイアログが持つ内部状態の型 */
+export type LabelEditDialog = {
+  labels: List<string>
+}
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */

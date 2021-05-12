@@ -3,6 +3,7 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {
   CodeBlockItemEditDialog,
   DefaultWindowModeSettingDialog,
+  LabelEditDialog,
   WebPageItemTitleSettingDialog,
   WorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/State'
@@ -29,4 +30,10 @@ export function setDefaultWindowModeSettingDialog(value: DefaultWindowModeSettin
 export function setWorkspaceDialog(value: WorkspaceDialog | null) {
   Internal.instance.state.workspaceDialog = value
   Internal.instance.markAsMutated(PropertyPath.of('workspaceDialog'))
+}
+
+/** ラベル編集ダイアログの状態を設定する */
+export function setLabelEditDialog(value: LabelEditDialog | null) {
+  Internal.instance.state.labelEditDialog = value
+  Internal.instance.markAsMutated(PropertyPath.of('labelEditDialog'))
 }
