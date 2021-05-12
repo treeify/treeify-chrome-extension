@@ -184,7 +184,7 @@ export namespace TreeifyWindow {
   // Windowsでウィンドウの左端、右端、下端に隙間ができる問題への対策用関数
   function fillWindowGaps(rawData: UpdateInfo | CreateData): UpdateInfo | CreateData {
     if (new UAParser().getOS().name === 'Windows') {
-      const gapPx = 9
+      const gapPx = 8
       const cloned = {...rawData}
       if (cloned.left !== undefined) {
         cloned.left -= gapPx
