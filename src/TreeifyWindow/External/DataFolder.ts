@@ -3,6 +3,7 @@ import md5 from 'md5'
 import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
 import {DeviceId} from 'src/TreeifyWindow/DeviceId'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
+import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
@@ -387,8 +388,8 @@ export class DataFolder {
 
   // 各チャンクの書き込み先ファイル名を返す
   private static getChunkPackFileName(chunkId: ChunkId): string {
-    const propertyPath = ChunkId.toPropertyPath(chunkId)
-    const firstKey = propertyPath.first() as keyof State
+    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+    const firstKey = propertyKeys.first() as keyof State
     switch (firstKey) {
       case 'items':
       case 'textItems':
@@ -397,7 +398,7 @@ export class DataFolder {
       case 'codeBlockItems':
         // チャンク数が肥大化するグループ
 
-        const itemId = parseInt(propertyPath.get(1)!)
+        const itemId = parseInt(propertyKeys.get(1)!)
 
         /**
          * このコメント欄では1ファイルにアイテムを詰め込む個数として100を選んだ理由を説明する。
