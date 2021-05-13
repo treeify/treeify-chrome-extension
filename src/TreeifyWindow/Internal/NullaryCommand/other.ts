@@ -7,7 +7,6 @@ import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {State} from 'src/TreeifyWindow/Internal/State'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
 
 /**
@@ -38,7 +37,7 @@ export async function saveToDataFolder() {
         await cleanup()
         // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
         External.instance.dataFolder = dataFolder
-        await startup(state as State)
+        await startup(state)
       }
     } else {
       // もし自身の知らない他デバイスの更新があれば
@@ -50,7 +49,7 @@ export async function saveToDataFolder() {
       await cleanup()
       // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
       External.instance.dataFolder = dataFolder
-      await startup(state as State)
+      await startup(state)
     }
   } else {
     const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
@@ -75,7 +74,7 @@ export async function saveToDataFolder() {
       await cleanup()
       // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
       External.instance.dataFolder = dataFolder
-      await startup(state as State)
+      await startup(state)
     }
   }
   CurrentState.commit()

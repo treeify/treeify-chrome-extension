@@ -9,7 +9,7 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 export class Internal {
   private static _instance: Internal | undefined
 
-  readonly state: State = Internal.createInitialState()
+  readonly state: State = Internal.createSampleState()
 
   private readonly mutatedPropertyPaths = new Set<PropertyPath>()
   private readonly stateChangeListeners = new Set<
@@ -70,6 +70,82 @@ export class Internal {
   }
 
   static createInitialState(): State {
+    return {
+      items: {
+        0: {
+          itemType: ItemType.TEXT,
+          childItemIds: List.of(),
+          parents: {},
+          timestamp: Timestamp.now(),
+          cssClasses: List.of(),
+        },
+      },
+      textItems: {
+        0: {
+          domishObjects: List.of({type: 'text', textContent: 'Top'}),
+        },
+      },
+      webPageItems: {},
+      imageItems: {},
+      codeBlockItems: {},
+      pages: {
+        0: {
+          targetItemPath: List.of(0),
+          anchorItemPath: List.of(0),
+          defaultWindowMode: 'keep',
+        },
+      },
+      workspaces: {
+        [Timestamp.now()]: {
+          excludedItemIds: List.of(),
+          name: 'ワークスペース1',
+        },
+      },
+      mountedPageIds: List.of(0),
+      availableItemIds: List.of(),
+      maxItemId: 0,
+      activePageId: 0,
+      itemTreeKeyboardBinding: {
+        '0000Tab': {functionName: 'indentItem'},
+        '0100Tab': {functionName: 'unindentItem'},
+        '1000ArrowUp': {functionName: 'moveItemUpward'},
+        '1000ArrowDown': {functionName: 'moveItemDownward'},
+        '1100ArrowUp': {functionName: 'moveItemToPrevSibling'},
+        '1100ArrowDown': {functionName: 'moveItemToNextSibling'},
+        '0000Enter': {functionName: 'enterKeyDefault'},
+        '0100Enter': {functionName: 'insertLineBreak'},
+        '1000Enter': {functionName: 'toggleGrayedOut'},
+        '1000KeyL': {functionName: 'toggleHighlighted'},
+        '1000KeyD': {functionName: 'deleteItem'},
+        '1000KeyP': {functionName: 'toggleCollapsed'},
+        '1000KeyO': {functionName: 'toggleBold'},
+        '1000KeyU': {functionName: 'toggleUnderline'},
+        '1000KeyI': {functionName: 'toggleItalic'},
+        '1000KeyK': {functionName: 'toggleStrikethrough'},
+        '1000KeyS': {functionName: 'saveToDataFolder'},
+        '0010KeyC': {functionName: 'copyForTransclusion'},
+        '1100KeyL': {functionName: 'createEmptyCodeBlockItem'},
+        '0010KeyW': {functionName: 'showDefaultWindowModeSettingDialog'},
+        '0110KeyW': {functionName: 'showWorkspaceDialog'},
+        '0010KeyE': {functionName: 'excludeFromCurrentWorkspace'},
+        '0000F2': {functionName: 'edit'},
+        '0100F2': {functionName: 'showLabelEditDialog'},
+        '0110ArrowDown': {functionName: 'selectAllBelowItems'},
+        '0110ArrowUp': {functionName: 'selectAllAboveItems'},
+      },
+      itemTreeDeleteButtonMouseBinding: {
+        '0000MouseButton0': {functionName: 'deleteItem'},
+        '1000MouseButton0': {functionName: 'deleteItemItself'},
+      },
+      webPageItemTitleSettingDialog: null,
+      codeBlockItemEditDialog: null,
+      defaultWindowModeSettingDialog: null,
+      workspaceDialog: null,
+      labelEditDialog: null,
+    }
+  }
+
+  static createSampleState(): State {
     return {
       items: {
         0: {

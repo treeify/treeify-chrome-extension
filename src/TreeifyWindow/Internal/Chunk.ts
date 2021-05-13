@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 
@@ -83,12 +84,9 @@ export namespace Chunk {
     }
   }
 
-  /**
-   * チャンクリストからStateみたいなオブジェクトを作る。
-   * できあがったオブジェクトがStateのスキーマを満たしていることは全く検証・保証しない。
-   */
-  export function inflateStateFromChunks(chunks: List<Chunk>): object {
-    const result = {}
+  /** チャンクリストからStateオブジェクトを作る */
+  export function inflateStateFromChunks(chunks: List<Chunk>): State {
+    const result = Internal.createInitialState()
     for (const chunk of chunks) {
       setProperty(result, chunk.id, chunk.data)
     }
