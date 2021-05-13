@@ -462,19 +462,22 @@ export function enterKeyDefault() {
  * ターゲットアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItem() {
-  const targetItemPath = CurrentState.getTargetItemPath()
-
   // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(targetItemPath)) return
+  if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) return
 
-  // 上のアイテムをフォーカス
-  const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+
+  // 削除されるアイテムの上のアイテムをフォーカス
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   assertNonUndefined(aboveItemPath)
   External.instance.requestFocusAfterRendering(
     ItemTreeContentView.focusableDomElementId(aboveItemPath)
   )
 
-  CurrentState.deleteItem(ItemPath.getItemId(targetItemPath))
+  // 対象アイテムを削除
+  for (const selectedItemPath of selectedItemPaths) {
+    CurrentState.deleteItem(ItemPath.getItemId(selectedItemPath))
+  }
 }
 
 /**
