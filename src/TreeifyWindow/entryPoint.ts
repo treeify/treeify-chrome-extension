@@ -6,5 +6,5 @@ import {startup} from 'src/TreeifyWindow/startup'
 doAsyncWithErrorCapture(async () => {
   console.log('デバイスID = ' + DeviceId.get())
 
-  await startup(Internal.createInitialState())
+  await startup(Internal.createSampleState())
 })
