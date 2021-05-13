@@ -102,6 +102,11 @@ export function createPageTreeNodeViewModel(
 ): PageTreeNodeViewModel {
   const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
+
+  // TODO: パラメータをカスタマイズ可能にする
+  const footprintCount = Math.floor(Math.pow(filteredPageIds.size, 0.7))
+  const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId)
+
   return {
     bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
     contentViewModel: createPageTreeContentViewModel(state, itemId),
@@ -115,8 +120,8 @@ export function createPageTreeNodeViewModel(
     ),
     isActivePage: CurrentState.getActivePageId() === itemId,
     isRoot: itemId === TOP_ITEM_ID,
-    footprintRank: filteredPageIds.size - filteredPageIds.indexOf(itemId),
-    footprintCount: filteredPageIds.size,
+    footprintRank: rank <= footprintCount ? rank : undefined,
+    footprintCount,
     onClickContentArea: () => {
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
