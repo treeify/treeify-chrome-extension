@@ -30,7 +30,10 @@ export function onCopy(event: ClipboardEvent) {
     event.clipboardData.setData('text/plain', contentText)
 
     // OPML形式のテキストをクリップボードに入れる
-    event.clipboardData.setData('application/xml', toOpmlString(CurrentState.getTargetItemPath()))
+    event.clipboardData.setData(
+      'application/xml',
+      toOpmlString(CurrentState.getSelectedItemPaths())
+    )
   }
 }
 
@@ -51,7 +54,10 @@ export function onCut(event: ClipboardEvent) {
     event.clipboardData.setData('text/plain', contentText)
 
     // OPML形式のテキストをクリップボードに入れる
-    event.clipboardData.setData('application/xml', toOpmlString(CurrentState.getTargetItemPath()))
+    event.clipboardData.setData(
+      'application/xml',
+      toOpmlString(CurrentState.getSelectedItemPaths())
+    )
 
     NullaryCommand.deleteItem()
     CurrentState.commit()
@@ -382,7 +388,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
  * 指定されたアイテムとその子孫をOPML 2.0形式に変換する。
  * ページや折りたたまれたアイテムの子孫も含める。
  */
-export function toOpmlString(itemPath: ItemPath): string {
+export function toOpmlString(itemPaths: List<ItemPath>): string {
   const xmlObject = {
     declaration: {
       attributes: {
@@ -402,7 +408,7 @@ export function toOpmlString(itemPath: ItemPath): string {
           {
             type: 'element',
             name: 'body',
-            elements: [toOpmlOutlineElement(itemPath)],
+            elements: itemPaths.map(toOpmlOutlineElement).toArray(),
           },
         ],
       },
