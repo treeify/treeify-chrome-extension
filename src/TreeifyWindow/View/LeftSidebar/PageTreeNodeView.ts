@@ -1,5 +1,5 @@
 import Color from 'color'
-import {Collection, List, Seq, Set} from 'immutable'
+import {Collection, List, Seq} from 'immutable'
 import {html, TemplateResult} from 'lit-html'
 import {classMap} from 'lit-html/directives/class-map'
 import {styleMap} from 'lit-html/directives/style-map'
@@ -40,14 +40,7 @@ export type PageTreeNodeViewModel = {
 }
 
 export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
-  const excludedItemIds = CurrentState.getExcludedItemIds()
-  const filteredPageIds = state.mountedPageIds.filter((pageId) => {
-    // ページが除外アイテムならページツリーには表示しない
-    if (excludedItemIds.contains(pageId)) return false
-
-    // ページの先祖アイテムに除外アイテムが含まれていたらページツリーには表示しない
-    return Set(CurrentState.yieldAncestorItemIds(pageId)).intersect(excludedItemIds).isEmpty()
-  })
+  const filteredPageIds = CurrentState.getFilteredMountedPageIds()
   const itemPaths = filteredPageIds.flatMap((itemId) => [
     ...searchItemPathForMountedPage(state, List.of(itemId)),
   ])
