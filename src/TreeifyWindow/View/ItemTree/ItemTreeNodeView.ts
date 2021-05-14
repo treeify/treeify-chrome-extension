@@ -448,6 +448,7 @@ export const ItemTreeNodeCss = css`
   CSSの優先順位のためにファイルの下の方で定義する。
   */
   .multi-selected.item-tree-node,
+  .multi-selected .item-tree-node_content-area,
   .multi-selected .item-tree-node_body-area {
     background: var(--item-tree-selected-item-background-color);
   }
