@@ -108,7 +108,7 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
 function onClickExportButton() {
   const fileName = 'treeify.opml'
 
-  const content = toOpmlString(List.of(TOP_ITEM_ID))
+  const content = toOpmlString(List.of(List.of(TOP_ITEM_ID)))
   const aElement = document.createElement('a')
   aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
   aElement.download = fileName
