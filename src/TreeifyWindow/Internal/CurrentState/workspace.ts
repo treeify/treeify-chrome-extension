@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import {List, Set} from 'immutable'
 import {ItemId, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -71,8 +71,21 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
   Internal.instance.markAsMutated(PropertyPath.of('workspaces', workspaceId))
 }
 
-/** 先祖アイテムのジェネレーター */
-export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
+/** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
+export function getFilteredMountedPageIds(): List<ItemId> {
+  return Internal.instance.state.mountedPageIds.filter((pageId) => {
+    const excludedItemIds = CurrentState.getExcludedItemIds()
+
+    // ページが除外アイテムそのものの場合
+    if (excludedItemIds.contains(pageId)) return false
+
+    // ページの先祖アイテムに除外アイテムが含まれているかどうか
+    return Set(yieldAncestorItemIds(pageId)).intersect(excludedItemIds).isEmpty()
+  })
+}
+
+// 先祖アイテムのジェネレーター
+function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     yield parentItemId
     yield* yieldAncestorItemIds(parentItemId)

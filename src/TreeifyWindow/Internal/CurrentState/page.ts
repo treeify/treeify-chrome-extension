@@ -59,15 +59,13 @@ const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 export function getActivePageId(): ItemId {
   const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)
   if (savedActivePageId === null) {
-    // TODO: 除外アイテムによるフィルターが必要
-    return Internal.instance.state.mountedPageIds.last()
+    return CurrentState.getFilteredMountedPageIds().last()
   } else {
     const activePageId = parseInt(savedActivePageId)
     if (CurrentState.isPage(activePageId)) {
       return activePageId
     } else {
-      // TODO: 除外アイテムによるフィルターが必要
-      return Internal.instance.state.mountedPageIds.last()
+      return CurrentState.getFilteredMountedPageIds().last()
     }
   }
 }
