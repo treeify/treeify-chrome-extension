@@ -173,8 +173,8 @@ function countTabsInSubtree(state: State, itemId: ItemId): integer {
 }
 
 function deriveIsSelected(state: State, itemPath: ItemPath): boolean {
-  const targetItemPath = state.pages[state.activePageId].targetItemPath
-  const anchorItemPath = state.pages[state.activePageId].anchorItemPath
+  const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
+  const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
   if (is(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
     return false

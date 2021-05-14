@@ -104,7 +104,6 @@ export class Internal {
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
       maxItemId: 0,
-      activePageId: 0,
       itemTreeKeyboardBinding: {
         '0000Tab': {functionName: 'indentItem'},
         '0100Tab': {functionName: 'unindentItem'},
@@ -279,7 +278,6 @@ export class Internal {
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
       maxItemId: 8,
-      activePageId: 0,
       itemTreeKeyboardBinding: {
         '0000Tab': {functionName: 'indentItem'},
         '0100Tab': {functionName: 'unindentItem'},

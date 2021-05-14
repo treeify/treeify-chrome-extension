@@ -7,7 +7,7 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 
 /** ターゲットアイテムパスを返す */
 export function getTargetItemPath(): ItemPath {
-  return Internal.instance.state.pages[Internal.instance.state.activePageId].targetItemPath
+  return Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath
 }
 
 /** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
@@ -18,19 +18,19 @@ export function setTargetItemPath(itemPath: ItemPath) {
 
 /** ターゲットアイテムパスを返す */
 export function getAnchorItemPath(): ItemPath {
-  return Internal.instance.state.pages[Internal.instance.state.activePageId].anchorItemPath
+  return Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath
 }
 
 /** アンカーアイテムパスを上書きする */
 export function setAnchorItemPath(itemPath: ItemPath) {
-  const activePageId = Internal.instance.state.activePageId
+  const activePageId = CurrentState.getActivePageId()
   Internal.instance.state.pages[activePageId].anchorItemPath = itemPath
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'anchorItemPath'))
 }
 
 /** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
-  const activePageId = Internal.instance.state.activePageId
+  const activePageId = CurrentState.getActivePageId()
   Internal.instance.state.pages[activePageId].targetItemPath = itemPath
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
 }

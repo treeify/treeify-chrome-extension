@@ -5,7 +5,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {DefaultWindowMode, Page, State} from 'src/TreeifyWindow/Internal/State'
+import {DefaultWindowMode, Page} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
@@ -50,10 +50,31 @@ function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
   return 'keep'
 }
 
-/** state.activePageIdを設定する */
+const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
+
+/**
+ * localStorageのアクティブページIDを返す。
+ * 保存されていない場合や値が不正な場合は適当なページIDを返す。
+ */
+export function getActivePageId(): ItemId {
+  const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)
+  if (savedActivePageId === null) {
+    // TODO: 除外アイテムによるフィルターが必要
+    return Internal.instance.state.mountedPageIds.last()
+  } else {
+    const activePageId = parseInt(savedActivePageId)
+    if (CurrentState.isPage(activePageId)) {
+      return activePageId
+    } else {
+      // TODO: 除外アイテムによるフィルターが必要
+      return Internal.instance.state.mountedPageIds.last()
+    }
+  }
+}
+
+/** localStorageにアクティブページIDを保存する */
 export function setActivePageId(itemId: ItemId) {
-  Internal.instance.state.activePageId = itemId
-  Internal.instance.markAsMutated(PropertyPath.of('activePageId'))
+  localStorage.setItem(ACTIVE_PAGE_ID_KEY, itemId.toString())
 }
 
 /**
@@ -105,6 +126,6 @@ export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
 }
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
-export function deriveTreeifyWindowTitle(state: State): string {
-  return getContentAsPlainText(state.activePageId)
+export function deriveTreeifyWindowTitle(): string {
+  return getContentAsPlainText(CurrentState.getActivePageId())
 }
