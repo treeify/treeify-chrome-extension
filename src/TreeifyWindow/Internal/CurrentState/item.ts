@@ -205,7 +205,9 @@ export function updateItemTimestamp(itemId: ItemId) {
 
 /** 指定されたアイテムの親アイテムIDのリストを返す */
 export function getParentItemIds(itemId: ItemId): List<ItemId> {
-  return List(Object.keys(Internal.instance.state.items[itemId].parents).map(parseInt))
+  return List(Object.keys(Internal.instance.state.items[itemId].parents)).map((key) =>
+    parseInt(key)
+  )
 }
 
 /** 指定されたアイテムの親の数を返す */
