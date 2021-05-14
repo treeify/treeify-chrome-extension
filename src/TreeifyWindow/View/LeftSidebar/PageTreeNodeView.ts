@@ -113,7 +113,7 @@ export function createPageTreeNodeViewModel(
         filteredPageIds
       )
     ),
-    isActivePage: state.activePageId === itemId,
+    isActivePage: CurrentState.getActivePageId() === itemId,
     isRoot: itemId === TOP_ITEM_ID,
     footprintRank: filteredPageIds.size - filteredPageIds.indexOf(itemId),
     footprintCount: filteredPageIds.size,
@@ -130,7 +130,7 @@ export function createPageTreeNodeViewModel(
         CurrentState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
-        if (itemId === Internal.instance.state.activePageId) {
+        if (itemId === CurrentState.getActivePageId()) {
           const hottestPageId = Internal.instance.state.mountedPageIds
             .map((pageId) => {
               return {

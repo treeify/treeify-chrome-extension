@@ -21,7 +21,7 @@ export function createWebPageItemTitleSettingDialogViewModel(
 ): WebPageItemTitleSettingDialogViewModel | undefined {
   if (state.webPageItemTitleSettingDialog === null) return undefined
 
-  const targetItemPath = state.pages[state.activePageId].targetItemPath
+  const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   return {

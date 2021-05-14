@@ -224,7 +224,7 @@ export async function matchTabsAndWebPageItems() {
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最後の子として追加する
-      const activePageId = Internal.instance.state.activePageId
+      const activePageId = CurrentState.getActivePageId()
       CurrentState.insertLastChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合

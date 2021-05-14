@@ -31,7 +31,7 @@ export type ItemTreeViewModel = {
 }
 
 export function createItemTreeViewModel(state: State): ItemTreeViewModel {
-  const rootItemPath = List.of(state.activePageId)
+  const rootItemPath = List.of(CurrentState.getActivePageId())
 
   const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算

@@ -23,7 +23,6 @@ export type State = {
   /** 削除され再利用されるアイテムID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId
-  activePageId: ItemId
   /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */
   itemTreeKeyboardBinding: {[K in InputId]: Command}
   /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */

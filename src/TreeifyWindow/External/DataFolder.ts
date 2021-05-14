@@ -434,7 +434,6 @@ export class DataFolder {
       case 'pages':
       case 'availableItemIds':
       case 'maxItemId':
-      case 'activePageId':
         // ミューテーションされる頻度が非常に高いグループ
         return `${firstKey}.json`
       default:

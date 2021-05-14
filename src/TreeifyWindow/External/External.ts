@@ -105,7 +105,7 @@ export class External {
     this.pendingTextItemSelection = undefined
 
     // Treeifyウィンドウのタイトルを更新する
-    document.title = CurrentState.deriveTreeifyWindowTitle(state)
+    document.title = CurrentState.deriveTreeifyWindowTitle()
   }
 
   /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
