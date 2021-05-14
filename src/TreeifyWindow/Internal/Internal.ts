@@ -141,6 +141,7 @@ export class Internal {
       defaultWindowModeSettingDialog: null,
       workspaceDialog: null,
       labelEditDialog: null,
+      otherParentsDialog: null,
     }
   }
 
@@ -315,6 +316,7 @@ export class Internal {
       defaultWindowModeSettingDialog: null,
       workspaceDialog: null,
       labelEditDialog: null,
+      otherParentsDialog: null,
     }
   }
 }
