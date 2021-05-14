@@ -34,7 +34,13 @@ import {
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
   isActivePage: boolean
-  isSelected: boolean
+  /**
+   * このアイテムが選択されているかどうかを示す値。
+   * 複数選択されたアイテムのうちの1つならmulti。
+   * 単一選択されたアイテムならsingle。
+   * 選択されていないならnon。
+   */
+  selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
   cssClasses: List<string>
   footprintRank: integer | undefined
@@ -63,7 +69,7 @@ export function createItemTreeNodeViewModel(
   return {
     itemPath,
     isActivePage: !ItemPath.hasParent(itemPath),
-    isSelected: deriveIsSelected(state, itemPath),
+    selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
     cssClasses: item.cssClasses,
     footprintRank: footprintRankMap.get(itemId),
@@ -172,31 +178,38 @@ function countTabsInSubtree(state: State, itemId: ItemId): integer {
   }
 }
 
-function deriveIsSelected(state: State, itemPath: ItemPath): boolean {
+function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
   const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
   const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
   if (is(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
-    return false
+    if (is(itemPath, targetItemPath)) return 'single'
+    else return 'non'
   }
 
   if (!is(itemPath.pop(), targetItemPath.pop())) {
     // 選択されたアイテムパス群がこのアイテムパスと異なる子リスト上に存在する場合
-    return false
+    return 'non'
   }
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const anchorItemId = ItemPath.getItemId(anchorItemPath)
 
   const parentItemId = ItemPath.getParentItemId(itemPath)
-  if (parentItemId === undefined) return false
+  // itemPathが親を持たない場合、複数選択に含まれることはないので必ずnonになる
+  if (parentItemId === undefined) return 'non'
+
   const childItemIds = state.items[parentItemId].childItemIds
   const targetItemIndex = childItemIds.indexOf(targetItemId)
   const anchorItemIndex = childItemIds.indexOf(anchorItemId)
   const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))
   const minIndex = Math.min(targetItemIndex, anchorItemIndex)
   const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
-  return minIndex <= itemIndex && itemIndex <= maxIndex
+  if (minIndex <= itemIndex && itemIndex <= maxIndex) {
+    return 'multi'
+  } else {
+    return 'non'
+  }
 }
 
 /** アイテムツリーの各アイテムのルートView */
@@ -207,7 +220,12 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   })
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 
-  return html`<div class=${classMap({'item-tree-node': true, selected: viewModel.isSelected})}>
+  return html`<div
+    class=${classMap({
+      'item-tree-node': true,
+      'multi-selected': viewModel.selected === 'multi',
+    })}
+  >
     ${viewModel.isActivePage
       ? html`<div class="grid-empty-cell"></div>`
       : html`
@@ -232,7 +250,10 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
           <!-- コンテンツ領域 -->
           <div
             data-item-path=${JSON.stringify(viewModel.itemPath.toArray())}
-            class="item-tree-node_content-area"
+            class="${classMap({
+              'item-tree-node_content-area': true,
+              'single-selected': viewModel.selected === 'single',
+            })},"
             @mousedown=${viewModel.onMouseDownContentArea}
           >
             ${ItemTreeContentView(viewModel.contentViewModel)}
@@ -331,9 +352,8 @@ export const ItemTreeNodeCss = css`
     /* マウスホバーアイテムの強調表示 */
     background: var(--item-tree-mouse-hover-item-background-color);
   }
-  /* フォーカス時のコンテンツ領域 */
-  .item-tree-node_content-area:focus-within {
-    /* フォーカスアイテムの強調表示 */
+  /* 単一選択されたアイテムのコンテンツ領域 */
+  .single-selected.item-tree-node_content-area {
     background: var(--item-tree-focused-item-background-color);
   }
 
@@ -427,8 +447,8 @@ export const ItemTreeNodeCss = css`
   他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
   CSSの優先順位のためにファイルの下の方で定義する。
   */
-  .selected.item-tree-node,
-  .selected .item-tree-node_body-area {
+  .multi-selected.item-tree-node,
+  .multi-selected .item-tree-node_body-area {
     background: var(--item-tree-selected-item-background-color);
   }
 `
