@@ -207,7 +207,9 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResu
   })
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 
-  return html`<div class=${classMap({'item-tree-node': true, selected: viewModel.isSelected})}>
+  return html`<div
+    class=${classMap({'item-tree-node': true, 'multi-selected': viewModel.isSelected})}
+  >
     ${viewModel.isActivePage
       ? html`<div class="grid-empty-cell"></div>`
       : html`
@@ -427,8 +429,8 @@ export const ItemTreeNodeCss = css`
   他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
   CSSの優先順位のためにファイルの下の方で定義する。
   */
-  .selected.item-tree-node,
-  .selected .item-tree-node_body-area {
+  .multi-selected.item-tree-node,
+  .multi-selected .item-tree-node_body-area {
     background: var(--item-tree-selected-item-background-color);
   }
 `
