@@ -115,7 +115,7 @@ export function createItemTreeWebPageContentViewModel(
           case '0100MouseButton0':
             event.preventDefault()
 
-            if (isUnloaded) {
+            if (tab === undefined) {
               // アンロード状態の場合
               NullaryCommand.loadSubtree()
             } else {
@@ -128,7 +128,7 @@ export function createItemTreeWebPageContentViewModel(
           case '1100MouseButton0':
             event.preventDefault()
 
-            if (isUnloaded) {
+            if (tab === undefined) {
               // アンロード状態の場合
               NullaryCommand.loadItem()
             } else {
