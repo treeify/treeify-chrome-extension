@@ -51,6 +51,11 @@ export function createItemTreeWebPageContentViewModel(
     isAudible: tab?.audible === true,
     onFocus: (event) => {
       doWithErrorCapture(() => {
+        // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+        if (event.target instanceof Node) {
+          getSelection()?.setPosition(event.target)
+        }
+
         CurrentState.setTargetItemPath(itemPath)
         CurrentState.commit()
       })
