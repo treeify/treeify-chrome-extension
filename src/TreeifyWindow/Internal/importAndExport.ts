@@ -356,7 +356,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       if (!markedupText.styles.isEmpty()) {
         baseAttributes.styles = JSON.stringify(markedupText.styles.toArray())
       }
-      return baseAttributes
+      break
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       baseAttributes.type = 'link'
@@ -366,22 +366,35 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       if (webPageItem.title !== null) {
         baseAttributes.title = webPageItem.tabTitle
       }
-      return baseAttributes
+      break
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       baseAttributes.type = 'image'
       baseAttributes.text = imageItem.caption
       baseAttributes.url = imageItem.url
-      return baseAttributes
+      break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       baseAttributes.type = 'code-block'
       baseAttributes.text = codeBlockItem.code
       baseAttributes.language = codeBlockItem.language
-      return baseAttributes
+      break
     default:
       assertNeverType(item.itemType)
   }
+
+  // 属性値内の&を手動でXMLエスケープする。
+  // 本来はライブラリがやるべきだと思うが不具合でやってくれない。
+  // Pull requestは既に出ているので待っている状態。
+  // https://github.com/nashwaan/xml-js/pull/160
+  for (const key in baseAttributes) {
+    const attr = baseAttributes[key]
+    if (typeof attr === 'string') {
+      baseAttributes[key] = attr.replaceAll('&', '&amp;')
+    }
+  }
+
+  return baseAttributes
 }
 
 /**
