@@ -20,7 +20,8 @@ export type ItemTreeWebPageContentViewModel = {
   title: string
   faviconUrl: string
   isLoading: boolean
-  isUnloaded: boolean
+  isSoftUnloaded: boolean
+  isHardUnloaded: boolean
   isUnread: boolean
   isAudible: boolean
   onFocus: (event: FocusEvent) => void
@@ -47,7 +48,8 @@ export function createItemTreeWebPageContentViewModel(
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',
-    isUnloaded,
+    isSoftUnloaded: tab?.discarded === true,
+    isHardUnloaded: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     onFocus: (event) => {
@@ -177,7 +179,8 @@ export function ItemTreeWebPageContentView(
       ? html`<img
           class=${classMap({
             'item-tree-web-page-content_favicon': true,
-            'unloaded-item': viewModel.isUnloaded,
+            'soft-unloaded-item': viewModel.isSoftUnloaded,
+            'hard-unloaded-item': viewModel.isHardUnloaded,
           })}
           src=${viewModel.faviconUrl}
           @click=${viewModel.onClickFavicon}
@@ -186,7 +189,8 @@ export function ItemTreeWebPageContentView(
           class=${classMap({
             'item-tree-web-page-content_favicon': true,
             'default-favicon': true,
-            'unloaded-item': viewModel.isUnloaded,
+            'soft-unloaded-item': viewModel.isSoftUnloaded,
+            'hard-unloaded-item': viewModel.isHardUnloaded,
           })}
           @click=${viewModel.onClickFavicon}
         />`}
@@ -198,7 +202,8 @@ export function ItemTreeWebPageContentView(
     <div
       class=${classMap({
         'item-tree-web-page-content_title': true,
-        'unloaded-item': viewModel.isUnloaded,
+        'soft-unloaded-item': viewModel.isSoftUnloaded,
+        'hard-unloaded-item': viewModel.isHardUnloaded,
         unread: viewModel.isUnread,
       })}
       title=${viewModel.title}
@@ -228,7 +233,8 @@ export const ItemTreeWebPageContentCss = css`
     --item-tree-audible-icon-color: hsl(0, 0%, 35%);
 
     /* アンロード済みウェブページアイテムのopacity */
-    --unloaded-web-page-item-opacity: 45%;
+    --soft-unloaded-web-page-item-opacity: 75%;
+    --hard-unloaded-web-page-item-opacity: 55%;
   }
 
   /* ウェブページアイテムのコンテンツ領域のルート */
@@ -314,12 +320,18 @@ export const ItemTreeWebPageContentCss = css`
   }
 
   /* アンロード済みウェブページアイテムのタイトルのグレーアウト */
-  .item-tree-web-page-content_title.unloaded-item {
-    filter: opacity(var(--unloaded-web-page-item-opacity));
+  .item-tree-web-page-content_title.soft-unloaded-item {
+    filter: opacity(var(--soft-unloaded-web-page-item-opacity));
+  }
+  .item-tree-web-page-content_title.hard-unloaded-item {
+    filter: opacity(var(--hard-unloaded-web-page-item-opacity));
   }
 
   /* アンロード済みウェブページアイテムのファビコンのグレーアウト */
-  .item-tree-web-page-content_favicon.unloaded-item {
-    filter: opacity(var(--unloaded-web-page-item-opacity));
+  .item-tree-web-page-content_favicon.soft-unloaded-item {
+    filter: opacity(var(--soft-unloaded-web-page-item-opacity));
+  }
+  .item-tree-web-page-content_favicon.hard-unloaded-item {
+    filter: opacity(var(--hard-unloaded-web-page-item-opacity));
   }
 `
