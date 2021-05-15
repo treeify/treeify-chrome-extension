@@ -98,7 +98,7 @@ export function createPageTreeNodeViewModel(
 
   // TODO: パラメータをカスタマイズ可能にする
   const footprintCount = Math.floor(Math.pow(filteredPageIds.size, 0.7))
-  const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId)
+  const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
     bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
@@ -254,9 +254,9 @@ export const PageTreeNodeCss = css`
     --page-tree-active-page-background-color: hsl(0, 0%, 90%);
 
     /* 最も新しい足跡の色（線形補間の一端） */
-    --page-tree-strongest-footprint-color: hsl(0, 100%, 97.3%);
+    --page-tree-strongest-footprint-color: hsl(0, 90%, 96%);
     /* 最も古い足跡の色（線形補間の一端） */
-    --page-tree-weakest-footprint-color: hsl(60, 100%, 97.3%);
+    --page-tree-weakest-footprint-color: hsl(60, 90%, 96%);
 
     /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
     --page-tree-close-button-size: 1.1em;
