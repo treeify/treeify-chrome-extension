@@ -42,6 +42,12 @@ export class TabItemCorrespondence {
     this.tabIdToItemId.delete(tabId)
   }
 
+  /** 指定されたウェブページアイテムがアンロード状態かどうかを判定する */
+  isUnloaded(itemId: ItemId): boolean {
+    const tabId = this.getTabIdBy(itemId)
+    return tabId === undefined || this.getTab(tabId)?.discarded === true
+  }
+
   dumpCurrentState() {
     console.groupCollapsed('ダンプ：TabItemCorrespondence#tabIdToTab')
     const stateString = JSON.stringify(Object.fromEntries(this.tabIdToTab), undefined, 2)

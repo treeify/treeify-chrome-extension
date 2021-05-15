@@ -38,7 +38,7 @@ export function createItemTreeWebPageContentViewModel(
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
   const tab =
     tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
-  const isUnloaded = tab === undefined || tab.discarded
+  const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
 
   return {
     itemPath,
