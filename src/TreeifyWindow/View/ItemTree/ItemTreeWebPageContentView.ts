@@ -26,6 +26,7 @@ export type ItemTreeWebPageContentViewModel = {
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
+  onDragStart: (event: DragEvent) => void
 }
 
 export function createItemTreeWebPageContentViewModel(
@@ -140,6 +141,19 @@ export function createItemTreeWebPageContentViewModel(
         }
       })
     },
+    onDragStart: (event) => {
+      doWithErrorCapture(() => {
+        if (event.dataTransfer === null) return
+
+        const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+        const domElement = document.getElementById(domElementId)
+        if (domElement === null) return
+        // ドラッグ中にマウスポインターに追随して表示される内容を設定
+        event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
+
+        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
+      })
+    },
   }
 }
 
@@ -188,7 +202,9 @@ export function ItemTreeWebPageContentView(
         unread: viewModel.isUnread,
       })}
       title=${viewModel.title}
+      draggable="true"
       @click=${viewModel.onClickTitle}
+      @dragstart=${viewModel.onDragStart}
     >
       ${viewModel.title}
     </div>
