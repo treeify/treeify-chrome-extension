@@ -113,10 +113,10 @@ export function unindentItem() {
  */
 export function moveItemUpward() {
   const targetItemPath = CurrentState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
-  const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   // 1つ上のアイテムが存在しない場合は何もしない
   if (aboveItemPath === undefined) return
 
@@ -124,43 +124,56 @@ export function moveItemUpward() {
   // 1つ上のアイテムがアクティブページである場合も何もしない
   if (aboveItemParentItemId === undefined) return
 
-  // 下記の分岐が必要な理由（else節内の処理では兄弟順序入れ替えができない理由）：
-  // 兄弟リスト内に同一アイテムが複数存在する状況は（CurrentStateの途中状態だったとしても）許容しない。
-  // なぜならindexOfなどで不具合が起こることが目に見えているから。
-  // そのため、旧エッジ削除の前に新エッジ追加を行ってはならない。
-  // 一方、新エッジ追加の前に旧エッジ削除を行おうとしても、
-  // 旧エッジを削除してしまうと「兄になるよう配置する処理」の基準を失ってしまう。
-  // そのため、新エッジ追加と旧エッジ削除をバラバラに行うことはできず、下記の分岐が必要となる。
+  // 1つ上のアイテムの上にアイテムを移動する
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    // 既存の親子関係を削除
+    const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
+    // 1つ上のアイテムの兄になるようターゲットアイテムを配置
+    CurrentState.insertPrevSiblingItem(aboveItemPath, selectedItemId, edge)
+
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
 
   if (aboveItemParentItemId === targetItemParentItemId) {
-    // 1つ上のアイテムが兄である場合、兄弟リスト内を兄方向に1つ移動する
-    CurrentState.moveToPrevSibling(targetItemPath)
+    if (selectedItemPaths.size === 1) {
+      // 単一選択の場合
 
-    CurrentState.updateItemTimestamp(targetItemId)
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(targetItemPath)
+      )
 
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(targetItemPath)
-    )
-
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+      // キャレット位置、テキスト選択範囲を維持する
+      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    }
   } else {
-    // 既存の親子関係を削除
-    const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, targetItemId)
-    // 1つ上のアイテムの兄になるようターゲットアイテムを配置
-    CurrentState.insertPrevSiblingItem(aboveItemPath, targetItemId, edge)
+    const targetItemId = ItemPath.getItemId(targetItemPath)
+    if (selectedItemPaths.size === 1) {
+      // 単一選択の場合
 
-    CurrentState.updateItemTimestamp(targetItemId)
+      // フォーカスを移動先に更新する
+      const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
+      assertNonUndefined(newTargetItemPath)
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(newTargetItemPath)
+      )
 
-    // フォーカスを移動先に更新する
-    const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
-    assertNonUndefined(newTargetItemPath)
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(newTargetItemPath)
-    )
+      // キャレット位置、テキスト選択範囲を維持する
+      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    } else {
+      // 複数選択の場合
 
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+      const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
+      assertNonUndefined(newTargetItemPath)
+      CurrentState.setTargetItemPathOnly(newTargetItemPath)
+
+      const newAnchorItemPath = ItemPath.createSiblingItemPath(
+        aboveItemPath,
+        ItemPath.getItemId(CurrentState.getAnchorItemPath())
+      )
+      assertNonUndefined(newAnchorItemPath)
+      CurrentState.setAnchorItemPath(newAnchorItemPath)
+    }
   }
 }
 
