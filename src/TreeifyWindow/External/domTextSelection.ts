@@ -128,3 +128,18 @@ function getCharacterCount(node: Node): integer {
   range.selectNode(node)
   return range.toString().length + countBrElements(range.cloneContents())
 }
+
+/**
+ * アイテムツリー自体をフォーカスする。
+ * これはアイテムツリー内のいずれのアイテムもフォーカスせず、
+ * それでいてアイテムツリーに対するキーボード操作を可能とするために用いられる。
+ * 具体的には複数選択時にこの関数が用いられる。
+ */
+export function focusItemTreeBackground() {
+  const itemTree = document.querySelector<HTMLElement>('.item-tree')
+  itemTree?.focus()
+  // focusだけでなくselectionも設定しないとcopyイベント等が発行されない
+  if (itemTree instanceof Node) {
+    getSelection()?.setPosition(itemTree)
+  }
+}

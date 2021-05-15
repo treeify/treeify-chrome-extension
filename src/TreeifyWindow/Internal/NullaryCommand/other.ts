@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
+import {focusItemTreeBackground} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -94,8 +95,8 @@ export function selectAllBelowItems() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
 
-  // 複数選択中はターゲットアイテムからフォーカスを外す
-  document.querySelector<HTMLElement>('.item-tree')?.focus()
+  // 複数選択中はアイテムツリー自体をフォーカスする
+  focusItemTreeBackground()
 }
 
 /**
@@ -112,8 +113,8 @@ export function selectAllAboveItems() {
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 
-  // 複数選択中はターゲットアイテムからフォーカスを外す
-  document.querySelector<HTMLElement>('.item-tree')?.focus()
+  // 複数選択中はアイテムツリー自体をフォーカスする
+  focusItemTreeBackground()
 }
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */

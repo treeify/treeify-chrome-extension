@@ -5,6 +5,7 @@ import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
+  focusItemTreeBackground,
   getTextItemSelectionFromDom,
   setDomSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
@@ -477,9 +478,8 @@ function onShiftArrowUp(event: KeyboardEvent) {
 
   event.preventDefault()
   CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
-  // TODO: ↓この処理はExternalにリクエストする方式にするべきじゃないのか？
-  // 複数選択中はターゲットアイテムからフォーカスを外す
-  document.querySelector<HTMLElement>('.item-tree')?.focus()
+  // 複数選択中はアイテムツリー自体をフォーカスする
+  focusItemTreeBackground()
   CurrentState.commit()
 }
 
@@ -509,9 +509,8 @@ function onShiftArrowDown(event: KeyboardEvent) {
 
   event.preventDefault()
   CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
-  // TODO: ↓この処理はExternalにリクエストする方式にするべきじゃないのか？
-  // 複数選択中はターゲットアイテムからフォーカスを外す
-  document.querySelector<HTMLElement>('.item-tree')?.focus()
+  // 複数選択中はアイテムツリー自体をフォーカスする
+  focusItemTreeBackground()
   CurrentState.commit()
 }
 
