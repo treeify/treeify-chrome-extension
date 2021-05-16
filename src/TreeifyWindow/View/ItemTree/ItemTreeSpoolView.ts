@@ -153,9 +153,9 @@ export const ItemTreeSpoolCss = css`
     --bullet-page-icon-size: 1em;
 
     /* トランスクルードされたアイテムのバレットの色 */
-    --transcluded-item-bullet-color: hsl(120, 50%, 35%);
+    --transcluded-item-bullet-color: hsl(120, 50%, 40%);
     /* トランスクルードされたアイテムのバレットのマウスホバー時の色 */
-    --transcluded-item-bullet-hover-color: hsl(120, 50%, 30%);
+    --transcluded-item-bullet-hover-color: hsl(120, 50%, 35%);
 
     /* ハイライト状態のアイテムのバレットの色 */
     --highlighted-item-bullet-color: hsl(0, 100%, 45%);
