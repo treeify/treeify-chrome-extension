@@ -33,6 +33,7 @@ export type State = {
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
   workspaceDialog: WorkspaceDialog | null
   labelEditDialog: LabelEditDialog | null
+  otherParentsDialog: OtherParentsDialog | null
 }
 
 /**
@@ -164,6 +165,8 @@ export type WorkspaceDialog = {}
 export type LabelEditDialog = {
   labels: List<string>
 }
+
+export type OtherParentsDialog = {}
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */

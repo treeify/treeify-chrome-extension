@@ -4,6 +4,7 @@ import {
   CodeBlockItemEditDialog,
   DefaultWindowModeSettingDialog,
   LabelEditDialog,
+  OtherParentsDialog,
   WebPageItemTitleSettingDialog,
   WorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/State'
@@ -36,4 +37,10 @@ export function setWorkspaceDialog(value: WorkspaceDialog | null) {
 export function setLabelEditDialog(value: LabelEditDialog | null) {
   Internal.instance.state.labelEditDialog = value
   Internal.instance.markAsMutated(PropertyPath.of('labelEditDialog'))
+}
+
+/** 他のトランスクルード元ダイアログの状態を設定する */
+export function setOtherParentsDialog(value: OtherParentsDialog | null) {
+  Internal.instance.state.otherParentsDialog = value
+  Internal.instance.markAsMutated(PropertyPath.of('otherParentsDialog'))
 }

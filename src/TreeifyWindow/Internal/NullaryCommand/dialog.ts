@@ -55,3 +55,8 @@ export function showLabelEditDialog() {
     CurrentState.setLabelEditDialog({labels})
   }
 }
+
+/** 他のトランスクルード元ダイアログを表示する */
+export function showOtherParentsDialog() {
+  CurrentState.setOtherParentsDialog({})
+}
