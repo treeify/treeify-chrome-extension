@@ -59,11 +59,11 @@ export async function saveToDataFolder() {
 
       // 変化のあったチャンクをデータベースに書き込む
       const chunks = []
-      for (const chunkId of Chunk.extractChunkIds(External.instance.pendingMutatedPropertyPaths)) {
+      for (const chunkId of External.instance.pendingMutatedChunkIds) {
         const chunk = Chunk.create(Internal.instance.state, chunkId)
         chunks.push(chunk)
       }
-      External.instance.pendingMutatedPropertyPaths.clear()
+      External.instance.pendingMutatedChunkIds.clear()
       await External.instance.dataFolder.writeChunks(List(chunks))
     } else {
       // もし自身の知らない他デバイスの更新があれば
