@@ -60,14 +60,19 @@ export namespace Chunk {
   export function extractChunkIds(propertyPaths: Set<PropertyPath>): Set<ChunkId> {
     const result = new Set<ChunkId>()
     for (const propertyPath of propertyPaths) {
-      const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-      if (collectionKeys.has(propertyKeys.get(0)!.toString())) {
-        result.add(PropertyPath.of(...propertyKeys.take(2)))
-      } else {
-        result.add(PropertyPath.of(...propertyKeys.take(1)))
-      }
+      result.add(convertToChunkId(propertyPath))
     }
     return result
+  }
+
+  /** PropertyPathからChunkIdに変換する */
+  export function convertToChunkId(propertyPath: PropertyPath): ChunkId {
+    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
+    if (collectionKeys.has(propertyKeys.get(0)!.toString())) {
+      return PropertyPath.of(...propertyKeys.take(2))
+    } else {
+      return PropertyPath.of(...propertyKeys.take(1))
+    }
   }
 
   // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。

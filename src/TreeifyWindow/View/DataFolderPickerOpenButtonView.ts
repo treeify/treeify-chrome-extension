@@ -14,7 +14,7 @@ export function createDataFolderPickerOpenButtonViewModel(): DataFolderPickerOpe
   return {
     isGrayedOut:
       External.instance.dataFolder !== undefined &&
-      External.instance.pendingMutatedPropertyPaths.size === 0,
+      External.instance.pendingMutatedChunkIds.size === 0,
   }
 }
 

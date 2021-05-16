@@ -8,6 +8,7 @@ import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
+import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -21,8 +22,8 @@ export class External {
 
   /** データフォルダ */
   dataFolder: DataFolder | undefined
-  // データフォルダに書き込むべきプロパティパス
-  readonly pendingMutatedPropertyPaths = new Set<PropertyPath>()
+  /** データフォルダに書き込むべきChunkId群 */
+  readonly pendingMutatedChunkIds = new Set<ChunkId>()
 
   /** フローティング型の左サイドバーを表示するべきかどうか */
   shouldFloatingLeftSidebarShown: boolean = false
@@ -131,7 +132,7 @@ export class External {
     if (this.dataFolder === undefined) return
 
     for (const mutatedPropertyPath of mutatedPropertyPaths) {
-      this.pendingMutatedPropertyPaths.add(mutatedPropertyPath)
+      this.pendingMutatedChunkIds.add(Chunk.convertToChunkId(mutatedPropertyPath))
     }
   }
 
