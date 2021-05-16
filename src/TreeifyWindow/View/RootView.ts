@@ -25,6 +25,11 @@ import {
   LabelEditDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/LabelEditDialogView'
 import {
+  createOtherParentsDialogViewModel,
+  OtherParentsDialogView,
+  OtherParentsDialogViewModel,
+} from 'src/TreeifyWindow/View/Dialog/OtherParentsDialogView'
+import {
   createWebPageItemTitleSettingDialogViewModel,
   WebPageItemTitleSettingDialogView,
   WebPageItemTitleSettingDialogViewModel,
@@ -54,6 +59,7 @@ export type RootViewModel = {
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
   workspaceDialog: WorkspaceDialogViewModel | undefined
   labelEditDialog: LabelEditDialogViewModel | undefined
+  otherParentsDialog: OtherParentsDialogViewModel | undefined
   dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 }
 
@@ -67,6 +73,7 @@ export function createRootViewModel(state: State): RootViewModel {
     defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogViewModel(state),
     workspaceDialog: createWorkspaceDialogViewModel(state),
     labelEditDialog: createLabelEditDialogViewModel(state),
+    otherParentsDialog: createOtherParentsDialogViewModel(state),
   }
 }
 
@@ -101,6 +108,9 @@ export function RootView(viewModel: RootViewModel): TemplateResult {
       : undefined}
     ${viewModel.labelEditDialog !== undefined
       ? LabelEditDialogView(viewModel.labelEditDialog)
+      : undefined}
+    ${viewModel.otherParentsDialog !== undefined
+      ? OtherParentsDialogView(viewModel.otherParentsDialog)
       : undefined}
   </div>`
 }

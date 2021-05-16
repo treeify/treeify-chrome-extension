@@ -3,6 +3,7 @@ import {
   edit,
   showDefaultWindowModeSettingDialog,
   showLabelEditDialog,
+  showOtherParentsDialog,
   showWorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
@@ -88,6 +89,7 @@ export const functions: {[name: string]: () => void} = {
   showDefaultWindowModeSettingDialog,
   showWorkspaceDialog,
   showLabelEditDialog,
+  showOtherParentsDialog,
   saveToDataFolder,
 }
 export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'

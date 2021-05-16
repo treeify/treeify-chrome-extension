@@ -4,6 +4,7 @@ import {CodeBlockItemEditDialogCss} from 'src/TreeifyWindow/View/Dialog/CodeBloc
 import {CommonDialogCss} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 import {DefaultWindowModeSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/DefaultWindowModeSettingDialogView'
 import {LabelEditDialogCss} from 'src/TreeifyWindow/View/Dialog/LabelEditDialogView'
+import {OtherParentsDialogCss} from 'src/TreeifyWindow/View/Dialog/OtherParentsDialogView'
 import {WebPageItemTitleSettingDialogCss} from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogView'
 import {WorkspaceDialogCss} from 'src/TreeifyWindow/View/Dialog/WorkspaceDialogView'
 import {FullWindowModeButtonCss} from 'src/TreeifyWindow/View/FullWindowModeButtonView'
@@ -57,5 +58,6 @@ export function generateStyleElementContents() {
     ${DefaultWindowModeSettingDialogCss}
     ${WorkspaceDialogCss}
     ${LabelEditDialogCss}
+    ${OtherParentsDialogCss}
   `
 }
