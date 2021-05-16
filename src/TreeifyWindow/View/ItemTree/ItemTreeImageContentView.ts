@@ -60,7 +60,7 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
         </div>`
       : undefined}
     <div class="item-tree-image-content_image-and-caption">
-      <img class="item-tree-image-content_image" src=${viewModel.url} alt="" />
+      <img class="item-tree-image-content_image" src=${viewModel.url} />
       <div class="item-tree-image-content_caption">${viewModel.caption}</div>
     </div>
   </div>`
