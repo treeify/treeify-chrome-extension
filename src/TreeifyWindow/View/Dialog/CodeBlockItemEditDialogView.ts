@@ -98,6 +98,8 @@ export const CodeBlockItemEditDialogCss = css`
     margin: 1em;
 
     white-space: nowrap;
+
+    resize: none;
   }
 
   .code-block-edit-dialog_language-area {
