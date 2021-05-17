@@ -725,5 +725,8 @@ export const ItemTreeCss = css`
     padding-top: 15px;
     /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
     padding-bottom: 150px;
+
+    /* フォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
   }
 `
