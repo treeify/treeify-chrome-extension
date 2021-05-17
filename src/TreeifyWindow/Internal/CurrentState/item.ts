@@ -317,46 +317,6 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId, edg
 }
 
 /**
- * 指定されたアイテムを兄弟リスト内で兄方向に1つ移動する。
- * 兄弟リストが定義されない場合は何もしない。
- * 長男だった場合も何もしない。
- */
-export function moveToPrevSibling(itemPath: ItemPath) {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  // アクティブページである場合は何もしない
-  if (parentItemId === undefined) return
-
-  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const oldIndex = siblingItemIds.indexOf(itemId)
-  // 長男だった場合は何もしない
-  if (oldIndex === 0) return
-
-  // 子アイテムリスト内で該当アイテムを1つ移動する
-  modifyChildItems(parentItemId, (itemIds) => itemIds.remove(oldIndex).insert(oldIndex - 1, itemId))
-}
-
-/**
- * 指定されたアイテムを兄弟リスト内で弟方向に1つ移動する。
- * 兄弟リストが定義されない場合は何もしない。
- * 末弟だった場合も何もしない。
- */
-export function moveToNextSibling(itemPath: ItemPath) {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  // アクティブページである場合は何もしない
-  if (parentItemId === undefined) return
-
-  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const oldIndex = siblingItemIds.indexOf(itemId)
-  // 末弟だった場合は何もしない
-  if (oldIndex === siblingItemIds.size - 1) return
-
-  // 子アイテムリスト内で該当アイテムを1つ移動する
-  modifyChildItems(parentItemId, (itemIds) => itemIds.remove(oldIndex).insert(oldIndex + 1, itemId))
-}
-
-/**
  * アイテムの親子関係グラフにおけるエッジを削除する。
  * もし親の数が0になったとしてもそのアイテムの削除は行わない。
  * 引数のアイテムが親子関係になかった場合の動作は未定義。
