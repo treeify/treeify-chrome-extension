@@ -305,6 +305,7 @@ export function moveItemToPrevSibling() {
 
     if (selectedItemPaths.size === 1) {
       // 単一選択の場合
+
       External.instance.requestFocusAfterRendering(
         ItemTreeContentView.focusableDomElementId(selectedItemPaths.first())
       )
@@ -323,19 +324,34 @@ export function moveItemToPrevSibling() {
  * 弟が居ない場合はmoveItemDownwardコマンドと等価。
  */
 export function moveItemToNextSibling() {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(selectedItemPaths.last())
   if (nextSiblingItemPath !== undefined) {
-    CurrentState.moveToNextSibling(targetItemPath)
+    const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
+    // 兄が居るということは親が居るということ
+    assertNonUndefined(targetItemParentItemId)
 
-    CurrentState.updateItemTimestamp(ItemPath.getItemId(targetItemPath))
+    for (const selectedItemPath of selectedItemPaths) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      // 既存の親子関係を削除
+      const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId, selectedItemId)
+      // 弟の下に配置
+      CurrentState.insertNextSiblingItem(nextSiblingItemPath, selectedItemId, edge)
 
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(targetItemPath)
-    )
+      CurrentState.updateItemTimestamp(selectedItemId)
+    }
 
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    if (selectedItemPaths.size === 1) {
+      // 単一選択の場合
+
+      External.instance.requestFocusAfterRendering(
+        ItemTreeContentView.focusableDomElementId(selectedItemPaths.first())
+      )
+
+      // キャレット位置、テキスト選択範囲を維持する
+      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    }
+    // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
   } else {
     moveItemDownward()
   }
