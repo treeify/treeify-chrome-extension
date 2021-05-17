@@ -10,6 +10,7 @@ import {CssCustomProperty} from 'src/TreeifyWindow/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -159,11 +160,17 @@ export function createPageTreeNodeViewModel(
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        const edge = CurrentState.removeItemGraphEdge(
-          ItemPath.getParentItemId(draggedItemPath)!,
-          draggedItemId
-        )
-        CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
+        if (InputId.isFirstModifierKeyPressed(event)) {
+          // エッジを追加する（トランスクルード）
+          CurrentState.insertFirstChildItem(itemId, draggedItemId)
+        } else {
+          // エッジを付け替える
+          const edge = CurrentState.removeItemGraphEdge(
+            ItemPath.getParentItemId(draggedItemPath)!,
+            draggedItemId
+          )
+          CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
+        }
 
         CurrentState.updateItemTimestamp(draggedItemId)
         CurrentState.commit()
