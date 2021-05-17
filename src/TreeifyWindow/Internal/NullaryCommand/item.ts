@@ -529,6 +529,34 @@ export function enterKeyDefault() {
 /**
  * アイテムを削除するコマンド。
  * ターゲットアイテムがアクティブページの場合は何もしない。
+ * トランスクルードされたアイテムの場合はエッジのみ削除する。
+ */
+export function removeEdge() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const parentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
+
+  // アクティブページを削除しようとしている場合、何もしない
+  if (parentItemId === undefined) return
+
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  assertNonUndefined(aboveItemPath)
+  External.instance.requestFocusAfterRendering(
+    ItemTreeContentView.focusableDomElementId(aboveItemPath)
+  )
+
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    if (CurrentState.countParents(selectedItemId) >= 2) {
+      CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
+    } else {
+      CurrentState.deleteItem(selectedItemId)
+    }
+  }
+}
+
+/**
+ * アイテムを削除するコマンド。
+ * ターゲットアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItem() {
   // アクティブページを削除しようとしている場合、何もしない
