@@ -688,9 +688,15 @@ function onDrop(event: DragEvent) {
     }
 
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
-    // エッジを付け替える
-    const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-    CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+
+    if (InputId.isFirstModifierKeyPressed(event)) {
+      // エッジを追加する（トランスクルード）
+      CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
+    } else {
+      // エッジを付け替える
+      const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+      CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+    }
 
     CurrentState.updateItemTimestamp(draggedItemId)
     CurrentState.commit()

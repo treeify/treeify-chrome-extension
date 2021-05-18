@@ -30,20 +30,35 @@ export namespace InputId {
   }
 
   function getModifierKeysId(event: KeyboardEvent | MouseEvent): string {
+    return [
+      isFirstModifierKeyPressed(event) ? '1' : '0',
+      event.shiftKey ? '1' : '0',
+      event.altKey ? '1' : '0',
+      isFourthModifierKeyPressed(event) ? '1' : '0',
+    ].join('')
+  }
+
+  /**
+   * 1番目の修飾キーが押されているかどうかを判定する。
+   * 1番目の修飾キーとはWindowsではCtrlキー、MacではCommandキーのことを指す。
+   */
+  export function isFirstModifierKeyPressed(event: KeyboardEvent | MouseEvent): boolean {
     if (new UAParser().getOS().name !== 'Mac OS') {
-      return [
-        event.ctrlKey ? '1' : '0',
-        event.shiftKey ? '1' : '0',
-        event.altKey ? '1' : '0',
-        event.metaKey ? '1' : '0',
-      ].join('')
+      return event.ctrlKey
     } else {
-      return [
-        event.metaKey ? '1' : '0',
-        event.shiftKey ? '1' : '0',
-        event.altKey ? '1' : '0',
-        event.ctrlKey ? '1' : '0',
-      ].join('')
+      return event.metaKey
+    }
+  }
+
+  /**
+   * 4番目の修飾キーが押されているかどうかを判定する。
+   * 4番目の修飾キーとはWindowsではWindowsキー、MacではControlキーのことを指す。
+   */
+  export function isFourthModifierKeyPressed(event: KeyboardEvent | MouseEvent): boolean {
+    if (new UAParser().getOS().name !== 'Mac OS') {
+      return event.metaKey
+    } else {
+      return event.ctrlKey
     }
   }
 }
