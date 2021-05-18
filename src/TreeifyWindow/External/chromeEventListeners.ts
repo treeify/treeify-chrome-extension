@@ -164,7 +164,9 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   doWithErrorCapture(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-    assertNonUndefined(itemId)
+    // アイテム削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
+    if (itemId === undefined) return
+
     External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
 
     if (External.instance.hardUnloadedTabIds.has(tabId)) {
