@@ -250,7 +250,7 @@ export const ItemTreeWebPageContentCss = css`
 
   /* グレーアウト状態のウェブページアイテムのタイトル */
   .grayed-out .item-tree-web-page-content_title,
-  .grayed-out .item-tree-web-page-content_title {
+  .grayed-out-children .item-tree-web-page-content_title {
     color: var(--grayed-out-item-text-color);
   }
 
