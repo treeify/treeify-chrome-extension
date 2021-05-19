@@ -1,5 +1,6 @@
 import {html, render} from 'lit-html'
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {doAsyncWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
@@ -75,8 +76,13 @@ export async function cleanup() {
 }
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
-  External.instance.render(newState)
-  External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
+  doWithTimeMeasuring('External.instance.render(newState)', () =>
+    External.instance.render(newState)
+  )
+  doWithTimeMeasuring(
+    'External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)',
+    () => External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
+  )
 }
 
 function onMouseMove(event: MouseEvent) {
