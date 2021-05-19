@@ -82,6 +82,39 @@ export namespace TreeifyWindow {
     return false
   }
 
+  /** フルウィンドウモードかどうか判定する */
+  export async function isFullWindowMode(): Promise<boolean> {
+    const windows = await getAllNormalWindows()
+    for (const window of windows) {
+      if (!isFullSize(window)) return false
+    }
+
+    const treeifyWindow = await getTreeifyWindow()
+    return isFullSize(treeifyWindow)
+  }
+
+  function isFullSize(window: chrome.windows.Window): boolean {
+    assertNonUndefined(window.width)
+    assertNonUndefined(window.height)
+    return (window.width * window.height) / (screen.availWidth * screen.availHeight) >= 0.9
+  }
+
+  async function getTreeifyWindow(): Promise<chrome.windows.Window> {
+    return new Promise((resolve, reject) => {
+      chrome.windows.getAll({populate: true, windowTypes: ['popup']}, (windows) => {
+        for (const window of windows) {
+          if (window.tabs?.length === 1) {
+            if (window.tabs[0].url === chrome.extension.getURL('TreeifyWindow/index.html')) {
+              resolve(window)
+              return
+            }
+          }
+        }
+        reject()
+      })
+    })
+  }
+
   /** デュアルウィンドウモードに変更する */
   export async function toDualWindowMode() {
     // Treeifyウィンドウの幅や位置を変更する
@@ -116,6 +149,9 @@ export namespace TreeifyWindow {
 
   /** フルウィンドウモードに変更する */
   export async function toFullWindowMode() {
+    // 既にフルウィンドウモードなら何もしない（ちらつき対策）
+    if (await isFullWindowMode()) return
+
     if (new UAParser().getOS().name !== 'Mac OS') {
       // ブラウザウィンドウの幅や位置を変更する
       for (const window of await getAllNormalWindows()) {
