@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {render as renderWithLitHtml} from 'lit-html'
 import md5 from 'md5'
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
@@ -80,27 +81,40 @@ export class External {
   render(state: State) {
     const styleElement = document.querySelector('.style')
     assertNonNull(styleElement)
-    renderWithLitHtml(generateStyleElementContents(), styleElement)
+    const result = doWithTimeMeasuring('generateStyleElementContents', () =>
+      generateStyleElementContents()
+    )
+    doWithTimeMeasuring('renderWithLitHtml(result, styleElement)', () =>
+      renderWithLitHtml(result, styleElement)
+    )
 
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
-    renderWithLitHtml(RootView(createRootViewModel(state)), spaRoot)
+    const result1 = doWithTimeMeasuring('RootView(createRootViewModel(state))', () =>
+      RootView(createRootViewModel(state))
+    )
 
-    if (this.pendingFocusElementId !== undefined) {
-      const focusableElement = document.getElementById(this.pendingFocusElementId)
-      if (focusableElement !== null) {
-        // フォーカスアイテムが画面内に入るようスクロールする。
-        // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
-        focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
+    doWithTimeMeasuring('renderWithLitHtml(result1, spaRoot)', () =>
+      renderWithLitHtml(result1, spaRoot)
+    )
 
-        focusableElement.focus()
+    doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
+      if (this.pendingFocusElementId !== undefined) {
+        const focusableElement = document.getElementById(this.pendingFocusElementId)
+        if (focusableElement !== null) {
+          // フォーカスアイテムが画面内に入るようスクロールする。
+          // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
+          focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
+
+          focusableElement.focus()
+        }
       }
-    }
 
-    if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
-      // キャレット位置、テキスト選択範囲を設定する
-      setDomSelection(document.activeElement, this.pendingTextItemSelection)
-    }
+      if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
+        // キャレット位置、テキスト選択範囲を設定する
+        setDomSelection(document.activeElement, this.pendingTextItemSelection)
+      }
+    })
 
     this.pendingFocusElementId = undefined
     this.pendingTextItemSelection = undefined

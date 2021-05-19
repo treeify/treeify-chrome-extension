@@ -64,3 +64,10 @@ function replacer(this: any, key: string, value: any): any {
   }
   return value
 }
+
+export function doWithTimeMeasuring<T>(message: string, f: () => T): T {
+  const time = Date.now()
+  const result = f()
+  console.log(message, Date.now() - time)
+  return result
+}
