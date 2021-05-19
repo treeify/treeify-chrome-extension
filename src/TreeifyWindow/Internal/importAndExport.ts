@@ -499,10 +499,9 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
   const attributes = element.attributes
   const existingItemId = attributes.itemId !== undefined ? itemIdMap[attributes.itemId] : undefined
   if (existingItemId !== undefined) {
-    if (attributes.isCollapsed === 'true') {
-      return {itemId: existingItemId, edge: {isCollapsed: true, labels: List.of()}}
-    } else {
-      return {itemId: existingItemId, edge: {isCollapsed: false, labels: List.of()}}
+    return {
+      itemId: existingItemId,
+      edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
     }
   }
 
@@ -525,11 +524,21 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
     CurrentState.turnIntoPage(itemId)
   }
 
-  if (attributes.isCollapsed === 'true') {
-    return {itemId, edge: {isCollapsed: true, labels: List.of()}}
-  } else {
-    return {itemId, edge: {isCollapsed: false, labels: List.of()}}
+  return {
+    itemId,
+    edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
   }
+}
+
+function extractLabels(attribute: OutlineAttributes): List<string> {
+  try {
+    if (typeof attribute.labels === 'string') {
+      return List(JSON.parse(attribute.labels))
+    }
+  } catch {
+    return List.of()
+  }
+  return List.of()
 }
 
 function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
