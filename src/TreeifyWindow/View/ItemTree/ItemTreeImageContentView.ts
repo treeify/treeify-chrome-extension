@@ -1,10 +1,10 @@
 import {List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
@@ -46,24 +46,27 @@ export function createItemTreeImageContentViewModel(
 }
 
 /** 画像アイテムのコンテンツ領域のView */
-export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewModel): TemplateResult {
+export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewModel) {
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
-  return html`<div
-    class="item-tree-image-content"
-    id=${id}
-    tabindex="0"
-    @focus=${viewModel.onFocus}
-  >
-    ${!viewModel.labels.isEmpty()
-      ? html`<div class="item-tree-image-content_labels">
-          ${viewModel.labels.map((label) => LabelView({text: label}))}
-        </div>`
-      : undefined}
-    <div class="item-tree-image-content_image-and-caption">
-      <img class="item-tree-image-content_image" src=${viewModel.url} />
-      <div class="item-tree-image-content_caption">${viewModel.caption}</div>
-    </div>
-  </div>`
+  return createDivElement(
+    {class: 'item-tree-image-content', id, tabindex: '0'},
+    {focus: viewModel.onFocus},
+    [
+      !viewModel.labels.isEmpty()
+        ? createDivElement(
+            'item-tree-image-content_labels',
+            {},
+            viewModel.labels.map((label) => LabelView({text: label}))
+          )
+        : undefined,
+      createDivElement('item-tree-image-content_image-and-caption', {}, [
+        createImgElement({class: 'item-tree-image-content_image', src: viewModel.url}),
+        createDivElement('item-tree-image-content_caption', {}, [
+          document.createTextNode(viewModel.caption),
+        ]),
+      ]),
+    ]
+  )
 }
 
 export const ItemTreeImageContentCss = css`

@@ -1,6 +1,4 @@
 import {List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
-import {classMap} from 'lit-html/directives/class-map'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
@@ -9,6 +7,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {classMap, createDivElement, createElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
@@ -160,63 +159,65 @@ export function createItemTreeWebPageContentViewModel(
 }
 
 /** ウェブページアイテムのコンテンツ領域のView */
-export function ItemTreeWebPageContentView(
-  viewModel: ItemTreeWebPageContentViewModel
-): TemplateResult {
+export function ItemTreeWebPageContentView(viewModel: ItemTreeWebPageContentViewModel) {
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
-  return html`<div
-    class="item-tree-web-page-content"
-    id=${id}
-    tabindex="0"
-    @focus=${viewModel.onFocus}
-  >
-    ${viewModel.isLoading
-      ? html`<div
-          class="item-tree-web-page-content_favicon loading-indicator"
-          @click=${viewModel.onClickFavicon}
-        />`
-      : viewModel.faviconUrl.length > 0
-      ? html`<img
-          class=${classMap({
-            'item-tree-web-page-content_favicon': true,
+
+  return createDivElement(
+    {class: 'item-tree-web-page-content', id, tabindex: '0'},
+    {focus: viewModel.onFocus},
+    [
+      viewModel.isLoading
+        ? createDivElement('item-tree-web-page-content_favicon loading-indicator', {
+            click: viewModel.onClickFavicon,
+          })
+        : viewModel.faviconUrl.length > 0
+        ? createElement(
+            'img',
+            {
+              class: classMap({
+                'item-tree-web-page-content_favicon': true,
+                'soft-unloaded-item': viewModel.isSoftUnloaded,
+                'hard-unloaded-item': viewModel.isHardUnloaded,
+              }),
+              src: viewModel.faviconUrl,
+            },
+            {click: viewModel.onClickFavicon}
+          )
+        : createDivElement(
+            classMap({
+              'item-tree-web-page-content_favicon': true,
+              'default-favicon': true,
+              'soft-unloaded-item': viewModel.isSoftUnloaded,
+              'hard-unloaded-item': viewModel.isHardUnloaded,
+            }),
+            {click: viewModel.onClickFavicon}
+          ),
+      !viewModel.labels.isEmpty()
+        ? createDivElement(
+            'item-tree-web-page-content_labels',
+            {},
+            viewModel.labels.map((label) => LabelView({text: label}))
+          )
+        : createDivElement('grid-empty-cell'),
+      createDivElement(
+        {
+          class: classMap({
+            'item-tree-web-page-content_title': true,
             'soft-unloaded-item': viewModel.isSoftUnloaded,
             'hard-unloaded-item': viewModel.isHardUnloaded,
-          })}
-          src=${viewModel.faviconUrl}
-          @click=${viewModel.onClickFavicon}
-        />`
-      : html`<div
-          class=${classMap({
-            'item-tree-web-page-content_favicon': true,
-            'default-favicon': true,
-            'soft-unloaded-item': viewModel.isSoftUnloaded,
-            'hard-unloaded-item': viewModel.isHardUnloaded,
-          })}
-          @click=${viewModel.onClickFavicon}
-        />`}
-    ${!viewModel.labels.isEmpty()
-      ? html`<div class="item-tree-web-page-content_labels">
-          ${viewModel.labels.map((label) => LabelView({text: label}))}
-        </div>`
-      : html`<div class="grid-empty-cell"></div>`}
-    <div
-      class=${classMap({
-        'item-tree-web-page-content_title': true,
-        'soft-unloaded-item': viewModel.isSoftUnloaded,
-        'hard-unloaded-item': viewModel.isHardUnloaded,
-        unread: viewModel.isUnread,
-      })}
-      title=${viewModel.title}
-      draggable="true"
-      @click=${viewModel.onClickTitle}
-      @dragstart=${viewModel.onDragStart}
-    >
-      ${viewModel.title}
-    </div>
-    ${viewModel.isAudible
-      ? html`<div class="item-tree-web-page-content_audible-icon" />`
-      : html`<div class="grid-empty-cell"></div>`}
-  </div>`
+            unread: viewModel.isUnread,
+          }),
+          title: viewModel.title,
+          draggable: 'true',
+        },
+        {click: viewModel.onClickTitle, dragstart: viewModel.onDragStart},
+        [document.createTextNode(viewModel.title)]
+      ),
+      viewModel.isAudible
+        ? createDivElement('item-tree-web-page-content_audible-icon')
+        : createDivElement('grid-empty-cell'),
+    ]
+  )
 }
 
 export const ItemTreeWebPageContentCss = css`

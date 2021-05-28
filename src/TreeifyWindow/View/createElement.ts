@@ -6,7 +6,7 @@ export function createElement(
   tagName: string,
   attributesOrClassName: {[K in string]: string} | string,
   eventListeners?: {[K in string]: (...args: any) => any},
-  children?: Iterable<Node | undefined>
+  children?: Iterable<Node | undefined> | string
 ): HTMLElement {
   const element = document.createElement(tagName)
 
@@ -23,11 +23,15 @@ export function createElement(
     element.addEventListener(eventName, eventListeners[eventName])
   }
 
-  // 子要素を設定する
+  // 子要素またはinnerHTMLを設定する
   if (children !== undefined) {
-    for (const child of children) {
-      if (child !== undefined) {
-        element.appendChild(child)
+    if (typeof children === 'string') {
+      element.innerHTML = children
+    } else {
+      for (const child of children) {
+        if (child !== undefined) {
+          element.appendChild(child)
+        }
       }
     }
   }
@@ -42,6 +46,15 @@ export function createDivElement(
   children?: Iterable<Node | undefined>
 ) {
   return createElement('div', attributesOrClassName, eventListeners, children)
+}
+
+/** createElement関数の第1引数を'img'に固定しただけのユーティリティ関数 */
+export function createImgElement(
+  attributesOrClassName: {[K in string]: string} | string,
+  eventListeners?: {[K in string]: (...args: any) => any},
+  children?: Iterable<Node | undefined>
+) {
+  return createElement('img', attributesOrClassName, eventListeners, children)
 }
 
 /**
