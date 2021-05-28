@@ -5,8 +5,8 @@
 export function createElement(
   tagName: string,
   attributesOrClassName: {[K in string]: string} | string,
-  children?: Iterable<Node | undefined>,
-  eventListeners?: {[K in string]: (...args: any) => any}
+  eventListeners?: {[K in string]: (...args: any) => any},
+  children?: Iterable<Node | undefined>
 ): HTMLElement {
   const element = document.createElement(tagName)
 
@@ -38,10 +38,10 @@ export function createElement(
 /** createElement関数の第1引数を'div'に固定しただけのユーティリティ関数 */
 export function createDivElement(
   attributesOrClassName: {[K in string]: string} | string,
-  children?: Iterable<Node | undefined>,
-  eventListeners?: {[K in string]: (...args: any) => any}
+  eventListeners?: {[K in string]: (...args: any) => any},
+  children?: Iterable<Node | undefined>
 ) {
-  return createElement('div', attributesOrClassName, children, eventListeners)
+  return createElement('div', attributesOrClassName, eventListeners, children)
 }
 
 /**

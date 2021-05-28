@@ -6,7 +6,7 @@ export type LabelViewModel = {
 }
 
 export function LabelView(viewModel: LabelViewModel) {
-  return createElement('span', 'label', [document.createTextNode(viewModel.text)])
+  return createElement('span', 'label', {}, [document.createTextNode(viewModel.text)])
 }
 
 export const LabelCss = css`

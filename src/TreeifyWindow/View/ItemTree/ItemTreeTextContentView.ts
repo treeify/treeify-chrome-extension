@@ -102,10 +102,11 @@ export function createItemTreeTextContentViewModel(
  * 独自のDOM要素キャッシュを用いている点に注意。
  */
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel) {
-  return createDivElement('item-tree-text-content', [
+  return createDivElement('item-tree-text-content', {}, [
     !viewModel.labels.isEmpty()
       ? createDivElement(
           'item-tree-text-content_labels',
+          {},
           viewModel.labels.map((label) => LabelView({text: label}))
         )
       : undefined,
@@ -127,12 +128,12 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
       class: 'item-tree-text-content_content-editable',
       contenteditable: 'true',
     },
-    [DomishObject.toDocumentFragment(viewModel.domishObjects)],
     {
       input: viewModel.onInput,
       compositionend: viewModel.onCompositionEnd,
       focus: viewModel.onFocus,
-    }
+    },
+    [DomishObject.toDocumentFragment(viewModel.domishObjects)]
   )
 
   // キャッシュに登録
