@@ -1,7 +1,7 @@
 import {List} from 'immutable'
-import {html} from 'lit-html'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 
 export type PageTreeTextContentViewModel = {
   itemType: ItemType.TEXT
@@ -9,5 +9,5 @@ export type PageTreeTextContentViewModel = {
 }
 
 export function PageTreeTextContentView(viewModel: PageTreeTextContentViewModel) {
-  return html`<div>${DomishObject.toDocumentFragment(viewModel.domishObjects)}</div>`
+  return createDivElement({}, {}, [DomishObject.toDocumentFragment(viewModel.domishObjects)])
 }
