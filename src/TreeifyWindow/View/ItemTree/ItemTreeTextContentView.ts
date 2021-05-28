@@ -1,5 +1,4 @@
 import {List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
@@ -102,15 +101,16 @@ export function createItemTreeTextContentViewModel(
  * contenteditableな要素はlit-htmlで描画するのが事実上困難なので、
  * 独自のDOM要素キャッシュを用いている点に注意。
  */
-export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel): TemplateResult {
-  return html`<div class="item-tree-text-content">
-    ${!viewModel.labels.isEmpty()
-      ? html`<div class="item-tree-text-content_labels">
-          ${viewModel.labels.map((label) => LabelView({text: label}))}
-        </div>`
-      : undefined}
-    ${getContentEditableElement(viewModel)}
-  </div>`
+export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel) {
+  return createDivElement('item-tree-text-content', [
+    !viewModel.labels.isEmpty()
+      ? createDivElement(
+          'item-tree-text-content_labels',
+          viewModel.labels.map((label) => LabelView({text: label}))
+        )
+      : undefined,
+    getContentEditableElement(viewModel),
+  ])
 }
 
 function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTMLElement {

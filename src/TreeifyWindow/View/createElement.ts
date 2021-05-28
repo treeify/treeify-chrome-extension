@@ -4,14 +4,18 @@
  */
 export function createElement(
   tagName: string,
-  attributes: {[K in string]: string},
+  attributesOrClassName: {[K in string]: string} | string,
   children?: Iterable<Node | undefined>,
   eventListeners?: {[K in string]: (...args: any) => any}
 ): HTMLElement {
   const element = document.createElement(tagName)
 
-  for (const attributeKey in attributes) {
-    element.setAttribute(attributeKey, attributes[attributeKey])
+  if (typeof attributesOrClassName === 'string') {
+    element.className = attributesOrClassName
+  } else {
+    for (const attributeKey in attributesOrClassName) {
+      element.setAttribute(attributeKey, attributesOrClassName[attributeKey])
+    }
   }
 
   // イベントリスナーを設定する
@@ -33,11 +37,11 @@ export function createElement(
 
 /** createElement関数の第1引数を'div'に固定しただけのユーティリティ関数 */
 export function createDivElement(
-  attributes: {[K in string]: string},
+  attributesOrClassName: {[K in string]: string} | string,
   children?: Iterable<Node | undefined>,
   eventListeners?: {[K in string]: (...args: any) => any}
 ) {
-  return createElement('div', attributes, children, eventListeners)
+  return createElement('div', attributesOrClassName, children, eventListeners)
 }
 
 /**
