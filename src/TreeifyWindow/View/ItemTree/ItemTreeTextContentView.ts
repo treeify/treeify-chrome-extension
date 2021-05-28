@@ -8,6 +8,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
@@ -120,16 +121,20 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
   )
   if (cached !== undefined) return cached
 
-  // contenteditableな要素のinnerHTMLは原則としてlit-htmlで描画するべきでないので自前でDOM要素を作る。
-  // 参考：https://github.com/Polymer/lit-html/issues/572
-  const contentEditableElement = document.createElement('div')
-  contentEditableElement.id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
-  contentEditableElement.className = 'item-tree-text-content_content-editable'
-  contentEditableElement.setAttribute('contenteditable', 'true')
-  contentEditableElement.appendChild(DomishObject.toDocumentFragment(viewModel.domishObjects))
-  contentEditableElement.addEventListener('input', viewModel.onInput as any)
-  contentEditableElement.addEventListener('compositionend', viewModel.onCompositionEnd as any)
-  contentEditableElement.addEventListener('focus', viewModel.onFocus as any)
+  const contentEditableElement = createElement(
+    'div',
+    {
+      id: ItemTreeContentView.focusableDomElementId(viewModel.itemPath),
+      class: 'item-tree-text-content_content-editable',
+      contenteditable: 'true',
+    },
+    [DomishObject.toDocumentFragment(viewModel.domishObjects)],
+    {
+      input: viewModel.onInput,
+      compositionend: viewModel.onCompositionEnd,
+      focus: viewModel.onFocus,
+    }
+  )
 
   // キャッシュに登録
   External.instance.textItemDomElementCache.set(
