@@ -8,7 +8,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {createElement} from 'src/TreeifyWindow/View/createElement'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
@@ -121,8 +121,7 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
   )
   if (cached !== undefined) return cached
 
-  const contentEditableElement = createElement(
-    'div',
+  const contentEditableElement = createDivElement(
     {
       id: ItemTreeContentView.focusableDomElementId(viewModel.itemPath),
       class: 'item-tree-text-content_content-editable',

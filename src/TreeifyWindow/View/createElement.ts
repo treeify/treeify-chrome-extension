@@ -31,6 +31,15 @@ export function createElement(
   return element
 }
 
+/** createElement関数の第1引数を'div'に固定しただけのユーティリティ関数 */
+export function createDivElement(
+  attributes: {[K in string]: string},
+  children?: Iterable<Node | undefined>,
+  eventListeners?: {[K in string]: (...args: any) => any}
+) {
+  return createElement('div', attributes, children, eventListeners)
+}
+
 /**
  * 動的に変化するclass属性を定義するためのユーティリティ関数。
  * lit-htmlのclassMap関数と同じ。
