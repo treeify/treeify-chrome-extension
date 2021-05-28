@@ -1,9 +1,5 @@
 import Color from 'color'
 import {is, List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
-import {classMap} from 'lit-html/directives/class-map'
-import {repeat} from 'lit-html/directives/repeat'
-import {styleMap} from 'lit-html/directives/style-map'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
@@ -17,6 +13,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {
   createItemTreeContentViewModel,
@@ -214,76 +211,77 @@ function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 
 }
 
 /** アイテムツリーの各アイテムのルートView */
-export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): TemplateResult {
+export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): HTMLElement {
   const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const footprintLayerStyle = styleMap({
-    backgroundColor: footprintColor?.toString() ?? '',
-  })
+  const footprintLayerStyle =
+    footprintColor !== undefined ? `{background-color: ${footprintColor}}` : ''
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 
-  return html`<div
-    class=${classMap({
+  return createDivElement(
+    classMap({
       'item-tree-node': true,
       'multi-selected': viewModel.selected === 'multi',
-    })}
-  >
-    ${viewModel.isActivePage
-      ? html`<div class="grid-empty-cell"></div>`
-      : html`
-          <!-- バレットとインデントラインの領域 -->
-          <div
-            class=${classMap({
-              'item-tree-node_spool-area': true,
-              transcluded: viewModel.isTranscluded,
-              ...Object.fromEntries(viewModel.cssClasses.map((cssClass) => [cssClass, true])),
-            })}
-            draggable="true"
-            @dragstart=${viewModel.onDragStart}
-          >
-            ${ItemTreeSpoolView(viewModel.spoolViewModel)}
-          </div>
-        `}
-    <div class="item-tree-node_body-and-children-area">
-      <!-- ボディ領域 -->
-      <div class=${viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
-        <!-- 足跡表示用のレイヤー -->
-        <div class="item-tree-node_footprint-layer" style=${footprintLayerStyle}>
-          <!-- コンテンツ領域 -->
-          <div
-            data-item-path=${JSON.stringify(viewModel.itemPath.toArray())}
-            class="${classMap({
-              'item-tree-node_content-area': true,
-              'single-selected': viewModel.selected === 'single',
-            })},"
-            @mousedown=${viewModel.onMouseDownContentArea}
-          >
-            ${ItemTreeContentView(viewModel.contentViewModel)}
-          </div>
-        </div>
-        <!-- 隠れているタブ数 -->
-        ${viewModel.hiddenTabsCount > 0
-          ? html`<div
-              class="item-tree-node_hidden-tabs-count"
-              @click=${viewModel.onClickHiddenTabsCount}
-            >
-              ${Math.min(99, viewModel.hiddenTabsCount)}
-            </div>`
-          : html`<div class="grid-empty-cell"></div>`}
-        <!-- 削除ボタン -->
-        <div class="item-tree-node_delete-button" @click=${viewModel.onClickDeleteButton}>
-          <div class="item-tree-node_delete-button-icon"></div>
-        </div>
-      </div>
-      <!-- 子リスト領域 -->
-      <div class=${childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-        ${repeat(
-          viewModel.childItemViewModels,
-          (itemViewModel) => itemViewModel.itemPath.toString(),
-          ItemTreeNodeView
-        )}
-      </div>
-    </div>
-  </div>`
+    }),
+    {},
+    [
+      viewModel.isActivePage
+        ? createDivElement('grid-empty-cell')
+        : createDivElement(
+            {
+              class: classMap({
+                'item-tree-node_spool-area': true,
+                transcluded: viewModel.isTranscluded,
+                ...Object.fromEntries(viewModel.cssClasses.map((cssClass) => [cssClass, true])),
+              }),
+              draggable: 'true',
+            },
+            {dragstart: viewModel.onDragStart},
+            [ItemTreeSpoolView(viewModel.spoolViewModel)]
+          ),
+      createDivElement('item-tree-node_body-and-children-area', {}, [
+        // ボディ領域
+        createDivElement(viewModel.cssClasses.unshift('item-tree-node_body-area').join(' '), {}, [
+          // 足跡表示用のレイヤー
+          createDivElement(
+            {class: 'item-tree-node_footprint-layer', style: footprintLayerStyle},
+            {},
+            [
+              // コンテンツ領域
+              createDivElement(
+                {
+                  class: classMap({
+                    'item-tree-node_content-area': true,
+                    'single-selected': viewModel.selected === 'single',
+                  }),
+                  'data-item-path': JSON.stringify(viewModel.itemPath.toArray()),
+                },
+                {mousedown: viewModel.onMouseDownContentArea},
+                [ItemTreeContentView(viewModel.contentViewModel)]
+              ),
+            ]
+          ),
+          // 隠れているタブ数
+          viewModel.hiddenTabsCount > 0
+            ? createDivElement(
+                'item-tree-node_hidden-tabs-count',
+                {click: viewModel.onClickHiddenTabsCount},
+                [document.createTextNode(Math.min(99, viewModel.hiddenTabsCount).toString())]
+              )
+            : createDivElement('grid-empty-cell'),
+          // 削除ボタン
+          createDivElement('item-tree-node_delete-button', {click: viewModel.onClickDeleteButton}, [
+            createDivElement('item-tree-node_delete-button-icon'),
+          ]),
+        ]),
+        // 子リスト領域
+        createDivElement(
+          childrenCssClasses.unshift('item-tree-node_children-area').join(' '),
+          {},
+          viewModel.childItemViewModels.map((itemViewModel) => ItemTreeNodeView(itemViewModel))
+        ),
+      ]),
+    ]
+  )
 }
 
 function calculateFootprintColor(
