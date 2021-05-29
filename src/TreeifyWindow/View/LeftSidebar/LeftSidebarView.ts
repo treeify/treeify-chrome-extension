@@ -1,7 +1,6 @@
-import {html} from 'lit-html'
-import {classMap} from 'lit-html/directives/class-map'
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {classMap, createElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {
   createPageTreeViewModel,
@@ -38,14 +37,15 @@ export function createLeftSidebarViewModel(state: State): LeftSidebarViewModel |
 }
 
 export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
-  return html`<aside
-    class=${classMap({
+  return createElement(
+    'aside',
+    classMap({
       'left-sidebar': true,
       floating: viewModel.isFloating,
-    })}
-  >
-    ${PageTreeView(viewModel.pageTreeViewModel)}
-  </aside>`
+    }),
+    {},
+    [PageTreeView(viewModel.pageTreeViewModel)]
+  )
 }
 
 export const LeftSidebarCss = css`

@@ -1,8 +1,5 @@
 import Color from 'color'
 import {Collection, List, Seq} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
-import {classMap} from 'lit-html/directives/class-map'
-import {styleMap} from 'lit-html/directives/style-map'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
@@ -14,6 +11,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {
   createPageTreeBulletAndIndentViewModel,
@@ -196,42 +194,46 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
   }
 }
 
-export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): TemplateResult {
+export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): HTMLElement {
   const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const footprintLayerStyle = styleMap({
-    backgroundColor: footprintColor?.toString() ?? '',
-  })
+  const footprintLayerStyle =
+    footprintColor !== undefined ? `{background-color: ${footprintColor}}` : ''
 
-  return html`<div class="page-tree-node">
-    ${!viewModel.isRoot
-      ? html`<div class="page-tree-node_bullet-and-indent-area">
-          ${PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel)}
-        </div>`
-      : html`<div class="grid-empty-cell"></div>`}
-    <div class="page-tree-node_body-and-children-area">
-      <div class="page-tree-node_footprint-layer" style=${footprintLayerStyle}>
-        <div
-          class=${classMap({
+  return createDivElement('page-tree-node', {}, [
+    !viewModel.isRoot
+      ? createDivElement('page-tree-node_bullet-and-indent-area', {}, [
+          PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel),
+        ])
+      : createDivElement('grid-empty-cell'),
+    createDivElement('page-tree-node_body-and-children-area', {}, [
+      createDivElement({class: 'page-tree-node_footprint-layer', style: footprintLayerStyle}, {}, [
+        createDivElement(
+          classMap({
             'page-tree-node_body-area': true,
             'active-page': viewModel.isActivePage,
-          })}
-        >
-          <div
-            class="page-tree-node_content-area"
-            @click=${viewModel.onClickContentArea}
-            @dragover=${viewModel.onDragOver}
-            @drop=${viewModel.onDrop}
-          >
-            ${PageTreeContentView(viewModel.contentViewModel)}
-          </div>
-          <div class="page-tree-node_close-button" @click=${viewModel.onClickCloseButton}></div>
-        </div>
-      </div>
-      <div class="page-tree-node_children-area">
-        ${viewModel.childNodeViewModels.map(PageTreeNodeView)}
-      </div>
-    </div>
-  </div>`
+          }),
+          {},
+          [
+            createDivElement(
+              'page-tree-node_content-area',
+              {
+                click: viewModel.onClickContentArea,
+                dragover: viewModel.onDragOver,
+                drop: viewModel.onDrop,
+              },
+              [PageTreeContentView(viewModel.contentViewModel)]
+            ),
+            createDivElement('page-tree-node_close-button', {click: viewModel.onClickCloseButton}),
+          ]
+        ),
+      ]),
+      createDivElement(
+        'page-tree-node_children-area',
+        {},
+        viewModel.childNodeViewModels.map(PageTreeNodeView)
+      ),
+    ]),
+  ])
 }
 
 function calculateFootprintColor(

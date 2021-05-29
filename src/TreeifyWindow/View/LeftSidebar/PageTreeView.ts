@@ -1,5 +1,5 @@
-import {html} from 'lit-html'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {
   createPageTreeRootNodeViewModel,
@@ -18,7 +18,7 @@ export function createPageTreeViewModel(state: State): PageTreeViewModel {
 }
 
 export function PageTreeView(viewModel: PageTreeViewModel) {
-  return html`<div class="page-tree">${PageTreeNodeView(viewModel.pageTreeRootNodeViewModel)}</div>`
+  return createDivElement('page-tree', {}, [PageTreeNodeView(viewModel.pageTreeRootNodeViewModel)])
 }
 
 export const PageTreeCss = css`

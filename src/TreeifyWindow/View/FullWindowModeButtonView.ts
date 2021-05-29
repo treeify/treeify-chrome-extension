@@ -1,14 +1,12 @@
-import {html} from 'lit-html'
 import {doAsyncWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export function FullWindowModeButtonView() {
-  return html`
-    <div class="toolbar-icon-button" @click=${onClick}>
-      <div class="full-window-mode-button_icon"></div>
-    </div>
-  `
+  return createDivElement('toolbar-icon-button', {click: onClick}, [
+    createDivElement('full-window-mode-button_icon'),
+  ])
 }
 
 function onClick() {
