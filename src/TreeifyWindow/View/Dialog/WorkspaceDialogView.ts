@@ -1,8 +1,12 @@
 import {List} from 'immutable'
-import {html} from 'lit-html'
 import {WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State, Workspace} from 'src/TreeifyWindow/Internal/State'
+import {
+  createButtonElement,
+  createDivElement,
+  createInputElement,
+} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
@@ -41,13 +45,16 @@ export function WorkspaceDialogView(viewModel: WorkspaceDialogViewModel) {
 
   return CommonDialogView({
     title: 'ワークスペース',
-    content: html`
-      <div class="workspace-dialog_content" tabindex="0">
-        ${viewModel.workspaces.map(createWorkspaceRow)}
-        <div class="workspace-dialog_add-button" @click=${viewModel.onClickAddButton}></div>
-        <button class="workspace-dialog_close-button" @click=${closeDialog}>閉じる</button>
-      </div>
-    `,
+    content: createDivElement(
+      {class: 'workspace-dialog_content', tabindex: '0'},
+      {},
+      viewModel.workspaces
+        .map(createWorkspaceRow)
+        .push(
+          createDivElement('workspace-dialog_add-button', {click: viewModel.onClickAddButton}),
+          createButtonElement('workspace-dialog_close-button', {click: closeDialog}, '閉じる')
+        )
+    ),
     onCloseDialog: closeDialog,
   })
 }
@@ -69,24 +76,22 @@ function createWorkspaceRow(workspace: WorkspaceRecord) {
     CurrentState.commit()
   }
 
-  return html`<div class="workspace-dialog_existing-workspace">
-    ${workspace.id === CurrentState.getCurrentWorkspaceId()
-      ? html`<input
-          type="radio"
-          name="currentWorkspaceId"
-          value=${workspace.id}
-          @input=${onClickRadioButton}
-          checked
-        />`
-      : html`<input
-          type="radio"
-          name="currentWorkspaceId"
-          value=${workspace.id}
-          @input=${onClickRadioButton}
-        />`}
-    <input type="text" class="workspace-dialog_name" value=${workspace.name} @input=${onInput} />
-    <div class="workspace-dialog_delete-button" @click=${onClickDeleteButton}></div>
-  </div>`
+  return createDivElement('workspace-dialog_existing-workspace', {}, [
+    workspace.id === CurrentState.getCurrentWorkspaceId()
+      ? createInputElement(
+          {type: 'radio', name: 'currentWorkspaceId', value: workspace.id.toString(), checked: ''},
+          {input: onClickRadioButton}
+        )
+      : createInputElement(
+          {type: 'radio', name: 'currentWorkspaceId', value: workspace.id.toString()},
+          {input: onClickRadioButton}
+        ),
+    createInputElement(
+      {type: 'text', class: 'workspace-dialog_name', value: workspace.name},
+      {input: onInput}
+    ),
+    createDivElement('workspace-dialog_delete-button', {click: onClickDeleteButton}),
+  ])
 }
 
 export const WorkspaceDialogCss = css`

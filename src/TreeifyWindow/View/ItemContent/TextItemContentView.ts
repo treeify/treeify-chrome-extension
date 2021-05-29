@@ -1,8 +1,8 @@
 import {List} from 'immutable'
-import {html} from 'lit-html'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 
 export type TextItemContentViewModel = {
   itemType: ItemType.TEXT
@@ -17,5 +17,5 @@ export function createTextItemContentViewModel(itemId: ItemId): TextItemContentV
 }
 
 export function TextItemContentView(viewModel: TextItemContentViewModel) {
-  return html`<div>${DomishObject.toDocumentFragment(viewModel.domishObjects)}</div>`
+  return createDivElement({}, {}, [DomishObject.toDocumentFragment(viewModel.domishObjects)])
 }

@@ -43,7 +43,7 @@ export function createElement(
 export function createDivElement(
   attributesOrClassName: {[K in string]: string} | string,
   eventListeners?: {[K in string]: (...args: any) => any},
-  children?: Iterable<Node | undefined>
+  children?: Iterable<Node | undefined> | string
 ) {
   return createElement('div', attributesOrClassName, eventListeners, children)
 }
@@ -52,9 +52,27 @@ export function createDivElement(
 export function createImgElement(
   attributesOrClassName: {[K in string]: string} | string,
   eventListeners?: {[K in string]: (...args: any) => any},
-  children?: Iterable<Node | undefined>
+  children?: Iterable<Node | undefined> | string
 ) {
   return createElement('img', attributesOrClassName, eventListeners, children)
+}
+
+/** createElement関数の第1引数を'input'に固定しただけのユーティリティ関数 */
+export function createInputElement(
+  attributesOrClassName: {[K in string]: string} | string,
+  eventListeners?: {[K in string]: (...args: any) => any},
+  children?: Iterable<Node | undefined> | string
+) {
+  return createElement('input', attributesOrClassName, eventListeners, children)
+}
+
+/** createElement関数の第1引数を'button'に固定しただけのユーティリティ関数 */
+export function createButtonElement(
+  attributesOrClassName: {[K in string]: string} | string,
+  eventListeners?: {[K in string]: (...args: any) => any},
+  children?: Iterable<Node | undefined> | string
+) {
+  return createElement('button', attributesOrClassName, eventListeners, children)
 }
 
 /**

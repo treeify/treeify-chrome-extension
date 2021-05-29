@@ -1,4 +1,3 @@
-import {html} from 'lit-html'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -7,6 +6,12 @@ import {
   DefaultWindowModeSettingDialog,
   State,
 } from 'src/TreeifyWindow/Internal/State'
+import {
+  createButtonElement,
+  createDivElement,
+  createElement,
+  createInputElement,
+} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
@@ -59,25 +64,23 @@ export function DefaultWindowModeSettingDialogView(
 ) {
   return CommonDialogView({
     title: 'デフォルトウィンドウモード設定',
-    content: html`
-      <div class="default-window-mode-setting-dialog_content">
-        <form class="default-window-mode-setting-dialog_option-list">
-          ${createOption('keep', '指定なし', viewModel.initialDefaultWindowMode)}
-          ${createOption('dual', 'デュアルウィンドウモード', viewModel.initialDefaultWindowMode)}
-          ${createOption(
-            'floating',
-            'フローティングウィンドウモード',
-            viewModel.initialDefaultWindowMode
-          )}
-          ${createOption('full', 'フルウィンドウモード', viewModel.initialDefaultWindowMode)}
-          ${createOption('inherit', '親ページの設定を継承', viewModel.initialDefaultWindowMode)}
-        </form>
-        <div class="default-window-mode-setting-dialog_button-area">
-          <button @click=${viewModel.onClickFinishButton}>完了</button>
-          <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
-        </div>
-      </div>
-    `,
+    content: createDivElement('default-window-mode-setting-dialog_content', {}, [
+      createElement('form', 'default-window-mode-setting-dialog_option-list', {}, [
+        createOption('keep', '指定なし', viewModel.initialDefaultWindowMode),
+        createOption('dual', 'デュアルウィンドウモード', viewModel.initialDefaultWindowMode),
+        createOption(
+          'floating',
+          'フローティングウィンドウモード',
+          viewModel.initialDefaultWindowMode
+        ),
+        createOption('full', 'フルウィンドウモード', viewModel.initialDefaultWindowMode),
+        createOption('inherit', '親ページの設定を継承', viewModel.initialDefaultWindowMode),
+      ]),
+      createDivElement('default-window-mode-setting-dialog_button-area', {}, [
+        createButtonElement({}, {click: viewModel.onClickFinishButton}, '完了'),
+        createButtonElement({}, {click: viewModel.onClickCancelButton}, 'キャンセル'),
+      ]),
+    ]),
     onCloseDialog: () => {
       // ダイアログを閉じる
       CurrentState.setDefaultWindowModeSettingDialog(null)
@@ -95,13 +98,15 @@ function createOption(value: string, text: string, initialDefaultWindowMode: Def
   }
 
   if (initialDefaultWindowMode === value) {
-    return html`<div class="default-window-mode-setting-dialog_option" @click=${onClick}>
-      <input type="radio" name="defaultWindowMode" value=${value} checked />${text}
-    </div>`
+    return createDivElement('default-window-mode-setting-dialog_option', {click: onClick}, [
+      createInputElement({type: 'radio', name: 'defaultWindowMode', value, checked: ''}),
+      document.createTextNode(text),
+    ])
   } else {
-    return html`<div class="default-window-mode-setting-dialog_option" @click=${onClick}>
-      <input type="radio" name="defaultWindowMode" value=${value} />${text}
-    </div>`
+    return createDivElement('default-window-mode-setting-dialog_option', {click: onClick}, [
+      createInputElement({type: 'radio', name: 'defaultWindowMode', value}),
+      document.createTextNode(text),
+    ])
   }
 }
 

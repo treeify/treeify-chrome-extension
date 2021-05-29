@@ -1,8 +1,8 @@
 import {List} from 'immutable'
-import {html} from 'lit-html'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createButtonElement, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 import {
@@ -37,19 +37,18 @@ export function OtherParentsDialogView(viewModel: OtherParentsDialogViewModel) {
 
   return CommonDialogView({
     title: '他のトランスクルード元',
-    content: html`
-      <div class="other-parents-dialog_content">
-        <div class="other-parents-dialog_item-content-list">
-          ${viewModel.itemContentViewModels.map(
-            (itemContentViewModel) =>
-              html`<div class="other-parents-dialog_row-wrapper">
-                ${ItemContentView(itemContentViewModel)}
-              </div>`
-          )}
-        </div>
-        <button class="other-parents-dialog_close-button" @click=${closeDialog}>閉じる</button>
-      </div>
-    `,
+    content: createDivElement('other-parents-dialog_content', {}, [
+      createDivElement(
+        'other-parents-dialog_item-content-list',
+        {},
+        viewModel.itemContentViewModels.map((itemContentViewModel) =>
+          createDivElement('other-parents-dialog_row-wrapper', {}, [
+            ItemContentView(itemContentViewModel),
+          ])
+        )
+      ),
+      createButtonElement('other-parents-dialog_close-button', {click: closeDialog}, '閉じる'),
+    ]),
     onCloseDialog: closeDialog,
   })
 }

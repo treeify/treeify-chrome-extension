@@ -265,7 +265,7 @@ export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): HTMLElement 
             ? createDivElement(
                 'item-tree-node_hidden-tabs-count',
                 {click: viewModel.onClickHiddenTabsCount},
-                [document.createTextNode(Math.min(99, viewModel.hiddenTabsCount).toString())]
+                Math.min(99, viewModel.hiddenTabsCount).toString()
               )
             : createDivElement('grid-empty-cell'),
           // 削除ボタン
