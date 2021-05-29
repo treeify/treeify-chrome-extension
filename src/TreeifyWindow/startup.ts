@@ -1,4 +1,3 @@
-import {html, render} from 'lit-html'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
@@ -72,7 +71,7 @@ export async function cleanup() {
 
   const spaRoot = document.querySelector('.spa-root')
   assertNonNull(spaRoot)
-  render(html``, spaRoot)
+  spaRoot.innerHTML = ''
 }
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {

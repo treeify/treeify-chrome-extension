@@ -1,4 +1,4 @@
-import {html, TemplateResult} from 'lit-html'
+import {List} from 'immutable'
 import {DataFolderPickerOpenButtonCss} from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
 import {CodeBlockItemEditDialogCss} from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogView'
 import {CommonDialogCss} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
@@ -30,34 +30,34 @@ import {RootCss} from 'src/TreeifyWindow/View/RootView'
  *  次のように定義するとなぜかエラーになったのでわざわざfunctionで定義している。
  *  export const css = html
  */
-export function css(strings: TemplateStringsArray, ...values: unknown[]): TemplateResult {
-  return html(strings, ...values)
+export function css(template: TemplateStringsArray, ...substitutions: any[]): string {
+  return String.raw(template, ...substitutions)
 }
 
 export function generateStyleElementContents() {
-  return css`
-    ${RootCss}
-    ${FullWindowModeButtonCss}
-    ${DataFolderPickerOpenButtonCss}
-    ${LeftSidebarCss}
-    ${PageTreeCss}
-    ${PageTreeNodeCss}
-    ${PageTreeBulletAndIndentCss}
-    ${PageTreeWebPageContentCss}
-    ${ItemTreeCss}
-    ${ItemTreeNodeCss}
-    ${ItemTreeSpoolCss}
-    ${ItemTreeTextContentCss}
-    ${ItemTreeWebPageContentCss}
-    ${ItemTreeImageContentCss}
-    ${ItemTreeCodeBlockContentCss}
-    ${LabelCss}
-    ${CommonDialogCss}
-    ${WebPageItemTitleSettingDialogCss}
-    ${CodeBlockItemEditDialogCss}
-    ${DefaultWindowModeSettingDialogCss}
-    ${WorkspaceDialogCss}
-    ${LabelEditDialogCss}
-    ${OtherParentsDialogCss}
-  `
+  return List.of(
+    RootCss,
+    FullWindowModeButtonCss,
+    DataFolderPickerOpenButtonCss,
+    LeftSidebarCss,
+    PageTreeCss,
+    PageTreeNodeCss,
+    PageTreeBulletAndIndentCss,
+    PageTreeWebPageContentCss,
+    ItemTreeCss,
+    ItemTreeNodeCss,
+    ItemTreeSpoolCss,
+    ItemTreeTextContentCss,
+    ItemTreeWebPageContentCss,
+    ItemTreeImageContentCss,
+    ItemTreeCodeBlockContentCss,
+    LabelCss,
+    CommonDialogCss,
+    WebPageItemTitleSettingDialogCss,
+    CodeBlockItemEditDialogCss,
+    DefaultWindowModeSettingDialogCss,
+    WorkspaceDialogCss,
+    LabelEditDialogCss,
+    OtherParentsDialogCss
+  ).join('\n')
 }

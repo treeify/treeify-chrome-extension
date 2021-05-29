@@ -1,5 +1,4 @@
 import {List} from 'immutable'
-import {render as renderWithLitHtml} from 'lit-html'
 import md5 from 'md5'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
@@ -84,9 +83,9 @@ export class External {
     const result = doWithTimeMeasuring('generateStyleElementContents', () =>
       generateStyleElementContents()
     )
-    doWithTimeMeasuring('renderWithLitHtml(result, styleElement)', () =>
-      renderWithLitHtml(result, styleElement)
-    )
+    doWithTimeMeasuring('renderWithLitHtml(result, styleElement)', () => {
+      styleElement.innerHTML = result
+    })
 
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
@@ -94,9 +93,10 @@ export class External {
       RootView(createRootViewModel(state))
     )
 
-    doWithTimeMeasuring('renderWithLitHtml(result1, spaRoot)', () =>
-      renderWithLitHtml(result1, spaRoot)
-    )
+    doWithTimeMeasuring('renderWithLitHtml(result1, spaRoot)', () => {
+      spaRoot.innerHTML = ''
+      spaRoot.appendChild(result1)
+    })
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
       if (this.pendingFocusElementId !== undefined) {
