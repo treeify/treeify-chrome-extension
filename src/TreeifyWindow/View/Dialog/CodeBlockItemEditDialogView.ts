@@ -57,7 +57,7 @@ export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogVi
   return CommonDialogView({
     title: 'コードブロック編集',
     content: createDivElement('code-block-edit-dialog_content', {}, [
-      createElement('code-block-edit-dialog_code', {}, {}, [
+      createElement('textarea', 'code-block-edit-dialog_code', {}, [
         document.createTextNode(viewModel.code),
       ]),
       createDivElement('code-block-edit-dialog_language-area', {}, [
