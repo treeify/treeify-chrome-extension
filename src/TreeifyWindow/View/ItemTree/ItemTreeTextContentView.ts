@@ -19,7 +19,7 @@ export type ItemTreeTextContentViewModel = {
   domishObjects: List<DomishObject>
   onInput: (event: InputEvent) => void
   onCompositionEnd: (event: CompositionEvent) => void
-  onFocus: (event: FocusEvent) => void
+  onClick: (event: Event) => void
 }
 
 export function createItemTreeTextContentViewModel(
@@ -87,9 +87,17 @@ export function createItemTreeTextContentViewModel(
         }
       })
     },
-    onFocus: (event) => {
+    onClick: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
+
+        // 再描画によってDOM要素が再生成され、フォーカスとキャレットが失われる現象の対策で
+        // フォーカスとキャレットを設定する。
+        External.instance.requestFocusAfterRendering(
+          ItemTreeContentView.focusableDomElementId(itemPath)
+        )
+        External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+
         CurrentState.commit()
       })
     },
@@ -126,7 +134,7 @@ function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTM
     {
       input: viewModel.onInput,
       compositionend: viewModel.onCompositionEnd,
-      focus: viewModel.onFocus,
+      click: viewModel.onClick,
     },
     [DomishObject.toDocumentFragment(viewModel.domishObjects)]
   )
