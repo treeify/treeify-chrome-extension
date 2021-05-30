@@ -46,11 +46,9 @@ export function indentItem() {
   }
 
   if (selectedItemPaths.size === 1) {
-    // フォーカスを移動先に更新する
+    // ターゲットアイテムを移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(prevSiblingItemPath.push(targetItemId))
-    )
+    CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
 
     // キャレット位置、テキスト選択範囲を維持する
     External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
@@ -87,12 +85,10 @@ export function unindentItem() {
   }
 
   if (selectedItemPaths.size === 1) {
-    // フォーカスを移動先に更新する
+    // ターゲットアイテムを移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(siblingItemPath)
-    )
+    CurrentState.setTargetItemPath(siblingItemPath)
 
     // キャレット位置、テキスト選択範囲を維持する
     External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
