@@ -1,6 +1,7 @@
 /**
  * 当初はlit-htmlを使ってDOM要素を生成・描画していたが、
  * 動作がだんだん重くなる問題を解決できなかったので自作することにした。
+ * lit-htmlの類似ライブラリであるhyperhtmlとuhtmlも試したが、いずれも何か問題が起こった。
  */
 export function createElement(
   tagName: string,

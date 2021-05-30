@@ -96,11 +96,6 @@ export function createItemTreeTextContentViewModel(
   }
 }
 
-/**
- * テキストアイテムのコンテンツ領域のView
- * contenteditableな要素はlit-htmlで描画するのが事実上困難なので、
- * 独自のDOM要素キャッシュを用いている点に注意。
- */
 export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel) {
   return createDivElement('item-tree-text-content', {}, [
     !viewModel.labels.isEmpty()
