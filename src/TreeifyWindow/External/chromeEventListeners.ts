@@ -13,7 +13,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import UAParser from 'ua-parser-js'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
@@ -77,9 +76,7 @@ export function onCreated(tab: Tab) {
           if (tab.active) {
             const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newWebPageItemId)
             assertNonUndefined(newItemPath)
-            External.instance.requestFocusAfterRendering(
-              ItemTreeContentView.focusableDomElementId(newItemPath)
-            )
+            CurrentState.setTargetItemPath(newItemPath)
           }
         } else {
           // アクティブアイテムの最初の子として追加する
@@ -88,9 +85,7 @@ export function onCreated(tab: Tab) {
           // フォーカスを移す
           if (tab.active) {
             const newItemPath = targetItemPath.push(newWebPageItemId)
-            External.instance.requestFocusAfterRendering(
-              ItemTreeContentView.focusableDomElementId(newItemPath)
-            )
+            CurrentState.setTargetItemPath(newItemPath)
           }
         }
       } else {
@@ -105,9 +100,7 @@ export function onCreated(tab: Tab) {
           // フォーカスを移す
           if (tab.active) {
             const newItemPath = targetItemPath.push(newWebPageItemId)
-            External.instance.requestFocusAfterRendering(
-              ItemTreeContentView.focusableDomElementId(newItemPath)
-            )
+            CurrentState.setTargetItemPath(newItemPath)
           }
         }
       }

@@ -52,10 +52,6 @@ export function createItemTreeTextContentViewModel(
           // →実際にはKキーの入力がなかったことにされ、「亜い」と表示される。
           External.instance.textItemDomElementCache.updateDomishObjects(itemPath, domishObjects)
 
-          External.instance.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(itemPath)
-          )
-
           CurrentState.updateItemTimestamp(itemId)
           CurrentState.commit()
         }
@@ -78,10 +74,6 @@ export function createItemTreeTextContentViewModel(
           // →実際にはKキーの入力がなかったことにされ、「亜い」と表示される。
           External.instance.textItemDomElementCache.updateDomishObjects(itemPath, domishObjects)
 
-          External.instance.requestFocusAfterRendering(
-            ItemTreeContentView.focusableDomElementId(itemPath)
-          )
-
           CurrentState.updateItemTimestamp(itemId)
           CurrentState.commit()
         }
@@ -91,11 +83,7 @@ export function createItemTreeTextContentViewModel(
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
 
-        // 再描画によってDOM要素が再生成され、フォーカスとキャレットが失われる現象の対策で
-        // フォーカスとキャレットを設定する。
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(itemPath)
-        )
+        // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
         External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
         CurrentState.commit()

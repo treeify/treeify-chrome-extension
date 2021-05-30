@@ -96,9 +96,6 @@ export function createItemTreeNodeViewModel(
     onClickDeleteButton: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(itemPath)
-        )
 
         const inputId = InputId.fromMouseEvent(event)
         const command: Command | undefined = state.itemTreeDeleteButtonMouseBinding[inputId]

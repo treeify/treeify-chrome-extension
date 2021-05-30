@@ -51,9 +51,6 @@ export class External {
    */
   readonly textItemDomElementCache = new TextItemDomElementCache()
 
-  // 次の描画が完了した際にフォーカスすべきDOM要素のID
-  private pendingFocusElementId: string | undefined
-
   // 次の描画が完了した際に設定すべきテキスト選択範囲
   private pendingTextItemSelection: TextItemSelection | undefined
 
@@ -101,35 +98,24 @@ export class External {
     })
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-      if (this.pendingFocusElementId !== undefined) {
-        const focusableElement = document.getElementById(this.pendingFocusElementId)
+      if (CurrentState.getSelectedItemPaths().size === 1) {
+        const targetItemPath = CurrentState.getTargetItemPath()
+        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+        const focusableElement = document.getElementById(targetElementId)
         if (focusableElement !== null) {
           // フォーカスアイテムが画面内に入るようスクロールする。
           // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
-          focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
+          focusableElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest',
+          })
 
           focusableElement.focus()
         }
       } else {
-        if (CurrentState.getSelectedItemPaths().size === 1) {
-          const targetItemPath = CurrentState.getTargetItemPath()
-          const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
-          const focusableElement = document.getElementById(targetElementId)
-          if (focusableElement !== null) {
-            // フォーカスアイテムが画面内に入るようスクロールする。
-            // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
-            focusableElement.scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest',
-              inline: 'nearest',
-            })
-
-            focusableElement.focus()
-          }
-        } else {
-          // 複数選択の場合
-          focusItemTreeBackground()
-        }
+        // 複数選択の場合
+        focusItemTreeBackground()
       }
 
       if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
@@ -138,16 +124,10 @@ export class External {
       }
     })
 
-    this.pendingFocusElementId = undefined
     this.pendingTextItemSelection = undefined
 
     // Treeifyウィンドウのタイトルを更新する
     document.title = CurrentState.deriveTreeifyWindowTitle()
-  }
-
-  /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
-  requestFocusAfterRendering(elementId: string) {
-    this.pendingFocusElementId = elementId
   }
 
   /**

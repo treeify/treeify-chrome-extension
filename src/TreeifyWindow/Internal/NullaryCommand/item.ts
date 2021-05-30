@@ -6,7 +6,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
@@ -318,9 +317,7 @@ export function enterKeyDefault() {
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
-      )
+      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
       External.instance.requestSetCaretDistanceAfterRendering(0)
       return
     }
@@ -334,9 +331,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       const siblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(siblingItemPath)
-      )
+      CurrentState.setTargetItemPath(siblingItemPath)
       External.instance.requestSetCaretDistanceAfterRendering(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
@@ -356,9 +351,6 @@ export function enterKeyDefault() {
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath)
-      )
       External.instance.requestSetCaretDistanceAfterRendering(0)
     } else {
       // キャレット位置が後半なら
@@ -381,9 +373,7 @@ export function enterKeyDefault() {
         CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
-        )
+        CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
         External.instance.requestSetCaretDistanceAfterRendering(0)
       } else {
         // もし子を表示していないなら
@@ -403,11 +393,7 @@ export function enterKeyDefault() {
         CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
         // キャレット位置を更新する
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(
-            ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
-          )
-        )
+        CurrentState.setTargetItemPath(ItemPath.createSiblingItemPath(targetItemPath, newItemId)!)
         External.instance.requestSetCaretDistanceAfterRendering(0)
       }
     }
@@ -421,9 +407,7 @@ export function enterKeyDefault() {
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
-      )
+      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
       return
     }
 
@@ -434,9 +418,7 @@ export function enterKeyDefault() {
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath.push(newItemId))
-      )
+      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
     } else {
       // もし子を表示していないなら
       // 新規アイテムを弟として追加する
@@ -445,9 +427,7 @@ export function enterKeyDefault() {
 
       // フォーカスを移す
       const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(newItemPath)
-      )
+      CurrentState.setTargetItemPath(newItemPath)
     }
   }
 }
@@ -466,9 +446,7 @@ export function removeEdge() {
 
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   assertNonUndefined(aboveItemPath)
-  External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(aboveItemPath)
-  )
+  CurrentState.setTargetItemPath(aboveItemPath)
 
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -493,9 +471,7 @@ export function deleteItem() {
   // 削除されるアイテムの上のアイテムをフォーカス
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   assertNonUndefined(aboveItemPath)
-  External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(aboveItemPath)
-  )
+  CurrentState.setTargetItemPath(aboveItemPath)
 
   // 対象アイテムを削除
   for (const selectedItemPath of selectedItemPaths) {
@@ -520,16 +496,12 @@ export function deleteItemItself() {
     // 上のアイテムをフォーカス
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(aboveItemPath)
-    )
+    CurrentState.setTargetItemPath(aboveItemPath)
   } else {
     // 子がいる場合は最初の子をフォーカス
     const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds.first())
     assertNonUndefined(newItemPath)
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(newItemPath)
-    )
+    CurrentState.setTargetItemPath(newItemPath)
   }
 
   CurrentState.deleteItemItself(targetItemId)
@@ -599,9 +571,7 @@ export function toggleGrayedOut() {
   // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
   const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
   if (firstFollowingItemPath !== undefined) {
-    External.instance.requestFocusAfterRendering(
-      ItemTreeContentView.focusableDomElementId(firstFollowingItemPath)
-    )
+    CurrentState.setTargetItemPath(firstFollowingItemPath)
     const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
     if (Internal.instance.state.items[firstFollowingItemId].itemType === ItemType.TEXT) {
       External.instance.requestSetCaretDistanceAfterRendering(0)

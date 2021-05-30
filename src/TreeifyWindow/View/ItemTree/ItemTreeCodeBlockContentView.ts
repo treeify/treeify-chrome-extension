@@ -2,7 +2,6 @@ import hljs from 'highlight.js'
 import {List} from 'immutable'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
-import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -45,9 +44,6 @@ export function createItemTreeCodeBlockContentViewModel(
     onClick: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(itemPath)
-        )
         CurrentState.commit()
       })
     },
