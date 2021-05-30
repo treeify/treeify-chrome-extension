@@ -5,7 +5,11 @@ import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
-import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
+import {
+  focusItemTreeBackground,
+  setDomSelection,
+  TextItemSelection,
+} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
@@ -14,6 +18,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {generateStyleElementContents} from 'src/TreeifyWindow/View/css'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
 /** TODO: コメント */
@@ -104,6 +109,26 @@ export class External {
           focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
 
           focusableElement.focus()
+        }
+      } else {
+        if (CurrentState.getSelectedItemPaths().size === 1) {
+          const targetItemPath = CurrentState.getTargetItemPath()
+          const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+          const focusableElement = document.getElementById(targetElementId)
+          if (focusableElement !== null) {
+            // フォーカスアイテムが画面内に入るようスクロールする。
+            // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
+            focusableElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'nearest',
+              inline: 'nearest',
+            })
+
+            focusableElement.focus()
+          }
+        } else {
+          // 複数選択の場合
+          focusItemTreeBackground()
         }
       }
 
