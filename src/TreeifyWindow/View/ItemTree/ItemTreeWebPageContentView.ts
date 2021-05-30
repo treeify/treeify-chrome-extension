@@ -57,9 +57,6 @@ export function createItemTreeWebPageContentViewModel(
         if (event.target instanceof Node) {
           getSelection()?.setPosition(event.target)
         }
-
-        CurrentState.setTargetItemPath(itemPath)
-        CurrentState.commit()
       })
     },
     onClickTitle: (event) => {

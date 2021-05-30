@@ -161,16 +161,12 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
       External.instance.requestSetCaretDistanceAfterRendering(characterCount)
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(aboveItemPath)
-      )
+      CurrentState.setTargetItemPath(aboveItemPath)
       CurrentState.commit()
     } else {
       // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(aboveItemPath)
-      )
+      CurrentState.setTargetItemPath(aboveItemPath)
       CurrentState.commit()
     }
   } else {
@@ -186,16 +182,12 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
       External.instance.requestSetCaretDistanceAfterRendering(characterCount)
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(aboveItemPath)
-      )
+      CurrentState.setTargetItemPath(aboveItemPath)
       CurrentState.commit()
     } else {
       // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(aboveItemPath)
-      )
+      CurrentState.setTargetItemPath(aboveItemPath)
       CurrentState.commit()
     }
   }
@@ -222,16 +214,12 @@ function onArrowRight(event: KeyboardEvent) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
       External.instance.requestSetCaretDistanceAfterRendering(0)
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(belowItemPath)
-      )
+      CurrentState.setTargetItemPath(belowItemPath)
       CurrentState.commit()
     } else {
       // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(belowItemPath)
-      )
+      CurrentState.setTargetItemPath(belowItemPath)
       CurrentState.commit()
     }
   } else {
@@ -252,16 +240,12 @@ function onArrowRight(event: KeyboardEvent) {
       // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
       event.preventDefault()
       External.instance.requestSetCaretDistanceAfterRendering(0)
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(belowItemPath)
-      )
+      CurrentState.setTargetItemPath(belowItemPath)
       CurrentState.commit()
     } else {
       // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
       event.preventDefault()
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(belowItemPath)
-      )
+      CurrentState.setTargetItemPath(belowItemPath)
       CurrentState.commit()
     }
   }
@@ -346,9 +330,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     }
   }
 
-  External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(aboveItemPath)
-  )
+  CurrentState.setTargetItemPath(aboveItemPath)
   CurrentState.commit()
 }
 
@@ -431,9 +413,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
       }
     }
   }
-  External.instance.requestFocusAfterRendering(
-    ItemTreeContentView.focusableDomElementId(belowItemPath)
-  )
+  CurrentState.setTargetItemPath(belowItemPath)
   CurrentState.commit()
 }
 
@@ -562,9 +542,7 @@ function onBackspace(event: KeyboardEvent) {
         CurrentState.deleteItem(targetItemId)
 
         // 上のアイテムの元の末尾にキャレットを移動する
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(aboveItemPath)
-        )
+        CurrentState.setTargetItemPath(aboveItemPath)
         External.instance.requestSetCaretDistanceAfterRendering(
           DomishObject.countCharacters(aboveItemDomishObjects)
         )
@@ -624,9 +602,6 @@ function onDelete(event: KeyboardEvent) {
         CurrentState.deleteItem(belowItemId)
 
         // 元のキャレット位置を維持する
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(targetItemPath)
-        )
         External.instance.requestSetCaretDistanceAfterRendering(
           DomishObject.countCharacters(focusedItemDomishObjects)
         )

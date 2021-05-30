@@ -16,6 +16,7 @@ export type ItemTreeImageContentViewModel = {
   url: string
   caption: string
   onFocus: (event: FocusEvent) => void
+  onClick: (event: Event) => void
 }
 
 export function createItemTreeImageContentViewModel(
@@ -37,7 +38,10 @@ export function createItemTreeImageContentViewModel(
         if (event.target instanceof Node) {
           getSelection()?.setPosition(event.target)
         }
-
+      })
+    },
+    onClick: (event) => {
+      doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
         CurrentState.commit()
       })
@@ -50,7 +54,7 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   return createDivElement(
     {class: 'item-tree-image-content', id, tabindex: '0'},
-    {focus: viewModel.onFocus},
+    {focus: viewModel.onFocus, click: viewModel.onClick},
     [
       !viewModel.labels.isEmpty()
         ? createDivElement(

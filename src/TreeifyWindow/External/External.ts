@@ -5,7 +5,11 @@ import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
-import {setDomSelection, TextItemSelection} from 'src/TreeifyWindow/External/domTextSelection'
+import {
+  focusItemTreeBackground,
+  setDomSelection,
+  TextItemSelection,
+} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
@@ -14,6 +18,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {generateStyleElementContents} from 'src/TreeifyWindow/View/css'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
 
 /** TODO: コメント */
@@ -45,9 +50,6 @@ export class External {
    *  このキャッシュはlit-htmlを使っていた時代に必要だったもの。現在も必要なのかどうか把握していない。
    */
   readonly textItemDomElementCache = new TextItemDomElementCache()
-
-  // 次の描画が完了した際にフォーカスすべきDOM要素のID
-  private pendingFocusElementId: string | undefined
 
   // 次の描画が完了した際に設定すべきテキスト選択範囲
   private pendingTextItemSelection: TextItemSelection | undefined
@@ -96,15 +98,24 @@ export class External {
     })
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-      if (this.pendingFocusElementId !== undefined) {
-        const focusableElement = document.getElementById(this.pendingFocusElementId)
+      if (CurrentState.getSelectedItemPaths().size === 1) {
+        const targetItemPath = CurrentState.getTargetItemPath()
+        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+        const focusableElement = document.getElementById(targetElementId)
         if (focusableElement !== null) {
           // フォーカスアイテムが画面内に入るようスクロールする。
           // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
-          focusableElement.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'})
+          focusableElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'nearest',
+          })
 
           focusableElement.focus()
         }
+      } else {
+        // 複数選択の場合
+        focusItemTreeBackground()
       }
 
       if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
@@ -113,16 +124,10 @@ export class External {
       }
     })
 
-    this.pendingFocusElementId = undefined
     this.pendingTextItemSelection = undefined
 
     // Treeifyウィンドウのタイトルを更新する
     document.title = CurrentState.deriveTreeifyWindowTitle()
-  }
-
-  /** 次の描画が完了した際にフォーカスしてほしいDOM要素のIDを指定する */
-  requestFocusAfterRendering(elementId: string) {
-    this.pendingFocusElementId = elementId
   }
 
   /**

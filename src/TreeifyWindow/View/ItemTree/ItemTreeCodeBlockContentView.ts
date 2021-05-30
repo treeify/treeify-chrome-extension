@@ -17,6 +17,7 @@ export type ItemTreeCodeBlockContentViewModel = {
   code: string
   language: string
   onFocus: (event: FocusEvent) => void
+  onClick: (event: Event) => void
 }
 
 export function createItemTreeCodeBlockContentViewModel(
@@ -38,7 +39,10 @@ export function createItemTreeCodeBlockContentViewModel(
         if (event.target instanceof Node) {
           getSelection()?.setPosition(event.target)
         }
-
+      })
+    },
+    onClick: (event) => {
+      doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
         CurrentState.commit()
       })
@@ -51,7 +55,7 @@ export function ItemTreeCodeBlockContentView(viewModel: ItemTreeCodeBlockContent
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
   return createDivElement(
     {class: 'item-tree-code-block-content', id, tabindex: '0'},
-    {focus: viewModel.onFocus},
+    {focus: viewModel.onFocus, click: viewModel.onClick},
     [
       !viewModel.labels.isEmpty()
         ? createDivElement(

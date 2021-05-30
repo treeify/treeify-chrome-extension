@@ -1,13 +1,11 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/TreeifyWindow/basicType'
-import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {DefaultWindowMode, Page} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
@@ -18,9 +16,6 @@ export async function switchActivePage(itemId: ItemId) {
   Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 
   CurrentState.setActivePageId(itemId)
-  // ページ切り替え後はそのページのターゲットアイテムをフォーカス
-  const elementId = ItemTreeContentView.focusableDomElementId(CurrentState.getTargetItemPath())
-  External.instance.requestFocusAfterRendering(elementId)
 
   // ウィンドウモードの自動切り替え機能
   switch (deriveDefaultWindowMode(itemId)) {
