@@ -1,4 +1,4 @@
-import {html} from 'lit-html'
+import {createElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type LabelViewModel = {
@@ -6,7 +6,7 @@ export type LabelViewModel = {
 }
 
 export function LabelView(viewModel: LabelViewModel) {
-  return html`<span class="label">${viewModel.text}</span>`
+  return createElement('span', 'label', {}, [document.createTextNode(viewModel.text)])
 }
 
 export const LabelCss = css`

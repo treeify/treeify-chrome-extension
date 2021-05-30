@@ -1,5 +1,4 @@
-import {html, TemplateResult} from 'lit-html'
-import {classMap} from 'lit-html/directives/class-map'
+import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type PageTreeBulletAndIndentViewModel = {
@@ -27,24 +26,22 @@ export function createPageTreeBulletAndIndentViewModel(
 }
 
 /** ページツリーのバレットとインデント */
-export function PageTreeBulletAndIndentView(
-  viewModel: PageTreeBulletAndIndentViewModel
-): TemplateResult {
-  return html`<div class="page-tree-bullet-and-indent">
-    ${viewModel.bulletState === PageTreeBulletState.EXPANDED
-      ? html`<div class="page-tree-bullet-and-indent_indent-area">
-          <div class="page-tree-bullet-and-indent_indent-line"></div>
-        </div>`
-      : undefined}
-    <div
-      class=${classMap({
+export function PageTreeBulletAndIndentView(viewModel: PageTreeBulletAndIndentViewModel) {
+  return createDivElement('page-tree-bullet-and-indent', {}, [
+    viewModel.bulletState === PageTreeBulletState.EXPANDED
+      ? createDivElement('page-tree-bullet-and-indent_indent-area', {}, [
+          createDivElement('page-tree-bullet-and-indent_indent-line'),
+        ])
+      : undefined,
+    createDivElement(
+      classMap({
         'page-tree-bullet-and-indent_bullet-area': true,
         'no-children': viewModel.bulletState === PageTreeBulletState.NO_CHILDREN,
         expanded: viewModel.bulletState === PageTreeBulletState.EXPANDED,
         collapsed: viewModel.bulletState === PageTreeBulletState.COLLAPSED,
-      })}
-    ></div>
-  </div>`
+      })
+    ),
+  ])
 }
 
 export const PageTreeBulletAndIndentCss = css`

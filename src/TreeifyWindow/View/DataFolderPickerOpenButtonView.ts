@@ -1,9 +1,8 @@
-import {html} from 'lit-html'
-import {classMap} from 'lit-html/directives/class-map'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
+import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type DataFolderPickerOpenButtonViewModel = {
@@ -19,16 +18,14 @@ export function createDataFolderPickerOpenButtonViewModel(): DataFolderPickerOpe
 }
 
 export function DataFolderPickerOpenButtonView(viewModel: DataFolderPickerOpenButtonViewModel) {
-  return html`
-    <div class="toolbar-icon-button" @click=${onClick}>
-      <div
-        class=${classMap({
-          'data-folder-picker-open-button_icon': true,
-          'grayed-out': viewModel.isGrayedOut,
-        })}
-      ></div>
-    </div>
-  `
+  return createDivElement('toolbar-icon-button', {click: onClick}, [
+    createDivElement(
+      classMap({
+        'data-folder-picker-open-button_icon': true,
+        'grayed-out': viewModel.isGrayedOut,
+      })
+    ),
+  ])
 }
 
 function onClick() {

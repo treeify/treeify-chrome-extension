@@ -1,5 +1,4 @@
 import {List} from 'immutable'
-import {render as renderWithLitHtml} from 'lit-html'
 import md5 from 'md5'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
@@ -42,11 +41,8 @@ export class External {
 
   /**
    * テキストアイテムのcontenteditableな要素のキャッシュ。
-   * 【キャッシュする理由】
-   * contenteditableな要素はlit-htmlで描画するのが事実上困難なので、自前でDOM要素を生成している。
-   * 参考：https://github.com/Polymer/lit-html/issues/572
-   * キャッシュしないと画面更新ごとに全てのcontenteditableな要素が再生成されることになり、
-   * パフォーマンスへの悪影響に加えてfocusとselectionが失われる問題に対処しなければならない。
+   * TODO: キャッシュする理由を探す。見つからなければ廃止を検討する。
+   *  このキャッシュはlit-htmlを使っていた時代に必要だったもの。現在も必要なのかどうか把握していない。
    */
   readonly textItemDomElementCache = new TextItemDomElementCache()
 
@@ -84,9 +80,9 @@ export class External {
     const result = doWithTimeMeasuring('generateStyleElementContents', () =>
       generateStyleElementContents()
     )
-    doWithTimeMeasuring('renderWithLitHtml(result, styleElement)', () =>
-      renderWithLitHtml(result, styleElement)
-    )
+    doWithTimeMeasuring('styleElement.innerHTML = result', () => {
+      styleElement.innerHTML = result
+    })
 
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
@@ -94,9 +90,10 @@ export class External {
       RootView(createRootViewModel(state))
     )
 
-    doWithTimeMeasuring('renderWithLitHtml(result1, spaRoot)', () =>
-      renderWithLitHtml(result1, spaRoot)
-    )
+    doWithTimeMeasuring('spaRootの子要素取り替え', () => {
+      spaRoot.innerHTML = ''
+      spaRoot.appendChild(result1)
+    })
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
       if (this.pendingFocusElementId !== undefined) {

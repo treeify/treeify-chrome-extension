@@ -43,11 +43,7 @@ export namespace DomishObject {
     return toDocumentFragment(lhs).isEqualNode(toDocumentFragment(rhs))
   }
 
-  /**
-   * DomishObjectをDOM要素に変換する。
-   * 本来ならlit-htmlで描画したいところだが、contenteditableな要素のinnerHTMLをlit-htmlで描画すると編集時にエラーが出てしまう。
-   * https://github.com/Polymer/lit-html/issues/293#issuecomment-421491355
-   */
+  /** DomishObjectをDOM要素に変換する */
   export function toDocumentFragment(value: DomishObject | List<DomishObject>): DocumentFragment {
     const templateElement = document.createElement('template')
     if (value instanceof List) {

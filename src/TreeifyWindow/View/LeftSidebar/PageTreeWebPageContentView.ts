@@ -1,5 +1,5 @@
-import {html} from 'lit-html'
 import {ItemType} from 'src/TreeifyWindow/basicType'
+import {createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type PageTreeWebPageContentViewModel = {
@@ -9,10 +9,12 @@ export type PageTreeWebPageContentViewModel = {
 }
 
 export function PageTreeWebPageContentView(viewModel: PageTreeWebPageContentViewModel) {
-  return html`<div class="page-tree-web-page-content">
-    <img class="page-tree-web-page-content_favicon" src=${viewModel.faviconUrl} />
-    <div class="page-tree-web-page-content_title">${viewModel.title}</div>
-  </div>`
+  return createDivElement('page-tree-web-page-content', {}, [
+    createImgElement({class: 'page-tree-web-page-content_favicon', src: viewModel.faviconUrl}),
+    createDivElement('page-tree-web-page-content_title', {}, [
+      document.createTextNode(viewModel.title),
+    ]),
+  ])
 }
 
 export const PageTreeWebPageContentCss = css`

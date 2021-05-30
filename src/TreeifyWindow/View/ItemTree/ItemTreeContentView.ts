@@ -1,4 +1,3 @@
-import {TemplateResult} from 'lit-html'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -51,7 +50,7 @@ export function createItemTreeContentViewModel(
 }
 
 /** アイテムツリーの各アイテムのコンテンツ領域のViewスイッチャー */
-export function ItemTreeContentView(viewModel: ItemTreeContentViewModel): TemplateResult {
+export function ItemTreeContentView(viewModel: ItemTreeContentViewModel) {
   switch (viewModel.itemType) {
     case ItemType.TEXT:
       return ItemTreeTextContentView(viewModel)

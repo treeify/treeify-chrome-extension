@@ -1,5 +1,4 @@
 import {is, List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
@@ -19,6 +18,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
@@ -72,19 +72,23 @@ function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<I
 }
 
 /** アイテムツリーの全体のルートView */
-export function ItemTreeView(viewModel: ItemTreeViewModel): TemplateResult {
-  return html`<main
-    class="item-tree"
-    tabindex="0"
-    @keydown=${onKeyDown}
-    @dragover=${onDragOver}
-    @drop=${onDrop}
-    @copy=${onCopy}
-    @cut=${onCut}
-    @paste=${onPaste}
-  >
-    ${ItemTreeNodeView(viewModel.rootNodeViewModel)}
-  </main>`
+export function ItemTreeView(viewModel: ItemTreeViewModel) {
+  return createElement(
+    'main',
+    {
+      class: 'item-tree',
+      tabindex: '0',
+    },
+    {
+      keydown: onKeyDown,
+      dragover: onDragOver,
+      drop: onDrop,
+      copy: onCopy,
+      cut: onCut,
+      paste: onPaste,
+    },
+    [ItemTreeNodeView(viewModel.rootNodeViewModel)]
+  )
 }
 
 function onKeyDown(event: KeyboardEvent) {

@@ -1,10 +1,14 @@
 import {List} from 'immutable'
-import {html} from 'lit-html'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {LabelEditDialog, State} from 'src/TreeifyWindow/Internal/State'
+import {
+  createButtonElement,
+  createDivElement,
+  createInputElement,
+} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
@@ -36,18 +40,27 @@ export function LabelEditDialogView(viewModel: LabelEditDialogViewModel) {
 
   return CommonDialogView({
     title: 'ラベル編集',
-    content: html`
-      <div class="label-edit-dialog_content">
-        ${viewModel.labels.map(createLabelRow)}
-        <div class="label-edit-dialog_add-button" @click=${onClickAddButton}></div>
-        <div class="label-edit-dialog_button-area">
-          <button class="label-edit-dialog_finish-button" @click=${onClickFinishButton}>
-            完了
-          </button>
-          <button class="label-edit-dialog_cancel-button" @click=${closeDialog}>キャンセル</button>
-        </div>
-      </div>
-    `,
+    content: createDivElement(
+      'label-edit-dialog_content',
+      {},
+      viewModel.labels
+        .map(createLabelRow)
+        .push(
+          createDivElement('label-edit-dialog_add-button', {click: onClickAddButton}),
+          createDivElement('label-edit-dialog_button-area', {}, [
+            createButtonElement(
+              'label-edit-dialog_finish-button',
+              {click: onClickFinishButton},
+              '完了'
+            ),
+            createButtonElement(
+              'label-edit-dialog_cancel-button',
+              {click: closeDialog},
+              'キャンセル'
+            ),
+          ])
+        )
+    ),
     onCloseDialog: closeDialog,
   })
 }
@@ -62,16 +75,13 @@ function createLabelRow(text: string, index: integer) {
     CurrentState.commit()
   }
 
-  return html`<div class="label-edit-dialog_label-row">
-    <input
-      type="text"
-      class="label-edit-dialog_label-name"
-      .value=${text}
-      @input=${onInput}
-      @compositionend=${reflectViewToViewModel}
-    />
-    <div class="label-edit-dialog_delete-button" @click=${onClickDeleteButton}></div>
-  </div>`
+  return createDivElement('label-edit-dialog_label-row', {}, [
+    createInputElement(
+      {type: 'text', class: 'label-edit-dialog_label-name', value: text},
+      {input: onInput, compositionend: reflectViewToViewModel}
+    ),
+    createDivElement('label-edit-dialog_delete-button', {click: onClickDeleteButton}),
+  ])
 }
 
 const onInput = (event: InputEvent) => {

@@ -1,12 +1,11 @@
 import {createFocusTrap, FocusTrap} from 'focus-trap'
-import {html} from 'lit-html'
-import {styleMap} from 'lit-html/directives/style-map'
 import {assert} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
+import {createDivElement, createInputElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type WebPageItemTitleSettingDialogViewModel = {
@@ -55,29 +54,32 @@ export function createWebPageItemTitleSettingDialogViewModel(
 export function WebPageItemTitleSettingDialogView(
   viewModel: WebPageItemTitleSettingDialogViewModel
 ) {
-  const style = styleMap({
-    left: `${viewModel.webPageItemTitleSettingDialog.targetItemRect.left}px`,
-    top: `${viewModel.webPageItemTitleSettingDialog.targetItemRect.top}px`,
-    width: `${viewModel.webPageItemTitleSettingDialog.targetItemRect.width}px`,
-    height: `${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px`,
-  })
-  return html`
-    <div
-      class="web-page-item-title-setting-dialog"
-      @click=${onClickBackdrop}
-      @DOMNodeInsertedIntoDocument=${onInserted}
-      @DOMNodeRemovedFromDocument=${onRemoved}
-    >
-      <div class="web-page-item-title-setting-dialog_frame" style=${style}>
-        <input
-          type="text"
-          class="web-page-item-title-setting-dialog_text-box"
-          value=${viewModel.initialTitle}
-          @keydown=${viewModel.onKeyDown}
-        />
-      </div>
-    </div>
-  `
+  const style = `{
+    left: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.left}px;
+    top: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.top}px;
+    width: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.width}px;
+    height: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px;
+  }`
+  return createDivElement(
+    'web-page-item-title-setting-dialog',
+    {
+      click: onClickBackdrop,
+      DOMNodeInsertedIntoDocument: onInserted,
+      DOMNodeRemovedFromDocument: onRemoved,
+    },
+    [
+      createDivElement({class: 'web-page-item-title-setting-dialog_frame', style}, {}, [
+        createInputElement(
+          {
+            type: 'text',
+            class: 'web-page-item-title-setting-dialog_text-box',
+            value: viewModel.initialTitle,
+          },
+          {keydown: viewModel.onKeyDown}
+        ),
+      ]),
+    ]
+  )
 }
 
 function onClickBackdrop(event: Event) {

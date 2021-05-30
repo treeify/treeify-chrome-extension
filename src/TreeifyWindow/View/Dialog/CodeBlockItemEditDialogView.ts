@@ -1,9 +1,14 @@
 import hljs from 'highlight.js'
-import {html} from 'lit-html'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {CodeBlockItemEditDialog, State} from 'src/TreeifyWindow/Internal/State'
+import {
+  createButtonElement,
+  createDivElement,
+  createElement,
+  createInputElement,
+} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
@@ -51,28 +56,31 @@ export function createCodeBlockItemEditDialogViewModel(
 export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogViewModel) {
   return CommonDialogView({
     title: 'コードブロック編集',
-    content: html`
-      <div class="code-block-edit-dialog_content">
-        <textarea class="code-block-edit-dialog_code">${viewModel.code}</textarea>
-        <div class="code-block-edit-dialog_language-area">
-          <label>言語名</label>
-          <input
-            class="code-block-edit-dialog_language"
-            type="text"
-            autocomplete="on"
-            list="languages"
-            value=${viewModel.language}
-          />
-        </div>
-        <datalist id="languages">
-          ${hljs.listLanguages().map((language) => html`<option value=${language}></option>`)}
-        </datalist>
-        <div class="code-block-edit-dialog_button-area">
-          <button @click=${viewModel.onClickFinishButton}>完了</button>
-          <button @click=${viewModel.onClickCancelButton}>キャンセル</button>
-        </div>
-      </div>
-    `,
+    content: createDivElement('code-block-edit-dialog_content', {}, [
+      createElement('code-block-edit-dialog_code', {}, {}, [
+        document.createTextNode(viewModel.code),
+      ]),
+      createDivElement('code-block-edit-dialog_language-area', {}, [
+        createElement('label', {}, {}, '言語名'),
+        createInputElement({
+          class: 'code-block-edit-dialog_language',
+          type: 'text',
+          autocomplete: 'on',
+          list: 'languages',
+          value: viewModel.language,
+        }),
+      ]),
+      createElement(
+        'datalist',
+        {id: 'languages'},
+        {},
+        hljs.listLanguages().map((language) => createElement('option', {value: language}))
+      ),
+      createDivElement('code-block-edit-dialog_button-area', {}, [
+        createButtonElement({}, {click: viewModel.onClickFinishButton}, '完了'),
+        createButtonElement({}, {click: viewModel.onClickCancelButton}, 'キャンセル'),
+      ]),
+    ]),
     onCloseDialog: () => {
       // ダイアログを閉じる
       CurrentState.setCodeBlockItemEditDialog(null)

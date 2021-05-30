@@ -1,5 +1,3 @@
-import {html, TemplateResult} from 'lit-html'
-import {styleMap} from 'lit-html/directives/style-map'
 import {integer} from 'src/Common/integer'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -7,6 +5,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type ItemTreeSpoolViewModel = {
@@ -108,32 +107,34 @@ export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBul
 }
 
 /** アイテムツリーのバレットとインデント */
-export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel): TemplateResult {
+export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel) {
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
   const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
   const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
-  const outerCircleStyle = styleMap({
-    width: `${outerCircleRadiusEm}em`,
-    height: `${outerCircleRadiusEm}em`,
-  })
+  const outerCircleStyle = `{
+    width: "${outerCircleRadiusEm}em",
+    height: "${outerCircleRadiusEm}em",
+  }`
 
-  return html`<div class="item-tree-spool" @click=${viewModel.onClick}>
-    ${viewModel.bulletState === ItemTreeBulletState.EXPANDED
-      ? html`<div class="item-tree-spool_indent-area">
-          <div class="item-tree-spool_indent-line"></div>
-        </div>`
-      : undefined}
-    <div class="item-tree-spool_bullet-area">
-      ${viewModel.bulletState === ItemTreeBulletState.PAGE
-        ? html`<div class="item-tree-spool_page-icon" />`
-        : html`
-            ${viewModel.bulletState === ItemTreeBulletState.COLLAPSED
-              ? html`<div class="item-tree-spool_outer-circle" style=${outerCircleStyle}></div>`
-              : undefined}
-            <div class="item-tree-spool_inner-circle"></div>
-          `}
-    </div>
-  </div>`
+  return createDivElement('item-tree-spool', {click: viewModel.onClick}, [
+    viewModel.bulletState === ItemTreeBulletState.EXPANDED
+      ? createDivElement('item-tree-spool_indent-area', {}, [
+          createDivElement('item-tree-spool_indent-line'),
+        ])
+      : undefined,
+    createDivElement(
+      'item-tree-spool_bullet-area',
+      {},
+      viewModel.bulletState === ItemTreeBulletState.PAGE
+        ? [createDivElement('item-tree-spool_page-icon')]
+        : viewModel.bulletState === ItemTreeBulletState.COLLAPSED
+        ? [
+            createDivElement({class: 'item-tree-spool_outer-circle', style: outerCircleStyle}, {}),
+            createDivElement('item-tree-spool_inner-circle'),
+          ]
+        : [createDivElement('item-tree-spool_inner-circle')]
+    ),
+  ])
 }
 
 export const ItemTreeSpoolCss = css`

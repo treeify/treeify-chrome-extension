@@ -1,12 +1,12 @@
 import {createFocusTrap, FocusTrap} from 'focus-trap'
-import {html, TemplateResult} from 'lit-html'
 import {assert} from 'src/Common/Debug/assert'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
+import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 
 export type CommonDialogViewModel = {
   title: string
-  content: TemplateResult
+  content: Node
   onCloseDialog: () => void
 }
 
@@ -29,18 +29,21 @@ export function CommonDialogView(viewModel: CommonDialogViewModel) {
     }
   }
 
-  return html`<div
-    class="common-dialog"
-    @click=${onClickBackdrop}
-    @keydown=${onKeyDown}
-    @DOMNodeInsertedIntoDocument=${onInserted}
-    @DOMNodeRemovedFromDocument=${onRemoved}
-  >
-    <div class="common-dialog_frame">
-      <div class="common-dialog_title-bar">${viewModel.title}</div>
-      ${viewModel.content}
-    </div>
-  </div> `
+  return createDivElement(
+    'common-dialog',
+    {
+      click: onClickBackdrop,
+      keydown: onKeyDown,
+      DOMNodeInsertedIntoDocument: onInserted,
+      DOMNodeRemovedFromDocument: onRemoved,
+    },
+    [
+      createDivElement('common-dialog_frame', {}, [
+        createDivElement('common-dialog_title-bar', {}, [document.createTextNode(viewModel.title)]),
+        viewModel.content,
+      ]),
+    ]
+  )
 }
 
 // onInsertedとonRemovedの間でFocusTrapインスタンスを共有するためのグローバル変数

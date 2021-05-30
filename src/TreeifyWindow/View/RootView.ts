@@ -1,8 +1,8 @@
 import {List} from 'immutable'
-import {html, TemplateResult} from 'lit-html'
 import {TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {createButtonElement, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {
   createDataFolderPickerOpenButtonViewModel,
@@ -78,41 +78,40 @@ export function createRootViewModel(state: State): RootViewModel {
 }
 
 /** html-litによる動的描画が行われる領域全体のルートView */
-export function RootView(viewModel: RootViewModel): TemplateResult {
-  return html`<div class="root">
-    <div class="toolbar-and-sidebar-layout">
-      <div class="toolbar">
-        <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
-        <button @click=${onClickExportButton}>OPMLファイルをエクスポート</button>
-        ${FullWindowModeButtonView()}
-        ${DataFolderPickerOpenButtonView(viewModel.dataFolderPickerOpenButtonViewModel)}
-      </div>
-      <div class="sidebar-layout">
-        ${viewModel.leftSidebarViewModel !== undefined
+export function RootView(viewModel: RootViewModel) {
+  return createDivElement('root', {}, [
+    createDivElement('toolbar-and-sidebar-layout', {}, [
+      createDivElement('toolbar', {}, [
+        createButtonElement({}, {click: onClickExportButton}, 'OPMLファイルをエクスポート'),
+        FullWindowModeButtonView(),
+        DataFolderPickerOpenButtonView(viewModel.dataFolderPickerOpenButtonViewModel),
+      ]),
+      createDivElement('sidebar-layout', {}, [
+        viewModel.leftSidebarViewModel !== undefined
           ? LeftSidebarView(viewModel.leftSidebarViewModel)
-          : html`<div class="grid-empty-cell"></div>`}
-        ${ItemTreeView(viewModel.itemTreeViewModel)}
-      </div>
-    </div>
-    ${viewModel.webPageItemTitleSettingDialog !== undefined
+          : createDivElement('grid-empty-cell'),
+        ItemTreeView(viewModel.itemTreeViewModel),
+      ]),
+    ]),
+    viewModel.webPageItemTitleSettingDialog !== undefined
       ? WebPageItemTitleSettingDialogView(viewModel.webPageItemTitleSettingDialog)
-      : undefined}
-    ${viewModel.codeBlockItemEditDialogViewModel !== undefined
+      : undefined,
+    viewModel.codeBlockItemEditDialogViewModel !== undefined
       ? CodeBlockItemEditDialogView(viewModel.codeBlockItemEditDialogViewModel)
-      : undefined}
-    ${viewModel.defaultWindowModeSettingDialog !== undefined
+      : undefined,
+    viewModel.defaultWindowModeSettingDialog !== undefined
       ? DefaultWindowModeSettingDialogView(viewModel.defaultWindowModeSettingDialog)
-      : undefined}
-    ${viewModel.workspaceDialog !== undefined
+      : undefined,
+    viewModel.workspaceDialog !== undefined
       ? WorkspaceDialogView(viewModel.workspaceDialog)
-      : undefined}
-    ${viewModel.labelEditDialog !== undefined
+      : undefined,
+    viewModel.labelEditDialog !== undefined
       ? LabelEditDialogView(viewModel.labelEditDialog)
-      : undefined}
-    ${viewModel.otherParentsDialog !== undefined
+      : undefined,
+    viewModel.otherParentsDialog !== undefined
       ? OtherParentsDialogView(viewModel.otherParentsDialog)
-      : undefined}
-  </div>`
+      : undefined,
+  ])
 }
 
 function onClickExportButton() {
