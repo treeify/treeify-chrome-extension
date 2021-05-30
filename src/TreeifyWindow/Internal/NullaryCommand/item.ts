@@ -131,46 +131,21 @@ export function moveItemUpward() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  if (aboveItemParentItemId === targetItemParentItemId) {
-    if (selectedItemPaths.size === 1) {
-      // 単一選択の場合
+  // ターゲットアイテムパスを更新
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
+  assertNonUndefined(newTargetItemPath)
+  CurrentState.setTargetItemPathOnly(newTargetItemPath)
+  // アンカーアイテムパスを更新
+  const newAnchorItemPath = ItemPath.createSiblingItemPath(
+    aboveItemPath,
+    ItemPath.getItemId(CurrentState.getAnchorItemPath())
+  )
+  assertNonUndefined(newAnchorItemPath)
+  CurrentState.setAnchorItemPath(newAnchorItemPath)
 
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(targetItemPath)
-      )
-
-      // キャレット位置、テキスト選択範囲を維持する
-      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    }
-  } else {
-    const targetItemId = ItemPath.getItemId(targetItemPath)
-    if (selectedItemPaths.size === 1) {
-      // 単一選択の場合
-
-      // フォーカスを移動先に更新する
-      const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
-      assertNonUndefined(newTargetItemPath)
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(newTargetItemPath)
-      )
-
-      // キャレット位置、テキスト選択範囲を維持する
-      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    } else {
-      // 複数選択の場合
-
-      const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
-      assertNonUndefined(newTargetItemPath)
-      CurrentState.setTargetItemPathOnly(newTargetItemPath)
-
-      const newAnchorItemPath = ItemPath.createSiblingItemPath(
-        aboveItemPath,
-        ItemPath.getItemId(CurrentState.getAnchorItemPath())
-      )
-      assertNonUndefined(newAnchorItemPath)
-      CurrentState.setAnchorItemPath(newAnchorItemPath)
-    }
-  }
+  // キャレット位置、テキスト選択範囲を維持する
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 }
 
 /**
@@ -203,43 +178,21 @@ export function moveItemDownward() {
       CurrentState.updateItemTimestamp(selectedItemId)
     }
 
-    if (ItemPath.getParentItemId(firstFollowingItemPath) === targetItemParentItemId) {
-      // 兄弟リスト内での移動の場合
+    // ターゲットアイテムパスを更新
+    const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
+    assertNonUndefined(newTargetItemPath)
+    CurrentState.setTargetItemPathOnly(newTargetItemPath)
 
-      if (selectedItemPaths.size === 1) {
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(targetItemPath)
-        )
+    // アンカーアイテムパスを更新
+    const newAnchorItemPath = ItemPath.createSiblingItemPath(
+      firstFollowingItemPath,
+      ItemPath.getItemId(CurrentState.getAnchorItemPath())
+    )
+    assertNonUndefined(newAnchorItemPath)
+    CurrentState.setAnchorItemPath(newAnchorItemPath)
 
-        // キャレット位置、テキスト選択範囲を維持する
-        External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-      }
-      // focusItemPath, anchorItemPathは結果的に変化なし
-    } else {
-      const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
-      assertNonUndefined(newTargetItemPath)
-
-      if (selectedItemPaths.size === 1) {
-        // 単一選択の場合、フォーカスを移動先に更新する
-        External.instance.requestFocusAfterRendering(
-          ItemTreeContentView.focusableDomElementId(newTargetItemPath)
-        )
-
-        // キャレット位置、テキスト選択範囲を維持する
-        External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-      } else {
-        // 複数選択の場合
-
-        CurrentState.setTargetItemPathOnly(newTargetItemPath)
-
-        const newAnchorItemPath = ItemPath.createSiblingItemPath(
-          firstFollowingItemPath,
-          ItemPath.getItemId(CurrentState.getAnchorItemPath())
-        )
-        assertNonUndefined(newAnchorItemPath)
-        CurrentState.setAnchorItemPath(newAnchorItemPath)
-      }
-    }
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
 
@@ -254,26 +207,17 @@ export function moveItemDownward() {
       CurrentState.updateItemTimestamp(selectedItemId)
     }
 
+    // ターゲットアイテムパスを更新
     const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
+    CurrentState.setTargetItemPathOnly(newTargetItemPath)
+    // アンカーアイテムパスを更新
+    const newAnchorItemPath = firstFollowingItemPath.push(
+      ItemPath.getItemId(CurrentState.getAnchorItemPath())
+    )
+    CurrentState.setAnchorItemPath(newAnchorItemPath)
 
-    if (selectedItemPaths.size === 1) {
-      // フォーカスを移動先に更新する
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(newTargetItemPath)
-      )
-
-      // キャレット位置、テキスト選択範囲を維持する
-      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    } else {
-      // 複数選択の場合
-
-      CurrentState.setTargetItemPathOnly(newTargetItemPath)
-
-      const newAnchorItemPath = firstFollowingItemPath.push(
-        ItemPath.getItemId(CurrentState.getAnchorItemPath())
-      )
-      CurrentState.setAnchorItemPath(newAnchorItemPath)
-    }
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   }
 }
 
