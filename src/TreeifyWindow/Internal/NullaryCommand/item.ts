@@ -243,17 +243,10 @@ export function moveItemToPrevSibling() {
       CurrentState.updateItemTimestamp(selectedItemId)
     }
 
-    if (selectedItemPaths.size === 1) {
-      // 単一選択の場合
-
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(selectedItemPaths.first())
-      )
-
-      // キャレット位置、テキスト選択範囲を維持する
-      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    }
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     moveItemUpward()
   }
@@ -281,17 +274,10 @@ export function moveItemToNextSibling() {
       CurrentState.updateItemTimestamp(selectedItemId)
     }
 
-    if (selectedItemPaths.size === 1) {
-      // 単一選択の場合
-
-      External.instance.requestFocusAfterRendering(
-        ItemTreeContentView.focusableDomElementId(selectedItemPaths.first())
-      )
-
-      // キャレット位置、テキスト選択範囲を維持する
-      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    }
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
+
+    // キャレット位置、テキスト選択範囲を維持する
+    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     moveItemDownward()
   }
