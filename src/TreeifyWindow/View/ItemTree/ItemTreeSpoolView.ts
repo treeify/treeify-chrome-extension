@@ -111,10 +111,10 @@ export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel) {
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
   const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
   const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
-  const outerCircleStyle = `{
-    width: "${outerCircleRadiusEm}em",
-    height: "${outerCircleRadiusEm}em",
-  }`
+  const outerCircleStyle = `
+    width: ${outerCircleRadiusEm}em;
+    height: ${outerCircleRadiusEm}em;
+  `
 
   return createDivElement('item-tree-spool', {click: viewModel.onClick}, [
     viewModel.bulletState === ItemTreeBulletState.EXPANDED

@@ -197,7 +197,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): HTMLElement {
   const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
   const footprintLayerStyle =
-    footprintColor !== undefined ? `{background-color: ${footprintColor}}` : ''
+    footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
 
   return createDivElement('page-tree-node', {}, [
     !viewModel.isRoot

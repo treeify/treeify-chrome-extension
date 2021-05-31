@@ -54,12 +54,12 @@ export function createWebPageItemTitleSettingDialogViewModel(
 export function WebPageItemTitleSettingDialogView(
   viewModel: WebPageItemTitleSettingDialogViewModel
 ) {
-  const style = `{
+  const style = `
     left: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.left}px;
     top: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.top}px;
     width: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.width}px;
     height: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px;
-  }`
+  `
   return createDivElement(
     'web-page-item-title-setting-dialog',
     {

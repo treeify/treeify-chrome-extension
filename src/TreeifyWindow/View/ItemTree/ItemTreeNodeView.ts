@@ -211,7 +211,7 @@ function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 
 export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): HTMLElement {
   const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
   const footprintLayerStyle =
-    footprintColor !== undefined ? `{background-color: ${footprintColor}}` : ''
+    footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 
   return createDivElement(
