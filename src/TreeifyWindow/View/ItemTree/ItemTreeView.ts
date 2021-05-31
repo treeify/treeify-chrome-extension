@@ -652,35 +652,52 @@ function onDrop(event: DragEvent) {
       return element.getBoundingClientRect().bottom
     }) as List<HTMLElement>
 
-    // ドロップによって挿入される箇所を線形探索
-    const elementIndex = sortedElements.findIndex((element) => {
-      const rect = element.getBoundingClientRect()
-      const middleY = (rect.top + rect.bottom) / 2
-      return middleY > event.clientY
-    })
-    const itemPath: ItemPath = List(JSON.parse(sortedElements.get(elementIndex)!.dataset.itemPath!))
-
-    if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
-      // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
-      // 下記の2パターンが該当する。
-      // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
-      // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
-      return
-    }
-
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
+    for (const element of sortedElements) {
+      const rect = element.getBoundingClientRect()
+      if (rect.top <= event.clientY && event.clientY <= rect.bottom) {
+        const itemPath: ItemPath = List(JSON.parse(element.dataset.itemPath!))
 
-    if (InputId.isFirstModifierKeyPressed(event)) {
-      // エッジを追加する（トランスクルード）
-      CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
-    } else {
-      // エッジを付け替える
-      const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-      CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+        if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+          // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
+          // 下記の2パターンが該当する。
+          // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
+          // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
+          return
+        }
+
+        if (event.clientY - rect.top < rect.bottom - event.clientY) {
+          // ドロップ先座標がドロップ先要素の上半分の場合
+
+          // ドロップ先がアクティブページなら何もしない
+          if (!ItemPath.hasParent(itemPath)) return
+
+          if (InputId.isFirstModifierKeyPressed(event)) {
+            // エッジを追加する（トランスクルード）
+            CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
+          } else {
+            // エッジを付け替える
+            const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+            CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+          }
+        } else {
+          // ドロップ先座標がドロップ先要素の下半分の場合
+
+          if (InputId.isFirstModifierKeyPressed(event)) {
+            // エッジを追加する（トランスクルード）
+            CurrentState.insertBelowItem(itemPath, draggedItemId)
+          } else {
+            // エッジを付け替える
+            const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+            CurrentState.insertBelowItem(itemPath, draggedItemId, edge)
+          }
+        }
+
+        CurrentState.updateItemTimestamp(draggedItemId)
+        CurrentState.commit()
+        return
+      }
     }
-
-    CurrentState.updateItemTimestamp(draggedItemId)
-    CurrentState.commit()
   })
 }
 

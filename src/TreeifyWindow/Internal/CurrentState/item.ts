@@ -318,6 +318,19 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId, edg
 }
 
 /**
+ * 指定されたアイテムパスの（ドキュメント順で）下にアイテムを配置する。
+ * 基本的には弟になるよう配置するが、
+ * 指定されたアイテムパスが子を表示している場合は最初の子になるよう配置する。
+ */
+export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge) {
+  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
+    insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
+  } else {
+    insertNextSiblingItem(itemPath, newItemId, edge)
+  }
+}
+
+/**
  * アイテムの親子関係グラフにおけるエッジを削除する。
  * もし親の数が0になったとしてもそのアイテムの削除は行わない。
  * 引数のアイテムが親子関係になかった場合の動作は未定義。
