@@ -256,12 +256,22 @@ function onArrowRight(event: KeyboardEvent) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowUp(event: KeyboardEvent) {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   // 上のアイテムが存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  // 複数選択の場合、上のアイテムをフォーカスするだけで終了
+  if (selectedItemPaths.size > 1) {
+    event.preventDefault()
+
+    CurrentState.setTargetItemPath(aboveItemPath)
+    External.instance.requestSetCaretDistanceAfterRendering(0)
+    CurrentState.commit()
+    return
+  }
+
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
@@ -340,12 +350,22 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowDown(event: KeyboardEvent) {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
   // 下のアイテムが存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  // 複数選択の場合、下のアイテムをフォーカスするだけで終了
+  if (selectedItemPaths.size > 1) {
+    event.preventDefault()
+
+    CurrentState.setTargetItemPath(belowItemPath)
+    External.instance.requestSetCaretDistanceAfterRendering(0)
+    CurrentState.commit()
+    return
+  }
+
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
