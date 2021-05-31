@@ -7,7 +7,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {classMap, createDivElement, createElement} from 'src/TreeifyWindow/View/createElement'
+import {classMap, createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
@@ -168,8 +168,7 @@ export function ItemTreeWebPageContentView(viewModel: ItemTreeWebPageContentView
             click: viewModel.onClickFavicon,
           })
         : viewModel.faviconUrl.length > 0
-        ? createElement(
-            'img',
+        ? createImgElement(
             {
               class: classMap({
                 'item-tree-web-page-content_favicon': true,
@@ -177,6 +176,7 @@ export function ItemTreeWebPageContentView(viewModel: ItemTreeWebPageContentView
                 'hard-unloaded-item': viewModel.isHardUnloaded,
               }),
               src: viewModel.faviconUrl,
+              draggable: 'false',
             },
             {click: viewModel.onClickFavicon}
           )
