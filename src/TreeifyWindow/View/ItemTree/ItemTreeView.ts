@@ -331,6 +331,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   }
 
   CurrentState.setTargetItemPath(aboveItemPath)
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   CurrentState.commit()
 }
 
@@ -414,6 +415,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
     }
   }
   CurrentState.setTargetItemPath(belowItemPath)
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   CurrentState.commit()
 }
 
