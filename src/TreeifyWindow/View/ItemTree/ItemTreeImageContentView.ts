@@ -64,7 +64,11 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
           )
         : undefined,
       createDivElement('item-tree-image-content_image-and-caption', {}, [
-        createImgElement({class: 'item-tree-image-content_image', src: viewModel.url}),
+        createImgElement({
+          class: 'item-tree-image-content_image',
+          src: viewModel.url,
+          draggable: 'false',
+        }),
         createDivElement('item-tree-image-content_caption', {}, [
           document.createTextNode(viewModel.caption),
         ]),

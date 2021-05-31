@@ -10,7 +10,11 @@ export type PageTreeWebPageContentViewModel = {
 
 export function PageTreeWebPageContentView(viewModel: PageTreeWebPageContentViewModel) {
   return createDivElement('page-tree-web-page-content', {}, [
-    createImgElement({class: 'page-tree-web-page-content_favicon', src: viewModel.faviconUrl}),
+    createImgElement({
+      class: 'page-tree-web-page-content_favicon',
+      src: viewModel.faviconUrl,
+      draggable: 'false',
+    }),
     createDivElement('page-tree-web-page-content_title', {}, [
       document.createTextNode(viewModel.title),
     ]),
