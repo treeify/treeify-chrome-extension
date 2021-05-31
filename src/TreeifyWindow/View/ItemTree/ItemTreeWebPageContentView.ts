@@ -92,7 +92,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadSubtree()
             } else {
               // ロード状態の場合
-              NullaryCommand.softUnloadSubtree()
+              NullaryCommand.hardUnloadSubtree()
             }
 
             CurrentState.commit()
@@ -105,7 +105,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadItem()
             } else {
               // ロード状態の場合
-              NullaryCommand.softUnloadItem()
+              NullaryCommand.hardUnloadItem()
             }
 
             CurrentState.commit()
@@ -118,7 +118,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadSubtree()
             } else {
               // ロード状態の場合
-              NullaryCommand.hardUnloadSubtree()
+              NullaryCommand.softUnloadSubtree()
             }
 
             CurrentState.commit()
@@ -131,7 +131,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.loadItem()
             } else {
               // ロード状態の場合
-              NullaryCommand.hardUnloadItem()
+              NullaryCommand.softUnloadItem()
             }
 
             CurrentState.commit()
