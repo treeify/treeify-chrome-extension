@@ -68,7 +68,8 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
 
 export function deriveWebPageItemTitle(itemId: ItemId): string {
   const webPageItem = Internal.instance.state.webPageItems[itemId]
-  return webPageItem.title ?? webPageItem.tabTitle
+  const title = webPageItem.title ?? webPageItem.tabTitle
+  return title !== '' ? title : webPageItem.url
 }
 
 /** ウェブページアイテムの未読フラグを上書き設定する */
