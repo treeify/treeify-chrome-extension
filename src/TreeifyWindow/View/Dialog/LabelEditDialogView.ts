@@ -1,7 +1,9 @@
 import {List} from 'immutable'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {LabelEditDialog, State} from 'src/TreeifyWindow/Internal/State'
 import {
   createButtonElement,
@@ -18,25 +20,6 @@ export function createLabelEditDialogViewModel(state: State): LabelEditDialogVie
 }
 
 export function LabelEditDialogView(viewModel: LabelEditDialogViewModel) {
-  const onClickAddButton = () => {
-    CurrentState.setLabelEditDialog({
-      labels: getAllLabelInputValues().push(''),
-    })
-    CurrentState.commit()
-  }
-
-  const onClickFinishButton = () => {
-    const labels = getAllLabelInputValues().filter((label) => label !== '')
-    CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
-    CurrentState.setLabelEditDialog(null)
-    CurrentState.commit()
-  }
-
-  const closeDialog = () => {
-    CurrentState.setLabelEditDialog(null)
-    CurrentState.commit()
-  }
-
   return CommonDialogView({
     title: 'ラベル編集',
     content: createDivElement(
@@ -73,10 +56,43 @@ function createLabelRow(text: string, index: integer) {
     CurrentState.commit()
   }
 
+  const onKeyDown = (event: KeyboardEvent) => {
+    doWithErrorCapture(() => {
+      if (event.isComposing) return
+
+      // Enterキー押下は完了ボタン押下と同じ扱いにする
+      if (InputId.fromKeyboardEvent(event) === '0000Enter') {
+        onClickFinishButton()
+      }
+    })
+  }
+
   return createDivElement('label-edit-dialog_label-row', {}, [
-    createInputElement({type: 'text', class: 'label-edit-dialog_label-name', value: text}),
+    createInputElement(
+      {type: 'text', class: 'label-edit-dialog_label-name', value: text},
+      {keydown: onKeyDown}
+    ),
     createDivElement('label-edit-dialog_delete-button', {click: onClickDeleteButton}),
   ])
+}
+
+const onClickAddButton = () => {
+  CurrentState.setLabelEditDialog({
+    labels: getAllLabelInputValues().push(''),
+  })
+  CurrentState.commit()
+}
+
+const onClickFinishButton = () => {
+  const labels = getAllLabelInputValues().filter((label) => label !== '')
+  CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
+  CurrentState.setLabelEditDialog(null)
+  CurrentState.commit()
+}
+
+const closeDialog = () => {
+  CurrentState.setLabelEditDialog(null)
+  CurrentState.commit()
 }
 
 // 全てのラベル入力欄の内容テキストを返す
