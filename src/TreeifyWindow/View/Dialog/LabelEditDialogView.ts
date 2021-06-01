@@ -1,8 +1,7 @@
 import {List} from 'immutable'
-import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {LabelEditDialog, State} from 'src/TreeifyWindow/Internal/State'
 import {
   createButtonElement,
@@ -21,13 +20,13 @@ export function createLabelEditDialogViewModel(state: State): LabelEditDialogVie
 export function LabelEditDialogView(viewModel: LabelEditDialogViewModel) {
   const onClickAddButton = () => {
     CurrentState.setLabelEditDialog({
-      labels: viewModel.labels.push(''),
+      labels: getAllLabelInputValues().push(''),
     })
     CurrentState.commit()
   }
 
   const onClickFinishButton = () => {
-    const labels = viewModel.labels.filter((label) => label !== '')
+    const labels = getAllLabelInputValues().filter((label) => label !== '')
     CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
     CurrentState.setLabelEditDialog(null)
     CurrentState.commit()
@@ -67,37 +66,26 @@ export function LabelEditDialogView(viewModel: LabelEditDialogViewModel) {
 
 function createLabelRow(text: string, index: integer) {
   const onClickDeleteButton = () => {
-    const labels = Internal.instance.state.labelEditDialog?.labels
-    assertNonUndefined(labels)
+    const values = getAllLabelInputValues()
     CurrentState.setLabelEditDialog({
-      labels: labels.size > 1 ? labels.remove(index) : List.of(''),
+      labels: values.size > 1 ? values.remove(index) : List.of(''),
     })
     CurrentState.commit()
   }
 
   return createDivElement('label-edit-dialog_label-row', {}, [
-    createInputElement(
-      {type: 'text', class: 'label-edit-dialog_label-name', value: text},
-      {input: onInput, compositionend: reflectViewToViewModel}
-    ),
+    createInputElement({type: 'text', class: 'label-edit-dialog_label-name', value: text}),
     createDivElement('label-edit-dialog_delete-button', {click: onClickDeleteButton}),
   ])
 }
 
-const onInput = (event: InputEvent) => {
-  if (event.isComposing) return
-
-  reflectViewToViewModel()
-}
-
-function reflectViewToViewModel() {
+// 全てのラベル入力欄の内容テキストを返す
+function getAllLabelInputValues(): List<string> {
   const dialogDomElement = document.querySelector('.label-edit-dialog_content')
   assertNonNull(dialogDomElement)
 
   const inputElements = dialogDomElement.querySelectorAll('input')
-  const values = List(inputElements).map((inputElement) => inputElement.value)
-  CurrentState.setLabelEditDialog({labels: values})
-  CurrentState.commit()
+  return List(inputElements).map((inputElement) => inputElement.value)
 }
 
 export const LabelEditDialogCss = css`
