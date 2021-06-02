@@ -163,19 +163,22 @@ export function moveItemDownward() {
   // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
+  // 1つ下のアイテムの下にアイテムを移動する
+  for (const selectedItemPath of selectedItemPaths.reverse()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    // 既存の親子関係を削除
+    const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
+    // アイテムを再配置
+    CurrentState.insertBelowItem(firstFollowingItemPath, selectedItemId, edge)
+
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
+
+  // キャレット位置、テキスト選択範囲を維持する
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+
   if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下のアイテムが子を表示していない場合
-
-    // 1つ下のアイテムの下にアイテムを移動する
-    for (const selectedItemPath of selectedItemPaths.reverse()) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      // 既存の親子関係を削除
-      const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
-      // 1つ下のアイテムの弟になるようターゲットアイテムを配置
-      CurrentState.insertNextSiblingItem(firstFollowingItemPath, selectedItemId, edge)
-
-      CurrentState.updateItemTimestamp(selectedItemId)
-    }
 
     // ターゲットアイテムパスを更新
     const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
@@ -189,22 +192,8 @@ export function moveItemDownward() {
     )
     assertNonUndefined(newAnchorItemPath)
     CurrentState.setAnchorItemPath(newAnchorItemPath)
-
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
-    // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
-
-    const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
-    for (const selectedItemPath of selectedItemPaths.reverse()) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      // 既存の親子関係を削除
-      const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
-      // 1つ下のアイテムの弟になるようターゲットアイテムを配置
-      CurrentState.insertFirstChildItem(firstFollowingItemId, selectedItemId, edge)
-
-      CurrentState.updateItemTimestamp(selectedItemId)
-    }
+    // 1つ下のアイテムが子を表示している場合
 
     // ターゲットアイテムパスを更新
     const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
@@ -214,9 +203,6 @@ export function moveItemDownward() {
       ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
-
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   }
 }
 
