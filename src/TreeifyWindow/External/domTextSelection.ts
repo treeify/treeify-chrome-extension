@@ -100,16 +100,18 @@ function convertToDomOffset(node: Node, distance: integer): {node: Node; offset:
 
 /** DOMのテキスト選択範囲(selection)を設定する */
 export function setDomSelection(contentEditable: Node, textItemSelection: TextItemSelection) {
-  const selection = getSelection()
-  if (selection !== null) {
-    const focusPosition = convertToDomOffset(contentEditable, textItemSelection.focusDistance)
-    const anchorPosition = convertToDomOffset(contentEditable, textItemSelection.anchorDistance)
-    selection.setBaseAndExtent(
-      anchorPosition.node,
-      anchorPosition.offset,
-      focusPosition.node,
-      focusPosition.offset
-    )
+  if (contentEditable instanceof HTMLElement && contentEditable.isContentEditable) {
+    const selection = getSelection()
+    if (selection !== null) {
+      const focusPosition = convertToDomOffset(contentEditable, textItemSelection.focusDistance)
+      const anchorPosition = convertToDomOffset(contentEditable, textItemSelection.anchorDistance)
+      selection.setBaseAndExtent(
+        anchorPosition.node,
+        anchorPosition.offset,
+        focusPosition.node,
+        focusPosition.offset
+      )
+    }
   }
 }
 

@@ -318,6 +318,9 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
       setCaretPosition(i)
       const caretXCoordinate = getCaretXCoordinate()!
       if (caretXCoordinate === originalXCoordinate) {
+        CurrentState.setTargetItemPath(aboveItemPath)
+        External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+        CurrentState.commit()
         return
       }
       if (caretXCoordinate < originalXCoordinate) {
@@ -325,7 +328,12 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
       }
     }
     // もしi < 0なら既にsetCaretPosition(0)が実行済みなので、このままreturnしていい
-    if (i < 0) return
+    if (i < 0) {
+      CurrentState.setTargetItemPath(aboveItemPath)
+      External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+      CurrentState.commit()
+      return
+    }
 
     // キャレットのX座標の移動距離が最も小さくなるようなpositionを選ぶ
     if (i < charactersCount) {
