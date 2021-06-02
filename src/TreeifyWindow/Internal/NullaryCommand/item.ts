@@ -163,19 +163,22 @@ export function moveItemDownward() {
   // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
+  // 1つ下のアイテムの下にアイテムを移動する
+  for (const selectedItemPath of selectedItemPaths.reverse()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    // 既存の親子関係を削除
+    const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
+    // アイテムを再配置
+    CurrentState.insertBelowItem(firstFollowingItemPath, selectedItemId, edge)
+
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
+
+  // キャレット位置、テキスト選択範囲を維持する
+  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+
   if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下のアイテムが子を表示していない場合
-
-    // 1つ下のアイテムの下にアイテムを移動する
-    for (const selectedItemPath of selectedItemPaths.reverse()) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      // 既存の親子関係を削除
-      const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
-      // 1つ下のアイテムの弟になるようターゲットアイテムを配置
-      CurrentState.insertNextSiblingItem(firstFollowingItemPath, selectedItemId, edge)
-
-      CurrentState.updateItemTimestamp(selectedItemId)
-    }
 
     // ターゲットアイテムパスを更新
     const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
@@ -189,22 +192,8 @@ export function moveItemDownward() {
     )
     assertNonUndefined(newAnchorItemPath)
     CurrentState.setAnchorItemPath(newAnchorItemPath)
-
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
-    // 1つ下のアイテムが子を表示している場合、最初の子になるよう移動する
-
-    const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
-    for (const selectedItemPath of selectedItemPaths.reverse()) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      // 既存の親子関係を削除
-      const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
-      // 1つ下のアイテムの弟になるようターゲットアイテムを配置
-      CurrentState.insertFirstChildItem(firstFollowingItemId, selectedItemId, edge)
-
-      CurrentState.updateItemTimestamp(selectedItemId)
-    }
+    // 1つ下のアイテムが子を表示している場合
 
     // ターゲットアイテムパスを更新
     const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
@@ -214,9 +203,6 @@ export function moveItemDownward() {
       ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
-
-    // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   }
 }
 
@@ -300,7 +286,7 @@ export function enterKeyDefault() {
     const textItemSelection = getTextItemSelectionFromDom()
     assertNonUndefined(textItemSelection)
 
-    // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
+    // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないのでキャレット位置によらず子として追加する
     if (!ItemPath.hasParent(targetItemPath)) {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
@@ -325,13 +311,12 @@ export function enterKeyDefault() {
     if (characterCount === 0) {
       // 空のテキストアイテムなら
 
-      // 新規アイテムを弟として追加する
+      // 新規アイテムを下に追加する
       const newItemId = CurrentState.createTextItem()
-      CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
+      const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
       // キャレット位置を更新する
-      const siblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
-      CurrentState.setTargetItemPath(siblingItemPath)
+      CurrentState.setTargetItemPath(newItemPath)
       External.instance.requestSetCaretDistanceAfterRendering(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
@@ -355,47 +340,23 @@ export function enterKeyDefault() {
     } else {
       // キャレット位置が後半なら
 
-      if (!CurrentState.getDisplayingChildItemIds(targetItemPath).isEmpty()) {
-        // もし子を表示しているなら
+      // キャレットより後ろのテキストをカットする
+      const range = selection.getRangeAt(0)
+      range.setEndAfter(document.activeElement.lastChild!)
+      const domishObjects = DomishObject.fromChildren(range.extractContents())
+      CurrentState.setTextItemDomishObjects(
+        targetItemId,
+        DomishObject.fromChildren(document.activeElement)
+      )
 
-        // キャレットより後ろのテキストをカットする
-        const range = selection.getRangeAt(0)
-        range.setEndAfter(document.activeElement.lastChild!)
-        const domishObjects = DomishObject.fromChildren(range.extractContents())
-        CurrentState.setTextItemDomishObjects(
-          targetItemId,
-          DomishObject.fromChildren(document.activeElement)
-        )
+      // 新規アイテムを下に配置する
+      const newItemId = CurrentState.createTextItem()
+      const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
+      CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
-        // 新規アイテムを最初の子として追加する
-        const newItemId = CurrentState.createTextItem()
-        CurrentState.insertFirstChildItem(targetItemId, newItemId)
-        CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
-
-        // キャレット位置を更新する
-        CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
-        External.instance.requestSetCaretDistanceAfterRendering(0)
-      } else {
-        // もし子を表示していないなら
-
-        // キャレットより後ろのテキストをカットする
-        const range = selection.getRangeAt(0)
-        range.setEndAfter(document.activeElement.lastChild!)
-        const domishObjects = DomishObject.fromChildren(range.extractContents())
-        CurrentState.setTextItemDomishObjects(
-          targetItemId,
-          DomishObject.fromChildren(document.activeElement)
-        )
-
-        // 新規アイテムを弟として追加する
-        const newItemId = CurrentState.createTextItem()
-        CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
-        CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
-
-        // キャレット位置を更新する
-        CurrentState.setTargetItemPath(ItemPath.createSiblingItemPath(targetItemPath, newItemId)!)
-        External.instance.requestSetCaretDistanceAfterRendering(0)
-      }
+      // キャレット位置を更新する
+      CurrentState.setTargetItemPath(newItemPath)
+      External.instance.requestSetCaretDistanceAfterRendering(0)
     }
   } else {
     // ターゲットアイテムがテキストアイテム以外の場合
@@ -411,24 +372,12 @@ export function enterKeyDefault() {
       return
     }
 
-    if (!CurrentState.getDisplayingChildItemIds(targetItemPath).isEmpty()) {
-      // もし子を表示しているなら
-      // 新規アイテムを最初の子として追加する
-      const newItemId = CurrentState.createTextItem()
-      CurrentState.insertFirstChildItem(targetItemId, newItemId)
+    // 新規アイテムを下に配置する
+    const newItemId = CurrentState.createTextItem()
+    const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
-      // フォーカスを移す
-      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
-    } else {
-      // もし子を表示していないなら
-      // 新規アイテムを弟として追加する
-      const newItemId = CurrentState.createTextItem()
-      CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
-
-      // フォーカスを移す
-      const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newItemId)!
-      CurrentState.setTargetItemPath(newItemPath)
-    }
+    // フォーカスを移す
+    CurrentState.setTargetItemPath(newItemPath)
   }
 }
 

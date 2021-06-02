@@ -271,15 +271,18 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Ed
  * @param newItemId 兄として追加されるアイテム
  * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
-export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge) {
+export function insertPrevSiblingItem(
+  itemPath: ItemPath,
+  newItemId: ItemId,
+  edge?: Edge
+): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
-  // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
-  if (parentItemId === undefined) return
+  // 親が居ない場合はこの関数を呼んではならない
+  assertNonUndefined(parentItemId)
 
   const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  // 親の子リストに自身が含まれない場合、すなわち不正なItemPathの場合は何もしない
-  if (!childItemIds.contains(itemId)) return
+  assert(childItemIds.contains(itemId))
 
   // 兄として追加する
   modifyChildItems(parentItemId, (itemIds) => {
@@ -288,25 +291,29 @@ export function insertPrevSiblingItem(itemPath: ItemPath, newItemId: ItemId, edg
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, parentItemId, edge)
+
+  return itemPath
 }
 
 /**
  * あるアイテムの弟になるようアイテムを子リストに追加する。
  * 整合性が取れるように親アイテムリストも修正する。
- * 何らかの理由で弟として追加できない場合は何もしない。
  * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの弟になる
  * @param newItemId 弟として追加されるアイテム
  * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
-export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge) {
+export function insertNextSiblingItem(
+  itemPath: ItemPath,
+  newItemId: ItemId,
+  edge?: Edge
+): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
-  // 親が居ない（≒ アクティブページアイテムである）場合は何もしない
-  if (parentItemId === undefined) return
+  // 親が居ない場合はこの関数を呼んではならない
+  assertNonUndefined(parentItemId)
 
   const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  // 親の子リストに自身が含まれない場合、すなわち不正なItemPathの場合は何もしない
-  if (!childItemIds.contains(itemId)) return
+  assert(childItemIds.contains(itemId))
 
   // 弟として追加する
   modifyChildItems(parentItemId, (itemIds) => {
@@ -315,6 +322,8 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId, edg
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, parentItemId, edge)
+
+  return ItemPath.createSiblingItemPath(itemPath, newItemId)!
 }
 
 /**
@@ -322,11 +331,12 @@ export function insertNextSiblingItem(itemPath: ItemPath, newItemId: ItemId, edg
  * 基本的には弟になるよう配置するが、
  * 指定されたアイテムパスが子を表示している場合は最初の子になるよう配置する。
  */
-export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge) {
+export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge): ItemPath {
   if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
+    return itemPath.push(newItemId)
   } else {
-    insertNextSiblingItem(itemPath, newItemId, edge)
+    return insertNextSiblingItem(itemPath, newItemId, edge)
   }
 }
 
