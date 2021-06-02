@@ -144,9 +144,8 @@ export class DataFolder {
     const fileTexts = await Promise.all(fileTextPromises)
 
     const chunksFolderHandle = await this.getFolderHandle(DataFolder.getChunkPacksFolderPath())
-    // 各ファイルに書き込む
-    // TODO: 各ファイルへの書き込みは並列にやりたい
-    for (const {fileName, text} of fileTexts) {
+    // 各ファイルに並列に書き込む
+    const writingPromises = fileTexts.map(async ({fileName, text}) => {
       const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
       if (text !== undefined) {
         this.setCacheEntry(chunkPackFilePath, text)
@@ -156,7 +155,8 @@ export class DataFolder {
         this.deleteCacheEntry(chunkPackFilePath)
         await chunksFolderHandle.removeEntry(fileName)
       }
-    }
+    })
+    await Promise.all(writingPromises)
 
     // 各ファイルのMD5を計算し、メタデータファイルを更新
     const metadata = await this.readMetadataFile()
@@ -211,6 +211,7 @@ export class DataFolder {
    */
   async copyFrom(deviceId: DeviceId) {
     // 自デバイスフォルダ内の全ファイルとフォルダを削除
+    // TODO: 並列化できないか？あるいはフォルダをまるごと削除して空のフォルダを作り直すのは？
     const ownDeviceFolderPath = DataFolder.getDeviceFolderPath()
     const ownDeviceFolder = await this.getFolderHandle(ownDeviceFolderPath)
     for await (const entryName of ownDeviceFolder.keys()) {
