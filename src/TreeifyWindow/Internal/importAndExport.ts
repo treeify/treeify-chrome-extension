@@ -90,7 +90,7 @@ export function onPaste(event: ClipboardEvent) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
           const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
-          CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
+          CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
         CurrentState.commit()
@@ -104,7 +104,7 @@ export function onPaste(event: ClipboardEvent) {
     // OPML形式の場合
     if (opmlParseResult !== undefined) {
       for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
-        CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
+        CurrentState.insertBelowItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
       }
       CurrentState.commit()
       return
@@ -121,7 +121,7 @@ export function onPaste(event: ClipboardEvent) {
         const newItemId = CurrentState.createImageItem()
         // TODO: Gyazoの画像はpngとは限らない
         CurrentState.setImageItemUrl(newItemId, text + '.png')
-        CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
+        CurrentState.insertBelowItem(targetItemPath, newItemId)
         CurrentState.commit()
       } else {
         document.execCommand('insertText', false, text)
@@ -194,7 +194,7 @@ export function pasteMultilineText(text: string) {
       // インデント形式のテキストとして認識できた場合
       const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
       for (const rootItemId of rootItemIds.reverse()) {
-        CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), rootItemId)
+        CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), rootItemId)
       }
       CurrentState.commit()
       return
@@ -203,7 +203,7 @@ export function pasteMultilineText(text: string) {
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
   for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
-    CurrentState.insertNextSiblingItem(CurrentState.getTargetItemPath(), itemId)
+    CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), itemId)
   }
   CurrentState.commit()
 }
