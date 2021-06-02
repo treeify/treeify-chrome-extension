@@ -68,25 +68,9 @@ export function onCreated(tab: Tab) {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
-        if (ItemPath.hasParent(targetItemPath)) {
-          // いわゆる「新しいタブ」は弟として追加する
-          CurrentState.insertNextSiblingItem(targetItemPath, newWebPageItemId)
-
-          // フォーカスを移す
-          if (tab.active) {
-            const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, newWebPageItemId)
-            assertNonUndefined(newItemPath)
-            CurrentState.setTargetItemPath(newItemPath)
-          }
-        } else {
-          // アクティブアイテムの最初の子として追加する
-          CurrentState.insertFirstChildItem(targetItemId, newWebPageItemId)
-
-          // フォーカスを移す
-          if (tab.active) {
-            const newItemPath = targetItemPath.push(newWebPageItemId)
-            CurrentState.setTargetItemPath(newItemPath)
-          }
+        const newItemPath = CurrentState.insertBelowItem(targetItemPath, newWebPageItemId)
+        if (tab.active) {
+          CurrentState.setTargetItemPath(newItemPath)
         }
       } else {
         const openerItemId = External.instance.tabItemCorrespondence.getItemIdBy(tab.openerTabId)
