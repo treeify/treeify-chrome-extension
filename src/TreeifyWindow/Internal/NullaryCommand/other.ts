@@ -78,7 +78,6 @@ export async function saveToDataFolder() {
       await startup(state)
     }
   }
-  CurrentState.commit()
 }
 
 /**

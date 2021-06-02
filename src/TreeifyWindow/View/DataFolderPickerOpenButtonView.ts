@@ -1,4 +1,4 @@
-import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
+import {doAsyncWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
@@ -29,8 +29,8 @@ export function DataFolderPickerOpenButtonView(viewModel: DataFolderPickerOpenBu
 }
 
 function onClick() {
-  doWithErrorCapture(() => {
-    NullaryCommand.saveToDataFolder()
+  doAsyncWithErrorCapture(async () => {
+    await NullaryCommand.saveToDataFolder()
     CurrentState.commit()
   })
 }
