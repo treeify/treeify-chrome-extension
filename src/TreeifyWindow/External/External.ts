@@ -11,7 +11,6 @@ import {
   TextItemSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
-import {TextItemDomElementCache} from 'src/TreeifyWindow/External/TextItemDomElementCache'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -43,13 +42,6 @@ export class External {
 
   /** 独自クリップボード */
   treeifyClipboard: TreeifyClipboard | undefined
-
-  /**
-   * テキストアイテムのcontenteditableな要素のキャッシュ。
-   * TODO: キャッシュする理由を探す。見つからなければ廃止を検討する。
-   *  このキャッシュはlit-htmlを使っていた時代に必要だったもの。現在も必要なのかどうか把握していない。
-   */
-  readonly textItemDomElementCache = new TextItemDomElementCache()
 
   // 次の描画が完了した際に設定すべきテキスト選択範囲
   private pendingTextItemSelection: TextItemSelection | undefined

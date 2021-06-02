@@ -34,23 +34,12 @@ export function createItemTreeTextContentViewModel(
     domishObjects: state.textItems[itemId].domishObjects,
     onInput: (event) => {
       doWithErrorCapture(() => {
-        // もしisComposingがtrueの時にModelに反映するとテキストが重複してしまう
         if (!event.isComposing && event.target instanceof Node) {
-          // 最新のキャレット位置をModelに反映する
           External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
           CurrentState.setTextItemDomishObjects(itemId, domishObjects)
-
-          // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
-          // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
-          // 【具体的な手順】
-          // (1) Aキーを押して「あ」と入力
-          // (2) Spaceキーを押して「亜」に変換（Enterキーは押さない）
-          // (3) Kキーを押して、さらにIキーを押す（つまり「亜」の後ろに「き」と入力しようとする）
-          // →実際にはKキーの入力がなかったことにされ、「亜い」と表示される。
-          External.instance.textItemDomElementCache.updateDomishObjects(itemPath, domishObjects)
 
           CurrentState.updateItemTimestamp(itemId)
           CurrentState.commit()
@@ -64,16 +53,6 @@ export function createItemTreeTextContentViewModel(
           const domishObjects = DomishObject.fromChildren(event.target)
           CurrentState.setTextItemDomishObjects(itemId, domishObjects)
           External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
-          // DOMの内容が変わったので、キャッシュ内のdomishObjectsを更新する。
-          // これを怠ると特定の手順でIME入力した際に文字入力がなかったことにされてしまう。
-          // 【具体的な手順】
-          // (1) Aキーを押して「あ」と入力
-          // (2) Spaceキーを押して「亜」に変換（Enterキーは押さない）
-          // (3) Kキーを押して、さらにIキーを押す（つまり「亜」の後ろに「き」と入力しようとする）
-          // →実際にはKキーの入力がなかったことにされ、「亜い」と表示される。
-          External.instance.textItemDomElementCache.updateDomishObjects(itemPath, domishObjects)
-
           CurrentState.updateItemTimestamp(itemId)
 
           // 本当はCurrentState.commit()を呼んでリアクティブに画面を更新したいのだが、
@@ -115,40 +94,20 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
           viewModel.labels.map((label) => LabelView({text: label}))
         )
       : undefined,
-    getContentEditableElement(viewModel),
+    createDivElement(
+      {
+        id: ItemTreeContentView.focusableDomElementId(viewModel.itemPath),
+        class: 'item-tree-text-content_content-editable',
+        contenteditable: 'true',
+      },
+      {
+        input: viewModel.onInput,
+        compositionend: viewModel.onCompositionEnd,
+        click: viewModel.onClick,
+      },
+      [DomishObject.toDocumentFragment(viewModel.domishObjects)]
+    ),
   ])
-}
-
-function getContentEditableElement(viewModel: ItemTreeTextContentViewModel): HTMLElement {
-  // キャッシュ照会
-  const cached = External.instance.textItemDomElementCache.get(
-    viewModel.itemPath,
-    viewModel.domishObjects
-  )
-  if (cached !== undefined) return cached
-
-  const contentEditableElement = createDivElement(
-    {
-      id: ItemTreeContentView.focusableDomElementId(viewModel.itemPath),
-      class: 'item-tree-text-content_content-editable',
-      contenteditable: 'true',
-    },
-    {
-      input: viewModel.onInput,
-      compositionend: viewModel.onCompositionEnd,
-      click: viewModel.onClick,
-    },
-    [DomishObject.toDocumentFragment(viewModel.domishObjects)]
-  )
-
-  // キャッシュに登録
-  External.instance.textItemDomElementCache.set(
-    viewModel.itemPath,
-    viewModel.domishObjects,
-    contentEditableElement
-  )
-
-  return contentEditableElement
 }
 
 export const ItemTreeTextContentCss = css`
