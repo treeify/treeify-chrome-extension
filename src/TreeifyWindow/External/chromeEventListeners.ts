@@ -256,5 +256,7 @@ async function getAllNormalTabs(): Promise<Tab[]> {
 }
 
 export function onWindowFocusChanged(windowId: integer) {
-  External.instance.lastFocusedWindowId = windowId
+  doWithErrorCapture(() => {
+    External.instance.lastFocusedWindowId = windowId
+  })
 }

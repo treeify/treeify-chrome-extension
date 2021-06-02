@@ -1,4 +1,5 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {
@@ -91,10 +92,12 @@ export function DefaultWindowModeSettingDialogView(
 
 function createOption(value: string, text: string, initialDefaultWindowMode: DefaultWindowMode) {
   const onClick = () => {
-    const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
-    const inputElement = document.querySelector<HTMLInputElement>(selector)
-    assertNonNull(inputElement)
-    inputElement.checked = true
+    doWithErrorCapture(() => {
+      const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
+      const inputElement = document.querySelector<HTMLInputElement>(selector)
+      assertNonNull(inputElement)
+      inputElement.checked = true
+    })
   }
 
   if (initialDefaultWindowMode === value) {

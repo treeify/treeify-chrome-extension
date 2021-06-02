@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -14,116 +15,122 @@ import {Edge} from 'src/TreeifyWindow/Internal/State'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
-  if (event.clipboardData === null) return
+  doWithErrorCapture(() => {
+    if (event.clipboardData === null) return
 
-  External.instance.treeifyClipboard = undefined
+    External.instance.treeifyClipboard = undefined
 
-  const textSelection = getTextItemSelectionFromDom()
-  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
-    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
-  } else {
-    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
-    event.preventDefault()
+    const textSelection = getTextItemSelectionFromDom()
+    if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+      // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+    } else {
+      // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+      event.preventDefault()
 
-    // インデント形式のテキストをクリップボードに入れる
-    const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
-    event.clipboardData.setData('text/plain', contentText)
+      // インデント形式のテキストをクリップボードに入れる
+      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
+      event.clipboardData.setData('text/plain', contentText)
 
-    // OPML形式のテキストをクリップボードに入れる
-    event.clipboardData.setData(
-      'application/xml',
-      toOpmlString(CurrentState.getSelectedItemPaths())
-    )
-  }
+      // OPML形式のテキストをクリップボードに入れる
+      event.clipboardData.setData(
+        'application/xml',
+        toOpmlString(CurrentState.getSelectedItemPaths())
+      )
+    }
+  })
 }
 
 export function onCut(event: ClipboardEvent) {
-  if (event.clipboardData === null) return
+  doWithErrorCapture(() => {
+    if (event.clipboardData === null) return
 
-  External.instance.treeifyClipboard = undefined
+    External.instance.treeifyClipboard = undefined
 
-  const textSelection = getTextItemSelectionFromDom()
-  if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
-    // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
-  } else {
-    // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
-    event.preventDefault()
+    const textSelection = getTextItemSelectionFromDom()
+    if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+      // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+    } else {
+      // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+      event.preventDefault()
 
-    // インデント形式のテキストをクリップボードに入れる
-    const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
-    event.clipboardData.setData('text/plain', contentText)
+      // インデント形式のテキストをクリップボードに入れる
+      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
+      event.clipboardData.setData('text/plain', contentText)
 
-    // OPML形式のテキストをクリップボードに入れる
-    event.clipboardData.setData(
-      'application/xml',
-      toOpmlString(CurrentState.getSelectedItemPaths())
-    )
+      // OPML形式のテキストをクリップボードに入れる
+      event.clipboardData.setData(
+        'application/xml',
+        toOpmlString(CurrentState.getSelectedItemPaths())
+      )
 
-    NullaryCommand.deleteItem()
-    CurrentState.commit()
-  }
+      NullaryCommand.deleteItem()
+      CurrentState.commit()
+    }
+  })
 }
 
 // ペースト時にプレーンテキスト化する
 export function onPaste(event: ClipboardEvent) {
-  if (event.clipboardData === null) return
+  doWithErrorCapture(() => {
+    if (event.clipboardData === null) return
 
-  event.preventDefault()
-  const targetItemPath = CurrentState.getTargetItemPath()
+    event.preventDefault()
+    const targetItemPath = CurrentState.getTargetItemPath()
 
-  const text = event.clipboardData.getData('text/plain')
+    const text = event.clipboardData.getData('text/plain')
 
-  // 独自クリップボードを優先して貼り付ける
-  if (External.instance.treeifyClipboard !== undefined) {
-    // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
-    if (text === External.instance.getTreeifyClipboardHash()) {
-      // TODO: 兄弟リスト内に同一アイテムが複数含まれてしまう場合のエラー処理を追加する
+    // 独自クリップボードを優先して貼り付ける
+    if (External.instance.treeifyClipboard !== undefined) {
+      // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
+      if (text === External.instance.getTreeifyClipboardHash()) {
+        // TODO: 兄弟リスト内に同一アイテムが複数含まれてしまう場合のエラー処理を追加する
 
-      // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
-      for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
-        const selectedItemId = ItemPath.getItemId(selectedItemPath)
-        // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-        const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
-        CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
+        // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
+        for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+          const selectedItemId = ItemPath.getItemId(selectedItemPath)
+          // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
+          const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
+          CurrentState.insertNextSiblingItem(targetItemPath, selectedItemId, initialEdge)
+        }
+
+        CurrentState.commit()
+        return
+      } else {
+        External.instance.treeifyClipboard = undefined
       }
+    }
 
+    const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
+    // OPML形式の場合
+    if (opmlParseResult !== undefined) {
+      for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
+        CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
+      }
       CurrentState.commit()
       return
+    }
+
+    if (!text.includes('\n')) {
+      // 1行だけのテキストの場合
+
+      // GyazoのスクリーンショットのURLを判定する。
+      // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
+      const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
+      if (gyazoUrlPattern.test(text)) {
+        // GyazoのスクリーンショットのURLなら画像アイテムを作る
+        const newItemId = CurrentState.createImageItem()
+        // TODO: Gyazoの画像はpngとは限らない
+        CurrentState.setImageItemUrl(newItemId, text + '.png')
+        CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
+        CurrentState.commit()
+      } else {
+        document.execCommand('insertText', false, text)
+      }
     } else {
-      External.instance.treeifyClipboard = undefined
+      // 複数行にわたるテキストの場合
+      pasteMultilineText(text)
     }
-  }
-
-  const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
-  // OPML形式の場合
-  if (opmlParseResult !== undefined) {
-    for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
-      CurrentState.insertNextSiblingItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
-    }
-    CurrentState.commit()
-    return
-  }
-
-  if (!text.includes('\n')) {
-    // 1行だけのテキストの場合
-
-    // GyazoのスクリーンショットのURLを判定する。
-    // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
-    const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
-    if (gyazoUrlPattern.test(text)) {
-      // GyazoのスクリーンショットのURLなら画像アイテムを作る
-      const newItemId = CurrentState.createImageItem()
-      // TODO: Gyazoの画像はpngとは限らない
-      CurrentState.setImageItemUrl(newItemId, text + '.png')
-      CurrentState.insertNextSiblingItem(targetItemPath, newItemId)
-      CurrentState.commit()
-    } else {
-      document.execCommand('insertText', false, text)
-    }
-  } else {
-    // 複数行にわたるテキストの場合
-    pasteMultilineText(text)
-  }
+  })
 }
 
 // OPMLの可能性があるMIMEタイプをいろいろ試してテキストを取り出す

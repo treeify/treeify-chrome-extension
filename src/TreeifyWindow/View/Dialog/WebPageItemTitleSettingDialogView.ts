@@ -83,36 +83,42 @@ export function WebPageItemTitleSettingDialogView(
 }
 
 function onClickBackdrop(event: Event) {
-  // ダイアログを閉じる
-  if (event.eventPhase === Event.AT_TARGET) {
-    CurrentState.setWebPageItemTitleSettingDialog(null)
-    CurrentState.commit()
-  }
+  doWithErrorCapture(() => {
+    // ダイアログを閉じる
+    if (event.eventPhase === Event.AT_TARGET) {
+      CurrentState.setWebPageItemTitleSettingDialog(null)
+      CurrentState.commit()
+    }
+  })
 }
 
 // onInsertedとonRemovedの間でFocusTrapインスタンスを共有するためのグローバル変数
 let focusTrap: FocusTrap | undefined
 
 function onInserted(event: Event) {
-  // フォーカストラップを作る
-  if (event.target instanceof HTMLElement) {
-    assert(focusTrap === undefined)
-    focusTrap = createFocusTrap(event.target, {
-      returnFocusOnDeactivate: true,
-      // この機能を使うとイベント発生順序の違いにより難解なエラーが起こるので、
-      // ESCキー押下時にダイアログを閉じる処理は自前で実装する。
-      escapeDeactivates: false,
-    })
-    focusTrap.activate()
-  }
+  doWithErrorCapture(() => {
+    // フォーカストラップを作る
+    if (event.target instanceof HTMLElement) {
+      assert(focusTrap === undefined)
+      focusTrap = createFocusTrap(event.target, {
+        returnFocusOnDeactivate: true,
+        // この機能を使うとイベント発生順序の違いにより難解なエラーが起こるので、
+        // ESCキー押下時にダイアログを閉じる処理は自前で実装する。
+        escapeDeactivates: false,
+      })
+      focusTrap.activate()
+    }
+  })
 }
 
 function onRemoved(event: Event) {
-  // フォーカストラップを消す
-  if (focusTrap !== undefined) {
-    focusTrap.deactivate()
-    focusTrap = undefined
-  }
+  doWithErrorCapture(() => {
+    // フォーカストラップを消す
+    if (focusTrap !== undefined) {
+      focusTrap.deactivate()
+      focusTrap = undefined
+    }
+  })
 }
 
 export const WebPageItemTitleSettingDialogCss = css`

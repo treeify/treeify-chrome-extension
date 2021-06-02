@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -31,8 +32,10 @@ export function createOtherParentsDialogViewModel(
 
 export function OtherParentsDialogView(viewModel: OtherParentsDialogViewModel) {
   const closeDialog = () => {
-    CurrentState.setOtherParentsDialog(null)
-    CurrentState.commit()
+    doWithErrorCapture(() => {
+      CurrentState.setOtherParentsDialog(null)
+      CurrentState.commit()
+    })
   }
 
   return CommonDialogView({
