@@ -1,5 +1,6 @@
 import {List} from 'immutable'
 import {TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {toOpmlString} from 'src/TreeifyWindow/Internal/importAndExport'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {createButtonElement, createDivElement} from 'src/TreeifyWindow/View/createElement'
@@ -115,13 +116,15 @@ export function RootView(viewModel: RootViewModel) {
 }
 
 function onClickExportButton() {
-  const fileName = 'treeify.opml'
+  doWithErrorCapture(() => {
+    const fileName = 'treeify.opml'
 
-  const content = toOpmlString(List.of(List.of(TOP_ITEM_ID)))
-  const aElement = document.createElement('a')
-  aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
-  aElement.download = fileName
-  aElement.click()
+    const content = toOpmlString(List.of(List.of(TOP_ITEM_ID)))
+    const aElement = document.createElement('a')
+    aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
+    aElement.download = fileName
+    aElement.click()
+  })
 }
 
 export const RootCss = css`

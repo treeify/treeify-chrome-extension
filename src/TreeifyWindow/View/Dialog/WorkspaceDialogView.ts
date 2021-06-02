@@ -1,5 +1,6 @@
 import {List} from 'immutable'
 import {WorkspaceId} from 'src/TreeifyWindow/basicType'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State, Workspace} from 'src/TreeifyWindow/Internal/State'
 import {
@@ -39,8 +40,10 @@ export function createWorkspaceDialogViewModel(state: State): WorkspaceDialogVie
 
 export function WorkspaceDialogView(viewModel: WorkspaceDialogViewModel) {
   const closeDialog = () => {
-    CurrentState.setWorkspaceDialog(null)
-    CurrentState.commit()
+    doWithErrorCapture(() => {
+      CurrentState.setWorkspaceDialog(null)
+      CurrentState.commit()
+    })
   }
 
   return CommonDialogView({
@@ -61,19 +64,25 @@ export function WorkspaceDialogView(viewModel: WorkspaceDialogViewModel) {
 
 function createWorkspaceRow(workspace: WorkspaceRecord) {
   const onInput = (event: InputEvent) => {
-    if (event.target instanceof HTMLInputElement) {
-      CurrentState.setWorkspaceName(workspace.id, event.target.value)
-    }
+    doWithErrorCapture(() => {
+      if (event.target instanceof HTMLInputElement) {
+        CurrentState.setWorkspaceName(workspace.id, event.target.value)
+      }
+    })
   }
 
   const onClickRadioButton = () => {
-    CurrentState.setCurrentWorkspaceId(workspace.id)
-    CurrentState.commit()
+    doWithErrorCapture(() => {
+      CurrentState.setCurrentWorkspaceId(workspace.id)
+      CurrentState.commit()
+    })
   }
 
   const onClickDeleteButton = () => {
-    CurrentState.deleteWorkspace(workspace.id)
-    CurrentState.commit()
+    doWithErrorCapture(() => {
+      CurrentState.deleteWorkspace(workspace.id)
+      CurrentState.commit()
+    })
   }
 
   return createDivElement('workspace-dialog_existing-workspace', {}, [

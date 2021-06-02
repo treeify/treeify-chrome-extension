@@ -660,8 +660,10 @@ function onSpace(event: KeyboardEvent) {
 }
 
 function onDragOver(event: DragEvent) {
-  // ドロップを動作させるために必要
-  event.preventDefault()
+  doWithErrorCapture(() => {
+    // ドロップを動作させるために必要
+    event.preventDefault()
+  })
 }
 
 function onDrop(event: DragEvent) {

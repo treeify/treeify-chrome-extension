@@ -1,5 +1,6 @@
 import {createFocusTrap, FocusTrap} from 'focus-trap'
 import {assert} from 'src/Common/Debug/assert'
+import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {css} from 'src/TreeifyWindow/View/css'
@@ -12,21 +13,25 @@ export type CommonDialogViewModel = {
 
 export function CommonDialogView(viewModel: CommonDialogViewModel) {
   const onClickBackdrop = (event: MouseEvent) => {
-    // ダイアログを閉じる
-    if (event.eventPhase === Event.AT_TARGET) {
-      viewModel.onCloseDialog()
-    }
+    doWithErrorCapture(() => {
+      // ダイアログを閉じる
+      if (event.eventPhase === Event.AT_TARGET) {
+        viewModel.onCloseDialog()
+      }
+    })
   }
 
   // ESCキー押下時にダイアログを閉じるためのイベントハンドラー。
   // focus-trapにはESCキー押下時にdeactivateする標準機能があるが、
   // それを使うとイベント発生順序の違いにより難解なエラーが起こるので自前でハンドリングする。
   const onKeyDown = (event: KeyboardEvent) => {
-    if (event.isComposing) return
+    doWithErrorCapture(() => {
+      if (event.isComposing) return
 
-    if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-      viewModel.onCloseDialog()
-    }
+      if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+        viewModel.onCloseDialog()
+      }
+    })
   }
 
   return createDivElement(
@@ -50,23 +55,27 @@ export function CommonDialogView(viewModel: CommonDialogViewModel) {
 let focusTrap: FocusTrap | undefined
 
 function onInserted(event: Event) {
-  // フォーカストラップを作る
-  if (event.target instanceof HTMLElement) {
-    assert(focusTrap === undefined)
-    focusTrap = createFocusTrap(event.target, {
-      returnFocusOnDeactivate: true,
-      escapeDeactivates: false,
-    })
-    focusTrap.activate()
-  }
+  doWithErrorCapture(() => {
+    // フォーカストラップを作る
+    if (event.target instanceof HTMLElement) {
+      assert(focusTrap === undefined)
+      focusTrap = createFocusTrap(event.target, {
+        returnFocusOnDeactivate: true,
+        escapeDeactivates: false,
+      })
+      focusTrap.activate()
+    }
+  })
 }
 
 function onRemoved(event: Event) {
-  // フォーカストラップを消す
-  if (focusTrap !== undefined) {
-    focusTrap.deactivate()
-    focusTrap = undefined
-  }
+  doWithErrorCapture(() => {
+    // フォーカストラップを消す
+    if (focusTrap !== undefined) {
+      focusTrap.deactivate()
+      focusTrap = undefined
+    }
+  })
 }
 
 export const CommonDialogCss = css`

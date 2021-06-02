@@ -49,11 +49,13 @@ export function LabelEditDialogView(viewModel: LabelEditDialogViewModel) {
 
 function createLabelRow(text: string, index: integer) {
   const onClickDeleteButton = () => {
-    const values = getAllLabelInputValues()
-    CurrentState.setLabelEditDialog({
-      labels: values.size > 1 ? values.remove(index) : List.of(''),
+    doWithErrorCapture(() => {
+      const values = getAllLabelInputValues()
+      CurrentState.setLabelEditDialog({
+        labels: values.size > 1 ? values.remove(index) : List.of(''),
+      })
+      CurrentState.commit()
     })
-    CurrentState.commit()
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -77,22 +79,28 @@ function createLabelRow(text: string, index: integer) {
 }
 
 const onClickAddButton = () => {
-  CurrentState.setLabelEditDialog({
-    labels: getAllLabelInputValues().push(''),
+  doWithErrorCapture(() => {
+    CurrentState.setLabelEditDialog({
+      labels: getAllLabelInputValues().push(''),
+    })
+    CurrentState.commit()
   })
-  CurrentState.commit()
 }
 
 const onClickFinishButton = () => {
-  const labels = getAllLabelInputValues().filter((label) => label !== '')
-  CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
-  CurrentState.setLabelEditDialog(null)
-  CurrentState.commit()
+  doWithErrorCapture(() => {
+    const labels = getAllLabelInputValues().filter((label) => label !== '')
+    CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
+    CurrentState.setLabelEditDialog(null)
+    CurrentState.commit()
+  })
 }
 
 const closeDialog = () => {
-  CurrentState.setLabelEditDialog(null)
-  CurrentState.commit()
+  doWithErrorCapture(() => {
+    CurrentState.setLabelEditDialog(null)
+    CurrentState.commit()
+  })
 }
 
 // 全てのラベル入力欄の内容テキストを返す
