@@ -87,11 +87,11 @@ export function createItemTreeWebPageContentViewModel(
           case '0000MouseButton0':
             event.preventDefault()
 
-            if (isUnloaded) {
-              // アンロード状態の場合
+            if (tab === undefined) {
+              // ハードアンロード状態の場合
               NullaryCommand.loadSubtree()
             } else {
-              // ロード状態の場合
+              // ソフトアンロード状態またはロード状態の場合
               NullaryCommand.hardUnloadSubtree()
             }
 
@@ -100,11 +100,11 @@ export function createItemTreeWebPageContentViewModel(
           case '1000MouseButton0':
             event.preventDefault()
 
-            if (isUnloaded) {
-              // アンロード状態の場合
+            if (tab === undefined) {
+              // ハードアンロード状態の場合
               NullaryCommand.loadItem()
             } else {
-              // ロード状態の場合
+              // ソフトアンロード状態またはロード状態の場合
               NullaryCommand.hardUnloadItem()
             }
 
@@ -113,7 +113,7 @@ export function createItemTreeWebPageContentViewModel(
           case '0100MouseButton0':
             event.preventDefault()
 
-            if (tab === undefined) {
+            if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadSubtree()
             } else {
@@ -126,7 +126,7 @@ export function createItemTreeWebPageContentViewModel(
           case '1100MouseButton0':
             event.preventDefault()
 
-            if (tab === undefined) {
+            if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadItem()
             } else {
