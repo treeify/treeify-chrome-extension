@@ -127,3 +127,10 @@ export function browseTabInDualWindowMode() {
 
   browseTab()
 }
+
+/** ChromeのCtrl+Tのデフォルトの挙動をコマンド化したもの */
+export function openNewTab() {
+  chrome.tabs.create({}, (tab) => {
+    chrome.windows.update(tab.windowId, {focused: true})
+  })
+}
