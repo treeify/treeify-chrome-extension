@@ -43,7 +43,6 @@ export async function startup(initialState: State) {
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
 
   document.addEventListener('mousemove', onMouseMove)
-  document.addEventListener('mouseenter', onMouseEnter)
 
   window.addEventListener('resize', onResize)
 }
@@ -54,7 +53,6 @@ export async function cleanup() {
 
   window.removeEventListener('resize', onResize)
 
-  document.removeEventListener('mouseenter', onMouseEnter)
   document.removeEventListener('mousemove', onMouseMove)
 
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
@@ -86,6 +84,14 @@ function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>)
 
 function onMouseMove(event: MouseEvent) {
   doWithErrorCapture(() => {
+    // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
+    if (
+      new UAParser().getOS().name === 'Mac OS' &&
+      External.instance.lastFocusedWindowId !== chrome.windows.WINDOW_ID_NONE
+    ) {
+      TreeifyWindow.open()
+    }
+
     // マウスの位置と動きに応じて左サイドバーを開閉する
     if (!External.instance.shouldFloatingLeftSidebarShown) {
       // マウスポインターが画面左端に到達した時。
@@ -104,18 +110,6 @@ function onMouseMove(event: MouseEvent) {
         External.instance.shouldFloatingLeftSidebarShown = false
         CurrentState.commit()
       }
-    }
-  })
-}
-
-function onMouseEnter() {
-  doWithErrorCapture(() => {
-    // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
-    if (
-      new UAParser().getOS().name === 'Mac OS' &&
-      External.instance.lastFocusedWindowId !== chrome.windows.WINDOW_ID_NONE
-    ) {
-      TreeifyWindow.open()
     }
   })
 }
