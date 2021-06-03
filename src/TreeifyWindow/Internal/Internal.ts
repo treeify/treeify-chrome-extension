@@ -114,6 +114,7 @@ export class Internal {
         '0000Enter': List.of({commandName: 'enterKeyDefault'}),
         '0100Enter': List.of({commandName: 'insertLineBreak'}),
         '1000Enter': List.of({commandName: 'toggleGrayedOut'}),
+        '1000KeyT': List.of({commandName: 'toDualWindowMode'}, {commandName: 'openNewTab'}),
         '1000KeyL': List.of({commandName: 'toggleHighlighted'}),
         '1000KeyD': List.of({commandName: 'removeEdge'}),
         '1000KeyP': List.of({commandName: 'toggleCollapsed'}),
