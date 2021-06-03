@@ -24,9 +24,9 @@ export type State = {
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */
-  itemTreeKeyboardBinding: {[K in InputId]: Command}
+  itemTreeKeyboardBinding: {[K in InputId]: List<Command>}
   /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */
-  itemTreeDeleteButtonMouseBinding: {[K in InputId]: Command}
+  itemTreeDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
   /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null

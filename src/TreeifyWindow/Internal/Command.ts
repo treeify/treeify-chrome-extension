@@ -1,14 +1,14 @@
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
 export type Command = {
-  functionName: string
-  param?: any
+  commandName: string
+  parameter?: string
 }
 
 export namespace Command {
   export function execute(command: Command) {
     // NullaryCommandだった場合のコマンド実行
-    const nullaryCommandFunction = NullaryCommand.functions[command.functionName]
+    const nullaryCommandFunction = NullaryCommand.functions[command.commandName]
     if (nullaryCommandFunction !== undefined) {
       nullaryCommandFunction()
       return

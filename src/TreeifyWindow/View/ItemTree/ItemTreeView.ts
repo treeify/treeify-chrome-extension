@@ -128,10 +128,13 @@ function onKeyDown(event: KeyboardEvent) {
         return
     }
 
-    const command: Command | undefined = Internal.instance.state.itemTreeKeyboardBinding[inputId]
-    if (command !== undefined) {
+    const commands: List<Command> | undefined =
+      Internal.instance.state.itemTreeKeyboardBinding[inputId]
+    if (commands !== undefined) {
       event.preventDefault()
-      Command.execute(command)
+      for (const command of commands) {
+        Command.execute(command)
+      }
       CurrentState.commit()
     }
   })

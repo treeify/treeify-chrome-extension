@@ -9,6 +9,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
+import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 /**
  * データフォルダに現在の状態を書き込む。
@@ -143,4 +144,9 @@ export function excludeFromCurrentWorkspace() {
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
   const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
   CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())
+}
+
+/** デュアルウィンドウモードにする */
+export async function toDualWindowMode() {
+  await TreeifyWindow.toDualWindowMode()
 }

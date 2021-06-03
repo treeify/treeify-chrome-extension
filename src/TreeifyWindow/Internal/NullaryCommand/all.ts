@@ -31,6 +31,7 @@ import {
   saveToDataFolder,
   selectAllAboveItems,
   selectAllBelowItems,
+  toDualWindowMode,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
   insertLineBreak,
@@ -44,6 +45,7 @@ import {
   hardUnloadSubtree,
   loadItem,
   loadSubtree,
+  openNewTab,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
@@ -67,6 +69,7 @@ export const functions: {[name: string]: () => void} = {
   selectAllAboveItems,
   copyForTransclusion,
   excludeFromCurrentWorkspace,
+  toDualWindowMode,
   enterKeyDefault,
   removeEdge,
   deleteItem,
@@ -86,6 +89,7 @@ export const functions: {[name: string]: () => void} = {
   hardUnloadSubtree,
   loadItem,
   loadSubtree,
+  openNewTab,
   createEmptyCodeBlockItem,
   edit,
   showDefaultWindowModeSettingDialog,
