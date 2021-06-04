@@ -535,7 +535,8 @@ function onShiftArrowDown(event: KeyboardEvent) {
 function onBackspace(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+  const targetItem = Internal.instance.state.items[targetItemId]
+  if (targetItem.itemType === ItemType.TEXT) {
     // ターゲットアイテムがテキストアイテムの場合
 
     const selection = getTextItemSelectionFromDom()
@@ -567,8 +568,8 @@ function onBackspace(event: KeyboardEvent) {
 
         // 子リストを連結するため、子を全て弟としてエッジ追加。
         // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of Internal.instance.state.items[targetItemId].childItemIds) {
-          CurrentState.insertNextSiblingItem(targetItemPath, childItemId)
+        for (const childItemId of targetItem.childItemIds.reverse()) {
+          CurrentState.insertLastChildItem(aboveItemId, childItemId)
         }
 
         // ↑の元のエッジごと削除
@@ -610,8 +611,8 @@ function onDelete(event: KeyboardEvent) {
       if (belowItemPath === undefined) return
 
       const belowItemId = ItemPath.getItemId(belowItemPath)
-
-      if (Internal.instance.state.items[belowItemId].itemType !== ItemType.TEXT) {
+      const belowItem = Internal.instance.state.items[belowItemId]
+      if (belowItem.itemType !== ItemType.TEXT) {
         // 下のアイテムがテキストアイテム以外の場合
         // TODO: アイテム削除コマンドを実行するのがいいと思う
       } else {
@@ -627,8 +628,8 @@ function onDelete(event: KeyboardEvent) {
 
         // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
         // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of Internal.instance.state.items[belowItemId].childItemIds) {
-          CurrentState.insertNextSiblingItem(belowItemPath, childItemId)
+        for (const childItemId of belowItem.childItemIds) {
+          CurrentState.insertLastChildItem(targetItemId, childItemId)
         }
 
         // ↑の元のエッジごと削除
