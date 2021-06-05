@@ -52,6 +52,12 @@ export class External {
    */
   readonly hardUnloadedTabIds = new Set<integer>()
 
+  /**
+   * 各ページのスクロール位置の保存先。
+   * 再描画時にDOM要素を再利用しない限りスクロール位置がリセットされてしまうのでその対策用。
+   */
+  readonly scrollPositions = new Map<ItemId, integer>()
+
   private constructor() {}
 
   /** シングルトンインスタンスを取得する */
@@ -89,22 +95,19 @@ export class External {
       spaRoot.appendChild(result1)
     })
 
+    // アイテムツリーのスクロール位置を復元
+    const itemTree = document.querySelector('.item-tree')
+    const scrollPosition = External.instance.scrollPositions.get(CurrentState.getActivePageId())
+    if (scrollPosition !== undefined && itemTree instanceof HTMLElement) {
+      itemTree.scrollTop = scrollPosition
+    }
+
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
       if (CurrentState.getSelectedItemPaths().size === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
-        if (focusableElement !== null) {
-          // フォーカスアイテムが画面内に入るようスクロールする。
-          // blockに'center'を指定してもなぜか中央化してくれない（原因不明）。
-          focusableElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'nearest',
-          })
-
-          focusableElement.focus()
-        }
+        focusableElement?.focus()
       } else {
         // 複数選択の場合
         focusItemTreeBackground()

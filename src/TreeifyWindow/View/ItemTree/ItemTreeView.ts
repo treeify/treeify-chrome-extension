@@ -86,6 +86,7 @@ export function ItemTreeView(viewModel: ItemTreeViewModel) {
       copy: onCopy,
       cut: onCut,
       paste: onPaste,
+      scroll: onScroll,
     },
     [ItemTreeNodeView(viewModel.rootNodeViewModel)]
   )
@@ -733,6 +734,13 @@ function onDrop(event: DragEvent) {
       }
     }
   })
+}
+
+function onScroll(event: Event) {
+  // スクロール位置を保存する
+  if (event.target instanceof HTMLElement) {
+    External.instance.scrollPositions.set(CurrentState.getActivePageId(), event.target.scrollTop)
+  }
 }
 
 export const ItemTreeCss = css`
