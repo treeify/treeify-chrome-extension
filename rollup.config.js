@@ -3,6 +3,8 @@ import resolve from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
 import builtins from 'rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
+import svelte from 'rollup-plugin-svelte'
+import sveltePreprocess from 'svelte-preprocess'
 
 export default {
   input: {
@@ -17,6 +19,10 @@ export default {
     chunkFileNames: '[name].js',
   },
   plugins: [
+    svelte({
+      preprocess: sveltePreprocess(),
+      emitCss: false,
+    }),
     typescript(),
     resolve({browser: true, preferBuiltins: false}),
     commonjs(),
