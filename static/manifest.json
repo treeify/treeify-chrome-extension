@@ -4,9 +4,7 @@
   "name": "Treeify",
   "description": "メモ、タブ、ブックマークをまとめてスマートに管理",
   "background": {
-    "scripts": [
-      "Background/entryPoint.js"
-    ],
+    "page": "Background/index.html",
     "persistent": false
   },
   "browser_action": {
