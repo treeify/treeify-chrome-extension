@@ -4,7 +4,7 @@
   import {CodeBlockItemEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
+  type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
     onClickFinishButton: () => void
     onClickCancelButton: () => void
   }

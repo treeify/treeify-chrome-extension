@@ -6,7 +6,7 @@
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  export type ItemTreeTextContentViewModel = {
+  type ItemTreeTextContentViewModel = {
     itemPath: ItemPath
     itemType: ItemType.TEXT
     labels: List<string>

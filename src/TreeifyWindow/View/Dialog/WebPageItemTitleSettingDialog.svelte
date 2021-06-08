@@ -20,7 +20,7 @@
   import {assertNonUndefined} from '../../../Common/Debug/assert'
   import {WebPageItemTitleSettingDialog} from '../../Internal/State'
 
-  export type WebPageItemTitleSettingDialogViewModel = {
+  type WebPageItemTitleSettingDialogViewModel = {
     webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
     /** タイトル入力欄のテキストの初期値 */
     initialTitle: string

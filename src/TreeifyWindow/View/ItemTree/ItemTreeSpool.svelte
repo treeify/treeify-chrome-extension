@@ -1,7 +1,7 @@
 <script lang="ts">
   import {integer} from '../../../Common/integer'
 
-  export type ItemTreeSpoolViewModel = {
+  type ItemTreeSpoolViewModel = {
     bulletState: ItemTreeBulletState
     /**
      * expand時に表示されるアイテム数。
@@ -24,8 +24,8 @@
   const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
   const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
   const outerCircleStyle = `
-    width: {outerCircleRadiusEm}em;
-    height: {outerCircleRadiusEm}em;
+    width: ${outerCircleRadiusEm}em;
+    height: ${outerCircleRadiusEm}em;
   `
 </script>
 

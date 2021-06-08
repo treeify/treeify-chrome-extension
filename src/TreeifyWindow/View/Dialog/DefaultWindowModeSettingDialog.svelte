@@ -4,7 +4,7 @@
   import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  export type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
+  type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
     initialDefaultWindowMode: DefaultWindowMode
     onClickFinishButton: () => void
     onClickCancelButton: () => void

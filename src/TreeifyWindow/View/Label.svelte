@@ -1,5 +1,5 @@
 <script lang="ts">
-  export type LabelViewModel = {
+  type LabelViewModel = {
     text: string
   }
 

@@ -5,7 +5,7 @@
   import PageTreeWebPageContent from './PageTreeWebPageContent.svelte'
   import {PageTreeWebPageContentViewModel} from './PageTreeWebPageContentView'
 
-  export type PageTreeContentViewModel =
+  type PageTreeContentViewModel =
     | PageTreeTextContentViewModel
     | PageTreeWebPageContentViewModel
 

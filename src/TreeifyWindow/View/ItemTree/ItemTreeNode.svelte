@@ -6,12 +6,12 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {classMap} from '../createElement'
   import ItemTreeContent from './ItemTreeContent.svelte'
-  import {ItemTreeContentView, ItemTreeContentViewModel} from './ItemTreeContentView'
+  import {ItemTreeContentViewModel} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
   import ItemTreeSpool from './ItemTreeSpool.svelte'
   import {ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
 
-  export type ItemTreeNodeViewModel = {
+  type ItemTreeNodeViewModel = {
     itemPath: ItemPath
     isActivePage: boolean
     /**
@@ -36,8 +36,6 @@
   }
 
   export let viewModel: ItemTreeNodeViewModel
-
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,

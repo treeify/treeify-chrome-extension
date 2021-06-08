@@ -1,7 +1,7 @@
 <script lang="ts">
   import {classMap} from '../createElement'
 
-  export type PageTreeBulletAndIndentViewModel = {
+  type PageTreeBulletAndIndentViewModel = {
     bulletState: PageTreeBulletState
   }
 

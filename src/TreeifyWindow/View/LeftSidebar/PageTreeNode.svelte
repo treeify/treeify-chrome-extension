@@ -10,7 +10,7 @@
   import {PageTreeContentViewModel} from './PageTreeContentView'
   import PageTreeNode from './PageTreeNode.svelte'
 
-  export type PageTreeNodeViewModel = {
+  type PageTreeNodeViewModel = {
     bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
     contentViewModel: PageTreeContentViewModel
     childNodeViewModels: List<PageTreeNodeViewModel>

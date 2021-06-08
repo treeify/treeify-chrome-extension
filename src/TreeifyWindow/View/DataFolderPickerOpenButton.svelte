@@ -4,7 +4,7 @@
   import {NullaryCommand} from '../Internal/NullaryCommand'
   import {classMap} from './createElement'
 
-  export type DataFolderPickerOpenButtonViewModel = {
+  type DataFolderPickerOpenButtonViewModel = {
     isGrayedOut: boolean
   }
 

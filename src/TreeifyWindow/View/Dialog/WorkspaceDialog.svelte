@@ -9,7 +9,7 @@
 
   type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
-  export type WorkspaceDialogViewModel = {
+  type WorkspaceDialogViewModel = {
     workspaces: List<WorkspaceRecord>
     onClickAddButton: () => void
   }

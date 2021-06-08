@@ -3,7 +3,7 @@
   import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
 
-  export type PageTreeTextContentViewModel = {
+  type PageTreeTextContentViewModel = {
     itemType: ItemType.TEXT
     domishObjects: List<DomishObject>
   }

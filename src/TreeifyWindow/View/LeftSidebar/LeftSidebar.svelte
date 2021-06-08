@@ -3,7 +3,7 @@
   import PageTree from './PageTree.svelte'
   import {PageTreeViewModel} from './PageTreeView'
 
-  export type LeftSidebarViewModel = {
+  type LeftSidebarViewModel = {
     pageTreeViewModel: PageTreeViewModel
     isFloating: boolean
   }
