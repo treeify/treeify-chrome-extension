@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {ItemType} from '../../basicType'
   import ItemTreeCodeBlockContent from './ItemTreeCodeBlockContent.svelte'
   import {ItemTreeCodeBlockContentViewModel} from './ItemTreeCodeBlockContentView'
@@ -19,13 +19,13 @@
 </script>
 
 {#if viewModel.itemType === ItemType.TEXT}
-  <ItemTreeTextContent viewModel={viewModel}/>
+  <ItemTreeTextContent {viewModel} />
 {:else if viewModel.itemType === ItemType.WEB_PAGE}
-  <ItemTreeWebPageContent viewModel={viewModel}/>
+  <ItemTreeWebPageContent {viewModel} />
 {:else if viewModel.itemType === ItemType.IMAGE}
-  <ItemTreeImageContent viewModel={viewModel}/>
+  <ItemTreeImageContent {viewModel} />
 {:else if viewModel.itemType === ItemType.CODE_BLOCK}
-  <ItemTreeCodeBlockContent viewModel={viewModel}/>
+  <ItemTreeCodeBlockContent {viewModel} />
 {/if}
 
 <style>

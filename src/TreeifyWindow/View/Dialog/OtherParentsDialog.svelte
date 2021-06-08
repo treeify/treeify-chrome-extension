@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {List} from 'immutable'
   import {CurrentState} from '../../Internal/CurrentState'
   import ItemContent from '../ItemContent/ItemContent.svelte'
@@ -18,12 +18,12 @@
   }
 </script>
 
-<CommonDialog title='他のトランスクルード元' onCloseDialog={closeDialog}>
+<CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
       {#each viewModel.itemContentViewModels.toArray() as itemContentViewModel}
         <div class="other-parents-dialog_row-wrapper">
-          <ItemContent viewModel={itemContentViewModel}/>
+          <ItemContent viewModel={itemContentViewModel} />
         </div>
       {/each}
     </div>
@@ -32,28 +32,28 @@
 </CommonDialog>
 
 <style>
-    .other-parents-dialog_content {
-        width: 90vw;
-        padding: 1em;
+  .other-parents-dialog_content {
+    width: 90vw;
+    padding: 1em;
 
-        font-size: 17px;
-    }
+    font-size: 17px;
+  }
 
-    .other-parents-dialog_row-wrapper {
-        display: flex;
-        align-items: center;
+  .other-parents-dialog_row-wrapper {
+    display: flex;
+    align-items: center;
 
-        margin-top: 0.3em;
-    }
-    .other-parents-dialog_row-wrapper:first-child {
-        margin-top: 0;
-    }
+    margin-top: 0.3em;
+  }
+  .other-parents-dialog_row-wrapper:first-child {
+    margin-top: 0;
+  }
 
-    .other-parents-dialog_close-button {
-        /* 右寄せにする */
-        display: block;
-        margin-left: auto;
+  .other-parents-dialog_close-button {
+    /* 右寄せにする */
+    display: block;
+    margin-left: auto;
 
-        margin-top: 1em;
-    }
+    margin-top: 1em;
+  }
 </style>

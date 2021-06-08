@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
@@ -22,7 +22,7 @@
 
   const onClick = () => {
     doWithErrorCapture(() => {
-      throw new Error("TODO: ラジオボタンをチェックする処理が未移植")
+      throw new Error('TODO: ラジオボタンをチェックする処理が未移植')
 
       // const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
       // const inputElement = document.querySelector<HTMLInputElement>(selector)
@@ -32,27 +32,27 @@
   }
 </script>
 
-<CommonDialog title='デフォルトウィンドウモード設定' onCloseDialog={onCloseDialog}>
+<CommonDialog title="デフォルトウィンドウモード設定" {onCloseDialog}>
   <div class="default-window-mode-setting-dialog_content">
     <form class="default-window-mode-setting-dialog_option-list">
-      <div class='default-window-mode-setting-dialog_option' on:click={onClick}>
-        <input type='radio' bind:group={selectedDefaultWindowMode} value='keep'/>
+      <div class="default-window-mode-setting-dialog_option" on:click={onClick}>
+        <input type="radio" bind:group={selectedDefaultWindowMode} value="keep" />
         指定なし
       </div>
-      <div class='default-window-mode-setting-dialog_option' on:click={onClick}>
-        <input type='radio' bind:group={selectedDefaultWindowMode} value='dual'/>
+      <div class="default-window-mode-setting-dialog_option" on:click={onClick}>
+        <input type="radio" bind:group={selectedDefaultWindowMode} value="dual" />
         デュアルウィンドウモード
       </div>
-      <div class='default-window-mode-setting-dialog_option' on:click={onClick}>
-        <input type='radio' bind:group={selectedDefaultWindowMode} value='floating'/>
+      <div class="default-window-mode-setting-dialog_option" on:click={onClick}>
+        <input type="radio" bind:group={selectedDefaultWindowMode} value="floating" />
         フローティングウィンドウモード
       </div>
-      <div class='default-window-mode-setting-dialog_option' on:click={onClick}>
-        <input type='radio' bind:group={selectedDefaultWindowMode} value='full'/>
+      <div class="default-window-mode-setting-dialog_option" on:click={onClick}>
+        <input type="radio" bind:group={selectedDefaultWindowMode} value="full" />
         フルウィンドウモード
       </div>
-      <div class='default-window-mode-setting-dialog_option' on:click={onClick}>
-        <input type='radio' bind:group={selectedDefaultWindowMode} value='inherit'/>
+      <div class="default-window-mode-setting-dialog_option" on:click={onClick}>
+        <input type="radio" bind:group={selectedDefaultWindowMode} value="inherit" />
         親ページの設定を継承
       </div>
     </form>
@@ -64,32 +64,32 @@
 </CommonDialog>
 
 <style>
-    .default-window-mode-setting-dialog_option-list {
-        margin: 1em;
-    }
+  .default-window-mode-setting-dialog_option-list {
+    margin: 1em;
+  }
 
-    input[type='radio'] {
-        margin: 0 3px 0 0;
-    }
+  input[type='radio'] {
+    margin: 0 3px 0 0;
+  }
 
-    /* デフォルトウィンドウモードの選択肢 */
-    .default-window-mode-setting-dialog_option {
-        display: flex;
-        align-items: center;
+  /* デフォルトウィンドウモードの選択肢 */
+  .default-window-mode-setting-dialog_option {
+    display: flex;
+    align-items: center;
 
-        margin-top: 0.1em;
+    margin-top: 0.1em;
 
-        font-size: 14px;
+    font-size: 14px;
 
-        cursor: pointer;
-    }
-    .default-window-mode-setting-dialog_option:first-child {
-        margin-top: 0;
-    }
+    cursor: pointer;
+  }
+  .default-window-mode-setting-dialog_option:first-child {
+    margin-top: 0;
+  }
 
-    .default-window-mode-setting-dialog_button-area {
-        /* ボタン群を右寄せにする */
-        margin: 1em 1em 1em auto;
-        width: max-content;
-    }
+  .default-window-mode-setting-dialog_button-area {
+    /* ボタン群を右寄せにする */
+    margin: 1em 1em 1em auto;
+    width: max-content;
+  }
 </style>

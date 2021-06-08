@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {List} from 'immutable'
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
@@ -24,12 +24,12 @@
   }
 </script>
 
-<CommonDialog title='ワークスペース' onCloseDialog={closeDialog}>
-  <div class='workspace-dialog_content' tabindex="0"></div>
+<CommonDialog title="ワークスペース" onCloseDialog={closeDialog}>
+  <div class="workspace-dialog_content" tabindex="0" />
   {#each viewModel.workspaces.toArray() as workspace}
-    <WorkspaceDialogRow workspace={workspace}/>
+    <WorkspaceDialogRow {workspace} />
   {/each}
-  <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton}></div>
+  <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton} />
   <button class="workspace-dialog_close-button" on:click={closeDialog}>閉じる</button>
 </CommonDialog>
 

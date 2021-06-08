@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {List} from 'immutable'
   import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
@@ -21,18 +21,18 @@
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
-<div class='item-tree-text-content'>
+<div class="item-tree-text-content">
   {#if !viewModel.labels.isEmpty()}
-    <div class='item-tree-text-content_labels'>
+    <div class="item-tree-text-content_labels">
       {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}}/>
+        <Label viewModel={{text: label}} />
       {/each}
     </div>
   {/if}
   <div
-    class='item-tree-text-content_content-editable'
-    id={id}
-    contenteditable='true'
+    class="item-tree-text-content_content-editable"
+    {id}
+    contenteditable="true"
     on:input={viewModel.onInput}
     on:compositionend={viewModel.onCompositionEnd}
     on:click={viewModel.onClick}
@@ -42,22 +42,22 @@
 </div>
 
 <style>
-    .item-tree-text-content_labels {
-        float: left;
+  .item-tree-text-content_labels {
+    float: left;
 
-        /* テキストとの間に少し余白を入れないとくっつく */
-        margin-right: 0.1em;
-    }
+    /* テキストとの間に少し余白を入れないとくっつく */
+    margin-right: 0.1em;
+  }
 
-    /* テキストアイテムのcontenteditableな要素 */
-    .item-tree-text-content_content-editable {
-        /* contenteditableな要素のフォーカス時の枠線を非表示 */
-        outline: 0 solid transparent;
-    }
+  /* テキストアイテムのcontenteditableな要素 */
+  .item-tree-text-content_content-editable {
+    /* contenteditableな要素のフォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
+  }
 
-    /* グレーアウト状態のテキストアイテム */
-    .grayed-out .item-tree-text-content_content-editable,
-    .grayed-out-children .item-tree-text-content_content-editable {
-        color: var(--grayed-out-item-text-color);
-    }
+  /* グレーアウト状態のテキストアイテム */
+  .grayed-out .item-tree-text-content_content-editable,
+  .grayed-out-children .item-tree-text-content_content-editable {
+    color: var(--grayed-out-item-text-color);
+  }
 </style>
