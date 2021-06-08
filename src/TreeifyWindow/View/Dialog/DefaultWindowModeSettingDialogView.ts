@@ -13,7 +13,6 @@ import {
   createElement,
   createInputElement,
 } from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
 export type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
@@ -112,34 +111,3 @@ function createOption(value: string, text: string, initialDefaultWindowMode: Def
     ])
   }
 }
-
-export const DefaultWindowModeSettingDialogCss = css`
-  .default-window-mode-setting-dialog_option-list {
-    margin: 1em;
-  }
-
-  input[type='radio'][name='defaultWindowMode'] {
-    margin: 0 3px 0 0;
-  }
-
-  /* デフォルトウィンドウモードの選択肢 */
-  .default-window-mode-setting-dialog_option {
-    display: flex;
-    align-items: center;
-
-    margin-top: 0.1em;
-
-    font-size: 14px;
-
-    cursor: pointer;
-  }
-  .default-window-mode-setting-dialog_option:first-child {
-    margin-top: 0;
-  }
-
-  .default-window-mode-setting-dialog_button-area {
-    /* ボタン群を右寄せにする */
-    margin: 1em 1em 1em auto;
-    width: max-content;
-  }
-`

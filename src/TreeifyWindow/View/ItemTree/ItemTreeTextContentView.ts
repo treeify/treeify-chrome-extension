@@ -8,7 +8,6 @@ import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {createDivElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 
@@ -109,24 +108,3 @@ export function ItemTreeTextContentView(viewModel: ItemTreeTextContentViewModel)
     ),
   ])
 }
-
-export const ItemTreeTextContentCss = css`
-  .item-tree-text-content_labels {
-    float: left;
-
-    /* テキストとの間に少し余白を入れないとくっつく */
-    margin-right: 0.1em;
-  }
-
-  /* テキストアイテムのcontenteditableな要素 */
-  .item-tree-text-content_content-editable {
-    /* contenteditableな要素のフォーカス時の枠線を非表示 */
-    outline: 0 solid transparent;
-  }
-
-  /* グレーアウト状態のテキストアイテム */
-  .grayed-out .item-tree-text-content_content-editable,
-  .grayed-out-children .item-tree-text-content_content-editable {
-    color: var(--grayed-out-item-text-color);
-  }
-`

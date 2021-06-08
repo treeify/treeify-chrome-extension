@@ -12,7 +12,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {
   createPageTreeBulletAndIndentViewModel,
   PageTreeBulletAndIndentView,
@@ -253,69 +252,3 @@ function calculateFootprintColor(
   const ratio = footprintRank / (footprintCount - 1)
   return strongestColor.mix(weakestColor, ratio)
 }
-
-export const PageTreeNodeCss = css`
-  :root {
-    /* ページツリーの項目のマウスホバー時の背景色 */
-    --page-tree-hover-item-background-color: hsl(0, 0%, 95%);
-
-    /* ページツリーのアクティブページの背景色 */
-    --page-tree-active-page-background-color: hsl(0, 0%, 90%);
-
-    /* 最も新しい足跡の色（線形補間の一端） */
-    --page-tree-strongest-footprint-color: hsl(0, 90%, 96%);
-    /* 最も古い足跡の色（線形補間の一端） */
-    --page-tree-weakest-footprint-color: hsl(60, 90%, 96%);
-
-    /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
-    --page-tree-close-button-size: 1.1em;
-  }
-
-  .page-tree-node {
-    /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
-    display: grid;
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
-  .page-tree-node_body-area {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-  }
-  .page-tree-node_body-area.active-page {
-    /* アクティブページの強調表示 */
-    background: var(--page-tree-active-page-background-color);
-  }
-
-  .page-tree-node_body-area:hover {
-    background: var(--page-tree-hover-item-background-color);
-  }
-
-  .page-tree-node_content-area {
-    cursor: default;
-
-    /* ページツリーではテキストは折り返さない */
-    overflow-x: hidden;
-    white-space: nowrap;
-  }
-
-  .page-tree-node_close-button {
-    width: var(--page-tree-close-button-size);
-    height: var(--page-tree-close-button-size);
-
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 20%);
-    -webkit-mask-image: url('close-icon2.svg');
-
-    /* マウスホバー時にのみ表示 */
-    display: none;
-
-    /* ボタンであることを示す */
-    cursor: pointer;
-  }
-  .page-tree-node_body-area:hover .page-tree-node_close-button {
-    /* マウスホバー時にのみ表示 */
-    display: initial;
-  }
-`

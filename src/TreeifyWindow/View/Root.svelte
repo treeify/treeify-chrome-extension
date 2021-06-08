@@ -100,15 +100,15 @@
         --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
     }
 
-    * {
+    :global(*) {
         box-sizing: border-box;
     }
 
-    html {
+    :global(html) {
         height: 100%;
     }
 
-    body {
+    :global(body) {
         height: 100%;
         margin: 0;
     }

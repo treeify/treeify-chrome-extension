@@ -4,7 +4,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {createButtonElement, createDivElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 import {
   createItemContentViewModel,
@@ -55,30 +54,3 @@ export function OtherParentsDialogView(viewModel: OtherParentsDialogViewModel) {
     onCloseDialog: closeDialog,
   })
 }
-
-export const OtherParentsDialogCss = css`
-  .other-parents-dialog_content {
-    width: 90vw;
-    padding: 1em;
-
-    font-size: 17px;
-  }
-
-  .other-parents-dialog_row-wrapper {
-    display: flex;
-    align-items: center;
-
-    margin-top: 0.3em;
-  }
-  .other-parents-dialog_row-wrapper:first-child {
-    margin-top: 0;
-  }
-
-  .other-parents-dialog_close-button {
-    /* 右寄せにする */
-    display: block;
-    margin-left: auto;
-
-    margin-top: 1em;
-  }
-`

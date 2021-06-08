@@ -16,7 +16,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {generateStyleElementContents} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
 import Root from '../View/Root.svelte'
@@ -76,15 +75,6 @@ export class External {
 
   /** DOMの初回描画を行う */
   render(state: State) {
-    const styleElement = document.querySelector('.style')
-    assertNonNull(styleElement)
-    const result = doWithTimeMeasuring('generateStyleElementContents', () =>
-      generateStyleElementContents()
-    )
-    doWithTimeMeasuring('styleElement.innerHTML = result', () => {
-      styleElement.innerHTML = result
-    })
-
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
     if (spaRoot instanceof HTMLElement) {
