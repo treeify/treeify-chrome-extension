@@ -80,24 +80,4 @@ export class StackFrame {
     const lastIndexOfArgument = callingLine.lastIndexOf(')')
     return callingLine.substring(indexOfArgument, lastIndexOfArgument)
   }
-
-  /**
-   * 対応する関数呼び出しが行われたファイルのパスを返す。
-   * 本来ならソースマップを解析するべきなのだが、Treeifyの環境で簡単に使えるライブラリが見つからなかった。
-   * そのため簡易的な実装になっている。
-   */
-  getSourceMappedFilePath(): string {
-    const sourceFileLines = SourceFileReader.instance.readLines(this.filePath)!
-
-    // バンドルされたjsファイル内を上方向に探索し、ファイルパスを探す。
-    // esbuildでバンドルされた場合、次のようなフォーマットになるようだ。
-    // // src/TreeifyWindow/entryPoint.ts
-    for (let i = this.lineNumber - 1; i > 0; i--) {
-      const result = /\/\/ (src\/.+)/.exec(sourceFileLines[i])
-      if (result !== null) {
-        return result[1]
-      }
-    }
-    throw new Error(`バンドル後のソースファイル${this.filePath}の解析に失敗。`)
-  }
 }
