@@ -34,7 +34,13 @@
   const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
-<div class="item-tree-code-block-content" {id} tabindex="0" on:focus={viewModel.onFocus}>
+<div
+  class="item-tree-code-block-content"
+  {id}
+  tabindex="0"
+  on:focus={viewModel.onFocus}
+  on:click={viewModel.onClick}
+>
   {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-code-block-content_labels">
       {#each viewModel.labels.toArray() as label}
