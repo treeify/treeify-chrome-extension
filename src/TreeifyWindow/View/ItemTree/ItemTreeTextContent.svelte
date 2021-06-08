@@ -37,8 +37,7 @@
     on:compositionend={viewModel.onCompositionEnd}
     on:click={viewModel.onClick}
   >
-    <!-- TODO: ここはinnerHTMLのバインディングに変えないとダメかも -->
-    {DomishObject.toDocumentFragment(viewModel.domishObjects)}
+    {@html DomishObject.toHtml(viewModel.domishObjects)}
   </div>
 </div>
 

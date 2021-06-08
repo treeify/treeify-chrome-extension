@@ -12,7 +12,7 @@
   export let viewModel: TextItemContentViewModel
 </script>
 
-<div>{DomishObject.toDocumentFragment(viewModel.domishObjects)}</div>
+<div>{@html DomishObject.toHtml(viewModel.domishObjects)}</div>
 
 <style>
 </style>

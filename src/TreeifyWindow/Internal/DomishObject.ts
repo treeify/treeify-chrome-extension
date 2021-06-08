@@ -91,6 +91,32 @@ export namespace DomishObject {
     }
   }
 
+  /** DomishObjectをHTML文字列に変換する */
+  export function toHtml(value: DomishObject | List<DomishObject>): string {
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      return domishObjects.map(toHtml).join('')
+    } else {
+      const domishObject = value as DomishObject
+      switch (domishObject.type) {
+        case 'b':
+          return `<b>${toHtml(domishObject.children)}</b>`
+        case 'u':
+          return `<u>${toHtml(domishObject.children)}</u>`
+        case 'i':
+          return `<i>${toHtml(domishObject.children)}</i>`
+        case 'strike':
+          return `<strike>${toHtml(domishObject.children)}</strike>`
+        case 'br':
+          return `<br>`
+        case 'text':
+          return domishObject.textContent
+        default:
+          assertNeverType(domishObject)
+      }
+    }
+  }
+
   /**
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
