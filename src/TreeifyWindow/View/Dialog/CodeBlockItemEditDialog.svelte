@@ -1,4 +1,5 @@
 <script lang="ts">
+  import hljs from 'highlight.js'
   import {CurrentState} from '../../Internal/CurrentState'
   import {CodeBlockItemEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
