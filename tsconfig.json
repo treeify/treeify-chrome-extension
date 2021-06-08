@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "commonjs",
+    "module": "esnext",
     "strict": true,
     "noImplicitReturns": true,
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"]
     },
+    "moduleResolution": "Node",
     "esModuleInterop": true
   }
 }
