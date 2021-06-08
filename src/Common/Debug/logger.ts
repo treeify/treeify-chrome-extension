@@ -40,8 +40,7 @@ function formatForConsole(value: any): any {
 }
 
 function createCallerInfoString(stackFrame: StackFrame): string {
-  const filePath = stackFrame.getSourceMappedFilePath()
-  return `in ${stackFrame.callerName} @ ${filePath}:`
+  return `in ${stackFrame.callerName}:`
 }
 
 /**
