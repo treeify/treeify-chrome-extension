@@ -2,7 +2,6 @@
   import {List} from 'immutable'
   import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
-  import {TextItemContentViewModel} from './TextItemContentView'
 
   type TextItemContentViewModel = {
     itemType: ItemType.TEXT

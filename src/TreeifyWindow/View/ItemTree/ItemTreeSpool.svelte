@@ -24,8 +24,8 @@
   const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
   const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
   const outerCircleStyle = `
-    width: {outerCircleRadiusEm}em;
-    height: {outerCircleRadiusEm}em;
+    width: ${outerCircleRadiusEm}em;
+    height: ${outerCircleRadiusEm}em;
   `
 </script>
 
