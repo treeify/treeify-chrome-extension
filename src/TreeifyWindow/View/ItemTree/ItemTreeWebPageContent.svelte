@@ -149,7 +149,7 @@
         box-sizing: border-box;
         animation: rotation 0.8s infinite linear;
     }
-    on:keyframes rotation {
+    @keyframes rotation {
         0% {
             transform: rotate(0deg);
         }
