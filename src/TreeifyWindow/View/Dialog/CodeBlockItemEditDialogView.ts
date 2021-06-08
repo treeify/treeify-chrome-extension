@@ -9,7 +9,6 @@ import {
   createElement,
   createInputElement,
 } from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
 export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
@@ -88,41 +87,3 @@ export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogVi
     },
   })
 }
-
-export const CodeBlockItemEditDialogCss = css`
-  .code-block-edit-dialog_content {
-    width: 90vw;
-    height: 50vh;
-
-    /* ダイアログ内の基本レイアウトは縦並び */
-    display: flex;
-    flex-direction: column;
-  }
-
-  .code-block-edit-dialog_code {
-    /* 表示範囲をタイトルバーやボタンエリアを除くダイアログ全域に広げる */
-    flex: 1 0;
-
-    margin: 1em;
-
-    white-space: nowrap;
-
-    resize: none;
-  }
-
-  .code-block-edit-dialog_language-area {
-    display: flex;
-
-    margin-left: 1em;
-    margin-right: 1em;
-  }
-
-  .code-block-edit-dialog_language {
-    flex: 1 0;
-  }
-
-  .code-block-edit-dialog_button-area {
-    /* ボタン群を右寄せにする */
-    margin: 1em 1em 1em auto;
-  }
-`

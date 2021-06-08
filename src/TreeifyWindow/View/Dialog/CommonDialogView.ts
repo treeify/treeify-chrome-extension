@@ -3,7 +3,6 @@ import {assert} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {createDivElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 
 export type CommonDialogViewModel = {
   title: string
@@ -77,46 +76,3 @@ function onRemoved(event: Event) {
     }
   })
 }
-
-export const CommonDialogCss = css`
-  :root {
-    --common-dialog-border-radius: 5px;
-
-    --common-dialog-title-bar-background: hsl(0, 0%, 25%);
-  }
-
-  .common-dialog {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* ツールバーやサイドバーより高い位置にいる */
-    z-index: 3;
-
-    /* バックドロップ */
-    background: hsla(0, 0%, 0%, 10%);
-
-    /* ダイアログを画面中央に表示する */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .common-dialog_frame {
-    border-radius: var(--common-dialog-border-radius);
-    /* 子要素を角丸からはみ出させない */
-    overflow: hidden;
-
-    background: hsl(0, 0%, 100%);
-    box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
-  }
-
-  .common-dialog_title-bar {
-    font-size: 15px;
-    padding: 0.3em;
-
-    background: var(--common-dialog-title-bar-background);
-    color: white;
-  }
-`

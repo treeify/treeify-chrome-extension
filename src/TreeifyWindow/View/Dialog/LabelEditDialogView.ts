@@ -10,7 +10,6 @@ import {
   createDivElement,
   createInputElement,
 } from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
 export type LabelEditDialogViewModel = LabelEditDialog
@@ -111,61 +110,3 @@ function getAllLabelInputValues(): List<string> {
   const inputElements = dialogDomElement.querySelectorAll('input')
   return List(inputElements).map((inputElement) => inputElement.value)
 }
-
-export const LabelEditDialogCss = css`
-  :root {
-    /* 作成ボタンのサイズ（正方形の一辺の長さ） */
-    --label-edit-dialog-add-button-size: 22px;
-
-    /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-    --label-edit-dialog-delete-button-size: 19px;
-  }
-
-  .label-edit-dialog_content {
-    padding: 1em;
-  }
-
-  .label-edit-dialog_label-row {
-    display: flex;
-    align-items: center;
-
-    margin-top: 3px;
-
-    font-size: 100%;
-  }
-  .label-edit-dialog_label-row:first-child {
-    margin-top: 0;
-  }
-
-  .label-edit-dialog_delete-button {
-    width: var(--label-edit-dialog-delete-button-size);
-    height: var(--label-edit-dialog-delete-button-size);
-
-    background: hsl(0, 0%, 40%);
-    -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
-
-    cursor: pointer;
-  }
-
-  .label-edit-dialog_add-button {
-    width: var(--label-edit-dialog-add-button-size);
-    height: var(--label-edit-dialog-add-button-size);
-
-    margin: 3px auto;
-
-    background: hsl(0, 0%, 35%);
-    -webkit-mask: url('./plus-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
-
-    cursor: pointer;
-  }
-
-  .label-edit-dialog_button-area {
-    /* 右寄せにする */
-    width: max-content;
-    margin-left: auto;
-
-    margin-top: 1em;
-  }
-`

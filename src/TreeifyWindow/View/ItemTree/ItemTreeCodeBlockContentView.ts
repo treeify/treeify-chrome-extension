@@ -6,7 +6,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {createDivElement, createElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 
@@ -83,34 +82,3 @@ function getHighlightedHtml(code: string, language: string): string {
     return code
   }
 }
-
-export const ItemTreeCodeBlockContentCss = css`
-  :root {
-    --code-block-padding: 0.2em;
-  }
-
-  /* コードブロックアイテムのコンテンツ領域のルート */
-  .item-tree-code-block-content {
-    /* フォーカス時の枠線を非表示 */
-    outline: 0 solid transparent;
-
-    overflow-x: auto;
-  }
-
-  .item-tree-code-block-content pre {
-    border: 1px solid hsl(0, 0%, 80%);
-    margin: 0;
-    padding: var(--code-block-padding);
-    // これを指定しないとoverflowしたコードがborderからはみ出る
-    min-width: max-content;
-    // コードが空文字列のときにぺしゃんこにならないよう設定
-    min-height: calc(var(--item-tree-calculated-line-height) + 2 * var(--code-block-padding));
-
-    font-size: 90%;
-  }
-
-  /* グレーアウト状態のコードブロックアイテム */
-  .grayed-out .item-tree-code-block-content {
-    filter: opacity(50%);
-  }
-`

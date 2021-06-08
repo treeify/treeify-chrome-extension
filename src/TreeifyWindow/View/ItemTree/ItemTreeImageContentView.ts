@@ -5,7 +5,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 
@@ -76,35 +75,3 @@ export function ItemTreeImageContentView(viewModel: ItemTreeImageContentViewMode
     ]
   )
 }
-
-export const ItemTreeImageContentCss = css`
-  /* 画像アイテムのコンテンツ領域のルート */
-  .item-tree-image-content {
-    /* フォーカス時の枠線を非表示 */
-    outline: 0 solid transparent;
-  }
-
-  /* 画像とキャプションを中央揃えにする */
-  .item-tree-image-content_image-and-caption {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* これを指定しないとアイテムツリーの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
-    width: fit-content;
-  }
-
-  .item-tree-image-content_image {
-    /* 画像が表示領域の横幅をはみ出さないよう設定 */
-    max-width: 100%;
-    height: auto;
-  }
-  /* グレーアウト状態の画像 */
-  .grayed-out .item-tree-image-content_image {
-    filter: opacity(50%);
-  }
-
-  /* グレーアウト状態のキャプション */
-  .grayed-out .item-tree-image-content_caption {
-    color: hsl(0, 0%, 50%);
-  }
-`

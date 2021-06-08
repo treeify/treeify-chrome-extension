@@ -1,7 +1,6 @@
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {classMap, createElement} from 'src/TreeifyWindow/View/createElement'
-import {css} from 'src/TreeifyWindow/View/css'
 import {
   createPageTreeViewModel,
   PageTreeView,
@@ -47,31 +46,3 @@ export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
     [PageTreeView(viewModel.pageTreeViewModel)]
   )
 }
-
-export const LeftSidebarCss = css`
-  :root {
-    /* 左サイドバーの背景色 */
-    --left-sidebar-background-color: hsl(0, 0%, 98%);
-
-    /* 左サイドバーの幅 */
-    --left-sidebar-width: 200px;
-  }
-
-  .left-sidebar {
-    width: var(--left-sidebar-width);
-    height: 100%;
-
-    overflow-y: auto;
-
-    background: var(--left-sidebar-background-color);
-    /* Dynalistを参考にしながら調整した影 */
-    box-shadow: 1.5px 0 3px hsl(0, 0%, 85%);
-  }
-
-  /* フローティング型の左サイドバー */
-  .left-sidebar.floating {
-    position: fixed;
-    /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
-    z-index: 1;
-  }
-`
