@@ -11,7 +11,7 @@
   import ItemTreeSpool from './ItemTreeSpool.svelte'
   import {ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
 
-  export type ItemTreeNodeViewModel = {
+  type ItemTreeNodeViewModel = {
     itemPath: ItemPath
     isActivePage: boolean
     /**

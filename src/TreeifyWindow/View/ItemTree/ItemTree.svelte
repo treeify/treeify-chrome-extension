@@ -22,7 +22,7 @@
   import ItemTreeNode from './ItemTreeNode.svelte'
   import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
 
-  export type ItemTreeViewModel = {
+  type ItemTreeViewModel = {
     rootNodeViewModel: ItemTreeNodeViewModel
   }
 

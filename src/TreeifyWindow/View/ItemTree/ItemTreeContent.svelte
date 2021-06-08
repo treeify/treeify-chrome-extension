@@ -9,7 +9,7 @@
   import ItemTreeWebPageContent from './ItemTreeWebPageContent.svelte'
   import {ItemTreeWebPageContentViewModel} from './ItemTreeWebPageContentView'
 
-  export type ItemTreeContentViewModel =
+  type ItemTreeContentViewModel =
     | ItemTreeTextContentViewModel
     | ItemTreeWebPageContentViewModel
     | ItemTreeImageContentViewModel

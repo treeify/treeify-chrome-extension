@@ -23,7 +23,7 @@
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
   import {LeftSidebarViewModel} from './LeftSidebar/LeftSidebarView'
 
-  export type RootViewModel = {
+  type RootViewModel = {
     leftSidebarViewModel: LeftSidebarViewModel | undefined
     itemTreeViewModel: ItemTreeViewModel
     webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined

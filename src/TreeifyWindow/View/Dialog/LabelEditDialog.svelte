@@ -7,7 +7,7 @@
   import {LabelEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  export type LabelEditDialogViewModel = LabelEditDialog
+  type LabelEditDialogViewModel = LabelEditDialog
 
   export let viewModel: LabelEditDialogViewModel
 

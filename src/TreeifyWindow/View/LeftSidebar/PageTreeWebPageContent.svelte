@@ -1,7 +1,7 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
 
-  export type PageTreeWebPageContentViewModel = {
+  type PageTreeWebPageContentViewModel = {
     itemType: ItemType.WEB_PAGE
     title: string
     faviconUrl: string

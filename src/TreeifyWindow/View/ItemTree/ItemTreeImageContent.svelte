@@ -5,7 +5,7 @@
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  export type ItemTreeImageContentViewModel = {
+  type ItemTreeImageContentViewModel = {
     itemPath: ItemPath
     labels: List<string>
     itemType: ItemType.IMAGE

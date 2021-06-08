@@ -5,7 +5,7 @@
   import {ItemContentViewModel} from '../ItemContent/ItemContentView'
   import CommonDialog from './CommonDialog.svelte'
 
-  export type OtherParentsDialogViewModel = {
+  type OtherParentsDialogViewModel = {
     itemContentViewModels: List<ItemContentViewModel>
   }
 

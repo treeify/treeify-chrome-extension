@@ -1,7 +1,7 @@
 <script lang="ts">
   import {integer} from '../../../Common/integer'
 
-  export type ItemTreeSpoolViewModel = {
+  type ItemTreeSpoolViewModel = {
     bulletState: ItemTreeBulletState
     /**
      * expand時に表示されるアイテム数。

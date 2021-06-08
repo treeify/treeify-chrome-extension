@@ -2,7 +2,7 @@
   import PageTreeNode from './PageTreeNode.svelte'
   import {PageTreeNodeViewModel} from './PageTreeNodeView'
 
-  export type PageTreeViewModel = {
+  type PageTreeViewModel = {
     pageTreeRootNodeViewModel: PageTreeNodeViewModel
   }
 

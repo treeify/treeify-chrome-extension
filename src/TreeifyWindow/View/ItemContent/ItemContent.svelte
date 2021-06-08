@@ -3,7 +3,7 @@
   import TextItemContent from './TextItemContent.svelte'
   import {TextItemContentViewModel} from './TextItemContentView'
 
-  export type ItemContentViewModel = TextItemContentViewModel
+  type ItemContentViewModel = TextItemContentViewModel
 
   export let viewModel: ItemContentViewModel
 </script>
