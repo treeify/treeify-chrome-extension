@@ -76,31 +76,43 @@
 
 <style>
   :root {
-    --code-block-padding: 0.2em;
+    --common-dialog-border-radius: 5px;
+
+    --common-dialog-title-bar-background: hsl(0, 0%, 25%);
   }
 
-  /* コードブロックアイテムのコンテンツ領域のルート */
-  .item-tree-code-block-content {
-    /* フォーカス時の枠線を非表示 */
-    outline: 0 solid transparent;
+  .common-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* ツールバーやサイドバーより高い位置にいる */
+    z-index: 3;
 
-    overflow-x: auto;
+    /* バックドロップ */
+    background: hsla(0, 0%, 0%, 0.1);
+
+    /* ダイアログを画面中央に表示する */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .item-tree-code-block-content pre {
-    border: 1px solid hsl(0, 0%, 80%);
-    margin: 0;
-    padding: var(--code-block-padding);
-    /* これを指定しないとoverflowしたコードがborderからはみ出る */
-    min-width: max-content;
-    /* コードが空文字列のときにぺしゃんこにならないよう設定 */
-    min-height: calc(var(--item-tree-calculated-line-height) + 2 * var(--code-block-padding));
+  .common-dialog_frame {
+    border-radius: var(--common-dialog-border-radius);
+    /* 子要素を角丸からはみ出させない */
+    overflow: hidden;
 
-    font-size: 90%;
+    background: hsl(0, 0%, 100%);
+    box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
   }
 
-  /* グレーアウト状態のコードブロックアイテム */
-  .grayed-out .item-tree-code-block-content {
-    filter: opacity(50%);
+  .common-dialog_title-bar {
+    font-size: 15px;
+    padding: 0.3em;
+
+    background: var(--common-dialog-title-bar-background);
+    color: white;
   }
 </style>
