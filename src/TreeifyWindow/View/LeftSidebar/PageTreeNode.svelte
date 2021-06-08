@@ -51,11 +51,11 @@
 
 <div class="page-tree-node">
   {#if viewModel.isRoot}
+    <div class="grid-empty-cell" />
+  {:else}
     <div class="page-tree-node_bullet-and-indent-area">
       <PageTreeBulletAndIndent viewModel={viewModel.bulletAndIndentViewModel} />
     </div>
-  {:else}
-    <div class="grid-empty-cell" />
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
