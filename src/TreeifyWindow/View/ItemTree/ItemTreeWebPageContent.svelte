@@ -61,7 +61,7 @@
 
   {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-web-page-content_labels">
-      {#each viewModel.labels as label}
+      {#each viewModel.labels.toArray() as label}
         <Label viewModel={{text: label}} />
       {/each}
     </div>

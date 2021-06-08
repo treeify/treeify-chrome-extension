@@ -77,7 +77,7 @@
       </div>
     </div>
     <div class="page-tree-node_children-area">
-      {#each viewModel.childNodeViewModels as childNodeViewModel}
+      {#each viewModel.childNodeViewModels.toArray() as childNodeViewModel}
         <PageTreeNode viewModel={childNodeViewModel}/>
       {/each}
     </div>

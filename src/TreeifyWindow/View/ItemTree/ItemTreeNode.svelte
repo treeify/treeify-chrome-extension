@@ -120,7 +120,7 @@
   </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-      {#each viewModel.childItemViewModels as itemViewModel (itemViewModel.itemPath.toString())}
+      {#each viewModel.childItemViewModels.toArray() as itemViewModel (itemViewModel.itemPath.toString())}
         <ItemTreeNode viewModel={itemViewModel}/>
       {/each}
     </div>
