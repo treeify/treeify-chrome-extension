@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -31,10 +31,16 @@
   }
 </script>
 
-<div class='workspace-dialog_existing-workspace'>
-  <input type='radio' name='currentWorkspaceId' value={workspace.id.toString()} checked={workspace.id === CurrentState.getCurrentWorkspaceId()} on:input={onClickRadioButton}/>
-  <input type='text' class='workspace-dialog_name' value={workspace.name} on:input={onInput}/>
-  <div class='workspace-dialog_delete-button' on:click={onClickDeleteButton}></div>
+<div class="workspace-dialog_existing-workspace">
+  <input
+    type="radio"
+    name="currentWorkspaceId"
+    value={workspace.id.toString()}
+    checked={workspace.id === CurrentState.getCurrentWorkspaceId()}
+    on:input={onClickRadioButton}
+  />
+  <input type="text" class="workspace-dialog_name" value={workspace.name} on:input={onInput} />
+  <div class="workspace-dialog_delete-button" on:click={onClickDeleteButton} />
 </div>
 
 <style>
@@ -51,6 +57,7 @@
 
     font-size: 100%;
   }
+
   .workspace-dialog_existing-workspace:first-child {
     margin-top: 0;
   }

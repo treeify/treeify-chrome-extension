@@ -6,6 +6,8 @@
   export let viewModel: LabelViewModel
 </script>
 
+<span class="label">{viewModel.text}</span>
+
 <style>
   .label {
     border-radius: 9999px;
@@ -16,5 +18,3 @@
     color: hsl(0, 0%, 30%);
   }
 </style>
-
-<span class='label'>{viewModel.text}</span>

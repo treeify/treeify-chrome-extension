@@ -1,10 +1,14 @@
-<script lang='ts'>
+<script lang="ts">
   import {is, List} from 'immutable'
   import {assertNonNull, assertNonUndefined} from '../../../Common/Debug/assert'
   import {integer} from '../../../Common/integer'
   import {ItemType} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {focusItemTreeBackground, getTextItemSelectionFromDom, setDomSelection} from '../../External/domTextSelection'
+  import {
+    focusItemTreeBackground,
+    getTextItemSelectionFromDom,
+    setDomSelection,
+  } from '../../External/domTextSelection'
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -23,7 +27,6 @@
   }
 
   export let viewModel: ItemTreeViewModel
-
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -493,11 +496,12 @@
           // テキストを連結
           const focusedItemDomishObjects =
             Internal.instance.state.textItems[targetItemId].domishObjects
-          const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+          const aboveItemDomishObjects =
+            Internal.instance.state.textItems[aboveItemId].domishObjects
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(
             aboveItemId,
-            aboveItemDomishObjects.concat(focusedItemDomishObjects),
+            aboveItemDomishObjects.concat(focusedItemDomishObjects)
           )
 
           // 子リストを連結するため、子を全て弟としてエッジ追加。
@@ -512,7 +516,7 @@
           // 上のアイテムの元の末尾にキャレットを移動する
           CurrentState.setTargetItemPath(aboveItemPath)
           External.instance.requestSetCaretDistanceAfterRendering(
-            DomishObject.countCharacters(aboveItemDomishObjects),
+            DomishObject.countCharacters(aboveItemDomishObjects)
           )
 
           event.preventDefault()
@@ -537,7 +541,10 @@
 
       const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
       const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
-      if (selection.focusDistance === characterCount && selection.anchorDistance === characterCount) {
+      if (
+        selection.focusDistance === characterCount &&
+        selection.anchorDistance === characterCount
+      ) {
         // キャレットが末尾にあるなら
 
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
@@ -553,11 +560,12 @@
           // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
+          const belowItemDomishObjects =
+            Internal.instance.state.textItems[belowItemId].domishObjects
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(
             targetItemId,
-            focusedItemDomishObjects.concat(belowItemDomishObjects),
+            focusedItemDomishObjects.concat(belowItemDomishObjects)
           )
 
           // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
@@ -571,7 +579,7 @@
 
           // 元のキャレット位置を維持する
           External.instance.requestSetCaretDistanceAfterRendering(
-            DomishObject.countCharacters(focusedItemDomishObjects),
+            DomishObject.countCharacters(focusedItemDomishObjects)
           )
 
           event.preventDefault()
@@ -675,12 +683,11 @@
       External.instance.scrollPositions.set(CurrentState.getActivePageId(), event.target.scrollTop)
     }
   }
-
 </script>
 
 <main
-  class='item-tree'
-  tabindex='0'
+  class="item-tree"
+  tabindex="0"
   on:keydown={onKeyDown}
   on:dragover={onDragOver}
   on:drop={onDrop}
@@ -689,39 +696,39 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode viewModel={viewModel.rootNodeViewModel}/>
+  <ItemTreeNode viewModel={viewModel.rootNodeViewModel} />
 </main>
 
 <style>
-    :root {
-        --item-tree-base-font-size: 16px;
+  :root {
+    --item-tree-base-font-size: 16px;
 
-        /*
+    /*
         アイテムツリーのテキスト全般に適用されるline-height。
         階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
         */
-        --item-tree-line-height: 1.45;
-        /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
-        --item-tree-font-size-multiplicator: 99.5%;
+    --item-tree-line-height: 1.45;
+    /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+    --item-tree-font-size-multiplicator: 99.5%;
 
-        /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-        --item-tree-calculated-line-height: calc(
-                1em * var(--item-tree-line-height) + var(--item-tree-body-area-vertical-padding)
-        );
-    }
+    /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
+    --item-tree-calculated-line-height: calc(
+      1em * var(--item-tree-line-height) + var(--item-tree-body-area-vertical-padding)
+    );
+  }
 
-    .item-tree {
-        overflow-y: auto;
+  .item-tree {
+    overflow-y: auto;
 
-        font-size: var(--item-tree-base-font-size);
-        line-height: var(--item-tree-line-height);
+    font-size: var(--item-tree-base-font-size);
+    line-height: var(--item-tree-line-height);
 
-        padding-left: 15px;
-        padding-top: 15px;
-        /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
-        padding-bottom: 150px;
+    padding-left: 15px;
+    padding-top: 15px;
+    /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
+    padding-bottom: 150px;
 
-        /* フォーカス時の枠線を非表示 */
-        outline: 0 solid transparent;
-    }
+    /* フォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
+  }
 </style>

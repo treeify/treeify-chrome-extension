@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import {List} from 'immutable'
   import {assertNonNull} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
@@ -37,12 +37,12 @@
 
   const onClickDeleteButton = () => {
     doWithErrorCapture(() => {
-      throw new Error("TODO: 未移植。indexの取得方法を検討中")
-    //   const values = getAllLabelInputValues()
-    //   CurrentState.setLabelEditDialog({
-    //     labels: values.size > 1 ? values.remove(index) : List.of(''),
-    //   })
-    //   CurrentState.commit()
+      throw new Error('TODO: 未移植。indexの取得方法を検討中')
+      // const values = getAllLabelInputValues()
+      // CurrentState.setLabelEditDialog({
+      //   labels: values.size > 1 ? values.remove(index) : List.of(''),
+      // })
+      // CurrentState.commit()
     })
   }
 
@@ -67,78 +67,81 @@
   }
 </script>
 
-<CommonDialog title='ラベル編集' onCloseDialog={closeDialog}>
+<CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
   <div class="label-edit-dialog_content">
     {#each viewModel.labels.toArray() as label}
-      <div class='label-edit-dialog_label-row'>
-        <input type='text' class='label-edit-dialog_label-name' value={label} on:keydown={onKeyDown}/>
-        <div class='label-edit-dialog_delete-button' on:click={onClickDeleteButton}></div>
+      <div class="label-edit-dialog_label-row">
+        <input
+          type="text"
+          class="label-edit-dialog_label-name"
+          value={label}
+          on:keydown={onKeyDown}
+        />
+        <div class="label-edit-dialog_delete-button" on:click={onClickDeleteButton} />
       </div>
     {/each}
-    <div class="label-edit-dialog_add-button" on:click={onClickAddButton}></div>
+    <div class="label-edit-dialog_add-button" on:click={onClickAddButton} />
     <div class="label-edit-dialog_button-area">
-      <button class="label-edit-dialog_finish-button" on:click={onClickFinishButton}>
-        完了
-      </button>
+      <button class="label-edit-dialog_finish-button" on:click={onClickFinishButton}>完了</button>
       <button class="label-edit-dialog_cancel-button" on:click={closeDialog}>キャンセル</button>
     </div>
   </div>
 </CommonDialog>
 
 <style>
-    :root {
-        /* 作成ボタンのサイズ（正方形の一辺の長さ） */
-        --label-edit-dialog-add-button-size: 22px;
+  :root {
+    /* 作成ボタンのサイズ（正方形の一辺の長さ） */
+    --label-edit-dialog-add-button-size: 22px;
 
-        /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-        --label-edit-dialog-delete-button-size: 19px;
-    }
+    /* 削除ボタンのサイズ（正方形の一辺の長さ） */
+    --label-edit-dialog-delete-button-size: 19px;
+  }
 
-    .label-edit-dialog_content {
-        padding: 1em;
-    }
+  .label-edit-dialog_content {
+    padding: 1em;
+  }
 
-    .label-edit-dialog_label-row {
-        display: flex;
-        align-items: center;
+  .label-edit-dialog_label-row {
+    display: flex;
+    align-items: center;
 
-        margin-top: 3px;
+    margin-top: 3px;
 
-        font-size: 100%;
-    }
-    .label-edit-dialog_label-row:first-child {
-        margin-top: 0;
-    }
+    font-size: 100%;
+  }
+  .label-edit-dialog_label-row:first-child {
+    margin-top: 0;
+  }
 
-    .label-edit-dialog_delete-button {
-        width: var(--label-edit-dialog-delete-button-size);
-        height: var(--label-edit-dialog-delete-button-size);
+  .label-edit-dialog_delete-button {
+    width: var(--label-edit-dialog-delete-button-size);
+    height: var(--label-edit-dialog-delete-button-size);
 
-        background: hsl(0, 0%, 40%);
-        -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-        -webkit-mask-size: contain;
+    background: hsl(0, 0%, 40%);
+    -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
+    -webkit-mask-size: contain;
 
-        cursor: pointer;
-    }
+    cursor: pointer;
+  }
 
-    .label-edit-dialog_add-button {
-        width: var(--label-edit-dialog-add-button-size);
-        height: var(--label-edit-dialog-add-button-size);
+  .label-edit-dialog_add-button {
+    width: var(--label-edit-dialog-add-button-size);
+    height: var(--label-edit-dialog-add-button-size);
 
-        margin: 3px auto;
+    margin: 3px auto;
 
-        background: hsl(0, 0%, 35%);
-        -webkit-mask: url('./plus-icon.svg') no-repeat center;
-        -webkit-mask-size: contain;
+    background: hsl(0, 0%, 35%);
+    -webkit-mask: url('./plus-icon.svg') no-repeat center;
+    -webkit-mask-size: contain;
 
-        cursor: pointer;
-    }
+    cursor: pointer;
+  }
 
-    .label-edit-dialog_button-area {
-        /* 右寄せにする */
-        width: max-content;
-        margin-left: auto;
+  .label-edit-dialog_button-area {
+    /* 右寄せにする */
+    width: max-content;
+    margin-left: auto;
 
-        margin-top: 1em;
-    }
+    margin-top: 1em;
+  }
 </style>

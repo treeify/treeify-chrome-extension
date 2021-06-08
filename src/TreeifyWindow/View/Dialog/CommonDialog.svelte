@@ -31,7 +31,7 @@
   }
 </script>
 
-<script lang='ts'>
+<script lang="ts">
   import {InputId} from '../../Internal/InputId'
 
   export let title: string
@@ -61,44 +61,46 @@
   }
 </script>
 
-<div class='common-dialog'
-     on:click={onClickBackdrop}
-     on:keydown={onKeyDown}
-     on:DOMNodeInsertedIntoDocument={onInserted}
-     on:DOMNodeRemovedFromDocument={onRemoved}>
-  <div class='common-dialog_frame'>
-    <div class='common-dialog_title-bar'>{title}</div>
+<div
+  class="common-dialog"
+  on:click={onClickBackdrop}
+  on:keydown={onKeyDown}
+  on:DOMNodeInsertedIntoDocument={onInserted}
+  on:DOMNodeRemovedFromDocument={onRemoved}
+>
+  <div class="common-dialog_frame">
+    <div class="common-dialog_title-bar">{title}</div>
     <slot />
   </div>
 </div>
 
 <style>
-    :root {
-        --code-block-padding: 0.2em;
-    }
+  :root {
+    --code-block-padding: 0.2em;
+  }
 
-    /* コードブロックアイテムのコンテンツ領域のルート */
-    .item-tree-code-block-content {
-        /* フォーカス時の枠線を非表示 */
-        outline: 0 solid transparent;
+  /* コードブロックアイテムのコンテンツ領域のルート */
+  .item-tree-code-block-content {
+    /* フォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
 
-        overflow-x: auto;
-    }
+    overflow-x: auto;
+  }
 
-    .item-tree-code-block-content pre {
-        border: 1px solid hsl(0, 0%, 80%);
-        margin: 0;
-        padding: var(--code-block-padding);
-        /* これを指定しないとoverflowしたコードがborderからはみ出る */
-        min-width: max-content;
-        /* コードが空文字列のときにぺしゃんこにならないよう設定 */
-        min-height: calc(var(--item-tree-calculated-line-height) + 2 * var(--code-block-padding));
+  .item-tree-code-block-content pre {
+    border: 1px solid hsl(0, 0%, 80%);
+    margin: 0;
+    padding: var(--code-block-padding);
+    /* これを指定しないとoverflowしたコードがborderからはみ出る */
+    min-width: max-content;
+    /* コードが空文字列のときにぺしゃんこにならないよう設定 */
+    min-height: calc(var(--item-tree-calculated-line-height) + 2 * var(--code-block-padding));
 
-        font-size: 90%;
-    }
+    font-size: 90%;
+  }
 
-    /* グレーアウト状態のコードブロックアイテム */
-    .grayed-out .item-tree-code-block-content {
-        filter: opacity(50%);
-    }
+  /* グレーアウト状態のコードブロックアイテム */
+  .grayed-out .item-tree-code-block-content {
+    filter: opacity(50%);
+  }
 </style>

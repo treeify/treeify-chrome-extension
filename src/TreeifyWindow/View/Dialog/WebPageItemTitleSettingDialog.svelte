@@ -42,10 +42,9 @@
       }
     })
   }
-
 </script>
 
-<script lang='ts'>
+<script lang="ts">
   import {WebPageItemTitleSettingDialog} from '../../Internal/State'
 
   export type WebPageItemTitleSettingDialogViewModel = {
@@ -66,37 +65,42 @@
 </script>
 
 <div
-  class='web-page-item-title-setting-dialog'
+  class="web-page-item-title-setting-dialog"
   on:click={onClickBackdrop}
   on:DOMNodeInsertedIntoDocument={onInserted}
   on:DOMNodeRemovedFromDocument={onRemoved}
 >
-  <div class='web-page-item-title-setting-dialog_frame' style={style}>
-    <input type='text' class='web-page-item-title-setting-dialog_text-box' value={viewModel.initialTitle} on:keydown={viewModel.onKeyDown}>
+  <div class="web-page-item-title-setting-dialog_frame" {style}>
+    <input
+      type="text"
+      class="web-page-item-title-setting-dialog_text-box"
+      value={viewModel.initialTitle}
+      on:keydown={viewModel.onKeyDown}
+    />
   </div>
 </div>
 
 <style>
-    .web-page-item-title-setting-dialog {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
+  .web-page-item-title-setting-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 
-    /* ウェブページアイテムのタイトル設定ダイアログ */
-    .web-page-item-title-setting-dialog_frame {
-        /*
+  /* ウェブページアイテムのタイトル設定ダイアログ */
+  .web-page-item-title-setting-dialog_frame {
+    /*
         ウェブページアイテムの位置に合わせたフローティング。
         left, top, width, heightがJavaScriptで設定される。
         */
-        position: absolute;
-    }
+    position: absolute;
+  }
 
-    /* ウェブページアイテムのタイトル設定ダイアログのテキスト入力欄 */
-    .web-page-item-title-setting-dialog_text-box {
-        width: 100%;
-        height: 100%;
-    }
+  /* ウェブページアイテムのタイトル設定ダイアログのテキスト入力欄 */
+  .web-page-item-title-setting-dialog_text-box {
+    width: 100%;
+    height: 100%;
+  }
 </style>
