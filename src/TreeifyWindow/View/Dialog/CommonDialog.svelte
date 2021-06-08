@@ -1,26 +1,33 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {createFocusTrap, FocusTrap} from 'focus-trap'
-  import {assert} from '../../../Common/Debug/assert'
+  import {onDestroy, onMount} from 'svelte'
+  import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
+  import {InputId} from '../../Internal/InputId'
 
-  // onInsertedとonRemovedの間でFocusTrapインスタンスを共有するためのグローバル変数
+  export let title: string
+
+  export let onCloseDialog: () => void
+
   let focusTrap: FocusTrap | undefined
 
-  function onInserted(event: Event) {
+  // focusTrapのターゲットとして指定するためにDOM要素が必要
+  let domElement: HTMLElement | undefined
+
+  onMount(() => {
     doWithErrorCapture(() => {
       // フォーカストラップを作る
-      if (event.target instanceof HTMLElement) {
-        assert(focusTrap === undefined)
-        focusTrap = createFocusTrap(event.target, {
-          returnFocusOnDeactivate: true,
-          escapeDeactivates: false,
-        })
-        focusTrap.activate()
-      }
+      assert(focusTrap === undefined)
+      assertNonUndefined(domElement)
+      focusTrap = createFocusTrap(domElement, {
+        returnFocusOnDeactivate: true,
+        escapeDeactivates: false,
+      })
+      focusTrap.activate()
     })
-  }
+  })
 
-  function onRemoved(event: Event) {
+  onDestroy(() => {
     doWithErrorCapture(() => {
       // フォーカストラップを消す
       if (focusTrap !== undefined) {
@@ -28,15 +35,7 @@
         focusTrap = undefined
       }
     })
-  }
-</script>
-
-<script lang="ts">
-  import {InputId} from '../../Internal/InputId'
-
-  export let title: string
-
-  export let onCloseDialog: () => void
+  })
 
   const onClickBackdrop = (event: MouseEvent) => {
     doWithErrorCapture(() => {
@@ -61,13 +60,7 @@
   }
 </script>
 
-<div
-  class="common-dialog"
-  on:click={onClickBackdrop}
-  on:keydown={onKeyDown}
-  on:DOMNodeInsertedIntoDocument={onInserted}
-  on:DOMNodeRemovedFromDocument={onRemoved}
->
+<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} bind:this={domElement}>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">{title}</div>
     <slot />
