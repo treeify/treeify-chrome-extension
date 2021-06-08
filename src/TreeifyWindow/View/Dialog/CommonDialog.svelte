@@ -32,8 +32,6 @@
 </script>
 
 <script lang='ts'>
-  import {assert} from '../../../Common/Debug/assert'
-  import {doWithErrorCapture} from '../../errorCapture'
   import {InputId} from '../../Internal/InputId'
 
   export let title: string

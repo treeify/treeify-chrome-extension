@@ -46,7 +46,6 @@
 </script>
 
 <script lang='ts'>
-  import {CurrentState} from '../../Internal/CurrentState'
   import {WebPageItemTitleSettingDialog} from '../../Internal/State'
 
   export type WebPageItemTitleSettingDialogViewModel = {

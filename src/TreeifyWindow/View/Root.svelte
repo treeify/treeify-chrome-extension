@@ -5,11 +5,17 @@
   import {toOpmlString} from '../Internal/importAndExport'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
   import {DataFolderPickerOpenButtonViewModel} from './DataFolderPickerOpenButtonView'
+  import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import {CodeBlockItemEditDialogViewModel} from './Dialog/CodeBlockItemEditDialogView'
+  import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
   import {DefaultWindowModeSettingDialogViewModel} from './Dialog/DefaultWindowModeSettingDialogView'
+  import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
   import {LabelEditDialogViewModel} from './Dialog/LabelEditDialogView'
+  import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
   import {OtherParentsDialogViewModel} from './Dialog/OtherParentsDialogView'
+  import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import {WebPageItemTitleSettingDialogViewModel} from './Dialog/WebPageItemTitleSettingDialogView'
+  import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
   import {WorkspaceDialogViewModel} from './Dialog/WorkspaceDialogView'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
@@ -61,7 +67,24 @@
       <ItemTree viewModel={viewModel.itemTreeViewModel}/>
     </div>
   </div>
-  <!-- TODO: ダイアログのSvelte移行は一旦保留して、動作確認を優先する -->
+  {#if viewModel.webPageItemTitleSettingDialog !== undefined}
+    <WebPageItemTitleSettingDialog viewModel={viewModel.webPageItemTitleSettingDialog}/>
+  {/if}
+  {#if viewModel.codeBlockItemEditDialogViewModel !== undefined}
+    <CodeBlockItemEditDialog viewModel={viewModel.codeBlockItemEditDialogViewModel}/>
+  {/if}
+  {#if viewModel.defaultWindowModeSettingDialog !== undefined}
+    <DefaultWindowModeSettingDialog viewModel={viewModel.defaultWindowModeSettingDialog}/>
+  {/if}
+  {#if viewModel.workspaceDialog !== undefined}
+    <WorkspaceDialog viewModel={viewModel.workspaceDialog}/>
+  {/if}
+  {#if viewModel.labelEditDialog !== undefined}
+    <LabelEditDialog viewModel={viewModel.labelEditDialog}/>
+  {/if}
+  {#if viewModel.otherParentsDialog !== undefined}
+    <OtherParentsDialog viewModel={viewModel.otherParentsDialog}/>
+  {/if}
 </div>
 
 <style>
