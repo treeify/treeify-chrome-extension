@@ -18,7 +18,8 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {generateStyleElementContents} from 'src/TreeifyWindow/View/css'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {createRootViewModel, RootView} from 'src/TreeifyWindow/View/RootView'
+import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
+import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
 export class External {
@@ -86,14 +87,15 @@ export class External {
 
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
-    const result1 = doWithTimeMeasuring('RootView(createRootViewModel(state))', () =>
-      RootView(createRootViewModel(state))
-    )
-
-    doWithTimeMeasuring('spaRootの子要素取り替え', () => {
+    if (spaRoot instanceof HTMLElement) {
       spaRoot.innerHTML = ''
-      spaRoot.appendChild(result1)
-    })
+      new Root({
+        target: spaRoot,
+        props: {
+          viewModel: createRootViewModel(state),
+        },
+      })
+    }
 
     // アイテムツリーのスクロール位置を復元
     const itemTree = document.querySelector('.item-tree')
