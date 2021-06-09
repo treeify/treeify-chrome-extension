@@ -4,6 +4,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
+import {get} from 'svelte/store'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 
@@ -73,7 +74,7 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 
 /** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
 export function getFilteredMountedPageIds(): List<ItemId> {
-  return Internal.instance.state.mountedPageIds.filter((pageId) => {
+  return get(Internal.instance.state.mountedPageIds).filter((pageId) => {
     const excludedItemIds = CurrentState.getExcludedItemIds()
 
     // ページが除外アイテムそのものの場合

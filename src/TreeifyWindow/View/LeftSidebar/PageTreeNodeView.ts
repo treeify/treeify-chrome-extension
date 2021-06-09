@@ -128,7 +128,7 @@ export function createPageTreeNodeViewModel(
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
         if (itemId === CurrentState.getActivePageId()) {
-          const hottestPageId = Internal.instance.state.mountedPageIds
+          const hottestPageId = get(Internal.instance.state.mountedPageIds)
             .map((pageId) => {
               return {
                 pageId,
@@ -184,7 +184,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
   assertNonUndefined(itemId)
 
   // もし他のマウント済みページに到達したら、そのページまでの経路を返す
-  if (itemIds.size > 1 && state.mountedPageIds.contains(itemId)) {
+  if (itemIds.size > 1 && get(state.mountedPageIds).contains(itemId)) {
     yield itemIds
     return
   }

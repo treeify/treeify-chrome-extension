@@ -20,7 +20,7 @@ export type State = {
    * マウントされているページたちのアイテムID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: List<ItemId>
+  mountedPageIds: Writable<List<ItemId>>
   /** 削除され再利用されるアイテムID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId

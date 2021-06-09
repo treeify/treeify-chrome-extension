@@ -102,7 +102,7 @@ export class Internal {
           name: 'ワークスペース1',
         },
       },
-      mountedPageIds: List.of(0),
+      mountedPageIds: writable(List.of(0)),
       availableItemIds: List.of(),
       maxItemId: 0,
       itemTreeKeyboardBinding: {
@@ -281,7 +281,7 @@ export class Internal {
           name: 'ワークスペース1',
         },
       },
-      mountedPageIds: List.of(0),
+      mountedPageIds: writable(List.of(0)),
       availableItemIds: List.of(),
       maxItemId: 8,
       itemTreeKeyboardBinding: {
