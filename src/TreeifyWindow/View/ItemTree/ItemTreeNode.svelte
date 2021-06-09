@@ -71,7 +71,7 @@
       draggable="true"
       on:dragstart={viewModel.onDragStart}
     >
-      <ItemTreeSpool viewModel={viewModel.spoolViewModel} />
+      <ItemTreeSpool {...viewModel.spoolViewModel} />
     </div>
   {/if}
   <div class="item-tree-node_body-and-children-area">

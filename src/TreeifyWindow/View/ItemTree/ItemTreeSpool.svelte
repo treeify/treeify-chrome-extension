@@ -18,10 +18,16 @@
     PAGE,
   }
 
-  export let viewModel: ItemTreeSpoolViewModel
+  export let bulletState: ItemTreeBulletState
+  /**
+   * expand時に表示されるアイテム数。
+   * collapsed状態以外の場合は常に0。
+   */
+  export let hiddenItemsCount: integer
+  export let onClick: (event: MouseEvent) => void
 
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
-  const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
+  const limitedHiddenItemsCount = Math.min(hiddenItemsCount, 10)
   const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
   const outerCircleStyle = `
     width: ${outerCircleRadiusEm}em;
@@ -29,17 +35,17 @@
   `
 </script>
 
-<div class="item-tree-spool" on:click={viewModel.onClick}>
-  {#if viewModel.bulletState === ItemTreeBulletState.EXPANDED}
+<div class="item-tree-spool" on:click={onClick}>
+  {#if bulletState === ItemTreeBulletState.EXPANDED}
     <div class="item-tree-spool_indent-area">
       <div class="item-tree-spool_indent-line" />
     </div>
   {/if}
   <div class="item-tree-spool_bullet-area">
-    {#if viewModel.bulletState === ItemTreeBulletState.PAGE}
+    {#if bulletState === ItemTreeBulletState.PAGE}
       <div class="item-tree-spool_page-icon" />
     {:else}
-      {#if viewModel.bulletState === ItemTreeBulletState.COLLAPSED}
+      {#if bulletState === ItemTreeBulletState.COLLAPSED}
         <div class="item-tree-spool_outer-circle" style={outerCircleStyle} />
       {/if}
       <div class="item-tree-spool_inner-circle" />
