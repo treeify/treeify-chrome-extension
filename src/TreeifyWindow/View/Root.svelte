@@ -6,8 +6,9 @@
   import DataFolderPickerOpenButton, {
     createDataFolderPickerOpenButtonProps,
   } from './DataFolderPickerOpenButton.svelte'
-  import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
-  import {CodeBlockItemEditDialogViewModel} from './Dialog/CodeBlockItemEditDialogView'
+  import CodeBlockItemEditDialog, {
+    createCodeBlockItemEditDialogProps,
+  } from './Dialog/CodeBlockItemEditDialog.svelte'
   import DefaultWindowModeSettingDialog, {
     createDefaultWindowModeSettingDialogProps,
   } from './Dialog/DefaultWindowModeSettingDialog.svelte'
@@ -26,13 +27,13 @@
 
   export let itemTreeViewModel: ItemTreeViewModel
   export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-  export let codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
   export let workspaceDialog: WorkspaceDialogViewModel | undefined
   export let labelEditDialog: LabelEditDialogViewModel | undefined
   export let otherParentsDialog: OtherParentsDialogViewModel | undefined
 
   const leftSidebarProps = createLeftSidebarProps()
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
+  const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -67,8 +68,8 @@
   {#if webPageItemTitleSettingDialog !== undefined}
     <WebPageItemTitleSettingDialog viewModel={webPageItemTitleSettingDialog} />
   {/if}
-  {#if codeBlockItemEditDialogViewModel !== undefined}
-    <CodeBlockItemEditDialog viewModel={codeBlockItemEditDialogViewModel} />
+  {#if codeBlockItemEditDialogProps !== undefined}
+    <CodeBlockItemEditDialog {...codeBlockItemEditDialogProps} />
   {/if}
   {#if defaultWindowModeSettingDialogProps !== undefined}
     <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
