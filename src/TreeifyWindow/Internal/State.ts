@@ -163,9 +163,7 @@ export type DefaultWindowModeSettingDialog = {}
 export type WorkspaceDialog = {}
 
 /** ラベル編集ダイアログが持つ内部状態の型 */
-export type LabelEditDialog = {
-  labels: List<string>
-}
+export type LabelEditDialog = {}
 
 export type OtherParentsDialog = {}
 

@@ -1,4 +1,3 @@
-import {List} from 'immutable'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -48,13 +47,7 @@ export function showWorkspaceDialog() {
 
 /** ラベル編集ダイアログを表示する */
 export function showLabelEditDialog() {
-  const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
-  if (labels.isEmpty()) {
-    // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
-    CurrentState.setLabelEditDialog({labels: List.of('')})
-  } else {
-    CurrentState.setLabelEditDialog({labels})
-  }
+  CurrentState.setLabelEditDialog({})
 }
 
 /** 他のトランスクルード元ダイアログを表示する */

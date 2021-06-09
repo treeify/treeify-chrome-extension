@@ -1,13 +1,27 @@
+<script context="module" lang="ts">
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+
+  export function createLabelEditDialogProps() {
+    if (Internal.instance.state.labelEditDialog === null) return undefined
+
+    const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
+    if (labels.isEmpty()) {
+      // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
+      return {labels: ['']}
+    } else {
+      return {labels: labels.toArray()}
+    }
+  }
+</script>
+
 <script lang="ts">
   import {List} from 'immutable'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
   import CommonDialog from './CommonDialog.svelte'
 
-  export let labels: List<string>
-
-  let labelArray = labels.toArray()
+  export let labels: string[]
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -17,15 +31,15 @@
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      labelArray.push('')
-      labelArray = labelArray
+      labels.push('')
+      labels = labels
     })
   }
 
   const onClickFinishButton = () => {
     doWithErrorCapture(() => {
-      const labels = labelArray.filter((label) => label !== '')
-      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(labels))
+      const nonEmptyLabels = labels.filter((label) => label !== '')
+      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
       CurrentState.setLabelEditDialog(null)
       CurrentState.commit()
     })
@@ -56,7 +70,7 @@
 
 <CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
   <div class="label-edit-dialog_content">
-    {#each labelArray as label}
+    {#each labels as label}
       <div class="label-edit-dialog_label-row">
         <input
           type="text"

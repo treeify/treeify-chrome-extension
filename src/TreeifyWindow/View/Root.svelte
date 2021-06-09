@@ -12,8 +12,7 @@
   import DefaultWindowModeSettingDialog, {
     createDefaultWindowModeSettingDialogProps,
   } from './Dialog/DefaultWindowModeSettingDialog.svelte'
-  import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
-  import {LabelEditDialogViewModel} from './Dialog/LabelEditDialogView'
+  import LabelEditDialog, {createLabelEditDialogProps} from './Dialog/LabelEditDialog.svelte'
   import OtherParentsDialog, {
     createOtherParentsDialogProps,
   } from './Dialog/OtherParentsDialog.svelte'
@@ -27,13 +26,13 @@
   import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
 
   export let itemTreeViewModel: ItemTreeViewModel
-  export let labelEditDialog: LabelEditDialogViewModel | undefined
 
   const leftSidebarProps = createLeftSidebarProps()
   const webPageItemTitleSettingDialogProps = createWebPageItemTitleSettingDialogProps()
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
   const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
   const workspaceDialogProps = createWorkspaceDialogProps()
+  const labelEditDialogProps = createLabelEditDialogProps()
   const otherParentsDialogProps = createOtherParentsDialogProps()
 
   function onClickExportButton() {
@@ -78,8 +77,8 @@
   {#if workspaceDialogProps !== undefined}
     <WorkspaceDialog {...workspaceDialogProps} />
   {/if}
-  {#if labelEditDialog !== undefined}
-    <LabelEditDialog labels={labelEditDialog.labels} />
+  {#if labelEditDialogProps !== undefined}
+    <LabelEditDialog {...labelEditDialogProps} />
   {/if}
   {#if otherParentsDialogProps !== undefined}
     <OtherParentsDialog {...otherParentsDialogProps} />
