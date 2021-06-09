@@ -1,10 +1,22 @@
-<script lang="ts">
+<script context="module" lang="ts">
+  export function createPageTreeBulletAndIndentProps(
+    hasChildren: boolean
+  ): {bulletState: PageTreeBulletState} {
+    if (hasChildren) {
+      return {bulletState: PageTreeBulletState.EXPANDED}
+    } else {
+      return {bulletState: PageTreeBulletState.NO_CHILDREN}
+    }
+  }
+
   enum PageTreeBulletState {
     NO_CHILDREN,
     EXPANDED,
     COLLAPSED,
   }
+</script>
 
+<script lang="ts">
   export let bulletState: PageTreeBulletState
 </script>
 

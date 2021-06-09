@@ -10,17 +10,12 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createPageTreeBulletAndIndentViewModel,
-  PageTreeBulletAndIndentViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
-import {
   createPageTreeContentViewModel,
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
 import {get} from 'svelte/store'
 
 export type PageTreeNodeViewModel = {
-  bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
   contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
   isActivePage: boolean
@@ -95,7 +90,6 @@ export function createPageTreeNodeViewModel(
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
-    bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
     contentViewModel: createPageTreeContentViewModel(state, itemId),
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(

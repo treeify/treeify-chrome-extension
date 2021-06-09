@@ -3,14 +3,14 @@
   import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
-  import {PageTreeBulletAndIndentViewModel} from './PageTreeBulletAndIndentView'
+  import PageTreeBulletAndIndent, {
+    createPageTreeBulletAndIndentProps,
+  } from './PageTreeBulletAndIndent.svelte'
   import PageTreeContent from './PageTreeContent.svelte'
   import {PageTreeContentViewModel} from './PageTreeContentView'
   import PageTreeNode from './PageTreeNode.svelte'
 
   type PageTreeNodeViewModel = {
-    bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
     contentViewModel: PageTreeContentViewModel
     childNodeViewModels: List<PageTreeNodeViewModel>
     isActivePage: boolean
@@ -53,7 +53,9 @@
     <div class="grid-empty-cell" />
   {:else}
     <div class="page-tree-node_bullet-and-indent-area">
-      <PageTreeBulletAndIndent {...viewModel.bulletAndIndentViewModel} />
+      <PageTreeBulletAndIndent
+        {...createPageTreeBulletAndIndentProps(!viewModel.childNodeViewModels.isEmpty())}
+      />
     </div>
   {/if}
   <div class="page-tree-node_body-and-children-area">
