@@ -4,10 +4,6 @@ import {
   LabelEditDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/LabelEditDialogView'
 import {
-  createOtherParentsDialogViewModel,
-  OtherParentsDialogViewModel,
-} from 'src/TreeifyWindow/View/Dialog/OtherParentsDialogView'
-import {
   createWebPageItemTitleSettingDialogViewModel,
   WebPageItemTitleSettingDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogView'
@@ -20,7 +16,6 @@ export type RootViewModel = {
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   labelEditDialog: LabelEditDialogViewModel | undefined
-  otherParentsDialog: OtherParentsDialogViewModel | undefined
 }
 
 export function createRootViewModel(state: State): RootViewModel {
@@ -28,6 +23,5 @@ export function createRootViewModel(state: State): RootViewModel {
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
     labelEditDialog: createLabelEditDialogViewModel(state),
-    otherParentsDialog: createOtherParentsDialogViewModel(state),
   }
 }
