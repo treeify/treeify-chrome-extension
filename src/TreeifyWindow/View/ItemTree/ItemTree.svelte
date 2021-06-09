@@ -569,8 +569,9 @@
           // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const belowItemDomishObjects =
+          const belowItemDomishObjects = get(
             Internal.instance.state.textItems[belowItemId].domishObjects
+          )
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(
             targetItemId,
