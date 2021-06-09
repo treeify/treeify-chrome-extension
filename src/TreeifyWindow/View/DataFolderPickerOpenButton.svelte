@@ -1,3 +1,15 @@
+<script context="module" lang="ts">
+  import {External} from '../External/External'
+
+  export function createDataFolderPickerOpenButtonProps() {
+    return {
+      isGrayedOut:
+        External.instance.dataFolder !== undefined &&
+        External.instance.pendingMutatedChunkIds.size === 0,
+    }
+  }
+</script>
+
 <script lang="ts">
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {CurrentState} from '../Internal/CurrentState'

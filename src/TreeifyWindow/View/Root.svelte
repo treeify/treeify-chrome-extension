@@ -3,8 +3,9 @@
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
-  import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
-  import {DataFolderPickerOpenButtonViewModel} from './DataFolderPickerOpenButtonView'
+  import DataFolderPickerOpenButton, {
+    createDataFolderPickerOpenButtonProps,
+  } from './DataFolderPickerOpenButton.svelte'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import {CodeBlockItemEditDialogViewModel} from './Dialog/CodeBlockItemEditDialogView'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
@@ -29,7 +30,6 @@
   export let workspaceDialog: WorkspaceDialogViewModel | undefined
   export let labelEditDialog: LabelEditDialogViewModel | undefined
   export let otherParentsDialog: OtherParentsDialogViewModel | undefined
-  export let dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 
   const leftSidebarProps = createLeftSidebarProps()
 
@@ -52,7 +52,7 @@
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
       <FullWindowModeButton />
-      <DataFolderPickerOpenButton {...dataFolderPickerOpenButtonViewModel} />
+      <DataFolderPickerOpenButton {...createDataFolderPickerOpenButtonProps()} />
     </div>
     <div class="sidebar-layout">
       {#if leftSidebarProps !== undefined}

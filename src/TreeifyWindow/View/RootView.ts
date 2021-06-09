@@ -1,9 +1,5 @@
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createDataFolderPickerOpenButtonViewModel,
-  DataFolderPickerOpenButtonViewModel,
-} from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
-import {
   CodeBlockItemEditDialogViewModel,
   createCodeBlockItemEditDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogView'
@@ -40,14 +36,12 @@ export type RootViewModel = {
   workspaceDialog: WorkspaceDialogViewModel | undefined
   labelEditDialog: LabelEditDialogViewModel | undefined
   otherParentsDialog: OtherParentsDialogViewModel | undefined
-  dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 }
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
-    dataFolderPickerOpenButtonViewModel: createDataFolderPickerOpenButtonViewModel(),
     codeBlockItemEditDialogViewModel: createCodeBlockItemEditDialogViewModel(state),
     defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogViewModel(state),
     workspaceDialog: createWorkspaceDialogViewModel(state),
