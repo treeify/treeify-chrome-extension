@@ -81,9 +81,7 @@ export class External {
       spaRoot.innerHTML = ''
       new Root({
         target: spaRoot,
-        props: {
-          viewModel: createRootViewModel(state),
-        },
+        props: createRootViewModel(state),
       })
     }
 

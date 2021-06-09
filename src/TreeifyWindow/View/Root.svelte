@@ -23,19 +23,15 @@
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
   import {LeftSidebarViewModel} from './LeftSidebar/LeftSidebarView'
 
-  type RootViewModel = {
-    leftSidebarViewModel: LeftSidebarViewModel | undefined
-    itemTreeViewModel: ItemTreeViewModel
-    webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-    codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
-    defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
-    workspaceDialog: WorkspaceDialogViewModel | undefined
-    labelEditDialog: LabelEditDialogViewModel | undefined
-    otherParentsDialog: OtherParentsDialogViewModel | undefined
-    dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
-  }
-
-  export let viewModel: RootViewModel
+  export let leftSidebarViewModel: LeftSidebarViewModel | undefined
+  export let itemTreeViewModel: ItemTreeViewModel
+  export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
+  export let codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
+  export let defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
+  export let workspaceDialog: WorkspaceDialogViewModel | undefined
+  export let labelEditDialog: LabelEditDialogViewModel | undefined
+  export let otherParentsDialog: OtherParentsDialogViewModel | undefined
+  export let dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -56,34 +52,34 @@
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
       <FullWindowModeButton />
-      <DataFolderPickerOpenButton viewModel={viewModel.dataFolderPickerOpenButtonViewModel} />
+      <DataFolderPickerOpenButton viewModel={dataFolderPickerOpenButtonViewModel} />
     </div>
     <div class="sidebar-layout">
-      {#if viewModel.leftSidebarViewModel !== undefined}
-        <LeftSidebar viewModel={viewModel.leftSidebarViewModel} />
+      {#if leftSidebarViewModel !== undefined}
+        <LeftSidebar viewModel={leftSidebarViewModel} />
       {:else}
         <div class="grid-empty-cell" />
       {/if}
-      <ItemTree viewModel={viewModel.itemTreeViewModel} />
+      <ItemTree viewModel={itemTreeViewModel} />
     </div>
   </div>
-  {#if viewModel.webPageItemTitleSettingDialog !== undefined}
-    <WebPageItemTitleSettingDialog viewModel={viewModel.webPageItemTitleSettingDialog} />
+  {#if webPageItemTitleSettingDialog !== undefined}
+    <WebPageItemTitleSettingDialog viewModel={webPageItemTitleSettingDialog} />
   {/if}
-  {#if viewModel.codeBlockItemEditDialogViewModel !== undefined}
-    <CodeBlockItemEditDialog viewModel={viewModel.codeBlockItemEditDialogViewModel} />
+  {#if codeBlockItemEditDialogViewModel !== undefined}
+    <CodeBlockItemEditDialog viewModel={codeBlockItemEditDialogViewModel} />
   {/if}
-  {#if viewModel.defaultWindowModeSettingDialog !== undefined}
-    <DefaultWindowModeSettingDialog viewModel={viewModel.defaultWindowModeSettingDialog} />
+  {#if defaultWindowModeSettingDialog !== undefined}
+    <DefaultWindowModeSettingDialog viewModel={defaultWindowModeSettingDialog} />
   {/if}
-  {#if viewModel.workspaceDialog !== undefined}
-    <WorkspaceDialog viewModel={viewModel.workspaceDialog} />
+  {#if workspaceDialog !== undefined}
+    <WorkspaceDialog viewModel={workspaceDialog} />
   {/if}
-  {#if viewModel.labelEditDialog !== undefined}
-    <LabelEditDialog viewModel={viewModel.labelEditDialog} />
+  {#if labelEditDialog !== undefined}
+    <LabelEditDialog viewModel={labelEditDialog} />
   {/if}
-  {#if viewModel.otherParentsDialog !== undefined}
-    <OtherParentsDialog viewModel={viewModel.otherParentsDialog} />
+  {#if otherParentsDialog !== undefined}
+    <OtherParentsDialog viewModel={otherParentsDialog} />
   {/if}
 </div>
 
