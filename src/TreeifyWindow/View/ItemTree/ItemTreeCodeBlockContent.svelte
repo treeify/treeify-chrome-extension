@@ -77,7 +77,7 @@
   }
 
   /* グレーアウト状態のコードブロックアイテム */
-  .grayed-out .item-tree-code-block-content {
+  :global(.grayed-out) .item-tree-code-block-content {
     filter: opacity(50%);
   }
 </style>

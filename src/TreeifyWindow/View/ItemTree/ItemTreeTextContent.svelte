@@ -56,8 +56,8 @@
   }
 
   /* グレーアウト状態のテキストアイテム */
-  .grayed-out .item-tree-text-content_content-editable,
-  .grayed-out-children .item-tree-text-content_content-editable {
+  :global(.grayed-out) .item-tree-text-content_content-editable,
+  :global(.grayed-out-children) .item-tree-text-content_content-editable {
     color: var(--grayed-out-item-text-color);
   }
 </style>
