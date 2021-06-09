@@ -52,7 +52,7 @@
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
       <FullWindowModeButton />
-      <DataFolderPickerOpenButton viewModel={dataFolderPickerOpenButtonViewModel} />
+      <DataFolderPickerOpenButton {...dataFolderPickerOpenButtonViewModel} />
     </div>
     <div class="sidebar-layout">
       {#if leftSidebarViewModel !== undefined}
