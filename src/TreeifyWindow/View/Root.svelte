@@ -20,10 +20,8 @@
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
   import {ItemTreeViewModel} from './ItemTree/ItemTreeView'
-  import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
-  import {LeftSidebarViewModel} from './LeftSidebar/LeftSidebarView'
+  import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
 
-  export let leftSidebarViewModel: LeftSidebarViewModel | undefined
   export let itemTreeViewModel: ItemTreeViewModel
   export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   export let codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
@@ -32,6 +30,8 @@
   export let labelEditDialog: LabelEditDialogViewModel | undefined
   export let otherParentsDialog: OtherParentsDialogViewModel | undefined
   export let dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
+
+  const leftSidebarProps = createLeftSidebarProps()
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -55,8 +55,8 @@
       <DataFolderPickerOpenButton {...dataFolderPickerOpenButtonViewModel} />
     </div>
     <div class="sidebar-layout">
-      {#if leftSidebarViewModel !== undefined}
-        <LeftSidebar {...leftSidebarViewModel} />
+      {#if leftSidebarProps !== undefined}
+        <LeftSidebar {...leftSidebarProps} />
       {:else}
         <div class="grid-empty-cell" />
       {/if}

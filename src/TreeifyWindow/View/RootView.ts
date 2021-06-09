@@ -31,13 +31,8 @@ import {
   createItemTreeViewModel,
   ItemTreeViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
-import {
-  createLeftSidebarViewModel,
-  LeftSidebarViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 
 export type RootViewModel = {
-  leftSidebarViewModel: LeftSidebarViewModel | undefined
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
@@ -50,7 +45,6 @@ export type RootViewModel = {
 
 export function createRootViewModel(state: State): RootViewModel {
   return {
-    leftSidebarViewModel: createLeftSidebarViewModel(state),
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
     dataFolderPickerOpenButtonViewModel: createDataFolderPickerOpenButtonViewModel(),
