@@ -17,8 +17,9 @@
   import OtherParentsDialog, {
     createOtherParentsDialogProps,
   } from './Dialog/OtherParentsDialog.svelte'
-  import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
-  import {WebPageItemTitleSettingDialogViewModel} from './Dialog/WebPageItemTitleSettingDialogView'
+  import WebPageItemTitleSettingDialog, {
+    createWebPageItemTitleSettingDialogProps,
+  } from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog, {createWorkspaceDialogProps} from './Dialog/WorkspaceDialog.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
@@ -26,10 +27,10 @@
   import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
 
   export let itemTreeViewModel: ItemTreeViewModel
-  export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   export let labelEditDialog: LabelEditDialogViewModel | undefined
 
   const leftSidebarProps = createLeftSidebarProps()
+  const webPageItemTitleSettingDialogProps = createWebPageItemTitleSettingDialogProps()
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
   const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
   const workspaceDialogProps = createWorkspaceDialogProps()
@@ -65,8 +66,8 @@
       <ItemTree viewModel={itemTreeViewModel} />
     </div>
   </div>
-  {#if webPageItemTitleSettingDialog !== undefined}
-    <WebPageItemTitleSettingDialog viewModel={webPageItemTitleSettingDialog} />
+  {#if webPageItemTitleSettingDialogProps !== undefined}
+    <WebPageItemTitleSettingDialog {...webPageItemTitleSettingDialogProps} />
   {/if}
   {#if codeBlockItemEditDialogProps !== undefined}
     <CodeBlockItemEditDialog {...codeBlockItemEditDialogProps} />
