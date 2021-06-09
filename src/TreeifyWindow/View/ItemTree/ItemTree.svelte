@@ -1,5 +1,6 @@
 <script lang="ts">
   import {is, List} from 'immutable'
+  import {get} from 'svelte/store'
   import {assertNonNull, assertNonUndefined} from '../../../Common/Debug/assert'
   import {integer} from '../../../Common/integer'
   import {ItemType} from '../../basicType'
@@ -98,7 +99,7 @@
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
-        const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+        const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
         const characterCount = DomishObject.countCharacters(domishObjects)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
@@ -119,7 +120,7 @@
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
-        const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+        const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
         const characterCount = DomishObject.countCharacters(domishObjects)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
@@ -164,7 +165,7 @@
       }
     } else {
       const targetItemId = ItemPath.getItemId(targetItemPath)
-      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      const domishObjects = get(Internal.instance.state.textItems[targetItemId].domishObjects)
       const characterCount = DomishObject.countCharacters(domishObjects)
 
       // キャレット位置が末尾以外のときはブラウザの挙動に任せる
@@ -241,7 +242,9 @@
       assertNonUndefined(originalXCoordinate)
 
       // 上のアイテムの最後の行の文字数を取得
-      const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+      const aboveItemDomishObjects = get(
+        Internal.instance.state.textItems[aboveItemId].domishObjects
+      )
       const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
       const lastLine = lines[lines.length - 1]
 
@@ -353,7 +356,9 @@
       assertNonUndefined(originalXCoordinate)
 
       // 下のアイテムの最初の行の文字数を取得
-      const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
+      const belowItemDomishObjects = get(
+        Internal.instance.state.textItems[belowItemId].domishObjects
+      )
       const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split('\n')[0]
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
@@ -452,7 +457,7 @@
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合
 
-        const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+        const domishObjects = get(Internal.instance.state.textItems[targetItemId].domishObjects)
         const charactersCount = DomishObject.countCharacters(domishObjects)
         const textItemSelection = getTextItemSelectionFromDom()
         if (textItemSelection?.focusDistance !== charactersCount) {
@@ -494,10 +499,12 @@
           // ターゲットアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const focusedItemDomishObjects =
+          const focusedItemDomishObjects = get(
             Internal.instance.state.textItems[targetItemId].domishObjects
-          const aboveItemDomishObjects =
+          )
+          const aboveItemDomishObjects = get(
             Internal.instance.state.textItems[aboveItemId].domishObjects
+          )
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(
             aboveItemId,
@@ -506,7 +513,7 @@
 
           // 子リストを連結するため、子を全て弟としてエッジ追加。
           // アンインデントに似ているが元のエッジを削除しない点が異なる。
-          for (const childItemId of targetItem.childItemIds.reverse()) {
+          for (const childItemId of get(targetItem.childItemIds).reverse()) {
             CurrentState.insertLastChildItem(aboveItemId, childItemId)
           }
 
@@ -539,7 +546,9 @@
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
 
-      const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      const focusedItemDomishObjects = get(
+        Internal.instance.state.textItems[targetItemId].domishObjects
+      )
       const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
       if (
         selection.focusDistance === characterCount &&
@@ -560,8 +569,9 @@
           // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const belowItemDomishObjects =
+          const belowItemDomishObjects = get(
             Internal.instance.state.textItems[belowItemId].domishObjects
+          )
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(
             targetItemId,
@@ -570,7 +580,7 @@
 
           // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
           // アンインデントに似ているが元のエッジを削除しない点が異なる。
-          for (const childItemId of belowItem.childItemIds) {
+          for (const childItemId of get(belowItem.childItemIds)) {
             CurrentState.insertLastChildItem(targetItemId, childItemId)
           }
 

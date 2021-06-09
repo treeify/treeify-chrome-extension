@@ -4,6 +4,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
+import {writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -74,15 +75,15 @@ export class Internal {
       items: {
         0: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {},
-          timestamp: Timestamp.now(),
-          cssClasses: List.of(),
+          timestamp: writable(Timestamp.now()),
+          cssClasses: writable(List.of()),
         },
       },
       textItems: {
         0: {
-          domishObjects: List.of({type: 'text', textContent: 'Top'}),
+          domishObjects: writable(List.of({type: 'text', textContent: 'Top'})),
         },
       },
       webPageItems: {},
@@ -101,7 +102,7 @@ export class Internal {
           name: 'ワークスペース1',
         },
       },
-      mountedPageIds: List.of(0),
+      mountedPageIds: writable(List.of(0)),
       availableItemIds: List.of(),
       maxItemId: 0,
       itemTreeKeyboardBinding: {
@@ -152,112 +153,114 @@ export class Internal {
       items: {
         0: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(1, 2, 5, 8),
+          childItemIds: writable(List.of(1, 2, 5, 8)),
           parents: {},
-          timestamp: 1604284090000,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090000),
+          cssClasses: writable(List.of()),
         },
         1: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(3, 6, 7),
+          childItemIds: writable(List.of(3, 6, 7)),
           parents: {0: {isCollapsed: false, labels: List.of()}},
-          timestamp: 1604284090001,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090001),
+          cssClasses: writable(List.of()),
         },
         2: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(4),
+          childItemIds: writable(List.of(4)),
           parents: {0: {isCollapsed: true, labels: List.of()}},
-          timestamp: 1604284090002,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090002),
+          cssClasses: writable(List.of()),
         },
         3: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {1: {isCollapsed: false, labels: List.of()}},
-          timestamp: 1604284090003,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090003),
+          cssClasses: writable(List.of()),
         },
         4: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {2: {isCollapsed: false, labels: List.of()}},
-          timestamp: 1604284090004,
-          cssClasses: List.of('grayed-out'),
+          timestamp: writable(1604284090004),
+          cssClasses: writable(List.of('grayed-out')),
         },
         5: {
           itemType: ItemType.WEB_PAGE,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {0: {isCollapsed: false, labels: List.of('サンプル')}},
-          timestamp: 1604284090005,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090005),
+          cssClasses: writable(List.of()),
         },
         6: {
           itemType: ItemType.TEXT,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {1: {isCollapsed: false, labels: List.of()}},
-          timestamp: 1604284090006,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090006),
+          cssClasses: writable(List.of()),
         },
         7: {
           itemType: ItemType.IMAGE,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {1: {isCollapsed: false, labels: List.of()}},
-          timestamp: 1604284090007,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090007),
+          cssClasses: writable(List.of()),
         },
         8: {
           itemType: ItemType.CODE_BLOCK,
-          childItemIds: List.of(),
+          childItemIds: writable(List.of()),
           parents: {0: {isCollapsed: false, labels: List.of()}},
-          timestamp: 1604284090008,
-          cssClasses: List.of(),
+          timestamp: writable(1604284090008),
+          cssClasses: writable(List.of()),
         },
       },
       textItems: {
         0: {
-          domishObjects: List.of({type: 'text', textContent: 'Top'}),
+          domishObjects: writable(List.of({type: 'text', textContent: 'Top'})),
         },
         1: {
-          domishObjects: List.of({type: 'text', textContent: 'isCollapsed false'}),
+          domishObjects: writable(List.of({type: 'text', textContent: 'isCollapsed false'})),
         },
         2: {
-          domishObjects: List.of({type: 'text', textContent: 'isCollapsed true'}),
+          domishObjects: writable(List.of({type: 'text', textContent: 'isCollapsed true'})),
         },
         3: {
-          domishObjects: List.of({type: 'text', textContent: 'visible child'}),
+          domishObjects: writable(List.of({type: 'text', textContent: 'visible child'})),
         },
         4: {
-          domishObjects: List.of({type: 'text', textContent: 'invisible child'}),
+          domishObjects: writable(List.of({type: 'text', textContent: 'invisible child'})),
         },
         6: {
-          domishObjects: List.of({type: 'text', textContent: '子ページ'}),
+          domishObjects: writable(List.of({type: 'text', textContent: '子ページ'})),
         },
       },
       webPageItems: {
         5: {
-          url: 'https://ao-system.net/favicon/',
-          faviconUrl: 'https://ao-system.net/favicon.ico',
-          tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
-          title: null,
-          isUnread: true,
+          url: writable('https://ao-system.net/favicon/'),
+          faviconUrl: writable('https://ao-system.net/favicon.ico'),
+          tabTitle: writable('ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます'),
+          title: writable(null),
+          isUnread: writable(true),
         },
       },
       imageItems: {
         7: {
-          url:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
-          caption: 'tamias',
+          url: writable(
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg'
+          ),
+          caption: writable('tamias'),
         },
       },
       codeBlockItems: {
         8: {
-          code:
+          code: writable(
             "const url = 'https://google.com/'\n" +
-            'if (url.length > 10 || /https:/.test(url)) {\n' +
-            '  console.log(`OK: ${url.length}`)\n' +
-            '}\n',
-          language: 'javascript',
+              'if (url.length > 10 || /https:/.test(url)) {\n' +
+              '  console.log(`OK: ${url.length}`)\n' +
+              '}\n'
+          ),
+          language: writable('javascript'),
         },
       },
       pages: {
@@ -278,7 +281,7 @@ export class Internal {
           name: 'ワークスペース1',
         },
       },
-      mountedPageIds: List.of(0),
+      mountedPageIds: writable(List.of(0)),
       availableItemIds: List.of(),
       maxItemId: 8,
       itemTreeKeyboardBinding: {

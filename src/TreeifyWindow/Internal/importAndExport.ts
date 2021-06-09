@@ -12,6 +12,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyWindow/Internal/State'
+import {get} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
@@ -166,7 +167,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
   const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
+      const domishObjects = get(Internal.instance.state.textItems[itemId].domishObjects)
       return DomishObject.toSingleLinePlainText(domishObjects)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
@@ -174,11 +175,11 @@ export function getContentAsPlainText(itemId: ItemId): string {
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return `${imageItem.caption} ${imageItem.url}`
+      return `${get(imageItem.caption)} ${get(imageItem.url)}`
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
-      return codeBlockItem.code.split('\n')[0]
+      return get(codeBlockItem.code).split('\n')[0]
     default:
       assertNeverType(itemType)
   }
@@ -329,7 +330,7 @@ function toOpmlOutlineElement(itemPath: ItemPath): Element {
     type: 'element',
     name: 'outline',
     attributes: toOpmlAttributes(itemPath),
-    elements: item.childItemIds
+    elements: get(item.childItemIds)
       .map((childItemId) => toOpmlOutlineElement(itemPath.push(childItemId)))
       .toArray(),
   }
@@ -346,8 +347,8 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
   }
-  if (!item.cssClasses.isEmpty()) {
-    baseAttributes.cssClass = item.cssClasses.join(' ')
+  if (!get(item.cssClasses).isEmpty()) {
+    baseAttributes.cssClass = get(item.cssClasses).join(' ')
   }
   const labels = CurrentState.getLabels(itemPath)
   if (!labels.isEmpty()) {
@@ -357,7 +358,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
-      const markedupText = MarkedupText.from(textItem.domishObjects)
+      const markedupText = MarkedupText.from(get(textItem.domishObjects))
       baseAttributes.type = 'text'
       baseAttributes.text = markedupText.text
       if (!markedupText.styles.isEmpty()) {
@@ -368,23 +369,23 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       baseAttributes.type = 'link'
       baseAttributes.text = CurrentState.deriveWebPageItemTitle(itemId)
-      baseAttributes.url = webPageItem.url
-      baseAttributes.faviconUrl = webPageItem.faviconUrl
-      if (webPageItem.title !== null) {
-        baseAttributes.title = webPageItem.tabTitle
+      baseAttributes.url = get(webPageItem.url)
+      baseAttributes.faviconUrl = get(webPageItem.faviconUrl)
+      if (get(webPageItem.title) !== null) {
+        baseAttributes.title = get(webPageItem.tabTitle)
       }
       break
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       baseAttributes.type = 'image'
-      baseAttributes.text = imageItem.caption
-      baseAttributes.url = imageItem.url
+      baseAttributes.text = get(imageItem.caption)
+      baseAttributes.url = get(imageItem.url)
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       baseAttributes.type = 'code-block'
-      baseAttributes.text = codeBlockItem.code
-      baseAttributes.language = codeBlockItem.language
+      baseAttributes.text = get(codeBlockItem.code)
+      baseAttributes.language = get(codeBlockItem.language)
       break
     default:
       assertNeverType(item.itemType)

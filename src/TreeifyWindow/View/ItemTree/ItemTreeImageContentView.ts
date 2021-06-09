@@ -7,6 +7,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
+import {get} from 'svelte/store'
 
 export type ItemTreeImageContentViewModel = {
   itemPath: ItemPath
@@ -29,8 +30,8 @@ export function createItemTreeImageContentViewModel(
     itemPath,
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.IMAGE,
-    url: imageItem.url,
-    caption: imageItem.caption,
+    url: get(imageItem.url),
+    caption: get(imageItem.caption),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
