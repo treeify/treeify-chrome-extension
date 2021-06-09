@@ -53,7 +53,7 @@
     <div class="grid-empty-cell" />
   {:else}
     <div class="page-tree-node_bullet-and-indent-area">
-      <PageTreeBulletAndIndent viewModel={viewModel.bulletAndIndentViewModel} />
+      <PageTreeBulletAndIndent {...viewModel.bulletAndIndentViewModel} />
     </div>
   {/if}
   <div class="page-tree-node_body-and-children-area">
