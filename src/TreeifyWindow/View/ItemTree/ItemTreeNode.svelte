@@ -4,7 +4,6 @@
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {classMap} from '../createElement'
   import ItemTreeContent from './ItemTreeContent.svelte'
   import {ItemTreeContentViewModel} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
@@ -61,22 +60,14 @@
   const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div
-  class={classMap({
-    'item-tree-node': true,
-    'multi-selected': viewModel.selected === 'multi',
-  })}
->
+<div class="item-tree-node" class:multi-selected={viewModel.selected === 'multi'}>
   {#if viewModel.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
     <!-- バレットとインデントラインの領域 -->
     <div
-      class={classMap({
-        'item-tree-node_spool-area': true,
-        transcluded: viewModel.isTranscluded,
-        ...Object.fromEntries(viewModel.cssClasses.map((cssClass) => [cssClass, true])),
-      })}
+      class={'item-tree-node_spool-area ' + viewModel.cssClasses.join(' ')}
+      class:transcluded={viewModel.isTranscluded}
       draggable="true"
       on:dragstart={viewModel.onDragStart}
     >
@@ -91,10 +82,8 @@
         <!-- コンテンツ領域 -->
         <div
           data-item-path={JSON.stringify(viewModel.itemPath.toArray())}
-          class={classMap({
-            'item-tree-node_content-area': true,
-            'single-selected': viewModel.selected === 'single',
-          })}
+          class="item-tree-node_content-area"
+          class:single-selected={viewModel.selected === 'single'}
           on:mousedown={viewModel.onMouseDownContentArea}
         >
           <ItemTreeContent viewModel={viewModel.contentViewModel} />
