@@ -1,5 +1,4 @@
 import {is, List} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
@@ -18,8 +17,6 @@ import {
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
   createItemTreeSpoolViewModel,
-  deriveBulletState,
-  ItemTreeBulletState,
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 import {get} from 'svelte/store'
@@ -126,16 +123,13 @@ export function createItemTreeNodeViewModel(
 }
 
 function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
-  const bulletState = deriveBulletState(state, itemPath)
-  switch (bulletState) {
-    case ItemTreeBulletState.NO_CHILDREN:
-    case ItemTreeBulletState.EXPANDED:
-    case ItemTreeBulletState.PAGE:
-      return 0
-    case ItemTreeBulletState.COLLAPSED:
-      return countLoadedTabsInDescendants(state, ItemPath.getItemId(itemPath))
-    default:
-      assertNeverType(bulletState)
+  const itemId = ItemPath.getItemId(itemPath)
+  if (CurrentState.isPage(itemId)) return 0
+  if (get(state.items[itemId].childItemIds).isEmpty()) return 0
+  if (CurrentState.getIsCollapsed(itemPath)) {
+    return countLoadedTabsInDescendants(state, itemId)
+  } else {
+    return 0
   }
 }
 

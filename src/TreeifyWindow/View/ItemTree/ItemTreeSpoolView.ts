@@ -91,7 +91,7 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   return counts.size + counts.reduce((a: integer, x) => a + x, 0)
 }
 
-export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBulletState {
+function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBulletState {
   const itemId = ItemPath.getItemId(itemPath)
   if (state.pages[itemId] !== undefined) {
     return ItemTreeBulletState.PAGE
