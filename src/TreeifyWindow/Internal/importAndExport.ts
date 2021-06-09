@@ -12,6 +12,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyWindow/Internal/State'
+import {get} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
@@ -174,7 +175,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return `${imageItem.caption} ${imageItem.url}`
+      return `${get(imageItem.caption)} ${get(imageItem.url)}`
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
@@ -377,8 +378,8 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       baseAttributes.type = 'image'
-      baseAttributes.text = imageItem.caption
-      baseAttributes.url = imageItem.url
+      baseAttributes.text = get(imageItem.caption)
+      baseAttributes.url = get(imageItem.url)
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]

@@ -5,6 +5,7 @@ import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
+import {Writable} from 'svelte/store'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
@@ -106,8 +107,8 @@ export type WebPageItem = {
 
 /** 画像アイテムが固有で持つデータの型 */
 export type ImageItem = {
-  url: string
-  caption: string
+  url: Writable<string>
+  caption: Writable<string>
 }
 
 /** コードブロックアイテムが固有で持つデータの型 */

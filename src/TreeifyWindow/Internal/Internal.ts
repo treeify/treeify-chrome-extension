@@ -4,6 +4,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
+import {writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -245,9 +246,10 @@ export class Internal {
       },
       imageItems: {
         7: {
-          url:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
-          caption: 'tamias',
+          url: writable(
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg'
+          ),
+          caption: writable('tamias'),
         },
       },
       codeBlockItems: {
