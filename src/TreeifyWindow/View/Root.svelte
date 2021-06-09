@@ -18,8 +18,7 @@
   import {OtherParentsDialogViewModel} from './Dialog/OtherParentsDialogView'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import {WebPageItemTitleSettingDialogViewModel} from './Dialog/WebPageItemTitleSettingDialogView'
-  import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
-  import {WorkspaceDialogViewModel} from './Dialog/WorkspaceDialogView'
+  import WorkspaceDialog, {createWorkspaceDialogProps} from './Dialog/WorkspaceDialog.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
   import {ItemTreeViewModel} from './ItemTree/ItemTreeView'
@@ -27,13 +26,13 @@
 
   export let itemTreeViewModel: ItemTreeViewModel
   export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-  export let workspaceDialog: WorkspaceDialogViewModel | undefined
   export let labelEditDialog: LabelEditDialogViewModel | undefined
   export let otherParentsDialog: OtherParentsDialogViewModel | undefined
 
   const leftSidebarProps = createLeftSidebarProps()
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
   const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
+  const workspaceDialogProps = createWorkspaceDialogProps()
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -74,8 +73,8 @@
   {#if defaultWindowModeSettingDialogProps !== undefined}
     <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
   {/if}
-  {#if workspaceDialog !== undefined}
-    <WorkspaceDialog viewModel={workspaceDialog} />
+  {#if workspaceDialogProps !== undefined}
+    <WorkspaceDialog {...workspaceDialogProps} />
   {/if}
   {#if labelEditDialog !== undefined}
     <LabelEditDialog viewModel={labelEditDialog} />
