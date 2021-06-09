@@ -6,6 +6,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {get} from 'svelte/store'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
@@ -281,7 +282,7 @@ export function enterKeyDefault() {
     assertNonNull(selection)
 
     const characterCount = DomishObject.countCharacters(
-      Internal.instance.state.textItems[targetItemId].domishObjects
+      get(Internal.instance.state.textItems[targetItemId].domishObjects)
     )
     const textItemSelection = getTextItemSelectionFromDom()
     assertNonUndefined(textItemSelection)

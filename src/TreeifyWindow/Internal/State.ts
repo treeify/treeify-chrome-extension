@@ -79,7 +79,7 @@ export function createDefaultEdge(): Edge {
 
 /** テキストアイテムが固有で持つデータの型 */
 export type TextItem = {
-  domishObjects: List<DomishObject>
+  domishObjects: Writable<List<DomishObject>>
 }
 
 /** ウェブページアイテムが固有で持つデータの型 */
