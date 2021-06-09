@@ -84,25 +84,25 @@ export type TextItem = {
 
 /** ウェブページアイテムが固有で持つデータの型 */
 export type WebPageItem = {
-  url: string
+  url: Writable<string>
   /**
    * ファビコンのURL。
    * 指定なしの場合は空文字列。
    * アンロード後もファビコンを表示するために、このオブジェクトで保持する。
    */
-  faviconUrl: string
+  faviconUrl: Writable<string>
   /**
    * タブのタイトル。
    * アンロード後もタイトルを表示するために、このオブジェクトで保持する。
    */
-  tabTitle: string
+  tabTitle: Writable<string>
   /**
    * タブのタイトルを上書き表示するためのタイトル。
    * nullの場合はtabTitleがこのウェブページアイテムのタイトルとして扱われる。
    */
-  title: string | null
+  title: Writable<string | null>
   /** 未読フラグ */
-  isUnread: boolean
+  isUnread: Writable<boolean>
 }
 
 /** 画像アイテムが固有で持つデータの型 */

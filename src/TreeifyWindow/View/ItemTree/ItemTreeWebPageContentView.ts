@@ -10,6 +10,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {classMap, createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {LabelView} from 'src/TreeifyWindow/View/LabelView'
+import {get} from 'svelte/store'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
@@ -44,11 +45,11 @@ export function createItemTreeWebPageContentViewModel(
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.WEB_PAGE,
     title: CurrentState.deriveWebPageItemTitle(itemId),
-    faviconUrl: webPageItem.faviconUrl,
+    faviconUrl: get(webPageItem.faviconUrl),
     isLoading: tab?.status === 'loading',
     isSoftUnloaded: tab?.discarded === true,
     isHardUnloaded: tab === undefined,
-    isUnread: webPageItem.isUnread,
+    isUnread: get(webPageItem.isUnread),
     isAudible: tab?.audible === true,
     onFocus: (event) => {
       doWithErrorCapture(() => {

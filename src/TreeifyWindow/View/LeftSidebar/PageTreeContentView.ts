@@ -31,7 +31,7 @@ export function createPageTreeContentViewModel(
       return {
         itemType: ItemType.WEB_PAGE,
         title: CurrentState.deriveWebPageItemTitle(itemId),
-        faviconUrl: state.webPageItems[itemId].faviconUrl,
+        faviconUrl: get(state.webPageItems[itemId].faviconUrl),
       }
     case ItemType.IMAGE:
       // TODO: 未対応

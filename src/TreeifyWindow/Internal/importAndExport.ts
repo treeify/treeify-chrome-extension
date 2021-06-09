@@ -369,10 +369,10 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       baseAttributes.type = 'link'
       baseAttributes.text = CurrentState.deriveWebPageItemTitle(itemId)
-      baseAttributes.url = webPageItem.url
-      baseAttributes.faviconUrl = webPageItem.faviconUrl
-      if (webPageItem.title !== null) {
-        baseAttributes.title = webPageItem.tabTitle
+      baseAttributes.url = get(webPageItem.url)
+      baseAttributes.faviconUrl = get(webPageItem.faviconUrl)
+      if (get(webPageItem.title) !== null) {
+        baseAttributes.title = get(webPageItem.tabTitle)
       }
       break
     case ItemType.IMAGE:
