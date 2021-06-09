@@ -16,7 +16,7 @@ export function createCodeBlockItem(): ItemId {
 
   const newItem: Item = {
     itemType: ItemType.CODE_BLOCK,
-    childItemIds: List.of(),
+    childItemIds: writable(List.of()),
     parents: {},
     timestamp: writable(Timestamp.now()),
     cssClasses: writable(List.of()),

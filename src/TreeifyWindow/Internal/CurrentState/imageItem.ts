@@ -16,7 +16,7 @@ export function createImageItem(): ItemId {
 
   const newItem: Item = {
     itemType: ItemType.IMAGE,
-    childItemIds: List.of(),
+    childItemIds: writable(List.of()),
     parents: {},
     timestamp: writable(Timestamp.now()),
     cssClasses: writable(List.of()),

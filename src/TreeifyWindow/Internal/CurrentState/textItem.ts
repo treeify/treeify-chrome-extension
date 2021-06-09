@@ -23,7 +23,7 @@ export function createTextItem(): ItemId {
 
   const newItem: Item = {
     itemType: ItemType.TEXT,
-    childItemIds: List.of(),
+    childItemIds: writable(List.of()),
     parents: {},
     timestamp: writable(Timestamp.now()),
     cssClasses: writable(List.of()),

@@ -18,7 +18,7 @@ import {get} from 'svelte/store'
  */
 export function deleteItem(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
-  for (const childItemId of item.childItemIds) {
+  for (const childItemId of get(item.childItemIds)) {
     if (CurrentState.countParents(childItemId) === 1) {
       // 親を1つしか持たない子アイテムは再帰的に削除する
       deleteItem(childItemId)
@@ -73,7 +73,7 @@ export function deleteItem(itemId: ItemId) {
  */
 export function deleteItemItself(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
-  const childItemIds = item.childItemIds
+  const childItemIds = get(item.childItemIds)
 
   // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
@@ -141,13 +141,13 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
 
   // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
   if (itemPath.size === 1) {
-    return item.childItemIds
+    return get(item.childItemIds)
   }
 
   if (CurrentState.getIsCollapsed(itemPath) || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
-    return item.childItemIds
+    return get(item.childItemIds)
   }
 }
 
@@ -229,8 +229,7 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  * @param f 子アイテムリストを受け取って新しい子アイテムリストを返す関数
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  const item = Internal.instance.state.items[itemId]
-  item.childItemIds = f(item.childItemIds)
+  Internal.instance.state.items[itemId].childItemIds.update(f)
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'childItemIds'))
 }
 
@@ -282,7 +281,7 @@ export function insertPrevSiblingItem(
   // 親が居ない場合はこの関数を呼んではならない
   assertNonUndefined(parentItemId)
 
-  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
   assert(childItemIds.contains(itemId))
 
   // 兄として追加する
@@ -313,7 +312,7 @@ export function insertNextSiblingItem(
   // 親が居ない場合はこの関数を呼んではならない
   assertNonUndefined(parentItemId)
 
-  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
   assert(childItemIds.contains(itemId))
 
   // 弟として追加する
@@ -368,7 +367,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   // ページは終端ノードとして扱う
   if (CurrentState.isPage(itemId)) return
 
-  for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
+  for (const childItemId of get(Internal.instance.state.items[itemId].childItemIds)) {
     yield* getSubtreeItemIds(childItemId)
   }
 }

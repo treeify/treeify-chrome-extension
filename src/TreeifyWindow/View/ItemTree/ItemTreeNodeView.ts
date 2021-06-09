@@ -165,7 +165,7 @@ function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
     }
   }
 
-  const sum = Internal.instance.state.items[itemId].childItemIds
+  const sum = get(Internal.instance.state.items[itemId].childItemIds)
     .map((childItemId) => countLoadedTabsInSubtree(state, childItemId))
     .reduce((a: integer, x) => a + x, 0)
   if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
@@ -196,7 +196,7 @@ function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 
   // itemPathが親を持たない場合、複数選択に含まれることはないので必ずnonになる
   if (parentItemId === undefined) return 'non'
 
-  const childItemIds = state.items[parentItemId].childItemIds
+  const childItemIds = get(state.items[parentItemId].childItemIds)
   const targetItemIndex = childItemIds.indexOf(targetItemId)
   const anchorItemIndex = childItemIds.indexOf(anchorItemId)
   const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))

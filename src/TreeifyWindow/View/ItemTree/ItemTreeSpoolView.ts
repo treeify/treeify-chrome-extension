@@ -6,6 +6,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {createDivElement} from 'src/TreeifyWindow/View/createElement'
+import {get} from 'svelte/store'
 
 export type ItemTreeSpoolViewModel = {
   bulletState: ItemTreeBulletState
@@ -85,7 +86,7 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
   if (bulletState !== ItemTreeBulletState.COLLAPSED) return 0
 
-  const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
+  const counts = get(state.items[ItemPath.getItemId(itemPath)].childItemIds).map((childItemId) => {
     return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
   })
   return counts.size + counts.reduce((a: integer, x) => a + x, 0)
@@ -95,7 +96,7 @@ export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBul
   const itemId = ItemPath.getItemId(itemPath)
   if (state.pages[itemId] !== undefined) {
     return ItemTreeBulletState.PAGE
-  } else if (state.items[itemId].childItemIds.size === 0) {
+  } else if (get(state.items[itemId].childItemIds).size === 0) {
     return ItemTreeBulletState.NO_CHILDREN
   } else {
     CurrentState.getIsCollapsed(itemPath)
