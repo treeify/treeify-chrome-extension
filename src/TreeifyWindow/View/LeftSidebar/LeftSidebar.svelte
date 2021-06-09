@@ -2,16 +2,12 @@
   import PageTree from './PageTree.svelte'
   import {PageTreeViewModel} from './PageTreeView'
 
-  type LeftSidebarViewModel = {
-    pageTreeViewModel: PageTreeViewModel
-    isFloating: boolean
-  }
-
-  export let viewModel: LeftSidebarViewModel
+  export let pageTreeViewModel: PageTreeViewModel
+  export let isFloating: boolean
 </script>
 
-<aside class="left-sidebar" class:floating={viewModel.isFloating}>
-  <PageTree viewModel={viewModel.pageTreeViewModel} />
+<aside class="left-sidebar" class:floating={isFloating}>
+  <PageTree viewModel={pageTreeViewModel} />
 </aside>
 
 <style>

@@ -56,7 +56,7 @@
     </div>
     <div class="sidebar-layout">
       {#if leftSidebarViewModel !== undefined}
-        <LeftSidebar viewModel={leftSidebarViewModel} />
+        <LeftSidebar {...leftSidebarViewModel} />
       {:else}
         <div class="grid-empty-cell" />
       {/if}
