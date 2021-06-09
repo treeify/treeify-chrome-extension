@@ -25,7 +25,7 @@
   {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-text-content_labels">
       {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}} />
+        <Label text={label} />
       {/each}
     </div>
   {/if}

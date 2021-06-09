@@ -53,7 +53,7 @@
   {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-web-page-content_labels">
       {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}} />
+        <Label text={label} />
       {/each}
     </div>
   {:else}
