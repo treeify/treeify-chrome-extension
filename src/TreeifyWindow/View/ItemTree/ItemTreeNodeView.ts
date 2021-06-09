@@ -26,6 +26,7 @@ import {
   ItemTreeSpoolView,
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
+import {get} from 'svelte/store'
 
 export type ItemTreeNodeViewModel = {
   itemPath: ItemPath
@@ -67,7 +68,7 @@ export function createItemTreeNodeViewModel(
     isActivePage: !ItemPath.hasParent(itemPath),
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
-    cssClasses: item.cssClasses,
+    cssClasses: get(item.cssClasses),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),

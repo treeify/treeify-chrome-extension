@@ -52,7 +52,7 @@ export type Item = {
    * 付与されたアイテム本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
-  cssClasses: List<string>
+  cssClasses: Writable<List<string>>
 }
 
 export type Edge = {

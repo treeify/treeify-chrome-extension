@@ -347,8 +347,8 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
   }
-  if (!item.cssClasses.isEmpty()) {
-    baseAttributes.cssClass = item.cssClasses.join(' ')
+  if (!get(item.cssClasses).isEmpty()) {
+    baseAttributes.cssClass = get(item.cssClasses).join(' ')
   }
   const labels = CurrentState.getLabels(itemPath)
   if (!labels.isEmpty()) {

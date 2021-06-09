@@ -26,7 +26,7 @@ export function createTextItem(): ItemId {
     childItemIds: List.of(),
     parents: {},
     timestamp: writable(Timestamp.now()),
-    cssClasses: List.of(),
+    cssClasses: writable(List.of()),
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))

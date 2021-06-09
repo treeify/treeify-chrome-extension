@@ -9,6 +9,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {createDefaultEdge, Edge} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
+import {get} from 'svelte/store'
 
 /**
  * 指定されたアイテムに関するデータを削除する。
@@ -395,7 +396,7 @@ export function recycleItemId(itemId: ItemId) {
 
 /** 指定されたアイテムのCSSクラスリストを上書き設定する */
 export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
-  Internal.instance.state.items[itemId].cssClasses = cssClasses
+  Internal.instance.state.items[itemId].cssClasses.set(cssClasses)
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
 }
 
@@ -405,13 +406,13 @@ export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
  */
 export function toggleCssClass(itemId: ItemId, cssClass: string) {
   const item = Internal.instance.state.items[itemId]
-  const cssClasses = item.cssClasses
+  const cssClasses = get(item.cssClasses)
 
   const index = cssClasses.indexOf(cssClass)
   if (index === -1) {
-    item.cssClasses = cssClasses.push(cssClass)
+    item.cssClasses.set(cssClasses.push(cssClass))
   } else {
-    item.cssClasses = cssClasses.remove(index)
+    item.cssClasses.set(cssClasses.remove(index))
   }
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
 }
