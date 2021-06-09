@@ -1,15 +1,13 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {assertNonNull} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
-  import {LabelEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  type LabelEditDialogViewModel = LabelEditDialog
+  export let labels: List<string>
 
-  export let viewModel: LabelEditDialogViewModel
+  let labelArray = labels.toArray()
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -19,17 +17,15 @@
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.setLabelEditDialog({
-        labels: getAllLabelInputValues().push(''),
-      })
-      CurrentState.commit()
+      labelArray.push('')
+      labelArray = labelArray
     })
   }
 
   const onClickFinishButton = () => {
     doWithErrorCapture(() => {
-      const labels = getAllLabelInputValues().filter((label) => label !== '')
-      CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
+      const labels = labelArray.filter((label) => label !== '')
+      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(labels))
       CurrentState.setLabelEditDialog(null)
       CurrentState.commit()
     })
@@ -56,25 +52,16 @@
       }
     })
   }
-
-  // 全てのラベル入力欄の内容テキストを返す
-  function getAllLabelInputValues(): List<string> {
-    const dialogDomElement = document.querySelector('.label-edit-dialog_content')
-    assertNonNull(dialogDomElement)
-
-    const inputElements = dialogDomElement.querySelectorAll('input')
-    return List(inputElements).map((inputElement: HTMLInputElement) => inputElement.value)
-  }
 </script>
 
 <CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
   <div class="label-edit-dialog_content">
-    {#each viewModel.labels.toArray() as label}
+    {#each labelArray as label}
       <div class="label-edit-dialog_label-row">
         <input
           type="text"
           class="label-edit-dialog_label-name"
-          value={label}
+          bind:value={label}
           on:keydown={onKeyDown}
         />
         <div class="label-edit-dialog_delete-button" on:click={onClickDeleteButton} />

@@ -79,7 +79,7 @@
     <WorkspaceDialog {...workspaceDialogProps} />
   {/if}
   {#if labelEditDialog !== undefined}
-    <LabelEditDialog viewModel={labelEditDialog} />
+    <LabelEditDialog labels={labelEditDialog.labels} />
   {/if}
   {#if otherParentsDialogProps !== undefined}
     <OtherParentsDialog {...otherParentsDialogProps} />
