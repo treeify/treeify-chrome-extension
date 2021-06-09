@@ -8,8 +8,9 @@
   } from './DataFolderPickerOpenButton.svelte'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import {CodeBlockItemEditDialogViewModel} from './Dialog/CodeBlockItemEditDialogView'
-  import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
-  import {DefaultWindowModeSettingDialogViewModel} from './Dialog/DefaultWindowModeSettingDialogView'
+  import DefaultWindowModeSettingDialog, {
+    createDefaultWindowModeSettingDialogProps,
+  } from './Dialog/DefaultWindowModeSettingDialog.svelte'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
   import {LabelEditDialogViewModel} from './Dialog/LabelEditDialogView'
   import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
@@ -26,12 +27,12 @@
   export let itemTreeViewModel: ItemTreeViewModel
   export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   export let codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
-  export let defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
   export let workspaceDialog: WorkspaceDialogViewModel | undefined
   export let labelEditDialog: LabelEditDialogViewModel | undefined
   export let otherParentsDialog: OtherParentsDialogViewModel | undefined
 
   const leftSidebarProps = createLeftSidebarProps()
+  const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -69,8 +70,8 @@
   {#if codeBlockItemEditDialogViewModel !== undefined}
     <CodeBlockItemEditDialog viewModel={codeBlockItemEditDialogViewModel} />
   {/if}
-  {#if defaultWindowModeSettingDialog !== undefined}
-    <DefaultWindowModeSettingDialog viewModel={defaultWindowModeSettingDialog} />
+  {#if defaultWindowModeSettingDialogProps !== undefined}
+    <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
   {/if}
   {#if workspaceDialog !== undefined}
     <WorkspaceDialog viewModel={workspaceDialog} />

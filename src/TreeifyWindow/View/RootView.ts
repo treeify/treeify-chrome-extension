@@ -4,10 +4,6 @@ import {
   createCodeBlockItemEditDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogView'
 import {
-  createDefaultWindowModeSettingDialogViewModel,
-  DefaultWindowModeSettingDialogViewModel,
-} from 'src/TreeifyWindow/View/Dialog/DefaultWindowModeSettingDialogView'
-import {
   createLabelEditDialogViewModel,
   LabelEditDialogViewModel,
 } from 'src/TreeifyWindow/View/Dialog/LabelEditDialogView'
@@ -32,7 +28,6 @@ export type RootViewModel = {
   itemTreeViewModel: ItemTreeViewModel
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
   codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
-  defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
   workspaceDialog: WorkspaceDialogViewModel | undefined
   labelEditDialog: LabelEditDialogViewModel | undefined
   otherParentsDialog: OtherParentsDialogViewModel | undefined
@@ -43,7 +38,6 @@ export function createRootViewModel(state: State): RootViewModel {
     itemTreeViewModel: createItemTreeViewModel(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
     codeBlockItemEditDialogViewModel: createCodeBlockItemEditDialogViewModel(state),
-    defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogViewModel(state),
     workspaceDialog: createWorkspaceDialogViewModel(state),
     labelEditDialog: createLabelEditDialogViewModel(state),
     otherParentsDialog: createOtherParentsDialogViewModel(state),
