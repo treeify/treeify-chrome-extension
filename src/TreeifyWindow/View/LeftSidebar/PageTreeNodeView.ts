@@ -22,6 +22,7 @@ import {
   PageTreeContentView,
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
+import {get} from 'svelte/store'
 
 export type PageTreeNodeViewModel = {
   bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
@@ -131,7 +132,7 @@ export function createPageTreeNodeViewModel(
             .map((pageId) => {
               return {
                 pageId,
-                timestamp: Internal.instance.state.items[pageId].timestamp,
+                timestamp: get(Internal.instance.state.items[pageId].timestamp),
               }
             })
             .maxBy((a) => a.timestamp)!.pageId

@@ -18,7 +18,7 @@ export function createWebPageItem(): ItemId {
     itemType: ItemType.WEB_PAGE,
     childItemIds: List.of(),
     parents: {},
-    timestamp: Timestamp.now(),
+    timestamp: writable(Timestamp.now()),
     cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem

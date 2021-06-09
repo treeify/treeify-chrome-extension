@@ -46,7 +46,7 @@ export type Item = {
   childItemIds: List<ItemId>
   parents: {[K in ItemId]: Edge}
   /** 足跡表示機能で使われるタイムスタンプ */
-  timestamp: Timestamp
+  timestamp: Writable<Timestamp>
   /**
    * このアイテムにアドホックに付与されるCSSクラスのリスト。
    * 付与されたアイテム本体とその子孫に別々のスタイルを適用できるよう、

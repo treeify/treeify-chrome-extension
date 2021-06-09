@@ -200,7 +200,7 @@ export function setLabels(itemPath: ItemPath, labels: List<string>) {
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
-  Internal.instance.state.items[itemId].timestamp = Timestamp.now()
+  Internal.instance.state.items[itemId].timestamp.set(Timestamp.now())
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'timestamp'))
 }
 
