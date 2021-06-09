@@ -1,9 +1,7 @@
-import Color from 'color'
 import {Collection, List, Seq} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
-import {CssCustomProperty} from 'src/TreeifyWindow/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -11,15 +9,12 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {
   createPageTreeBulletAndIndentViewModel,
-  PageTreeBulletAndIndentView,
   PageTreeBulletAndIndentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
 import {
   createPageTreeContentViewModel,
-  PageTreeContentView,
   PageTreeContentViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
 import {get} from 'svelte/store'
@@ -192,64 +187,4 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     yield* searchItemPathForMountedPage(state, itemIds.unshift(parentItemId))
   }
-}
-
-export function PageTreeNodeView(viewModel: PageTreeNodeViewModel): HTMLElement {
-  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const footprintLayerStyle =
-    footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
-
-  return createDivElement('page-tree-node', {}, [
-    !viewModel.isRoot
-      ? createDivElement('page-tree-node_bullet-and-indent-area', {}, [
-          PageTreeBulletAndIndentView(viewModel.bulletAndIndentViewModel),
-        ])
-      : createDivElement('grid-empty-cell'),
-    createDivElement('page-tree-node_body-and-children-area', {}, [
-      createDivElement({class: 'page-tree-node_footprint-layer', style: footprintLayerStyle}, {}, [
-        createDivElement(
-          classMap({
-            'page-tree-node_body-area': true,
-            'active-page': viewModel.isActivePage,
-          }),
-          {},
-          [
-            createDivElement(
-              'page-tree-node_content-area',
-              {
-                click: viewModel.onClickContentArea,
-                dragover: viewModel.onDragOver,
-                drop: viewModel.onDrop,
-              },
-              [PageTreeContentView(viewModel.contentViewModel)]
-            ),
-            createDivElement('page-tree-node_close-button', {click: viewModel.onClickCloseButton}),
-          ]
-        ),
-      ]),
-      createDivElement(
-        'page-tree-node_children-area',
-        {},
-        viewModel.childNodeViewModels.map(PageTreeNodeView)
-      ),
-    ]),
-  ])
-}
-
-function calculateFootprintColor(
-  footprintRank: integer | undefined,
-  footprintCount: integer
-): Color | undefined {
-  if (footprintRank === undefined) return undefined
-
-  const strongestColor = CssCustomProperty.getColor('--page-tree-strongest-footprint-color')
-  const weakestColor = CssCustomProperty.getColor('--page-tree-weakest-footprint-color')
-
-  if (footprintCount === 1) {
-    return strongestColor
-  }
-
-  // 線形補間する
-  const ratio = footprintRank / (footprintCount - 1)
-  return strongestColor.mix(weakestColor, ratio)
 }

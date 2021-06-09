@@ -2,14 +2,8 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {
-  PageTreeTextContentView,
-  PageTreeTextContentViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeTextContentView'
-import {
-  PageTreeWebPageContentView,
-  PageTreeWebPageContentViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
+import {PageTreeTextContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeTextContentView'
+import {PageTreeWebPageContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
 import {get} from 'svelte/store'
 
 export type PageTreeContentViewModel =
@@ -41,14 +35,5 @@ export function createPageTreeContentViewModel(
       throw new Error('コードブロックアイテムは未対応')
     default:
       assertNeverType(itemType)
-  }
-}
-
-export function PageTreeContentView(viewModel: PageTreeContentViewModel) {
-  switch (viewModel.itemType) {
-    case ItemType.TEXT:
-      return PageTreeTextContentView(viewModel)
-    case ItemType.WEB_PAGE:
-      return PageTreeWebPageContentView(viewModel)
   }
 }

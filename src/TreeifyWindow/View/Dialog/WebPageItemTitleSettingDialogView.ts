@@ -1,11 +1,8 @@
-import {createFocusTrap, FocusTrap} from 'focus-trap'
-import {assert} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
-import {createDivElement, createInputElement} from 'src/TreeifyWindow/View/createElement'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
@@ -48,74 +45,4 @@ export function createWebPageItemTitleSettingDialogViewModel(
       })
     },
   }
-}
-
-export function WebPageItemTitleSettingDialogView(
-  viewModel: WebPageItemTitleSettingDialogViewModel
-) {
-  const style = `
-    left: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.left}px;
-    top: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.top}px;
-    width: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.width}px;
-    height: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px;
-  `
-  return createDivElement(
-    'web-page-item-title-setting-dialog',
-    {
-      click: onClickBackdrop,
-      DOMNodeInsertedIntoDocument: onInserted,
-      DOMNodeRemovedFromDocument: onRemoved,
-    },
-    [
-      createDivElement({class: 'web-page-item-title-setting-dialog_frame', style}, {}, [
-        createInputElement(
-          {
-            type: 'text',
-            class: 'web-page-item-title-setting-dialog_text-box',
-            value: viewModel.initialTitle,
-          },
-          {keydown: viewModel.onKeyDown}
-        ),
-      ]),
-    ]
-  )
-}
-
-function onClickBackdrop(event: Event) {
-  doWithErrorCapture(() => {
-    // ダイアログを閉じる
-    if (event.eventPhase === Event.AT_TARGET) {
-      CurrentState.setWebPageItemTitleSettingDialog(null)
-      CurrentState.commit()
-    }
-  })
-}
-
-// onInsertedとonRemovedの間でFocusTrapインスタンスを共有するためのグローバル変数
-let focusTrap: FocusTrap | undefined
-
-function onInserted(event: Event) {
-  doWithErrorCapture(() => {
-    // フォーカストラップを作る
-    if (event.target instanceof HTMLElement) {
-      assert(focusTrap === undefined)
-      focusTrap = createFocusTrap(event.target, {
-        returnFocusOnDeactivate: true,
-        // この機能を使うとイベント発生順序の違いにより難解なエラーが起こるので、
-        // ESCキー押下時にダイアログを閉じる処理は自前で実装する。
-        escapeDeactivates: false,
-      })
-      focusTrap.activate()
-    }
-  })
-}
-
-function onRemoved(event: Event) {
-  doWithErrorCapture(() => {
-    // フォーカストラップを消す
-    if (focusTrap !== undefined) {
-      focusTrap.deactivate()
-      focusTrap = undefined
-    }
-  })
 }
