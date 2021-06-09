@@ -7,7 +7,7 @@
 </script>
 
 <aside class="left-sidebar" class:floating={isFloating}>
-  <PageTree viewModel={pageTreeViewModel} />
+  <PageTree {...pageTreeViewModel} />
 </aside>
 
 <style>
