@@ -1,6 +1,4 @@
 <script lang="ts">
-  import {classMap} from '../createElement'
-
   type PageTreeBulletAndIndentViewModel = {
     bulletState: PageTreeBulletState
   }
@@ -21,12 +19,10 @@
     </div>
   {/if}
   <div
-    class={classMap({
-      'page-tree-bullet-and-indent_bullet-area': true,
-      'no-children': viewModel.bulletState === PageTreeBulletState.NO_CHILDREN,
-      expanded: viewModel.bulletState === PageTreeBulletState.EXPANDED,
-      collapsed: viewModel.bulletState === PageTreeBulletState.COLLAPSED,
-    })}
+    class="page-tree-bullet-and-indent_bullet-area"
+    class:no-children={viewModel.bulletState === PageTreeBulletState.NO_CHILDREN}
+    class:expanded={viewModel.bulletState === PageTreeBulletState.EXPANDED}
+    class:collapsed={viewModel.bulletState === PageTreeBulletState.COLLAPSED}
   />
 </div>
 

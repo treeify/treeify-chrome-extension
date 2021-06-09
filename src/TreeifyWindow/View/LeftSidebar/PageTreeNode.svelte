@@ -3,7 +3,6 @@
   import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import {classMap} from '../createElement'
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
   import {PageTreeBulletAndIndentViewModel} from './PageTreeBulletAndIndentView'
   import PageTreeContent from './PageTreeContent.svelte'
@@ -59,12 +58,7 @@
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
-      <div
-        class={classMap({
-          'page-tree-node_body-area': true,
-          'active-page': viewModel.isActivePage,
-        })}
-      >
+      <div class="page-tree-node_body-area" class:active-page={viewModel.isActivePage}>
         <div
           class="page-tree-node_content-area"
           on:click={viewModel.onClickContentArea}

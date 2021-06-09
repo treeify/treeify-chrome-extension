@@ -2,7 +2,6 @@
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {CurrentState} from '../Internal/CurrentState'
   import {NullaryCommand} from '../Internal/NullaryCommand'
-  import {classMap} from './createElement'
 
   type DataFolderPickerOpenButtonViewModel = {
     isGrayedOut: boolean
@@ -19,12 +18,7 @@
 </script>
 
 <div class="toolbar-icon-button" on:click={onClick}>
-  <div
-    class={classMap({
-      'data-folder-picker-open-button_icon': true,
-      'grayed-out': viewModel.isGrayedOut,
-    })}
-  />
+  <div class="data-folder-picker-open-button_icon" class:grayed-out={viewModel.isGrayedOut} />
 </div>
 
 <style>

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import {classMap} from '../createElement'
   import PageTree from './PageTree.svelte'
   import {PageTreeViewModel} from './PageTreeView'
 
@@ -11,12 +10,7 @@
   export let viewModel: LeftSidebarViewModel
 </script>
 
-<aside
-  class={classMap({
-    'left-sidebar': true,
-    floating: viewModel.isFloating,
-  })}
->
+<aside class="left-sidebar" class:floating={viewModel.isFloating}>
   <PageTree viewModel={viewModel.pageTreeViewModel} />
 </aside>
 

@@ -2,7 +2,6 @@
   import {List} from 'immutable'
   import {ItemType} from '../../basicType'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {classMap} from '../createElement'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
@@ -36,22 +35,17 @@
     />
   {:else if viewModel.faviconUrl.length > 0}
     <img
-      class={classMap({
-        'item-tree-web-page-content_favicon': true,
-        'soft-unloaded-item': viewModel.isSoftUnloaded,
-        'hard-unloaded-item': viewModel.isHardUnloaded,
-      })}
+      class="item-tree-web-page-content_favicon"
+      class:soft-unloaded-item={viewModel.isSoftUnloaded}
+      class:hard-unloaded-item={viewModel.isHardUnloaded}
       src={viewModel.faviconUrl}
       on:click={viewModel.onClickFavicon}
     />
   {:else}
     <div
-      class={classMap({
-        'item-tree-web-page-content_favicon': true,
-        'default-favicon': true,
-        'soft-unloaded-item': viewModel.isSoftUnloaded,
-        'hard-unloaded-item': viewModel.isHardUnloaded,
-      })}
+      class="item-tree-web-page-content_favicon default-favicon"
+      class:soft-unloaded-item={viewModel.isSoftUnloaded}
+      class:hard-unloaded-item={viewModel.isHardUnloaded}
       on:click={viewModel.onClickFavicon}
     />
   {/if}
@@ -66,12 +60,10 @@
     <div class="grid-empty-cell" />
   {/if}
   <div
-    class={classMap({
-      'item-tree-web-page-content_title': true,
-      'soft-unloaded-item': viewModel.isSoftUnloaded,
-      'hard-unloaded-item': viewModel.isHardUnloaded,
-      unread: viewModel.isUnread,
-    })}
+    class="item-tree-web-page-content_title"
+    class:soft-unloaded-item={viewModel.isSoftUnloaded}
+    class:hard-unloaded-item={viewModel.isHardUnloaded}
+    class:unread={viewModel.isUnread}
     title={viewModel.title}
     draggable="true"
     on:click={viewModel.onClickTitle}
