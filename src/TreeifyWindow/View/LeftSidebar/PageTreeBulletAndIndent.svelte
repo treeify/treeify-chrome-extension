@@ -1,7 +1,5 @@
 <script context="module" lang="ts">
-  export function createPageTreeBulletAndIndentProps(
-    hasChildren: boolean
-  ): {bulletState: PageTreeBulletState} {
+  export function createPageTreeBulletAndIndentProps(hasChildren: boolean) {
     if (hasChildren) {
       return {bulletState: PageTreeBulletState.EXPANDED}
     } else {
