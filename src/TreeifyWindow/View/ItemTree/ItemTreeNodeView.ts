@@ -1,9 +1,7 @@
-import Color from 'color'
 import {is, List} from 'immutable'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
-import {CssCustomProperty} from 'src/TreeifyWindow/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
@@ -13,7 +11,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {classMap, createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {
   createItemTreeContentViewModel,
   ItemTreeContentView,
@@ -23,7 +20,6 @@ import {
   createItemTreeSpoolViewModel,
   deriveBulletState,
   ItemTreeBulletState,
-  ItemTreeSpoolView,
   ItemTreeSpoolViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 import {get} from 'svelte/store'
@@ -207,96 +203,4 @@ function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 
   } else {
     return 'non'
   }
-}
-
-/** アイテムツリーの各アイテムのルートView */
-export function ItemTreeNodeView(viewModel: ItemTreeNodeViewModel): HTMLElement {
-  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const footprintLayerStyle =
-    footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
-  const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
-
-  return createDivElement(
-    classMap({
-      'item-tree-node': true,
-      'multi-selected': viewModel.selected === 'multi',
-    }),
-    {},
-    [
-      viewModel.isActivePage
-        ? createDivElement('grid-empty-cell')
-        : createDivElement(
-            {
-              class: classMap({
-                'item-tree-node_spool-area': true,
-                transcluded: viewModel.isTranscluded,
-                ...Object.fromEntries(viewModel.cssClasses.map((cssClass) => [cssClass, true])),
-              }),
-              draggable: 'true',
-            },
-            {dragstart: viewModel.onDragStart},
-            [ItemTreeSpoolView(viewModel.spoolViewModel)]
-          ),
-      createDivElement('item-tree-node_body-and-children-area', {}, [
-        // ボディ領域
-        createDivElement(viewModel.cssClasses.unshift('item-tree-node_body-area').join(' '), {}, [
-          // 足跡表示用のレイヤー
-          createDivElement(
-            {class: 'item-tree-node_footprint-layer', style: footprintLayerStyle},
-            {},
-            [
-              // コンテンツ領域
-              createDivElement(
-                {
-                  class: classMap({
-                    'item-tree-node_content-area': true,
-                    'single-selected': viewModel.selected === 'single',
-                  }),
-                  'data-item-path': JSON.stringify(viewModel.itemPath.toArray()),
-                },
-                {mousedown: viewModel.onMouseDownContentArea},
-                [ItemTreeContentView(viewModel.contentViewModel)]
-              ),
-            ]
-          ),
-          // 隠れているタブ数
-          viewModel.hiddenTabsCount > 0
-            ? createDivElement(
-                'item-tree-node_hidden-tabs-count',
-                {click: viewModel.onClickHiddenTabsCount},
-                Math.min(99, viewModel.hiddenTabsCount).toString()
-              )
-            : createDivElement('grid-empty-cell'),
-          // 削除ボタン
-          createDivElement('item-tree-node_delete-button', {click: viewModel.onClickDeleteButton}, [
-            createDivElement('item-tree-node_delete-button-icon'),
-          ]),
-        ]),
-        // 子リスト領域
-        createDivElement(
-          childrenCssClasses.unshift('item-tree-node_children-area').join(' '),
-          {},
-          viewModel.childItemViewModels.map((itemViewModel) => ItemTreeNodeView(itemViewModel))
-        ),
-      ]),
-    ]
-  )
-}
-
-function calculateFootprintColor(
-  footprintRank: integer | undefined,
-  footprintCount: integer
-): Color | undefined {
-  if (footprintRank === undefined) return undefined
-
-  const strongestColor = CssCustomProperty.getColor('--item-tree-strongest-footprint-color')
-  const weakestColor = CssCustomProperty.getColor('--item-tree-weakest-footprint-color')
-
-  if (footprintCount === 1) {
-    return strongestColor
-  }
-
-  // 線形補間する
-  const ratio = footprintRank / (footprintCount - 1)
-  return strongestColor.mix(weakestColor, ratio)
 }

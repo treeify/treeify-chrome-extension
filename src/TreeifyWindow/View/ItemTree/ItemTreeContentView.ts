@@ -4,22 +4,18 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeCodeBlockContentViewModel,
-  ItemTreeCodeBlockContentView,
   ItemTreeCodeBlockContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentView'
 import {
   createItemTreeImageContentViewModel,
-  ItemTreeImageContentView,
   ItemTreeImageContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
 import {
   createItemTreeWebPageContentViewModel,
-  ItemTreeWebPageContentView,
   ItemTreeWebPageContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
 import {
   createItemTreeTextContentViewModel,
-  ItemTreeTextContentView,
   ItemTreeTextContentViewModel,
 } from './ItemTreeTextContentView'
 
@@ -46,22 +42,6 @@ export function createItemTreeContentViewModel(
       return createItemTreeCodeBlockContentViewModel(state, itemPath)
     default:
       assertNeverType(itemType)
-  }
-}
-
-/** アイテムツリーの各アイテムのコンテンツ領域のViewスイッチャー */
-export function ItemTreeContentView(viewModel: ItemTreeContentViewModel) {
-  switch (viewModel.itemType) {
-    case ItemType.TEXT:
-      return ItemTreeTextContentView(viewModel)
-    case ItemType.WEB_PAGE:
-      return ItemTreeWebPageContentView(viewModel)
-    case ItemType.IMAGE:
-      return ItemTreeImageContentView(viewModel)
-    case ItemType.CODE_BLOCK:
-      return ItemTreeCodeBlockContentView(viewModel)
-    default:
-      assertNeverType(viewModel)
   }
 }
 

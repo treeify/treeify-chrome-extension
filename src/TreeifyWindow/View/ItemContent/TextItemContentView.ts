@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {get} from 'svelte/store'
 
 export type TextItemContentViewModel = {
@@ -15,8 +14,4 @@ export function createTextItemContentViewModel(itemId: ItemId): TextItemContentV
     itemType: ItemType.TEXT,
     domishObjects: get(Internal.instance.state.textItems[itemId].domishObjects),
   }
-}
-
-export function TextItemContentView(viewModel: TextItemContentViewModel) {
-  return createDivElement({}, {}, [DomishObject.toDocumentFragment(viewModel.domishObjects)])
 }

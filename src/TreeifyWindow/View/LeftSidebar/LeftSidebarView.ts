@@ -1,9 +1,7 @@
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {classMap, createElement} from 'src/TreeifyWindow/View/createElement'
 import {
   createPageTreeViewModel,
-  PageTreeView,
   PageTreeViewModel,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
 
@@ -33,16 +31,4 @@ export function createLeftSidebarViewModel(state: State): LeftSidebarViewModel |
   }
 
   return undefined
-}
-
-export function LeftSidebarView(viewModel: LeftSidebarViewModel) {
-  return createElement(
-    'aside',
-    classMap({
-      'left-sidebar': true,
-      floating: viewModel.isFloating,
-    }),
-    {},
-    [PageTreeView(viewModel.pageTreeViewModel)]
-  )
 }

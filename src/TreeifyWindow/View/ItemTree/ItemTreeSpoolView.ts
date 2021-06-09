@@ -5,7 +5,6 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {createDivElement} from 'src/TreeifyWindow/View/createElement'
 import {get} from 'svelte/store'
 
 export type ItemTreeSpoolViewModel = {
@@ -104,35 +103,4 @@ export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBul
       ? ItemTreeBulletState.COLLAPSED
       : ItemTreeBulletState.EXPANDED
   }
-}
-
-/** アイテムツリーのバレットとインデント */
-export function ItemTreeSpoolView(viewModel: ItemTreeSpoolViewModel) {
-  // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
-  const limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
-  const outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
-  const outerCircleStyle = `
-    width: ${outerCircleRadiusEm}em;
-    height: ${outerCircleRadiusEm}em;
-  `
-
-  return createDivElement('item-tree-spool', {click: viewModel.onClick}, [
-    viewModel.bulletState === ItemTreeBulletState.EXPANDED
-      ? createDivElement('item-tree-spool_indent-area', {}, [
-          createDivElement('item-tree-spool_indent-line'),
-        ])
-      : undefined,
-    createDivElement(
-      'item-tree-spool_bullet-area',
-      {},
-      viewModel.bulletState === ItemTreeBulletState.PAGE
-        ? [createDivElement('item-tree-spool_page-icon')]
-        : viewModel.bulletState === ItemTreeBulletState.COLLAPSED
-        ? [
-            createDivElement({class: 'item-tree-spool_outer-circle', style: outerCircleStyle}, {}),
-            createDivElement('item-tree-spool_inner-circle'),
-          ]
-        : [createDivElement('item-tree-spool_inner-circle')]
-    ),
-  ])
 }

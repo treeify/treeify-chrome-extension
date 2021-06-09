@@ -3,7 +3,6 @@ import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {
   createTextItemContentViewModel,
-  TextItemContentView,
   TextItemContentViewModel,
 } from 'src/TreeifyWindow/View/ItemContent/TextItemContentView'
 
@@ -20,14 +19,5 @@ export function createItemContentViewModel(itemId: ItemId) {
       throw new Error('未実装')
     default:
       assertNeverType(itemType)
-  }
-}
-
-export function ItemContentView(viewModel: ItemContentViewModel) {
-  switch (viewModel.itemType) {
-    case ItemType.TEXT:
-      return TextItemContentView(viewModel)
-    default:
-      assertNeverType(viewModel.itemType)
   }
 }

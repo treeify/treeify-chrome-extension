@@ -1,15 +1,7 @@
-import hljs from 'highlight.js'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {CodeBlockItemEditDialog, State} from 'src/TreeifyWindow/Internal/State'
-import {
-  createButtonElement,
-  createDivElement,
-  createElement,
-  createInputElement,
-} from 'src/TreeifyWindow/View/createElement'
-import {CommonDialogView} from 'src/TreeifyWindow/View/Dialog/CommonDialogView'
 
 export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
   onClickFinishButton: () => void
@@ -50,40 +42,4 @@ export function createCodeBlockItemEditDialogViewModel(
       CurrentState.commit()
     },
   }
-}
-
-export function CodeBlockItemEditDialogView(viewModel: CodeBlockItemEditDialogViewModel) {
-  return CommonDialogView({
-    title: 'コードブロック編集',
-    content: createDivElement('code-block-edit-dialog_content', {}, [
-      createElement('textarea', 'code-block-edit-dialog_code', {}, [
-        document.createTextNode(viewModel.code),
-      ]),
-      createDivElement('code-block-edit-dialog_language-area', {}, [
-        createElement('label', {}, {}, '言語名'),
-        createInputElement({
-          class: 'code-block-edit-dialog_language',
-          type: 'text',
-          autocomplete: 'on',
-          list: 'languages',
-          value: viewModel.language,
-        }),
-      ]),
-      createElement(
-        'datalist',
-        {id: 'languages'},
-        {},
-        hljs.listLanguages().map((language) => createElement('option', {value: language}))
-      ),
-      createDivElement('code-block-edit-dialog_button-area', {}, [
-        createButtonElement({}, {click: viewModel.onClickFinishButton}, '完了'),
-        createButtonElement({}, {click: viewModel.onClickCancelButton}, 'キャンセル'),
-      ]),
-    ]),
-    onCloseDialog: () => {
-      // ダイアログを閉じる
-      CurrentState.setCodeBlockItemEditDialog(null)
-      CurrentState.commit()
-    },
-  })
 }

@@ -7,9 +7,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {classMap, createDivElement, createImgElement} from 'src/TreeifyWindow/View/createElement'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {LabelView} from 'src/TreeifyWindow/View/LabelView'
 import {get} from 'svelte/store'
 
 export type ItemTreeWebPageContentViewModel = {
@@ -153,66 +151,4 @@ export function createItemTreeWebPageContentViewModel(
       })
     },
   }
-}
-
-/** ウェブページアイテムのコンテンツ領域のView */
-export function ItemTreeWebPageContentView(viewModel: ItemTreeWebPageContentViewModel) {
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
-
-  return createDivElement(
-    {class: 'item-tree-web-page-content', id, tabindex: '0'},
-    {focus: viewModel.onFocus},
-    [
-      viewModel.isLoading
-        ? createDivElement('item-tree-web-page-content_favicon loading-indicator', {
-            click: viewModel.onClickFavicon,
-          })
-        : viewModel.faviconUrl.length > 0
-        ? createImgElement(
-            {
-              class: classMap({
-                'item-tree-web-page-content_favicon': true,
-                'soft-unloaded-item': viewModel.isSoftUnloaded,
-                'hard-unloaded-item': viewModel.isHardUnloaded,
-              }),
-              src: viewModel.faviconUrl,
-              draggable: 'false',
-            },
-            {click: viewModel.onClickFavicon}
-          )
-        : createDivElement(
-            classMap({
-              'item-tree-web-page-content_favicon': true,
-              'default-favicon': true,
-              'soft-unloaded-item': viewModel.isSoftUnloaded,
-              'hard-unloaded-item': viewModel.isHardUnloaded,
-            }),
-            {click: viewModel.onClickFavicon}
-          ),
-      !viewModel.labels.isEmpty()
-        ? createDivElement(
-            'item-tree-web-page-content_labels',
-            {},
-            viewModel.labels.map((label) => LabelView({text: label}))
-          )
-        : createDivElement('grid-empty-cell'),
-      createDivElement(
-        {
-          class: classMap({
-            'item-tree-web-page-content_title': true,
-            'soft-unloaded-item': viewModel.isSoftUnloaded,
-            'hard-unloaded-item': viewModel.isHardUnloaded,
-            unread: viewModel.isUnread,
-          }),
-          title: viewModel.title,
-          draggable: 'true',
-        },
-        {click: viewModel.onClickTitle, dragstart: viewModel.onDragStart},
-        [document.createTextNode(viewModel.title)]
-      ),
-      viewModel.isAudible
-        ? createDivElement('item-tree-web-page-content_audible-icon')
-        : createDivElement('grid-empty-cell'),
-    ]
-  )
 }
