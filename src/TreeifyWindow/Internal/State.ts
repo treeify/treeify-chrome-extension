@@ -113,8 +113,8 @@ export type ImageItem = {
 
 /** コードブロックアイテムが固有で持つデータの型 */
 export type CodeBlockItem = {
-  code: string
-  language: string
+  code: Writable<string>
+  language: Writable<string>
 }
 
 /** 各ページが持つデータの型 */
