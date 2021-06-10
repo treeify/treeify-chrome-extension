@@ -5,7 +5,6 @@
 
   export function createWorkspaceDialogProps() {
     const state = Internal.instance.state
-    if (state.workspaceDialog === null) return undefined
 
     const workspaces = []
     for (const key in state.workspaces) {
@@ -19,7 +18,7 @@
       workspaces: List(workspaces),
       onClickAddButton: () => {
         CurrentState.createWorkspace()
-        CurrentState.commit()
+        // CurrentState.commit()
       },
     }
   }
@@ -40,7 +39,7 @@
   const closeDialog = () => {
     doWithErrorCapture(() => {
       CurrentState.setWorkspaceDialog(null)
-      CurrentState.commit()
+      // CurrentState.commit()
     })
   }
 </script>

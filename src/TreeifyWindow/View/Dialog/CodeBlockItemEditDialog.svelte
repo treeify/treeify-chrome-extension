@@ -1,16 +1,17 @@
 <script context="module" lang="ts">
+  import hljs from 'highlight.js'
+  import {State} from 'src/TreeifyWindow/Internal/State'
   import {assertNonNull} from '../../../Common/Debug/assert'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
+  import CommonDialog from './CommonDialog.svelte'
 
-  export function createCodeBlockItemEditDialogProps() {
-    const state = Internal.instance.state
-    if (state.codeBlockItemEditDialog === null) return undefined
-
+  export function createCodeBlockItemEditDialogProps(
+    codeBlockItemEditDialog: State.CodeBlockItemEditDialog
+  ) {
     const targetItemPath = CurrentState.getTargetItemPath()
     return {
-      ...state.codeBlockItemEditDialog,
+      ...codeBlockItemEditDialog,
       onClickFinishButton: () => {
         const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -29,21 +30,18 @@
 
         // ダイアログを閉じる
         CurrentState.setCodeBlockItemEditDialog(null)
-        CurrentState.commit()
+        // CurrentState.commit()
       },
       onClickCancelButton: () => {
         // ダイアログを閉じる
         CurrentState.setCodeBlockItemEditDialog(null)
-        CurrentState.commit()
+        // CurrentState.commit()
       },
     }
   }
 </script>
 
 <script lang="ts">
-  import hljs from 'highlight.js'
-  import CommonDialog from './CommonDialog.svelte'
-
   export let code: string
   export let language: string
   export let onClickFinishButton: () => void
@@ -52,7 +50,7 @@
   const onCloseDialog = () => {
     // ダイアログを閉じる
     CurrentState.setCodeBlockItemEditDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 </script>
 

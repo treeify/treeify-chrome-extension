@@ -1,11 +1,8 @@
 <script context="module" lang="ts">
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
 
   export function createOtherParentsDialogProps() {
-    if (Internal.instance.state.otherParentsDialog === null) return undefined
-
     const targetItemPath = CurrentState.getTargetItemPath()
     const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
     const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
@@ -25,7 +22,7 @@
   const closeDialog = () => {
     // ダイアログを閉じる
     CurrentState.setOtherParentsDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 </script>
 

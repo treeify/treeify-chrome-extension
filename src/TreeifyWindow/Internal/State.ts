@@ -30,11 +30,11 @@ export type State = {
   itemTreeDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
   /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
-  codeBlockItemEditDialog: State.CodeBlockItemEditDialog | null
-  defaultWindowModeSettingDialog: State.DefaultWindowModeSettingDialog | null
-  workspaceDialog: State.WorkspaceDialog | null
-  labelEditDialog: State.LabelEditDialog | null
-  otherParentsDialog: State.OtherParentsDialog | null
+  codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
+  defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
+  workspaceDialog: Writable<State.WorkspaceDialog | null>
+  labelEditDialog: Writable<State.LabelEditDialog | null>
+  otherParentsDialog: Writable<State.OtherParentsDialog | null>
 }
 
 export namespace State {

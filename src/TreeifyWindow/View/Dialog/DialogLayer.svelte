@@ -16,20 +16,25 @@
   import WorkspaceDialog, {createWorkspaceDialogProps} from './WorkspaceDialog.svelte'
 
   export function createDialogLayerProps() {
+    const state = Internal.instance.state
     return {
-      webPageItemTitleSettingDialog: Internal.instance.state.webPageItemTitleSettingDialog,
+      webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+      codeBlockItemEditDialog: state.codeBlockItemEditDialog,
+      defaultWindowModeSettingDialog: state.defaultWindowModeSettingDialog,
+      workspaceDialog: state.workspaceDialog,
+      labelEditDialog: state.labelEditDialog,
+      otherParentsDialog: state.otherParentsDialog,
     }
   }
 </script>
 
 <script lang="ts">
   export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
-
-  const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
-  const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
-  const workspaceDialogProps = createWorkspaceDialogProps()
-  const labelEditDialogProps = createLabelEditDialogProps()
-  const otherParentsDialogProps = createOtherParentsDialogProps()
+  export let codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
+  export let defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
+  export let workspaceDialog: Writable<State.WorkspaceDialog | null>
+  export let labelEditDialog: Writable<State.LabelEditDialog | null>
+  export let otherParentsDialog: Writable<State.OtherParentsDialog | null>
 </script>
 
 {#if $webPageItemTitleSettingDialog !== null}
@@ -37,18 +42,18 @@
     {...createWebPageItemTitleSettingDialogProps($webPageItemTitleSettingDialog)}
   />
 {/if}
-{#if codeBlockItemEditDialogProps !== undefined}
-  <CodeBlockItemEditDialog {...codeBlockItemEditDialogProps} />
+{#if $codeBlockItemEditDialog !== null}
+  <CodeBlockItemEditDialog {...createCodeBlockItemEditDialogProps($codeBlockItemEditDialog)} />
 {/if}
-{#if defaultWindowModeSettingDialogProps !== undefined}
-  <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
+{#if $defaultWindowModeSettingDialog !== null}
+  <DefaultWindowModeSettingDialog {...createDefaultWindowModeSettingDialogProps()} />
 {/if}
-{#if workspaceDialogProps !== undefined}
-  <WorkspaceDialog {...workspaceDialogProps} />
+{#if $workspaceDialog !== null}
+  <WorkspaceDialog {...createWorkspaceDialogProps()} />
 {/if}
-{#if labelEditDialogProps !== undefined}
-  <LabelEditDialog {...labelEditDialogProps} />
+{#if $labelEditDialog !== null}
+  <LabelEditDialog {...createLabelEditDialogProps()} />
 {/if}
-{#if otherParentsDialogProps !== undefined}
-  <OtherParentsDialog {...otherParentsDialogProps} />
+{#if $otherParentsDialog !== null}
+  <OtherParentsDialog {...createOtherParentsDialogProps()} />
 {/if}

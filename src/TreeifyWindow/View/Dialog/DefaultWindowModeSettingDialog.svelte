@@ -6,9 +6,6 @@
   import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {
-    const state = Internal.instance.state
-    if (state.defaultWindowModeSettingDialog === null) return undefined
-
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetPageId = CurrentState.isPage(targetItemId)
@@ -16,12 +13,11 @@
       : ItemPath.getRootItemId(targetItemPath)
 
     return {
-      ...state.defaultWindowModeSettingDialog,
-      initialDefaultWindowMode: state.pages[targetPageId].defaultWindowMode,
+      initialDefaultWindowMode: Internal.instance.state.pages[targetPageId].defaultWindowMode,
       onClickCancelButton: () => {
         // ダイアログを閉じる
         CurrentState.setDefaultWindowModeSettingDialog(null)
-        CurrentState.commit()
+        // CurrentState.commit()
       },
     }
   }
@@ -38,7 +34,7 @@
   const onCloseDialog = () => {
     // ダイアログを閉じる
     CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 
   const onClick = (event: Event) => {
@@ -68,7 +64,7 @@
 
     // ダイアログを閉じる
     CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 </script>
 

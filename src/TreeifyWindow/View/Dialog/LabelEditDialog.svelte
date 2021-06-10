@@ -1,10 +1,7 @@
 <script context="module" lang="ts">
-  import {Internal} from 'src/TreeifyWindow/Internal/Internal'
   import {CurrentState} from '../../Internal/CurrentState'
 
   export function createLabelEditDialogProps() {
-    if (Internal.instance.state.labelEditDialog === null) return undefined
-
     const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
     if (labels.isEmpty()) {
       // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
@@ -31,7 +28,7 @@
   const closeDialog = () => {
     // ダイアログを閉じる
     CurrentState.setLabelEditDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 
   const onClickAddButton = () => {
@@ -46,7 +43,7 @@
       const nonEmptyLabels = labels.filter((label) => label !== '')
       CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
       CurrentState.setLabelEditDialog(null)
-      CurrentState.commit()
+      // CurrentState.commit()
     })
   }
 

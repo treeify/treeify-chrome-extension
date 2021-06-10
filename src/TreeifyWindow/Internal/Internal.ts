@@ -140,11 +140,11 @@ export class Internal {
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },
       webPageItemTitleSettingDialog: writable(null),
-      codeBlockItemEditDialog: null,
-      defaultWindowModeSettingDialog: null,
-      workspaceDialog: null,
-      labelEditDialog: null,
-      otherParentsDialog: null,
+      codeBlockItemEditDialog: writable(null),
+      defaultWindowModeSettingDialog: writable(null),
+      workspaceDialog: writable(null),
+      labelEditDialog: writable(null),
+      otherParentsDialog: writable(null),
     }
   }
 
@@ -319,11 +319,11 @@ export class Internal {
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },
       webPageItemTitleSettingDialog: writable(null),
-      codeBlockItemEditDialog: null,
-      defaultWindowModeSettingDialog: null,
-      workspaceDialog: null,
-      labelEditDialog: null,
-      otherParentsDialog: null,
+      codeBlockItemEditDialog: writable(null),
+      defaultWindowModeSettingDialog: writable(null),
+      workspaceDialog: writable(null),
+      labelEditDialog: writable(null),
+      otherParentsDialog: writable(null),
     }
   }
 }

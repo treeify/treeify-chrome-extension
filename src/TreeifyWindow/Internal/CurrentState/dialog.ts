@@ -12,7 +12,7 @@ export function setWebPageItemTitleSettingDialog(
 
 /** コードブロックアイテム編集ダイアログの状態を設定する */
 export function setCodeBlockItemEditDialog(value: State.CodeBlockItemEditDialog | null) {
-  Internal.instance.state.codeBlockItemEditDialog = value
+  Internal.instance.state.codeBlockItemEditDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItemEditDialog'))
 }
 
@@ -20,24 +20,24 @@ export function setCodeBlockItemEditDialog(value: State.CodeBlockItemEditDialog 
 export function setDefaultWindowModeSettingDialog(
   value: State.DefaultWindowModeSettingDialog | null
 ) {
-  Internal.instance.state.defaultWindowModeSettingDialog = value
+  Internal.instance.state.defaultWindowModeSettingDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('defaultWindowModeSettingDialog'))
 }
 
 /** ワークスペースダイアログの状態を設定する */
 export function setWorkspaceDialog(value: State.WorkspaceDialog | null) {
-  Internal.instance.state.workspaceDialog = value
+  Internal.instance.state.workspaceDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('workspaceDialog'))
 }
 
 /** ラベル編集ダイアログの状態を設定する */
 export function setLabelEditDialog(value: State.LabelEditDialog | null) {
-  Internal.instance.state.labelEditDialog = value
+  Internal.instance.state.labelEditDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('labelEditDialog'))
 }
 
 /** 他のトランスクルード元ダイアログの状態を設定する */
 export function setOtherParentsDialog(value: State.OtherParentsDialog | null) {
-  Internal.instance.state.otherParentsDialog = value
+  Internal.instance.state.otherParentsDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('otherParentsDialog'))
 }
