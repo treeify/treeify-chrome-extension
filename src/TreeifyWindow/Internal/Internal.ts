@@ -144,7 +144,7 @@ export class Internal {
       defaultWindowModeSettingDialog: writable(null),
       workspaceDialog: writable(null),
       labelEditDialog: writable(null),
-      otherParentsDialog: null,
+      otherParentsDialog: writable(null),
     }
   }
 
@@ -323,7 +323,7 @@ export class Internal {
       defaultWindowModeSettingDialog: writable(null),
       workspaceDialog: writable(null),
       labelEditDialog: writable(null),
-      otherParentsDialog: null,
+      otherParentsDialog: writable(null),
     }
   }
 }

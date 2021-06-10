@@ -34,7 +34,7 @@ export type State = {
   defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
   workspaceDialog: Writable<State.WorkspaceDialog | null>
   labelEditDialog: Writable<State.LabelEditDialog | null>
-  otherParentsDialog: State.OtherParentsDialog | null
+  otherParentsDialog: Writable<State.OtherParentsDialog | null>
 }
 
 export namespace State {

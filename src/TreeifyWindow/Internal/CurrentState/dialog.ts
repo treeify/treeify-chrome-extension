@@ -38,6 +38,6 @@ export function setLabelEditDialog(value: State.LabelEditDialog | null) {
 
 /** 他のトランスクルード元ダイアログの状態を設定する */
 export function setOtherParentsDialog(value: State.OtherParentsDialog | null) {
-  Internal.instance.state.otherParentsDialog = value
+  Internal.instance.state.otherParentsDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('otherParentsDialog'))
 }
