@@ -12,7 +12,7 @@ export function setWebPageItemTitleSettingDialog(
 
 /** コードブロックアイテム編集ダイアログの状態を設定する */
 export function setCodeBlockItemEditDialog(value: State.CodeBlockItemEditDialog | null) {
-  Internal.instance.state.codeBlockItemEditDialog = value
+  Internal.instance.state.codeBlockItemEditDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItemEditDialog'))
 }
 

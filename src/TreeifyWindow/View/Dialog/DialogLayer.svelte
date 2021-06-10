@@ -19,6 +19,7 @@
     const state = Internal.instance.state
     return {
       webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+      codeBlockItemEditDialog: state.codeBlockItemEditDialog,
       labelEditDialog: state.labelEditDialog,
     }
   }
@@ -26,10 +27,10 @@
 
 <script lang="ts">
   export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
+  export let codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
   export let labelEditDialog: Writable<State.LabelEditDialog | null>
 
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
-  const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
   const workspaceDialogProps = createWorkspaceDialogProps()
   const otherParentsDialogProps = createOtherParentsDialogProps()
 </script>
@@ -39,8 +40,8 @@
     {...createWebPageItemTitleSettingDialogProps($webPageItemTitleSettingDialog)}
   />
 {/if}
-{#if codeBlockItemEditDialogProps !== undefined}
-  <CodeBlockItemEditDialog {...codeBlockItemEditDialogProps} />
+{#if $codeBlockItemEditDialog !== null}
+  <CodeBlockItemEditDialog {...createCodeBlockItemEditDialogProps($codeBlockItemEditDialog)} />
 {/if}
 {#if defaultWindowModeSettingDialogProps !== undefined}
   <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
