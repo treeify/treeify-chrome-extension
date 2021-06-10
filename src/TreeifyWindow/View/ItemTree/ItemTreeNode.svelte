@@ -7,8 +7,7 @@
   import ItemTreeContent from './ItemTreeContent.svelte'
   import {ItemTreeContentViewModel} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import ItemTreeSpool from './ItemTreeSpool.svelte'
-  import {ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
+  import ItemTreeSpool, {createItemTreeSpoolProps} from './ItemTreeSpool.svelte'
 
   type ItemTreeNodeViewModel = {
     itemPath: ItemPath
@@ -27,7 +26,6 @@
     hiddenTabsCount: integer
     contentViewModel: ItemTreeContentViewModel
     childItemViewModels: List<ItemTreeNodeViewModel>
-    spoolViewModel: ItemTreeSpoolViewModel
     onMouseDownContentArea: (event: MouseEvent) => void
     onClickDeleteButton: (event: MouseEvent) => void
     onDragStart: (event: DragEvent) => void
@@ -71,7 +69,7 @@
       draggable="true"
       on:dragstart={viewModel.onDragStart}
     >
-      <ItemTreeSpool {...viewModel.spoolViewModel} />
+      <ItemTreeSpool {...createItemTreeSpoolProps(viewModel.itemPath)} />
     </div>
   {/if}
   <div class="item-tree-node_body-and-children-area">

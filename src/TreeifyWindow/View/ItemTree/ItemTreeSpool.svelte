@@ -1,15 +1,13 @@
-<script lang="ts">
+<script context="module" lang="ts">
+  import {get} from 'svelte/store'
   import {integer} from '../../../Common/integer'
-
-  type ItemTreeSpoolViewModel = {
-    bulletState: ItemTreeBulletState
-    /**
-     * expand時に表示されるアイテム数。
-     * collapsed状態以外の場合は常に0。
-     */
-    hiddenItemsCount: integer
-    onClick: (event: MouseEvent) => void
-  }
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {InputId} from '../../Internal/InputId'
+  import {Internal} from '../../Internal/Internal'
+  import {ItemPath} from '../../Internal/ItemPath'
+  import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {State} from '../../Internal/State'
 
   export enum ItemTreeBulletState {
     NO_CHILDREN,
@@ -18,6 +16,88 @@
     PAGE,
   }
 
+  export function createItemTreeSpoolProps(itemPath: ItemPath) {
+    const state = Internal.instance.state
+    const bulletState = deriveBulletState(state, itemPath)
+
+    const onClick = (event: MouseEvent) => {
+      doWithErrorCapture(() => {
+        CurrentState.setTargetItemPath(itemPath)
+
+        const inputId = InputId.fromMouseEvent(event)
+        switch (bulletState) {
+          case ItemTreeBulletState.NO_CHILDREN:
+            switch (inputId) {
+              case '1000MouseButton0':
+                NullaryCommand.turnIntoAndShowPage()
+                break
+            }
+            break
+          case ItemTreeBulletState.EXPANDED:
+            switch (inputId) {
+              case '0000MouseButton0':
+                NullaryCommand.toggleCollapsed()
+                break
+              case '1000MouseButton0':
+                NullaryCommand.turnIntoAndShowPage()
+                break
+            }
+            break
+          case ItemTreeBulletState.COLLAPSED:
+            switch (inputId) {
+              case '0000MouseButton0':
+                NullaryCommand.toggleCollapsed()
+                break
+              case '1000MouseButton0':
+                NullaryCommand.turnIntoAndShowPage()
+                break
+            }
+            break
+          case ItemTreeBulletState.PAGE:
+            switch (inputId) {
+              case '0000MouseButton0':
+                NullaryCommand.showPage()
+                break
+              case '1000MouseButton0':
+                NullaryCommand.turnIntoNonPageAndExpand()
+                CurrentState.commit()
+            }
+            break
+        }
+        CurrentState.commit()
+      })
+    }
+
+    return {bulletState, hiddenItemsCount: countHiddenItems(state, itemPath), onClick}
+  }
+
+  function countHiddenItems(state: State, itemPath: ItemPath): integer {
+    const bulletState = deriveBulletState(state, itemPath)
+    if (bulletState !== ItemTreeBulletState.COLLAPSED) return 0
+
+    const counts = get(state.items[ItemPath.getItemId(itemPath)].childItemIds).map(
+      (childItemId) => {
+        return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
+      }
+    )
+    return counts.size + counts.reduce((a: integer, x) => a + x, 0)
+  }
+
+  function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBulletState {
+    const itemId = ItemPath.getItemId(itemPath)
+    if (state.pages[itemId] !== undefined) {
+      return ItemTreeBulletState.PAGE
+    } else if (get(state.items[itemId].childItemIds).size === 0) {
+      return ItemTreeBulletState.NO_CHILDREN
+    } else {
+      return CurrentState.getIsCollapsed(itemPath)
+        ? ItemTreeBulletState.COLLAPSED
+        : ItemTreeBulletState.EXPANDED
+    }
+  }
+</script>
+
+<script lang="ts">
   export let bulletState: ItemTreeBulletState
   /**
    * expand時に表示されるアイテム数。
@@ -55,7 +135,7 @@
 
 <style>
   :root {
-    /* バレットの外側の円の直径は{@link ItemTreeSpoolView.ts}で動的に設定している */
+    /* バレットの外側の円の直径は{@link ItemTreeSpool.svelte}で動的に設定している */
     /* バレットの外側の円の色 */
     --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
     /* バレットの外側の円のマウスホバー時の色 */
