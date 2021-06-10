@@ -31,7 +31,7 @@ export type State = {
   /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
   codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
-  defaultWindowModeSettingDialog: State.DefaultWindowModeSettingDialog | null
+  defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
   workspaceDialog: State.WorkspaceDialog | null
   labelEditDialog: Writable<State.LabelEditDialog | null>
   otherParentsDialog: State.OtherParentsDialog | null

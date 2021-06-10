@@ -20,6 +20,7 @@
     return {
       webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
       codeBlockItemEditDialog: state.codeBlockItemEditDialog,
+      defaultWindowModeSettingDialog: state.defaultWindowModeSettingDialog,
       labelEditDialog: state.labelEditDialog,
     }
   }
@@ -28,9 +29,9 @@
 <script lang="ts">
   export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
   export let codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
+  export let defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
   export let labelEditDialog: Writable<State.LabelEditDialog | null>
 
-  const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
   const workspaceDialogProps = createWorkspaceDialogProps()
   const otherParentsDialogProps = createOtherParentsDialogProps()
 </script>
@@ -43,8 +44,8 @@
 {#if $codeBlockItemEditDialog !== null}
   <CodeBlockItemEditDialog {...createCodeBlockItemEditDialogProps($codeBlockItemEditDialog)} />
 {/if}
-{#if defaultWindowModeSettingDialogProps !== undefined}
-  <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
+{#if $defaultWindowModeSettingDialog !== null}
+  <DefaultWindowModeSettingDialog {...createDefaultWindowModeSettingDialogProps()} />
 {/if}
 {#if workspaceDialogProps !== undefined}
   <WorkspaceDialog {...workspaceDialogProps} />

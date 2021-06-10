@@ -20,7 +20,7 @@ export function setCodeBlockItemEditDialog(value: State.CodeBlockItemEditDialog 
 export function setDefaultWindowModeSettingDialog(
   value: State.DefaultWindowModeSettingDialog | null
 ) {
-  Internal.instance.state.defaultWindowModeSettingDialog = value
+  Internal.instance.state.defaultWindowModeSettingDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('defaultWindowModeSettingDialog'))
 }
 
