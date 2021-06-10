@@ -3,18 +3,16 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
-  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
+  import {State} from '../../Internal/State'
 
-  export function createWebPageItemTitleSettingDialogProps() {
-    const state = Internal.instance.state
-    if (state.webPageItemTitleSettingDialog === null) return undefined
-
-    const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
-    const targetItemId = ItemPath.getItemId(targetItemPath)
+  export function createWebPageItemTitleSettingDialogProps(
+    webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog
+  ) {
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
     return {
-      webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+      webPageItemTitleSettingDialog,
       initialTitle: CurrentState.deriveWebPageItemTitle(targetItemId),
       onKeyDown: (event: KeyboardEvent) => {
         doWithErrorCapture(() => {
@@ -29,12 +27,12 @@
             }
             // タイトル設定ダイアログを閉じる
             CurrentState.setWebPageItemTitleSettingDialog(null)
-            CurrentState.commit()
+            // CurrentState.commit()
           }
 
           if (InputId.fromKeyboardEvent(event) === '0000Escape') {
             CurrentState.setWebPageItemTitleSettingDialog(null)
-            CurrentState.commit()
+            // CurrentState.commit()
           }
         })
       },
@@ -46,15 +44,13 @@
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
         CurrentState.setWebPageItemTitleSettingDialog(null)
-        CurrentState.commit()
+        // CurrentState.commit()
       }
     })
   }
 </script>
 
 <script lang="ts">
-  import {State} from '../../Internal/State'
-
   export let webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog
   /** タイトル入力欄のテキストの初期値 */
   export let initialTitle: string

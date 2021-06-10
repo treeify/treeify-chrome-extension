@@ -6,7 +6,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 export function setWebPageItemTitleSettingDialog(
   value: State.WebPageItemTitleSettingDialog | null
 ) {
-  Internal.instance.state.webPageItemTitleSettingDialog = value
+  Internal.instance.state.webPageItemTitleSettingDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('webPageItemTitleSettingDialog'))
 }
 
