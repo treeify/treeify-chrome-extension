@@ -746,7 +746,7 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode viewModel={rootNodeViewModel} />
+  <ItemTreeNode {...rootNodeViewModel} />
 </main>
 
 <style>
