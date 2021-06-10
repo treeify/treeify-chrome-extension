@@ -1,39 +1,17 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {State} from 'src/TreeifyWindow/Internal/State'
-  import {Writable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
   import DataFolderPickerOpenButton, {
     createDataFolderPickerOpenButtonProps,
   } from './DataFolderPickerOpenButton.svelte'
-  import CodeBlockItemEditDialog, {
-    createCodeBlockItemEditDialogProps,
-  } from './Dialog/CodeBlockItemEditDialog.svelte'
-  import DefaultWindowModeSettingDialog, {
-    createDefaultWindowModeSettingDialogProps,
-  } from './Dialog/DefaultWindowModeSettingDialog.svelte'
-  import LabelEditDialog, {createLabelEditDialogProps} from './Dialog/LabelEditDialog.svelte'
-  import OtherParentsDialog, {
-    createOtherParentsDialogProps,
-  } from './Dialog/OtherParentsDialog.svelte'
-  import WebPageItemTitleSettingDialog, {
-    createWebPageItemTitleSettingDialogProps,
-  } from './Dialog/WebPageItemTitleSettingDialog.svelte'
-  import WorkspaceDialog, {createWorkspaceDialogProps} from './Dialog/WorkspaceDialog.svelte'
+  import DialogLayer, {createDialogLayerProps} from './Dialog/DialogLayer.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree, {createItemTreeProps} from './ItemTree/ItemTree.svelte'
   import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
 
-  export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
-
   const leftSidebarProps = createLeftSidebarProps()
-  const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
-  const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
-  const workspaceDialogProps = createWorkspaceDialogProps()
-  const labelEditDialogProps = createLabelEditDialogProps()
-  const otherParentsDialogProps = createOtherParentsDialogProps()
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -65,26 +43,7 @@
       <ItemTree {...createItemTreeProps()} />
     </div>
   </div>
-  {#if $webPageItemTitleSettingDialog !== null}
-    <WebPageItemTitleSettingDialog
-      {...createWebPageItemTitleSettingDialogProps($webPageItemTitleSettingDialog)}
-    />
-  {/if}
-  {#if codeBlockItemEditDialogProps !== undefined}
-    <CodeBlockItemEditDialog {...codeBlockItemEditDialogProps} />
-  {/if}
-  {#if defaultWindowModeSettingDialogProps !== undefined}
-    <DefaultWindowModeSettingDialog {...defaultWindowModeSettingDialogProps} />
-  {/if}
-  {#if workspaceDialogProps !== undefined}
-    <WorkspaceDialog {...workspaceDialogProps} />
-  {/if}
-  {#if labelEditDialogProps !== undefined}
-    <LabelEditDialog {...labelEditDialogProps} />
-  {/if}
-  {#if otherParentsDialogProps !== undefined}
-    <OtherParentsDialog {...otherParentsDialogProps} />
-  {/if}
+  <DialogLayer {...createDialogLayerProps()} />
 </div>
 
 <style>
