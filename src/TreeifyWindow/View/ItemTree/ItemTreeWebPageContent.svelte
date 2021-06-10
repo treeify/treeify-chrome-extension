@@ -1,12 +1,141 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
+  import {get} from 'svelte/store'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {External} from '../../External/External'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {InputId} from '../../Internal/InputId'
+  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
+  import {NullaryCommand} from '../../Internal/NullaryCommand'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
+  export function createItemTreeWebPageContentProps(itemPath: ItemPath) {
+    const itemId = ItemPath.getItemId(itemPath)
+    const webPageItem = Internal.instance.state.webPageItems[itemId]
+    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
+    const tab =
+      tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
+    const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
+
+    return {
+      itemPath,
+      labels: CurrentState.getLabels(itemPath),
+      title: CurrentState.deriveWebPageItemTitle(itemId),
+      faviconUrl: get(webPageItem.faviconUrl),
+      isLoading: tab?.status === 'loading',
+      isSoftUnloaded: tab?.discarded === true,
+      isHardUnloaded: tab === undefined,
+      isUnread: get(webPageItem.isUnread),
+      isAudible: tab?.audible === true,
+      onFocus: (event: FocusEvent) => {
+        doWithErrorCapture(() => {
+          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+          if (event.target instanceof Node) {
+            getSelection()?.setPosition(event.target)
+          }
+        })
+      },
+      onClickTitle: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          switch (InputId.fromMouseEvent(event)) {
+            case '0000MouseButton0':
+              CurrentState.setTargetItemPath(itemPath)
+              NullaryCommand.browseTabInDualWindowMode()
+              CurrentState.commit()
+              break
+            case '1000MouseButton0':
+              CurrentState.setTargetItemPath(itemPath)
+              CurrentState.commit()
+              break
+            case '0010MouseButton0':
+              CurrentState.setTargetItemPath(itemPath)
+              NullaryCommand.browseTab()
+              CurrentState.commit()
+              break
+          }
+        })
+      },
+      onClickFavicon: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          CurrentState.setTargetItemPath(itemPath)
+
+          switch (InputId.fromMouseEvent(event)) {
+            case '0000MouseButton0':
+              event.preventDefault()
+
+              if (tab === undefined) {
+                // ハードアンロード状態の場合
+                NullaryCommand.loadSubtree()
+              } else {
+                // ソフトアンロード状態またはロード状態の場合
+                NullaryCommand.hardUnloadSubtree()
+              }
+
+              CurrentState.commit()
+              break
+            case '1000MouseButton0':
+              event.preventDefault()
+
+              if (tab === undefined) {
+                // ハードアンロード状態の場合
+                NullaryCommand.loadItem()
+              } else {
+                // ソフトアンロード状態またはロード状態の場合
+                NullaryCommand.hardUnloadItem()
+              }
+
+              CurrentState.commit()
+              break
+            case '0100MouseButton0':
+              event.preventDefault()
+
+              if (isUnloaded) {
+                // アンロード状態の場合
+                NullaryCommand.loadSubtree()
+              } else {
+                // ロード状態の場合
+                NullaryCommand.softUnloadSubtree()
+              }
+
+              CurrentState.commit()
+              break
+            case '1100MouseButton0':
+              event.preventDefault()
+
+              if (isUnloaded) {
+                // アンロード状態の場合
+                NullaryCommand.loadItem()
+              } else {
+                // ロード状態の場合
+                NullaryCommand.softUnloadItem()
+              }
+
+              CurrentState.commit()
+              break
+          }
+        })
+      },
+      onDragStart: (event: DragEvent) => {
+        doWithErrorCapture(() => {
+          if (event.dataTransfer === null) return
+
+          const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+          const domElement = document.getElementById(domElementId)
+          if (domElement === null) return
+          // ドラッグ中にマウスポインターに追随して表示される内容を設定
+          event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
+
+          event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
+        })
+      },
+    }
+  }
+</script>
+
+<script lang="ts">
   export let itemPath: ItemPath
-  export let itemType: ItemType.WEB_PAGE
   export let labels: List<string>
   export let title: string
   export let faviconUrl: string

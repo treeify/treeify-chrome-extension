@@ -10,11 +10,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {
-  createItemTreeContentViewModel,
-  ItemTreeContentView,
-  ItemTreeContentViewModel,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {get} from 'svelte/store'
 
 export type ItemTreeNodeViewModel = {
@@ -32,7 +28,6 @@ export type ItemTreeNodeViewModel = {
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
-  contentViewModel: ItemTreeContentViewModel
   childItemViewModels: List<ItemTreeNodeViewModel>
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
@@ -60,7 +55,6 @@ export function createItemTreeNodeViewModel(
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-    contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
     childItemViewModels: displayingChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeViewModel(
         state,

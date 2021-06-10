@@ -4,8 +4,7 @@
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
   import {ItemPath} from '../../Internal/ItemPath'
-  import ItemTreeContent from './ItemTreeContent.svelte'
-  import {ItemTreeContentViewModel} from './ItemTreeContentView'
+  import ItemTreeContent, {createItemTreeContentProps} from './ItemTreeContent.svelte'
   import ItemTreeNode from './ItemTreeNode.svelte'
   import ItemTreeSpool, {createItemTreeSpoolProps} from './ItemTreeSpool.svelte'
 
@@ -24,7 +23,6 @@
     footprintRank: integer | undefined
     footprintCount: integer
     hiddenTabsCount: integer
-    contentViewModel: ItemTreeContentViewModel
     childItemViewModels: List<ItemTreeNodeViewModel>
     onMouseDownContentArea: (event: MouseEvent) => void
     onClickDeleteButton: (event: MouseEvent) => void
@@ -84,7 +82,7 @@
           class:single-selected={viewModel.selected === 'single'}
           on:mousedown={viewModel.onMouseDownContentArea}
         >
-          <ItemTreeContent viewModel={viewModel.contentViewModel} />
+          <ItemTreeContent {...createItemTreeContentProps(viewModel.itemPath)} />
         </div>
       </div>
       <!-- 隠れているタブ数 -->

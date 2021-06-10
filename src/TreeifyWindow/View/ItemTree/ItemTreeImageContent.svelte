@@ -1,17 +1,47 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
+  import {get} from 'svelte/store'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
+  export function createItemTreeImageContentProps(itemPath: ItemPath) {
+    const itemId = ItemPath.getItemId(itemPath)
+    const imageItem = Internal.instance.state.imageItems[itemId]
+
+    return {
+      itemPath,
+      labels: CurrentState.getLabels(itemPath),
+      url: get(imageItem.url),
+      caption: get(imageItem.caption),
+      onFocus: (event: FocusEvent) => {
+        doWithErrorCapture(() => {
+          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+          if (event.target instanceof Node) {
+            getSelection()?.setPosition(event.target)
+          }
+        })
+      },
+      onClick: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          CurrentState.setTargetItemPath(itemPath)
+          CurrentState.commit()
+        })
+      },
+    }
+  }
+</script>
+
+<script lang="ts">
   export let itemPath: ItemPath
   export let labels: List<string>
-  export let itemType: ItemType.IMAGE
   export let url: string
   export let caption: string
   export let onFocus: (event: FocusEvent) => void
-  export let onClick: (event: Event) => void
+  export let onClick: (event: MouseEvent) => void
 
   const id = ItemTreeContentView.focusableDomElementId(itemPath)
 </script>

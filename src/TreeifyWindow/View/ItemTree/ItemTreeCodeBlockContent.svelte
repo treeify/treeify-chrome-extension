@@ -1,18 +1,48 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import hljs from 'highlight.js'
   import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
+  import {get} from 'svelte/store'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
+  export function createItemTreeCodeBlockContentProps(itemPath: ItemPath) {
+    const itemId = ItemPath.getItemId(itemPath)
+
+    const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+    return {
+      itemPath,
+      labels: CurrentState.getLabels(itemPath),
+      code: get(codeBlockItem.code),
+      language: get(codeBlockItem.language),
+      onFocus: (event: FocusEvent) => {
+        doWithErrorCapture(() => {
+          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+          if (event.target instanceof Node) {
+            getSelection()?.setPosition(event.target)
+          }
+        })
+      },
+      onClick: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          CurrentState.setTargetItemPath(itemPath)
+          CurrentState.commit()
+        })
+      },
+    }
+  }
+</script>
+
+<script lang="ts">
   export let itemPath: ItemPath
   export let labels: List<string>
-  export let itemType: ItemType.CODE_BLOCK
   export let code: string
   export let language: string
   export let onFocus: (event: FocusEvent) => void
-  export let onClick: (event: Event) => void
+  export let onClick: (event: MouseEvent) => void
 
   function getHighlightedHtml(code: string, language: string): string {
     // ライブラリが対応していない言語の場合例外が投げられる
