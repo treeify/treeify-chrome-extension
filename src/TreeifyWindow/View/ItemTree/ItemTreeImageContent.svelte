@@ -1,43 +1,63 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
+  import {get} from 'svelte/store'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  type ItemTreeImageContentViewModel = {
-    itemPath: ItemPath
-    labels: List<string>
-    itemType: ItemType.IMAGE
-    url: string
-    caption: string
-    onFocus: (event: FocusEvent) => void
-    onClick: (event: Event) => void
+  export function createItemTreeImageContentProps(itemPath: ItemPath) {
+    const itemId = ItemPath.getItemId(itemPath)
+    const imageItem = Internal.instance.state.imageItems[itemId]
+
+    return {
+      itemPath,
+      labels: CurrentState.getLabels(itemPath),
+      url: get(imageItem.url),
+      caption: get(imageItem.caption),
+      onFocus: (event: FocusEvent) => {
+        doWithErrorCapture(() => {
+          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+          if (event.target instanceof Node) {
+            getSelection()?.setPosition(event.target)
+          }
+        })
+      },
+      onClick: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          CurrentState.setTargetItemPath(itemPath)
+          CurrentState.commit()
+        })
+      },
+    }
   }
-
-  export let viewModel: ItemTreeImageContentViewModel
-
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
-<div
-  class="item-tree-image-content"
-  {id}
-  tabindex="0"
-  on:focus={viewModel.onFocus}
-  on:click={viewModel.onClick}
->
-  {#if !viewModel.labels.isEmpty()}
+<script lang="ts">
+  export let itemPath: ItemPath
+  export let labels: List<string>
+  export let url: string
+  export let caption: string
+  export let onFocus: (event: FocusEvent) => void
+  export let onClick: (event: MouseEvent) => void
+
+  const id = ItemTreeContentView.focusableDomElementId(itemPath)
+</script>
+
+<div class="item-tree-image-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
+  {#if !labels.isEmpty()}
     <div class="item-tree-image-content_labels">
-      {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}} />
+      {#each labels.toArray() as label}
+        <Label text={label} />
       {/each}
     </div>
   {/if}
 
   <div class="item-tree-image-content_image-and-caption">
-    <img class="item-tree-image-content_image" src={viewModel.url} />
-    <div class="item-tree-image-content_caption">{viewModel.caption}</div>
+    <img class="item-tree-image-content_image" src={url} />
+    <div class="item-tree-image-content_caption">{caption}</div>
   </div>
 </div>
 

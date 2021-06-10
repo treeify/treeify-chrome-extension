@@ -17,7 +17,6 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
 import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
@@ -81,9 +80,6 @@ export class External {
       spaRoot.innerHTML = ''
       new Root({
         target: spaRoot,
-        props: {
-          viewModel: createRootViewModel(state),
-        },
       })
     }
 

@@ -1,17 +1,41 @@
-<script lang="ts">
-  import PageTree from './PageTree.svelte'
-  import {PageTreeViewModel} from './PageTreeView'
+<script context="module" lang="ts">
+  import {External} from '../../External/External'
+  import {Internal} from '../../Internal/Internal'
+  import {createPageTreeViewModel, PageTreeViewModel} from './PageTreeView'
 
-  type LeftSidebarViewModel = {
-    pageTreeViewModel: PageTreeViewModel
-    isFloating: boolean
+  /**
+   * 左サイドバーのViewModelを作る。
+   * 左サイドバーを非表示にする場合はundefinedを返す。
+   */
+  export function createLeftSidebarProps() {
+    // Treeifyウィンドウの横幅が画面横幅の50%以上のときは左サイドバーを表示する。
+    // window.outerWidthを使うとウィンドウ最大化および最大化解除時に実態と異なる値になる（Macで確認済み）。
+    // TODO: スレッショルドを50%固定ではなく変更可能にする
+    if (window.innerWidth >= screen.width * 0.5) {
+      return {
+        pageTreeViewModel: createPageTreeViewModel(Internal.instance.state),
+        isFloating: false,
+      }
+    } else if (External.instance.shouldFloatingLeftSidebarShown) {
+      return {
+        pageTreeViewModel: createPageTreeViewModel(Internal.instance.state),
+        isFloating: true,
+      }
+    }
+
+    return undefined
   }
-
-  export let viewModel: LeftSidebarViewModel
 </script>
 
-<aside class="left-sidebar" class:floating={viewModel.isFloating}>
-  <PageTree viewModel={viewModel.pageTreeViewModel} />
+<script lang="ts">
+  import PageTree from './PageTree.svelte'
+
+  export let pageTreeViewModel: PageTreeViewModel
+  export let isFloating: boolean
+</script>
+
+<aside class="left-sidebar" class:floating={isFloating}>
+  <PageTree {...pageTreeViewModel} />
 </aside>
 
 <style>

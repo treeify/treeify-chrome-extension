@@ -1,15 +1,26 @@
+<script context="module" lang="ts">
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from '../../Internal/Internal'
+  import {ItemPath} from '../../Internal/ItemPath'
+
+  export function createOtherParentsDialogProps() {
+    if (Internal.instance.state.otherParentsDialog === null) return undefined
+
+    const targetItemPath = CurrentState.getTargetItemPath()
+    const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
+    const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
+    const itemIds = parentItemIds.filter((itemId) => targetParentItemId !== itemId)
+    return {itemIds}
+  }
+</script>
+
 <script lang="ts">
   import {List} from 'immutable'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {ItemContentViewModel} from '../ItemContent/ItemContentView'
+  import {ItemId} from '../../basicType'
+  import ItemContent, {createItemContentProps} from '../ItemContent/ItemContent.svelte'
   import CommonDialog from './CommonDialog.svelte'
 
-  type OtherParentsDialogViewModel = {
-    itemContentViewModels: List<ItemContentViewModel>
-  }
-
-  export let viewModel: OtherParentsDialogViewModel
+  export let itemIds: List<ItemId>
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -21,9 +32,9 @@
 <CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
-      {#each viewModel.itemContentViewModels.toArray() as itemContentViewModel}
+      {#each itemIds.toArray() as itemId}
         <div class="other-parents-dialog_row-wrapper">
-          <ItemContent viewModel={itemContentViewModel} />
+          <ItemContent {...createItemContentProps(itemId)} />
         </div>
       {/each}
     </div>

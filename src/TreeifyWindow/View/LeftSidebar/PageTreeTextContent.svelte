@@ -1,17 +1,23 @@
-<script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
-  import {DomishObject} from '../../Internal/DomishObject'
+<script context="module" lang="ts">
+  import {get} from 'svelte/store'
+  import {ItemId} from '../../basicType'
+  import {Internal} from '../../Internal/Internal'
 
-  type PageTreeTextContentViewModel = {
-    itemType: ItemType.TEXT
-    domishObjects: List<DomishObject>
+  export function createPageTreeTextContentProps(itemId: ItemId) {
+    return {
+      domishObjects: get(Internal.instance.state.textItems[itemId].domishObjects),
+    }
   }
-
-  export let viewModel: PageTreeTextContentViewModel
 </script>
 
-<div>{@html DomishObject.toHtml(viewModel.domishObjects)}</div>
+<script lang="ts">
+  import {List} from 'immutable'
+  import {DomishObject} from '../../Internal/DomishObject'
+
+  export let domishObjects: List<DomishObject>
+</script>
+
+<div>{@html DomishObject.toHtml(domishObjects)}</div>
 
 <style>
 </style>

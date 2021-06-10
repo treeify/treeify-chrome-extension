@@ -1,20 +1,41 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import {List} from 'immutable'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from '../../Internal/Internal'
+
+  export function createWorkspaceDialogProps() {
+    const state = Internal.instance.state
+    if (state.workspaceDialog === null) return undefined
+
+    const workspaces = []
+    for (const key in state.workspaces) {
+      const workspaceId = parseInt(key)
+      workspaces.push({
+        id: workspaceId,
+        ...state.workspaces[workspaceId],
+      })
+    }
+    return {
+      workspaces: List(workspaces),
+      onClickAddButton: () => {
+        CurrentState.createWorkspace()
+        CurrentState.commit()
+      },
+    }
+  }
+</script>
+
+<script lang="ts">
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
   import {Workspace} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
 
   type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
-  type WorkspaceDialogViewModel = {
-    workspaces: List<WorkspaceRecord>
-    onClickAddButton: () => void
-  }
-
-  export let viewModel: WorkspaceDialogViewModel
+  export let workspaces: List<WorkspaceRecord>
+  export let onClickAddButton: () => void
 
   const closeDialog = () => {
     doWithErrorCapture(() => {
@@ -26,10 +47,10 @@
 
 <CommonDialog title="ワークスペース" onCloseDialog={closeDialog}>
   <div class="workspace-dialog_content" tabindex="0" />
-  {#each viewModel.workspaces.toArray() as workspace}
+  {#each workspaces.toArray() as workspace}
     <WorkspaceDialogRow {workspace} />
   {/each}
-  <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton} />
+  <div class="workspace-dialog_add-button" on:click={onClickAddButton} />
   <button class="workspace-dialog_close-button" on:click={closeDialog}>閉じる</button>
 </CommonDialog>
 

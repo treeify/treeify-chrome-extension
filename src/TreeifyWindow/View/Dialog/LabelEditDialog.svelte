@@ -1,15 +1,27 @@
+<script context="module" lang="ts">
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+
+  export function createLabelEditDialogProps() {
+    if (Internal.instance.state.labelEditDialog === null) return undefined
+
+    const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
+    if (labels.isEmpty()) {
+      // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
+      return {labels: ['']}
+    } else {
+      return {labels: labels.toArray()}
+    }
+  }
+</script>
+
 <script lang="ts">
   import {List} from 'immutable'
-  import {assertNonNull} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
-  import {LabelEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  type LabelEditDialogViewModel = LabelEditDialog
-
-  export let viewModel: LabelEditDialogViewModel
+  export let labels: string[]
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -19,17 +31,15 @@
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.setLabelEditDialog({
-        labels: getAllLabelInputValues().push(''),
-      })
-      CurrentState.commit()
+      labels.push('')
+      labels = labels
     })
   }
 
   const onClickFinishButton = () => {
     doWithErrorCapture(() => {
-      const labels = getAllLabelInputValues().filter((label) => label !== '')
-      CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
+      const nonEmptyLabels = labels.filter((label) => label !== '')
+      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
       CurrentState.setLabelEditDialog(null)
       CurrentState.commit()
     })
@@ -56,25 +66,16 @@
       }
     })
   }
-
-  // 全てのラベル入力欄の内容テキストを返す
-  function getAllLabelInputValues(): List<string> {
-    const dialogDomElement = document.querySelector('.label-edit-dialog_content')
-    assertNonNull(dialogDomElement)
-
-    const inputElements = dialogDomElement.querySelectorAll('input')
-    return List(inputElements).map((inputElement: HTMLInputElement) => inputElement.value)
-  }
 </script>
 
 <CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
   <div class="label-edit-dialog_content">
-    {#each viewModel.labels.toArray() as label}
+    {#each labels as label}
       <div class="label-edit-dialog_label-row">
         <input
           type="text"
           class="label-edit-dialog_label-name"
-          value={label}
+          bind:value={label}
           on:keydown={onKeyDown}
         />
         <div class="label-edit-dialog_delete-button" on:click={onClickDeleteButton} />
