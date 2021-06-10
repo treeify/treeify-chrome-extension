@@ -6,7 +6,7 @@
 </script>
 
 <div class="page-tree">
-  <PageTreeNode viewModel={pageTreeRootNodeViewModel} />
+  <PageTreeNode {...pageTreeRootNodeViewModel} />
 </div>
 
 <style>
