@@ -2,16 +2,16 @@
   import Color from 'color'
   import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
+  import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
   import PageTreeBulletAndIndent, {
     createPageTreeBulletAndIndentProps,
   } from './PageTreeBulletAndIndent.svelte'
-  import PageTreeContent from './PageTreeContent.svelte'
-  import {PageTreeContentViewModel} from './PageTreeContentView'
+  import PageTreeContent, {createPageTreeContentProps} from './PageTreeContent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
 
   type PageTreeNodeViewModel = {
-    contentViewModel: PageTreeContentViewModel
+    itemId: ItemId
     childNodeViewModels: List<PageTreeNodeViewModel>
     isActivePage: boolean
     isRoot: boolean
@@ -67,7 +67,7 @@
           on:dragover={viewModel.onDragOver}
           on:drop={viewModel.onDrop}
         >
-          <PageTreeContent viewModel={viewModel.contentViewModel} />
+          <PageTreeContent {...createPageTreeContentProps(viewModel.itemId)} />
         </div>
         <div class="page-tree-node_close-button" on:click={viewModel.onClickCloseButton} />
       </div>

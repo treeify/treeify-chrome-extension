@@ -9,14 +9,10 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {
-  createPageTreeContentViewModel,
-  PageTreeContentViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
 import {get} from 'svelte/store'
 
 export type PageTreeNodeViewModel = {
-  contentViewModel: PageTreeContentViewModel
+  itemId: ItemId
   childNodeViewModels: List<PageTreeNodeViewModel>
   isActivePage: boolean
   isRoot: boolean
@@ -90,7 +86,7 @@ export function createPageTreeNodeViewModel(
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
-    contentViewModel: createPageTreeContentViewModel(state, itemId),
+    itemId,
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(
         state,

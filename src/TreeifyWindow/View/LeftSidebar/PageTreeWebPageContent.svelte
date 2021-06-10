@@ -1,3 +1,17 @@
+<script context="module" lang="ts">
+  import {get} from 'svelte/store'
+  import {ItemId} from '../../basicType'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {Internal} from '../../Internal/Internal'
+
+  export function createPageTreeWebPageContentProps(itemId: ItemId) {
+    return {
+      title: CurrentState.deriveWebPageItemTitle(itemId),
+      faviconUrl: get(Internal.instance.state.webPageItems[itemId].faviconUrl),
+    }
+  }
+</script>
+
 <script lang="ts">
   export let title: string
   export let faviconUrl: string
