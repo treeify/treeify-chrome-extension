@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-  import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+  import {CurrentState} from '../../Internal/CurrentState'
 
   export function createLabelEditDialogProps() {
     if (Internal.instance.state.labelEditDialog === null) return undefined
@@ -17,6 +17,7 @@
 
 <script lang="ts">
   import {List} from 'immutable'
+  import {assert} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {InputId} from '../../Internal/InputId'
   import CommonDialog from './CommonDialog.svelte'
@@ -45,14 +46,22 @@
     })
   }
 
-  const onClickDeleteButton = () => {
+  const onClickDeleteButton = (event: Event) => {
     doWithErrorCapture(() => {
-      throw new Error('TODO: 未移植。indexの取得方法を検討中')
-      // const values = getAllLabelInputValues()
-      // CurrentState.setLabelEditDialog({
-      //   labels: values.size > 1 ? values.remove(index) : List.of(''),
-      // })
-      // CurrentState.commit()
+      if (event.target instanceof HTMLElement) {
+        const elementNodeListOf = document.querySelectorAll('.label-edit-dialog_delete-button')
+        const index = List(elementNodeListOf).indexOf(event.target)
+        assert(index !== -1)
+        assert(labels.length > 0)
+        if (labels.length === 1) {
+          // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
+          labels = ['']
+        } else {
+          // 該当する入力欄を削除する
+          labels.splice(index, 1)
+          labels = labels
+        }
+      }
     })
   }
 
