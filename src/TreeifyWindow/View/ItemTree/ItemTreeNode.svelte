@@ -1,35 +1,174 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import Color from 'color'
-  import {List} from 'immutable'
+  import {is, List} from 'immutable'
+  import {get} from 'svelte/store'
   import {integer} from '../../../Common/integer'
+  import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {External} from '../../External/External'
+  import {Command} from '../../Internal/Command'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {InputId} from '../../Internal/InputId'
+  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
+  import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {State} from '../../Internal/State'
   import ItemTreeContent, {createItemTreeContentProps} from './ItemTreeContent.svelte'
+  import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
   import ItemTreeSpool, {createItemTreeSpoolProps} from './ItemTreeSpool.svelte'
 
-  type ItemTreeNodeViewModel = {
+  export function createItemTreeNodeProps(
+    footprintRankMap: Map<ItemId, integer>,
+    footprintCount: integer,
     itemPath: ItemPath
-    isActivePage: boolean
-    /**
-     * このアイテムが選択されているかどうかを示す値。
-     * 複数選択されたアイテムのうちの1つならmulti。
-     * 単一選択されたアイテムならsingle。
-     * 選択されていないならnon。
-     */
-    selected: 'single' | 'multi' | 'non'
-    isTranscluded: boolean
-    cssClasses: List<string>
-    footprintRank: integer | undefined
-    footprintCount: integer
-    hiddenTabsCount: integer
-    childItemViewModels: List<ItemTreeNodeViewModel>
-    onMouseDownContentArea: (event: MouseEvent) => void
-    onClickDeleteButton: (event: MouseEvent) => void
-    onDragStart: (event: DragEvent) => void
-    onClickHiddenTabsCount: (event: MouseEvent) => void
+  ) {
+    const state = Internal.instance.state
+    const itemId = ItemPath.getItemId(itemPath)
+    const item = state.items[itemId]
+    const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
+
+    return {
+      itemPath,
+      isActivePage: !ItemPath.hasParent(itemPath),
+      selected: deriveSelected(state, itemPath),
+      isTranscluded: Object.keys(item.parents).length > 1,
+      cssClasses: get(item.cssClasses),
+      footprintRank: footprintRankMap.get(itemId),
+      footprintRankMap,
+      footprintCount,
+      hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
+      childItemPaths: displayingChildItemIds.map((childItemId: ItemId) => {
+        return itemPath.push(childItemId)
+      }),
+      onMouseDownContentArea: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          const inputId = InputId.fromMouseEvent(event)
+          if (inputId === '0000MouseButton1') {
+            event.preventDefault()
+            CurrentState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItem()
+            CurrentState.commit()
+          }
+        })
+      },
+      onClickDeleteButton: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          CurrentState.setTargetItemPath(itemPath)
+
+          const inputId = InputId.fromMouseEvent(event)
+          const commands: List<Command> | undefined =
+            state.itemTreeDeleteButtonMouseBinding[inputId]
+          if (commands !== undefined) {
+            event.preventDefault()
+            for (const command of commands) {
+              Command.execute(command)
+            }
+          }
+          CurrentState.commit()
+        })
+      },
+      onDragStart: (event: DragEvent) => {
+        doWithErrorCapture(() => {
+          if (event.dataTransfer === null) return
+
+          const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+          const domElement = document.getElementById(domElementId)
+          if (domElement === null) return
+          // ドラッグ中にマウスポインターに追随して表示される内容を設定
+          event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
+
+          event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
+        })
+      },
+      onClickHiddenTabsCount: (event: MouseEvent) => {
+        CurrentState.setTargetItemPath(itemPath)
+        NullaryCommand.hardUnloadSubtree()
+        CurrentState.commit()
+      },
+    }
   }
 
+  function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
+    const itemId = ItemPath.getItemId(itemPath)
+    if (CurrentState.isPage(itemId)) return 0
+    if (get(state.items[itemId].childItemIds).isEmpty()) return 0
+    if (CurrentState.getIsCollapsed(itemPath)) {
+      return countLoadedTabsInDescendants(state, itemId)
+    } else {
+      return 0
+    }
+  }
+
+  // 指定されたアイテムの子孫アイテムに対応するロード状態のタブを数える。
+  // 自分自身に対応するタブはカウントしない。
+  // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+  function countLoadedTabsInDescendants(state: State, itemId: ItemId): integer {
+    if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
+      return countLoadedTabsInSubtree(state, itemId)
+    } else {
+      return countLoadedTabsInSubtree(state, itemId) - 1
+    }
+  }
+
+  // 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
+  // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+  function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
+    if (CurrentState.isPage(itemId)) {
+      if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
+        return 0
+      } else {
+        return 1
+      }
+    }
+
+    const sum = get(Internal.instance.state.items[itemId].childItemIds)
+      .map((childItemId) => countLoadedTabsInSubtree(state, childItemId))
+      .reduce((a: integer, x) => a + x, 0)
+    if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
+      return sum
+    } else {
+      return 1 + sum
+    }
+  }
+
+  function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
+    const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
+    const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
+    if (is(targetItemPath, anchorItemPath)) {
+      // そもそも複数範囲されていない場合
+      if (is(itemPath, targetItemPath)) return 'single'
+      else return 'non'
+    }
+
+    if (!is(itemPath.pop(), targetItemPath.pop())) {
+      // 選択されたアイテムパス群がこのアイテムパスと異なる子リスト上に存在する場合
+      return 'non'
+    }
+
+    const targetItemId = ItemPath.getItemId(targetItemPath)
+    const anchorItemId = ItemPath.getItemId(anchorItemPath)
+
+    const parentItemId = ItemPath.getParentItemId(itemPath)
+    // itemPathが親を持たない場合、複数選択に含まれることはないので必ずnonになる
+    if (parentItemId === undefined) return 'non'
+
+    const childItemIds = get(state.items[parentItemId].childItemIds)
+    const targetItemIndex = childItemIds.indexOf(targetItemId)
+    const anchorItemIndex = childItemIds.indexOf(anchorItemId)
+    const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))
+    const minIndex = Math.min(targetItemIndex, anchorItemIndex)
+    const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
+    if (minIndex <= itemIndex && itemIndex <= maxIndex) {
+      return 'multi'
+    } else {
+      return 'non'
+    }
+  }
+</script>
+
+<script lang="ts">
   export let itemPath: ItemPath
   export let isActivePage: boolean
   /**
@@ -42,9 +181,10 @@
   export let isTranscluded: boolean
   export let cssClasses: List<string>
   export let footprintRank: integer | undefined
+  export let footprintRankMap: Map<ItemId, integer>
   export let footprintCount: integer
   export let hiddenTabsCount: integer
-  export let childItemViewModels: List<ItemTreeNodeViewModel>
+  export let childItemPaths: List<ItemPath>
   export let onMouseDownContentArea: (event: MouseEvent) => void
   export let onClickDeleteButton: (event: MouseEvent) => void
   export let onDragStart: (event: DragEvent) => void
@@ -118,8 +258,10 @@
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-      {#each childItemViewModels.toArray() as itemViewModel (itemViewModel.itemPath.toString())}
-        <ItemTreeNode {...itemViewModel} />
+      {#each childItemPaths.toArray() as childItemPath (childItemPath.toString())}
+        <ItemTreeNode
+          {...createItemTreeNodeProps(footprintRankMap, footprintCount, childItemPath)}
+        />
       {/each}
     </div>
   </div>

@@ -21,8 +21,8 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {State} from '../../Internal/State'
   import {ItemTreeContentView} from './ItemTreeContentView'
-  import ItemTreeNode from './ItemTreeNode.svelte'
-  import {createItemTreeNodeViewModel, ItemTreeNodeViewModel} from './ItemTreeNodeView'
+  import ItemTreeNode, {createItemTreeNodeProps} from './ItemTreeNode.svelte'
+  import {ItemTreeNodeProps} from './ItemTreeNodeView'
 
   export function createItemTreeProps() {
     const state = Internal.instance.state
@@ -45,12 +45,7 @@
     }
 
     return {
-      rootNodeViewModel: createItemTreeNodeViewModel(
-        state,
-        footprintRankMap,
-        footprintCount,
-        rootItemPath
-      ),
+      rootNodeProps: createItemTreeNodeProps(footprintRankMap, footprintCount, rootItemPath),
     }
   }
 
@@ -67,7 +62,7 @@
 </script>
 
 <script lang="ts">
-  export let rootNodeViewModel: ItemTreeNodeViewModel
+  export let rootNodeProps: ItemTreeNodeProps
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -746,7 +741,7 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode {...rootNodeViewModel} />
+  <ItemTreeNode {...rootNodeProps} />
 </main>
 
 <style>
