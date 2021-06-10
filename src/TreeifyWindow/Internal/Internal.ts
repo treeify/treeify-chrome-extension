@@ -143,7 +143,7 @@ export class Internal {
       codeBlockItemEditDialog: null,
       defaultWindowModeSettingDialog: null,
       workspaceDialog: null,
-      labelEditDialog: null,
+      labelEditDialog: writable(null),
       otherParentsDialog: null,
     }
   }
@@ -322,7 +322,7 @@ export class Internal {
       codeBlockItemEditDialog: null,
       defaultWindowModeSettingDialog: null,
       workspaceDialog: null,
-      labelEditDialog: null,
+      labelEditDialog: writable(null),
       otherParentsDialog: null,
     }
   }

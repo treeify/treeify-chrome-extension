@@ -16,19 +16,21 @@
   import WorkspaceDialog, {createWorkspaceDialogProps} from './WorkspaceDialog.svelte'
 
   export function createDialogLayerProps() {
+    const state = Internal.instance.state
     return {
-      webPageItemTitleSettingDialog: Internal.instance.state.webPageItemTitleSettingDialog,
+      webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+      labelEditDialog: state.labelEditDialog,
     }
   }
 </script>
 
 <script lang="ts">
   export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
+  export let labelEditDialog: Writable<State.LabelEditDialog | null>
 
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
   const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
   const workspaceDialogProps = createWorkspaceDialogProps()
-  const labelEditDialogProps = createLabelEditDialogProps()
   const otherParentsDialogProps = createOtherParentsDialogProps()
 </script>
 
@@ -46,8 +48,8 @@
 {#if workspaceDialogProps !== undefined}
   <WorkspaceDialog {...workspaceDialogProps} />
 {/if}
-{#if labelEditDialogProps !== undefined}
-  <LabelEditDialog {...labelEditDialogProps} />
+{#if $labelEditDialog !== null}
+  <LabelEditDialog {...createLabelEditDialogProps()} />
 {/if}
 {#if otherParentsDialogProps !== undefined}
   <OtherParentsDialog {...otherParentsDialogProps} />

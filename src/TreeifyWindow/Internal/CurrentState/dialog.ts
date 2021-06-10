@@ -32,7 +32,7 @@ export function setWorkspaceDialog(value: State.WorkspaceDialog | null) {
 
 /** ラベル編集ダイアログの状態を設定する */
 export function setLabelEditDialog(value: State.LabelEditDialog | null) {
-  Internal.instance.state.labelEditDialog = value
+  Internal.instance.state.labelEditDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('labelEditDialog'))
 }
 

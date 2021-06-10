@@ -33,7 +33,7 @@ export type State = {
   codeBlockItemEditDialog: State.CodeBlockItemEditDialog | null
   defaultWindowModeSettingDialog: State.DefaultWindowModeSettingDialog | null
   workspaceDialog: State.WorkspaceDialog | null
-  labelEditDialog: State.LabelEditDialog | null
+  labelEditDialog: Writable<State.LabelEditDialog | null>
   otherParentsDialog: State.OtherParentsDialog | null
 }
 
