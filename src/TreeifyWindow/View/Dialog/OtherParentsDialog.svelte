@@ -22,7 +22,7 @@
   const closeDialog = () => {
     // ダイアログを閉じる
     CurrentState.setOtherParentsDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 </script>
 

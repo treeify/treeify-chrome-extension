@@ -17,7 +17,7 @@
       onClickCancelButton: () => {
         // ダイアログを閉じる
         CurrentState.setDefaultWindowModeSettingDialog(null)
-        CurrentState.commit()
+        // CurrentState.commit()
       },
     }
   }
@@ -34,7 +34,7 @@
   const onCloseDialog = () => {
     // ダイアログを閉じる
     CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 
   const onClick = (event: Event) => {
@@ -64,7 +64,7 @@
 
     // ダイアログを閉じる
     CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 </script>
 

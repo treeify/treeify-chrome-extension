@@ -18,7 +18,7 @@
       workspaces: List(workspaces),
       onClickAddButton: () => {
         CurrentState.createWorkspace()
-        CurrentState.commit()
+        // CurrentState.commit()
       },
     }
   }
@@ -39,7 +39,7 @@
   const closeDialog = () => {
     doWithErrorCapture(() => {
       CurrentState.setWorkspaceDialog(null)
-      CurrentState.commit()
+      // CurrentState.commit()
     })
   }
 </script>

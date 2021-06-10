@@ -28,7 +28,7 @@
   const closeDialog = () => {
     // ダイアログを閉じる
     CurrentState.setLabelEditDialog(null)
-    CurrentState.commit()
+    // CurrentState.commit()
   }
 
   const onClickAddButton = () => {
@@ -43,7 +43,7 @@
       const nonEmptyLabels = labels.filter((label) => label !== '')
       CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
       CurrentState.setLabelEditDialog(null)
-      CurrentState.commit()
+      // CurrentState.commit()
     })
   }
 
