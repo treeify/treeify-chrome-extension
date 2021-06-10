@@ -32,7 +32,7 @@ export type State = {
   webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
   codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
   defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
-  workspaceDialog: State.WorkspaceDialog | null
+  workspaceDialog: Writable<State.WorkspaceDialog | null>
   labelEditDialog: Writable<State.LabelEditDialog | null>
   otherParentsDialog: State.OtherParentsDialog | null
 }

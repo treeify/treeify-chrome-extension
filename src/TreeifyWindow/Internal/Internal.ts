@@ -142,7 +142,7 @@ export class Internal {
       webPageItemTitleSettingDialog: writable(null),
       codeBlockItemEditDialog: writable(null),
       defaultWindowModeSettingDialog: writable(null),
-      workspaceDialog: null,
+      workspaceDialog: writable(null),
       labelEditDialog: writable(null),
       otherParentsDialog: null,
     }
@@ -321,7 +321,7 @@ export class Internal {
       webPageItemTitleSettingDialog: writable(null),
       codeBlockItemEditDialog: writable(null),
       defaultWindowModeSettingDialog: writable(null),
-      workspaceDialog: null,
+      workspaceDialog: writable(null),
       labelEditDialog: writable(null),
       otherParentsDialog: null,
     }

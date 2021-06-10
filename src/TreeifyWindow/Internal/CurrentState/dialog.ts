@@ -26,7 +26,7 @@ export function setDefaultWindowModeSettingDialog(
 
 /** ワークスペースダイアログの状態を設定する */
 export function setWorkspaceDialog(value: State.WorkspaceDialog | null) {
-  Internal.instance.state.workspaceDialog = value
+  Internal.instance.state.workspaceDialog.set(value)
   Internal.instance.markAsMutated(PropertyPath.of('workspaceDialog'))
 }
 
