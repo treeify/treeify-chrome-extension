@@ -1,18 +1,11 @@
 <script lang="ts">
-  import {ItemType} from '../../basicType'
-
-  type PageTreeWebPageContentViewModel = {
-    itemType: ItemType.WEB_PAGE
-    title: string
-    faviconUrl: string
-  }
-
-  export let viewModel: PageTreeWebPageContentViewModel
+  export let title: string
+  export let faviconUrl: string
 </script>
 
 <div class="page-tree-web-page-content">
   <img class="page-tree-web-page-content_favicon" src="LeftSidebar.svelte" draggable="false" />
-  <div class="page-tree-web-page-content_title">{viewModel.title}</div>
+  <div class="page-tree-web-page-content_title">{title}</div>
 </div>
 
 <style>

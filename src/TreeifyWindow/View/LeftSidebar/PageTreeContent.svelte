@@ -5,17 +5,15 @@
   import PageTreeWebPageContent from './PageTreeWebPageContent.svelte'
   import {PageTreeWebPageContentViewModel} from './PageTreeWebPageContentView'
 
-  type PageTreeContentViewModel =
-    | PageTreeTextContentViewModel
-    | PageTreeWebPageContentViewModel
+  type PageTreeContentViewModel = PageTreeTextContentViewModel | PageTreeWebPageContentViewModel
 
   export let viewModel: PageTreeContentViewModel
 </script>
 
 {#if viewModel.itemType === ItemType.TEXT}
-  <PageTreeTextContent {viewModel} />
+  <PageTreeTextContent {...viewModel} />
 {:else if viewModel.itemType === ItemType.WEB_PAGE}
-  <PageTreeWebPageContent {viewModel} />
+  <PageTreeWebPageContent {...viewModel} />
 {/if}
 
 <style>
