@@ -4,7 +4,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {DefaultWindowMode, Page} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {get} from 'svelte/store'
 
@@ -32,8 +32,8 @@ export async function switchActivePage(itemId: ItemId) {
   }
 }
 
-function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
-  const page: Page | undefined = Internal.instance.state.pages[itemId]
+function deriveDefaultWindowMode(itemId: ItemId): State.DefaultWindowMode {
+  const page: State.Page | undefined = Internal.instance.state.pages[itemId]
   if (page !== undefined && page.defaultWindowMode !== 'inherit') {
     return page.defaultWindowMode
   }
@@ -94,7 +94,7 @@ export function turnIntoPage(itemId: ItemId) {
   // 既にページだった場合は何もしない
   if (isPage(itemId)) return
 
-  const page: Page = {
+  const page: State.Page = {
     targetItemPath: List.of(itemId),
     anchorItemPath: List.of(itemId),
     defaultWindowMode: 'inherit',
@@ -114,7 +114,7 @@ export function turnIntoNonPage(itemId: ItemId) {
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
 }
 
-export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
+export function setDefaultWindowMode(itemId: ItemId, value: State.DefaultWindowMode) {
   Internal.instance.state.pages[itemId].defaultWindowMode = value
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId, 'defaultWindowMode'))
 }

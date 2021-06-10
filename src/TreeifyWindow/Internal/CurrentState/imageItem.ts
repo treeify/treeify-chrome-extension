@@ -3,7 +3,7 @@ import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {ImageItem, Item} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {writable} from 'svelte/store'
 
@@ -14,7 +14,7 @@ import {writable} from 'svelte/store'
 export function createImageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
-  const newItem: Item = {
+  const newItem: State.Item = {
     itemType: ItemType.IMAGE,
     childItemIds: writable(List.of()),
     parents: {},
@@ -24,7 +24,7 @@ export function createImageItem(): ItemId {
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
-  const imageItem: ImageItem = {
+  const imageItem: State.ImageItem = {
     url: writable(''),
     caption: writable(''),
   }

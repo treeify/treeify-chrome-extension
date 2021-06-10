@@ -11,7 +11,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {Edge} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {get} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
@@ -90,7 +90,7 @@ export function onPaste(event: ClipboardEvent) {
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
+          const initialEdge: State.Edge = {isCollapsed: true, labels: List.of()}
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
@@ -489,7 +489,7 @@ interface OutlineElement extends Element {
 type OutlineAttributes = Attributes & {
   text: string
 }
-type ItemAndEdge = {itemId: ItemId; edge: Edge}
+type ItemAndEdge = {itemId: ItemId; edge: State.Edge}
 // トランスクルージョンを復元するために、OPML内に出現したアイテムIDを記録しておくオブジェクト。
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応するアイテムID。
 type ItemIdMap = {[K in string | number]: ItemId}

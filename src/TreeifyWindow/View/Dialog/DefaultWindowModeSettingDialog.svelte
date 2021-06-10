@@ -3,7 +3,6 @@
   import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {DefaultWindowMode} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {
@@ -29,7 +28,9 @@
 </script>
 
 <script lang="ts">
-  export let initialDefaultWindowMode: DefaultWindowMode
+  import {State} from '../../Internal/State'
+
+  export let initialDefaultWindowMode: State.DefaultWindowMode
   export let onClickCancelButton: () => void
 
   let selectedDefaultWindowMode = initialDefaultWindowMode
