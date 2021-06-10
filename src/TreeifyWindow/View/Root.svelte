@@ -21,11 +21,8 @@
   } from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog, {createWorkspaceDialogProps} from './Dialog/WorkspaceDialog.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
-  import ItemTree from './ItemTree/ItemTree.svelte'
-  import {ItemTreeViewModel} from './ItemTree/ItemTreeView'
+  import ItemTree, {createItemTreeProps} from './ItemTree/ItemTree.svelte'
   import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
-
-  export let itemTreeViewModel: ItemTreeViewModel
 
   const leftSidebarProps = createLeftSidebarProps()
   const webPageItemTitleSettingDialogProps = createWebPageItemTitleSettingDialogProps()
@@ -62,7 +59,7 @@
       {:else}
         <div class="grid-empty-cell" />
       {/if}
-      <ItemTree viewModel={itemTreeViewModel} />
+      <ItemTree {...createItemTreeProps()} />
     </div>
   </div>
   {#if webPageItemTitleSettingDialogProps !== undefined}

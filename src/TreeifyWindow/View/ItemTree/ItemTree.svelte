@@ -1,9 +1,9 @@
-<script lang="ts">
+<script context="module" lang="ts">
   import {is, List} from 'immutable'
   import {get} from 'svelte/store'
   import {assertNonNull, assertNonUndefined} from '../../../Common/Debug/assert'
   import {integer} from '../../../Common/integer'
-  import {ItemType} from '../../basicType'
+  import {ItemId, ItemType} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {
     focusItemTreeBackground,
@@ -19,15 +19,55 @@
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {State} from '../../Internal/State'
   import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
+  import {createItemTreeNodeViewModel, ItemTreeNodeViewModel} from './ItemTreeNodeView'
 
-  type ItemTreeViewModel = {
-    rootNodeViewModel: ItemTreeNodeViewModel
+  export function createItemTreeProps() {
+    const state = Internal.instance.state
+    const rootItemPath = List.of(CurrentState.getActivePageId())
+
+    const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
+    // 足跡表示数を計算
+    // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
+    const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.5))
+
+    // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
+    const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
+      return get(state.items[b].timestamp) - get(state.items[a].timestamp)
+    })
+
+    // 各アイテムに足跡順位を対応付け
+    const footprintRankMap = new Map<ItemId, integer>()
+    for (let i = 0; i < footprintCount; i++) {
+      footprintRankMap.set(sorted[i], i)
+    }
+
+    return {
+      rootNodeViewModel: createItemTreeNodeViewModel(
+        state,
+        footprintRankMap,
+        footprintCount,
+        rootItemPath
+      ),
+    }
   }
 
-  export let viewModel: ItemTreeViewModel
+  /**
+   * 全ての子孫と自身のアイテムIDを返す。
+   * ただし（折りたたみなどの理由で）表示されないアイテムはスキップする。
+   */
+  function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
+    yield ItemPath.getItemId(itemPath)
+    for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
+      yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
+    }
+  }
+</script>
+
+<script lang="ts">
+  export let rootNodeViewModel: ItemTreeNodeViewModel
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -706,7 +746,7 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode viewModel={viewModel.rootNodeViewModel} />
+  <ItemTreeNode viewModel={rootNodeViewModel} />
 </main>
 
 <style>
