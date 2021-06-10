@@ -5,39 +5,29 @@
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  type ItemTreeImageContentViewModel = {
-    itemPath: ItemPath
-    labels: List<string>
-    itemType: ItemType.IMAGE
-    url: string
-    caption: string
-    onFocus: (event: FocusEvent) => void
-    onClick: (event: Event) => void
-  }
+  export let itemPath: ItemPath
+  export let labels: List<string>
+  export let itemType: ItemType.IMAGE
+  export let url: string
+  export let caption: string
+  export let onFocus: (event: FocusEvent) => void
+  export let onClick: (event: Event) => void
 
-  export let viewModel: ItemTreeImageContentViewModel
-
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(itemPath)
 </script>
 
-<div
-  class="item-tree-image-content"
-  {id}
-  tabindex="0"
-  on:focus={viewModel.onFocus}
-  on:click={viewModel.onClick}
->
-  {#if !viewModel.labels.isEmpty()}
+<div class="item-tree-image-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
+  {#if !labels.isEmpty()}
     <div class="item-tree-image-content_labels">
-      {#each viewModel.labels.toArray() as label}
+      {#each labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>
   {/if}
 
   <div class="item-tree-image-content_image-and-caption">
-    <img class="item-tree-image-content_image" src={viewModel.url} />
-    <div class="item-tree-image-content_caption">{viewModel.caption}</div>
+    <img class="item-tree-image-content_image" src={url} />
+    <div class="item-tree-image-content_caption">{caption}</div>
   </div>
 </div>
 

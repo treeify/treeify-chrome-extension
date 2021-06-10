@@ -5,54 +5,47 @@
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  type ItemTreeWebPageContentViewModel = {
-    itemPath: ItemPath
-    itemType: ItemType.WEB_PAGE
-    labels: List<string>
-    title: string
-    faviconUrl: string
-    isLoading: boolean
-    isSoftUnloaded: boolean
-    isHardUnloaded: boolean
-    isUnread: boolean
-    isAudible: boolean
-    onFocus: (event: FocusEvent) => void
-    onClickTitle: (event: MouseEvent) => void
-    onClickFavicon: (event: MouseEvent) => void
-    onDragStart: (event: DragEvent) => void
-  }
+  export let itemPath: ItemPath
+  export let itemType: ItemType.WEB_PAGE
+  export let labels: List<string>
+  export let title: string
+  export let faviconUrl: string
+  export let isLoading: boolean
+  export let isSoftUnloaded: boolean
+  export let isHardUnloaded: boolean
+  export let isUnread: boolean
+  export let isAudible: boolean
+  export let onFocus: (event: FocusEvent) => void
+  export let onClickTitle: (event: MouseEvent) => void
+  export let onClickFavicon: (event: MouseEvent) => void
+  export let onDragStart: (event: DragEvent) => void
 
-  export let viewModel: ItemTreeWebPageContentViewModel
-
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(itemPath)
 </script>
 
-<div class="item-tree-web-page-content" {id} tabindex="0" on:focus={viewModel.onFocus}>
-  {#if viewModel.isLoading}
-    <div
-      class="item-tree-web-page-content_favicon loading-indicator"
-      on:click={viewModel.onClickFavicon}
-    />
-  {:else if viewModel.faviconUrl.length > 0}
+<div class="item-tree-web-page-content" {id} tabindex="0" on:focus={onFocus}>
+  {#if isLoading}
+    <div class="item-tree-web-page-content_favicon loading-indicator" on:click={onClickFavicon} />
+  {:else if faviconUrl.length > 0}
     <img
       class="item-tree-web-page-content_favicon"
-      class:soft-unloaded-item={viewModel.isSoftUnloaded}
-      class:hard-unloaded-item={viewModel.isHardUnloaded}
-      src={viewModel.faviconUrl}
-      on:click={viewModel.onClickFavicon}
+      class:soft-unloaded-item={isSoftUnloaded}
+      class:hard-unloaded-item={isHardUnloaded}
+      src={faviconUrl}
+      on:click={onClickFavicon}
     />
   {:else}
     <div
       class="item-tree-web-page-content_favicon default-favicon"
-      class:soft-unloaded-item={viewModel.isSoftUnloaded}
-      class:hard-unloaded-item={viewModel.isHardUnloaded}
-      on:click={viewModel.onClickFavicon}
+      class:soft-unloaded-item={isSoftUnloaded}
+      class:hard-unloaded-item={isHardUnloaded}
+      on:click={onClickFavicon}
     />
   {/if}
 
-  {#if !viewModel.labels.isEmpty()}
+  {#if !labels.isEmpty()}
     <div class="item-tree-web-page-content_labels">
-      {#each viewModel.labels.toArray() as label}
+      {#each labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>
@@ -61,17 +54,17 @@
   {/if}
   <div
     class="item-tree-web-page-content_title"
-    class:soft-unloaded-item={viewModel.isSoftUnloaded}
-    class:hard-unloaded-item={viewModel.isHardUnloaded}
-    class:unread={viewModel.isUnread}
-    title={viewModel.title}
+    class:soft-unloaded-item={isSoftUnloaded}
+    class:hard-unloaded-item={isHardUnloaded}
+    class:unread={isUnread}
+    {title}
     draggable="true"
-    on:click={viewModel.onClickTitle}
-    on:dragstart={viewModel.onDragStart}
+    on:click={onClickTitle}
+    on:dragstart={onDragStart}
   >
-    {viewModel.title}
+    {title}
   </div>
-  {#if viewModel.isAudible}
+  {#if isAudible}
     <div class="item-tree-web-page-content_audible-icon" />
   {:else}
     <div class="grid-empty-cell" />

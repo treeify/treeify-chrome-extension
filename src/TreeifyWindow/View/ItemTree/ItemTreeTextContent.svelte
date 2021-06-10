@@ -6,25 +6,21 @@
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  type ItemTreeTextContentViewModel = {
-    itemPath: ItemPath
-    itemType: ItemType.TEXT
-    labels: List<string>
-    domishObjects: List<DomishObject>
-    onInput: (event: InputEvent) => void
-    onCompositionEnd: (event: CompositionEvent) => void
-    onClick: (event: Event) => void
-  }
+  export let itemPath: ItemPath
+  export let itemType: ItemType.TEXT
+  export let labels: List<string>
+  export let domishObjects: List<DomishObject>
+  export let onInput: (event: InputEvent) => void
+  export let onCompositionEnd: (event: CompositionEvent) => void
+  export let onClick: (event: Event) => void
 
-  export let viewModel: ItemTreeTextContentViewModel
-
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(itemPath)
 </script>
 
 <div class="item-tree-text-content">
-  {#if !viewModel.labels.isEmpty()}
+  {#if !labels.isEmpty()}
     <div class="item-tree-text-content_labels">
-      {#each viewModel.labels.toArray() as label}
+      {#each labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>
@@ -33,11 +29,11 @@
     class="item-tree-text-content_content-editable"
     {id}
     contenteditable="true"
-    on:input={viewModel.onInput}
-    on:compositionend={viewModel.onCompositionEnd}
-    on:click={viewModel.onClick}
+    on:input={onInput}
+    on:compositionend={onCompositionEnd}
+    on:click={onClick}
   >
-    {@html DomishObject.toHtml(viewModel.domishObjects)}
+    {@html DomishObject.toHtml(domishObjects)}
   </div>
 </div>
 

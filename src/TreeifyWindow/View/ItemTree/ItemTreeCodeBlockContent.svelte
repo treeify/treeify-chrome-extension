@@ -6,17 +6,13 @@
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  type ItemTreeCodeBlockContentViewModel = {
-    itemPath: ItemPath
-    labels: List<string>
-    itemType: ItemType.CODE_BLOCK
-    code: string
-    language: string
-    onFocus: (event: FocusEvent) => void
-    onClick: (event: Event) => void
-  }
-
-  export let viewModel: ItemTreeCodeBlockContentViewModel
+  export let itemPath: ItemPath
+  export let labels: List<string>
+  export let itemType: ItemType.CODE_BLOCK
+  export let code: string
+  export let language: string
+  export let onFocus: (event: FocusEvent) => void
+  export let onClick: (event: Event) => void
 
   function getHighlightedHtml(code: string, language: string): string {
     // ライブラリが対応していない言語の場合例外が投げられる
@@ -31,24 +27,18 @@
     }
   }
 
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(itemPath)
 </script>
 
-<div
-  class="item-tree-code-block-content"
-  {id}
-  tabindex="0"
-  on:focus={viewModel.onFocus}
-  on:click={viewModel.onClick}
->
-  {#if !viewModel.labels.isEmpty()}
+<div class="item-tree-code-block-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
+  {#if !labels.isEmpty()}
     <div class="item-tree-code-block-content_labels">
-      {#each viewModel.labels.toArray() as label}
+      {#each labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>
   {/if}
-  <pre><code>{@html getHighlightedHtml(viewModel.code, viewModel.language)}</code></pre>
+  <pre><code>{@html getHighlightedHtml(code, language)}</code></pre>
 </div>
 
 <style>

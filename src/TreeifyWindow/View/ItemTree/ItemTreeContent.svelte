@@ -19,13 +19,13 @@
 </script>
 
 {#if viewModel.itemType === ItemType.TEXT}
-  <ItemTreeTextContent {viewModel} />
+  <ItemTreeTextContent {...viewModel} />
 {:else if viewModel.itemType === ItemType.WEB_PAGE}
-  <ItemTreeWebPageContent {viewModel} />
+  <ItemTreeWebPageContent {...viewModel} />
 {:else if viewModel.itemType === ItemType.IMAGE}
-  <ItemTreeImageContent {viewModel} />
+  <ItemTreeImageContent {...viewModel} />
 {:else if viewModel.itemType === ItemType.CODE_BLOCK}
-  <ItemTreeCodeBlockContent {viewModel} />
+  <ItemTreeCodeBlockContent {...viewModel} />
 {/if}
 
 <style>
