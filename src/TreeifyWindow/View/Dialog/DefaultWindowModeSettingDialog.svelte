@@ -1,9 +1,10 @@
 <script context="module" lang="ts">
-  import {assertNonNull} from '../../../Common/Debug/assert'
+  import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {DefaultWindowMode} from '../../Internal/State'
+  import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {
     const state = Internal.instance.state
@@ -18,22 +19,6 @@
     return {
       ...state.defaultWindowModeSettingDialog,
       initialDefaultWindowMode: state.pages[targetPageId].defaultWindowMode,
-      onClickFinishButton: () => {
-        // デフォルトウィンドウモードを更新
-        const form = document.querySelector<HTMLFormElement>(
-          '.default-window-mode-setting-dialog_option-list'
-        )
-        assertNonNull(form)
-        const selectedDefaultWindowMode = form.defaultWindowMode.value as DefaultWindowMode
-        CurrentState.setDefaultWindowMode(targetPageId, selectedDefaultWindowMode)
-
-        // タイムスタンプを更新
-        CurrentState.updateItemTimestamp(targetPageId)
-
-        // ダイアログを閉じる
-        CurrentState.setDefaultWindowModeSettingDialog(null)
-        CurrentState.commit()
-      },
       onClickCancelButton: () => {
         // ダイアログを閉じる
         CurrentState.setDefaultWindowModeSettingDialog(null)
@@ -44,11 +29,7 @@
 </script>
 
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import CommonDialog from './CommonDialog.svelte'
-
   export let initialDefaultWindowMode: DefaultWindowMode
-  export let onClickFinishButton: () => void
   export let onClickCancelButton: () => void
 
   let selectedDefaultWindowMode = initialDefaultWindowMode
@@ -59,15 +40,34 @@
     CurrentState.commit()
   }
 
-  const onClick = () => {
+  const onClick = (event: Event) => {
     doWithErrorCapture(() => {
-      throw new Error('TODO: ラジオボタンをチェックする処理が未移植')
-
-      // const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
-      // const inputElement = document.querySelector<HTMLInputElement>(selector)
-      // assertNonNull(inputElement)
-      // inputElement.checked = true
+      if (event.target instanceof HTMLElement) {
+        const inputElement = event.target.querySelector("input[type='radio']")
+        if (inputElement instanceof HTMLInputElement) {
+          // inputElement.checked = true ではbind:groupをすり抜けてしまう模様
+          inputElement.click()
+        }
+      }
     })
+  }
+
+  const onClickFinishButton = () => {
+    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemId = ItemPath.getItemId(targetItemPath)
+    const targetPageId = CurrentState.isPage(targetItemId)
+      ? targetItemId
+      : ItemPath.getRootItemId(targetItemPath)
+
+    // デフォルトウィンドウモードを更新
+    CurrentState.setDefaultWindowMode(targetPageId, selectedDefaultWindowMode)
+
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetPageId)
+
+    // ダイアログを閉じる
+    CurrentState.setDefaultWindowModeSettingDialog(null)
+    CurrentState.commit()
   }
 </script>
 
