@@ -5,7 +5,6 @@
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {WebPageItemTitleSettingDialog} from '../../Internal/State'
 
   export function createWebPageItemTitleSettingDialogProps() {
     const state = Internal.instance.state
@@ -54,7 +53,9 @@
 </script>
 
 <script lang="ts">
-  export let webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
+  import {State} from '../../Internal/State'
+
+  export let webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog
   /** タイトル入力欄のテキストの初期値 */
   export let initialTitle: string
   export let onKeyDown: (event: KeyboardEvent) => void

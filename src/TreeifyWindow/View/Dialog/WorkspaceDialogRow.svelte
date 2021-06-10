@@ -2,9 +2,9 @@
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Workspace} from '../../Internal/State'
+  import {State} from '../../Internal/State'
 
-  type WorkspaceRecord = {id: WorkspaceId} & Workspace
+  type WorkspaceRecord = {id: WorkspaceId} & State.Workspace
 
   export let workspace: WorkspaceRecord
 

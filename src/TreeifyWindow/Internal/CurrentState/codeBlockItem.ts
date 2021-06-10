@@ -3,7 +3,7 @@ import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {CodeBlockItem, Item} from 'src/TreeifyWindow/Internal/State'
+import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {writable} from 'svelte/store'
 
@@ -14,7 +14,7 @@ import {writable} from 'svelte/store'
 export function createCodeBlockItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
-  const newItem: Item = {
+  const newItem: State.Item = {
     itemType: ItemType.CODE_BLOCK,
     childItemIds: writable(List.of()),
     parents: {},
@@ -24,7 +24,7 @@ export function createCodeBlockItem(): ItemId {
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
-  const codeBlockItem: CodeBlockItem = {
+  const codeBlockItem: State.CodeBlockItem = {
     code: writable(''),
     language: writable(''),
   }

@@ -28,11 +28,11 @@
 <script lang="ts">
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {Workspace} from '../../Internal/State'
+  import {State} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
 
-  type WorkspaceRecord = {id: WorkspaceId} & Workspace
+  type WorkspaceRecord = {id: WorkspaceId} & State.Workspace
 
   export let workspaces: List<WorkspaceRecord>
   export let onClickAddButton: () => void
