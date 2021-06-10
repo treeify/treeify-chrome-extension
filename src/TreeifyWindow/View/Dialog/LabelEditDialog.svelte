@@ -22,6 +22,10 @@
   import {InputId} from '../../Internal/InputId'
   import CommonDialog from './CommonDialog.svelte'
 
+  /**
+   * 全ての入力欄の内容テキスト。
+   * bindを使うためにListではなく配列を採用。
+   */
   export let labels: string[]
 
   const closeDialog = () => {
