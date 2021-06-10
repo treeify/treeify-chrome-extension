@@ -29,7 +29,7 @@ export type State = {
   /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */
   itemTreeDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
   /** 各ダイアログの状態 */
-  webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog | null
+  webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
   codeBlockItemEditDialog: State.CodeBlockItemEditDialog | null
   defaultWindowModeSettingDialog: State.DefaultWindowModeSettingDialog | null
   workspaceDialog: State.WorkspaceDialog | null

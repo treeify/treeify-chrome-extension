@@ -1,5 +1,7 @@
 <script lang="ts">
   import {List} from 'immutable'
+  import {State} from 'src/TreeifyWindow/Internal/State'
+  import {Writable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
@@ -24,8 +26,9 @@
   import ItemTree, {createItemTreeProps} from './ItemTree/ItemTree.svelte'
   import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
 
+  export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
+
   const leftSidebarProps = createLeftSidebarProps()
-  const webPageItemTitleSettingDialogProps = createWebPageItemTitleSettingDialogProps()
   const defaultWindowModeSettingDialogProps = createDefaultWindowModeSettingDialogProps()
   const codeBlockItemEditDialogProps = createCodeBlockItemEditDialogProps()
   const workspaceDialogProps = createWorkspaceDialogProps()
@@ -62,8 +65,10 @@
       <ItemTree {...createItemTreeProps()} />
     </div>
   </div>
-  {#if webPageItemTitleSettingDialogProps !== undefined}
-    <WebPageItemTitleSettingDialog {...webPageItemTitleSettingDialogProps} />
+  {#if $webPageItemTitleSettingDialog !== null}
+    <WebPageItemTitleSettingDialog
+      {...createWebPageItemTitleSettingDialogProps($webPageItemTitleSettingDialog)}
+    />
   {/if}
   {#if codeBlockItemEditDialogProps !== undefined}
     <CodeBlockItemEditDialog {...codeBlockItemEditDialogProps} />
