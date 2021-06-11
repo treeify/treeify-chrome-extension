@@ -1,7 +1,6 @@
 import {List} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 
 /** プレーンテキストとそれに対する装飾情報からなるオブジェクトの型 */
 export type MarkedupText = {
@@ -20,24 +19,23 @@ export type TextStyle = {
 
 export namespace MarkedupText {
   type StyleType = TextStyle['type']
-  type DomishObjectType = DomishObject.MarkupElement['type']
 
-  const domishObjectTypeToTextStyleType: {[K in DomishObjectType]: StyleType} = {
+  const tagNameToTextStyleType: {[K in string]: StyleType} = {
     b: 'bold',
     i: 'italic',
     u: 'underline',
     strike: 'strikethrough',
   }
 
-  /** List<DomishObject>からMarkedupTextに変換する */
-  export function from(domishObjects: List<DomishObject>): MarkedupText {
+  /** stringからMarkedupTextに変換する */
+  export function from(innerHtml: string): MarkedupText {
     const recorder: Recorder = {
       position: 0,
       texts: [],
       styles: [],
     }
-    for (const domishObject of domishObjects) {
-      traverseWithRecording(domishObject, recorder)
+    for (const node of InnerHtml.toDocumentFragment(innerHtml).childNodes) {
+      traverseWithRecording(node, recorder)
     }
     return {
       text: recorder.texts.join(''),
@@ -45,7 +43,7 @@ export namespace MarkedupText {
     }
   }
 
-  // List<DomishObject>からMarkedupTextへの変換処理で用いる特殊なオブジェクトの型。
+  // stringからMarkedupTextへの変換処理で用いる特殊なオブジェクトの型。
   // 再帰探索関数の引数として引き回され、ミューテーションされまくる。
   type Recorder = {
     position: integer
@@ -53,30 +51,34 @@ export namespace MarkedupText {
     styles: TextStyle[]
   }
 
-  function traverseWithRecording(domishObject: DomishObject, recorder: Recorder) {
-    switch (domishObject.type) {
-      case 'b':
-      case 'u':
-      case 'i':
-      case 'strike':
-        const start = recorder.position
-        for (const child of domishObject.children) {
-          traverseWithRecording(child, recorder)
-        }
-        const end = recorder.position
-        const type = domishObjectTypeToTextStyleType[domishObject.type]
-        recorder.styles.push({type, start, end})
-        break
-      case 'br':
-        recorder.texts.push('\n')
-        recorder.position++
-        break
-      case 'text':
-        recorder.texts.push(domishObject.textContent)
-        recorder.position += domishObject.textContent.length
-        break
-      default:
-        assertNeverType(domishObject)
+  function traverseWithRecording(node: Node, recorder: Recorder) {
+    if (node instanceof HTMLElement) {
+      switch (node.tagName) {
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          const start = recorder.position
+          for (const child of node.children) {
+            traverseWithRecording(child, recorder)
+          }
+          const end = recorder.position
+          const type = tagNameToTextStyleType[node.tagName]
+          recorder.styles.push({type, start, end})
+          break
+        case 'br':
+          recorder.texts.push('\n')
+          recorder.position++
+          break
+        default:
+        // TODO: エラー処理
+      }
+    } else if (node instanceof Text) {
+      const textContent = node.textContent ?? ''
+      recorder.texts.push(textContent)
+      recorder.position += textContent.length
+    } else {
+      // TODO: エラー処理
     }
   }
 }

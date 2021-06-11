@@ -3,7 +3,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {get} from 'svelte/store'
@@ -281,8 +281,8 @@ export function enterKeyDefault() {
     const selection = getSelection()
     assertNonNull(selection)
 
-    const characterCount = DomishObject.countCharacters(
-      get(Internal.instance.state.textItems[targetItemId].domishObjects)
+    const characterCount = InnerHtml.countCharacters(
+      get(Internal.instance.state.textItems[targetItemId].innerHtml)
     )
     const textItemSelection = getTextItemSelectionFromDom()
     assertNonUndefined(textItemSelection)
@@ -292,16 +292,16 @@ export function enterKeyDefault() {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
-      const domishObjects = DomishObject.fromChildren(range.extractContents())
-      CurrentState.setTextItemDomishObjects(
+      const innerHtml = InnerHtml.fromChildren(range.extractContents())
+      CurrentState.setTextItemInnerHtml(
         targetItemId,
-        DomishObject.fromChildren(document.activeElement)
+        InnerHtml.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを最初の子として追加する
       const newItemId = CurrentState.createTextItem()
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
-      CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
+      CurrentState.setTextItemInnerHtml(newItemId, innerHtml)
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
@@ -325,16 +325,16 @@ export function enterKeyDefault() {
       // キャレットより前のテキストをカットする
       const range = selection.getRangeAt(0)
       range.setStartBefore(document.activeElement.firstChild!)
-      const domishObjects = DomishObject.fromChildren(range.extractContents())
-      CurrentState.setTextItemDomishObjects(
+      const innerHtml = InnerHtml.fromChildren(range.extractContents())
+      CurrentState.setTextItemInnerHtml(
         targetItemId,
-        DomishObject.fromChildren(document.activeElement)
+        InnerHtml.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを兄として追加する
       const newItemId = CurrentState.createTextItem()
       CurrentState.insertPrevSiblingItem(targetItemPath, newItemId)
-      CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
+      CurrentState.setTextItemInnerHtml(newItemId, innerHtml)
 
       // キャレット位置を更新する
       External.instance.requestSetCaretDistanceAfterRendering(0)
@@ -344,16 +344,16 @@ export function enterKeyDefault() {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
-      const domishObjects = DomishObject.fromChildren(range.extractContents())
-      CurrentState.setTextItemDomishObjects(
+      const innerHtml = InnerHtml.fromChildren(range.extractContents())
+      CurrentState.setTextItemInnerHtml(
         targetItemId,
-        DomishObject.fromChildren(document.activeElement)
+        InnerHtml.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを下に配置する
       const newItemId = CurrentState.createTextItem()
       const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
-      CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
+      CurrentState.setTextItemInnerHtml(newItemId, innerHtml)
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)

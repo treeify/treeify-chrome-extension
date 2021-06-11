@@ -6,7 +6,7 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
@@ -167,8 +167,8 @@ export function getContentAsPlainText(itemId: ItemId): string {
   const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      const domishObjects = get(Internal.instance.state.textItems[itemId].domishObjects)
-      return DomishObject.toSingleLinePlainText(domishObjects)
+      const innerHtml = get(Internal.instance.state.textItems[itemId].innerHtml)
+      return InnerHtml.toSingleLinePlainText(innerHtml)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       const title = CurrentState.deriveWebPageItemTitle(itemId)
@@ -288,13 +288,7 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
 function createItemFromSingleLineText(line: string): ItemId {
   // テキストアイテムを作る
   const itemId = CurrentState.createTextItem()
-  CurrentState.setTextItemDomishObjects(
-    itemId,
-    List.of({
-      type: 'text',
-      textContent: line,
-    })
-  )
+  CurrentState.setTextItemInnerHtml(itemId, document.createTextNode(line).textContent ?? '')
   return itemId
 }
 
@@ -358,7 +352,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
-      const markedupText = MarkedupText.from(get(textItem.domishObjects))
+      const markedupText = MarkedupText.from(get(textItem.innerHtml))
       baseAttributes.type = 'text'
       baseAttributes.text = markedupText.text
       if (!markedupText.styles.isEmpty()) {
@@ -585,11 +579,8 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
     default:
       const textItemId = CurrentState.createTextItem()
       // TODO: スタイル情報を取り込む
-      const domishObject: DomishObject.TextNode = {
-        type: 'text',
-        textContent: attributes.text,
-      }
-      CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
+      const innerHtml = document.createTextNode(attributes.text).textContent ?? ''
+      CurrentState.setTextItemInnerHtml(textItemId, innerHtml)
       return textItemId
   }
 }

@@ -5,19 +5,16 @@
 
   export function createTextItemContentProps(itemId: ItemId) {
     return {
-      domishObjects: get(Internal.instance.state.textItems[itemId].domishObjects),
+      innerHtml: get(Internal.instance.state.textItems[itemId].innerHtml),
     }
   }
 </script>
 
 <script lang="ts">
-  import {List} from 'immutable'
-  import {DomishObject} from '../../Internal/DomishObject'
-
-  export let domishObjects: List<DomishObject>
+  export let innerHtml: string
 </script>
 
-<div>{@html DomishObject.toHtml(domishObjects)}</div>
+<div>{@html innerHtml}</div>
 
 <style>
 </style>

@@ -5,7 +5,7 @@
   import {getTextItemSelectionFromDom} from '../../External/domTextSelection'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {DomishObject} from '../../Internal/DomishObject'
+  import {InnerHtml} from '../../Internal/InnerHtml'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
@@ -16,15 +16,15 @@
     return {
       itemPath,
       labels: CurrentState.getLabels(itemPath),
-      domishObjects: get(Internal.instance.state.textItems[itemId].domishObjects),
+      innerHtml: get(Internal.instance.state.textItems[itemId].innerHtml),
       onInput: (event: InputEvent) => {
         doWithErrorCapture(() => {
           if (!event.isComposing && event.target instanceof Node) {
             External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
             // contenteditableな要素のinnerHTMLをModelに反映する
-            const domishObjects = DomishObject.fromChildren(event.target)
-            CurrentState.setTextItemDomishObjects(itemId, domishObjects)
+            const innerHtml = InnerHtml.fromChildren(event.target)
+            CurrentState.setTextItemInnerHtml(itemId, innerHtml)
 
             CurrentState.updateItemTimestamp(itemId)
             CurrentState.commit()
@@ -35,8 +35,8 @@
         doWithErrorCapture(() => {
           if (event.target instanceof Node) {
             // contenteditableな要素のinnerHTMLをModelに反映する
-            const domishObjects = DomishObject.fromChildren(event.target)
-            CurrentState.setTextItemDomishObjects(itemId, domishObjects)
+            const innerHtml = InnerHtml.fromChildren(event.target)
+            CurrentState.setTextItemInnerHtml(itemId, innerHtml)
             External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
             CurrentState.updateItemTimestamp(itemId)
 
@@ -74,7 +74,7 @@
 <script lang="ts">
   export let itemPath: ItemPath
   export let labels: List<string>
-  export let domishObjects: List<DomishObject>
+  export let innerHtml: string
   export let onInput: (event: InputEvent) => void
   export let onCompositionEnd: (event: CompositionEvent) => void
   export let onClick: (event: MouseEvent) => void
@@ -98,7 +98,7 @@
     on:compositionend={onCompositionEnd}
     on:click={onClick}
   >
-    {@html DomishObject.toHtml(domishObjects)}
+    {@html innerHtml}
   </div>
 </div>
 

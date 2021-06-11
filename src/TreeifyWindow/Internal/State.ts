@@ -1,7 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {Command} from 'src/TreeifyWindow/Internal/Command'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
@@ -80,7 +79,7 @@ export namespace State {
 
   /** テキストアイテムが固有で持つデータの型 */
   export type TextItem = {
-    domishObjects: Writable<List<DomishObject>>
+    innerHtml: Writable<string>
   }
 
   /** ウェブページアイテムが固有で持つデータの型 */
