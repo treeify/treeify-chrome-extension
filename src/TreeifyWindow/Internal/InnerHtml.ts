@@ -1,15 +1,20 @@
-import {assert} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 
 export namespace InnerHtml {
-  /**
-   * 与えられたNodeの子リストをDomishObjectのリストに変換する。
-   * DomishObjectとして表せない子Nodeは無視される。
-   * TODO: 引数の型をElementにできないか？
-   */
+  /** 与えられたNodeのinnerHTMLを返す */
   export function fromChildren(node: Node): string {
-    assert(node instanceof Element)
-    return ((node as unknown) as Element).innerHTML
+    if (node instanceof Element) {
+      return node.innerHTML
+    }
+    if (node instanceof DocumentFragment) {
+      const divElement = document.createElement('div')
+      divElement.appendChild(node)
+      return divElement.innerHTML
+    }
+    if (node instanceof Text) {
+      return node.textContent ?? ''
+    }
+    return ''
   }
 
   /** 改行（br要素）を含む文字数を返す */
