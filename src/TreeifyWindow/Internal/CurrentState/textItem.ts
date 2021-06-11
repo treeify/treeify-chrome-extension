@@ -30,7 +30,7 @@ export function createTextItem(): ItemId {
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
-  const newTextItem: State.TextItem = {innerHtml: writable(List.of())}
+  const newTextItem: State.TextItem = {innerHtml: writable('')}
   Internal.instance.state.textItems[newItemId] = newTextItem
   Internal.instance.markAsMutated(PropertyPath.of('textItems', newItemId))
 

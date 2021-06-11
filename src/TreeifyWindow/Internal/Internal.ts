@@ -83,7 +83,7 @@ export class Internal {
       },
       textItems: {
         0: {
-          innerHtml: writable(List.of({type: 'text', textContent: 'Top'})),
+          innerHtml: writable('Top'),
         },
       },
       webPageItems: {},
@@ -217,22 +217,22 @@ export class Internal {
       },
       textItems: {
         0: {
-          innerHtml: writable(List.of({type: 'text', textContent: 'Top'})),
+          innerHtml: writable('Top'),
         },
         1: {
-          innerHtml: writable(List.of({type: 'text', textContent: 'isCollapsed false'})),
+          innerHtml: writable('isCollapsed false'),
         },
         2: {
-          innerHtml: writable(List.of({type: 'text', textContent: 'isCollapsed true'})),
+          innerHtml: writable('isCollapsed true'),
         },
         3: {
-          innerHtml: writable(List.of({type: 'text', textContent: 'visible child'})),
+          innerHtml: writable('visible child'),
         },
         4: {
-          innerHtml: writable(List.of({type: 'text', textContent: 'invisible child'})),
+          innerHtml: writable('invisible child'),
         },
         6: {
-          innerHtml: writable(List.of({type: 'text', textContent: '子ページ'})),
+          innerHtml: writable('子ページ'),
         },
       },
       webPageItems: {
