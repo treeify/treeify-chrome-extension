@@ -1,5 +1,4 @@
 import {List} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 
@@ -20,9 +19,8 @@ export type TextStyle = {
 
 export namespace MarkedupText {
   type StyleType = TextStyle['type']
-  type DomishObjectType = DomishObject.MarkupElement['type']
 
-  const domishObjectTypeToTextStyleType: {[K in DomishObjectType]: StyleType} = {
+  const tagNameToTextStyleType: {[K in string]: StyleType} = {
     b: 'bold',
     i: 'italic',
     u: 'underline',
@@ -36,8 +34,8 @@ export namespace MarkedupText {
       texts: [],
       styles: [],
     }
-    for (const domishObject of innerHtml) {
-      traverseWithRecording(domishObject, recorder)
+    for (const node of DomishObject.toDocumentFragment(innerHtml).childNodes) {
+      traverseWithRecording(node, recorder)
     }
     return {
       text: recorder.texts.join(''),
@@ -53,30 +51,34 @@ export namespace MarkedupText {
     styles: TextStyle[]
   }
 
-  function traverseWithRecording(domishObject: DomishObject, recorder: Recorder) {
-    switch (domishObject.type) {
-      case 'b':
-      case 'u':
-      case 'i':
-      case 'strike':
-        const start = recorder.position
-        for (const child of domishObject.children) {
-          traverseWithRecording(child, recorder)
-        }
-        const end = recorder.position
-        const type = domishObjectTypeToTextStyleType[domishObject.type]
-        recorder.styles.push({type, start, end})
-        break
-      case 'br':
-        recorder.texts.push('\n')
-        recorder.position++
-        break
-      case 'text':
-        recorder.texts.push(domishObject.textContent)
-        recorder.position += domishObject.textContent.length
-        break
-      default:
-        assertNeverType(domishObject)
+  function traverseWithRecording(node: Node, recorder: Recorder) {
+    if (node instanceof HTMLElement) {
+      switch (node.tagName) {
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          const start = recorder.position
+          for (const child of node.children) {
+            traverseWithRecording(child, recorder)
+          }
+          const end = recorder.position
+          const type = tagNameToTextStyleType[node.tagName]
+          recorder.styles.push({type, start, end})
+          break
+        case 'br':
+          recorder.texts.push('\n')
+          recorder.position++
+          break
+        default:
+        // TODO: エラー処理
+      }
+    } else if (node instanceof Text) {
+      const textContent = node.textContent ?? ''
+      recorder.texts.push(textContent)
+      recorder.position += textContent.length
+    } else {
+      // TODO: エラー処理
     }
   }
 }

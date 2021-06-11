@@ -30,7 +30,7 @@ export namespace DomishObject {
     return toPlainText(innerHtml).replace(/\r?\n/, ' ')
   }
 
-  function toDocumentFragment(innerHtml: string): DocumentFragment {
+  export function toDocumentFragment(innerHtml: string): DocumentFragment {
     const templateElement = document.createElement('template')
     templateElement.innerHTML = innerHtml
     return templateElement.content
