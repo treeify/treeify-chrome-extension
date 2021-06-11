@@ -1,10 +1,11 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
-  import {get, Readable} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
+  import {get} from '../../Internal/Derived/all'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -15,9 +16,7 @@
   export function createItemTreeWebPageContentProps(itemPath: ItemPath) {
     const itemId = ItemPath.getItemId(itemPath)
     const webPageItem = Internal.instance.state.webPageItems[itemId]
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
-    const tab =
-      tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
+    const tab = External.instance.tabItemCorrespondence.getTab(itemId)
     const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
 
     return {
@@ -25,11 +24,11 @@
       labels: Derived.getLabels(itemPath),
       title: CurrentState.deriveWebPageItemTitle(itemId),
       faviconUrl: get(webPageItem.faviconUrl),
-      isLoading: tab?.status === 'loading',
-      isSoftUnloaded: tab?.discarded === true,
-      isHardUnloaded: tab === undefined,
+      isLoading: get(tab)?.status === 'loading',
+      isSoftUnloaded: get(tab)?.discarded === true,
+      isHardUnloaded: get(tab) === undefined,
       isUnread: get(webPageItem.isUnread),
-      isAudible: tab?.audible === true,
+      isAudible: get(tab)?.audible === true,
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
@@ -136,8 +135,6 @@
 </script>
 
 <script lang="ts">
-  import {Readable} from 'svelte/store'
-
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
   export let title: Readable<string>
