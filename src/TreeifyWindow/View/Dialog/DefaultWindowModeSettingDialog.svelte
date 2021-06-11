@@ -1,14 +1,17 @@
 <script context="module" lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
+  import {get} from '../../Internal/Derived/all'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
+  import {State} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    const targetPageId = CurrentState.isPage(targetItemId)
+    const targetPageId = get(Derived.isPage(targetItemId))
       ? targetItemId
       : ItemPath.getRootItemId(targetItemPath)
 
@@ -24,8 +27,6 @@
 </script>
 
 <script lang="ts">
-  import {State} from '../../Internal/State'
-
   export let initialDefaultWindowMode: State.DefaultWindowMode
   export let onClickCancelButton: () => void
 
@@ -52,7 +53,7 @@
   const onClickFinishButton = () => {
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    const targetPageId = CurrentState.isPage(targetItemId)
+    const targetPageId = get(Derived.isPage(targetItemId))
       ? targetItemId
       : ItemPath.getRootItemId(targetItemPath)
 

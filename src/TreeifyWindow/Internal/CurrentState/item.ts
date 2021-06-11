@@ -4,6 +4,7 @@ import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -144,7 +145,7 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
     return get(item.childItemIds)
   }
 
-  if (CurrentState.getIsCollapsed(itemPath) || CurrentState.isPage(itemId)) {
+  if (CurrentState.getIsCollapsed(itemPath) || get(Derived.isPage(itemId))) {
     return List.of()
   } else {
     return get(item.childItemIds)
@@ -358,7 +359,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
   // ページは終端ノードとして扱う
-  if (CurrentState.isPage(itemId)) return
+  if (get(Derived.isPage(itemId))) return
 
   for (const childItemId of get(Internal.instance.state.items[itemId].childItemIds)) {
     yield* getSubtreeItemIds(childItemId)

@@ -336,7 +336,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   const item = Internal.instance.state.items[itemId]
 
   const baseAttributes: Attributes = {
-    isPage: CurrentState.isPage(itemId).toString(),
+    isPage: get(Derived.isPage(itemId)).toString(),
     itemId,
   }
   if (ItemPath.hasParent(itemPath)) {

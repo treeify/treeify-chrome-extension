@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
   import {Derived} from 'src/TreeifyWindow/Internal/Derived'
-  import {get} from 'svelte/store'
+  import {get, Readable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from '../../Internal/Internal'
@@ -37,8 +37,6 @@
 </script>
 
 <script lang="ts">
-  import {Readable} from 'svelte/store'
-
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
   export let url: string

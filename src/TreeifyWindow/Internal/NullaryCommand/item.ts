@@ -3,6 +3,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -27,7 +28,7 @@ export function indentItem() {
   const prevSiblingItemId = ItemPath.getItemId(prevSiblingItemPath)
 
   // 兄がページの場合は展開できないので何もしない
-  if (CurrentState.isPage(prevSiblingItemId)) return
+  if (get(Derived.isPage(prevSiblingItemId))) return
 
   // 兄を展開する
   CurrentState.setIsCollapsed(prevSiblingItemPath, false)
@@ -464,7 +465,7 @@ export function deleteItemItself() {
 export function togglePaged() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  if (CurrentState.isPage(targetItemId)) {
+  if (get(Derived.isPage(targetItemId))) {
     CurrentState.unmountPage(targetItemId)
     CurrentState.turnIntoNonPage(targetItemId)
   } else {
@@ -476,7 +477,7 @@ export function togglePaged() {
 export function showPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  if (CurrentState.isPage(targetItemId)) {
+  if (get(Derived.isPage(targetItemId))) {
     CurrentState.switchActivePage(targetItemId)
   }
 }
