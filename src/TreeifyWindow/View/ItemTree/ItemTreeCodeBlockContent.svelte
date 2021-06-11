@@ -17,8 +17,8 @@
     return {
       itemPath,
       labels: Derived.getLabels(itemPath),
-      code: get(codeBlockItem.code),
-      language: get(codeBlockItem.language),
+      code: codeBlockItem.code,
+      language: codeBlockItem.language,
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
@@ -38,10 +38,12 @@
 </script>
 
 <script lang="ts">
+  import {Writable} from 'svelte/store'
+
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
-  export let code: string
-  export let language: string
+  export let code: Writable<string>
+  export let language: Writable<string>
   export let onFocus: (event: FocusEvent) => void
   export let onClick: (event: MouseEvent) => void
 
@@ -69,7 +71,7 @@
       {/each}
     </div>
   {/if}
-  <pre><code>{@html getHighlightedHtml(code, language)}</code></pre>
+  <pre><code>{@html getHighlightedHtml($code, $language)}</code></pre>
 </div>
 
 <style>
