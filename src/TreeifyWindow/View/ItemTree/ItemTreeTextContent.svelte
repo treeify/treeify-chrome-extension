@@ -36,7 +36,10 @@
 </script>
 
 <script lang="ts">
+  import {onDestroy} from 'svelte'
   import {Readable, Writable} from 'svelte/store'
+  import {Internal} from '../../Internal/Internal'
+  import {PropertyPath} from '../../Internal/PropertyPath'
 
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
@@ -45,6 +48,13 @@
   export let onClick: (event: MouseEvent) => void
 
   const id = ItemTreeContentView.focusableDomElementId(itemPath)
+
+  onDestroy(
+    innerHtml.subscribe(() => {
+      const itemId = ItemPath.getItemId(itemPath)
+      Internal.instance.markAsMutated(PropertyPath.of('textItems', itemId, 'innerHtml'))
+    })
+  )
 </script>
 
 <div class="item-tree-text-content">
