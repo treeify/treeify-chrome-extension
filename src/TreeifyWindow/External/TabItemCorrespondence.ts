@@ -64,12 +64,4 @@ export class TabItemCorrespondence {
   isUnloaded(itemId: ItemId): boolean {
     return get(this.getTab(itemId))?.discarded === true
   }
-
-  // TODO: 削除
-  dumpCurrentState() {
-    console.groupCollapsed('ダンプ：TabItemCorrespondence#itemIdToTab')
-    const stateString = JSON.stringify(Object.fromEntries(this.itemIdToTab), undefined, 2)
-    console.log(stateString)
-    console.groupEnd()
-  }
 }
