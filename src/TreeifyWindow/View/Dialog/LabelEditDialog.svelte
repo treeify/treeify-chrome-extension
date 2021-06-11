@@ -1,13 +1,17 @@
 <script context="module" lang="ts">
+  import {get} from 'svelte/store'
+  import {assertNonUndefined} from '../../../Common/Debug/assert'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
 
   export function createLabelEditDialogProps() {
-    const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
-    if (labels.isEmpty()) {
+    const labels = Derived.getLabels(CurrentState.getTargetItemPath())
+    assertNonUndefined(labels)
+    if (get(labels).isEmpty()) {
       // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
       return {labels: ['']}
     } else {
-      return {labels: labels.toArray()}
+      return {labels: get(labels).toArray()}
     }
   }
 </script>
