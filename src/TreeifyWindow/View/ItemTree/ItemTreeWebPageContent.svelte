@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
-  import {get} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -15,21 +15,19 @@
   export function createItemTreeWebPageContentProps(itemPath: ItemPath) {
     const itemId = ItemPath.getItemId(itemPath)
     const webPageItem = Internal.instance.state.webPageItems[itemId]
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
-    const tab =
-      tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
+    const tab = External.instance.tabItemCorrespondence.getTab(itemId)
     const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
 
     return {
       itemPath,
       labels: Derived.getLabels(itemPath),
-      title: CurrentState.deriveWebPageItemTitle(itemId),
-      faviconUrl: get(webPageItem.faviconUrl),
-      isLoading: tab?.status === 'loading',
-      isSoftUnloaded: tab?.discarded === true,
-      isHardUnloaded: tab === undefined,
-      isUnread: get(webPageItem.isUnread),
-      isAudible: tab?.audible === true,
+      title: Derived.getWebPageItemTitle(itemId),
+      faviconUrl: webPageItem.faviconUrl,
+      isLoading: Derived.getTabIsLoading(itemId),
+      isSoftUnloaded: Derived.getTabIsSoftUnloaded(itemId),
+      isHardUnloaded: Derived.getTabIsHardUnloaded(itemId),
+      isUnread: webPageItem.isUnread,
+      isAudible: Derived.getTabIsAudible(itemId),
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
@@ -136,17 +134,15 @@
 </script>
 
 <script lang="ts">
-  import {Readable} from 'svelte/store'
-
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
-  export let title: string
-  export let faviconUrl: string
-  export let isLoading: boolean
-  export let isSoftUnloaded: boolean
-  export let isHardUnloaded: boolean
-  export let isUnread: boolean
-  export let isAudible: boolean
+  export let title: Readable<string>
+  export let faviconUrl: Readable<string>
+  export let isLoading: Readable<boolean>
+  export let isSoftUnloaded: Readable<boolean>
+  export let isHardUnloaded: Readable<boolean>
+  export let isUnread: Readable<boolean>
+  export let isAudible: Readable<boolean>
   export let onFocus: (event: FocusEvent) => void
   export let onClickTitle: (event: MouseEvent) => void
   export let onClickFavicon: (event: MouseEvent) => void
@@ -156,21 +152,21 @@
 </script>
 
 <div class="item-tree-web-page-content" {id} tabindex="0" on:focus={onFocus}>
-  {#if isLoading}
+  {#if $isLoading}
     <div class="item-tree-web-page-content_favicon loading-indicator" on:click={onClickFavicon} />
-  {:else if faviconUrl.length > 0}
+  {:else if $faviconUrl.length > 0}
     <img
       class="item-tree-web-page-content_favicon"
-      class:soft-unloaded-item={isSoftUnloaded}
-      class:hard-unloaded-item={isHardUnloaded}
-      src={faviconUrl}
+      class:soft-unloaded-item={$isSoftUnloaded}
+      class:hard-unloaded-item={$isHardUnloaded}
+      src={$faviconUrl}
       on:click={onClickFavicon}
     />
   {:else}
     <div
       class="item-tree-web-page-content_favicon default-favicon"
-      class:soft-unloaded-item={isSoftUnloaded}
-      class:hard-unloaded-item={isHardUnloaded}
+      class:soft-unloaded-item={$isSoftUnloaded}
+      class:hard-unloaded-item={$isHardUnloaded}
       on:click={onClickFavicon}
     />
   {/if}
@@ -186,17 +182,17 @@
   {/if}
   <div
     class="item-tree-web-page-content_title"
-    class:soft-unloaded-item={isSoftUnloaded}
-    class:hard-unloaded-item={isHardUnloaded}
-    class:unread={isUnread}
-    {title}
+    class:soft-unloaded-item={$isSoftUnloaded}
+    class:hard-unloaded-item={$isHardUnloaded}
+    class:unread={$isUnread}
+    title={$title}
     draggable="true"
     on:click={onClickTitle}
     on:dragstart={onDragStart}
   >
-    {title}
+    {$title}
   </div>
-  {#if isAudible}
+  {#if $isAudible}
     <div class="item-tree-web-page-content_audible-icon" />
   {:else}
     <div class="grid-empty-cell" />

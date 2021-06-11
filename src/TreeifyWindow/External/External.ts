@@ -145,9 +145,7 @@ export class External {
     return md5(jsonString)
   }
 
-  dumpCurrentState() {
-    this.tabItemCorrespondence.dumpCurrentState()
-  }
+  dumpCurrentState() {}
 }
 
 type TreeifyClipboard = {

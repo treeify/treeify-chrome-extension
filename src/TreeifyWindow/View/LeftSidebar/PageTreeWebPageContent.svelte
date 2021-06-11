@@ -1,25 +1,25 @@
 <script context="module" lang="ts">
-  import {get} from 'svelte/store'
+  import {get, Readable} from 'svelte/store'
   import {ItemId} from '../../basicType'
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {Internal} from '../../Internal/Internal'
 
   export function createPageTreeWebPageContentProps(itemId: ItemId) {
     return {
-      title: CurrentState.deriveWebPageItemTitle(itemId),
+      title: Derived.getWebPageItemTitle(itemId),
       faviconUrl: get(Internal.instance.state.webPageItems[itemId].faviconUrl),
     }
   }
 </script>
 
 <script lang="ts">
-  export let title: string
+  export let title: Readable<string>
   export let faviconUrl: string
 </script>
 
 <div class="page-tree-web-page-content">
   <img class="page-tree-web-page-content_favicon" src="LeftSidebar.svelte" draggable="false" />
-  <div class="page-tree-web-page-content_title">{title}</div>
+  <div class="page-tree-web-page-content_title">{$title}</div>
 </div>
 
 <style>

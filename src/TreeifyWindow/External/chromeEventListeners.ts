@@ -58,7 +58,6 @@ export function onCreated(tab: Tab) {
       // ウェブページアイテムを作る
       const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
       // タブがバックグラウンドで開かれたら未読フラグを立てる
       if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
@@ -74,7 +73,7 @@ export function onCreated(tab: Tab) {
           CurrentState.setTargetItemPath(newItemPath)
         }
       } else {
-        const openerItemId = External.instance.tabItemCorrespondence.getItemIdBy(tab.openerTabId)
+        const openerItemId = External.instance.tabItemCorrespondence.getItemId(tab.openerTabId)
         assertNonUndefined(openerItemId)
 
         // openerの最後の子として追加する
@@ -95,7 +94,6 @@ export function onCreated(tab: Tab) {
       const itemId = itemIdsForTabCreation.first(undefined)
       assertNonUndefined(itemId)
       reflectInWebPageItem(itemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
       External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
 
       // タブがバックグラウンドで開かれたら未読フラグを立てる
@@ -120,7 +118,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
       await matchTabsAndWebPageItems()
     }
 
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+    const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
     assertNonUndefined(itemId)
     reflectInWebPageItem(itemId, tab)
 
@@ -131,7 +129,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
 // Tabの情報をウェブページアイテムに転写する
 function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
-    External.instance.tabItemCorrespondence.registerTab(tab.id, tab)
+    External.instance.tabItemCorrespondence.tieTabAndItem(itemId, tab)
   }
   CurrentState.setWebPageItemTabTitle(itemId, tab.title ?? '')
   const url = tab.url || tab.pendingUrl || ''
@@ -141,7 +139,7 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 
 export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   doWithErrorCapture(() => {
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+    const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
     // アイテム削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
     if (itemId === undefined) return
 
@@ -161,7 +159,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
 
 export async function onActivated(tabActiveInfo: TabActiveInfo) {
   doWithErrorCapture(() => {
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
+    const itemId = External.instance.tabItemCorrespondence.getItemId(tabActiveInfo.tabId)
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)
       CurrentState.setIsUnreadFlag(itemId, false)
@@ -201,7 +199,6 @@ export async function matchTabsAndWebPageItems() {
       // ウェブページアイテムを作る
       const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
       // アクティブページの最初の子として追加する
       const activePageId = CurrentState.getActivePageId()
@@ -211,7 +208,6 @@ export async function matchTabsAndWebPageItems() {
       const itemId: ItemId = webPageItemIds.last()
 
       reflectInWebPageItem(itemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
     }
   }
 }

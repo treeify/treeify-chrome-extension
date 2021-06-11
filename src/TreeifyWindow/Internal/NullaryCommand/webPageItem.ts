@@ -11,9 +11,7 @@ import {get} from 'svelte/store'
 export function softUnloadItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
-    ItemPath.getItemId(targetItemPath)
-  )
+  const tabId = External.instance.tabItemCorrespondence.getTabId(ItemPath.getItemId(targetItemPath))
   // 対応するタブがなければ何もしない
   if (tabId === undefined) return
 
@@ -25,7 +23,7 @@ export function softUnloadSubtree() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+    const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
     if (tabId !== undefined) {
       chrome.tabs.discard(tabId)
     }
@@ -36,9 +34,7 @@ export function softUnloadSubtree() {
 export function hardUnloadItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
-    ItemPath.getItemId(targetItemPath)
-  )
+  const tabId = External.instance.tabItemCorrespondence.getTabId(ItemPath.getItemId(targetItemPath))
   // 対応するタブがなければ何もしない
   if (tabId === undefined) return
 
@@ -53,7 +49,7 @@ export function hardUnloadSubtree() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+    const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
     if (tabId !== undefined) {
       // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
       External.instance.hardUnloadedTabIds.add(tabId)
@@ -67,7 +63,7 @@ export function hardUnloadSubtree() {
 /** ウェブページアイテムのロード操作 */
 export function loadItem() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
+  const tabId = External.instance.tabItemCorrespondence.getTabId(targetItemId)
   // 対応するタブがあれば何もしない。
   // discarded状態のタブをバックグラウンドで非discarded化できれば望ましいのだがそのようなAPIが見当たらない。
   if (tabId !== undefined) return
@@ -82,7 +78,7 @@ export function loadItem() {
 export function loadSubtree() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+    const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
     if (tabId === undefined) {
       const url = get(Internal.instance.state.webPageItems[subtreeItemId].url)
       const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
@@ -100,12 +96,12 @@ export function browseTab() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
+  const tabId = External.instance.tabItemCorrespondence.getTabId(targetItemId)
   if (tabId !== undefined) {
     // ウェブページアイテムに対応するタブを最前面化する
     assertNonUndefined(tabId)
     chrome.tabs.update(tabId, {active: true})
-    const tab = External.instance.tabItemCorrespondence.getTab(tabId)
+    const tab = get(External.instance.tabItemCorrespondence.getTab(targetItemId))
     assertNonUndefined(tab)
     chrome.windows.update(tab.windowId, {focused: true})
   } else {
