@@ -3,6 +3,7 @@
   import {get} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {ItemPath} from '../../Internal/ItemPath'
   import {State} from '../../Internal/State'
@@ -14,7 +15,7 @@
 
     return {
       webPageItemTitleSettingDialog,
-      initialTitle: get(CurrentState.deriveWebPageItemTitle(targetItemId)),
+      initialTitle: get(Derived.deriveWebPageItemTitle(targetItemId)),
       onKeyDown: (event: KeyboardEvent) => {
         doWithErrorCapture(() => {
           if (event.isComposing) return

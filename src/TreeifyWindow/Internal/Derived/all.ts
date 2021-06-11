@@ -28,3 +28,5 @@ export function get<T>(readable: Readable<T> | undefined | null) {
 
   return svelteGet(readable)
 }
+
+export * from 'src/TreeifyWindow/Internal/Derived/webPageItem'
