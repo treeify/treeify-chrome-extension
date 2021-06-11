@@ -5,7 +5,6 @@
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
-  import {get} from '../../Internal/Derived/all'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -23,12 +22,12 @@
       itemPath,
       labels: Derived.getLabels(itemPath),
       title: Derived.getWebPageItemTitle(itemId),
-      faviconUrl: get(webPageItem.faviconUrl),
-      isLoading: get(Derived.getTabIsLoading(itemId)),
-      isSoftUnloaded: get(Derived.getTabIsSoftUnloaded(itemId)),
-      isHardUnloaded: get(Derived.getTabIsHardUnloaded(itemId)),
-      isUnread: get(webPageItem.isUnread),
-      isAudible: get(Derived.getTabIsAudible(itemId)),
+      faviconUrl: webPageItem.faviconUrl,
+      isLoading: Derived.getTabIsLoading(itemId),
+      isSoftUnloaded: Derived.getTabIsSoftUnloaded(itemId),
+      isHardUnloaded: Derived.getTabIsHardUnloaded(itemId),
+      isUnread: webPageItem.isUnread,
+      isAudible: Derived.getTabIsAudible(itemId),
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
@@ -138,12 +137,12 @@
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
   export let title: Readable<string>
-  export let faviconUrl: string
-  export let isLoading: boolean
-  export let isSoftUnloaded: boolean
-  export let isHardUnloaded: boolean
-  export let isUnread: boolean
-  export let isAudible: boolean
+  export let faviconUrl: Readable<string>
+  export let isLoading: Readable<boolean>
+  export let isSoftUnloaded: Readable<boolean>
+  export let isHardUnloaded: Readable<boolean>
+  export let isUnread: Readable<boolean>
+  export let isAudible: Readable<boolean>
   export let onFocus: (event: FocusEvent) => void
   export let onClickTitle: (event: MouseEvent) => void
   export let onClickFavicon: (event: MouseEvent) => void
@@ -153,21 +152,21 @@
 </script>
 
 <div class="item-tree-web-page-content" {id} tabindex="0" on:focus={onFocus}>
-  {#if isLoading}
+  {#if $isLoading}
     <div class="item-tree-web-page-content_favicon loading-indicator" on:click={onClickFavicon} />
-  {:else if faviconUrl.length > 0}
+  {:else if $faviconUrl.length > 0}
     <img
       class="item-tree-web-page-content_favicon"
-      class:soft-unloaded-item={isSoftUnloaded}
-      class:hard-unloaded-item={isHardUnloaded}
-      src={faviconUrl}
+      class:soft-unloaded-item={$isSoftUnloaded}
+      class:hard-unloaded-item={$isHardUnloaded}
+      src={$faviconUrl}
       on:click={onClickFavicon}
     />
   {:else}
     <div
       class="item-tree-web-page-content_favicon default-favicon"
-      class:soft-unloaded-item={isSoftUnloaded}
-      class:hard-unloaded-item={isHardUnloaded}
+      class:soft-unloaded-item={$isSoftUnloaded}
+      class:hard-unloaded-item={$isHardUnloaded}
       on:click={onClickFavicon}
     />
   {/if}
@@ -183,9 +182,9 @@
   {/if}
   <div
     class="item-tree-web-page-content_title"
-    class:soft-unloaded-item={isSoftUnloaded}
-    class:hard-unloaded-item={isHardUnloaded}
-    class:unread={isUnread}
+    class:soft-unloaded-item={$isSoftUnloaded}
+    class:hard-unloaded-item={$isHardUnloaded}
+    class:unread={$isUnread}
     title={$title}
     draggable="true"
     on:click={onClickTitle}
@@ -193,7 +192,7 @@
   >
     {$title}
   </div>
-  {#if isAudible}
+  {#if $isAudible}
     <div class="item-tree-web-page-content_audible-icon" />
   {:else}
     <div class="grid-empty-cell" />
