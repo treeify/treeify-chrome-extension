@@ -167,8 +167,8 @@ export function getContentAsPlainText(itemId: ItemId): string {
   const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      const domishObjects = get(Internal.instance.state.textItems[itemId].domishObjects)
-      return DomishObject.toSingleLinePlainText(domishObjects)
+      const innerHtml = get(Internal.instance.state.textItems[itemId].innerHtml)
+      return DomishObject.toSingleLinePlainText(innerHtml)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       const title = CurrentState.deriveWebPageItemTitle(itemId)
@@ -358,7 +358,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
-      const markedupText = MarkedupText.from(get(textItem.domishObjects))
+      const markedupText = MarkedupText.from(get(textItem.innerHtml))
       baseAttributes.type = 'text'
       baseAttributes.text = markedupText.text
       if (!markedupText.styles.isEmpty()) {

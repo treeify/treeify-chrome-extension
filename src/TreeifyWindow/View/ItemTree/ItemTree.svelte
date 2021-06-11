@@ -134,8 +134,8 @@
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
-        const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
-        const characterCount = DomishObject.countCharacters(domishObjects)
+        const innerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
+        const characterCount = DomishObject.countCharacters(innerHtml)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
@@ -155,8 +155,8 @@
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
-        const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
-        const characterCount = DomishObject.countCharacters(domishObjects)
+        const innerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
+        const characterCount = DomishObject.countCharacters(innerHtml)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
@@ -200,8 +200,8 @@
       }
     } else {
       const targetItemId = ItemPath.getItemId(targetItemPath)
-      const domishObjects = get(Internal.instance.state.textItems[targetItemId].domishObjects)
-      const characterCount = DomishObject.countCharacters(domishObjects)
+      const innerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
+      const characterCount = DomishObject.countCharacters(innerHtml)
 
       // キャレット位置が末尾以外のときはブラウザの挙動に任せる
       if (
@@ -277,9 +277,7 @@
       assertNonUndefined(originalXCoordinate)
 
       // 上のアイテムの最後の行の文字数を取得
-      const aboveItemDomishObjects = get(
-        Internal.instance.state.textItems[aboveItemId].domishObjects
-      )
+      const aboveItemDomishObjects = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
       const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
       const lastLine = lines[lines.length - 1]
 
@@ -391,9 +389,7 @@
       assertNonUndefined(originalXCoordinate)
 
       // 下のアイテムの最初の行の文字数を取得
-      const belowItemDomishObjects = get(
-        Internal.instance.state.textItems[belowItemId].domishObjects
-      )
+      const belowItemDomishObjects = get(Internal.instance.state.textItems[belowItemId].innerHtml)
       const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split('\n')[0]
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
@@ -492,8 +488,8 @@
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合
 
-        const domishObjects = get(Internal.instance.state.textItems[targetItemId].domishObjects)
-        const charactersCount = DomishObject.countCharacters(domishObjects)
+        const innerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
+        const charactersCount = DomishObject.countCharacters(innerHtml)
         const textItemSelection = getTextItemSelectionFromDom()
         if (textItemSelection?.focusDistance !== charactersCount) {
           return
@@ -535,10 +531,10 @@
 
           // テキストを連結
           const focusedItemDomishObjects = get(
-            Internal.instance.state.textItems[targetItemId].domishObjects
+            Internal.instance.state.textItems[targetItemId].innerHtml
           )
           const aboveItemDomishObjects = get(
-            Internal.instance.state.textItems[aboveItemId].domishObjects
+            Internal.instance.state.textItems[aboveItemId].innerHtml
           )
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(
@@ -582,7 +578,7 @@
       assertNonUndefined(selection)
 
       const focusedItemDomishObjects = get(
-        Internal.instance.state.textItems[targetItemId].domishObjects
+        Internal.instance.state.textItems[targetItemId].innerHtml
       )
       const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
       if (
@@ -605,7 +601,7 @@
 
           // テキストを連結
           const belowItemDomishObjects = get(
-            Internal.instance.state.textItems[belowItemId].domishObjects
+            Internal.instance.state.textItems[belowItemId].innerHtml
           )
           // TODO: テキストノード同士が連結されないことが気がかり
           CurrentState.setTextItemDomishObjects(

@@ -30,13 +30,13 @@ export namespace MarkedupText {
   }
 
   /** stringからMarkedupTextに変換する */
-  export function from(domishObjects: string): MarkedupText {
+  export function from(innerHtml: string): MarkedupText {
     const recorder: Recorder = {
       position: 0,
       texts: [],
       styles: [],
     }
-    for (const domishObject of domishObjects) {
+    for (const domishObject of innerHtml) {
       traverseWithRecording(domishObject, recorder)
     }
     return {

@@ -79,7 +79,7 @@ export namespace State {
 
   /** テキストアイテムが固有で持つデータの型 */
   export type TextItem = {
-    domishObjects: Writable<string>
+    innerHtml: Writable<string>
   }
 
   /** ウェブページアイテムが固有で持つデータの型 */

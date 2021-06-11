@@ -83,7 +83,7 @@ export class Internal {
       },
       textItems: {
         0: {
-          domishObjects: writable(List.of({type: 'text', textContent: 'Top'})),
+          innerHtml: writable(List.of({type: 'text', textContent: 'Top'})),
         },
       },
       webPageItems: {},
@@ -217,22 +217,22 @@ export class Internal {
       },
       textItems: {
         0: {
-          domishObjects: writable(List.of({type: 'text', textContent: 'Top'})),
+          innerHtml: writable(List.of({type: 'text', textContent: 'Top'})),
         },
         1: {
-          domishObjects: writable(List.of({type: 'text', textContent: 'isCollapsed false'})),
+          innerHtml: writable(List.of({type: 'text', textContent: 'isCollapsed false'})),
         },
         2: {
-          domishObjects: writable(List.of({type: 'text', textContent: 'isCollapsed true'})),
+          innerHtml: writable(List.of({type: 'text', textContent: 'isCollapsed true'})),
         },
         3: {
-          domishObjects: writable(List.of({type: 'text', textContent: 'visible child'})),
+          innerHtml: writable(List.of({type: 'text', textContent: 'visible child'})),
         },
         4: {
-          domishObjects: writable(List.of({type: 'text', textContent: 'invisible child'})),
+          innerHtml: writable(List.of({type: 'text', textContent: 'invisible child'})),
         },
         6: {
-          domishObjects: writable(List.of({type: 'text', textContent: '子ページ'})),
+          innerHtml: writable(List.of({type: 'text', textContent: '子ページ'})),
         },
       },
       webPageItems: {

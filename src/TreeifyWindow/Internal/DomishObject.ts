@@ -47,8 +47,8 @@ export namespace DomishObject {
   export function toDocumentFragment(value: DomishObject | string): DocumentFragment {
     const templateElement = document.createElement('template')
     if (value instanceof List) {
-      const domishObjects = value as string
-      for (const node of domishObjects.map(toDomNode)) {
+      const innerHtml = value as string
+      for (const node of innerHtml.map(toDomNode)) {
         templateElement.content.appendChild(node)
       }
     } else {
@@ -94,8 +94,8 @@ export namespace DomishObject {
   /** DomishObjectをHTML文字列に変換する */
   export function toHtml(value: DomishObject | string): string {
     if (value instanceof List) {
-      const domishObjects = value as string
-      return domishObjects.map(toHtml).join('')
+      const innerHtml = value as string
+      return innerHtml.map(toHtml).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
@@ -169,8 +169,8 @@ export namespace DomishObject {
   /** 改行（br要素）を含む文字数を返す */
   export function countCharacters(value: DomishObject | string): integer {
     if (value instanceof List) {
-      const domishObjects = value as string
-      return domishObjects.map(countCharacters).reduce((a: integer, x) => a + x, 0)
+      const innerHtml = value as string
+      return innerHtml.map(countCharacters).reduce((a: integer, x) => a + x, 0)
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
@@ -192,8 +192,8 @@ export namespace DomishObject {
   /** プレーンテキストに変換する。改行は維持される。 */
   export function toPlainText(value: DomishObject | string): string {
     if (value instanceof List) {
-      const domishObjects = value as string
-      return domishObjects.map(toPlainText).join('')
+      const innerHtml = value as string
+      return innerHtml.map(toPlainText).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
@@ -218,8 +218,8 @@ export namespace DomishObject {
    */
   export function toSingleLinePlainText(value: DomishObject | string): string {
     if (value instanceof List) {
-      const domishObjects = value as string
-      return domishObjects.map(toSingleLinePlainText).join('')
+      const innerHtml = value as string
+      return innerHtml.map(toSingleLinePlainText).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
