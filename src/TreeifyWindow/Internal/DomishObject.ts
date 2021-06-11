@@ -38,59 +38,6 @@ export namespace DomishObject {
     textContent: string
   }
 
-  /** 等価性判定 */
-  export function equals(lhs: string, rhs: string): boolean {
-    return toDocumentFragment(lhs).isEqualNode(toDocumentFragment(rhs))
-  }
-
-  /** DomishObjectをDOM要素に変換する */
-  export function toDocumentFragment(value: DomishObject | string): DocumentFragment {
-    const templateElement = document.createElement('template')
-    if (value instanceof List) {
-      const innerHtml = value as string
-      for (const node of innerHtml.map(toDomNode)) {
-        templateElement.content.appendChild(node)
-      }
-    } else {
-      const domishObject = value as DomishObject
-      templateElement.content.appendChild(toDomNode(domishObject))
-    }
-    return templateElement.content
-  }
-
-  function toDomNode(domishObject: DomishObject): Node {
-    switch (domishObject.type) {
-      case 'b':
-        const bElement = document.createElement('b')
-        for (const child of domishObject.children) {
-          bElement.appendChild(toDomNode(child))
-        }
-        return bElement
-      case 'u':
-        const uElement = document.createElement('u')
-        for (const child of domishObject.children) {
-          uElement.appendChild(toDomNode(child))
-        }
-        return uElement
-      case 'i':
-        const iElement = document.createElement('i')
-        for (const child of domishObject.children) {
-          iElement.appendChild(toDomNode(child))
-        }
-        return iElement
-      case 'strike':
-        const strikeElement = document.createElement('strike')
-        for (const child of domishObject.children) {
-          strikeElement.appendChild(toDomNode(child))
-        }
-        return strikeElement
-      case 'br':
-        return document.createElement('br')
-      case 'text':
-        return document.createTextNode(domishObject.textContent)
-    }
-  }
-
   /**
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
