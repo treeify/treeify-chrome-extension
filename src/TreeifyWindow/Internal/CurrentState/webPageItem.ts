@@ -5,7 +5,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {get, writable} from 'svelte/store'
+import {derived, get, Readable, writable} from 'svelte/store'
 
 /**
  * 新しい空のウェブページアイテムを作成し、CurrentStateに登録する。
@@ -67,10 +67,12 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
 }
 
-export function deriveWebPageItemTitle(itemId: ItemId): string {
+export function deriveWebPageItemTitle(itemId: ItemId): Readable<string> {
   const webPageItem = Internal.instance.state.webPageItems[itemId]
-  const title = get(webPageItem.title) ?? get(webPageItem.tabTitle)
-  return title !== '' ? title : get(webPageItem.url)
+  return derived([webPageItem.title, webPageItem.tabTitle, webPageItem.url], () => {
+    const title = get(webPageItem.title) ?? get(webPageItem.tabTitle)
+    return title !== '' ? title : get(webPageItem.url)
+  })
 }
 
 /** ウェブページアイテムの未読フラグを上書き設定する */

@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
   import {createFocusTrap, FocusTrap} from 'focus-trap'
+  import {get} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
@@ -13,7 +14,7 @@
 
     return {
       webPageItemTitleSettingDialog,
-      initialTitle: CurrentState.deriveWebPageItemTitle(targetItemId),
+      initialTitle: get(CurrentState.deriveWebPageItemTitle(targetItemId)),
       onKeyDown: (event: KeyboardEvent) => {
         doWithErrorCapture(() => {
           if (event.isComposing) return
