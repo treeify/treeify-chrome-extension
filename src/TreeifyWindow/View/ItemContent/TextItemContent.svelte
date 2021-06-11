@@ -1,20 +1,21 @@
 <script context="module" lang="ts">
-  import {get} from 'svelte/store'
   import {ItemId} from '../../basicType'
   import {Internal} from '../../Internal/Internal'
 
   export function createTextItemContentProps(itemId: ItemId) {
     return {
-      innerHtml: get(Internal.instance.state.textItems[itemId].innerHtml),
+      innerHtml: Internal.instance.state.textItems[itemId].innerHtml,
     }
   }
 </script>
 
 <script lang="ts">
-  export let innerHtml: string
+  import {Writable} from 'svelte/store'
+
+  export let innerHtml: Writable<string>
 </script>
 
-<div>{@html innerHtml}</div>
+<div>{@html $innerHtml}</div>
 
 <style>
 </style>
