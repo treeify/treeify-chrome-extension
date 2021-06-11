@@ -28,7 +28,7 @@
       isSoftUnloaded: get(Derived.getTabIsSoftUnloaded(itemId)),
       isHardUnloaded: get(Derived.getTabIsHardUnloaded(itemId)),
       isUnread: get(webPageItem.isUnread),
-      isAudible: get(tab)?.audible === true,
+      isAudible: get(Derived.getTabIsAudible(itemId)),
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

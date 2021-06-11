@@ -40,3 +40,14 @@ export function getTabIsHardUnloaded(itemId: ItemId): Readable<boolean> {
     return tab === undefined
   })
 }
+
+/**
+ * 指定されたアイテムに対応するタブが音を鳴らしていればtrueを返す。
+ * 対応するタブがない場合はfalseを返す。
+ */
+export function getTabIsAudible(itemId: ItemId): Readable<boolean> {
+  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  return derived(tab, (tab) => {
+    return tab?.audible === true
+  })
+}
