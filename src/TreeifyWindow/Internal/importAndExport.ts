@@ -288,13 +288,7 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
 function createItemFromSingleLineText(line: string): ItemId {
   // テキストアイテムを作る
   const itemId = CurrentState.createTextItem()
-  CurrentState.setTextItemInnerHtml(
-    itemId,
-    List.of({
-      type: 'text',
-      textContent: line,
-    })
-  )
+  CurrentState.setTextItemInnerHtml(itemId, document.createTextNode(line).textContent ?? '')
   return itemId
 }
 
@@ -585,11 +579,8 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
     default:
       const textItemId = CurrentState.createTextItem()
       // TODO: スタイル情報を取り込む
-      const domishObject: DomishObject.TextNode = {
-        type: 'text',
-        textContent: attributes.text,
-      }
-      CurrentState.setTextItemInnerHtml(textItemId, List.of(domishObject))
+      const innerHtml = document.createTextNode(attributes.text).textContent ?? ''
+      CurrentState.setTextItemInnerHtml(textItemId, innerHtml)
       return textItemId
   }
 }
