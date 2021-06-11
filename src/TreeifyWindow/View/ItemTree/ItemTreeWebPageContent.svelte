@@ -24,7 +24,7 @@
       labels: Derived.getLabels(itemPath),
       title: Derived.getWebPageItemTitle(itemId),
       faviconUrl: get(webPageItem.faviconUrl),
-      isLoading: get(tab)?.status === 'loading',
+      isLoading: get(Derived.getTabIsLoading(itemId)),
       isSoftUnloaded: get(tab)?.discarded === true,
       isHardUnloaded: get(tab) === undefined,
       isUnread: get(webPageItem.isUnread),
