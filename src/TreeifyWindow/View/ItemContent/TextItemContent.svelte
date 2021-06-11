@@ -11,13 +11,10 @@
 </script>
 
 <script lang="ts">
-  import {List} from 'immutable'
-  import {DomishObject} from '../../Internal/DomishObject'
-
   export let innerHtml: string
 </script>
 
-<div>{@html DomishObject.toHtml(innerHtml)}</div>
+<div>{@html innerHtml}</div>
 
 <style>
 </style>

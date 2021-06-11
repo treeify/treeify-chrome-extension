@@ -98,7 +98,7 @@
     on:compositionend={onCompositionEnd}
     on:click={onClick}
   >
-    {@html DomishObject.toHtml(innerHtml)}
+    {@html innerHtml}
   </div>
 </div>
 
