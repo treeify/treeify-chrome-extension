@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
+  import {Derived} from 'src/TreeifyWindow/Internal/Derived'
   import {get} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -14,7 +15,7 @@
 
     return {
       itemPath,
-      labels: CurrentState.getLabels(itemPath),
+      labels: Derived.getLabels(itemPath),
       url: get(imageItem.url),
       caption: get(imageItem.caption),
       onFocus: (event: FocusEvent) => {
@@ -36,8 +37,10 @@
 </script>
 
 <script lang="ts">
+  import {Readable} from 'svelte/store'
+
   export let itemPath: ItemPath
-  export let labels: List<string>
+  export let labels: Readable<List<string>> | undefined
   export let url: string
   export let caption: string
   export let onFocus: (event: FocusEvent) => void
@@ -47,9 +50,9 @@
 </script>
 
 <div class="item-tree-image-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
-  {#if !labels.isEmpty()}
+  {#if labels !== undefined && !$labels.isEmpty()}
     <div class="item-tree-image-content_labels">
-      {#each labels.toArray() as label}
+      {#each $labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>

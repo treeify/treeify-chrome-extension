@@ -1,9 +1,10 @@
 <script context="module" lang="ts">
   import hljs from 'highlight.js'
   import {List} from 'immutable'
-  import {get} from 'svelte/store'
+  import {get, Readable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
@@ -15,7 +16,7 @@
     const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
     return {
       itemPath,
-      labels: CurrentState.getLabels(itemPath),
+      labels: Derived.getLabels(itemPath),
       code: get(codeBlockItem.code),
       language: get(codeBlockItem.language),
       onFocus: (event: FocusEvent) => {
@@ -38,7 +39,7 @@
 
 <script lang="ts">
   export let itemPath: ItemPath
-  export let labels: List<string>
+  export let labels: Readable<List<string>> | undefined
   export let code: string
   export let language: string
   export let onFocus: (event: FocusEvent) => void
@@ -61,9 +62,9 @@
 </script>
 
 <div class="item-tree-code-block-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
-  {#if !labels.isEmpty()}
+  {#if labels !== undefined && !$labels.isEmpty()}
     <div class="item-tree-code-block-content_labels">
-      {#each labels.toArray() as label}
+      {#each $labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>

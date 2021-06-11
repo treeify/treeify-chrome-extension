@@ -4,6 +4,7 @@
   import {getTextItemSelectionFromDom} from '../../External/domTextSelection'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
@@ -13,7 +14,7 @@
     const itemId = ItemPath.getItemId(itemPath)
     return {
       itemPath,
-      labels: CurrentState.getLabels(itemPath),
+      labels: Derived.getLabels(itemPath),
       innerHtml: Internal.instance.state.textItems[itemId].innerHtml,
       onInput: (event: InputEvent) => {
         doWithErrorCapture(() => {
@@ -35,10 +36,10 @@
 </script>
 
 <script lang="ts">
-  import {Writable} from 'svelte/store'
+  import {Readable, Writable} from 'svelte/store'
 
   export let itemPath: ItemPath
-  export let labels: List<string>
+  export let labels: Readable<List<string>> | undefined
   export let innerHtml: Writable<string>
   export let onInput: (event: InputEvent) => void
   export let onClick: (event: MouseEvent) => void
@@ -47,9 +48,9 @@
 </script>
 
 <div class="item-tree-text-content">
-  {#if !labels.isEmpty()}
+  {#if labels !== undefined && !$labels.isEmpty()}
     <div class="item-tree-text-content_labels">
-      {#each labels.toArray() as label}
+      {#each $labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>

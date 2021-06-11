@@ -174,20 +174,6 @@ export function getIsCollapsed(itemPath: ItemPath): boolean {
 }
 
 /**
- * 指定されたアイテムパスのラベルを返す。
- * 親を持たないアイテムパスの場合、空リストを返す。
- */
-export function getLabels(itemPath: ItemPath): List<string> {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  if (parentItemId !== undefined) {
-    return Internal.instance.state.items[itemId].parents[parentItemId].labels
-  } else {
-    return List.of()
-  }
-}
-
-/**
  * 指定されたアイテムパスのラベルを設定する。
  * 親を持たないアイテムパスの場合、何もしない。
  */
@@ -195,7 +181,10 @@ export function setLabels(itemPath: ItemPath, labels: List<string>) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   if (parentItemId !== undefined) {
-    Internal.instance.state.items[itemId].parents[parentItemId].labels = labels
+    Internal.instance.state.items[itemId].parents[parentItemId].labels.set(labels)
+    Internal.instance.markAsMutated(
+      PropertyPath.of('items', itemId, 'parents', parentItemId, 'labels')
+    )
   }
 }
 

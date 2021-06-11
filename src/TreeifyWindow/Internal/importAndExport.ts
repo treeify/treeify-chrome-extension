@@ -6,13 +6,14 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {get} from 'svelte/store'
+import {get, writable} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
@@ -90,7 +91,7 @@ export function onPaste(event: ClipboardEvent) {
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: State.Edge = {isCollapsed: true, labels: List.of()}
+          const initialEdge: State.Edge = {isCollapsed: true, labels: writable(List.of())}
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
@@ -344,9 +345,9 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   if (!get(item.cssClasses).isEmpty()) {
     baseAttributes.cssClass = get(item.cssClasses).join(' ')
   }
-  const labels = CurrentState.getLabels(itemPath)
-  if (!labels.isEmpty()) {
-    baseAttributes.labels = JSON.stringify(labels.toArray())
+  const labels = Derived.getLabels(itemPath)
+  if (labels !== undefined && !get(labels).isEmpty()) {
+    baseAttributes.labels = JSON.stringify(get(labels).toArray())
   }
 
   switch (item.itemType) {
@@ -503,7 +504,10 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
   if (existingItemId !== undefined) {
     return {
       itemId: existingItemId,
-      edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
+      edge: {
+        isCollapsed: attributes.isCollapsed === 'true',
+        labels: writable(extractLabels(attributes)),
+      },
     }
   }
 
@@ -528,7 +532,10 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
 
   return {
     itemId,
-    edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
+    edge: {
+      isCollapsed: attributes.isCollapsed === 'true',
+      labels: writable(extractLabels(attributes)),
+    },
   }
 }
 

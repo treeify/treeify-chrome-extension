@@ -4,6 +4,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -21,7 +22,7 @@
 
     return {
       itemPath,
-      labels: CurrentState.getLabels(itemPath),
+      labels: Derived.getLabels(itemPath),
       title: CurrentState.deriveWebPageItemTitle(itemId),
       faviconUrl: get(webPageItem.faviconUrl),
       isLoading: tab?.status === 'loading',
@@ -135,8 +136,10 @@
 </script>
 
 <script lang="ts">
+  import {Readable} from 'svelte/store'
+
   export let itemPath: ItemPath
-  export let labels: List<string>
+  export let labels: Readable<List<string>> | undefined
   export let title: string
   export let faviconUrl: string
   export let isLoading: boolean
@@ -172,9 +175,9 @@
     />
   {/if}
 
-  {#if !labels.isEmpty()}
+  {#if labels !== undefined && !$labels.isEmpty()}
     <div class="item-tree-web-page-content_labels">
-      {#each labels.toArray() as label}
+      {#each $labels.toArray() as label}
         <Label text={label} />
       {/each}
     </div>
