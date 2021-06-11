@@ -34,7 +34,7 @@
       isActivePage: !ItemPath.hasParent(itemPath),
       selected: deriveSelected(state, itemPath),
       isTranscluded: Object.keys(item.parents).length > 1,
-      cssClasses: get(item.cssClasses),
+      cssClasses: item.cssClasses,
       footprintRank: footprintRankMap.get(itemId),
       footprintRankMap,
       footprintCount,
@@ -169,6 +169,8 @@
 </script>
 
 <script lang="ts">
+  import {Readable} from 'svelte/store'
+
   export let itemPath: ItemPath
   export let isActivePage: boolean
   /**
@@ -179,7 +181,7 @@
    */
   export let selected: 'single' | 'multi' | 'non'
   export let isTranscluded: boolean
-  export let cssClasses: List<string>
+  export let cssClasses: Readable<List<string>>
   export let footprintRank: integer | undefined
   export let footprintRankMap: Map<ItemId, integer>
   export let footprintCount: integer
@@ -211,7 +213,7 @@
   const footprintColor = calculateFootprintColor(footprintRank, footprintCount)
   const footprintLayerStyle =
     footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
-  const childrenCssClasses = cssClasses.map((cssClass) => cssClass + '-children')
+  const childrenCssClasses = $cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
 <div class="item-tree-node" class:multi-selected={selected === 'multi'}>
@@ -220,7 +222,7 @@
   {:else}
     <!-- バレットとインデントラインの領域 -->
     <div
-      class={'item-tree-node_spool-area ' + cssClasses.join(' ')}
+      class={'item-tree-node_spool-area ' + $cssClasses.join(' ')}
       class:transcluded={isTranscluded}
       draggable="true"
       on:dragstart={onDragStart}
@@ -230,7 +232,7 @@
   {/if}
   <div class="item-tree-node_body-and-children-area">
     <!-- ボディ領域 -->
-    <div class={cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+    <div class={$cssClasses.unshift('item-tree-node_body-area').join(' ')}>
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style={footprintLayerStyle}>
         <!-- コンテンツ領域 -->
