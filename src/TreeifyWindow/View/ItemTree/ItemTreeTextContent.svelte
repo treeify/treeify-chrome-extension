@@ -1,11 +1,9 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
-  import {get} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {getTextItemSelectionFromDom} from '../../External/domTextSelection'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {InnerHtml} from '../../Internal/InnerHtml'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
@@ -16,45 +14,10 @@
     return {
       itemPath,
       labels: CurrentState.getLabels(itemPath),
-      innerHtml: get(Internal.instance.state.textItems[itemId].innerHtml),
+      innerHtml: Internal.instance.state.textItems[itemId].innerHtml,
       onInput: (event: InputEvent) => {
         doWithErrorCapture(() => {
-          if (!event.isComposing && event.target instanceof Node) {
-            External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
-            // contenteditableな要素のinnerHTMLをModelに反映する
-            const innerHtml = InnerHtml.fromChildren(event.target)
-            CurrentState.setTextItemInnerHtml(itemId, innerHtml)
-
-            CurrentState.updateItemTimestamp(itemId)
-            CurrentState.commit()
-          }
-        })
-      },
-      onCompositionEnd: (event: CompositionEvent) => {
-        doWithErrorCapture(() => {
-          if (event.target instanceof Node) {
-            // contenteditableな要素のinnerHTMLをModelに反映する
-            const innerHtml = InnerHtml.fromChildren(event.target)
-            CurrentState.setTextItemInnerHtml(itemId, innerHtml)
-            External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-            CurrentState.updateItemTimestamp(itemId)
-
-            // 本当はCurrentState.commit()を呼んでリアクティブに画面を更新したいのだが、
-            // 呼ぶと解決の難しい不具合が起こるので呼んでいない。
-            //
-            // 【不具合の詳細】
-            // 具体的には、IMEで文字を入力してからTabキーやSpaceキーで変換モードにした後、
-            // Enterキーを押さずに後続の文字を打ち始めると、打鍵が1回分なかったことになる。
-            // 例えばAキー、Iキー、Spaceキー、Gキー、Aキーという順に打鍵したとすると、
-            // 「愛が」になるのが正しいが、Gキーの打鍵がなかったことになり「愛あ」になる。
-            //
-            // 【CurrentState.commit()を呼ばないことによる悪影響】
-            // 編集中のテキストアイテムがページツリー内に表示されていたり、
-            // トランスクルードされてアイテムツリー内に表示されている場合、
-            // IME入力を完了してもそれらのViewに最新のテキストが反映されない。
-            // Viewに反映されないだけでModel(State)には反映されているので、次回の描画時に正しい表示になる。
-          }
+          CurrentState.updateItemTimestamp(itemId)
         })
       },
       onClick: (event: MouseEvent) => {
@@ -72,11 +35,12 @@
 </script>
 
 <script lang="ts">
+  import {Writable} from 'svelte/store'
+
   export let itemPath: ItemPath
   export let labels: List<string>
-  export let innerHtml: string
+  export let innerHtml: Writable<string>
   export let onInput: (event: InputEvent) => void
-  export let onCompositionEnd: (event: CompositionEvent) => void
   export let onClick: (event: MouseEvent) => void
 
   const id = ItemTreeContentView.focusableDomElementId(itemPath)
@@ -95,11 +59,9 @@
     {id}
     contenteditable="true"
     on:input={onInput}
-    on:compositionend={onCompositionEnd}
     on:click={onClick}
-  >
-    {@html innerHtml}
-  </div>
+    bind:innerHTML={$innerHtml}
+  />
 </div>
 
 <style>
