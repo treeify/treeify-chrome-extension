@@ -32,3 +32,11 @@ export function getTabIsSoftUnloaded(itemId: ItemId): Readable<boolean> {
     return tab?.discarded === true
   })
 }
+
+/** 指定されたアイテムに対応するタブが存在しなければtrueを返す */
+export function getTabIsHardUnloaded(itemId: ItemId): Readable<boolean> {
+  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  return derived(tab, (tab) => {
+    return tab === undefined
+  })
+}

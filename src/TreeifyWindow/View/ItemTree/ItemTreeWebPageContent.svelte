@@ -26,7 +26,7 @@
       faviconUrl: get(webPageItem.faviconUrl),
       isLoading: get(Derived.getTabIsLoading(itemId)),
       isSoftUnloaded: get(Derived.getTabIsSoftUnloaded(itemId)),
-      isHardUnloaded: get(tab) === undefined,
+      isHardUnloaded: get(Derived.getTabIsHardUnloaded(itemId)),
       isUnread: get(webPageItem.isUnread),
       isAudible: get(tab)?.audible === true,
       onFocus: (event: FocusEvent) => {
