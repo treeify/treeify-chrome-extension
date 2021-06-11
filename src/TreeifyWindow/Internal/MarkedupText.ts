@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {integer} from 'src/Common/integer'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 
 /** プレーンテキストとそれに対する装飾情報からなるオブジェクトの型 */
 export type MarkedupText = {
@@ -34,7 +34,7 @@ export namespace MarkedupText {
       texts: [],
       styles: [],
     }
-    for (const node of DomishObject.toDocumentFragment(innerHtml).childNodes) {
+    for (const node of InnerHtml.toDocumentFragment(innerHtml).childNodes) {
       traverseWithRecording(node, recorder)
     }
     return {

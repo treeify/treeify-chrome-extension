@@ -5,7 +5,7 @@
   import {getTextItemSelectionFromDom} from '../../External/domTextSelection'
   import {External} from '../../External/External'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {DomishObject} from '../../Internal/DomishObject'
+  import {InnerHtml} from '../../Internal/InnerHtml'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
@@ -23,7 +23,7 @@
             External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
             // contenteditableな要素のinnerHTMLをModelに反映する
-            const innerHtml = DomishObject.fromChildren(event.target)
+            const innerHtml = InnerHtml.fromChildren(event.target)
             CurrentState.setTextItemInnerHtml(itemId, innerHtml)
 
             CurrentState.updateItemTimestamp(itemId)
@@ -35,7 +35,7 @@
         doWithErrorCapture(() => {
           if (event.target instanceof Node) {
             // contenteditableな要素のinnerHTMLをModelに反映する
-            const innerHtml = DomishObject.fromChildren(event.target)
+            const innerHtml = InnerHtml.fromChildren(event.target)
             CurrentState.setTextItemInnerHtml(itemId, innerHtml)
             External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
             CurrentState.updateItemTimestamp(itemId)

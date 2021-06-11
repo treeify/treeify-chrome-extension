@@ -13,8 +13,8 @@
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {DomishObject} from '../../Internal/DomishObject'
   import {onCopy, onCut, onPaste} from '../../Internal/importAndExport'
+  import {InnerHtml} from '../../Internal/InnerHtml'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -135,7 +135,7 @@
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
         const innerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-        const characterCount = DomishObject.countCharacters(innerHtml)
+        const characterCount = InnerHtml.countCharacters(innerHtml)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
@@ -156,7 +156,7 @@
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
         const innerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-        const characterCount = DomishObject.countCharacters(innerHtml)
+        const characterCount = InnerHtml.countCharacters(innerHtml)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
@@ -201,7 +201,7 @@
     } else {
       const targetItemId = ItemPath.getItemId(targetItemPath)
       const innerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
-      const characterCount = DomishObject.countCharacters(innerHtml)
+      const characterCount = InnerHtml.countCharacters(innerHtml)
 
       // キャレット位置が末尾以外のときはブラウザの挙動に任せる
       if (
@@ -278,7 +278,7 @@
 
       // 上のアイテムの最後の行の文字数を取得
       const aboveItemInnerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-      const lines = DomishObject.toPlainText(aboveItemInnerHtml).split('\n')
+      const lines = InnerHtml.toPlainText(aboveItemInnerHtml).split('\n')
       const lastLine = lines[lines.length - 1]
 
       // 上のアイテムに一旦フォーカスする
@@ -287,7 +287,7 @@
       assertNonNull(aboveItemDomElement)
       aboveItemDomElement.focus()
 
-      const charactersCount = DomishObject.countCharacters(aboveItemInnerHtml)
+      const charactersCount = InnerHtml.countCharacters(aboveItemInnerHtml)
       // キャレット位置を最後の行の右端からスタートし、左にずらしていく
       let i = charactersCount
       for (; charactersCount - lastLine.length <= i; i--) {
@@ -390,7 +390,7 @@
 
       // 下のアイテムの最初の行の文字数を取得
       const belowItemInnerHtml = get(Internal.instance.state.textItems[belowItemId].innerHtml)
-      const firstLine = DomishObject.toPlainText(belowItemInnerHtml).split('\n')[0]
+      const firstLine = InnerHtml.toPlainText(belowItemInnerHtml).split('\n')[0]
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
       // TODO: 最適化の余地あり。二分探索が可能では？
@@ -489,7 +489,7 @@
         // ターゲットアイテムがテキストアイテムの場合
 
         const innerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
-        const charactersCount = DomishObject.countCharacters(innerHtml)
+        const charactersCount = InnerHtml.countCharacters(innerHtml)
         const textItemSelection = getTextItemSelectionFromDom()
         if (textItemSelection?.focusDistance !== charactersCount) {
           return
@@ -552,7 +552,7 @@
           // 上のアイテムの元の末尾にキャレットを移動する
           CurrentState.setTargetItemPath(aboveItemPath)
           External.instance.requestSetCaretDistanceAfterRendering(
-            DomishObject.countCharacters(aboveItemInnerHtml)
+            InnerHtml.countCharacters(aboveItemInnerHtml)
           )
 
           event.preventDefault()
@@ -576,7 +576,7 @@
       assertNonUndefined(selection)
 
       const focusedItemInnerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
-      const characterCount = DomishObject.countCharacters(focusedItemInnerHtml)
+      const characterCount = InnerHtml.countCharacters(focusedItemInnerHtml)
       if (
         selection.focusDistance === characterCount &&
         selection.anchorDistance === characterCount
@@ -614,7 +614,7 @@
 
           // 元のキャレット位置を維持する
           External.instance.requestSetCaretDistanceAfterRendering(
-            DomishObject.countCharacters(focusedItemInnerHtml)
+            InnerHtml.countCharacters(focusedItemInnerHtml)
           )
 
           event.preventDefault()

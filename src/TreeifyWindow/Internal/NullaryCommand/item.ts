@@ -3,7 +3,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {get} from 'svelte/store'
@@ -281,7 +281,7 @@ export function enterKeyDefault() {
     const selection = getSelection()
     assertNonNull(selection)
 
-    const characterCount = DomishObject.countCharacters(
+    const characterCount = InnerHtml.countCharacters(
       get(Internal.instance.state.textItems[targetItemId].innerHtml)
     )
     const textItemSelection = getTextItemSelectionFromDom()
@@ -292,10 +292,10 @@ export function enterKeyDefault() {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
-      const innerHtml = DomishObject.fromChildren(range.extractContents())
+      const innerHtml = InnerHtml.fromChildren(range.extractContents())
       CurrentState.setTextItemInnerHtml(
         targetItemId,
-        DomishObject.fromChildren(document.activeElement)
+        InnerHtml.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを最初の子として追加する
@@ -325,10 +325,10 @@ export function enterKeyDefault() {
       // キャレットより前のテキストをカットする
       const range = selection.getRangeAt(0)
       range.setStartBefore(document.activeElement.firstChild!)
-      const innerHtml = DomishObject.fromChildren(range.extractContents())
+      const innerHtml = InnerHtml.fromChildren(range.extractContents())
       CurrentState.setTextItemInnerHtml(
         targetItemId,
-        DomishObject.fromChildren(document.activeElement)
+        InnerHtml.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを兄として追加する
@@ -344,10 +344,10 @@ export function enterKeyDefault() {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
-      const innerHtml = DomishObject.fromChildren(range.extractContents())
+      const innerHtml = InnerHtml.fromChildren(range.extractContents())
       CurrentState.setTextItemInnerHtml(
         targetItemId,
-        DomishObject.fromChildren(document.activeElement)
+        InnerHtml.fromChildren(document.activeElement)
       )
 
       // 新規アイテムを下に配置する

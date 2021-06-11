@@ -6,7 +6,7 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
@@ -168,7 +168,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
   switch (itemType) {
     case ItemType.TEXT:
       const innerHtml = get(Internal.instance.state.textItems[itemId].innerHtml)
-      return DomishObject.toSingleLinePlainText(innerHtml)
+      return InnerHtml.toSingleLinePlainText(innerHtml)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       const title = CurrentState.deriveWebPageItemTitle(itemId)

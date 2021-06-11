@@ -1,7 +1,7 @@
 import {assert} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 
-export namespace DomishObject {
+export namespace InnerHtml {
   /**
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
