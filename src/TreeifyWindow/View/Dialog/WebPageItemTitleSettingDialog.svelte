@@ -15,7 +15,7 @@
 
     return {
       webPageItemTitleSettingDialog,
-      initialTitle: get(Derived.deriveWebPageItemTitle(targetItemId)),
+      initialTitle: get(Derived.getWebPageItemTitle(targetItemId)),
       onKeyDown: (event: KeyboardEvent) => {
         doWithErrorCapture(() => {
           if (event.isComposing) return

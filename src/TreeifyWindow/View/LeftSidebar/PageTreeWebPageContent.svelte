@@ -6,7 +6,7 @@
 
   export function createPageTreeWebPageContentProps(itemId: ItemId) {
     return {
-      title: Derived.deriveWebPageItemTitle(itemId),
+      title: Derived.getWebPageItemTitle(itemId),
       faviconUrl: get(Internal.instance.state.webPageItems[itemId].faviconUrl),
     }
   }
