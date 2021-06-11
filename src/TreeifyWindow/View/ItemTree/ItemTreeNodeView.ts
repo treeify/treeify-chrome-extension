@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Readable} from 'svelte/store'
 
 export type ItemTreeNodeProps = {
   itemPath: ItemPath
@@ -14,7 +15,7 @@ export type ItemTreeNodeProps = {
    */
   selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
-  cssClasses: List<string>
+  cssClasses: Readable<List<string>>
   footprintRank: integer | undefined
   footprintRankMap: Map<ItemId, integer>
   footprintCount: integer
