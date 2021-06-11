@@ -21,3 +21,14 @@ export function getTabIsLoading(itemId: ItemId): Readable<boolean> {
     return tab?.status === 'loading'
   })
 }
+
+/**
+ * 指定されたアイテムに対応するタブがdiscardされていればtrueを返す。
+ * 対応するタブがない場合はfalseを返す。
+ */
+export function getTabIsSoftUnloaded(itemId: ItemId): Readable<boolean> {
+  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  return derived(tab, (tab) => {
+    return tab?.discarded === true
+  })
+}

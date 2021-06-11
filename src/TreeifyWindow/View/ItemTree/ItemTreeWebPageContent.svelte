@@ -25,7 +25,7 @@
       title: Derived.getWebPageItemTitle(itemId),
       faviconUrl: get(webPageItem.faviconUrl),
       isLoading: get(Derived.getTabIsLoading(itemId)),
-      isSoftUnloaded: get(tab)?.discarded === true,
+      isSoftUnloaded: get(Derived.getTabIsSoftUnloaded(itemId)),
       isHardUnloaded: get(tab) === undefined,
       isUnread: get(webPageItem.isUnread),
       isAudible: get(tab)?.audible === true,
