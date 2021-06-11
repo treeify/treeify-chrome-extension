@@ -30,3 +30,4 @@ export function get<T>(readable: Readable<T> | undefined | null) {
 }
 
 export * from 'src/TreeifyWindow/Internal/Derived/webPageItem'
+export * from 'src/TreeifyWindow/Internal/Derived/page'

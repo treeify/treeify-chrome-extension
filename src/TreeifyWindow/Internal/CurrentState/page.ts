@@ -101,6 +101,7 @@ export function turnIntoPage(itemId: ItemId) {
   }
   Internal.instance.state.pages[itemId] = page
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
+  Internal.instance.pageIdsChanged()
 }
 
 /**
@@ -112,6 +113,7 @@ export function turnIntoNonPage(itemId: ItemId) {
 
   delete Internal.instance.state.pages[itemId]
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
+  Internal.instance.pageIdsChanged()
 }
 
 export function setDefaultWindowMode(itemId: ItemId, value: State.DefaultWindowMode) {

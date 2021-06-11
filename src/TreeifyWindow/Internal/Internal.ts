@@ -1,16 +1,18 @@
-import {List} from 'immutable'
+import {List, Set as ImmutableSet} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemType} from 'src/TreeifyWindow/basicType'
+import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
+import {Writable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
   private static _instance: Internal | undefined
 
-  readonly state: State = Internal.createSampleState()
+  readonly state: State
+  // this.state内のページIDの集合のストア
+  readonly pageIdsWritable: Writable<ImmutableSet<ItemId>>
 
   private readonly mutatedPropertyPaths = new Set<PropertyPath>()
   private readonly stateChangeListeners = new Set<
@@ -19,6 +21,7 @@ export class Internal {
 
   private constructor(initialState: State) {
     this.state = initialState
+    this.pageIdsWritable = writable(ImmutableSet(Object.keys(initialState.pages).map(parseInt)))
   }
 
   /**
@@ -61,6 +64,11 @@ export class Internal {
     listener: (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   ) {
     this.stateChangeListeners.add(listener)
+  }
+
+  /** Internal.instance.state内のページIDの集合が変化したことを伝える */
+  pageIdsChanged() {
+    this.pageIdsWritable.set(ImmutableSet(Object.keys(this.state.pages).map(parseInt)))
   }
 
   dumpCurrentState() {
