@@ -8,7 +8,7 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {writable} from 'svelte/store'
 
 /** 指定されたテキストアイテムのinnerHtmlを更新する */
-export function setTextItemDomishObjects(textItemId: ItemId, innerHtml: string) {
+export function setTextItemInnerHtml(textItemId: ItemId, innerHtml: string) {
   Internal.instance.state.textItems[textItemId].innerHtml.set(innerHtml)
   Internal.instance.markAsMutated(PropertyPath.of('textItems', textItemId, 'innerHtml'))
 }

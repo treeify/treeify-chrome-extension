@@ -24,7 +24,7 @@
 
             // contenteditableな要素のinnerHTMLをModelに反映する
             const innerHtml = DomishObject.fromChildren(event.target)
-            CurrentState.setTextItemDomishObjects(itemId, innerHtml)
+            CurrentState.setTextItemInnerHtml(itemId, innerHtml)
 
             CurrentState.updateItemTimestamp(itemId)
             CurrentState.commit()
@@ -36,7 +36,7 @@
           if (event.target instanceof Node) {
             // contenteditableな要素のinnerHTMLをModelに反映する
             const innerHtml = DomishObject.fromChildren(event.target)
-            CurrentState.setTextItemDomishObjects(itemId, innerHtml)
+            CurrentState.setTextItemInnerHtml(itemId, innerHtml)
             External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
             CurrentState.updateItemTimestamp(itemId)
 

@@ -293,7 +293,7 @@ export function enterKeyDefault() {
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
       const innerHtml = DomishObject.fromChildren(range.extractContents())
-      CurrentState.setTextItemDomishObjects(
+      CurrentState.setTextItemInnerHtml(
         targetItemId,
         DomishObject.fromChildren(document.activeElement)
       )
@@ -301,7 +301,7 @@ export function enterKeyDefault() {
       // 新規アイテムを最初の子として追加する
       const newItemId = CurrentState.createTextItem()
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
-      CurrentState.setTextItemDomishObjects(newItemId, innerHtml)
+      CurrentState.setTextItemInnerHtml(newItemId, innerHtml)
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
@@ -326,7 +326,7 @@ export function enterKeyDefault() {
       const range = selection.getRangeAt(0)
       range.setStartBefore(document.activeElement.firstChild!)
       const innerHtml = DomishObject.fromChildren(range.extractContents())
-      CurrentState.setTextItemDomishObjects(
+      CurrentState.setTextItemInnerHtml(
         targetItemId,
         DomishObject.fromChildren(document.activeElement)
       )
@@ -334,7 +334,7 @@ export function enterKeyDefault() {
       // 新規アイテムを兄として追加する
       const newItemId = CurrentState.createTextItem()
       CurrentState.insertPrevSiblingItem(targetItemPath, newItemId)
-      CurrentState.setTextItemDomishObjects(newItemId, innerHtml)
+      CurrentState.setTextItemInnerHtml(newItemId, innerHtml)
 
       // キャレット位置を更新する
       External.instance.requestSetCaretDistanceAfterRendering(0)
@@ -345,7 +345,7 @@ export function enterKeyDefault() {
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
       const innerHtml = DomishObject.fromChildren(range.extractContents())
-      CurrentState.setTextItemDomishObjects(
+      CurrentState.setTextItemInnerHtml(
         targetItemId,
         DomishObject.fromChildren(document.activeElement)
       )
@@ -353,7 +353,7 @@ export function enterKeyDefault() {
       // 新規アイテムを下に配置する
       const newItemId = CurrentState.createTextItem()
       const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
-      CurrentState.setTextItemDomishObjects(newItemId, innerHtml)
+      CurrentState.setTextItemInnerHtml(newItemId, innerHtml)
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)

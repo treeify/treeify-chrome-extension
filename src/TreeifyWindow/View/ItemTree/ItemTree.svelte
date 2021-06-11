@@ -277,8 +277,8 @@
       assertNonUndefined(originalXCoordinate)
 
       // 上のアイテムの最後の行の文字数を取得
-      const aboveItemDomishObjects = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-      const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
+      const aboveItemInnerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
+      const lines = DomishObject.toPlainText(aboveItemInnerHtml).split('\n')
       const lastLine = lines[lines.length - 1]
 
       // 上のアイテムに一旦フォーカスする
@@ -287,7 +287,7 @@
       assertNonNull(aboveItemDomElement)
       aboveItemDomElement.focus()
 
-      const charactersCount = DomishObject.countCharacters(aboveItemDomishObjects)
+      const charactersCount = DomishObject.countCharacters(aboveItemInnerHtml)
       // キャレット位置を最後の行の右端からスタートし、左にずらしていく
       let i = charactersCount
       for (; charactersCount - lastLine.length <= i; i--) {
@@ -389,8 +389,8 @@
       assertNonUndefined(originalXCoordinate)
 
       // 下のアイテムの最初の行の文字数を取得
-      const belowItemDomishObjects = get(Internal.instance.state.textItems[belowItemId].innerHtml)
-      const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split('\n')[0]
+      const belowItemInnerHtml = get(Internal.instance.state.textItems[belowItemId].innerHtml)
+      const firstLine = DomishObject.toPlainText(belowItemInnerHtml).split('\n')[0]
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
       // TODO: 最適化の余地あり。二分探索が可能では？
@@ -530,16 +530,14 @@
           // ターゲットアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const focusedItemDomishObjects = get(
+          const focusedItemInnerHtml = get(
             Internal.instance.state.textItems[targetItemId].innerHtml
           )
-          const aboveItemDomishObjects = get(
-            Internal.instance.state.textItems[aboveItemId].innerHtml
-          )
+          const aboveItemInnerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
           // TODO: テキストノード同士が連結されないことが気がかり
-          CurrentState.setTextItemDomishObjects(
+          CurrentState.setTextItemInnerHtml(
             aboveItemId,
-            aboveItemDomishObjects.concat(focusedItemDomishObjects)
+            aboveItemInnerHtml.concat(focusedItemInnerHtml)
           )
 
           // 子リストを連結するため、子を全て弟としてエッジ追加。
@@ -554,7 +552,7 @@
           // 上のアイテムの元の末尾にキャレットを移動する
           CurrentState.setTargetItemPath(aboveItemPath)
           External.instance.requestSetCaretDistanceAfterRendering(
-            DomishObject.countCharacters(aboveItemDomishObjects)
+            DomishObject.countCharacters(aboveItemInnerHtml)
           )
 
           event.preventDefault()
@@ -577,10 +575,8 @@
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
 
-      const focusedItemDomishObjects = get(
-        Internal.instance.state.textItems[targetItemId].innerHtml
-      )
-      const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
+      const focusedItemInnerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
+      const characterCount = DomishObject.countCharacters(focusedItemInnerHtml)
       if (
         selection.focusDistance === characterCount &&
         selection.anchorDistance === characterCount
@@ -600,13 +596,11 @@
           // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const belowItemDomishObjects = get(
-            Internal.instance.state.textItems[belowItemId].innerHtml
-          )
+          const belowItemInnerHtml = get(Internal.instance.state.textItems[belowItemId].innerHtml)
           // TODO: テキストノード同士が連結されないことが気がかり
-          CurrentState.setTextItemDomishObjects(
+          CurrentState.setTextItemInnerHtml(
             targetItemId,
-            focusedItemDomishObjects.concat(belowItemDomishObjects)
+            focusedItemInnerHtml.concat(belowItemInnerHtml)
           )
 
           // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
@@ -620,7 +614,7 @@
 
           // 元のキャレット位置を維持する
           External.instance.requestSetCaretDistanceAfterRendering(
-            DomishObject.countCharacters(focusedItemDomishObjects)
+            DomishObject.countCharacters(focusedItemInnerHtml)
           )
 
           event.preventDefault()
