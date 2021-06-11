@@ -14,7 +14,7 @@
   import {List} from 'immutable'
   import {DomishObject} from '../../Internal/DomishObject'
 
-  export let domishObjects: List<DomishObject>
+  export let domishObjects: string
 </script>
 
 <div>{@html DomishObject.toHtml(domishObjects)}</div>

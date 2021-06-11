@@ -74,7 +74,7 @@
 <script lang="ts">
   export let itemPath: ItemPath
   export let labels: List<string>
-  export let domishObjects: List<DomishObject>
+  export let domishObjects: string
   export let onInput: (event: InputEvent) => void
   export let onCompositionEnd: (event: CompositionEvent) => void
   export let onClick: (event: MouseEvent) => void

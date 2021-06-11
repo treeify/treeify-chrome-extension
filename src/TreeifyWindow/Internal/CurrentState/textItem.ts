@@ -1,7 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -9,7 +8,7 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {writable} from 'svelte/store'
 
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
-export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
+export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: string) {
   Internal.instance.state.textItems[textItemId].domishObjects.set(domishObjects)
   Internal.instance.markAsMutated(PropertyPath.of('textItems', textItemId, 'domishObjects'))
 }

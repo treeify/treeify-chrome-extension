@@ -14,19 +14,19 @@ export namespace DomishObject {
 
   export type BElement = {
     type: 'b'
-    children: List<DomishObject>
+    children: string
   }
   export type UElement = {
     type: 'u'
-    children: List<DomishObject>
+    children: string
   }
   export type IElement = {
     type: 'i'
-    children: List<DomishObject>
+    children: string
   }
   export type StrikeElement = {
     type: 'strike'
-    children: List<DomishObject>
+    children: string
   }
 
   export type BRElement = {
@@ -39,15 +39,15 @@ export namespace DomishObject {
   }
 
   /** 等価性判定 */
-  export function equals(lhs: List<DomishObject>, rhs: List<DomishObject>): boolean {
+  export function equals(lhs: string, rhs: string): boolean {
     return toDocumentFragment(lhs).isEqualNode(toDocumentFragment(rhs))
   }
 
   /** DomishObjectをDOM要素に変換する */
-  export function toDocumentFragment(value: DomishObject | List<DomishObject>): DocumentFragment {
+  export function toDocumentFragment(value: DomishObject | string): DocumentFragment {
     const templateElement = document.createElement('template')
     if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
+      const domishObjects = value as string
       for (const node of domishObjects.map(toDomNode)) {
         templateElement.content.appendChild(node)
       }
@@ -92,9 +92,9 @@ export namespace DomishObject {
   }
 
   /** DomishObjectをHTML文字列に変換する */
-  export function toHtml(value: DomishObject | List<DomishObject>): string {
+  export function toHtml(value: DomishObject | string): string {
     if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
+      const domishObjects = value as string
       return domishObjects.map(toHtml).join('')
     } else {
       const domishObject = value as DomishObject
@@ -121,10 +121,10 @@ export namespace DomishObject {
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
    */
-  export function fromChildren(node: Node): List<DomishObject> {
+  export function fromChildren(node: Node): string {
     return List(Array.from(node.childNodes))
       .map(from)
-      .filter((value) => value !== undefined) as List<DomishObject>
+      .filter((value) => value !== undefined) as string
   }
 
   /**
@@ -167,9 +167,9 @@ export namespace DomishObject {
   }
 
   /** 改行（br要素）を含む文字数を返す */
-  export function countCharacters(value: DomishObject | List<DomishObject>): integer {
+  export function countCharacters(value: DomishObject | string): integer {
     if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
+      const domishObjects = value as string
       return domishObjects.map(countCharacters).reduce((a: integer, x) => a + x, 0)
     } else {
       const domishObject = value as DomishObject
@@ -190,9 +190,9 @@ export namespace DomishObject {
   }
 
   /** プレーンテキストに変換する。改行は維持される。 */
-  export function toPlainText(value: DomishObject | List<DomishObject>): string {
+  export function toPlainText(value: DomishObject | string): string {
     if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
+      const domishObjects = value as string
       return domishObjects.map(toPlainText).join('')
     } else {
       const domishObject = value as DomishObject
@@ -216,9 +216,9 @@ export namespace DomishObject {
    * 単一行のプレーンテキストに変換する。リッチテキスト要素は無視される。
    * br要素は半角スペースに変換する。
    */
-  export function toSingleLinePlainText(value: DomishObject | List<DomishObject>): string {
+  export function toSingleLinePlainText(value: DomishObject | string): string {
     if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
+      const domishObjects = value as string
       return domishObjects.map(toSingleLinePlainText).join('')
     } else {
       const domishObject = value as DomishObject

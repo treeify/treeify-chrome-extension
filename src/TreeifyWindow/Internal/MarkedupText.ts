@@ -29,8 +29,8 @@ export namespace MarkedupText {
     strike: 'strikethrough',
   }
 
-  /** List<DomishObject>からMarkedupTextに変換する */
-  export function from(domishObjects: List<DomishObject>): MarkedupText {
+  /** stringからMarkedupTextに変換する */
+  export function from(domishObjects: string): MarkedupText {
     const recorder: Recorder = {
       position: 0,
       texts: [],
@@ -45,7 +45,7 @@ export namespace MarkedupText {
     }
   }
 
-  // List<DomishObject>からMarkedupTextへの変換処理で用いる特殊なオブジェクトの型。
+  // stringからMarkedupTextへの変換処理で用いる特殊なオブジェクトの型。
   // 再帰探索関数の引数として引き回され、ミューテーションされまくる。
   type Recorder = {
     position: integer
