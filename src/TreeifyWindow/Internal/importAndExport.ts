@@ -91,7 +91,7 @@ export function onPaste(event: ClipboardEvent) {
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: State.Edge = {isCollapsed: true, labels: writable(List.of())}
+          const initialEdge: State.Edge = {isCollapsed: writable(true), labels: writable(List.of())}
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
@@ -505,7 +505,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
     return {
       itemId: existingItemId,
       edge: {
-        isCollapsed: attributes.isCollapsed === 'true',
+        isCollapsed: writable(attributes.isCollapsed === 'true'),
         labels: writable(extractLabels(attributes)),
       },
     }
@@ -533,7 +533,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
   return {
     itemId,
     edge: {
-      isCollapsed: attributes.isCollapsed === 'true',
+      isCollapsed: writable(attributes.isCollapsed === 'true'),
       labels: writable(extractLabels(attributes)),
     },
   }

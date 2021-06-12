@@ -157,7 +157,7 @@ export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed = isCollapsed
+  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed.set(isCollapsed)
   Internal.instance.markAsMutated(
     PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
   )
@@ -171,7 +171,7 @@ export function getIsCollapsed(itemPath: ItemPath): boolean {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
+  return get(Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed)
 }
 
 /**
