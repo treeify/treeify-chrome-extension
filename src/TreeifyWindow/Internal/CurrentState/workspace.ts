@@ -6,29 +6,14 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {get} from 'svelte/store'
 
-const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
-
 /** このデバイスにおける現在のワークスペースのIDを返す */
-export function getCurrentWorkspaceId(): Timestamp {
-  const savedCurrentWorkspaceId = localStorage.getItem(CURRENT_WORKSPACE_ID_KEY)
-  if (savedCurrentWorkspaceId !== null) {
-    const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
-    if (Internal.instance.state.workspaces[currentWorkspaceId] !== undefined) {
-      // ローカルに保存されたvalidなワークスペースIDがある場合
-      return currentWorkspaceId
-    }
-  }
-
-  // 既存のワークスペースを適当に選んでIDを返す。
-  // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-  const currentWorkspaceId = getWorkspaceIds().first() as WorkspaceId
-  localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
-  return currentWorkspaceId
+export function getCurrentWorkspaceId(): WorkspaceId {
+  return get(Internal.instance.getCurrentWorkspaceId())
 }
 
 /** このデバイスにおける現在のワークスペースのIDを設定する */
 export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
-  localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
+  Internal.instance.setCurrentWorkspaceId(workspaceId)
 }
 
 /** Stateに登録されている全てのワークスペースIDを返す */
