@@ -13,6 +13,7 @@ import {
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -98,8 +99,8 @@ export class External {
     }
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-      if (CurrentState.getSelectedItemPaths().size === 1) {
-        const targetItemPath = CurrentState.getTargetItemPath()
+      if (get(Derived.getSelectedItemPaths()).size === 1) {
+        const targetItemPath = get(Derived.getTargetItemPath())
         const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
         focusableElement?.focus()

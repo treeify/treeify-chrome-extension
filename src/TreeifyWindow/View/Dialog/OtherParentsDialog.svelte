@@ -1,9 +1,15 @@
 <script context="module" lang="ts">
+  import {List} from 'immutable'
+  import {ItemId} from '../../basicType'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {ItemPath} from '../../Internal/ItemPath'
+  import {get} from '../../svelte'
+  import ItemContent, {createItemContentProps} from '../ItemContent/ItemContent.svelte'
+  import CommonDialog from './CommonDialog.svelte'
 
   export function createOtherParentsDialogProps() {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
     const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
     const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
     const itemIds = parentItemIds.filter((itemId) => targetParentItemId !== itemId)
@@ -12,11 +18,6 @@
 </script>
 
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemId} from '../../basicType'
-  import ItemContent, {createItemContentProps} from '../ItemContent/ItemContent.svelte'
-  import CommonDialog from './CommonDialog.svelte'
-
   export let itemIds: List<ItemId>
 
   const closeDialog = () => {

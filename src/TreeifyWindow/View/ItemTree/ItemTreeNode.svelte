@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import Color from 'color'
   import {is, List} from 'immutable'
-  import {derived, get} from 'svelte/store'
+  import {derived, Readable} from 'svelte/store'
   import {integer} from '../../../Common/integer'
   import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
@@ -15,6 +15,7 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {State} from '../../Internal/State'
+  import {get} from '../../svelte'
   import ItemTreeContent, {createItemTreeContentProps} from './ItemTreeContent.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
@@ -137,8 +138,8 @@
   }
 
   function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
-    const targetItemPath = CurrentState.getTargetItemPath()
-    const anchorItemPath = CurrentState.getAnchorItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
+    const anchorItemPath = get(Derived.getAnchorItemPath())
     if (is(targetItemPath, anchorItemPath)) {
       // そもそも複数範囲されていない場合
       if (is(itemPath, targetItemPath)) return 'single'
@@ -172,8 +173,6 @@
 </script>
 
 <script lang="ts">
-  import {Readable} from 'svelte/store'
-
   export let itemPath: ItemPath
   export let isActivePage: boolean
   /**

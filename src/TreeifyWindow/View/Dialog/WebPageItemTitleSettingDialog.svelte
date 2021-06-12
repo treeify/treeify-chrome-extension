@@ -1,17 +1,17 @@
 <script context="module" lang="ts">
   import {createFocusTrap, FocusTrap} from 'focus-trap'
-  import {get} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {ItemPath} from '../../Internal/ItemPath'
   import {State} from '../../Internal/State'
+  import {get} from '../../svelte'
 
   export function createWebPageItemTitleSettingDialogProps(
     webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog
   ) {
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
 
     return {
       webPageItemTitleSettingDialog,

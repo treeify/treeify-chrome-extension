@@ -119,7 +119,7 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onArrowLeft(event: KeyboardEvent) {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
 
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     // 上のアイテムが存在しない場合はブラウザの挙動に任せる
@@ -175,7 +175,7 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onArrowRight(event: KeyboardEvent) {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
     const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
     // 下のアイテムが存在しない場合はブラウザの挙動に任せる
     if (belowItemPath === undefined) return
@@ -233,7 +233,7 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onArrowUp(event: KeyboardEvent) {
-    const selectedItemPaths = CurrentState.getSelectedItemPaths()
+    const selectedItemPaths = get(Derived.getSelectedItemPaths())
     const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
     // 上のアイテムが存在しない場合はブラウザの挙動に任せる
     if (aboveItemPath === undefined) return
@@ -248,7 +248,7 @@
       return
     }
 
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
 
@@ -335,7 +335,7 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onArrowDown(event: KeyboardEvent) {
-    const selectedItemPaths = CurrentState.getSelectedItemPaths()
+    const selectedItemPaths = get(Derived.getSelectedItemPaths())
     const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
     // 下のアイテムが存在しない場合はブラウザの挙動に任せる
     if (belowItemPath === undefined) return
@@ -350,7 +350,7 @@
       return
     }
 
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
 
@@ -450,12 +450,12 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onShiftArrowUp(event: KeyboardEvent) {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
     const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(targetItemPath)
     // 兄アイテムが存在しない場合はブラウザの挙動に任せる
     if (prevSiblingItemPath === undefined) return
 
-    if (CurrentState.getSelectedItemPaths().size === 1) {
+    if (get(Derived.getSelectedItemPaths()).size === 1) {
       const targetItemId = ItemPath.getItemId(targetItemPath)
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合
@@ -479,12 +479,12 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onShiftArrowDown(event: KeyboardEvent) {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
     const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(targetItemPath)
     // 弟アイテムが存在しない場合はブラウザの挙動に任せる
     if (nextSiblingItemPath === undefined) return
 
-    if (CurrentState.getSelectedItemPaths().size === 1) {
+    if (get(Derived.getSelectedItemPaths()).size === 1) {
       const targetItemId = ItemPath.getItemId(targetItemPath)
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合
@@ -507,7 +507,7 @@
 
   /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
   function onBackspace(event: KeyboardEvent) {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetItem = Internal.instance.state.items[targetItemId]
     if (targetItem.itemType === ItemType.TEXT) {
@@ -568,7 +568,7 @@
 
   /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
   function onDelete(event: KeyboardEvent) {
-    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemPath = get(Derived.getTargetItemPath())
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
@@ -630,7 +630,7 @@
 
   /** アイテムツリー上でSpaceキーを押したときのデフォルトの挙動 */
   function onSpace(event: KeyboardEvent) {
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     const targetItemType = Internal.instance.state.items[targetItemId].itemType
     if (targetItemType === ItemType.WEB_PAGE) {
       event.preventDefault()

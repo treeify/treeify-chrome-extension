@@ -88,7 +88,7 @@ export async function saveToDataFolder() {
  * 正確に言うと、ターゲットアイテムを兄弟リストの末尾に設定する。
  */
 export function selectAllBelowItems() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
@@ -106,7 +106,7 @@ export function selectAllBelowItems() {
  * 正確に言うと、ターゲットアイテムを兄弟リストの先頭に設定する。
  */
 export function selectAllAboveItems() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
@@ -121,7 +121,7 @@ export function selectAllAboveItems() {
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */
 export async function copyForTransclusion() {
-  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const selectedItemPaths = get(Derived.getSelectedItemPaths())
   External.instance.treeifyClipboard = {selectedItemPaths}
 
   // 「独自クリップボードにコピー→他アプリで何かをコピー→Treeify上でペースト」としたとき、
@@ -142,7 +142,7 @@ export async function copyForTransclusion() {
  * ただしトップページは除外できない。
  */
 export function excludeFromCurrentWorkspace() {
-  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const selectedItemPaths = get(Derived.getSelectedItemPaths())
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
   const excludedItemIds = get(Derived.getExcludedItemIds()).toSet()
   CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())

@@ -1,26 +1,13 @@
-import {is, List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {get} from 'svelte/store'
-
-/** ターゲットアイテムパスを返す */
-export function getTargetItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[get(Internal.instance.getActivePageId())].targetItemPath)
-}
+import {get} from 'src/TreeifyWindow/svelte'
 
 /** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
 export function setTargetItemPath(itemPath: ItemPath) {
   setTargetItemPathOnly(itemPath)
   setAnchorItemPath(itemPath)
-}
-
-/** ターゲットアイテムパスを返す */
-export function getAnchorItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[get(Internal.instance.getActivePageId())].anchorItemPath)
 }
 
 /** アンカーアイテムパスを上書きする */
@@ -35,30 +22,6 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = get(Internal.instance.getActivePageId())
   Internal.instance.state.pages[activePageId].targetItemPath.set(itemPath)
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
-}
-
-/**
- * 複数選択されているアイテムのリストを返す。
- * 複数選択されていなければターゲットアイテムパスだけの単一要素リストを返す。
- * 並び順は元の兄弟リスト内での並び順と同じ。
- */
-export function getSelectedItemPaths(): List<ItemPath> {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const anchorItemPath = CurrentState.getAnchorItemPath()
-  if (is(targetItemPath, anchorItemPath)) {
-    // そもそも複数範囲されていない場合
-    return List.of(targetItemPath)
-  }
-
-  const parentItemId = ItemPath.getParentItemId(targetItemPath)
-  assertNonUndefined(parentItemId)
-  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
-  const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
-  const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
-  const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
-  const upperIndex = Math.max(targetItemIndex, anchorItemIndex)
-  const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
-  return sliced.map((itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!)
 }
 
 /**

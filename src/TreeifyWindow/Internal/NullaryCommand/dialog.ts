@@ -1,5 +1,6 @@
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
@@ -7,7 +8,7 @@ import {get} from 'svelte/store'
 
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemId = ItemPath.getItemId(targetItemPath)
   switch (Internal.instance.state.items[targetItemId].itemType) {
     case ItemType.TEXT:
