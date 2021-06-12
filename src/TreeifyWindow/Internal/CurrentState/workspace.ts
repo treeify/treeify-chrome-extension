@@ -6,16 +6,6 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {get} from 'svelte/store'
 
-/** このデバイスにおける現在のワークスペースのIDを返す */
-export function getCurrentWorkspaceId(): WorkspaceId {
-  return get(Internal.instance.getCurrentWorkspaceId())
-}
-
-/** このデバイスにおける現在のワークスペースのIDを設定する */
-export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
-  Internal.instance.setCurrentWorkspaceId(workspaceId)
-}
-
 /** Stateに登録されている全てのワークスペースIDを返す */
 export function getWorkspaceIds(): List<WorkspaceId> {
   return List(Object.keys(Internal.instance.state.workspaces)).map(parseInt)
@@ -23,12 +13,13 @@ export function getWorkspaceIds(): List<WorkspaceId> {
 
 /** 現在のワークスペースの除外アイテムリストを返す */
 export function getExcludedItemIds(): List<ItemId> {
-  return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
+  const currentWorkspaceId = get(Internal.instance.getCurrentWorkspaceId())
+  return Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds
 }
 
 /** 現在のワークスペースの除外アイテムリストを設定する */
 export function setExcludedItemIds(itemIds: List<ItemId>) {
-  const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
+  const currentWorkspaceId = get(Internal.instance.getCurrentWorkspaceId())
   Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds = itemIds
   Internal.instance.markAsMutated(
     PropertyPath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
