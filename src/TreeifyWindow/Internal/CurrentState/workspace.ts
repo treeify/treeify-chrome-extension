@@ -1,43 +1,15 @@
 import {List, Set} from 'immutable'
 import {ItemId, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {get, readable, Readable, Unsubscriber, writable} from 'svelte/store'
+import {get, writable} from 'svelte/store'
 
 /** Stateに登録されている全てのワークスペースIDを返す */
 export function getWorkspaceIds(): List<WorkspaceId> {
   return List(Object.keys(Internal.instance.state.workspaces)).map(parseInt)
-}
-
-/** 現在のワークスペースの除外アイテムリストを返す */
-export function getExcludedItemIds(): Readable<List<ItemId>> {
-  // この関数の呼び出し時点のカレントワークスペースのexcludedItemIdsを返すだけではダメ。
-  // ワークスペースが切り替えられたときに、参照先のexcludedItemIdsを切り替えなければならない。
-  // 依存先が動的に変化するということなので、derived関数では実現できない（はず）。
-  // 下記の実装は参照先のexcludedItemIdsをがんばって動的に切り替えている。
-  // 型で表すと Readable<Readable<T>> => Readable<T> という変換に近いことをやっている。
-
-  // 現在参照しているexcludedItemIdsの参照を解除する関数
-  let unsubscriber: Unsubscriber | undefined
-
-  const currentWorkspaceId = Internal.instance.getCurrentWorkspaceId()
-  const initialValue = get(
-    Internal.instance.state.workspaces[get(currentWorkspaceId)].excludedItemIds
-  )
-
-  return readable(initialValue, (set) => {
-    return currentWorkspaceId.subscribe((currentWorkspaceId) => {
-      // 前回登録したサブスクライバーを登録解除する（怠るとメモリリーク）
-      unsubscriber?.()
-
-      const excludedItemIds = Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds
-      unsubscriber = excludedItemIds.subscribe((excludedItemIds) => {
-        set(excludedItemIds)
-      })
-    })
-  })
 }
 
 /** 現在のワークスペースの除外アイテムリストを設定する */
@@ -74,7 +46,7 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 /** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
 export function getFilteredMountedPageIds(): List<ItemId> {
   return get(Internal.instance.state.mountedPageIds).filter((pageId) => {
-    const excludedItemIds = get(CurrentState.getExcludedItemIds())
+    const excludedItemIds = get(Derived.getExcludedItemIds())
 
     // ページが除外アイテムそのものの場合
     if (excludedItemIds.contains(pageId)) return false
