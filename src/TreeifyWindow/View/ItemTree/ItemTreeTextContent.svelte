@@ -19,7 +19,7 @@
       itemPath,
       labels: Derived.getLabels(itemPath),
       innerHtml: Internal.instance.state.textItems[itemId].innerHtml,
-      onInput: (event: InputEvent) => {
+      onInput: (event: Event) => {
         doWithErrorCapture(() => {
           CurrentState.updateItemTimestamp(itemId)
         })
@@ -42,7 +42,7 @@
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
   export let innerHtml: Writable<string>
-  export let onInput: (event: InputEvent) => void
+  export let onInput: (event: Event) => void
   export let onClick: (event: MouseEvent) => void
 
   const id = ItemTreeContentView.focusableDomElementId(itemPath)
