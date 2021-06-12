@@ -99,7 +99,7 @@ export class External {
     }
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-      if (CurrentState.getSelectedItemPaths().size === 1) {
+      if (get(Derived.getSelectedItemPaths()).size === 1) {
         const targetItemPath = get(Derived.getTargetItemPath())
         const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
