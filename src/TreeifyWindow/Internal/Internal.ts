@@ -21,7 +21,9 @@ export class Internal {
 
   private constructor(initialState: State) {
     this.state = initialState
-    this.pageIdsWritable = writable(ImmutableSet(Object.keys(initialState.pages).map(parseInt)))
+    this.pageIdsWritable = writable(
+      ImmutableSet(Object.keys(initialState.pages).map((key) => parseInt(key)))
+    )
   }
 
   /**
@@ -68,7 +70,9 @@ export class Internal {
 
   /** Internal.instance.state内のページIDの集合が変化したことを伝える */
   pageIdsChanged() {
-    this.pageIdsWritable.set(ImmutableSet(Object.keys(this.state.pages).map(parseInt)))
+    this.pageIdsWritable.set(
+      ImmutableSet(Object.keys(this.state.pages).map((key) => parseInt(key)))
+    )
   }
 
   dumpCurrentState() {
