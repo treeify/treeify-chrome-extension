@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import Color from 'color'
   import {is, List} from 'immutable'
-  import {get} from 'svelte/store'
+  import {derived, get} from 'svelte/store'
   import {integer} from '../../../Common/integer'
   import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
@@ -28,7 +28,7 @@
     const state = Internal.instance.state
     const itemId = ItemPath.getItemId(itemPath)
     const item = state.items[itemId]
-    const displayingChildItemIds = get(Derived.getDisplayingChildItemIds(itemPath))
+    const displayingChildItemIds = Derived.getDisplayingChildItemIds(itemPath)
 
     return {
       itemPath,
@@ -40,8 +40,10 @@
       footprintRankMap,
       footprintCount,
       hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-      childItemPaths: displayingChildItemIds.map((childItemId: ItemId) => {
-        return itemPath.push(childItemId)
+      childItemPaths: derived(displayingChildItemIds, (displayingChildItemIds) => {
+        return displayingChildItemIds.map((childItemId: ItemId) => {
+          return itemPath.push(childItemId)
+        })
       }),
       onMouseDownContentArea: (event: MouseEvent) => {
         doWithErrorCapture(() => {
@@ -187,7 +189,7 @@
   export let footprintRankMap: Map<ItemId, integer>
   export let footprintCount: integer
   export let hiddenTabsCount: integer
-  export let childItemPaths: List<ItemPath>
+  export let childItemPaths: Readable<List<ItemPath>>
   export let onMouseDownContentArea: (event: MouseEvent) => void
   export let onClickDeleteButton: (event: MouseEvent) => void
   export let onDragStart: (event: DragEvent) => void
@@ -261,7 +263,7 @@
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-      {#each childItemPaths.toArray() as childItemPath (childItemPath.toString())}
+      {#each $childItemPaths.toArray() as childItemPath (childItemPath.toString())}
         <ItemTreeNode
           {...createItemTreeNodeProps(footprintRankMap, footprintCount, childItemPath)}
         />

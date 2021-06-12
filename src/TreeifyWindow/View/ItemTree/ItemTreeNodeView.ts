@@ -20,7 +20,7 @@ export type ItemTreeNodeProps = {
   footprintRankMap: Map<ItemId, integer>
   footprintCount: integer
   hiddenTabsCount: integer
-  childItemPaths: List<ItemPath>
+  childItemPaths: Readable<List<ItemPath>>
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
