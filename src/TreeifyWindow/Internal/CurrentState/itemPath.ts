@@ -1,6 +1,5 @@
 import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -11,11 +10,6 @@ import {get} from 'src/TreeifyWindow/svelte'
 export function setTargetItemPath(itemPath: ItemPath) {
   setTargetItemPathOnly(itemPath)
   setAnchorItemPath(itemPath)
-}
-
-/** ターゲットアイテムパスを返す */
-export function getAnchorItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[get(Internal.instance.getActivePageId())].anchorItemPath)
 }
 
 /** アンカーアイテムパスを上書きする */
@@ -39,7 +33,7 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  */
 export function getSelectedItemPaths(): List<ItemPath> {
   const targetItemPath = get(Derived.getTargetItemPath())
-  const anchorItemPath = CurrentState.getAnchorItemPath()
+  const anchorItemPath = get(Derived.getAnchorItemPath())
   if (is(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
     return List.of(targetItemPath)

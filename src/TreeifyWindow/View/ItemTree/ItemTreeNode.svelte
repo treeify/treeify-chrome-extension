@@ -139,7 +139,7 @@
 
   function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
     const targetItemPath = get(Derived.getTargetItemPath())
-    const anchorItemPath = CurrentState.getAnchorItemPath()
+    const anchorItemPath = get(Derived.getAnchorItemPath())
     if (is(targetItemPath, anchorItemPath)) {
       // そもそも複数範囲されていない場合
       if (is(itemPath, targetItemPath)) return 'single'

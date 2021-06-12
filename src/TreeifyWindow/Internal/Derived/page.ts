@@ -18,3 +18,11 @@ export function getTargetItemPath(): Readable<ItemPath> {
   })
   return join(nestedStore)
 }
+
+export function getAnchorItemPath(): Readable<ItemPath> {
+  const activePageId = Internal.instance.getActivePageId()
+  const nestedStore = derived(activePageId, (activePageId) => {
+    return Internal.instance.state.pages[activePageId].anchorItemPath
+  })
+  return join(nestedStore)
+}
