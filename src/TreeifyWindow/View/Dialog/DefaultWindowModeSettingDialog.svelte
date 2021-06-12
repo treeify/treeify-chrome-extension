@@ -2,10 +2,10 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
-  import {get} from '../../Internal/Derived/other'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {State} from '../../Internal/State'
+  import {get} from '../../svelte'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {

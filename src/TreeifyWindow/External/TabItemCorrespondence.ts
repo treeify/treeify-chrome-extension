@@ -1,5 +1,5 @@
 import {ItemId, TabId} from 'src/TreeifyWindow/basicType'
-import {get} from 'src/TreeifyWindow/Internal/Derived/other'
+import {get} from 'src/TreeifyWindow/svelte'
 import {writable, Writable} from 'svelte/store'
 import Tab = chrome.tabs.Tab
 
