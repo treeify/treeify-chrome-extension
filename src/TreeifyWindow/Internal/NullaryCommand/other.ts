@@ -6,6 +6,7 @@ import {focusItemTreeBackground} from 'src/TreeifyWindow/External/domTextSelecti
 import {External} from 'src/TreeifyWindow/External/External'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
@@ -143,7 +144,7 @@ export async function copyForTransclusion() {
 export function excludeFromCurrentWorkspace() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
-  const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
+  const excludedItemIds = get(Derived.getExcludedItemIds()).toSet()
   CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())
 }
 

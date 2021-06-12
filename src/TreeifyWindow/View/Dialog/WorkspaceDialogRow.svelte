@@ -1,4 +1,6 @@
 <script lang="ts">
+  import {get} from 'src/TreeifyWindow/Internal/Derived/other'
+  import {Internal} from 'src/TreeifyWindow/Internal/Internal'
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -18,7 +20,7 @@
 
   const onClickRadioButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.setCurrentWorkspaceId(workspace.id)
+      Internal.instance.setCurrentWorkspaceId(workspace.id)
       // CurrentState.commit()
     })
   }
@@ -36,7 +38,7 @@
     type="radio"
     name="currentWorkspaceId"
     value={workspace.id.toString()}
-    checked={workspace.id === CurrentState.getCurrentWorkspaceId()}
+    checked={workspace.id === get(Internal.instance.getCurrentWorkspaceId())}
     on:input={onClickRadioButton}
   />
   <input type="text" class="workspace-dialog_name" value={workspace.name} on:input={onInput} />

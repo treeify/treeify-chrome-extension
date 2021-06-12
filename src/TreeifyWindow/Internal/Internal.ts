@@ -1,10 +1,12 @@
 import {List, Set as ImmutableSet} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
+import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {Writable, writable} from 'svelte/store'
+import {get, Readable, Writable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -19,11 +21,23 @@ export class Internal {
     (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   >()
 
+  // 現在のワークスペースIDのストア
+  private readonly currentWorkspaceId: Writable<WorkspaceId>
+
+  private readonly activePageId: Writable<ItemId>
+
+  private static readonly CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
+  private static readonly ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
+
   private constructor(initialState: State) {
+    Internal._instance = this
+
     this.state = initialState
     this.pageIdsWritable = writable(
       ImmutableSet(Object.keys(initialState.pages).map((key) => parseInt(key)))
     )
+    this.currentWorkspaceId = writable(Internal.deriveInitialWorkspaceId(this.state))
+    this.activePageId = writable(Internal.deriveActivePageId())
   }
 
   /**
@@ -31,7 +45,9 @@ export class Internal {
    * 生成されたインスタンスは.instanceで取得できる。
    */
   static initialize(initialState: State) {
-    this._instance = new Internal(initialState)
+    // 次のように書かずともコンストラクタ内でthis._instanceに代入しているので問題ない。
+    // this._instance = new Internal(initialState)
+    new Internal(initialState)
   }
 
   /**
@@ -75,6 +91,55 @@ export class Internal {
     )
   }
 
+  getCurrentWorkspaceId(): Readable<WorkspaceId> {
+    return this.currentWorkspaceId
+  }
+
+  setCurrentWorkspaceId(workspaceId: WorkspaceId) {
+    localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
+    this.currentWorkspaceId.set(workspaceId)
+  }
+
+  private static deriveInitialWorkspaceId(state: State): WorkspaceId {
+    const savedCurrentWorkspaceId = localStorage.getItem(Internal.CURRENT_WORKSPACE_ID_KEY)
+    if (savedCurrentWorkspaceId !== null) {
+      const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
+      if (state.workspaces[currentWorkspaceId] !== undefined) {
+        // ローカルに保存されたvalidなワークスペースIDがある場合
+        return currentWorkspaceId
+      }
+    }
+
+    // 既存のワークスペースを適当に選んでIDを返す。
+    // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
+    const currentWorkspaceId = parseInt(Object.keys(state.workspaces)[0])
+    localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
+    return currentWorkspaceId
+  }
+
+  getActivePageId(): Readable<ItemId> {
+    return this.activePageId
+  }
+
+  setActivePageId(activePageId: ItemId) {
+    localStorage.setItem(Internal.ACTIVE_PAGE_ID_KEY, activePageId.toString())
+    this.activePageId.set(activePageId)
+  }
+
+  private static deriveActivePageId(): ItemId {
+    const savedActivePageId = localStorage.getItem(Internal.ACTIVE_PAGE_ID_KEY)
+    if (savedActivePageId === null) {
+      return CurrentState.getFilteredMountedPageIds().last()
+    } else {
+      const activePageId = parseInt(savedActivePageId)
+      if (get(Derived.isPage(activePageId))) {
+        return activePageId
+      } else {
+        return CurrentState.getFilteredMountedPageIds().last()
+      }
+    }
+  }
+
   dumpCurrentState() {
     console.groupCollapsed('ダンプ：Internal#state')
     const stateString = JSON.stringify(this.state, State.jsonReplacer, 2)
@@ -103,14 +168,14 @@ export class Internal {
       codeBlockItems: {},
       pages: {
         0: {
-          targetItemPath: List.of(0),
-          anchorItemPath: List.of(0),
+          targetItemPath: writable(List.of(0)),
+          anchorItemPath: writable(List.of(0)),
           defaultWindowMode: 'keep',
         },
       },
       workspaces: {
         [Timestamp.now()]: {
-          excludedItemIds: List.of(),
+          excludedItemIds: writable(List.of()),
           name: 'ワークスペース1',
         },
       },
@@ -277,19 +342,19 @@ export class Internal {
       },
       pages: {
         0: {
-          targetItemPath: List.of(0),
-          anchorItemPath: List.of(0),
+          targetItemPath: writable(List.of(0)),
+          anchorItemPath: writable(List.of(0)),
           defaultWindowMode: 'keep',
         },
         6: {
-          targetItemPath: List.of(6),
-          anchorItemPath: List.of(6),
+          targetItemPath: writable(List.of(6)),
+          anchorItemPath: writable(List.of(6)),
           defaultWindowMode: 'inherit',
         },
       },
       workspaces: {
         [Timestamp.now()]: {
-          excludedItemIds: List.of(),
+          excludedItemIds: writable(List.of()),
           name: 'ワークスペース1',
         },
       },
