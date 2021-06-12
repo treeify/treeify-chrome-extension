@@ -64,31 +64,38 @@ export function get<T>(readable: Readable<T> | undefined | null) {
   return svelteGet(readable)
 }
 
+/**
+ * 依存先が動的に変化する複雑・動的なderived相当のReadableを作る関数。
+ * モナド(Monad)におけるjoinっぽい関数だと思ったのでそう命名した（実際にモナドやjoinの条件を満たすのかは知らない）。
+ */
+export function join<T>(dynamicReadable: Readable<Readable<T>>): Readable<T> {
+  // 現在参照している動的Readableの購読を解除する関数
+  let unsubscriber: Unsubscriber | undefined
+
+  const initialValue = get(get(dynamicReadable))
+
+  return readable(initialValue, (set) => {
+    return dynamicReadable.subscribe((level1) => {
+      // 参照していたReadableのサブスクライバーを登録解除する（怠るとメモリリーク）
+      unsubscriber?.()
+
+      unsubscriber = level1.subscribe((level2) => {
+        set(level2)
+      })
+    })
+  })
+}
+
 /** 現在のワークスペースの除外アイテムリストを返す */
 export function getExcludedItemIds(): Readable<List<ItemId>> {
   // この関数の呼び出し時点のカレントワークスペースのexcludedItemIdsを返すだけではダメ。
   // ワークスペースが切り替えられたときに、参照先のexcludedItemIdsを切り替えなければならない。
   // 依存先が動的に変化するということなので、derived関数では実現できない（はず）。
-  // 下記の実装は参照先のexcludedItemIdsをがんばって動的に切り替えている。
-  // 型で表すと Readable<Readable<T>> => Readable<T> という変換に近いことをやっている。
-
-  // 現在参照しているexcludedItemIdsの参照を解除する関数
-  let unsubscriber: Unsubscriber | undefined
+  // より高度なユーティリティ関数を用いて実装した。
 
   const currentWorkspaceId = Internal.instance.getCurrentWorkspaceId()
-  const initialValue = get(
-    Internal.instance.state.workspaces[get(currentWorkspaceId)].excludedItemIds
-  )
-
-  return readable(initialValue, (set) => {
-    return currentWorkspaceId.subscribe((currentWorkspaceId) => {
-      // 前回登録したサブスクライバーを登録解除する（怠るとメモリリーク）
-      unsubscriber?.()
-
-      const excludedItemIds = Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds
-      unsubscriber = excludedItemIds.subscribe((excludedItemIds) => {
-        set(excludedItemIds)
-      })
-    })
+  const nestedStore = derived(currentWorkspaceId, (currentWorkspaceId) => {
+    return Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds
   })
+  return join(nestedStore)
 }
