@@ -20,6 +20,7 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {get} from 'src/TreeifyWindow/svelte'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+import {Writable, writable} from 'svelte/store'
 import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
@@ -32,7 +33,7 @@ export class External {
   readonly pendingMutatedChunkIds = new Set<ChunkId>()
 
   /** フローティング型の左サイドバーを表示するべきかどうか */
-  shouldFloatingLeftSidebarShown: boolean = false
+  shouldFloatingLeftSidebarShown: Writable<boolean> = writable(false)
 
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()

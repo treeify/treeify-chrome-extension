@@ -9,9 +9,7 @@
   import DialogLayer, {createDialogLayerProps} from './Dialog/DialogLayer.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree, {createItemTreeProps} from './ItemTree/ItemTree.svelte'
-  import LeftSidebar, {createLeftSidebarProps} from './LeftSidebar/LeftSidebar.svelte'
-
-  const leftSidebarProps = createLeftSidebarProps()
+  import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -35,11 +33,7 @@
       <DataFolderPickerOpenButton {...createDataFolderPickerOpenButtonProps()} />
     </div>
     <div class="sidebar-layout">
-      {#if leftSidebarProps !== undefined}
-        <LeftSidebar {...leftSidebarProps} />
-      {:else}
-        <div class="grid-empty-cell" />
-      {/if}
+      <LeftSidebar />
       <ItemTree {...createItemTreeProps()} />
     </div>
   </div>
