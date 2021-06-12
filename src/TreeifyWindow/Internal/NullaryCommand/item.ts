@@ -179,7 +179,7 @@ export function moveItemDownward() {
   // キャレット位置、テキスト選択範囲を維持する
   External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
-  if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
+  if (get(Derived.getDisplayingChildItemIds(firstFollowingItemPath)).isEmpty()) {
     // 1つ下のアイテムが子を表示していない場合
 
     // ターゲットアイテムパスを更新

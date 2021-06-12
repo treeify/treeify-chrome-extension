@@ -135,23 +135,6 @@ export function isItem(itemId: ItemId): boolean {
   return undefined !== Internal.instance.state.items[itemId]
 }
 
-/** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
-export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
-  const itemId = ItemPath.getItemId(itemPath)
-  const item = Internal.instance.state.items[itemId]
-
-  // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
-  if (itemPath.size === 1) {
-    return get(item.childItemIds)
-  }
-
-  if (get(Derived.getIsCollapsed(itemPath)) || get(Derived.isPage(itemId))) {
-    return List.of()
-  } else {
-    return get(item.childItemIds)
-  }
-}
-
 /** 指定されたアイテムのisCollapsedフラグを設定する */
 export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
@@ -315,7 +298,7 @@ export function insertBelowItem(
   newItemId: ItemId,
   edge?: State.Edge
 ): ItemPath {
-  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
+  if (!get(Derived.getDisplayingChildItemIds(itemPath)).isEmpty()) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
     return itemPath.push(newItemId)
   } else {

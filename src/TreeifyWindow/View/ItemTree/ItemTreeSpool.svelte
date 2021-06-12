@@ -78,7 +78,7 @@
 
     const counts = get(state.items[ItemPath.getItemId(itemPath)].childItemIds).map(
       (childItemId) => {
-        return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
+        return get(Derived.getDisplayingChildItemIds(itemPath.push(childItemId))).size
       }
     )
     return counts.size + counts.reduce((a: integer, x) => a + x, 0)

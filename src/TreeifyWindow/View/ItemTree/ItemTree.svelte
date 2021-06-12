@@ -13,6 +13,7 @@
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {onCopy, onCut, onPaste} from '../../Internal/importAndExport'
   import {InnerHtml} from '../../Internal/InnerHtml'
   import {InputId} from '../../Internal/InputId'
@@ -55,7 +56,7 @@
    */
   function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
     yield ItemPath.getItemId(itemPath)
-    for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
+    for (const childItemId of get(Derived.getDisplayingChildItemIds(itemPath))) {
       yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
     }
   }

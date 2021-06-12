@@ -28,7 +28,7 @@
     const state = Internal.instance.state
     const itemId = ItemPath.getItemId(itemPath)
     const item = state.items[itemId]
-    const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
+    const displayingChildItemIds = get(Derived.getDisplayingChildItemIds(itemPath))
 
     return {
       itemPath,

@@ -1,8 +1,30 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {ItemId} from 'src/TreeifyWindow/basicType'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {get as svelteGet, Readable} from 'svelte/store'
+import {derived, get as svelteGet, Readable} from 'svelte/store'
+
+/** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
+export function getDisplayingChildItemIds(itemPath: ItemPath): Readable<List<ItemId>> {
+  const itemId = ItemPath.getItemId(itemPath)
+  const childItemIds = Internal.instance.state.items[itemId].childItemIds
+  // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
+  if (itemPath.size === 1) {
+    return childItemIds
+  }
+
+  const isCollapsed = Derived.getIsCollapsed(itemPath)
+  const isPage = Derived.isPage(itemId)
+  return derived([childItemIds, isCollapsed, isPage], () => {
+    if (get(isCollapsed) || get(isPage)) {
+      return List.of<ItemId>()
+    } else {
+      return get(childItemIds)
+    }
+  })
+}
 
 /**
  * 指定されたアイテムのisCollapsedフラグを返す。
