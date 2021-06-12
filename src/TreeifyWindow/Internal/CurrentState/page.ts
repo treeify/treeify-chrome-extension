@@ -7,7 +7,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {get} from 'svelte/store'
+import {get, writable} from 'svelte/store'
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
@@ -91,8 +91,8 @@ export function turnIntoPage(itemId: ItemId) {
   if (get(Derived.isPage(itemId))) return
 
   const page: State.Page = {
-    targetItemPath: List.of(itemId),
-    anchorItemPath: List.of(itemId),
+    targetItemPath: writable(List.of(itemId)),
+    anchorItemPath: writable(List.of(itemId)),
     defaultWindowMode: 'inherit',
   }
   Internal.instance.state.pages[itemId] = page

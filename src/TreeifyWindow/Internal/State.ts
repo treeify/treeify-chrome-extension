@@ -120,12 +120,12 @@ export namespace State {
   /** 各ページが持つデータの型 */
   export type Page = {
     /** アイテムツリー内で操作対象となるアイテム */
-    targetItemPath: ItemPath
+    targetItemPath: Writable<ItemPath>
     /**
      * アイテム複数選択時の範囲の一端。
      * テキスト選択におけるanchorと同じ意味合い。
      */
-    anchorItemPath: ItemPath
+    anchorItemPath: Writable<ItemPath>
     /** このページのデフォルトのウィンドウモード */
     defaultWindowMode: DefaultWindowMode
   }

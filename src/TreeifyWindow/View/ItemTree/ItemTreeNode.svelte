@@ -137,8 +137,8 @@
   }
 
   function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
-    const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
-    const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
+    const targetItemPath = CurrentState.getTargetItemPath()
+    const anchorItemPath = CurrentState.getAnchorItemPath()
     if (is(targetItemPath, anchorItemPath)) {
       // そもそも複数範囲されていない場合
       if (is(itemPath, targetItemPath)) return 'single'
