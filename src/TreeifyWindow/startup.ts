@@ -117,9 +117,6 @@ function onMouseMove(event: MouseEvent) {
 
 function onResize() {
   doAsyncWithErrorCapture(async () => {
-    // 左サイドバーの表示形態を変更する必要がある場合のために再描画する
-    CurrentState.commit()
-
     if (await TreeifyWindow.isDualWindowMode()) {
       TreeifyWindow.writeNarrowWidth(innerWidth)
     }
