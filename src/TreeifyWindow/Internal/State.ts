@@ -135,7 +135,7 @@ export namespace State {
      * このワークスペースでページツリーや検索結果から除外したいアイテム群。
      * これに含まれるアイテムまたはその子孫アイテムはページツリーや検索結果から除外される。
      */
-    excludedItemIds: List<ItemId>
+    excludedItemIds: Writable<List<ItemId>>
     name: string
   }
 
