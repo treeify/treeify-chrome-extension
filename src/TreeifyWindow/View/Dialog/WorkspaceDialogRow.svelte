@@ -1,10 +1,10 @@
 <script lang="ts">
-  import {get} from 'src/TreeifyWindow/Internal/Derived/other'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {State} from '../../Internal/State'
+  import {get} from '../../svelte'
 
   type WorkspaceRecord = {id: WorkspaceId} & State.Workspace
 
