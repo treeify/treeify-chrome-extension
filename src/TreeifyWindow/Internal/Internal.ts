@@ -1,16 +1,18 @@
-import {List} from 'immutable'
+import {List, Set as ImmutableSet} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemType} from 'src/TreeifyWindow/basicType'
+import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
+import {Writable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
   private static _instance: Internal | undefined
 
-  readonly state: State = Internal.createSampleState()
+  readonly state: State
+  // this.state内のページIDの集合のストア
+  readonly pageIdsWritable: Writable<ImmutableSet<ItemId>>
 
   private readonly mutatedPropertyPaths = new Set<PropertyPath>()
   private readonly stateChangeListeners = new Set<
@@ -19,6 +21,7 @@ export class Internal {
 
   private constructor(initialState: State) {
     this.state = initialState
+    this.pageIdsWritable = writable(ImmutableSet(Object.keys(initialState.pages).map(parseInt)))
   }
 
   /**
@@ -61,6 +64,11 @@ export class Internal {
     listener: (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   ) {
     this.stateChangeListeners.add(listener)
+  }
+
+  /** Internal.instance.state内のページIDの集合が変化したことを伝える */
+  pageIdsChanged() {
+    this.pageIdsWritable.set(ImmutableSet(Object.keys(this.state.pages).map(parseInt)))
   }
 
   dumpCurrentState() {
@@ -161,56 +169,56 @@ export class Internal {
         1: {
           itemType: ItemType.TEXT,
           childItemIds: writable(List.of(3, 6, 7)),
-          parents: {0: {isCollapsed: false, labels: writable(List.of())}},
+          parents: {0: {isCollapsed: writable(false), labels: writable(List.of())}},
           timestamp: writable(1604284090001),
           cssClasses: writable(List.of()),
         },
         2: {
           itemType: ItemType.TEXT,
           childItemIds: writable(List.of(4)),
-          parents: {0: {isCollapsed: true, labels: writable(List.of())}},
+          parents: {0: {isCollapsed: writable(true), labels: writable(List.of())}},
           timestamp: writable(1604284090002),
           cssClasses: writable(List.of()),
         },
         3: {
           itemType: ItemType.TEXT,
           childItemIds: writable(List.of()),
-          parents: {1: {isCollapsed: false, labels: writable(List.of())}},
+          parents: {1: {isCollapsed: writable(false), labels: writable(List.of())}},
           timestamp: writable(1604284090003),
           cssClasses: writable(List.of()),
         },
         4: {
           itemType: ItemType.TEXT,
           childItemIds: writable(List.of()),
-          parents: {2: {isCollapsed: false, labels: writable(List.of())}},
+          parents: {2: {isCollapsed: writable(false), labels: writable(List.of())}},
           timestamp: writable(1604284090004),
           cssClasses: writable(List.of('grayed-out')),
         },
         5: {
           itemType: ItemType.WEB_PAGE,
           childItemIds: writable(List.of()),
-          parents: {0: {isCollapsed: false, labels: writable(List.of('サンプル'))}},
+          parents: {0: {isCollapsed: writable(false), labels: writable(List.of('サンプル'))}},
           timestamp: writable(1604284090005),
           cssClasses: writable(List.of()),
         },
         6: {
           itemType: ItemType.TEXT,
           childItemIds: writable(List.of()),
-          parents: {1: {isCollapsed: false, labels: writable(List.of())}},
+          parents: {1: {isCollapsed: writable(false), labels: writable(List.of())}},
           timestamp: writable(1604284090006),
           cssClasses: writable(List.of()),
         },
         7: {
           itemType: ItemType.IMAGE,
           childItemIds: writable(List.of()),
-          parents: {1: {isCollapsed: false, labels: writable(List.of())}},
+          parents: {1: {isCollapsed: writable(false), labels: writable(List.of())}},
           timestamp: writable(1604284090007),
           cssClasses: writable(List.of()),
         },
         8: {
           itemType: ItemType.CODE_BLOCK,
           childItemIds: writable(List.of()),
-          parents: {0: {isCollapsed: false, labels: writable(List.of())}},
+          parents: {0: {isCollapsed: writable(false), labels: writable(List.of())}},
           timestamp: writable(1604284090008),
           cssClasses: writable(List.of()),
         },

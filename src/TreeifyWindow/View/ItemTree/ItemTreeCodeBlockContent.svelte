@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import hljs from 'highlight.js'
   import {List} from 'immutable'
-  import {get, Readable} from 'svelte/store'
+  import {Readable, Writable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
@@ -38,8 +38,6 @@
 </script>
 
 <script lang="ts">
-  import {Writable} from 'svelte/store'
-
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
   export let code: Writable<string>

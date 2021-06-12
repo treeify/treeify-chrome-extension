@@ -91,7 +91,7 @@ export function onPaste(event: ClipboardEvent) {
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: State.Edge = {isCollapsed: true, labels: writable(List.of())}
+          const initialEdge: State.Edge = {isCollapsed: writable(true), labels: writable(List.of())}
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
@@ -157,7 +157,7 @@ export function exportAsIndentedText(itemPath: ItemPath): string {
 function exportAsIndentedLines(itemPath: ItemPath, indentLevel = 0): List<string> {
   const line = '  '.repeat(indentLevel) + getContentAsPlainText(ItemPath.getItemId(itemPath))
 
-  const childLines = CurrentState.getDisplayingChildItemIds(itemPath).flatMap((childItemId) => {
+  const childLines = get(Derived.getDisplayingChildItemIds(itemPath)).flatMap((childItemId) => {
     return exportAsIndentedLines(itemPath.push(childItemId), indentLevel + 1)
   })
   return childLines.unshift(line)
@@ -336,11 +336,11 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   const item = Internal.instance.state.items[itemId]
 
   const baseAttributes: Attributes = {
-    isPage: CurrentState.isPage(itemId).toString(),
+    isPage: get(Derived.isPage(itemId)).toString(),
     itemId,
   }
   if (ItemPath.hasParent(itemPath)) {
-    baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
+    baseAttributes.isCollapsed = get(Derived.getIsCollapsed(itemPath)).toString()
   }
   if (!get(item.cssClasses).isEmpty()) {
     baseAttributes.cssClass = get(item.cssClasses).join(' ')
@@ -505,7 +505,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
     return {
       itemId: existingItemId,
       edge: {
-        isCollapsed: attributes.isCollapsed === 'true',
+        isCollapsed: writable(attributes.isCollapsed === 'true'),
         labels: writable(extractLabels(attributes)),
       },
     }
@@ -533,7 +533,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
   return {
     itemId,
     edge: {
-      isCollapsed: attributes.isCollapsed === 'true',
+      isCollapsed: writable(attributes.isCollapsed === 'true'),
       labels: writable(extractLabels(attributes)),
     },
   }

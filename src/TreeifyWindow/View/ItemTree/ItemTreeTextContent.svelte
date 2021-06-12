@@ -1,5 +1,7 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
+  import {onDestroy} from 'svelte'
+  import {Readable, Writable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {getTextItemSelectionFromDom} from '../../External/domTextSelection'
   import {External} from '../../External/External'
@@ -7,6 +9,7 @@
   import {Derived} from '../../Internal/Derived'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
+  import {PropertyPath} from '../../Internal/PropertyPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
@@ -36,11 +39,6 @@
 </script>
 
 <script lang="ts">
-  import {onDestroy} from 'svelte'
-  import {Readable, Writable} from 'svelte/store'
-  import {Internal} from '../../Internal/Internal'
-  import {PropertyPath} from '../../Internal/PropertyPath'
-
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
   export let innerHtml: Writable<string>

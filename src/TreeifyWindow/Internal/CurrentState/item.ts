@@ -4,6 +4,7 @@ import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -134,43 +135,15 @@ export function isItem(itemId: ItemId): boolean {
   return undefined !== Internal.instance.state.items[itemId]
 }
 
-/** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
-export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
-  const itemId = ItemPath.getItemId(itemPath)
-  const item = Internal.instance.state.items[itemId]
-
-  // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
-  if (itemPath.size === 1) {
-    return get(item.childItemIds)
-  }
-
-  if (CurrentState.getIsCollapsed(itemPath) || CurrentState.isPage(itemId)) {
-    return List.of()
-  } else {
-    return get(item.childItemIds)
-  }
-}
-
 /** 指定されたアイテムのisCollapsedフラグを設定する */
 export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed = isCollapsed
+  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed.set(isCollapsed)
   Internal.instance.markAsMutated(
     PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
   )
-}
-
-/**
- * 指定されたアイテムのisCollapsedフラグを返す。
- * 親アイテムに依存するのでItemIdではなくItemPathを取る。
- */
-export function getIsCollapsed(itemPath: ItemPath): boolean {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  assertNonUndefined(parentItemId)
-  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
 /**
@@ -325,7 +298,7 @@ export function insertBelowItem(
   newItemId: ItemId,
   edge?: State.Edge
 ): ItemPath {
-  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
+  if (!get(Derived.getDisplayingChildItemIds(itemPath)).isEmpty()) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
     return itemPath.push(newItemId)
   } else {
@@ -358,7 +331,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
   // ページは終端ノードとして扱う
-  if (CurrentState.isPage(itemId)) return
+  if (get(Derived.isPage(itemId))) return
 
   for (const childItemId of get(Internal.instance.state.items[itemId].childItemIds)) {
     yield* getSubtreeItemIds(childItemId)
