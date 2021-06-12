@@ -11,7 +11,7 @@ import {get} from 'svelte/store'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemId = ItemPath.getItemId(targetItemPath)
   CurrentState.setIsCollapsed(targetItemPath, !get(Derived.getIsCollapsed(targetItemPath)))
   CurrentState.updateItemTimestamp(targetItemId)
@@ -48,14 +48,14 @@ export function indentItem() {
 
   if (selectedItemPaths.size === 1) {
     // ターゲットアイテムを移動先に更新する
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
 
     // キャレット位置、テキスト選択範囲を維持する
     External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
@@ -87,7 +87,7 @@ export function unindentItem() {
 
   if (selectedItemPaths.size === 1) {
     // ターゲットアイテムを移動先に更新する
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
     CurrentState.setTargetItemPath(siblingItemPath)
 
@@ -95,7 +95,7 @@ export function unindentItem() {
     External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
     CurrentState.setTargetItemPathOnly(
       ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
     )
@@ -109,7 +109,7 @@ export function unindentItem() {
  * 親が居ない場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemUpward() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
@@ -154,7 +154,7 @@ export function moveItemUpward() {
  * すでに下端の場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemDownward() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
@@ -272,7 +272,7 @@ export function moveItemToNextSibling() {
 
 /** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
@@ -415,7 +415,7 @@ export function removeEdge() {
  */
 export function deleteItem() {
   // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) return
+  if (!ItemPath.hasParent(get(Derived.getTargetItemPath()))) return
 
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
@@ -436,7 +436,7 @@ export function deleteItem() {
  * ターゲットアイテムがアクティブページの場合は何もしない。
  */
 export function deleteItemItself() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   // アクティブページを削除しようとしている場合、何もしない
@@ -463,7 +463,7 @@ export function deleteItemItself() {
  * ターゲットアイテムが非ページならページ化する。
  */
 export function togglePaged() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
 
   if (get(Derived.isPage(targetItemId))) {
     CurrentState.unmountPage(targetItemId)
@@ -475,7 +475,7 @@ export function togglePaged() {
 
 /** 対象アイテムがページなら、そのページに切り替える */
 export function showPage() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
 
   if (get(Derived.isPage(targetItemId))) {
     CurrentState.switchActivePage(targetItemId)
@@ -484,7 +484,7 @@ export function showPage() {
 
 /** 対象アイテムをページ化し、そのページに切り替える */
 export function turnIntoAndShowPage() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
 
   CurrentState.turnIntoPage(targetItemId)
   CurrentState.switchActivePage(targetItemId)
@@ -492,7 +492,7 @@ export function turnIntoAndShowPage() {
 
 /** 対象を非ページ化し、expandする */
 export function turnIntoNonPageAndExpand() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   CurrentState.unmountPage(targetItemId)

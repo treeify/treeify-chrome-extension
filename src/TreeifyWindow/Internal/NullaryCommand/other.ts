@@ -88,7 +88,7 @@ export async function saveToDataFolder() {
  * 正確に言うと、ターゲットアイテムを兄弟リストの末尾に設定する。
  */
 export function selectAllBelowItems() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
@@ -106,7 +106,7 @@ export function selectAllBelowItems() {
  * 正確に言うと、ターゲットアイテムを兄弟リストの先頭に設定する。
  */
 export function selectAllAboveItems() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)

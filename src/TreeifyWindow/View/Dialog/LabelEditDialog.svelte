@@ -1,11 +1,15 @@
 <script context="module" lang="ts">
-  import {get} from 'svelte/store'
-  import {assertNonUndefined} from '../../../Common/Debug/assert'
+  import {List} from 'immutable'
+  import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
+  import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
+  import {InputId} from '../../Internal/InputId'
+  import {get} from '../../svelte'
+  import CommonDialog from './CommonDialog.svelte'
 
   export function createLabelEditDialogProps() {
-    const labels = Derived.getLabels(CurrentState.getTargetItemPath())
+    const labels = Derived.getLabels(get(Derived.getTargetItemPath()))
     assertNonUndefined(labels)
     if (get(labels).isEmpty()) {
       // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
@@ -17,12 +21,6 @@
 </script>
 
 <script lang="ts">
-  import {List} from 'immutable'
-  import {assert} from '../../../Common/Debug/assert'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {InputId} from '../../Internal/InputId'
-  import CommonDialog from './CommonDialog.svelte'
-
   /**
    * 全ての入力欄の内容テキスト。
    * bindを使うためにListではなく配列を採用。
@@ -45,7 +43,7 @@
   const onClickFinishButton = () => {
     doWithErrorCapture(() => {
       const nonEmptyLabels = labels.filter((label) => label !== '')
-      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
+      CurrentState.setLabels(get(Derived.getTargetItemPath()), List(nonEmptyLabels))
       CurrentState.setLabelEditDialog(null)
       // CurrentState.commit()
     })

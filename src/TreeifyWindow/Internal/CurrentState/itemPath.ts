@@ -5,12 +5,7 @@ import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {get} from 'svelte/store'
-
-/** ターゲットアイテムパスを返す */
-export function getTargetItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[get(Internal.instance.getActivePageId())].targetItemPath)
-}
+import {get} from 'src/TreeifyWindow/svelte'
 
 /** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
 export function setTargetItemPath(itemPath: ItemPath) {
@@ -43,7 +38,7 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
 export function getSelectedItemPaths(): List<ItemPath> {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemPath = get(Derived.getTargetItemPath())
   const anchorItemPath = CurrentState.getAnchorItemPath()
   if (is(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
