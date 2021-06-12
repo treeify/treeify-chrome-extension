@@ -143,7 +143,7 @@ export async function copyForTransclusion() {
 export function excludeFromCurrentWorkspace() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
-  const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
+  const excludedItemIds = get(CurrentState.getExcludedItemIds()).toSet()
   CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())
 }
 
