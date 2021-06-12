@@ -3,6 +3,7 @@
   import {integer} from '../../../Common/integer'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -90,7 +91,7 @@
     } else if (get(state.items[itemId].childItemIds).size === 0) {
       return ItemTreeBulletState.NO_CHILDREN
     } else {
-      return CurrentState.getIsCollapsed(itemPath)
+      return get(Derived.getIsCollapsed(itemPath))
         ? ItemTreeBulletState.COLLAPSED
         : ItemTreeBulletState.EXPANDED
     }

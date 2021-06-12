@@ -1,7 +1,20 @@
 import {List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {get as svelteGet, Readable} from 'svelte/store'
+
+/**
+ * 指定されたアイテムのisCollapsedフラグを返す。
+ * 親アイテムに依存するのでItemIdではなくItemPathを取る。
+ * TODO: 親のないItemPathを与えられた際の挙動をコメントに書く
+ */
+export function getIsCollapsed(itemPath: ItemPath): Readable<boolean> {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
+  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
+}
 
 /**
  * 指定されたアイテムパスの最後のエッジのラベルを返す。

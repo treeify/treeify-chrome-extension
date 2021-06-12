@@ -340,7 +340,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     itemId,
   }
   if (ItemPath.hasParent(itemPath)) {
-    baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
+    baseAttributes.isCollapsed = get(Derived.getIsCollapsed(itemPath)).toString()
   }
   if (!get(item.cssClasses).isEmpty()) {
     baseAttributes.cssClass = get(item.cssClasses).join(' ')

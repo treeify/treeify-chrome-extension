@@ -145,7 +145,7 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
     return get(item.childItemIds)
   }
 
-  if (CurrentState.getIsCollapsed(itemPath) || get(Derived.isPage(itemId))) {
+  if (get(Derived.getIsCollapsed(itemPath)) || get(Derived.isPage(itemId))) {
     return List.of()
   } else {
     return get(item.childItemIds)
@@ -161,17 +161,6 @@ export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   Internal.instance.markAsMutated(
     PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
   )
-}
-
-/**
- * 指定されたアイテムのisCollapsedフラグを返す。
- * 親アイテムに依存するのでItemIdではなくItemPathを取る。
- */
-export function getIsCollapsed(itemPath: ItemPath): boolean {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  assertNonUndefined(parentItemId)
-  return get(Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed)
 }
 
 /**
