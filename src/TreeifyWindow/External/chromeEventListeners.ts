@@ -201,7 +201,7 @@ export async function matchTabsAndWebPageItems() {
       reflectInWebPageItem(newWebPageItemId, tab)
 
       // アクティブページの最初の子として追加する
-      const activePageId = CurrentState.getActivePageId()
+      const activePageId = get(Internal.instance.getActivePageId())
       CurrentState.insertFirstChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合

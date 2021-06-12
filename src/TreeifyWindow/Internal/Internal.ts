@@ -1,10 +1,12 @@
 import {List, Set as ImmutableSet} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {Readable, Writable, writable} from 'svelte/store'
+import {get, Readable, Writable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -22,14 +24,20 @@ export class Internal {
   // 現在のワークスペースIDのストア
   private readonly currentWorkspaceId: Writable<WorkspaceId>
 
+  private readonly activePageId: Writable<ItemId>
+
   private static readonly CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
+  private static readonly ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 
   private constructor(initialState: State) {
+    Internal._instance = this
+
     this.state = initialState
     this.pageIdsWritable = writable(
       ImmutableSet(Object.keys(initialState.pages).map((key) => parseInt(key)))
     )
     this.currentWorkspaceId = writable(Internal.deriveInitialWorkspaceId(this.state))
+    this.activePageId = writable(Internal.deriveActivePageId())
   }
 
   /**
@@ -37,7 +45,9 @@ export class Internal {
    * 生成されたインスタンスは.instanceで取得できる。
    */
   static initialize(initialState: State) {
-    this._instance = new Internal(initialState)
+    // 次のように書かずともコンストラクタ内でthis._instanceに代入しているので問題ない。
+    // this._instance = new Internal(initialState)
+    new Internal(initialState)
   }
 
   /**
@@ -105,6 +115,29 @@ export class Internal {
     const currentWorkspaceId = parseInt(Object.keys(state.workspaces)[0])
     localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
     return currentWorkspaceId
+  }
+
+  getActivePageId(): Readable<ItemId> {
+    return this.activePageId
+  }
+
+  setActivePageId(activePageId: ItemId) {
+    localStorage.setItem(Internal.ACTIVE_PAGE_ID_KEY, activePageId.toString())
+    this.activePageId.set(activePageId)
+  }
+
+  private static deriveActivePageId(): ItemId {
+    const savedActivePageId = localStorage.getItem(Internal.ACTIVE_PAGE_ID_KEY)
+    if (savedActivePageId === null) {
+      return CurrentState.getFilteredMountedPageIds().last()
+    } else {
+      const activePageId = parseInt(savedActivePageId)
+      if (get(Derived.isPage(activePageId))) {
+        return activePageId
+      } else {
+        return CurrentState.getFilteredMountedPageIds().last()
+      }
+    }
   }
 
   dumpCurrentState() {

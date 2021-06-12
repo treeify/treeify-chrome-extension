@@ -17,7 +17,7 @@ export async function switchActivePage(itemId: ItemId) {
   Internal.instance.state.mountedPageIds.update((mountedPageIds) => mountedPageIds.push(itemId))
   Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 
-  CurrentState.setActivePageId(itemId)
+  Internal.instance.setActivePageId(itemId)
 
   // ウィンドウモードの自動切り替え機能
   switch (deriveDefaultWindowMode(itemId)) {
@@ -45,31 +45,6 @@ function deriveDefaultWindowMode(itemId: ItemId): State.DefaultWindowMode {
   if (parentItemId !== undefined) return deriveDefaultWindowMode(parentItemId)
 
   return 'keep'
-}
-
-const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
-
-/**
- * localStorageのアクティブページIDを返す。
- * 保存されていない場合や値が不正な場合は適当なページIDを返す。
- */
-export function getActivePageId(): ItemId {
-  const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)
-  if (savedActivePageId === null) {
-    return CurrentState.getFilteredMountedPageIds().last()
-  } else {
-    const activePageId = parseInt(savedActivePageId)
-    if (get(Derived.isPage(activePageId))) {
-      return activePageId
-    } else {
-      return CurrentState.getFilteredMountedPageIds().last()
-    }
-  }
-}
-
-/** localStorageにアクティブページIDを保存する */
-export function setActivePageId(itemId: ItemId) {
-  localStorage.setItem(ACTIVE_PAGE_ID_KEY, itemId.toString())
 }
 
 /**
@@ -119,5 +94,5 @@ export function setDefaultWindowMode(itemId: ItemId, value: State.DefaultWindowM
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function deriveTreeifyWindowTitle(): string {
-  return getContentAsPlainText(CurrentState.getActivePageId())
+  return getContentAsPlainText(get(Internal.instance.getActivePageId()))
 }

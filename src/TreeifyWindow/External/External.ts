@@ -13,6 +13,8 @@ import {
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {get} from 'src/TreeifyWindow/Internal/Derived/other'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -88,7 +90,9 @@ export class External {
 
     // アイテムツリーのスクロール位置を復元
     const itemTree = document.querySelector('.item-tree')
-    const scrollPosition = External.instance.scrollPositions.get(CurrentState.getActivePageId())
+    const scrollPosition = External.instance.scrollPositions.get(
+      get(Internal.instance.getActivePageId())
+    )
     if (scrollPosition !== undefined && itemTree instanceof HTMLElement) {
       itemTree.scrollTop = scrollPosition
     }

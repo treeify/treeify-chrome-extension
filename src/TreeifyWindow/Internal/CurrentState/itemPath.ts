@@ -9,7 +9,7 @@ import {get} from 'svelte/store'
 
 /** ターゲットアイテムパスを返す */
 export function getTargetItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath)
+  return get(Internal.instance.state.pages[get(Internal.instance.getActivePageId())].targetItemPath)
 }
 
 /** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
@@ -20,19 +20,19 @@ export function setTargetItemPath(itemPath: ItemPath) {
 
 /** ターゲットアイテムパスを返す */
 export function getAnchorItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath)
+  return get(Internal.instance.state.pages[get(Internal.instance.getActivePageId())].anchorItemPath)
 }
 
 /** アンカーアイテムパスを上書きする */
 export function setAnchorItemPath(itemPath: ItemPath) {
-  const activePageId = CurrentState.getActivePageId()
+  const activePageId = get(Internal.instance.getActivePageId())
   Internal.instance.state.pages[activePageId].anchorItemPath.set(itemPath)
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'anchorItemPath'))
 }
 
 /** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
-  const activePageId = CurrentState.getActivePageId()
+  const activePageId = get(Internal.instance.getActivePageId())
   Internal.instance.state.pages[activePageId].targetItemPath.set(itemPath)
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
 }
