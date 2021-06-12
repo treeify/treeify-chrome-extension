@@ -103,7 +103,7 @@ export function createPageTreeNodeViewModel(
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
-        External.instance.shouldFloatingLeftSidebarShown = false
+        External.instance.shouldFloatingLeftSidebarShown.set(false)
         CurrentState.commit()
       })
     },
