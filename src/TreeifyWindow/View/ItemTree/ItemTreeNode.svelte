@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import Color from 'color'
-  import {is, List} from 'immutable'
+  import {List} from 'immutable'
   import {derived, Readable} from 'svelte/store'
   import {integer} from '../../../Common/integer'
   import {ItemId} from '../../basicType'
@@ -34,7 +34,8 @@
     return {
       itemPath,
       isActivePage: !ItemPath.hasParent(itemPath),
-      selected: deriveSelected(state, itemPath),
+      isSelected: Derived.isSelected(itemPath),
+      isMultiSelected: Derived.isMultiSelected(),
       isTranscluded: Object.keys(item.parents).length > 1,
       cssClasses: item.cssClasses,
       footprintRank: footprintRankMap.get(itemId),
@@ -136,52 +137,13 @@
       return 1 + sum
     }
   }
-
-  function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
-    const targetItemPath = get(Derived.getTargetItemPath())
-    const anchorItemPath = get(Derived.getAnchorItemPath())
-    if (is(targetItemPath, anchorItemPath)) {
-      // そもそも複数範囲されていない場合
-      if (is(itemPath, targetItemPath)) return 'single'
-      else return 'non'
-    }
-
-    if (!is(itemPath.pop(), targetItemPath.pop())) {
-      // 選択されたアイテムパス群がこのアイテムパスと異なる子リスト上に存在する場合
-      return 'non'
-    }
-
-    const targetItemId = ItemPath.getItemId(targetItemPath)
-    const anchorItemId = ItemPath.getItemId(anchorItemPath)
-
-    const parentItemId = ItemPath.getParentItemId(itemPath)
-    // itemPathが親を持たない場合、複数選択に含まれることはないので必ずnonになる
-    if (parentItemId === undefined) return 'non'
-
-    const childItemIds = get(state.items[parentItemId].childItemIds)
-    const targetItemIndex = childItemIds.indexOf(targetItemId)
-    const anchorItemIndex = childItemIds.indexOf(anchorItemId)
-    const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))
-    const minIndex = Math.min(targetItemIndex, anchorItemIndex)
-    const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
-    if (minIndex <= itemIndex && itemIndex <= maxIndex) {
-      return 'multi'
-    } else {
-      return 'non'
-    }
-  }
 </script>
 
 <script lang="ts">
   export let itemPath: ItemPath
   export let isActivePage: boolean
-  /**
-   * このアイテムが選択されているかどうかを示す値。
-   * 複数選択されたアイテムのうちの1つならmulti。
-   * 単一選択されたアイテムならsingle。
-   * 選択されていないならnon。
-   */
-  export let selected: 'single' | 'multi' | 'non'
+  export let isSelected: Readable<boolean>
+  export let isMultiSelected: Readable<boolean>
   export let isTranscluded: boolean
   export let cssClasses: Readable<List<string>>
   export let footprintRank: integer | undefined
@@ -218,7 +180,7 @@
   const childrenCssClasses = $cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div class="item-tree-node" class:multi-selected={selected === 'multi'}>
+<div class="item-tree-node" class:multi-selected={$isSelected && $isMultiSelected}>
   {#if isActivePage}
     <div class="grid-empty-cell" />
   {:else}
@@ -241,7 +203,7 @@
         <div
           data-item-path={JSON.stringify(itemPath.toArray())}
           class="item-tree-node_content-area"
-          class:single-selected={selected === 'single'}
+          class:single-selected={$isSelected && !$isMultiSelected}
           on:mousedown={onMouseDownContentArea}
         >
           <ItemTreeContent {...createItemTreeContentProps(itemPath)} />
