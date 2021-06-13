@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
   import Color from 'color'
-  import {is, List} from 'immutable'
+  import {List} from 'immutable'
   import {derived, Readable} from 'svelte/store'
   import {integer} from '../../../Common/integer'
   import {ItemId} from '../../basicType'
@@ -138,34 +138,12 @@
   }
 
   function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
-    const targetItemPath = get(Derived.getTargetItemPath())
-    const anchorItemPath = get(Derived.getAnchorItemPath())
-    if (is(targetItemPath, anchorItemPath)) {
-      // そもそも複数範囲されていない場合
-      if (is(itemPath, targetItemPath)) return 'single'
-      else return 'non'
-    }
-
-    if (!is(itemPath.pop(), targetItemPath.pop())) {
-      // 選択されたアイテムパス群がこのアイテムパスと異なる子リスト上に存在する場合
-      return 'non'
-    }
-
-    const targetItemId = ItemPath.getItemId(targetItemPath)
-    const anchorItemId = ItemPath.getItemId(anchorItemPath)
-
-    const parentItemId = ItemPath.getParentItemId(itemPath)
-    // itemPathが親を持たない場合、複数選択に含まれることはないので必ずnonになる
-    if (parentItemId === undefined) return 'non'
-
-    const childItemIds = get(state.items[parentItemId].childItemIds)
-    const targetItemIndex = childItemIds.indexOf(targetItemId)
-    const anchorItemIndex = childItemIds.indexOf(anchorItemId)
-    const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))
-    const minIndex = Math.min(targetItemIndex, anchorItemIndex)
-    const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
-    if (minIndex <= itemIndex && itemIndex <= maxIndex) {
-      return 'multi'
+    if (get(Derived.isSelected(itemPath))) {
+      if (get(Derived.isMultiSelected())) {
+        return 'multi'
+      } else {
+        return 'single'
+      }
     } else {
       return 'non'
     }
