@@ -12,15 +12,13 @@ import {
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {get} from 'src/TreeifyWindow/svelte'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {Writable, writable} from 'svelte/store'
+import {get, writable, Writable} from 'svelte/store'
 import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
@@ -117,9 +115,6 @@ export class External {
     })
 
     this.pendingTextItemSelection = undefined
-
-    // Treeifyウィンドウのタイトルを更新する
-    document.title = CurrentState.deriveTreeifyWindowTitle()
   }
 
   /**

@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
-import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -90,9 +89,4 @@ export function turnIntoNonPage(itemId: ItemId) {
 export function setDefaultWindowMode(itemId: ItemId, value: State.DefaultWindowMode) {
   Internal.instance.state.pages[itemId].defaultWindowMode = value
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId, 'defaultWindowMode'))
-}
-
-/** Treeifyウィンドウのタイトルとして表示する文字列を返す */
-export function deriveTreeifyWindowTitle(): string {
-  return getContentAsPlainText(get(Internal.instance.getActivePageId()))
 }

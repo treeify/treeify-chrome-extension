@@ -1,5 +1,6 @@
 <script lang="ts">
   import {List} from 'immutable'
+  import {Derived} from 'src/TreeifyWindow/Internal/Derived'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
@@ -10,6 +11,11 @@
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree, {createItemTreeProps} from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
+
+  // Treeifyウィンドウのタイトルを設定する。
+  // Rootコンポーネントの表示内容とは全く無関係だが、他に書く場所の有力候補もないのでここでやる。
+  const treeifyWindowTitle = Derived.generateTreeifyWindowTitle()
+  document.title = $treeifyWindowTitle
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
