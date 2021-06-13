@@ -102,6 +102,14 @@ export class Internal {
     console.groupEnd()
   }
 
+  /**
+   * 頻出パターンの略記用ユーティリティ関数。
+   * 関数名はderivedの頭文字というだけで他に特に意味はない。
+   */
+  static d<T>(f: () => T): Readable<T> {
+    return derived(Internal.instance.rerenderingPulse, f)
+  }
+
   static createInitialState(): State {
     return {
       items: {

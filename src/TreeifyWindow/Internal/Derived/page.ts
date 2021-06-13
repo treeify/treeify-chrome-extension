@@ -3,30 +3,22 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {derived, Readable} from 'svelte/store'
+import {Readable} from 'svelte/store'
 
 /** 指定されたアイテムがページかどうかを返す */
 export function isPage(itemId: ItemId): Readable<boolean> {
-  return derived(Internal.instance.rerenderingPulse, () => {
-    return Internal.instance.state.pages[itemId] !== undefined
-  })
+  return Internal.d(() => Internal.instance.state.pages[itemId] !== undefined)
 }
 
 export function getTargetItemPath(): Readable<ItemPath> {
-  return derived(Internal.instance.rerenderingPulse, () => {
-    return CurrentState.getTargetItemPath()
-  })
+  return Internal.d(() => CurrentState.getTargetItemPath())
 }
 
 export function getAnchorItemPath(): Readable<ItemPath> {
-  return derived(Internal.instance.rerenderingPulse, () => {
-    return CurrentState.getAnchorItemPath()
-  })
+  return Internal.d(() => CurrentState.getAnchorItemPath())
 }
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function generateTreeifyWindowTitle(): Readable<string> {
-  return derived(Internal.instance.rerenderingPulse, () => {
-    return getContentAsPlainText(CurrentState.getActivePageId())
-  })
+  return Internal.d(() => getContentAsPlainText(CurrentState.getActivePageId()))
 }

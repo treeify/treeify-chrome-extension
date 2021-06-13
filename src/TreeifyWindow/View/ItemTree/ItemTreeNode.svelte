@@ -34,12 +34,8 @@
     return {
       itemPath,
       isActivePage: !ItemPath.hasParent(itemPath),
-      isSelected: derived(Internal.instance.rerenderingPulse, () =>
-        CurrentState.isSelected(itemPath)
-      ),
-      isMultiSelected: derived(Internal.instance.rerenderingPulse, () =>
-        CurrentState.isMultiSelected()
-      ),
+      isSelected: Internal.d(() => CurrentState.isSelected(itemPath)),
+      isMultiSelected: Internal.d(() => CurrentState.isMultiSelected()),
       isTranscluded: Object.keys(item.parents).length > 1,
       cssClasses: item.cssClasses,
       footprintRank: footprintRankMap.get(itemId),
