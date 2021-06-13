@@ -8,6 +8,27 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {get, writable} from 'svelte/store'
 
+const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
+
+export function getActivePageId(): ItemId {
+  // TODO: 最適化の余地あり（キャッシュ導入）
+  const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)
+  if (savedActivePageId === null) {
+    return CurrentState.getFilteredMountedPageIds().last() as number
+  } else {
+    const activePageId = parseInt(savedActivePageId)
+    if (get(Derived.isPage(activePageId))) {
+      return activePageId
+    } else {
+      return CurrentState.getFilteredMountedPageIds().last() as number
+    }
+  }
+}
+
+export function setActivePageId(activePageId: ItemId) {
+  localStorage.setItem(ACTIVE_PAGE_ID_KEY, activePageId.toString())
+}
+
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
   // マウントされたページがmountedPageIdsの末尾に来るようにする。

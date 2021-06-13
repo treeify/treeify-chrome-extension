@@ -2,11 +2,10 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {derived, get, Readable, writable} from 'svelte/store'
+import {derived, Readable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -23,8 +22,6 @@ export class Internal {
   private readonly stateChangeListeners = new Set<
     (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   >()
-
-  private static readonly ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 
   private constructor(initialState: State) {
     Internal._instance = this
@@ -98,25 +95,16 @@ export class Internal {
     CurrentState.setCurrentWorkspaceId(workspaceId)
   }
 
+  /** @deprecated */
   getActivePageId(): Readable<ItemId> {
     return derived(this.rerenderingPulse, () => {
-      // TODO: 最適化の余地あり（キャッシュ導入）
-      const savedActivePageId = localStorage.getItem(Internal.ACTIVE_PAGE_ID_KEY)
-      if (savedActivePageId === null) {
-        return CurrentState.getFilteredMountedPageIds().last() as number
-      } else {
-        const activePageId = parseInt(savedActivePageId)
-        if (get(Derived.isPage(activePageId))) {
-          return activePageId
-        } else {
-          return CurrentState.getFilteredMountedPageIds().last() as number
-        }
-      }
+      return CurrentState.getActivePageId()
     })
   }
 
+  /** @deprecated */
   setActivePageId(activePageId: ItemId) {
-    localStorage.setItem(Internal.ACTIVE_PAGE_ID_KEY, activePageId.toString())
+    CurrentState.setActivePageId(activePageId)
   }
 
   dumpCurrentState() {
