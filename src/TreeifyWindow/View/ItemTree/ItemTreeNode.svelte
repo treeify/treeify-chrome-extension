@@ -34,7 +34,8 @@
     return {
       itemPath,
       isActivePage: !ItemPath.hasParent(itemPath),
-      selected: deriveSelected(state, itemPath),
+      isSelected: Derived.isSelected(itemPath),
+      isMultiSelected: Derived.isMultiSelected(),
       isTranscluded: Object.keys(item.parents).length > 1,
       cssClasses: item.cssClasses,
       footprintRank: footprintRankMap.get(itemId),
@@ -136,30 +137,13 @@
       return 1 + sum
     }
   }
-
-  function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
-    if (get(Derived.isSelected(itemPath))) {
-      if (get(Derived.isMultiSelected())) {
-        return 'multi'
-      } else {
-        return 'single'
-      }
-    } else {
-      return 'non'
-    }
-  }
 </script>
 
 <script lang="ts">
   export let itemPath: ItemPath
   export let isActivePage: boolean
-  /**
-   * このアイテムが選択されているかどうかを示す値。
-   * 複数選択されたアイテムのうちの1つならmulti。
-   * 単一選択されたアイテムならsingle。
-   * 選択されていないならnon。
-   */
-  export let selected: 'single' | 'multi' | 'non'
+  export let isSelected: Readable<boolean>
+  export let isMultiSelected: Readable<boolean>
   export let isTranscluded: boolean
   export let cssClasses: Readable<List<string>>
   export let footprintRank: integer | undefined
@@ -196,7 +180,7 @@
   const childrenCssClasses = $cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div class="item-tree-node" class:multi-selected={selected === 'multi'}>
+<div class="item-tree-node" class:multi-selected={$isSelected && $isMultiSelected}>
   {#if isActivePage}
     <div class="grid-empty-cell" />
   {:else}
@@ -219,7 +203,7 @@
         <div
           data-item-path={JSON.stringify(itemPath.toArray())}
           class="item-tree-node_content-area"
-          class:single-selected={selected === 'single'}
+          class:single-selected={$isSelected && !$isMultiSelected}
           on:mousedown={onMouseDownContentArea}
         >
           <ItemTreeContent {...createItemTreeContentProps(itemPath)} />
