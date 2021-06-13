@@ -1,7 +1,6 @@
 import {List, Set} from 'immutable'
 import {ItemId, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
@@ -36,9 +35,16 @@ export function getWorkspaceIds(): List<WorkspaceId> {
   return List(Object.keys(Internal.instance.state.workspaces)).map(parseInt)
 }
 
+/** 現在のワークスペースの除外アイテムリストを返す */
+export function getExcludedItemIds(): List<ItemId> {
+  return get(
+    Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
+  )
+}
+
 /** 現在のワークスペースの除外アイテムリストを設定する */
 export function setExcludedItemIds(itemIds: List<ItemId>) {
-  const currentWorkspaceId = get(Internal.instance.getCurrentWorkspaceId())
+  const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds.set(itemIds)
   Internal.instance.markAsMutated(
     PropertyPath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
@@ -70,7 +76,7 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 /** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
 export function getFilteredMountedPageIds(): List<ItemId> {
   return get(Internal.instance.state.mountedPageIds).filter((pageId) => {
-    const excludedItemIds = get(Derived.getExcludedItemIds())
+    const excludedItemIds = CurrentState.getExcludedItemIds()
 
     // ページが除外アイテムそのものの場合
     if (excludedItemIds.contains(pageId)) return false

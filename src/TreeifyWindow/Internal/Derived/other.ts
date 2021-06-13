@@ -4,7 +4,7 @@ import {ItemId} from 'src/TreeifyWindow/basicType'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {get, join} from 'src/TreeifyWindow/svelte'
+import {get} from 'src/TreeifyWindow/svelte'
 import {derived, Readable} from 'svelte/store'
 
 /** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
@@ -51,18 +51,4 @@ export function getLabels(itemPath: ItemPath): Readable<List<string>> | undefine
   } else {
     return undefined
   }
-}
-
-/** 現在のワークスペースの除外アイテムリストを返す */
-export function getExcludedItemIds(): Readable<List<ItemId>> {
-  // この関数の呼び出し時点のカレントワークスペースのexcludedItemIdsを返すだけではダメ。
-  // ワークスペースが切り替えられたときに、参照先のexcludedItemIdsを切り替えなければならない。
-  // 依存先が動的に変化するということなので、derived関数では実現できない（はず）。
-  // より高度なユーティリティ関数を用いて実装した。
-
-  const currentWorkspaceId = Internal.instance.getCurrentWorkspaceId()
-  const nestedStore = derived(currentWorkspaceId, (currentWorkspaceId) => {
-    return Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds
-  })
-  return join(nestedStore)
 }

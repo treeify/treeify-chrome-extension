@@ -1,7 +1,6 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
@@ -81,18 +80,6 @@ export class Internal {
     listener: (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   ) {
     this.stateChangeListeners.add(listener)
-  }
-
-  /** @deprecated */
-  getCurrentWorkspaceId(): Readable<WorkspaceId> {
-    return derived(this.rerenderingPulse, () => {
-      return CurrentState.getCurrentWorkspaceId()
-    })
-  }
-
-  /** @deprecated */
-  setCurrentWorkspaceId(workspaceId: WorkspaceId) {
-    CurrentState.setCurrentWorkspaceId(workspaceId)
   }
 
   dumpCurrentState() {
