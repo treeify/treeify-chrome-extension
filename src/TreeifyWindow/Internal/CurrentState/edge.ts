@@ -10,6 +10,18 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {get} from 'svelte/store'
 
+/**
+ * 指定されたアイテムのisCollapsedフラグを返す。
+ * 親アイテムに依存するのでItemIdではなくItemPathを取る。
+ * TODO: 親のないItemPathを与えられた際の挙動を修正するかコメントに書く
+ */
+export function getIsCollapsed(itemPath: ItemPath): boolean {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
+  return get(Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed)
+}
+
 /** 指定されたアイテムのisCollapsedフラグを設定する */
 export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)

@@ -13,7 +13,7 @@ import {get} from 'svelte/store'
 export function toggleCollapsed() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  CurrentState.setIsCollapsed(targetItemPath, !get(Derived.getIsCollapsed(targetItemPath)))
+  CurrentState.setIsCollapsed(targetItemPath, !CurrentState.getIsCollapsed(targetItemPath))
   CurrentState.updateItemTimestamp(targetItemId)
 }
 

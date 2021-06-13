@@ -1,6 +1,6 @@
 import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyWindow/basicType'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -31,12 +31,10 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): Readable<List<Ite
  * 指定されたアイテムのisCollapsedフラグを返す。
  * 親アイテムに依存するのでItemIdではなくItemPathを取る。
  * TODO: 親のないItemPathを与えられた際の挙動を修正するかコメントに書く
+ * @deprecated
  */
 export function getIsCollapsed(itemPath: ItemPath): Readable<boolean> {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  assertNonUndefined(parentItemId)
-  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
+  return Internal.d(() => CurrentState.getIsCollapsed(itemPath))
 }
 
 /**

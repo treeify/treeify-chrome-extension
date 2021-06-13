@@ -99,7 +99,7 @@
     const itemId = ItemPath.getItemId(itemPath)
     if (CurrentState.isPage(itemId)) return 0
     if (get(state.items[itemId].childItemIds).isEmpty()) return 0
-    if (get(Derived.getIsCollapsed(itemPath))) {
+    if (CurrentState.getIsCollapsed(itemPath)) {
       return countLoadedTabsInDescendants(state, itemId)
     } else {
       return 0

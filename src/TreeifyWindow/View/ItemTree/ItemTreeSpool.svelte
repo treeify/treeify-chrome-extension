@@ -91,7 +91,7 @@
     } else if (get(state.items[itemId].childItemIds).size === 0) {
       return ItemTreeBulletState.NO_CHILDREN
     } else {
-      return get(Derived.getIsCollapsed(itemPath))
+      return CurrentState.getIsCollapsed(itemPath)
         ? ItemTreeBulletState.COLLAPSED
         : ItemTreeBulletState.EXPANDED
     }
