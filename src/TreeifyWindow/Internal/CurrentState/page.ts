@@ -37,7 +37,7 @@ export async function switchActivePage(itemId: ItemId) {
   Internal.instance.state.mountedPageIds.update((mountedPageIds) => mountedPageIds.push(itemId))
   Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 
-  Internal.instance.setActivePageId(itemId)
+  CurrentState.setActivePageId(itemId)
 
   // ウィンドウモードの自動切り替え機能
   switch (deriveDefaultWindowMode(itemId)) {

@@ -27,7 +27,7 @@
 
   export function createItemTreeProps() {
     const state = Internal.instance.state
-    const rootItemPath = List.of(get(Internal.instance.getActivePageId()))
+    const rootItemPath = List.of(CurrentState.getActivePageId())
 
     const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
     // 足跡表示数を計算
@@ -716,10 +716,7 @@
   function onScroll(event: Event) {
     // スクロール位置を保存する
     if (event.target instanceof HTMLElement) {
-      External.instance.scrollPositions.set(
-        get(Internal.instance.getActivePageId()),
-        event.target.scrollTop
-      )
+      External.instance.scrollPositions.set(CurrentState.getActivePageId(), event.target.scrollTop)
     }
   }
 </script>

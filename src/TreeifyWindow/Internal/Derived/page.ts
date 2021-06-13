@@ -1,6 +1,7 @@
 import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyWindow/basicType'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -16,17 +17,15 @@ export function isPage(itemId: ItemId): Readable<boolean> {
 }
 
 export function getTargetItemPath(): Readable<ItemPath> {
-  const activePageId = Internal.instance.getActivePageId()
-  const nestedStore = derived(activePageId, (activePageId) => {
-    return Internal.instance.state.pages[activePageId].targetItemPath
+  const nestedStore = derived(Internal.instance.rerenderingPulse, () => {
+    return Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath
   })
   return join(nestedStore)
 }
 
 export function getAnchorItemPath(): Readable<ItemPath> {
-  const activePageId = Internal.instance.getActivePageId()
-  const nestedStore = derived(activePageId, (activePageId) => {
-    return Internal.instance.state.pages[activePageId].anchorItemPath
+  const nestedStore = derived(Internal.instance.rerenderingPulse, () => {
+    return Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath
   })
   return join(nestedStore)
 }
@@ -60,8 +59,7 @@ export function getSelectedItemPaths(): Readable<List<ItemPath>> {
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function generateTreeifyWindowTitle(): Readable<string> {
-  const activePageId = Internal.instance.getActivePageId()
-  return derived(activePageId, (activePageId) => {
-    return getContentAsPlainText(activePageId)
+  return derived(Internal.instance.rerenderingPulse, () => {
+    return getContentAsPlainText(CurrentState.getActivePageId())
   })
 }

@@ -1,3 +1,4 @@
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -12,14 +13,14 @@ export function setTargetItemPath(itemPath: ItemPath) {
 
 /** アンカーアイテムパスを上書きする */
 export function setAnchorItemPath(itemPath: ItemPath) {
-  const activePageId = get(Internal.instance.getActivePageId())
+  const activePageId = CurrentState.getActivePageId()
   Internal.instance.state.pages[activePageId].anchorItemPath.set(itemPath)
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'anchorItemPath'))
 }
 
 /** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
-  const activePageId = get(Internal.instance.getActivePageId())
+  const activePageId = CurrentState.getActivePageId()
   Internal.instance.state.pages[activePageId].targetItemPath.set(itemPath)
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
 }

@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
+import {ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -93,18 +93,6 @@ export class Internal {
   /** @deprecated */
   setCurrentWorkspaceId(workspaceId: WorkspaceId) {
     CurrentState.setCurrentWorkspaceId(workspaceId)
-  }
-
-  /** @deprecated */
-  getActivePageId(): Readable<ItemId> {
-    return derived(this.rerenderingPulse, () => {
-      return CurrentState.getActivePageId()
-    })
-  }
-
-  /** @deprecated */
-  setActivePageId(activePageId: ItemId) {
-    CurrentState.setActivePageId(activePageId)
   }
 
   dumpCurrentState() {
