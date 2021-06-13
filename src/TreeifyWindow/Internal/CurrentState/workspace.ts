@@ -7,6 +7,30 @@ import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {get, writable} from 'svelte/store'
 
+const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
+
+export function getCurrentWorkspaceId(): WorkspaceId {
+  // TODO: 最適化の余地あり（キャッシュ導入）
+  const savedCurrentWorkspaceId = localStorage.getItem(CURRENT_WORKSPACE_ID_KEY)
+  if (savedCurrentWorkspaceId !== null) {
+    const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
+    if (Internal.instance.state.workspaces[currentWorkspaceId] !== undefined) {
+      // ローカルに保存されたvalidなワークスペースIDがある場合
+      return currentWorkspaceId
+    }
+  }
+
+  // 既存のワークスペースを適当に選んでIDを返す。
+  // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
+  const currentWorkspaceId = parseInt(Object.keys(Internal.instance.state.workspaces)[0])
+  localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
+  return currentWorkspaceId
+}
+
+export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
+  localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
+}
+
 /** Stateに登録されている全てのワークスペースIDを返す */
 export function getWorkspaceIds(): List<WorkspaceId> {
   return List(Object.keys(Internal.instance.state.workspaces)).map(parseInt)
