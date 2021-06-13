@@ -34,7 +34,9 @@
     return {
       itemPath,
       isActivePage: !ItemPath.hasParent(itemPath),
-      isSelected: Derived.isSelected(itemPath),
+      isSelected: derived(Internal.instance.rerenderingPulse, () =>
+        CurrentState.isSelected(itemPath)
+      ),
       isMultiSelected: Derived.isMultiSelected(),
       isTranscluded: Object.keys(item.parents).length > 1,
       cssClasses: item.cssClasses,
