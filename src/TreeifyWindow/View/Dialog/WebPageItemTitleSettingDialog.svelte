@@ -11,7 +11,7 @@
   export function createWebPageItemTitleSettingDialogProps(
     webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog
   ) {
-    const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
     return {
       webPageItemTitleSettingDialog,

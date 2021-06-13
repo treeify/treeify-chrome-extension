@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
@@ -10,7 +9,7 @@ import {get} from 'svelte/store'
 
 /** 対象ウェブページアイテムに対応するタブをdiscardする */
 export function softUnloadItem() {
-  const targetItemPath = get(Derived.getTargetItemPath())
+  const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.tabItemCorrespondence.getTabId(ItemPath.getItemId(targetItemPath))
   // 対応するタブがなければ何もしない
@@ -21,7 +20,7 @@ export function softUnloadItem() {
 
 /** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブをdiscardする */
 export function softUnloadSubtree() {
-  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
@@ -33,7 +32,7 @@ export function softUnloadSubtree() {
 
 /** 対象ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadItem() {
-  const targetItemPath = get(Derived.getTargetItemPath())
+  const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.tabItemCorrespondence.getTabId(ItemPath.getItemId(targetItemPath))
   // 対応するタブがなければ何もしない
@@ -47,7 +46,7 @@ export function hardUnloadItem() {
 
 /** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadSubtree() {
-  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
@@ -63,7 +62,7 @@ export function hardUnloadSubtree() {
 
 /** ウェブページアイテムのロード操作 */
 export function loadItem() {
-  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const tabId = External.instance.tabItemCorrespondence.getTabId(targetItemId)
   // 対応するタブがあれば何もしない。
   // discarded状態のタブをバックグラウンドで非discarded化できれば望ましいのだがそのようなAPIが見当たらない。
@@ -77,7 +76,7 @@ export function loadItem() {
 
 /** ウェブページアイテムのサブツリーロード操作 */
 export function loadSubtree() {
-  const targetItemId = ItemPath.getItemId(get(Derived.getTargetItemPath()))
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
     if (tabId === undefined) {
@@ -94,7 +93,7 @@ export function loadSubtree() {
  * 存在しない場合はタブを開く。
  */
 export function browseTab() {
-  const targetItemPath = get(Derived.getTargetItemPath())
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   const tabId = External.instance.tabItemCorrespondence.getTabId(targetItemId)

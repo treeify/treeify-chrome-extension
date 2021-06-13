@@ -77,7 +77,7 @@ export function onPaste(event: ClipboardEvent) {
     if (event.clipboardData === null) return
 
     event.preventDefault()
-    const targetItemPath = get(Derived.getTargetItemPath())
+    const targetItemPath = CurrentState.getTargetItemPath()
 
     const text = event.clipboardData.getData('text/plain')
 
@@ -196,7 +196,7 @@ export function pasteMultilineText(text: string) {
       // インデント形式のテキストとして認識できた場合
       const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
       for (const rootItemId of rootItemIds.reverse()) {
-        CurrentState.insertBelowItem(get(Derived.getTargetItemPath()), rootItemId)
+        CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), rootItemId)
       }
       CurrentState.commit()
       return
@@ -205,7 +205,7 @@ export function pasteMultilineText(text: string) {
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
   for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
-    CurrentState.insertBelowItem(get(Derived.getTargetItemPath()), itemId)
+    CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), itemId)
   }
   CurrentState.commit()
 }

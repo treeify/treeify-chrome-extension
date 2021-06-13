@@ -2,14 +2,12 @@
   import {List} from 'immutable'
   import {ItemId} from '../../basicType'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {get} from '../../svelte'
   import ItemContent, {createItemContentProps} from '../ItemContent/ItemContent.svelte'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createOtherParentsDialogProps() {
-    const targetItemPath = get(Derived.getTargetItemPath())
+    const targetItemPath = CurrentState.getTargetItemPath()
     const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
     const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
     const itemIds = parentItemIds.filter((itemId) => targetParentItemId !== itemId)

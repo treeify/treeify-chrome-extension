@@ -3,12 +3,17 @@ import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {get, writable} from 'svelte/store'
 
 const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
+
+export function getTargetItemPath(): ItemPath {
+  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath)
+}
 
 export function getActivePageId(): ItemId {
   // TODO: 最適化の余地あり（キャッシュ導入）

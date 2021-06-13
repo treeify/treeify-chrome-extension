@@ -9,7 +9,7 @@
   import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {
-    const targetItemPath = get(Derived.getTargetItemPath())
+    const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetPageId = get(Derived.isPage(targetItemId))
       ? targetItemId
@@ -51,7 +51,7 @@
   }
 
   const onClickFinishButton = () => {
-    const targetItemPath = get(Derived.getTargetItemPath())
+    const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetPageId = get(Derived.isPage(targetItemId))
       ? targetItemId

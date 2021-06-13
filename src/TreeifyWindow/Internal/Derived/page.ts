@@ -17,10 +17,9 @@ export function isPage(itemId: ItemId): Readable<boolean> {
 }
 
 export function getTargetItemPath(): Readable<ItemPath> {
-  const nestedStore = derived(Internal.instance.rerenderingPulse, () => {
-    return Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath
+  return derived(Internal.instance.rerenderingPulse, () => {
+    return CurrentState.getTargetItemPath()
   })
-  return join(nestedStore)
 }
 
 export function getAnchorItemPath(): Readable<ItemPath> {
