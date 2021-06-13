@@ -1,4 +1,4 @@
-import {List, Set as ImmutableSet} from 'immutable'
+import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -13,8 +13,6 @@ export class Internal {
   private static _instance: Internal | undefined
 
   readonly state: State
-  // this.state内のページIDの集合のストア
-  readonly pageIdsWritable: Writable<ImmutableSet<ItemId>>
 
   // 再描画制御変数。
   // 画面の再描画の唯一のトリガーとして運用するストア。
@@ -38,9 +36,6 @@ export class Internal {
     Internal._instance = this
 
     this.state = initialState
-    this.pageIdsWritable = writable(
-      ImmutableSet(Object.keys(initialState.pages).map((key) => parseInt(key)))
-    )
     this.currentWorkspaceId = writable(Internal.deriveInitialWorkspaceId(this.state))
     this.activePageId = writable(Internal.deriveActivePageId())
   }
@@ -97,13 +92,6 @@ export class Internal {
     listener: (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   ) {
     this.stateChangeListeners.add(listener)
-  }
-
-  /** Internal.instance.state内のページIDの集合が変化したことを伝える */
-  pageIdsChanged() {
-    this.pageIdsWritable.set(
-      ImmutableSet(Object.keys(this.state.pages).map((key) => parseInt(key)))
-    )
   }
 
   getCurrentWorkspaceId(): Readable<WorkspaceId> {

@@ -10,8 +10,8 @@ import {derived, Readable} from 'svelte/store'
 
 /** 指定されたアイテムがページかどうかを返す */
 export function isPage(itemId: ItemId): Readable<boolean> {
-  return derived(Internal.instance.pageIdsWritable, (pageIds) => {
-    return pageIds.has(itemId)
+  return derived(Internal.instance.rerenderingPulse, () => {
+    return Internal.instance.state.pages[itemId] !== undefined
   })
 }
 
