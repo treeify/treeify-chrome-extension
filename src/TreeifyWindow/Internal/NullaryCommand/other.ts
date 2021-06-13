@@ -121,7 +121,7 @@ export function selectAllAboveItems() {
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */
 export async function copyForTransclusion() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   External.instance.treeifyClipboard = {selectedItemPaths}
 
   // 「独自クリップボードにコピー→他アプリで何かをコピー→Treeify上でペースト」としたとき、
@@ -142,7 +142,7 @@ export async function copyForTransclusion() {
  * ただしトップページは除外できない。
  */
 export function excludeFromCurrentWorkspace() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
   const excludedItemIds = get(Derived.getExcludedItemIds()).toSet()
   CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())

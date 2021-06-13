@@ -1,4 +1,5 @@
-import {List} from 'immutable'
+import {is, List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived'
@@ -17,6 +18,31 @@ export function getTargetItemPath(): ItemPath {
 
 export function getAnchorItemPath(): ItemPath {
   return get(Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath)
+}
+
+/**
+ * 複数選択されているアイテムのリストを返す。
+ * 複数選択されていなければ単一要素のリストを返す。
+ * リストの並び順は兄弟リスト内での並び順と同じ。つまり上から下の順（targetとanchorの位置関係に依存しない）。
+ */
+export function getSelectedItemPaths(): List<ItemPath> {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const anchorItemPath = CurrentState.getAnchorItemPath()
+
+  if (is(targetItemPath, anchorItemPath)) {
+    // そもそも複数範囲されていない場合
+    return List.of(targetItemPath)
+  }
+
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  assertNonUndefined(parentItemId)
+  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
+  const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
+  const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
+  const upperIndex = Math.max(targetItemIndex, anchorItemIndex)
+  const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
+  return sliced.map((itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!)
 }
 
 export function getActivePageId(): ItemId {

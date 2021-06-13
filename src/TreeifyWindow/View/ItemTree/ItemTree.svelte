@@ -233,7 +233,7 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onArrowUp(event: KeyboardEvent) {
-    const selectedItemPaths = get(Derived.getSelectedItemPaths())
+    const selectedItemPaths = CurrentState.getSelectedItemPaths()
     const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
     // 上のアイテムが存在しない場合はブラウザの挙動に任せる
     if (aboveItemPath === undefined) return
@@ -335,7 +335,7 @@
    * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
    */
   function onArrowDown(event: KeyboardEvent) {
-    const selectedItemPaths = get(Derived.getSelectedItemPaths())
+    const selectedItemPaths = CurrentState.getSelectedItemPaths()
     const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
     // 下のアイテムが存在しない場合はブラウザの挙動に任せる
     if (belowItemPath === undefined) return
@@ -455,7 +455,7 @@
     // 兄アイテムが存在しない場合はブラウザの挙動に任せる
     if (prevSiblingItemPath === undefined) return
 
-    if (get(Derived.getSelectedItemPaths()).size === 1) {
+    if (CurrentState.getSelectedItemPaths().size === 1) {
       const targetItemId = ItemPath.getItemId(targetItemPath)
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合
@@ -484,7 +484,7 @@
     // 弟アイテムが存在しない場合はブラウザの挙動に任せる
     if (nextSiblingItemPath === undefined) return
 
-    if (get(Derived.getSelectedItemPaths()).size === 1) {
+    if (CurrentState.getSelectedItemPaths().size === 1) {
       const targetItemId = ItemPath.getItemId(targetItemPath)
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合

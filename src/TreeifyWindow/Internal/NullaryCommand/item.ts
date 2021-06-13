@@ -19,7 +19,7 @@ export function toggleCollapsed() {
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indentItem() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
   // 兄が居ない場合、何もしない
@@ -64,7 +64,7 @@ export function indentItem() {
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindentItem() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const parentItemPath = ItemPath.getParent(selectedItemPaths.first())
 
   // 親または親の親が居ない場合は何もしない
@@ -112,7 +112,7 @@ export function moveItemUpward() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   // 1つ上のアイテムが存在しない場合は何もしない
   if (aboveItemPath === undefined) return
@@ -158,7 +158,7 @@ export function moveItemDownward() {
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
   const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
@@ -213,7 +213,7 @@ export function moveItemDownward() {
  * 兄が居ない場合はmoveItemUpwardコマンドと等価。
  */
 export function moveItemToPrevSibling() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
   if (prevSiblingItemPath !== undefined) {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
@@ -244,7 +244,7 @@ export function moveItemToPrevSibling() {
  * 弟が居ない場合はmoveItemDownwardコマンドと等価。
  */
 export function moveItemToNextSibling() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(selectedItemPaths.last())
   if (nextSiblingItemPath !== undefined) {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
@@ -389,7 +389,7 @@ export function enterKeyDefault() {
  * トランスクルードされたアイテムの場合はエッジのみ削除する。
  */
 export function removeEdge() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const parentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
 
   // アクティブページを削除しようとしている場合、何もしない
@@ -417,7 +417,7 @@ export function deleteItem() {
   // アクティブページを削除しようとしている場合、何もしない
   if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) return
 
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   // 削除されるアイテムの上のアイテムをフォーカス
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
@@ -507,7 +507,7 @@ export function turnIntoNonPageAndExpand() {
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
     const targetItemId = ItemPath.getItemId(selectedItemPath)
 
@@ -535,7 +535,7 @@ export function toggleGrayedOut() {
  * もし既にハイライト状態なら非ハイライト状態に戻す。
  */
 export function toggleHighlighted() {
-  const selectedItemPaths = get(Derived.getSelectedItemPaths())
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
     const targetItemId = ItemPath.getItemId(selectedItemPath)
 

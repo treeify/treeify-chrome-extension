@@ -30,13 +30,13 @@ export function onCopy(event: ClipboardEvent) {
       event.preventDefault()
 
       // インデント形式のテキストをクリップボードに入れる
-      const contentText = get(Derived.getSelectedItemPaths()).map(exportAsIndentedText).join('\n')
+      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
       event.clipboardData.setData('text/plain', contentText)
 
       // OPML形式のテキストをクリップボードに入れる
       event.clipboardData.setData(
         'application/xml',
-        toOpmlString(get(Derived.getSelectedItemPaths()))
+        toOpmlString(CurrentState.getSelectedItemPaths())
       )
     }
   })
@@ -56,13 +56,13 @@ export function onCut(event: ClipboardEvent) {
       event.preventDefault()
 
       // インデント形式のテキストをクリップボードに入れる
-      const contentText = get(Derived.getSelectedItemPaths()).map(exportAsIndentedText).join('\n')
+      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
       event.clipboardData.setData('text/plain', contentText)
 
       // OPML形式のテキストをクリップボードに入れる
       event.clipboardData.setData(
         'application/xml',
-        toOpmlString(get(Derived.getSelectedItemPaths()))
+        toOpmlString(CurrentState.getSelectedItemPaths())
       )
 
       NullaryCommand.deleteItem()
