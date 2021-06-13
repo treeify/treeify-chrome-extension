@@ -1,17 +1,15 @@
 <script context="module" lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {State} from '../../Internal/State'
-  import {get} from '../../svelte'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createDefaultWindowModeSettingDialogProps() {
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    const targetPageId = get(Derived.isPage(targetItemId))
+    const targetPageId = CurrentState.isPage(targetItemId)
       ? targetItemId
       : ItemPath.getRootItemId(targetItemPath)
 
@@ -53,7 +51,7 @@
   const onClickFinishButton = () => {
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    const targetPageId = get(Derived.isPage(targetItemId))
+    const targetPageId = CurrentState.isPage(targetItemId)
       ? targetItemId
       : ItemPath.getRootItemId(targetItemPath)
 

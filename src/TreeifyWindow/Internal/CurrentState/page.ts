@@ -2,7 +2,6 @@ import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -52,7 +51,7 @@ export function getActivePageId(): ItemId {
     return CurrentState.getFilteredMountedPageIds().last() as number
   } else {
     const activePageId = parseInt(savedActivePageId)
-    if (get(Derived.isPage(activePageId))) {
+    if (CurrentState.isPage(activePageId)) {
       return activePageId
     } else {
       return CurrentState.getFilteredMountedPageIds().last() as number
@@ -118,7 +117,7 @@ export function unmountPage(itemId: ItemId) {
 /** 与えられたアイテムをページ化する */
 export function turnIntoPage(itemId: ItemId) {
   // 既にページだった場合は何もしない
-  if (get(Derived.isPage(itemId))) return
+  if (CurrentState.isPage(itemId)) return
 
   const page: State.Page = {
     targetItemPath: writable(List.of(itemId)),
@@ -134,10 +133,15 @@ export function turnIntoPage(itemId: ItemId) {
  * 既に非ページだった場合は何もしない。
  */
 export function turnIntoNonPage(itemId: ItemId) {
-  if (!get(Derived.isPage(itemId))) return
+  if (!CurrentState.isPage(itemId)) return
 
   delete Internal.instance.state.pages[itemId]
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
+}
+
+/** 指定されたアイテムがページかどうかを返す */
+export function isPage(itemId: ItemId): boolean {
+  return Internal.instance.state.pages[itemId] !== undefined
 }
 
 export function setDefaultWindowMode(itemId: ItemId, value: State.DefaultWindowMode) {

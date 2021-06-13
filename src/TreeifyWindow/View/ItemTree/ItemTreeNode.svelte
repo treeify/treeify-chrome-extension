@@ -97,7 +97,7 @@
 
   function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
     const itemId = ItemPath.getItemId(itemPath)
-    if (get(Derived.isPage(itemId))) return 0
+    if (CurrentState.isPage(itemId)) return 0
     if (get(state.items[itemId].childItemIds).isEmpty()) return 0
     if (get(Derived.getIsCollapsed(itemPath))) {
       return countLoadedTabsInDescendants(state, itemId)
@@ -120,7 +120,7 @@
   // 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
   // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
   function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
-    if (get(Derived.isPage(itemId))) {
+    if (CurrentState.isPage(itemId)) {
       if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
         return 0
       } else {
