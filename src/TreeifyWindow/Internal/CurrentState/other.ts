@@ -43,3 +43,10 @@ export function isSelected(itemPath: ItemPath): boolean {
   const maxIndex = Math.max(targetItemIndex, anchorItemIndex)
   return minIndex <= itemIndex && itemIndex <= maxIndex
 }
+
+/** アイテムを複数選択中かどうかを返す */
+export function isMultiSelected(): boolean {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const anchorItemPath = CurrentState.getAnchorItemPath()
+  return !is(targetItemPath, anchorItemPath)
+}

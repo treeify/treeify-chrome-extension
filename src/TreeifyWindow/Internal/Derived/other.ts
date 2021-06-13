@@ -1,4 +1,4 @@
-import {is, List} from 'immutable'
+import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {Derived} from 'src/TreeifyWindow/Internal/Derived/index'
@@ -65,14 +65,4 @@ export function getExcludedItemIds(): Readable<List<ItemId>> {
     return Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds
   })
   return join(nestedStore)
-}
-
-/** アイテムを複数選択中かどうかを返す */
-export function isMultiSelected(): Readable<boolean> {
-  const targetItemPath = Derived.getTargetItemPath()
-  const anchorItemPath = Derived.getAnchorItemPath()
-
-  return derived([targetItemPath, anchorItemPath], ([targetItemPath, anchorItemPath]) => {
-    return !is(targetItemPath, anchorItemPath)
-  })
 }

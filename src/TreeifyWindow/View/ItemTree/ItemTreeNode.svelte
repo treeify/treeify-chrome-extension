@@ -37,7 +37,9 @@
       isSelected: derived(Internal.instance.rerenderingPulse, () =>
         CurrentState.isSelected(itemPath)
       ),
-      isMultiSelected: Derived.isMultiSelected(),
+      isMultiSelected: derived(Internal.instance.rerenderingPulse, () =>
+        CurrentState.isMultiSelected()
+      ),
       isTranscluded: Object.keys(item.parents).length > 1,
       cssClasses: item.cssClasses,
       footprintRank: footprintRankMap.get(itemId),
