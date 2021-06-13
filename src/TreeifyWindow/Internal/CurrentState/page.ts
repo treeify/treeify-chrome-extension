@@ -15,6 +15,10 @@ export function getTargetItemPath(): ItemPath {
   return get(Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath)
 }
 
+export function getAnchorItemPath(): ItemPath {
+  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath)
+}
+
 export function getActivePageId(): ItemId {
   // TODO: 最適化の余地あり（キャッシュ導入）
   const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)

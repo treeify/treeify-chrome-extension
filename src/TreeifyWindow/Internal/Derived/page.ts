@@ -6,7 +6,7 @@ import {Derived} from 'src/TreeifyWindow/Internal/Derived/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/importAndExport'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {get, join} from 'src/TreeifyWindow/svelte'
+import {get} from 'src/TreeifyWindow/svelte'
 import {derived, Readable} from 'svelte/store'
 
 /** 指定されたアイテムがページかどうかを返す */
@@ -23,10 +23,9 @@ export function getTargetItemPath(): Readable<ItemPath> {
 }
 
 export function getAnchorItemPath(): Readable<ItemPath> {
-  const nestedStore = derived(Internal.instance.rerenderingPulse, () => {
-    return Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath
+  return derived(Internal.instance.rerenderingPulse, () => {
+    return CurrentState.getAnchorItemPath()
   })
-  return join(nestedStore)
 }
 
 /**

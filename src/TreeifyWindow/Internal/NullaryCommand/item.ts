@@ -57,7 +57,7 @@ export function indentItem() {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
-    const anchorItemId = ItemPath.getItemId(get(Derived.getAnchorItemPath()))
+    const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
   }
 }
@@ -99,7 +99,7 @@ export function unindentItem() {
     CurrentState.setTargetItemPathOnly(
       ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
     )
-    const anchorItemId = ItemPath.getItemId(get(Derived.getAnchorItemPath()))
+    const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(ItemPath.createSiblingItemPath(parentItemPath, anchorItemId)!)
   }
 }
@@ -140,7 +140,7 @@ export function moveItemUpward() {
   // アンカーアイテムパスを更新
   const newAnchorItemPath = ItemPath.createSiblingItemPath(
     aboveItemPath,
-    ItemPath.getItemId(get(Derived.getAnchorItemPath()))
+    ItemPath.getItemId(CurrentState.getAnchorItemPath())
   )
   assertNonUndefined(newAnchorItemPath)
   CurrentState.setAnchorItemPath(newAnchorItemPath)
@@ -190,7 +190,7 @@ export function moveItemDownward() {
     // アンカーアイテムパスを更新
     const newAnchorItemPath = ItemPath.createSiblingItemPath(
       firstFollowingItemPath,
-      ItemPath.getItemId(get(Derived.getAnchorItemPath()))
+      ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
     assertNonUndefined(newAnchorItemPath)
     CurrentState.setAnchorItemPath(newAnchorItemPath)
@@ -202,7 +202,7 @@ export function moveItemDownward() {
     CurrentState.setTargetItemPathOnly(newTargetItemPath)
     // アンカーアイテムパスを更新
     const newAnchorItemPath = firstFollowingItemPath.push(
-      ItemPath.getItemId(get(Derived.getAnchorItemPath()))
+      ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
   }
