@@ -157,7 +157,7 @@ export function exportAsIndentedText(itemPath: ItemPath): string {
 function exportAsIndentedLines(itemPath: ItemPath, indentLevel = 0): List<string> {
   const line = '  '.repeat(indentLevel) + getContentAsPlainText(ItemPath.getItemId(itemPath))
 
-  const childLines = get(Derived.getDisplayingChildItemIds(itemPath)).flatMap((childItemId) => {
+  const childLines = CurrentState.getDisplayingChildItemIds(itemPath).flatMap((childItemId) => {
     return exportAsIndentedLines(itemPath.push(childItemId), indentLevel + 1)
   })
   return childLines.unshift(line)

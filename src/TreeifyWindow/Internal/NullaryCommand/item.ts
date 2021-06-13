@@ -3,7 +3,6 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -179,7 +178,7 @@ export function moveItemDownward() {
   // キャレット位置、テキスト選択範囲を維持する
   External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
-  if (get(Derived.getDisplayingChildItemIds(firstFollowingItemPath)).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下のアイテムが子を表示していない場合
 
     // ターゲットアイテムパスを更新

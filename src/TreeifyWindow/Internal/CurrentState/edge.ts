@@ -3,7 +3,6 @@ import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -179,7 +178,7 @@ export function insertBelowItem(
   newItemId: ItemId,
   edge?: State.Edge
 ): ItemPath {
-  if (!get(Derived.getDisplayingChildItemIds(itemPath)).isEmpty()) {
+  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
     return itemPath.push(newItemId)
   } else {
@@ -216,5 +215,23 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
 
   for (const childItemId of get(Internal.instance.state.items[itemId].childItemIds)) {
     yield* getSubtreeItemIds(childItemId)
+  }
+}
+
+/** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
+export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
+  const itemId = ItemPath.getItemId(itemPath)
+  const childItemIds = get(Internal.instance.state.items[itemId].childItemIds)
+  // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
+  if (itemPath.size === 1) {
+    return childItemIds
+  }
+
+  const isCollapsed = CurrentState.getIsCollapsed(itemPath)
+  const isPage = CurrentState.isPage(itemId)
+  if (isCollapsed || isPage) {
+    return List.of<ItemId>()
+  } else {
+    return childItemIds
   }
 }

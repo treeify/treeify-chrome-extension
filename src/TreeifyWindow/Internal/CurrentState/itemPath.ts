@@ -1,5 +1,4 @@
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
@@ -63,7 +62,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  * 該当アイテムが存在しない場合はundefinedを返す。
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const firstChildItemId = get(Derived.getDisplayingChildItemIds(itemPath)).first(undefined)
+  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemPath).first(undefined)
   // 表示されているアイテムが存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子アイテムが該当アイテムである
@@ -137,7 +136,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  * というツリーではDが該当する。
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
-  if (get(Derived.getDisplayingChildItemIds(itemPath)).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
     // 子を表示していない場合、このアイテムこそが最も下のアイテムである
     return itemPath
   }
