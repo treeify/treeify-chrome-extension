@@ -82,9 +82,6 @@ export class External {
       spaRoot.innerHTML = ''
       new Root({
         target: spaRoot,
-        props: {
-          webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
-        },
       })
     }
 
