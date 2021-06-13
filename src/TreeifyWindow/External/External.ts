@@ -115,9 +115,6 @@ export class External {
     })
 
     this.pendingTextItemSelection = undefined
-
-    // Treeifyウィンドウのタイトルを更新する
-    document.title = get(Derived.generateTreeifyWindowTitle())
   }
 
   /**
