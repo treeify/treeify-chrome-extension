@@ -1,12 +1,67 @@
-import {List} from 'immutable'
+import {is, List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {get, writable} from 'svelte/store'
+
+const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
+
+export function getTargetItemPath(): ItemPath {
+  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath)
+}
+
+export function getAnchorItemPath(): ItemPath {
+  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath)
+}
+
+/**
+ * 複数選択されているアイテムのリストを返す。
+ * 複数選択されていなければ単一要素のリストを返す。
+ * リストの並び順は兄弟リスト内での並び順と同じ。つまり上から下の順（targetとanchorの位置関係に依存しない）。
+ */
+export function getSelectedItemPaths(): List<ItemPath> {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const anchorItemPath = CurrentState.getAnchorItemPath()
+
+  if (is(targetItemPath, anchorItemPath)) {
+    // そもそも複数範囲されていない場合
+    return List.of(targetItemPath)
+  }
+
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  assertNonUndefined(parentItemId)
+  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
+  const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
+  const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
+  const upperIndex = Math.max(targetItemIndex, anchorItemIndex)
+  const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
+  return sliced.map((itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!)
+}
+
+export function getActivePageId(): ItemId {
+  // TODO: 最適化の余地あり（キャッシュ導入）
+  const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)
+  if (savedActivePageId === null) {
+    return CurrentState.getFilteredMountedPageIds().last() as number
+  } else {
+    const activePageId = parseInt(savedActivePageId)
+    if (CurrentState.isPage(activePageId)) {
+      return activePageId
+    } else {
+      return CurrentState.getFilteredMountedPageIds().last() as number
+    }
+  }
+}
+
+export function setActivePageId(activePageId: ItemId) {
+  localStorage.setItem(ACTIVE_PAGE_ID_KEY, activePageId.toString())
+}
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
@@ -16,7 +71,7 @@ export async function switchActivePage(itemId: ItemId) {
   Internal.instance.state.mountedPageIds.update((mountedPageIds) => mountedPageIds.push(itemId))
   Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 
-  Internal.instance.setActivePageId(itemId)
+  CurrentState.setActivePageId(itemId)
 
   // ウィンドウモードの自動切り替え機能
   switch (deriveDefaultWindowMode(itemId)) {
@@ -62,7 +117,7 @@ export function unmountPage(itemId: ItemId) {
 /** 与えられたアイテムをページ化する */
 export function turnIntoPage(itemId: ItemId) {
   // 既にページだった場合は何もしない
-  if (get(Derived.isPage(itemId))) return
+  if (CurrentState.isPage(itemId)) return
 
   const page: State.Page = {
     targetItemPath: writable(List.of(itemId)),
@@ -71,7 +126,6 @@ export function turnIntoPage(itemId: ItemId) {
   }
   Internal.instance.state.pages[itemId] = page
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
-  Internal.instance.pageIdsChanged()
 }
 
 /**
@@ -79,11 +133,15 @@ export function turnIntoPage(itemId: ItemId) {
  * 既に非ページだった場合は何もしない。
  */
 export function turnIntoNonPage(itemId: ItemId) {
-  if (!get(Derived.isPage(itemId))) return
+  if (!CurrentState.isPage(itemId)) return
 
   delete Internal.instance.state.pages[itemId]
   Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
-  Internal.instance.pageIdsChanged()
+}
+
+/** 指定されたアイテムがページかどうかを返す */
+export function isPage(itemId: ItemId): boolean {
+  return Internal.instance.state.pages[itemId] !== undefined
 }
 
 export function setDefaultWindowMode(itemId: ItemId, value: State.DefaultWindowMode) {

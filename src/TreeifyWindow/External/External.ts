@@ -12,13 +12,12 @@ import {
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {get, writable, Writable} from 'svelte/store'
+import {writable, Writable} from 'svelte/store'
 import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
@@ -87,16 +86,14 @@ export class External {
 
     // アイテムツリーのスクロール位置を復元
     const itemTree = document.querySelector('.item-tree')
-    const scrollPosition = External.instance.scrollPositions.get(
-      get(Internal.instance.getActivePageId())
-    )
+    const scrollPosition = External.instance.scrollPositions.get(CurrentState.getActivePageId())
     if (scrollPosition !== undefined && itemTree instanceof HTMLElement) {
       itemTree.scrollTop = scrollPosition
     }
 
     doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-      if (get(Derived.getSelectedItemPaths()).size === 1) {
-        const targetItemPath = get(Derived.getTargetItemPath())
+      if (CurrentState.getSelectedItemPaths().size === 1) {
+        const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
         focusableElement?.focus()

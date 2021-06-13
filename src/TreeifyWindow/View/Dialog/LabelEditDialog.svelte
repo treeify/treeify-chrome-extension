@@ -9,7 +9,7 @@
   import CommonDialog from './CommonDialog.svelte'
 
   export function createLabelEditDialogProps() {
-    const labels = Derived.getLabels(get(Derived.getTargetItemPath()))
+    const labels = Derived.getLabels(CurrentState.getTargetItemPath())
     assertNonUndefined(labels)
     if (get(labels).isEmpty()) {
       // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
@@ -43,7 +43,7 @@
   const onClickFinishButton = () => {
     doWithErrorCapture(() => {
       const nonEmptyLabels = labels.filter((label) => label !== '')
-      CurrentState.setLabels(get(Derived.getTargetItemPath()), List(nonEmptyLabels))
+      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
       CurrentState.setLabelEditDialog(null)
       // CurrentState.commit()
     })

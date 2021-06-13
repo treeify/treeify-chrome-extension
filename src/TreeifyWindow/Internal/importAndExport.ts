@@ -30,13 +30,13 @@ export function onCopy(event: ClipboardEvent) {
       event.preventDefault()
 
       // インデント形式のテキストをクリップボードに入れる
-      const contentText = get(Derived.getSelectedItemPaths()).map(exportAsIndentedText).join('\n')
+      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
       event.clipboardData.setData('text/plain', contentText)
 
       // OPML形式のテキストをクリップボードに入れる
       event.clipboardData.setData(
         'application/xml',
-        toOpmlString(get(Derived.getSelectedItemPaths()))
+        toOpmlString(CurrentState.getSelectedItemPaths())
       )
     }
   })
@@ -56,13 +56,13 @@ export function onCut(event: ClipboardEvent) {
       event.preventDefault()
 
       // インデント形式のテキストをクリップボードに入れる
-      const contentText = get(Derived.getSelectedItemPaths()).map(exportAsIndentedText).join('\n')
+      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
       event.clipboardData.setData('text/plain', contentText)
 
       // OPML形式のテキストをクリップボードに入れる
       event.clipboardData.setData(
         'application/xml',
-        toOpmlString(get(Derived.getSelectedItemPaths()))
+        toOpmlString(CurrentState.getSelectedItemPaths())
       )
 
       NullaryCommand.deleteItem()
@@ -77,7 +77,7 @@ export function onPaste(event: ClipboardEvent) {
     if (event.clipboardData === null) return
 
     event.preventDefault()
-    const targetItemPath = get(Derived.getTargetItemPath())
+    const targetItemPath = CurrentState.getTargetItemPath()
 
     const text = event.clipboardData.getData('text/plain')
 
@@ -196,7 +196,7 @@ export function pasteMultilineText(text: string) {
       // インデント形式のテキストとして認識できた場合
       const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
       for (const rootItemId of rootItemIds.reverse()) {
-        CurrentState.insertBelowItem(get(Derived.getTargetItemPath()), rootItemId)
+        CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), rootItemId)
       }
       CurrentState.commit()
       return
@@ -205,7 +205,7 @@ export function pasteMultilineText(text: string) {
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
   for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
-    CurrentState.insertBelowItem(get(Derived.getTargetItemPath()), itemId)
+    CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), itemId)
   }
   CurrentState.commit()
 }
@@ -336,7 +336,7 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   const item = Internal.instance.state.items[itemId]
 
   const baseAttributes: Attributes = {
-    isPage: get(Derived.isPage(itemId)).toString(),
+    isPage: CurrentState.isPage(itemId).toString(),
     itemId,
   }
   if (ItemPath.hasParent(itemPath)) {

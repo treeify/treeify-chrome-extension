@@ -10,7 +10,6 @@ import {ItemId} from 'src/TreeifyWindow/basicType'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
@@ -65,7 +64,7 @@ export function onCreated(tab: Tab) {
         CurrentState.setIsUnreadFlag(newWebPageItemId, true)
       }
 
-      const targetItemPath = get(Derived.getTargetItemPath())
+      const targetItemPath = CurrentState.getTargetItemPath()
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
@@ -202,7 +201,7 @@ export async function matchTabsAndWebPageItems() {
       reflectInWebPageItem(newWebPageItemId, tab)
 
       // アクティブページの最初の子として追加する
-      const activePageId = get(Internal.instance.getActivePageId())
+      const activePageId = CurrentState.getActivePageId()
       CurrentState.insertFirstChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページアイテムがある場合

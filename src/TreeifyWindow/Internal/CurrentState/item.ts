@@ -331,7 +331,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
   // ページは終端ノードとして扱う
-  if (get(Derived.isPage(itemId))) return
+  if (CurrentState.isPage(itemId)) return
 
   for (const childItemId of get(Internal.instance.state.items[itemId].childItemIds)) {
     yield* getSubtreeItemIds(childItemId)

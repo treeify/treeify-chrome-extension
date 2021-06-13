@@ -3,15 +3,13 @@
   import {State} from 'src/TreeifyWindow/Internal/State'
   import {assertNonNull} from '../../../Common/Debug/assert'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {get} from '../../svelte'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createCodeBlockItemEditDialogProps(
     codeBlockItemEditDialog: State.CodeBlockItemEditDialog
   ) {
-    const targetItemPath = get(Derived.getTargetItemPath())
+    const targetItemPath = CurrentState.getTargetItemPath()
     return {
       ...codeBlockItemEditDialog,
       onClickFinishButton: () => {

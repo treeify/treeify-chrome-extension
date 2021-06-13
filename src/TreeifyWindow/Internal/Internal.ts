@@ -1,43 +1,32 @@
-import {List, Set as ImmutableSet} from 'immutable'
+import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId, ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
+import {ItemType, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {get, Readable, Writable, writable} from 'svelte/store'
+import {derived, Readable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
   private static _instance: Internal | undefined
 
   readonly state: State
-  // this.state内のページIDの集合のストア
-  readonly pageIdsWritable: Writable<ImmutableSet<ItemId>>
+
+  // 再描画制御変数。
+  // 画面の再描画の唯一のトリガーとして運用するストア。
+  // 値の内容に意味はないが、プリミティブ値だと更新イベントが起きないので{}にした。
+  readonly #rerenderingPulse = writable({})
 
   private readonly mutatedPropertyPaths = new Set<PropertyPath>()
   private readonly stateChangeListeners = new Set<
     (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   >()
 
-  // 現在のワークスペースIDのストア
-  private readonly currentWorkspaceId: Writable<WorkspaceId>
-
-  private readonly activePageId: Writable<ItemId>
-
-  private static readonly CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
-  private static readonly ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
-
   private constructor(initialState: State) {
     Internal._instance = this
 
     this.state = initialState
-    this.pageIdsWritable = writable(
-      ImmutableSet(Object.keys(initialState.pages).map((key) => parseInt(key)))
-    )
-    this.currentWorkspaceId = writable(Internal.deriveInitialWorkspaceId(this.state))
-    this.activePageId = writable(Internal.deriveActivePageId())
   }
 
   /**
@@ -65,8 +54,18 @@ export class Internal {
     this._instance = undefined
   }
 
+  /**
+   * 画面を再描画すべきタイミングで更新イベントが起こるストアを返す。
+   * タイミングを伝えるだけなので値に意味はない。
+   */
+  get rerenderingPulse(): Readable<{}> {
+    return this.#rerenderingPulse
+  }
+
   /** Stateへの変更を確定し、stateChangeListenerに通知する */
   commit() {
+    this.#rerenderingPulse.set({})
+
     for (const stateChangeListener of this.stateChangeListeners) {
       stateChangeListener(this.state, this.mutatedPropertyPaths)
     }
@@ -84,60 +83,16 @@ export class Internal {
     this.stateChangeListeners.add(listener)
   }
 
-  /** Internal.instance.state内のページIDの集合が変化したことを伝える */
-  pageIdsChanged() {
-    this.pageIdsWritable.set(
-      ImmutableSet(Object.keys(this.state.pages).map((key) => parseInt(key)))
-    )
-  }
-
+  /** @deprecated */
   getCurrentWorkspaceId(): Readable<WorkspaceId> {
-    return this.currentWorkspaceId
+    return derived(this.rerenderingPulse, () => {
+      return CurrentState.getCurrentWorkspaceId()
+    })
   }
 
+  /** @deprecated */
   setCurrentWorkspaceId(workspaceId: WorkspaceId) {
-    localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
-    this.currentWorkspaceId.set(workspaceId)
-  }
-
-  private static deriveInitialWorkspaceId(state: State): WorkspaceId {
-    const savedCurrentWorkspaceId = localStorage.getItem(Internal.CURRENT_WORKSPACE_ID_KEY)
-    if (savedCurrentWorkspaceId !== null) {
-      const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
-      if (state.workspaces[currentWorkspaceId] !== undefined) {
-        // ローカルに保存されたvalidなワークスペースIDがある場合
-        return currentWorkspaceId
-      }
-    }
-
-    // 既存のワークスペースを適当に選んでIDを返す。
-    // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-    const currentWorkspaceId = parseInt(Object.keys(state.workspaces)[0])
-    localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
-    return currentWorkspaceId
-  }
-
-  getActivePageId(): Readable<ItemId> {
-    return this.activePageId
-  }
-
-  setActivePageId(activePageId: ItemId) {
-    localStorage.setItem(Internal.ACTIVE_PAGE_ID_KEY, activePageId.toString())
-    this.activePageId.set(activePageId)
-  }
-
-  private static deriveActivePageId(): ItemId {
-    const savedActivePageId = localStorage.getItem(Internal.ACTIVE_PAGE_ID_KEY)
-    if (savedActivePageId === null) {
-      return CurrentState.getFilteredMountedPageIds().last()
-    } else {
-      const activePageId = parseInt(savedActivePageId)
-      if (get(Derived.isPage(activePageId))) {
-        return activePageId
-      } else {
-        return CurrentState.getFilteredMountedPageIds().last()
-      }
-    }
+    CurrentState.setCurrentWorkspaceId(workspaceId)
   }
 
   dumpCurrentState() {
@@ -145,6 +100,14 @@ export class Internal {
     const stateString = JSON.stringify(this.state, State.jsonReplacer, 2)
     console.log(stateString)
     console.groupEnd()
+  }
+
+  /**
+   * 頻出パターンの略記用ユーティリティ関数。
+   * 関数名はderivedの頭文字というだけで他に特に意味はない。
+   */
+  static d<T>(f: () => T): Readable<T> {
+    return derived(Internal.instance.rerenderingPulse, f)
   }
 
   static createInitialState(): State {
