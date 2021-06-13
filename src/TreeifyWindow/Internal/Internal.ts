@@ -4,13 +4,18 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
+import {Readable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
   private static _instance: Internal | undefined
 
   readonly state: State = Internal.createSampleState()
+
+  // 再描画制御変数。
+  // 画面の再描画の唯一のトリガーとして運用するストア。
+  // 値の内容に意味はないが、プリミティブ値だと更新イベントが起きないので{}にした。
+  readonly #rerenderingPulse = writable({})
 
   private readonly mutatedPropertyPaths = new Set<PropertyPath>()
   private readonly stateChangeListeners = new Set<
@@ -44,8 +49,18 @@ export class Internal {
     this._instance = undefined
   }
 
+  /**
+   * 画面を再描画すべきタイミングで更新イベントが起こるストアを返す。
+   * タイミングを伝えるだけなので値に意味はない。
+   */
+  get rerenderingPulse(): Readable<{}> {
+    return this.#rerenderingPulse
+  }
+
   /** Stateへの変更を確定し、stateChangeListenerに通知する */
   commit() {
+    this.#rerenderingPulse.set({})
+
     for (const stateChangeListener of this.stateChangeListeners) {
       stateChangeListener(this.state, this.mutatedPropertyPaths)
     }
