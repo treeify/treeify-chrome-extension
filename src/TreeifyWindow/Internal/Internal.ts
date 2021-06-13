@@ -6,7 +6,7 @@ import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {get, Readable, Writable, writable} from 'svelte/store'
+import {derived, get, Readable, Writable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -27,8 +27,6 @@ export class Internal {
   // 現在のワークスペースIDのストア
   private readonly currentWorkspaceId: Writable<WorkspaceId>
 
-  private readonly activePageId: Writable<ItemId>
-
   private static readonly CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
   private static readonly ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 
@@ -37,7 +35,6 @@ export class Internal {
 
     this.state = initialState
     this.currentWorkspaceId = writable(Internal.deriveInitialWorkspaceId(this.state))
-    this.activePageId = writable(Internal.deriveActivePageId())
   }
 
   /**
@@ -121,26 +118,24 @@ export class Internal {
   }
 
   getActivePageId(): Readable<ItemId> {
-    return this.activePageId
+    return derived(this.rerenderingPulse, () => {
+      // TODO: 最適化の余地あり（キャッシュ導入）
+      const savedActivePageId = localStorage.getItem(Internal.ACTIVE_PAGE_ID_KEY)
+      if (savedActivePageId === null) {
+        return CurrentState.getFilteredMountedPageIds().last() as number
+      } else {
+        const activePageId = parseInt(savedActivePageId)
+        if (get(Derived.isPage(activePageId))) {
+          return activePageId
+        } else {
+          return CurrentState.getFilteredMountedPageIds().last() as number
+        }
+      }
+    })
   }
 
   setActivePageId(activePageId: ItemId) {
     localStorage.setItem(Internal.ACTIVE_PAGE_ID_KEY, activePageId.toString())
-    this.activePageId.set(activePageId)
-  }
-
-  private static deriveActivePageId(): ItemId {
-    const savedActivePageId = localStorage.getItem(Internal.ACTIVE_PAGE_ID_KEY)
-    if (savedActivePageId === null) {
-      return CurrentState.getFilteredMountedPageIds().last()
-    } else {
-      const activePageId = parseInt(savedActivePageId)
-      if (get(Derived.isPage(activePageId))) {
-        return activePageId
-      } else {
-        return CurrentState.getFilteredMountedPageIds().last()
-      }
-    }
   }
 
   dumpCurrentState() {
