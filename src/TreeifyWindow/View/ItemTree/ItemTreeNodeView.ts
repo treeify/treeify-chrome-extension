@@ -7,13 +7,8 @@ import {Readable} from 'svelte/store'
 export type ItemTreeNodeProps = {
   itemPath: ItemPath
   isActivePage: boolean
-  /**
-   * このアイテムが選択されているかどうかを示す値。
-   * 複数選択されたアイテムのうちの1つならmulti。
-   * 単一選択されたアイテムならsingle。
-   * 選択されていないならnon。
-   */
-  selected: 'single' | 'multi' | 'non'
+  isSelected: Readable<boolean>
+  isMultiSelected: Readable<boolean>
   isTranscluded: boolean
   cssClasses: Readable<List<string>>
   footprintRank: integer | undefined
