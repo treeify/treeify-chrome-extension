@@ -6,7 +6,7 @@ import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {derived, get, Readable, Writable, writable} from 'svelte/store'
+import {derived, get, Readable, writable} from 'svelte/store'
 
 /** TODO: コメント */
 export class Internal {
@@ -24,9 +24,6 @@ export class Internal {
     (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
   >()
 
-  // 現在のワークスペースIDのストア
-  private readonly currentWorkspaceId: Writable<WorkspaceId>
-
   private static readonly CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
   private static readonly ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 
@@ -34,7 +31,6 @@ export class Internal {
     Internal._instance = this
 
     this.state = initialState
-    this.currentWorkspaceId = writable(Internal.deriveInitialWorkspaceId(this.state))
   }
 
   /**
@@ -92,29 +88,27 @@ export class Internal {
   }
 
   getCurrentWorkspaceId(): Readable<WorkspaceId> {
-    return this.currentWorkspaceId
+    return derived(this.rerenderingPulse, () => {
+      // TODO: 最適化の余地あり（キャッシュ導入）
+      const savedCurrentWorkspaceId = localStorage.getItem(Internal.CURRENT_WORKSPACE_ID_KEY)
+      if (savedCurrentWorkspaceId !== null) {
+        const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
+        if (this.state.workspaces[currentWorkspaceId] !== undefined) {
+          // ローカルに保存されたvalidなワークスペースIDがある場合
+          return currentWorkspaceId
+        }
+      }
+
+      // 既存のワークスペースを適当に選んでIDを返す。
+      // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
+      const currentWorkspaceId = parseInt(Object.keys(this.state.workspaces)[0])
+      localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
+      return currentWorkspaceId
+    })
   }
 
   setCurrentWorkspaceId(workspaceId: WorkspaceId) {
     localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
-    this.currentWorkspaceId.set(workspaceId)
-  }
-
-  private static deriveInitialWorkspaceId(state: State): WorkspaceId {
-    const savedCurrentWorkspaceId = localStorage.getItem(Internal.CURRENT_WORKSPACE_ID_KEY)
-    if (savedCurrentWorkspaceId !== null) {
-      const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
-      if (state.workspaces[currentWorkspaceId] !== undefined) {
-        // ローカルに保存されたvalidなワークスペースIDがある場合
-        return currentWorkspaceId
-      }
-    }
-
-    // 既存のワークスペースを適当に選んでIDを返す。
-    // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-    const currentWorkspaceId = parseInt(Object.keys(state.workspaces)[0])
-    localStorage.setItem(Internal.CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
-    return currentWorkspaceId
   }
 
   getActivePageId(): Readable<ItemId> {
