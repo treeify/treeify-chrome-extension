@@ -12,7 +12,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {get, writable} from 'svelte/store'
+import {get} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
@@ -90,7 +90,7 @@ export function onPaste(event: ClipboardEvent) {
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: State.Edge = {isCollapsed: true, labels: writable(List.of())}
+          const initialEdge: State.Edge = {isCollapsed: true, labels: List.of()}
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
@@ -505,7 +505,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
       itemId: existingItemId,
       edge: {
         isCollapsed: attributes.isCollapsed === 'true',
-        labels: writable(extractLabels(attributes)),
+        labels: extractLabels(attributes),
       },
     }
   }
@@ -533,7 +533,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
     itemId,
     edge: {
       isCollapsed: attributes.isCollapsed === 'true',
-      labels: writable(extractLabels(attributes)),
+      labels: extractLabels(attributes),
     },
   }
 }

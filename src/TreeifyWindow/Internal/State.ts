@@ -4,7 +4,7 @@ import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable, Writable} from 'svelte/store'
+import {Writable} from 'svelte/store'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
@@ -71,10 +71,10 @@ export namespace State {
      * いわゆる意味ネットワークのように、エッジが持つラベルのデータ。
      * List型なので複数設定できる。List内の並び順がそのまま画面表示上の並び順として使われる。
      */
-    labels: Writable<List<string>>
+    labels: List<string>
   }
   export function createDefaultEdge(): Edge {
-    return {isCollapsed: false, labels: writable(List.of())}
+    return {isCollapsed: false, labels: List.of()}
   }
 
   /** テキストアイテムが固有で持つデータの型 */
