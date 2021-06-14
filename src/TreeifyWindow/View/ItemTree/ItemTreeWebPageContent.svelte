@@ -22,7 +22,7 @@
     return {
       itemPath,
       labels: Derived.getLabels(itemPath),
-      title: Derived.getWebPageItemTitle(itemId),
+      title: Internal.d(() => CurrentState.getWebPageItemTitle(itemId)),
       faviconUrl: webPageItem.faviconUrl,
       isLoading: Derived.getTabIsLoading(itemId),
       isSoftUnloaded: Derived.getTabIsSoftUnloaded(itemId),

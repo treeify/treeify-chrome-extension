@@ -5,7 +5,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
+import {get, writable} from 'svelte/store'
 
 /**
  * 新しい空のウェブページアイテムを作成し、CurrentStateに登録する。
@@ -71,4 +71,15 @@ export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
 export function setIsUnreadFlag(itemId: ItemId, isUnread: boolean) {
   Internal.instance.state.webPageItems[itemId].isUnread.set(isUnread)
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'isUnread'))
+}
+
+/**
+ * ウェブページアイテムのタイトルを返す。
+ * タブのタイトルを上書きするタイトル設定が行われていればそちらを優先する。
+ * タイトルが空文字列の場合、代わりにURLを返す。
+ */
+export function getWebPageItemTitle(itemId: ItemId): string {
+  const webPageItem = Internal.instance.state.webPageItems[itemId]
+  const title = get(webPageItem.title) ?? get(webPageItem.tabTitle)
+  return title !== '' ? title : get(webPageItem.url)
 }

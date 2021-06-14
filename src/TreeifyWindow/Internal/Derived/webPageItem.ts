@@ -1,15 +1,7 @@
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {derived, get, Readable} from 'svelte/store'
-
-export function getWebPageItemTitle(itemId: ItemId): Readable<string> {
-  const webPageItem = Internal.instance.state.webPageItems[itemId]
-  return derived([webPageItem.title, webPageItem.tabTitle, webPageItem.url], () => {
-    const title = get(webPageItem.title) ?? get(webPageItem.tabTitle)
-    return title !== '' ? title : get(webPageItem.url)
-  })
-}
+import {Readable} from 'svelte/store'
 
 /**
  * 指定されたアイテムに対応するタブが読込中かどうかを返す。
