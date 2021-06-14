@@ -280,13 +280,12 @@ export class Internal {
       },
       codeBlockItems: {
         8: {
-          code: writable(
+          code:
             "const url = 'https://google.com/'\n" +
-              'if (url.length > 10 || /https:/.test(url)) {\n' +
-              '  console.log(`OK: ${url.length}`)\n' +
-              '}\n'
-          ),
-          language: writable('javascript'),
+            'if (url.length > 10 || /https:/.test(url)) {\n' +
+            '  console.log(`OK: ${url.length}`)\n' +
+            '}\n',
+          language: 'javascript',
         },
       },
       pages: {

@@ -113,8 +113,8 @@ export namespace State {
 
   /** コードブロックアイテムが固有で持つデータの型 */
   export type CodeBlockItem = {
-    code: Writable<string>
-    language: Writable<string>
+    code: string
+    language: string
   }
 
   /** 各ページが持つデータの型 */
