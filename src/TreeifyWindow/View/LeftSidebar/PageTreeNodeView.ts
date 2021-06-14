@@ -117,7 +117,7 @@ export function createPageTreeNodeViewModel(
             .map((pageId) => {
               return {
                 pageId,
-                timestamp: get(Internal.instance.state.items[pageId].timestamp),
+                timestamp: Internal.instance.state.items[pageId].timestamp,
               }
             })
             .maxBy((a) => a.timestamp)!.pageId
