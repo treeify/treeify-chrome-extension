@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import hljs from 'highlight.js'
   import {List} from 'immutable'
-  import {Readable, Writable} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Derived} from '../../Internal/Derived'
@@ -17,8 +17,8 @@
     return {
       itemPath,
       labels: Derived.getLabels(itemPath),
-      code: codeBlockItem.code,
-      language: codeBlockItem.language,
+      code: Internal.d(() => codeBlockItem.code),
+      language: Internal.d(() => codeBlockItem.language),
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
@@ -40,8 +40,8 @@
 <script lang="ts">
   export let itemPath: ItemPath
   export let labels: Readable<List<string>> | undefined
-  export let code: Writable<string>
-  export let language: Writable<string>
+  export let code: Readable<string>
+  export let language: Readable<string>
   export let onFocus: (event: FocusEvent) => void
   export let onClick: (event: MouseEvent) => void
 

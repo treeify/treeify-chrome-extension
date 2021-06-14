@@ -273,21 +273,19 @@ export class Internal {
       },
       imageItems: {
         7: {
-          url: writable(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg'
-          ),
-          caption: writable('tamias'),
+          url:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
+          caption: 'tamias',
         },
       },
       codeBlockItems: {
         8: {
-          code: writable(
+          code:
             "const url = 'https://google.com/'\n" +
-              'if (url.length > 10 || /https:/.test(url)) {\n' +
-              '  console.log(`OK: ${url.length}`)\n' +
-              '}\n'
-          ),
-          language: writable('javascript'),
+            'if (url.length > 10 || /https:/.test(url)) {\n' +
+            '  console.log(`OK: ${url.length}`)\n' +
+            '}\n',
+          language: 'javascript',
         },
       },
       pages: {

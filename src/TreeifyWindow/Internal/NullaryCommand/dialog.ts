@@ -3,7 +3,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {get} from 'svelte/store'
 
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {
@@ -28,8 +27,8 @@ export function edit() {
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[targetItemId]
       CurrentState.setCodeBlockItemEditDialog({
-        code: get(codeBlockItem.code),
-        language: get(codeBlockItem.language),
+        code: codeBlockItem.code,
+        language: codeBlockItem.language,
       })
       break
   }
