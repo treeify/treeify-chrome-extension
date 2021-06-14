@@ -15,7 +15,7 @@
   export function createItemTreeWebPageContentProps(itemPath: ItemPath) {
     const itemId = ItemPath.getItemId(itemPath)
     const webPageItem = Internal.instance.state.webPageItems[itemId]
-    const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+    const tab = Internal.d(() => External.instance.tabItemCorrespondence.getTab(itemId))
     const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
 
     return {

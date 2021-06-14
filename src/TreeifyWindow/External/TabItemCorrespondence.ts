@@ -1,7 +1,4 @@
 import {ItemId, TabId} from 'src/TreeifyWindow/basicType'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {get} from 'src/TreeifyWindow/svelte'
-import {Readable} from 'svelte/store'
 import Tab = chrome.tabs.Tab
 
 /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのクラス */
@@ -13,8 +10,7 @@ export class TabItemCorrespondence {
 
   /** 指定されたアイテムに紐付いているタブIDを返す */
   getTabId(itemId: ItemId): TabId | undefined {
-    const tab = get(this.getTab(itemId))
-    return tab?.id
+    return this.getTab(itemId)?.id
   }
 
   getItemId(tabId: TabId): ItemId | undefined {
@@ -25,8 +21,8 @@ export class TabItemCorrespondence {
    * 指定されたアイテムに対応するchrome.tabs.Tabオブジェクトを返す。
    * アイテムに対応するタブがなければundefinedを返す。
    */
-  getTab(itemId: ItemId): Readable<Tab | undefined> {
-    return Internal.d(() => this.itemIdToTab.get(itemId))
+  getTab(itemId: ItemId): Tab | undefined {
+    return this.itemIdToTab.get(itemId)
   }
 
   /** アイテムIDとTabオブジェクトを紐付ける */
@@ -53,6 +49,6 @@ export class TabItemCorrespondence {
    * @deprecated
    */
   isUnloaded(itemId: ItemId): boolean {
-    return get(this.getTab(itemId))?.discarded === true
+    return this.getTab(itemId)?.discarded === true
   }
 }

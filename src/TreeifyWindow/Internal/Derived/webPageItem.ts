@@ -16,7 +16,7 @@ export function getWebPageItemTitle(itemId: ItemId): Readable<string> {
  * 対応するタブがない場合はfalseを返す。
  */
 export function getTabIsLoading(itemId: ItemId): Readable<boolean> {
-  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  const tab = Internal.d(() => External.instance.tabItemCorrespondence.getTab(itemId))
   return derived(tab, (tab) => {
     return tab?.status === 'loading'
   })
@@ -27,7 +27,7 @@ export function getTabIsLoading(itemId: ItemId): Readable<boolean> {
  * 対応するタブがない場合はfalseを返す。
  */
 export function getTabIsSoftUnloaded(itemId: ItemId): Readable<boolean> {
-  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  const tab = Internal.d(() => External.instance.tabItemCorrespondence.getTab(itemId))
   return derived(tab, (tab) => {
     return tab?.discarded === true
   })
@@ -35,7 +35,7 @@ export function getTabIsSoftUnloaded(itemId: ItemId): Readable<boolean> {
 
 /** 指定されたアイテムに対応するタブが存在しなければtrueを返す */
 export function getTabIsHardUnloaded(itemId: ItemId): Readable<boolean> {
-  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  const tab = Internal.d(() => External.instance.tabItemCorrespondence.getTab(itemId))
   return derived(tab, (tab) => {
     return tab === undefined
   })
@@ -46,7 +46,7 @@ export function getTabIsHardUnloaded(itemId: ItemId): Readable<boolean> {
  * 対応するタブがない場合はfalseを返す。
  */
 export function getTabIsAudible(itemId: ItemId): Readable<boolean> {
-  const tab = External.instance.tabItemCorrespondence.getTab(itemId)
+  const tab = Internal.d(() => External.instance.tabItemCorrespondence.getTab(itemId))
   return derived(tab, (tab) => {
     return tab?.audible === true
   })
