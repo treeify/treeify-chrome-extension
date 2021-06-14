@@ -9,24 +9,25 @@
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {get} from '../../svelte'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
   export function createItemTreeWebPageContentProps(itemPath: ItemPath) {
     const itemId = ItemPath.getItemId(itemPath)
     const webPageItem = Internal.instance.state.webPageItems[itemId]
-    const tab = External.instance.tabItemCorrespondence.getTab(itemId)
     const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
+    const isHardUnloaded = Derived.getTabIsHardUnloaded(itemId)
 
     return {
       itemPath,
       labels: Derived.getLabels(itemPath),
-      title: Derived.getWebPageItemTitle(itemId),
-      faviconUrl: webPageItem.faviconUrl,
+      title: Internal.d(() => CurrentState.getWebPageItemTitle(itemId)),
+      faviconUrl: Internal.d(() => webPageItem.faviconUrl),
       isLoading: Derived.getTabIsLoading(itemId),
       isSoftUnloaded: Derived.getTabIsSoftUnloaded(itemId),
       isHardUnloaded: Derived.getTabIsHardUnloaded(itemId),
-      isUnread: webPageItem.isUnread,
+      isUnread: Internal.d(() => webPageItem.isUnread),
       isAudible: Derived.getTabIsAudible(itemId),
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
@@ -64,7 +65,7 @@
             case '0000MouseButton0':
               event.preventDefault()
 
-              if (tab === undefined) {
+              if (get(isHardUnloaded)) {
                 // ハードアンロード状態の場合
                 NullaryCommand.loadSubtree()
               } else {
@@ -77,7 +78,7 @@
             case '1000MouseButton0':
               event.preventDefault()
 
-              if (tab === undefined) {
+              if (get(isHardUnloaded)) {
                 // ハードアンロード状態の場合
                 NullaryCommand.loadItem()
               } else {

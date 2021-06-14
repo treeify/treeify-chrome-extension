@@ -25,11 +25,11 @@ export function createWebPageItem(): ItemId {
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
   const webPageItem: State.WebPageItem = {
-    url: writable(''),
-    faviconUrl: writable(''),
-    tabTitle: writable(''),
-    title: writable(null),
-    isUnread: writable(false),
+    url: '',
+    faviconUrl: '',
+    tabTitle: '',
+    title: null,
+    isUnread: false,
   }
   Internal.instance.state.webPageItems[newItemId] = webPageItem
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', newItemId))
@@ -45,30 +45,41 @@ export function deleteWebPageItemEntry(itemId: ItemId) {
 
 /** ウェブページアイテムのタブタイトルを設定する */
 export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
-  Internal.instance.state.webPageItems[itemId].tabTitle.set(tabTitle)
+  Internal.instance.state.webPageItems[itemId].tabTitle = tabTitle
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'tabTitle'))
 }
 
 /** ウェブページアイテムのタイトルを設定する */
 export function setWebPageItemTitle(itemId: ItemId, title: string | null) {
-  Internal.instance.state.webPageItems[itemId].title.set(title)
+  Internal.instance.state.webPageItems[itemId].title = title
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'title'))
 }
 
 /** ウェブページアイテムのURLを設定する */
 export function setWebPageItemUrl(itemId: ItemId, url: string) {
-  Internal.instance.state.webPageItems[itemId].url.set(url)
+  Internal.instance.state.webPageItems[itemId].url = url
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'url'))
 }
 
 /** ウェブページアイテムのファビコンURLを設定する */
 export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
-  Internal.instance.state.webPageItems[itemId].faviconUrl.set(url)
+  Internal.instance.state.webPageItems[itemId].faviconUrl = url
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
 }
 
 /** ウェブページアイテムの未読フラグを上書き設定する */
 export function setIsUnreadFlag(itemId: ItemId, isUnread: boolean) {
-  Internal.instance.state.webPageItems[itemId].isUnread.set(isUnread)
+  Internal.instance.state.webPageItems[itemId].isUnread = isUnread
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'isUnread'))
+}
+
+/**
+ * ウェブページアイテムのタイトルを返す。
+ * タブのタイトルを上書きするタイトル設定が行われていればそちらを優先する。
+ * タイトルが空文字列の場合、代わりにURLを返す。
+ */
+export function getWebPageItemTitle(itemId: ItemId): string {
+  const webPageItem = Internal.instance.state.webPageItems[itemId]
+  const title = webPageItem.title ?? webPageItem.tabTitle
+  return title !== '' ? title : webPageItem.url
 }

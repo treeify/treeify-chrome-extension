@@ -6,7 +6,6 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Derived} from 'src/TreeifyWindow/Internal/Derived'
 import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -172,7 +171,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
       return InnerHtml.toSingleLinePlainText(innerHtml)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
-      const title = get(Derived.getWebPageItemTitle(itemId))
+      const title = CurrentState.getWebPageItemTitle(itemId)
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
@@ -363,11 +362,11 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       baseAttributes.type = 'link'
-      baseAttributes.text = get(Derived.getWebPageItemTitle(itemId))
-      baseAttributes.url = get(webPageItem.url)
-      baseAttributes.faviconUrl = get(webPageItem.faviconUrl)
-      if (get(webPageItem.title) !== null) {
-        baseAttributes.title = get(webPageItem.tabTitle)
+      baseAttributes.text = CurrentState.getWebPageItemTitle(itemId)
+      baseAttributes.url = webPageItem.url
+      baseAttributes.faviconUrl = webPageItem.faviconUrl
+      if (webPageItem.title !== null) {
+        baseAttributes.title = webPageItem.tabTitle
       }
       break
     case ItemType.IMAGE:

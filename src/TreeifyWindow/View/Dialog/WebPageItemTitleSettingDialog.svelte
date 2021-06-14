@@ -2,11 +2,9 @@
   import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {ItemPath} from '../../Internal/ItemPath'
   import {State} from '../../Internal/State'
-  import {get} from '../../svelte'
 
   export function createWebPageItemTitleSettingDialogProps(
     webPageItemTitleSettingDialog: State.WebPageItemTitleSettingDialog
@@ -15,7 +13,7 @@
 
     return {
       webPageItemTitleSettingDialog,
-      initialTitle: get(Derived.getWebPageItemTitle(targetItemId)),
+      initialTitle: CurrentState.getWebPageItemTitle(targetItemId),
       onKeyDown: (event: KeyboardEvent) => {
         doWithErrorCapture(() => {
           if (event.isComposing) return
