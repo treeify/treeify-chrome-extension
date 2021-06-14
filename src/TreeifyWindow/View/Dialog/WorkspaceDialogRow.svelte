@@ -19,14 +19,14 @@
   const onClickRadioButton = () => {
     doWithErrorCapture(() => {
       CurrentState.setCurrentWorkspaceId(workspace.id)
-      // CurrentState.commit()
+      CurrentState.commit()
     })
   }
 
   const onClickDeleteButton = () => {
     doWithErrorCapture(() => {
       CurrentState.deleteWorkspace(workspace.id)
-      // CurrentState.commit()
+      CurrentState.commit()
     })
   }
 </script>

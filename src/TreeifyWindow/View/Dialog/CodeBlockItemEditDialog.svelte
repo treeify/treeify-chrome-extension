@@ -30,12 +30,12 @@
 
         // ダイアログを閉じる
         CurrentState.setCodeBlockItemEditDialog(null)
-        // CurrentState.commit()
+        CurrentState.commit()
       },
       onClickCancelButton: () => {
         // ダイアログを閉じる
         CurrentState.setCodeBlockItemEditDialog(null)
-        // CurrentState.commit()
+        CurrentState.commit()
       },
     }
   }
@@ -50,7 +50,7 @@
   const onCloseDialog = () => {
     // ダイアログを閉じる
     CurrentState.setCodeBlockItemEditDialog(null)
-    // CurrentState.commit()
+    CurrentState.commit()
   }
 </script>
 

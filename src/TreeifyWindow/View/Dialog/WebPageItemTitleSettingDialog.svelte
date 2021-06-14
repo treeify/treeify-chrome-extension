@@ -27,12 +27,12 @@
             }
             // タイトル設定ダイアログを閉じる
             CurrentState.setWebPageItemTitleSettingDialog(null)
-            // CurrentState.commit()
+            CurrentState.commit()
           }
 
           if (InputId.fromKeyboardEvent(event) === '0000Escape') {
             CurrentState.setWebPageItemTitleSettingDialog(null)
-            // CurrentState.commit()
+            CurrentState.commit()
           }
         })
       },
@@ -44,7 +44,7 @@
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
         CurrentState.setWebPageItemTitleSettingDialog(null)
-        // CurrentState.commit()
+        CurrentState.commit()
       }
     })
   }

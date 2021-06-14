@@ -166,12 +166,12 @@ export class Internal {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },
-      webPageItemTitleSettingDialog: writable(null),
-      codeBlockItemEditDialog: writable(null),
-      defaultWindowModeSettingDialog: writable(null),
-      workspaceDialog: writable(null),
-      labelEditDialog: writable(null),
-      otherParentsDialog: writable(null),
+      webPageItemTitleSettingDialog: null,
+      codeBlockItemEditDialog: null,
+      defaultWindowModeSettingDialog: null,
+      workspaceDialog: null,
+      labelEditDialog: null,
+      otherParentsDialog: null,
     }
   }
 
@@ -343,12 +343,12 @@ export class Internal {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },
-      webPageItemTitleSettingDialog: writable(null),
-      codeBlockItemEditDialog: writable(null),
-      defaultWindowModeSettingDialog: writable(null),
-      workspaceDialog: writable(null),
-      labelEditDialog: writable(null),
-      otherParentsDialog: writable(null),
+      webPageItemTitleSettingDialog: null,
+      codeBlockItemEditDialog: null,
+      defaultWindowModeSettingDialog: null,
+      workspaceDialog: null,
+      labelEditDialog: null,
+      otherParentsDialog: null,
     }
   }
 }
