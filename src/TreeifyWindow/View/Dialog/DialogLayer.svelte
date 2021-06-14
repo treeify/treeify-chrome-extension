@@ -1,40 +1,34 @@
 <script context="module" lang="ts">
-  import {Writable} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {Internal} from '../../Internal/Internal'
   import {State} from '../../Internal/State'
-  import CodeBlockItemEditDialog, {
-    createCodeBlockItemEditDialogProps,
-  } from './CodeBlockItemEditDialog.svelte'
-  import DefaultWindowModeSettingDialog, {
-    createDefaultWindowModeSettingDialogProps,
-  } from './DefaultWindowModeSettingDialog.svelte'
+  import CodeBlockItemEditDialog, {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialog.svelte'
+  import DefaultWindowModeSettingDialog, {createDefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialog.svelte'
   import LabelEditDialog, {createLabelEditDialogProps} from './LabelEditDialog.svelte'
   import OtherParentsDialog, {createOtherParentsDialogProps} from './OtherParentsDialog.svelte'
-  import WebPageItemTitleSettingDialog, {
-    createWebPageItemTitleSettingDialogProps,
-  } from './WebPageItemTitleSettingDialog.svelte'
+  import WebPageItemTitleSettingDialog, {createWebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog, {createWorkspaceDialogProps} from './WorkspaceDialog.svelte'
 
   export function createDialogLayerProps() {
     const state = Internal.instance.state
     return {
-      webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
-      codeBlockItemEditDialog: state.codeBlockItemEditDialog,
-      defaultWindowModeSettingDialog: state.defaultWindowModeSettingDialog,
-      workspaceDialog: state.workspaceDialog,
-      labelEditDialog: state.labelEditDialog,
-      otherParentsDialog: state.otherParentsDialog,
+      webPageItemTitleSettingDialog: Internal.d(() => state.webPageItemTitleSettingDialog),
+      codeBlockItemEditDialog: Internal.d(() => state.codeBlockItemEditDialog),
+      defaultWindowModeSettingDialog: Internal.d(() => state.defaultWindowModeSettingDialog),
+      workspaceDialog: Internal.d(() => state.workspaceDialog),
+      labelEditDialog: Internal.d(() => state.labelEditDialog),
+      otherParentsDialog: Internal.d(() => state.otherParentsDialog),
     }
   }
 </script>
 
 <script lang="ts">
-  export let webPageItemTitleSettingDialog: Writable<State.WebPageItemTitleSettingDialog | null>
-  export let codeBlockItemEditDialog: Writable<State.CodeBlockItemEditDialog | null>
-  export let defaultWindowModeSettingDialog: Writable<State.DefaultWindowModeSettingDialog | null>
-  export let workspaceDialog: Writable<State.WorkspaceDialog | null>
-  export let labelEditDialog: Writable<State.LabelEditDialog | null>
-  export let otherParentsDialog: Writable<State.OtherParentsDialog | null>
+  export let webPageItemTitleSettingDialog: Readable<State.WebPageItemTitleSettingDialog | null>
+  export let codeBlockItemEditDialog: Readable<State.CodeBlockItemEditDialog | null>
+  export let defaultWindowModeSettingDialog: Readable<State.DefaultWindowModeSettingDialog | null>
+  export let workspaceDialog: Readable<State.WorkspaceDialog | null>
+  export let labelEditDialog: Readable<State.LabelEditDialog | null>
+  export let otherParentsDialog: Readable<State.OtherParentsDialog | null>
 </script>
 
 {#if $webPageItemTitleSettingDialog !== null}
