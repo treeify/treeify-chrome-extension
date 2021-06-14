@@ -19,7 +19,7 @@ export function createImageItem(): ItemId {
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),
-    cssClasses: writable(List.of()),
+    cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))

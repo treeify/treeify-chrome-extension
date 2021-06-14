@@ -36,7 +36,7 @@
       isSelected: Internal.d(() => CurrentState.isSelected(itemPath)),
       isMultiSelected: Internal.d(() => CurrentState.isMultiSelected()),
       isTranscluded: Object.keys(item.parents).length > 1,
-      cssClasses: item.cssClasses,
+      cssClasses: Internal.d(() => item.cssClasses),
       footprintRank: footprintRankMap.get(itemId),
       footprintRankMap,
       footprintCount,
