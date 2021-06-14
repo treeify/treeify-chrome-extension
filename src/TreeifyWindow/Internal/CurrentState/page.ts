@@ -7,7 +7,6 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {get} from 'svelte/store'
 
 const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 
@@ -68,7 +67,7 @@ export async function switchActivePage(itemId: ItemId) {
   // マウントされたページがmountedPageIdsの末尾に来るようにする。
   // （ページツリーの足跡表示を実現するための処理）
   unmountPage(itemId)
-  Internal.instance.state.mountedPageIds.update((mountedPageIds) => mountedPageIds.push(itemId))
+  Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
   Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 
   CurrentState.setActivePageId(itemId)
@@ -106,10 +105,10 @@ function deriveDefaultWindowMode(itemId: ItemId): State.DefaultWindowMode {
  * マウントされていない場合は何もしない。
  */
 export function unmountPage(itemId: ItemId) {
-  const mountedPageIds = get(Internal.instance.state.mountedPageIds)
+  const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
-    Internal.instance.state.mountedPageIds.set(mountedPageIds.remove(index))
+    Internal.instance.state.mountedPageIds = mountedPageIds.remove(index)
     Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
   }
 }
