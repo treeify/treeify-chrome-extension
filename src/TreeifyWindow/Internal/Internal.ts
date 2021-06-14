@@ -125,7 +125,7 @@ export class Internal {
       },
       workspaces: {
         [Timestamp.now()]: {
-          excludedItemIds: writable(List.of()),
+          excludedItemIds: List.of(),
           name: 'ワークスペース1',
         },
       },
@@ -304,7 +304,7 @@ export class Internal {
       },
       workspaces: {
         [Timestamp.now()]: {
-          excludedItemIds: writable(List.of()),
+          excludedItemIds: List.of(),
           name: 'ワークスペース1',
         },
       },

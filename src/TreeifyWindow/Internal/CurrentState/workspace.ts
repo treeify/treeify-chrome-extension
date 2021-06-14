@@ -4,7 +4,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {get, writable} from 'svelte/store'
+import {get} from 'svelte/store'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 
@@ -37,15 +37,13 @@ export function getWorkspaceIds(): List<WorkspaceId> {
 
 /** 現在のワークスペースの除外アイテムリストを返す */
 export function getExcludedItemIds(): List<ItemId> {
-  return get(
-    Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
-  )
+  return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
 }
 
 /** 現在のワークスペースの除外アイテムリストを設定する */
 export function setExcludedItemIds(itemIds: List<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
-  Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds.set(itemIds)
+  Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds = itemIds
   Internal.instance.markAsMutated(
     PropertyPath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
   )
@@ -61,7 +59,7 @@ export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
 export function createWorkspace() {
   const workspaceId = Timestamp.now()
   Internal.instance.state.workspaces[workspaceId] = {
-    excludedItemIds: writable(List.of()),
+    excludedItemIds: List.of(),
     name: `ワークスペース${CurrentState.getWorkspaceIds().count() + 1}`,
   }
   Internal.instance.markAsMutated(PropertyPath.of('workspaces', workspaceId))
