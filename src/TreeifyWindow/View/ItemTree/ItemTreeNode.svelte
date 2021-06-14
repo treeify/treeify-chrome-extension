@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
   import Color from 'color'
   import {List} from 'immutable'
-  import {derived, Readable} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {integer} from '../../../Common/integer'
   import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
@@ -9,7 +9,6 @@
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -28,7 +27,6 @@
     const state = Internal.instance.state
     const itemId = ItemPath.getItemId(itemPath)
     const item = state.items[itemId]
-    const displayingChildItemIds = Derived.getDisplayingChildItemIds(itemPath)
 
     return {
       itemPath,
@@ -41,10 +39,9 @@
       footprintRankMap,
       footprintCount,
       hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-      childItemPaths: derived(displayingChildItemIds, (displayingChildItemIds) => {
-        return displayingChildItemIds.map((childItemId: ItemId) => {
-          return itemPath.push(childItemId)
-        })
+      childItemPaths: Internal.d(() => {
+        const childItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
+        return childItemIds.map((childItemId) => itemPath.push(childItemId))
       }),
       onMouseDownContentArea: (event: MouseEvent) => {
         doWithErrorCapture(() => {
