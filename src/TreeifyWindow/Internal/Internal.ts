@@ -118,8 +118,8 @@ export class Internal {
       codeBlockItems: {},
       pages: {
         0: {
-          targetItemPath: writable(List.of(0)),
-          anchorItemPath: writable(List.of(0)),
+          targetItemPath: List.of(0),
+          anchorItemPath: List.of(0),
           defaultWindowMode: 'keep',
         },
       },
@@ -292,13 +292,13 @@ export class Internal {
       },
       pages: {
         0: {
-          targetItemPath: writable(List.of(0)),
-          anchorItemPath: writable(List.of(0)),
+          targetItemPath: List.of(0),
+          anchorItemPath: List.of(0),
           defaultWindowMode: 'keep',
         },
         6: {
-          targetItemPath: writable(List.of(6)),
-          anchorItemPath: writable(List.of(6)),
+          targetItemPath: List.of(6),
+          anchorItemPath: List.of(6),
           defaultWindowMode: 'inherit',
         },
       },

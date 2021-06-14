@@ -7,16 +7,16 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {get, writable} from 'svelte/store'
+import {get} from 'svelte/store'
 
 const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
 
 export function getTargetItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath)
+  return Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath
 }
 
 export function getAnchorItemPath(): ItemPath {
-  return get(Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath)
+  return Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath
 }
 
 /**
@@ -120,8 +120,8 @@ export function turnIntoPage(itemId: ItemId) {
   if (CurrentState.isPage(itemId)) return
 
   const page: State.Page = {
-    targetItemPath: writable(List.of(itemId)),
-    anchorItemPath: writable(List.of(itemId)),
+    targetItemPath: List.of(itemId),
+    anchorItemPath: List.of(itemId),
     defaultWindowMode: 'inherit',
   }
   Internal.instance.state.pages[itemId] = page
