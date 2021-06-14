@@ -85,7 +85,8 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: State.Edg
  * @param f 子アイテムリストを受け取って新しい子アイテムリストを返す関数
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  Internal.instance.state.items[itemId].childItemIds.update(f)
+  const item = Internal.instance.state.items[itemId]
+  item.childItemIds = f(item.childItemIds)
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'childItemIds'))
 }
 
@@ -137,7 +138,7 @@ export function insertPrevSiblingItem(
   // 親が居ない場合はこの関数を呼んではならない
   assertNonUndefined(parentItemId)
 
-  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   assert(childItemIds.contains(itemId))
 
   // 兄として追加する
@@ -168,7 +169,7 @@ export function insertNextSiblingItem(
   // 親が居ない場合はこの関数を呼んではならない
   assertNonUndefined(parentItemId)
 
-  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   assert(childItemIds.contains(itemId))
 
   // 弟として追加する
@@ -227,7 +228,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   // ページは終端ノードとして扱う
   if (CurrentState.isPage(itemId)) return
 
-  for (const childItemId of get(Internal.instance.state.items[itemId].childItemIds)) {
+  for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
     yield* getSubtreeItemIds(childItemId)
   }
 }
@@ -235,7 +236,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
 /** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
 export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   const itemId = ItemPath.getItemId(itemPath)
-  const childItemIds = get(Internal.instance.state.items[itemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
   if (itemPath.size === 1) {
     return childItemIds

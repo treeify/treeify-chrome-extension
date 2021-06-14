@@ -44,7 +44,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
   for (let i = 1; i < itemPath.size; i++) {
-    const childItemIds = get(Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds)
+    const childItemIds = Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds
     siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
   }
   return List(siblingRankArray)

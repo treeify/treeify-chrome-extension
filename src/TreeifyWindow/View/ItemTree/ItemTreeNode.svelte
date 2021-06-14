@@ -15,7 +15,6 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {State} from '../../Internal/State'
-  import {get} from '../../svelte'
   import ItemTreeContent, {createItemTreeContentProps} from './ItemTreeContent.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
@@ -98,7 +97,7 @@
   function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
     const itemId = ItemPath.getItemId(itemPath)
     if (CurrentState.isPage(itemId)) return 0
-    if (get(state.items[itemId].childItemIds).isEmpty()) return 0
+    if (state.items[itemId].childItemIds.isEmpty()) return 0
     if (CurrentState.getIsCollapsed(itemPath)) {
       return countLoadedTabsInDescendants(state, itemId)
     } else {
@@ -128,7 +127,7 @@
       }
     }
 
-    const sum = get(Internal.instance.state.items[itemId].childItemIds)
+    const sum = Internal.instance.state.items[itemId].childItemIds
       .map((childItemId) => countLoadedTabsInSubtree(state, childItemId))
       .reduce((a: integer, x) => a + x, 0)
     if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {

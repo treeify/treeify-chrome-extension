@@ -15,7 +15,7 @@ import {get} from 'svelte/store'
  */
 export function deleteItem(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
-  for (const childItemId of get(item.childItemIds)) {
+  for (const childItemId of item.childItemIds) {
     if (CurrentState.countParents(childItemId) === 1) {
       // 親を1つしか持たない子アイテムは再帰的に削除する
       deleteItem(childItemId)
@@ -72,7 +72,7 @@ export function deleteItem(itemId: ItemId) {
  */
 export function deleteItemItself(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
-  const childItemIds = get(item.childItemIds)
+  const childItemIds = item.childItemIds
 
   // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {

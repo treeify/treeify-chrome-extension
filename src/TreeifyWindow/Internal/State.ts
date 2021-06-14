@@ -43,7 +43,7 @@ export namespace State {
    */
   export type Item = {
     itemType: ItemType
-    childItemIds: Writable<List<ItemId>>
+    childItemIds: List<ItemId>
     parents: {[K in ItemId]: Edge}
     /** 足跡表示機能で使われるタイムスタンプ */
     timestamp: Writable<Timestamp>

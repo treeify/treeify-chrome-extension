@@ -22,7 +22,7 @@ export function createTextItem(): ItemId {
 
   const newItem: State.Item = {
     itemType: ItemType.TEXT,
-    childItemIds: writable(List.of()),
+    childItemIds: List.of(),
     parents: {},
     timestamp: writable(Timestamp.now()),
     cssClasses: writable(List.of()),

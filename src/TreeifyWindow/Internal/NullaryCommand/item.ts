@@ -441,7 +441,7 @@ export function deleteItemItself() {
   // アクティブページを削除しようとしている場合、何もしない
   if (!ItemPath.hasParent(targetItemPath)) return
 
-  const childItemIds = get(Internal.instance.state.items[targetItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.isEmpty()) {
     // 上のアイテムをフォーカス
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)

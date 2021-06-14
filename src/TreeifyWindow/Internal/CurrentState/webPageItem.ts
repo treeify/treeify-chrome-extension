@@ -16,7 +16,7 @@ export function createWebPageItem(): ItemId {
 
   const newItem: State.Item = {
     itemType: ItemType.WEB_PAGE,
-    childItemIds: writable(List.of()),
+    childItemIds: List.of(),
     parents: {},
     timestamp: writable(Timestamp.now()),
     cssClasses: writable(List.of()),
