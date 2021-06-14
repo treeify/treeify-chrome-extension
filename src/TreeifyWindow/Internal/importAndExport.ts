@@ -324,7 +324,7 @@ function toOpmlOutlineElement(itemPath: ItemPath): Element {
     type: 'element',
     name: 'outline',
     attributes: toOpmlAttributes(itemPath),
-    elements: get(item.childItemIds)
+    elements: item.childItemIds
       .map((childItemId) => toOpmlOutlineElement(itemPath.push(childItemId)))
       .toArray(),
   }

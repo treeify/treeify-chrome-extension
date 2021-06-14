@@ -35,7 +35,7 @@ export function getSelectedItemPaths(): List<ItemPath> {
 
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   assertNonUndefined(parentItemId)
-  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
   const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
   const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)

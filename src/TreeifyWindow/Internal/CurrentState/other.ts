@@ -2,7 +2,6 @@ import {is} from 'immutable'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {get} from 'src/TreeifyWindow/svelte'
 
 /**
  * CurrentStateへの全ての変更を確定し、ModelのStateを書き換える。
@@ -35,7 +34,7 @@ export function isSelected(itemPath: ItemPath): boolean {
   const anchorItemId = ItemPath.getItemId(anchorItemPath)
 
   // （ここで他のStoreを参照しているが、複数選択中に子リストが変化することは無いと仮定していい）
-  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const targetItemIndex = childItemIds.indexOf(targetItemId)
   const anchorItemIndex = childItemIds.indexOf(anchorItemId)
   const itemIndex = childItemIds.indexOf(ItemPath.getItemId(itemPath))

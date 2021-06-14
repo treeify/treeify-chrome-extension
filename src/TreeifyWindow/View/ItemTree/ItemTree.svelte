@@ -542,7 +542,7 @@
 
           // 子リストを連結するため、子を全て弟としてエッジ追加。
           // アンインデントに似ているが元のエッジを削除しない点が異なる。
-          for (const childItemId of get(targetItem.childItemIds).reverse()) {
+          for (const childItemId of targetItem.childItemIds.reverse()) {
             CurrentState.insertLastChildItem(aboveItemId, childItemId)
           }
 
@@ -605,7 +605,7 @@
 
           // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
           // アンインデントに似ているが元のエッジを削除しない点が異なる。
-          for (const childItemId of get(belowItem.childItemIds)) {
+          for (const childItemId of belowItem.childItemIds) {
             CurrentState.insertLastChildItem(targetItemId, childItemId)
           }
 
