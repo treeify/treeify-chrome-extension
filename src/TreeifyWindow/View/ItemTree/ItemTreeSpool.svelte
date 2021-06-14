@@ -3,7 +3,6 @@
   import {integer} from '../../../Common/integer'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -78,7 +77,7 @@
 
     const counts = get(state.items[ItemPath.getItemId(itemPath)].childItemIds).map(
       (childItemId) => {
-        return get(Derived.getDisplayingChildItemIds(itemPath.push(childItemId))).size
+        return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
       }
     )
     return counts.size + counts.reduce((a: integer, x) => a + x, 0)
@@ -91,7 +90,7 @@
     } else if (get(state.items[itemId].childItemIds).size === 0) {
       return ItemTreeBulletState.NO_CHILDREN
     } else {
-      return get(Derived.getIsCollapsed(itemPath))
+      return CurrentState.getIsCollapsed(itemPath)
         ? ItemTreeBulletState.COLLAPSED
         : ItemTreeBulletState.EXPANDED
     }

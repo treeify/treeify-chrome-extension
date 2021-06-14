@@ -157,7 +157,7 @@ export function exportAsIndentedText(itemPath: ItemPath): string {
 function exportAsIndentedLines(itemPath: ItemPath, indentLevel = 0): List<string> {
   const line = '  '.repeat(indentLevel) + getContentAsPlainText(ItemPath.getItemId(itemPath))
 
-  const childLines = get(Derived.getDisplayingChildItemIds(itemPath)).flatMap((childItemId) => {
+  const childLines = CurrentState.getDisplayingChildItemIds(itemPath).flatMap((childItemId) => {
     return exportAsIndentedLines(itemPath.push(childItemId), indentLevel + 1)
   })
   return childLines.unshift(line)
@@ -340,14 +340,14 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     itemId,
   }
   if (ItemPath.hasParent(itemPath)) {
-    baseAttributes.isCollapsed = get(Derived.getIsCollapsed(itemPath)).toString()
+    baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
   }
   if (!get(item.cssClasses).isEmpty()) {
     baseAttributes.cssClass = get(item.cssClasses).join(' ')
   }
-  const labels = Derived.getLabels(itemPath)
-  if (labels !== undefined && !get(labels).isEmpty()) {
-    baseAttributes.labels = JSON.stringify(get(labels).toArray())
+  const labels = CurrentState.getLabels(itemPath)
+  if (labels?.isEmpty() === false) {
+    baseAttributes.labels = JSON.stringify(labels.toArray())
   }
 
   switch (item.itemType) {

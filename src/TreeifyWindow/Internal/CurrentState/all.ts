@@ -1,4 +1,5 @@
 export * from 'src/TreeifyWindow/Internal/CurrentState/item'
+export * from 'src/TreeifyWindow/Internal/CurrentState/edge'
 export * from 'src/TreeifyWindow/Internal/CurrentState/textItem'
 export * from 'src/TreeifyWindow/Internal/CurrentState/webPageItem'
 export * from 'src/TreeifyWindow/Internal/CurrentState/imageItem'
