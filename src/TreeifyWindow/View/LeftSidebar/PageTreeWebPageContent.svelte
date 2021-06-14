@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-  import {get, Readable} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {ItemId} from '../../basicType'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from '../../Internal/Internal'
@@ -7,7 +7,7 @@
   export function createPageTreeWebPageContentProps(itemId: ItemId) {
     return {
       title: Internal.d(() => CurrentState.getWebPageItemTitle(itemId)),
-      faviconUrl: get(Internal.instance.state.webPageItems[itemId].faviconUrl),
+      faviconUrl: Internal.instance.state.webPageItems[itemId].faviconUrl,
     }
   }
 </script>

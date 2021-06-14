@@ -23,11 +23,11 @@
       itemPath,
       labels: Derived.getLabels(itemPath),
       title: Internal.d(() => CurrentState.getWebPageItemTitle(itemId)),
-      faviconUrl: webPageItem.faviconUrl,
+      faviconUrl: Internal.d(() => webPageItem.faviconUrl),
       isLoading: Derived.getTabIsLoading(itemId),
       isSoftUnloaded: Derived.getTabIsSoftUnloaded(itemId),
       isHardUnloaded: Derived.getTabIsHardUnloaded(itemId),
-      isUnread: webPageItem.isUnread,
+      isUnread: Internal.d(() => webPageItem.isUnread),
       isAudible: Derived.getTabIsAudible(itemId),
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {

@@ -13,7 +13,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {get} from 'svelte/store'
 import UAParser from 'ua-parser-js'
 
 export const onMessage = (message: TreeifyWindow.Message, sender: MessageSender) => {
@@ -185,7 +184,7 @@ export async function matchTabsAndWebPageItems() {
   const webPageItems = Internal.instance.state.webPageItems
   for (const key in webPageItems) {
     const itemId = parseInt(key)
-    const url = get(webPageItems[itemId].url)
+    const url = webPageItems[itemId].url
     urlToItemIds.set(url, (urlToItemIds.get(url) ?? List.of()).push(itemId))
   }
 
@@ -219,7 +218,7 @@ function findWebPageItemId(url: string): ItemId | undefined {
   const webPageItems = Internal.instance.state.webPageItems
   for (const itemId in webPageItems) {
     const webPageItem = webPageItems[itemId]
-    if (url === get(webPageItem.url)) {
+    if (url === webPageItem.url) {
       // URLが一致するウェブページアイテムが見つかった場合
       return parseInt(itemId)
     }
