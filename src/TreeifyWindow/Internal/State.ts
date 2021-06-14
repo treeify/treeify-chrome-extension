@@ -65,7 +65,7 @@ export namespace State {
      * 正直、具体的なメリットはこれくらいしか思いつかない。
      * リスクはあるが直感的に面白そうなこちらに賭けてみた。
      */
-    isCollapsed: Writable<boolean>
+    isCollapsed: boolean
 
     /**
      * いわゆる意味ネットワークのように、エッジが持つラベルのデータ。
@@ -74,7 +74,7 @@ export namespace State {
     labels: Writable<List<string>>
   }
   export function createDefaultEdge(): Edge {
-    return {isCollapsed: writable(false), labels: writable(List.of())}
+    return {isCollapsed: false, labels: writable(List.of())}
   }
 
   /** テキストアイテムが固有で持つデータの型 */
