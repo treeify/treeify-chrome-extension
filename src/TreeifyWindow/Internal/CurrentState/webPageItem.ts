@@ -5,7 +5,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
 
 /**
  * 新しい空のウェブページアイテムを作成し、CurrentStateに登録する。
@@ -18,8 +17,8 @@ export function createWebPageItem(): ItemId {
     itemType: ItemType.WEB_PAGE,
     childItemIds: List.of(),
     parents: {},
-    timestamp: writable(Timestamp.now()),
-    cssClasses: writable(List.of()),
+    timestamp: Timestamp.now(),
+    cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))

@@ -18,8 +18,8 @@ export function createCodeBlockItem(): ItemId {
     itemType: ItemType.CODE_BLOCK,
     childItemIds: List.of(),
     parents: {},
-    timestamp: writable(Timestamp.now()),
-    cssClasses: writable(List.of()),
+    timestamp: Timestamp.now(),
+    cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))

@@ -4,7 +4,7 @@ import {Command} from 'src/TreeifyWindow/Internal/Command'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable, Writable} from 'svelte/store'
+import {Writable} from 'svelte/store'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
@@ -19,7 +19,7 @@ export type State = {
    * マウントされているページたちのアイテムID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: Writable<List<ItemId>>
+  mountedPageIds: List<ItemId>
   /** 削除され再利用されるアイテムID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId
@@ -46,13 +46,13 @@ export namespace State {
     childItemIds: List<ItemId>
     parents: {[K in ItemId]: Edge}
     /** 足跡表示機能で使われるタイムスタンプ */
-    timestamp: Writable<Timestamp>
+    timestamp: Timestamp
     /**
      * このアイテムにアドホックに付与されるCSSクラスのリスト。
      * 付与されたアイテム本体とその子孫に別々のスタイルを適用できるよう、
      * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
      */
-    cssClasses: Writable<List<string>>
+    cssClasses: List<string>
   }
 
   export type Edge = {
@@ -65,16 +65,16 @@ export namespace State {
      * 正直、具体的なメリットはこれくらいしか思いつかない。
      * リスクはあるが直感的に面白そうなこちらに賭けてみた。
      */
-    isCollapsed: Writable<boolean>
+    isCollapsed: boolean
 
     /**
      * いわゆる意味ネットワークのように、エッジが持つラベルのデータ。
      * List型なので複数設定できる。List内の並び順がそのまま画面表示上の並び順として使われる。
      */
-    labels: Writable<List<string>>
+    labels: List<string>
   }
   export function createDefaultEdge(): Edge {
-    return {isCollapsed: writable(false), labels: writable(List.of())}
+    return {isCollapsed: false, labels: List.of()}
   }
 
   /** テキストアイテムが固有で持つデータの型 */
@@ -120,12 +120,12 @@ export namespace State {
   /** 各ページが持つデータの型 */
   export type Page = {
     /** アイテムツリー内で操作対象となるアイテム */
-    targetItemPath: Writable<ItemPath>
+    targetItemPath: ItemPath
     /**
      * アイテム複数選択時の範囲の一端。
      * テキスト選択におけるanchorと同じ意味合い。
      */
-    anchorItemPath: Writable<ItemPath>
+    anchorItemPath: ItemPath
     /** このページのデフォルトのウィンドウモード */
     defaultWindowMode: DefaultWindowMode
   }
@@ -135,7 +135,7 @@ export namespace State {
      * このワークスペースでページツリーや検索結果から除外したいアイテム群。
      * これに含まれるアイテムまたはその子孫アイテムはページツリーや検索結果から除外される。
      */
-    excludedItemIds: Writable<List<ItemId>>
+    excludedItemIds: List<ItemId>
     name: string
   }
 

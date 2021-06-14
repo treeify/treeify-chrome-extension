@@ -35,7 +35,7 @@
 
     // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
     const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
-      return get(state.items[b].timestamp) - get(state.items[a].timestamp)
+      return state.items[b].timestamp - state.items[a].timestamp
     })
 
     // 各アイテムに足跡順位を対応付け

@@ -7,7 +7,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {get} from 'svelte/store'
 
 /**
  * 指定されたアイテムのisCollapsedフラグを返す。
@@ -18,7 +17,7 @@ export function getIsCollapsed(itemPath: ItemPath): boolean {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  return get(Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed)
+  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
 /** 指定されたアイテムのisCollapsedフラグを設定する */
@@ -26,7 +25,7 @@ export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed.set(isCollapsed)
+  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed = isCollapsed
   Internal.instance.markAsMutated(
     PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
   )
@@ -40,7 +39,7 @@ export function getLabels(itemPath: ItemPath): List<string> | undefined {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   if (parentItemId !== undefined) {
-    return get(Internal.instance.state.items[itemId].parents[parentItemId].labels)
+    return Internal.instance.state.items[itemId].parents[parentItemId].labels
   } else {
     return undefined
   }
@@ -54,7 +53,7 @@ export function setLabels(itemPath: ItemPath, labels: List<string>) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   if (parentItemId !== undefined) {
-    Internal.instance.state.items[itemId].parents[parentItemId].labels.set(labels)
+    Internal.instance.state.items[itemId].parents[parentItemId].labels = labels
     Internal.instance.markAsMutated(
       PropertyPath.of('items', itemId, 'parents', parentItemId, 'labels')
     )
