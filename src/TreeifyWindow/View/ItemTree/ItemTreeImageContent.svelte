@@ -1,14 +1,14 @@
 <script context="module" lang="ts">
   import {List} from 'immutable'
   import {Derived} from 'src/TreeifyWindow/Internal/Derived'
-  import {get, Readable} from 'svelte/store'
+  import {Readable} from 'svelte/store'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
-
+  
   export function createItemTreeImageContentProps(itemPath: ItemPath) {
     const itemId = ItemPath.getItemId(itemPath)
     const imageItem = Internal.instance.state.imageItems[itemId]
@@ -16,8 +16,8 @@
     return {
       itemPath,
       labels: Derived.getLabels(itemPath),
-      url: get(imageItem.url),
-      caption: get(imageItem.caption),
+      url: imageItem.url,
+      caption: imageItem.caption,
       onFocus: (event: FocusEvent) => {
         doWithErrorCapture(() => {
           // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

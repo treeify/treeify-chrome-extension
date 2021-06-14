@@ -175,7 +175,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return `${get(imageItem.caption)} ${get(imageItem.url)}`
+      return `${imageItem.caption} ${imageItem.url}`
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
@@ -372,8 +372,8 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       baseAttributes.type = 'image'
-      baseAttributes.text = get(imageItem.caption)
-      baseAttributes.url = get(imageItem.url)
+      baseAttributes.text = imageItem.caption
+      baseAttributes.url = imageItem.url
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]

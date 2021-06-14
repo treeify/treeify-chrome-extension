@@ -107,8 +107,8 @@ export namespace State {
 
   /** 画像アイテムが固有で持つデータの型 */
   export type ImageItem = {
-    url: Writable<string>
-    caption: Writable<string>
+    url: string
+    caption: string
   }
 
   /** コードブロックアイテムが固有で持つデータの型 */

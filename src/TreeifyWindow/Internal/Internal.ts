@@ -273,10 +273,9 @@ export class Internal {
       },
       imageItems: {
         7: {
-          url: writable(
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg'
-          ),
-          caption: writable('tamias'),
+          url:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
+          caption: 'tamias',
         },
       },
       codeBlockItems: {

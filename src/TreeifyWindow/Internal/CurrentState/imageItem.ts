@@ -5,7 +5,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
 
 /**
  * 新しい空の画像アイテムを作成し、CurrentStateに登録する。
@@ -25,8 +24,8 @@ export function createImageItem(): ItemId {
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
   const imageItem: State.ImageItem = {
-    url: writable(''),
-    caption: writable(''),
+    url: '',
+    caption: '',
   }
   Internal.instance.state.imageItems[newItemId] = imageItem
   Internal.instance.markAsMutated(PropertyPath.of('imageItems', newItemId))
@@ -42,12 +41,12 @@ export function deleteImageItemEntry(itemId: ItemId) {
 
 /** 画像アイテムのURLを設定する */
 export function setImageItemUrl(itemId: ItemId, url: string) {
-  Internal.instance.state.imageItems[itemId].url.set(url)
+  Internal.instance.state.imageItems[itemId].url = url
   Internal.instance.markAsMutated(PropertyPath.of('imageItems', itemId, 'url'))
 }
 
 /** 画像アイテムのキャプションを設定する */
 export function setImageItemCaption(itemId: ItemId, caption: string) {
-  Internal.instance.state.imageItems[itemId].caption.set(caption)
+  Internal.instance.state.imageItems[itemId].caption = caption
   Internal.instance.markAsMutated(PropertyPath.of('imageItems', itemId, 'caption'))
 }
