@@ -18,11 +18,7 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): Readable<List<Ite
  * 親を持たないアイテムパスの場合、undefinedを返す。
  */
 export function getLabels(itemPath: ItemPath): Readable<List<string>> | undefined {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  if (parentItemId !== undefined) {
-    return Internal.instance.state.items[itemId].parents[parentItemId].labels
-  } else {
-    return undefined
-  }
+  if (!ItemPath.hasParent(itemPath)) return undefined
+
+  return Internal.d(() => CurrentState.getLabels(itemPath)!)
 }

@@ -3,19 +3,17 @@
   import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
   import {InputId} from '../../Internal/InputId'
-  import {get} from '../../svelte'
   import CommonDialog from './CommonDialog.svelte'
 
   export function createLabelEditDialogProps() {
-    const labels = Derived.getLabels(CurrentState.getTargetItemPath())
+    const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
     assertNonUndefined(labels)
-    if (get(labels).isEmpty()) {
+    if (labels.isEmpty()) {
       // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
       return {labels: ['']}
     } else {
-      return {labels: get(labels).toArray()}
+      return {labels: labels.toArray()}
     }
   }
 </script>

@@ -33,7 +33,21 @@ export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
 }
 
 /**
- * 指定されたアイテムパスのラベルを設定する。
+ * 指定されたアイテムパスの最後のエッジのラベルを返す。
+ * 親を持たないアイテムパスの場合、undefinedを返す。
+ */
+export function getLabels(itemPath: ItemPath): List<string> | undefined {
+  const itemId = ItemPath.getItemId(itemPath)
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  if (parentItemId !== undefined) {
+    return get(Internal.instance.state.items[itemId].parents[parentItemId].labels)
+  } else {
+    return undefined
+  }
+}
+
+/**
+ * 指定されたアイテムパスの最後のエッジのラベルを設定する。
  * 親を持たないアイテムパスの場合、何もしない。
  */
 export function setLabels(itemPath: ItemPath, labels: List<string>) {
