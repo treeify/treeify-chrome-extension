@@ -471,6 +471,14 @@
 
   /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
   function onBackspace(event: KeyboardEvent) {
+    // 複数選択中は選択されたアイテムを削除して終了
+    if (CurrentState.getSelectedItemPaths().size > 1) {
+      event.preventDefault()
+      NullaryCommand.deleteItem()
+      Rerenderer.instance.rerender()
+      return
+    }
+
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetItem = Internal.instance.state.items[targetItemId]
@@ -546,6 +554,19 @@
 
   /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
   function onDelete(event: KeyboardEvent) {
+    // 複数選択中は選択されたアイテムを削除して終了
+    if (CurrentState.getSelectedItemPaths().size > 1) {
+      event.preventDefault()
+      NullaryCommand.deleteItem()
+      // 下のアイテムをフォーカスする
+      const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
+      if (belowItemPath !== undefined) {
+        CurrentState.setTargetItemPath(belowItemPath)
+      }
+      Rerenderer.instance.rerender()
+      return
+    }
+
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetItem = Internal.instance.state.items[targetItemId]
