@@ -33,7 +33,7 @@ export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
 
 /** Stateに登録されている全てのワークスペースIDを返す */
 export function getWorkspaceIds(): List<WorkspaceId> {
-  return List(Object.keys(Internal.instance.state.workspaces)).map(parseInt)
+  return List(Object.keys(Internal.instance.state.workspaces)).map((key) => parseInt(key))
 }
 
 /** 現在のワークスペースの除外アイテムリストを返す */
