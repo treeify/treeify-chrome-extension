@@ -1,5 +1,8 @@
 <script lang="ts">
   import {List} from 'immutable'
+  import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+  import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
+  import {derived, Readable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
@@ -35,7 +38,13 @@
     dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
   }
 
-  export let viewModel: RootViewModel
+  const viewModelStream: Readable<RootViewModel> = derived(
+    Internal.instance.rerenderingPulse,
+    () => {
+      return createRootViewModel(Internal.instance.state)
+    }
+  )
+  $: viewModel = $viewModelStream
 
   function onClickExportButton() {
     doWithErrorCapture(() => {

@@ -73,9 +73,6 @@ export async function cleanup() {
 }
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
-  doWithTimeMeasuring('External.instance.render(newState)', () =>
-    External.instance.render(newState)
-  )
   doWithTimeMeasuring(
     'External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)',
     () => External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
