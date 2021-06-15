@@ -497,10 +497,7 @@ function createItemsBasedOnOpml(elements: OutlineElement[]): ItemAndEdge[] {
   return elements.map((element) => createItemBasedOnOpml(element, itemIdMap))
 }
 
-/**
- * パースされたOPMLを元にアイテムを作る。
- * TODO: テキストアイテムのスタイル（太字、下線など）の取り込みは未実装
- */
+/** パースされたOPMLを元にアイテムを作る */
 function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): ItemAndEdge {
   const attributes = element.attributes
   const existingItemId = attributes.itemId !== undefined ? itemIdMap[attributes.itemId] : undefined
