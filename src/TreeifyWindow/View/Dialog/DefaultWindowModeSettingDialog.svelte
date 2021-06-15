@@ -20,14 +20,15 @@
     CurrentState.commit()
   }
 
-  const onClick = () => {
+  const onClick = (event: Event) => {
     doWithErrorCapture(() => {
-      throw new Error('TODO: ラジオボタンをチェックする処理が未移植')
-
-      // const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
-      // const inputElement = document.querySelector<HTMLInputElement>(selector)
-      // assertNonNull(inputElement)
-      // inputElement.checked = true
+      if (event.target instanceof HTMLElement) {
+        const inputElement = event.target.querySelector("input[type='radio']")
+        if (inputElement instanceof HTMLInputElement) {
+          // inputElement.checked = true ではbind:groupをすり抜けてしまう模様
+          inputElement.click()
+        }
+      }
     })
   }
 </script>
