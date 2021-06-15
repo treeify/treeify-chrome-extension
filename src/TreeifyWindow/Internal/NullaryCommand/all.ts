@@ -98,4 +98,3 @@ export const functions: {[name: string]: () => void} = {
   showOtherParentsDialog,
   saveToDataFolder,
 }
-export {insertLineBreak} from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
