@@ -11,7 +11,7 @@
     itemType: ItemType.TEXT
     labels: List<string>
     domishObjects: List<DomishObject>
-    onInput: (event: InputEvent) => void
+    onInput: (event: Event) => void
     onCompositionEnd: (event: CompositionEvent) => void
     onClick: (event: Event) => void
   }

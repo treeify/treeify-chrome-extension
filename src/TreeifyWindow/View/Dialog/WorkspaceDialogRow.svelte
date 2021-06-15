@@ -8,7 +8,7 @@
 
   export let workspace: WorkspaceRecord
 
-  const onInput = (event: InputEvent) => {
+  const onInput = (event: Event) => {
     doWithErrorCapture(() => {
       if (event.target instanceof HTMLInputElement) {
         CurrentState.setWorkspaceName(workspace.id, event.target.value)

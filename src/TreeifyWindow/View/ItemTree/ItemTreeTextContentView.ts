@@ -14,7 +14,7 @@ export type ItemTreeTextContentViewModel = {
   itemType: ItemType.TEXT
   labels: List<string>
   domishObjects: List<DomishObject>
-  onInput: (event: InputEvent) => void
+  onInput: (event: Event) => void
   onCompositionEnd: (event: CompositionEvent) => void
   onClick: (event: Event) => void
 }
@@ -29,9 +29,9 @@ export function createItemTreeTextContentViewModel(
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEXT,
     domishObjects: get(state.textItems[itemId].domishObjects),
-    onInput: (event) => {
+    onInput: (event: Event) => {
       doWithErrorCapture(() => {
-        if (!event.isComposing && event.target instanceof Node) {
+        if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
           Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
           // contenteditableな要素のinnerHTMLをModelに反映する
