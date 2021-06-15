@@ -117,6 +117,13 @@ export namespace DomishObject {
     }
   }
 
+  /** HTML文字列をDomishObjectに変換する */
+  export function fromHtml(html: string): List<DomishObject> {
+    const templateElement = document.createElement('template')
+    templateElement.innerHTML = html
+    return DomishObject.fromChildren(templateElement.content)
+  }
+
   /**
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。

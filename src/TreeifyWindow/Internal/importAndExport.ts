@@ -582,12 +582,18 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
     case 'text':
     default:
       const textItemId = CurrentState.createTextItem()
-      // TODO: html属性があればそちらを取り込む
-      const domishObject: DomishObject.TextNode = {
-        type: 'text',
-        textContent: attributes.text,
+      if (typeof attributes.html === 'string') {
+        // html属性がある場合はパースして使う
+        const domishObjects = DomishObject.fromHtml(attributes.html)
+        CurrentState.setTextItemDomishObjects(textItemId, domishObjects)
+      } else {
+        // html属性がない場合はtext属性をプレーンテキストとして使う
+        const domishObject: DomishObject.TextNode = {
+          type: 'text',
+          textContent: document.createTextNode(attributes.text).textContent ?? '',
+        }
+        CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
       }
-      CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
       return textItemId
   }
 }
