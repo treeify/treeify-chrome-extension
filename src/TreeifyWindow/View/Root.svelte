@@ -1,6 +1,7 @@
 <script lang="ts">
   import {List} from 'immutable'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+  import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
   import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
   import {derived, Readable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
@@ -39,7 +40,7 @@
   }
 
   const viewModelStream: Readable<RootViewModel> = derived(
-    Internal.instance.rerenderingPulse,
+    Rerenderer.instance.rerenderingPulse,
     () => {
       return createRootViewModel(Internal.instance.state)
     }
