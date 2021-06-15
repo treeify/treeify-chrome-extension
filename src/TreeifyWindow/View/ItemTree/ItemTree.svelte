@@ -653,8 +653,11 @@
             return
           }
 
-          if (event.clientY - rect.top < rect.bottom - event.clientY) {
-            // ドロップ先座標がドロップ先要素の上半分の場合
+          // ドロップ先要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
+          const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
+          // ドロップした座標に応じてアイテムの移動先を変える
+          if (ratio < 0.3) {
+            // ドロップ先座標がドロップ先要素の上の方の場合
 
             // ドロップ先がアクティブページなら何もしない
             if (!ItemPath.hasParent(itemPath)) return
@@ -667,8 +670,20 @@
               const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
               CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
             }
+          } else if (ratio <= 0.7) {
+            // ドロップ先座標がドロップ先要素の中央あたりの場合
+
+            const itemId = ItemPath.getItemId(itemPath)
+            if (InputId.isFirstModifierKeyPressed(event)) {
+              // エッジを追加する（トランスクルード）
+              CurrentState.insertFirstChildItem(itemId, draggedItemId)
+            } else {
+              // エッジを付け替える
+              const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+              CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
+            }
           } else {
-            // ドロップ先座標がドロップ先要素の下半分の場合
+            // ドロップ先座標がドロップ先要素の下の方の場合
 
             if (InputId.isFirstModifierKeyPressed(event)) {
               // エッジを追加する（トランスクルード）
