@@ -477,6 +477,16 @@
     if (targetItem.itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
 
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      // 空の子なしアイテムなら
+      if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+        event.preventDefault()
+        // ターゲットアイテムを削除して終了
+        NullaryCommand.deleteItem()
+        Rerenderer.instance.rerender()
+        return
+      }
+
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
       if (selection.focusDistance === 0 && selection.anchorDistance === 0) {
@@ -538,8 +548,24 @@
   function onDelete(event: KeyboardEvent) {
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+    const targetItem = Internal.instance.state.items[targetItemId]
+    if (targetItem.itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
+
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      // 空の子なしアイテムなら
+      if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+        event.preventDefault()
+        // ターゲットアイテムを削除して終了
+        NullaryCommand.deleteItem()
+        // 下のアイテムをフォーカスする
+        const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
+        if (belowItemPath !== undefined) {
+          CurrentState.setTargetItemPath(belowItemPath)
+        }
+        Rerenderer.instance.rerender()
+        return
+      }
 
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
