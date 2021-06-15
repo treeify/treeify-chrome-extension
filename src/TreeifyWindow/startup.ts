@@ -87,12 +87,21 @@ function onMouseMove(event: MouseEvent) {
 
     // マウスの位置と動きに応じて左サイドバーを開閉する
     if (!External.instance.shouldFloatingLeftSidebarShown) {
-      // マウスポインターが画面左端に到達した時。
-      // Treeifyウィンドウの左端が画面左端に近くないと発動しない点に注意。
-      // 逆に言うと、Treeifyウィンドウが画面左端にぴったりくっついていなくても割とルーズに発動してくれる。
-      if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
-        External.instance.shouldFloatingLeftSidebarShown = true
-        Rerenderer.instance.rerender()
+      const gap = event.screenX - event.clientX
+      if (gap > 0) {
+        // Treeifyウィンドウ左端と画面左端の間に隙間がある場合
+
+        if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
+          External.instance.shouldFloatingLeftSidebarShown = true
+          Rerenderer.instance.rerender()
+        }
+      } else {
+        // Treeifyウィンドウ左端と画面左端の間に隙間がない場合
+
+        if (event.screenX === 0 && event.movementX === 0) {
+          External.instance.shouldFloatingLeftSidebarShown = true
+          Rerenderer.instance.rerender()
+        }
       }
     } else {
       const leftSidebar = document.querySelector('.left-sidebar')
