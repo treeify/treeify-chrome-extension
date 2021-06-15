@@ -1,12 +1,12 @@
 <script lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {ItemPath} from '../../Internal/ItemPath'
   import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
   type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
     initialDefaultWindowMode: DefaultWindowMode
-    onClickFinishButton: () => void
     onClickCancelButton: () => void
   }
 
@@ -30,6 +30,24 @@
         }
       }
     })
+  }
+
+  const onClickFinishButton = () => {
+    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemId = ItemPath.getItemId(targetItemPath)
+    const targetPageId = CurrentState.isPage(targetItemId)
+      ? targetItemId
+      : ItemPath.getRootItemId(targetItemPath)
+
+    // デフォルトウィンドウモードを更新
+    CurrentState.setDefaultWindowMode(targetPageId, selectedDefaultWindowMode)
+
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetPageId)
+
+    // ダイアログを閉じる
+    CurrentState.setDefaultWindowModeSettingDialog(null)
+    CurrentState.commit()
   }
 </script>
 
@@ -58,7 +76,7 @@
       </div>
     </form>
     <div class="default-window-mode-setting-dialog_button-area">
-      <button on:click={viewModel.onClickFinishButton}>完了</button>
+      <button on:click={onClickFinishButton}>完了</button>
       <button on:click={viewModel.onClickCancelButton}>キャンセル</button>
     </div>
   </div>
