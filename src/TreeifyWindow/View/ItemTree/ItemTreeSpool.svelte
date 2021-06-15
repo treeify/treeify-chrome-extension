@@ -11,7 +11,7 @@
     onClick: (event: MouseEvent) => void
   }
 
-  export enum ItemTreeBulletState {
+  enum ItemTreeBulletState {
     NO_CHILDREN,
     EXPANDED,
     COLLAPSED,
