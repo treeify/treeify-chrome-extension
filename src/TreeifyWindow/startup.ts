@@ -26,7 +26,7 @@ export async function startup(initialState: State) {
   // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
   await matchTabsAndWebPageItems()
 
-  External.instance.render(initialState)
+  Rerenderer.instance.renderForFirstTime()
 
   Internal.instance.addOnMutateListener(onMutateState)
 

@@ -1,6 +1,5 @@
 import {List} from 'immutable'
 import md5 from 'md5'
-import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
@@ -9,7 +8,6 @@ import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
 export class External {
@@ -59,17 +57,6 @@ export class External {
   /** シングルトンインスタンスを破棄する */
   static cleanup() {
     this._instance = undefined
-  }
-
-  /** DOMの初回描画を行う */
-  render(state: State) {
-    const spaRoot = document.querySelector('.spa-root')
-    assertNonNull(spaRoot)
-    if (spaRoot instanceof HTMLElement) {
-      new Root({
-        target: spaRoot,
-      })
-    }
   }
 
   onMutateState(propertyPath: PropertyPath) {

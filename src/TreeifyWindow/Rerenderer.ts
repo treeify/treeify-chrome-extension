@@ -1,3 +1,4 @@
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {
   focusItemTreeBackground,
@@ -9,6 +10,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {tick} from 'svelte'
 import {Readable, writable} from 'svelte/store'
+import Root from './View/Root.svelte'
 
 /**
  * 画面の再描画に関する制御を担当するクラス。
@@ -40,7 +42,7 @@ export class Rerenderer {
     return this.#rerenderingPulse
   }
 
-  /** 再描画を実行する */
+  /** DOMを再描画する */
   rerender() {
     // Treeifyウィンドウのタイトルを更新する
     document.title = CurrentState.deriveTreeifyWindowTitle()
@@ -74,6 +76,17 @@ export class Rerenderer {
 
       this.pendingTextItemSelection = undefined
     })
+  }
+
+  /** DOMの初回描画を行う */
+  renderForFirstTime() {
+    const spaRoot = document.querySelector('.spa-root')
+    assertNonNull(spaRoot)
+    if (spaRoot instanceof HTMLElement) {
+      new Root({
+        target: spaRoot,
+      })
+    }
   }
 
   /**
