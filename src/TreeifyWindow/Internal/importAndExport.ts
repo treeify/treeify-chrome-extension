@@ -6,12 +6,12 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {InnerHtml} from 'src/TreeifyWindow/Internal/InnerHtml'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
-import {State} from 'src/TreeifyWindow/Internal/State'
+import {Edge} from 'src/TreeifyWindow/Internal/State'
 import {get} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
@@ -90,7 +90,7 @@ export function onPaste(event: ClipboardEvent) {
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: State.Edge = {isCollapsed: true, labels: List.of()}
+          const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
@@ -167,19 +167,19 @@ export function getContentAsPlainText(itemId: ItemId): string {
   const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      const innerHtml = get(Internal.instance.state.textItems[itemId].innerHtml)
-      return InnerHtml.toSingleLinePlainText(innerHtml)
+      const domishObjects = get(Internal.instance.state.textItems[itemId].domishObjects)
+      return DomishObject.toSingleLinePlainText(domishObjects)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
-      const title = CurrentState.getWebPageItemTitle(itemId)
+      const title = CurrentState.deriveWebPageItemTitle(itemId)
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return `${imageItem.caption} ${imageItem.url}`
+      return `${get(imageItem.caption)} ${get(imageItem.url)}`
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
-      return codeBlockItem.code.split('\n')[0]
+      return get(codeBlockItem.code).split('\n')[0]
     default:
       assertNeverType(itemType)
   }
@@ -288,7 +288,13 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
 function createItemFromSingleLineText(line: string): ItemId {
   // テキストアイテムを作る
   const itemId = CurrentState.createTextItem()
-  CurrentState.setTextItemInnerHtml(itemId, document.createTextNode(line).textContent ?? '')
+  CurrentState.setTextItemDomishObjects(
+    itemId,
+    List.of({
+      type: 'text',
+      textContent: line,
+    })
+  )
   return itemId
 }
 
@@ -324,7 +330,7 @@ function toOpmlOutlineElement(itemPath: ItemPath): Element {
     type: 'element',
     name: 'outline',
     attributes: toOpmlAttributes(itemPath),
-    elements: item.childItemIds
+    elements: get(item.childItemIds)
       .map((childItemId) => toOpmlOutlineElement(itemPath.push(childItemId)))
       .toArray(),
   }
@@ -341,18 +347,18 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
   }
-  if (!item.cssClasses.isEmpty()) {
-    baseAttributes.cssClass = item.cssClasses.join(' ')
+  if (!get(item.cssClasses).isEmpty()) {
+    baseAttributes.cssClass = get(item.cssClasses).join(' ')
   }
   const labels = CurrentState.getLabels(itemPath)
-  if (labels?.isEmpty() === false) {
+  if (!labels.isEmpty()) {
     baseAttributes.labels = JSON.stringify(labels.toArray())
   }
 
   switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
-      const markedupText = MarkedupText.from(get(textItem.innerHtml))
+      const markedupText = MarkedupText.from(get(textItem.domishObjects))
       baseAttributes.type = 'text'
       baseAttributes.text = markedupText.text
       if (!markedupText.styles.isEmpty()) {
@@ -362,24 +368,24 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       baseAttributes.type = 'link'
-      baseAttributes.text = CurrentState.getWebPageItemTitle(itemId)
-      baseAttributes.url = webPageItem.url
-      baseAttributes.faviconUrl = webPageItem.faviconUrl
-      if (webPageItem.title !== null) {
-        baseAttributes.title = webPageItem.tabTitle
+      baseAttributes.text = CurrentState.deriveWebPageItemTitle(itemId)
+      baseAttributes.url = get(webPageItem.url)
+      baseAttributes.faviconUrl = get(webPageItem.faviconUrl)
+      if (get(webPageItem.title) !== null) {
+        baseAttributes.title = get(webPageItem.tabTitle)
       }
       break
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       baseAttributes.type = 'image'
-      baseAttributes.text = imageItem.caption
-      baseAttributes.url = imageItem.url
+      baseAttributes.text = get(imageItem.caption)
+      baseAttributes.url = get(imageItem.url)
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       baseAttributes.type = 'code-block'
-      baseAttributes.text = codeBlockItem.code
-      baseAttributes.language = codeBlockItem.language
+      baseAttributes.text = get(codeBlockItem.code)
+      baseAttributes.language = get(codeBlockItem.language)
       break
     default:
       assertNeverType(item.itemType)
@@ -483,7 +489,7 @@ interface OutlineElement extends Element {
 type OutlineAttributes = Attributes & {
   text: string
 }
-type ItemAndEdge = {itemId: ItemId; edge: State.Edge}
+type ItemAndEdge = {itemId: ItemId; edge: Edge}
 // トランスクルージョンを復元するために、OPML内に出現したアイテムIDを記録しておくオブジェクト。
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応するアイテムID。
 type ItemIdMap = {[K in string | number]: ItemId}
@@ -503,10 +509,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
   if (existingItemId !== undefined) {
     return {
       itemId: existingItemId,
-      edge: {
-        isCollapsed: attributes.isCollapsed === 'true',
-        labels: extractLabels(attributes),
-      },
+      edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
     }
   }
 
@@ -531,10 +534,7 @@ function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): I
 
   return {
     itemId,
-    edge: {
-      isCollapsed: attributes.isCollapsed === 'true',
-      labels: extractLabels(attributes),
-    },
+    edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
   }
 }
 
@@ -585,8 +585,11 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
     default:
       const textItemId = CurrentState.createTextItem()
       // TODO: スタイル情報を取り込む
-      const innerHtml = document.createTextNode(attributes.text).textContent ?? ''
-      CurrentState.setTextItemInnerHtml(textItemId, innerHtml)
+      const domishObject: DomishObject.TextNode = {
+        type: 'text',
+        textContent: attributes.text,
+      }
+      CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
       return textItemId
   }
 }

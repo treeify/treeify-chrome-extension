@@ -9,9 +9,19 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {
+  createPageTreeBulletAndIndentViewModel,
+  PageTreeBulletAndIndentViewModel,
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
+import {
+  createPageTreeContentViewModel,
+  PageTreeContentViewModel,
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
+import {get} from 'svelte/store'
 
 export type PageTreeNodeViewModel = {
-  itemId: ItemId
+  bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
+  contentViewModel: PageTreeContentViewModel
   childNodeViewModels: List<PageTreeNodeViewModel>
   isActivePage: boolean
   isRoot: boolean
@@ -43,7 +53,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
   for (let i = 1; i < itemPath.size; i++) {
-    const childItemIds = Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds
+    const childItemIds = get(Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds)
     siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
   }
   return List(siblingRankArray)
@@ -85,7 +95,8 @@ export function createPageTreeNodeViewModel(
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
-    itemId,
+    bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
+    contentViewModel: createPageTreeContentViewModel(state, itemId),
     childNodeViewModels: childPagePaths.map((childPagePath) =>
       createPageTreeNodeViewModel(
         state,
@@ -102,7 +113,7 @@ export function createPageTreeNodeViewModel(
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
-        External.instance.shouldFloatingLeftSidebarShown.set(false)
+        External.instance.shouldFloatingLeftSidebarShown = false
         CurrentState.commit()
       })
     },
@@ -112,11 +123,11 @@ export function createPageTreeNodeViewModel(
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
         if (itemId === CurrentState.getActivePageId()) {
-          const hottestPageId = Internal.instance.state.mountedPageIds
+          const hottestPageId = get(Internal.instance.state.mountedPageIds)
             .map((pageId) => {
               return {
                 pageId,
-                timestamp: Internal.instance.state.items[pageId].timestamp,
+                timestamp: get(Internal.instance.state.items[pageId].timestamp),
               }
             })
             .maxBy((a) => a.timestamp)!.pageId
@@ -168,7 +179,7 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
   assertNonUndefined(itemId)
 
   // もし他のマウント済みページに到達したら、そのページまでの経路を返す
-  if (itemIds.size > 1 && state.mountedPageIds.contains(itemId)) {
+  if (itemIds.size > 1 && get(state.mountedPageIds).contains(itemId)) {
     yield itemIds
     return
   }

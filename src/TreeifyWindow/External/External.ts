@@ -17,7 +17,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {writable, Writable} from 'svelte/store'
+import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
 import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
@@ -30,7 +30,7 @@ export class External {
   readonly pendingMutatedChunkIds = new Set<ChunkId>()
 
   /** フローティング型の左サイドバーを表示するべきかどうか */
-  shouldFloatingLeftSidebarShown: Writable<boolean> = writable(false)
+  shouldFloatingLeftSidebarShown: boolean = false
 
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
@@ -81,6 +81,9 @@ export class External {
       spaRoot.innerHTML = ''
       new Root({
         target: spaRoot,
+        props: {
+          viewModel: createRootViewModel(state),
+        },
       })
     }
 
@@ -109,6 +112,9 @@ export class External {
     })
 
     this.pendingTextItemSelection = undefined
+
+    // Treeifyウィンドウのタイトルを更新する
+    document.title = CurrentState.deriveTreeifyWindowTitle()
   }
 
   /**
@@ -140,7 +146,9 @@ export class External {
     return md5(jsonString)
   }
 
-  dumpCurrentState() {}
+  dumpCurrentState() {
+    this.tabItemCorrespondence.dumpCurrentState()
+  }
 }
 
 type TreeifyClipboard = {

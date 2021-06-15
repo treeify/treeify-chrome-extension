@@ -1,22 +1,15 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {List} from 'immutable'
-  import {ItemId} from '../../basicType'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {ItemPath} from '../../Internal/ItemPath'
-  import ItemContent, {createItemContentProps} from '../ItemContent/ItemContent.svelte'
+  import ItemContent from '../ItemContent/ItemContent.svelte'
+  import {ItemContentViewModel} from '../ItemContent/ItemContentView'
   import CommonDialog from './CommonDialog.svelte'
 
-  export function createOtherParentsDialogProps() {
-    const targetItemPath = CurrentState.getTargetItemPath()
-    const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
-    const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
-    const itemIds = parentItemIds.filter((itemId) => targetParentItemId !== itemId)
-    return {itemIds}
+  type OtherParentsDialogViewModel = {
+    itemContentViewModels: List<ItemContentViewModel>
   }
-</script>
 
-<script lang="ts">
-  export let itemIds: List<ItemId>
+  export let viewModel: OtherParentsDialogViewModel
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -28,9 +21,9 @@
 <CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
-      {#each itemIds.toArray() as itemId}
+      {#each viewModel.itemContentViewModels.toArray() as itemContentViewModel}
         <div class="other-parents-dialog_row-wrapper">
-          <ItemContent {...createItemContentProps(itemId)} />
+          <ItemContent viewModel={itemContentViewModel} />
         </div>
       {/each}
     </div>

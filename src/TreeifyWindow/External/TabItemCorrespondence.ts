@@ -1,3 +1,4 @@
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TabId} from 'src/TreeifyWindow/basicType'
 import Tab = chrome.tabs.Tab
 
@@ -5,50 +6,52 @@ import Tab = chrome.tabs.Tab
 export class TabItemCorrespondence {
   // タブIDからアイテムIDへのMap
   private readonly tabIdToItemId = new Map<TabId, ItemId>()
-  // アイテムIDからTabオブジェクトへのMap
-  private readonly itemIdToTab = new Map<ItemId, Tab>()
+  // アイテムIDからタブIDへのMap
+  private readonly itemIdToTabId = new Map<ItemId, TabId>()
+  // タブIDからTabオブジェクトへのMap
+  private readonly tabIdToTab = new Map<TabId, Tab>()
 
-  /** 指定されたアイテムに紐付いているタブIDを返す */
-  getTabId(itemId: ItemId): TabId | undefined {
-    return this.getTab(itemId)?.id
+  getTabIdBy(itemId: ItemId): TabId | undefined {
+    return this.itemIdToTabId.get(itemId)
   }
 
-  getItemId(tabId: TabId): ItemId | undefined {
+  getItemIdBy(tabId: TabId): ItemId | undefined {
     return this.tabIdToItemId.get(tabId)
   }
 
-  /**
-   * 指定されたアイテムに対応するchrome.tabs.Tabオブジェクトを返す。
-   * アイテムに対応するタブがなければundefinedを返す。
-   */
-  getTab(itemId: ItemId): Tab | undefined {
-    return this.itemIdToTab.get(itemId)
+  getTab(tabId: TabId): Tab | undefined {
+    return this.tabIdToTab.get(tabId)
   }
 
-  /** アイテムIDとTabオブジェクトを紐付ける */
-  tieTabAndItem(itemId: ItemId, tab: Tab) {
-    // タブIDがない場合は結びつけ不可能
-    if (tab.id === undefined) return
+  /** タブIDとTabオブジェクトを紐付ける */
+  registerTab(tabId: TabId, tab: Tab) {
+    this.tabIdToTab.set(tabId, tab)
+  }
 
-    this.tabIdToItemId.set(tab.id, itemId)
-    this.itemIdToTab.set(itemId, tab)
+  /** タブIDとアイテムIDを結びつける */
+  tieTabAndItem(tabId: TabId, itemId: ItemId) {
+    this.tabIdToItemId.set(tabId, itemId)
+    this.itemIdToTabId.set(itemId, tabId)
   }
 
   /** タブIDとアイテムIDの結びつけを解除する */
   untieTabAndItemByTabId(tabId: TabId) {
-    const itemId = this.getItemId(tabId)
-    if (itemId !== undefined) {
-      this.itemIdToTab.delete(itemId)
-      this.tabIdToItemId.delete(tabId)
-    }
+    const itemId = this.tabIdToItemId.get(tabId)
+    assertNonUndefined(itemId)
+    this.itemIdToTabId.delete(itemId)
+    this.tabIdToItemId.delete(tabId)
   }
 
-  /**
-   * 指定されたウェブページアイテムがアンロード状態かどうかを判定する
-   * TODO: 定義場所を移動する
-   * @deprecated
-   */
+  /** 指定されたウェブページアイテムがアンロード状態かどうかを判定する */
   isUnloaded(itemId: ItemId): boolean {
-    return this.getTab(itemId)?.discarded === true
+    const tabId = this.getTabIdBy(itemId)
+    return tabId === undefined || this.getTab(tabId)?.discarded === true
+  }
+
+  dumpCurrentState() {
+    console.groupCollapsed('ダンプ：TabItemCorrespondence#tabIdToTab')
+    const stateString = JSON.stringify(Object.fromEntries(this.tabIdToTab), undefined, 2)
+    console.log(stateString)
+    console.groupEnd()
   }
 }

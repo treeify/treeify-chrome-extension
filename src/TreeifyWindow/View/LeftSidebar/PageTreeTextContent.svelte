@@ -1,21 +1,17 @@
-<script context="module" lang="ts">
-  import {ItemId} from '../../basicType'
-  import {Internal} from '../../Internal/Internal'
-
-  export function createPageTreeTextContentProps(itemId: ItemId) {
-    return {
-      innerHtml: Internal.instance.state.textItems[itemId].innerHtml,
-    }
-  }
-</script>
-
 <script lang="ts">
-  import {Writable} from 'svelte/store'
+  import {List} from 'immutable'
+  import {ItemType} from '../../basicType'
+  import {DomishObject} from '../../Internal/DomishObject'
 
-  export let innerHtml: Writable<string>
+  type PageTreeTextContentViewModel = {
+    itemType: ItemType.TEXT
+    domishObjects: List<DomishObject>
+  }
+
+  export let viewModel: PageTreeTextContentViewModel
 </script>
 
-<div>{@html $innerHtml}</div>
+<div>{@html DomishObject.toHtml(viewModel.domishObjects)}</div>
 
 <style>
 </style>

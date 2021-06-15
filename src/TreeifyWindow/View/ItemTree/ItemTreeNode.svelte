@@ -1,156 +1,40 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import Color from 'color'
   import {List} from 'immutable'
-  import {Readable} from 'svelte/store'
   import {integer} from '../../../Common/integer'
-  import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {Command} from '../../Internal/Command'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {InputId} from '../../Internal/InputId'
-  import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {NullaryCommand} from '../../Internal/NullaryCommand'
-  import {State} from '../../Internal/State'
-  import ItemTreeContent, {createItemTreeContentProps} from './ItemTreeContent.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentView'
+  import ItemTreeContent from './ItemTreeContent.svelte'
+  import {ItemTreeContentViewModel} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import ItemTreeSpool, {createItemTreeSpoolProps} from './ItemTreeSpool.svelte'
+  import ItemTreeSpool from './ItemTreeSpool.svelte'
+  import {ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
 
-  export function createItemTreeNodeProps(
-    footprintRankMap: Map<ItemId, integer>,
-    footprintCount: integer,
+  type ItemTreeNodeViewModel = {
     itemPath: ItemPath
-  ) {
-    const state = Internal.instance.state
-    const itemId = ItemPath.getItemId(itemPath)
-    const item = state.items[itemId]
-
-    return {
-      itemPath,
-      isActivePage: !ItemPath.hasParent(itemPath),
-      isSelected: Internal.d(() => CurrentState.isSelected(itemPath)),
-      isMultiSelected: Internal.d(() => CurrentState.isMultiSelected()),
-      isTranscluded: Object.keys(item.parents).length > 1,
-      cssClasses: Internal.d(() => item.cssClasses),
-      footprintRank: footprintRankMap.get(itemId),
-      footprintRankMap,
-      footprintCount,
-      hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-      childItemPaths: Internal.d(() => {
-        const childItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
-        return childItemIds.map((childItemId) => itemPath.push(childItemId))
-      }),
-      onMouseDownContentArea: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          const inputId = InputId.fromMouseEvent(event)
-          if (inputId === '0000MouseButton1') {
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.deleteItem()
-            CurrentState.commit()
-          }
-        })
-      },
-      onClickDeleteButton: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          CurrentState.setTargetItemPath(itemPath)
-
-          const inputId = InputId.fromMouseEvent(event)
-          const commands: List<Command> | undefined =
-            state.itemTreeDeleteButtonMouseBinding[inputId]
-          if (commands !== undefined) {
-            event.preventDefault()
-            for (const command of commands) {
-              Command.execute(command)
-            }
-          }
-          CurrentState.commit()
-        })
-      },
-      onDragStart: (event: DragEvent) => {
-        doWithErrorCapture(() => {
-          if (event.dataTransfer === null) return
-
-          const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
-          const domElement = document.getElementById(domElementId)
-          if (domElement === null) return
-          // ドラッグ中にマウスポインターに追随して表示される内容を設定
-          event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
-
-          event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
-        })
-      },
-      onClickHiddenTabsCount: (event: MouseEvent) => {
-        CurrentState.setTargetItemPath(itemPath)
-        NullaryCommand.hardUnloadSubtree()
-        CurrentState.commit()
-      },
-    }
+    isActivePage: boolean
+    /**
+     * このアイテムが選択されているかどうかを示す値。
+     * 複数選択されたアイテムのうちの1つならmulti。
+     * 単一選択されたアイテムならsingle。
+     * 選択されていないならnon。
+     */
+    selected: 'single' | 'multi' | 'non'
+    isTranscluded: boolean
+    cssClasses: List<string>
+    footprintRank: integer | undefined
+    footprintCount: integer
+    hiddenTabsCount: integer
+    contentViewModel: ItemTreeContentViewModel
+    childItemViewModels: List<ItemTreeNodeViewModel>
+    spoolViewModel: ItemTreeSpoolViewModel
+    onMouseDownContentArea: (event: MouseEvent) => void
+    onClickDeleteButton: (event: MouseEvent) => void
+    onDragStart: (event: DragEvent) => void
+    onClickHiddenTabsCount: (event: MouseEvent) => void
   }
 
-  function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
-    const itemId = ItemPath.getItemId(itemPath)
-    if (CurrentState.isPage(itemId)) return 0
-    if (state.items[itemId].childItemIds.isEmpty()) return 0
-    if (CurrentState.getIsCollapsed(itemPath)) {
-      return countLoadedTabsInDescendants(state, itemId)
-    } else {
-      return 0
-    }
-  }
-
-  // 指定されたアイテムの子孫アイテムに対応するロード状態のタブを数える。
-  // 自分自身に対応するタブはカウントしない。
-  // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
-  function countLoadedTabsInDescendants(state: State, itemId: ItemId): integer {
-    if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-      return countLoadedTabsInSubtree(state, itemId)
-    } else {
-      return countLoadedTabsInSubtree(state, itemId) - 1
-    }
-  }
-
-  // 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
-  // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
-  function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
-    if (CurrentState.isPage(itemId)) {
-      if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-        return 0
-      } else {
-        return 1
-      }
-    }
-
-    const sum = Internal.instance.state.items[itemId].childItemIds
-      .map((childItemId) => countLoadedTabsInSubtree(state, childItemId))
-      .reduce((a: integer, x) => a + x, 0)
-    if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-      return sum
-    } else {
-      return 1 + sum
-    }
-  }
-</script>
-
-<script lang="ts">
-  export let itemPath: ItemPath
-  export let isActivePage: boolean
-  export let isSelected: Readable<boolean>
-  export let isMultiSelected: Readable<boolean>
-  export let isTranscluded: boolean
-  export let cssClasses: Readable<List<string>>
-  export let footprintRank: integer | undefined
-  export let footprintRankMap: Map<ItemId, integer>
-  export let footprintCount: integer
-  export let hiddenTabsCount: integer
-  export let childItemPaths: Readable<List<ItemPath>>
-  export let onMouseDownContentArea: (event: MouseEvent) => void
-  export let onClickDeleteButton: (event: MouseEvent) => void
-  export let onDragStart: (event: DragEvent) => void
-  export let onClickHiddenTabsCount: (event: MouseEvent) => void
+  export let viewModel: ItemTreeNodeViewModel
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,
@@ -170,60 +54,58 @@
     return strongestColor.mix(weakestColor, ratio)
   }
 
-  const footprintColor = calculateFootprintColor(footprintRank, footprintCount)
+  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
   const footprintLayerStyle =
     footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
-  const childrenCssClasses = $cssClasses.map((cssClass) => cssClass + '-children')
+  const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div class="item-tree-node" class:multi-selected={$isSelected && $isMultiSelected}>
-  {#if isActivePage}
+<div class="item-tree-node" class:multi-selected={viewModel.selected === 'multi'}>
+  {#if viewModel.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
     <!-- バレットとインデントラインの領域 -->
     <div
-      class={'item-tree-node_spool-area ' + $cssClasses.join(' ')}
-      class:transcluded={isTranscluded}
+      class={'item-tree-node_spool-area ' + viewModel.cssClasses.join(' ')}
+      class:transcluded={viewModel.isTranscluded}
       draggable="true"
-      on:dragstart={onDragStart}
+      on:dragstart={viewModel.onDragStart}
     >
-      <ItemTreeSpool {...createItemTreeSpoolProps(itemPath)} />
+      <ItemTreeSpool viewModel={viewModel.spoolViewModel} />
     </div>
   {/if}
   <div class="item-tree-node_body-and-children-area">
     <!-- ボディ領域 -->
-    <div class={$cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+    <div class={viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style={footprintLayerStyle}>
         <!-- コンテンツ領域 -->
         <div
-          data-item-path={JSON.stringify(itemPath.toArray())}
+          data-item-path={JSON.stringify(viewModel.itemPath.toArray())}
           class="item-tree-node_content-area"
-          class:single-selected={$isSelected && !$isMultiSelected}
-          on:mousedown={onMouseDownContentArea}
+          class:single-selected={viewModel.selected === 'single'}
+          on:mousedown={viewModel.onMouseDownContentArea}
         >
-          <ItemTreeContent {...createItemTreeContentProps(itemPath)} />
+          <ItemTreeContent viewModel={viewModel.contentViewModel} />
         </div>
       </div>
       <!-- 隠れているタブ数 -->
-      {#if hiddenTabsCount > 0}
-        <div class="item-tree-node_hidden-tabs-count" on:click={onClickHiddenTabsCount}>
-          {Math.min(99, hiddenTabsCount)}
+      {#if viewModel.hiddenTabsCount > 0}
+        <div class="item-tree-node_hidden-tabs-count" on:click={viewModel.onClickHiddenTabsCount}>
+          {Math.min(99, viewModel.hiddenTabsCount)}
         </div>
       {:else}
         <div class="grid-empty-cell" />
       {/if}
       <!-- 削除ボタン -->
-      <div class="item-tree-node_delete-button" on:click={onClickDeleteButton}>
+      <div class="item-tree-node_delete-button" on:click={viewModel.onClickDeleteButton}>
         <div class="item-tree-node_delete-button-icon" />
       </div>
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-      {#each $childItemPaths.toArray() as childItemPath (childItemPath.toString())}
-        <ItemTreeNode
-          {...createItemTreeNodeProps(footprintRankMap, footprintCount, childItemPath)}
-        />
+      {#each viewModel.childItemViewModels.toArray() as itemViewModel (itemViewModel.itemPath.toString())}
+        <ItemTreeNode viewModel={itemViewModel} />
       {/each}
     </div>
   </div>

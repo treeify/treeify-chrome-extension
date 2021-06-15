@@ -1,10 +1,6 @@
-<script context="module" lang="ts">
-  export function createPageTreeBulletAndIndentProps(hasChildren: boolean) {
-    if (hasChildren) {
-      return {bulletState: PageTreeBulletState.EXPANDED}
-    } else {
-      return {bulletState: PageTreeBulletState.NO_CHILDREN}
-    }
+<script lang="ts">
+  type PageTreeBulletAndIndentViewModel = {
+    bulletState: PageTreeBulletState
   }
 
   enum PageTreeBulletState {
@@ -12,23 +8,21 @@
     EXPANDED,
     COLLAPSED,
   }
-</script>
 
-<script lang="ts">
-  export let bulletState: PageTreeBulletState
+  export let viewModel: PageTreeBulletAndIndentViewModel
 </script>
 
 <div class="page-tree-bullet-and-indent">
-  {#if bulletState === PageTreeBulletState.EXPANDED}
+  {#if viewModel.bulletState === PageTreeBulletState.EXPANDED}
     <div class="page-tree-bullet-and-indent_indent-area">
       <div class="page-tree-bullet-and-indent_indent-line" />
     </div>
   {/if}
   <div
     class="page-tree-bullet-and-indent_bullet-area"
-    class:no-children={bulletState === PageTreeBulletState.NO_CHILDREN}
-    class:expanded={bulletState === PageTreeBulletState.EXPANDED}
-    class:collapsed={bulletState === PageTreeBulletState.COLLAPSED}
+    class:no-children={viewModel.bulletState === PageTreeBulletState.NO_CHILDREN}
+    class:expanded={viewModel.bulletState === PageTreeBulletState.EXPANDED}
+    class:collapsed={viewModel.bulletState === PageTreeBulletState.COLLAPSED}
   />
 </div>
 

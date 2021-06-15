@@ -1,24 +1,18 @@
 <script lang="ts">
-  import {integer} from '../../../Common/integer'
-  import {External} from '../../External/External'
-  import {Internal} from '../../Internal/Internal'
   import PageTree from './PageTree.svelte'
-  import {createPageTreeViewModel} from './PageTreeView'
+  import {PageTreeViewModel} from './PageTreeView'
 
-  const shouldFloatingLeftSidebarShown = External.instance.shouldFloatingLeftSidebarShown
+  type LeftSidebarViewModel = {
+    pageTreeViewModel: PageTreeViewModel
+    isFloating: boolean
+  }
 
-  let windowWidth: integer = window.innerWidth
-  $: isTreeifyWindowWide = windowWidth >= screen.width * 0.5
-  $: isSidebarShown = isTreeifyWindowWide || $shouldFloatingLeftSidebarShown
+  export let viewModel: LeftSidebarViewModel
 </script>
 
-{#if isSidebarShown}
-  <aside class="left-sidebar" class:floating={!isTreeifyWindowWide}>
-    <PageTree {...createPageTreeViewModel(Internal.instance.state)} />
-  </aside>
-{/if}
-
-<svelte:window bind:innerWidth={windowWidth} />
+<aside class="left-sidebar" class:floating={viewModel.isFloating}>
+  <PageTree viewModel={viewModel.pageTreeViewModel} />
+</aside>
 
 <style>
   :root {

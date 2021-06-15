@@ -1,26 +1,21 @@
-<script context="module" lang="ts">
-  import {ItemId, ItemType} from '../../basicType'
-  import {Internal} from '../../Internal/Internal'
-  import PageTreeTextContent, {createPageTreeTextContentProps} from './PageTreeTextContent.svelte'
-  import PageTreeWebPageContent, {
-    createPageTreeWebPageContentProps,
-  } from './PageTreeWebPageContent.svelte'
-
-  export function createPageTreeContentProps(itemId: ItemId) {
-    const itemType = Internal.instance.state.items[itemId].itemType
-    return {itemType, itemId}
-  }
-</script>
-
 <script lang="ts">
-  export let itemType: ItemType
-  export let itemId: ItemId
+  import {ItemType} from '../../basicType'
+  import PageTreeTextContent from './PageTreeTextContent.svelte'
+  import {PageTreeTextContentViewModel} from './PageTreeTextContentView'
+  import PageTreeWebPageContent from './PageTreeWebPageContent.svelte'
+  import {PageTreeWebPageContentViewModel} from './PageTreeWebPageContentView'
+
+  type PageTreeContentViewModel =
+    | PageTreeTextContentViewModel
+    | PageTreeWebPageContentViewModel
+
+  export let viewModel: PageTreeContentViewModel
 </script>
 
-{#if itemType === ItemType.TEXT}
-  <PageTreeTextContent {...createPageTreeTextContentProps(itemId)} />
-{:else if itemType === ItemType.WEB_PAGE}
-  <PageTreeWebPageContent {...createPageTreeWebPageContentProps(itemId)} />
+{#if viewModel.itemType === ItemType.TEXT}
+  <PageTreeTextContent {viewModel} />
+{:else if viewModel.itemType === ItemType.WEB_PAGE}
+  <PageTreeWebPageContent {viewModel} />
 {/if}
 
 <style>

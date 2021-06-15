@@ -1,29 +1,15 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {List} from 'immutable'
-  import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
+  import {assertNonNull} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
+  import {LabelEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  export function createLabelEditDialogProps() {
-    const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
-    assertNonUndefined(labels)
-    if (labels.isEmpty()) {
-      // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
-      return {labels: ['']}
-    } else {
-      return {labels: labels.toArray()}
-    }
-  }
-</script>
+  type LabelEditDialogViewModel = LabelEditDialog
 
-<script lang="ts">
-  /**
-   * 全ての入力欄の内容テキスト。
-   * bindを使うためにListではなく配列を採用。
-   */
-  export let labels: string[]
+  export let viewModel: LabelEditDialogViewModel
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -33,36 +19,30 @@
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      labels.push('')
-      labels = labels
+      CurrentState.setLabelEditDialog({
+        labels: getAllLabelInputValues().push(''),
+      })
+      CurrentState.commit()
     })
   }
 
   const onClickFinishButton = () => {
     doWithErrorCapture(() => {
-      const nonEmptyLabels = labels.filter((label) => label !== '')
-      CurrentState.setLabels(CurrentState.getTargetItemPath(), List(nonEmptyLabels))
+      const labels = getAllLabelInputValues().filter((label) => label !== '')
+      CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
       CurrentState.setLabelEditDialog(null)
       CurrentState.commit()
     })
   }
 
-  const onClickDeleteButton = (event: Event) => {
+  const onClickDeleteButton = () => {
     doWithErrorCapture(() => {
-      if (event.target instanceof HTMLElement) {
-        const elementNodeListOf = document.querySelectorAll('.label-edit-dialog_delete-button')
-        const index = List(elementNodeListOf).indexOf(event.target)
-        assert(index !== -1)
-        assert(labels.length > 0)
-        if (labels.length === 1) {
-          // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
-          labels = ['']
-        } else {
-          // 該当する入力欄を削除する
-          labels.splice(index, 1)
-          labels = labels
-        }
-      }
+      throw new Error('TODO: 未移植。indexの取得方法を検討中')
+      // const values = getAllLabelInputValues()
+      // CurrentState.setLabelEditDialog({
+      //   labels: values.size > 1 ? values.remove(index) : List.of(''),
+      // })
+      // CurrentState.commit()
     })
   }
 
@@ -76,16 +56,25 @@
       }
     })
   }
+
+  // 全てのラベル入力欄の内容テキストを返す
+  function getAllLabelInputValues(): List<string> {
+    const dialogDomElement = document.querySelector('.label-edit-dialog_content')
+    assertNonNull(dialogDomElement)
+
+    const inputElements = dialogDomElement.querySelectorAll('input')
+    return List(inputElements).map((inputElement: HTMLInputElement) => inputElement.value)
+  }
 </script>
 
 <CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
   <div class="label-edit-dialog_content">
-    {#each labels as label}
+    {#each viewModel.labels.toArray() as label}
       <div class="label-edit-dialog_label-row">
         <input
           type="text"
           class="label-edit-dialog_label-name"
-          bind:value={label}
+          value={label}
           on:keydown={onKeyDown}
         />
         <div class="label-edit-dialog_delete-button" on:click={onClickDeleteButton} />

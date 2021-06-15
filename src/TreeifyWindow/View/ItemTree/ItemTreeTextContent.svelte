@@ -1,65 +1,31 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {List} from 'immutable'
-  import {onDestroy} from 'svelte'
-  import {Readable, Writable} from 'svelte/store'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {getTextItemSelectionFromDom} from '../../External/domTextSelection'
-  import {External} from '../../External/External'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
-  import {Internal} from '../../Internal/Internal'
+  import {ItemType} from '../../basicType'
+  import {DomishObject} from '../../Internal/DomishObject'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {PropertyPath} from '../../Internal/PropertyPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  export function createItemTreeTextContentProps(itemPath: ItemPath) {
-    const itemId = ItemPath.getItemId(itemPath)
-    return {
-      itemPath,
-      labels: Derived.getLabels(itemPath),
-      innerHtml: Internal.instance.state.textItems[itemId].innerHtml,
-      onInput: (event: Event) => {
-        doWithErrorCapture(() => {
-          CurrentState.updateItemTimestamp(itemId)
-        })
-      },
-      onClick: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          CurrentState.setTargetItemPath(itemPath)
-
-          // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
-          External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
-          CurrentState.commit()
-        })
-      },
-    }
+  type ItemTreeTextContentViewModel = {
+    itemPath: ItemPath
+    itemType: ItemType.TEXT
+    labels: List<string>
+    domishObjects: List<DomishObject>
+    onInput: (event: InputEvent) => void
+    onCompositionEnd: (event: CompositionEvent) => void
+    onClick: (event: Event) => void
   }
-</script>
 
-<script lang="ts">
-  export let itemPath: ItemPath
-  export let labels: Readable<List<string>> | undefined
-  export let innerHtml: Writable<string>
-  export let onInput: (event: Event) => void
-  export let onClick: (event: MouseEvent) => void
+  export let viewModel: ItemTreeTextContentViewModel
 
-  const id = ItemTreeContentView.focusableDomElementId(itemPath)
-
-  onDestroy(
-    innerHtml.subscribe(() => {
-      const itemId = ItemPath.getItemId(itemPath)
-      Internal.instance.markAsMutated(PropertyPath.of('textItems', itemId, 'innerHtml'))
-    })
-  )
+  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
 <div class="item-tree-text-content">
-  {#if labels !== undefined && !$labels.isEmpty()}
+  {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-text-content_labels">
-      {#each $labels.toArray() as label}
-        <Label text={label} />
+      {#each viewModel.labels.toArray() as label}
+        <Label viewModel={{text: label}} />
       {/each}
     </div>
   {/if}
@@ -67,10 +33,12 @@
     class="item-tree-text-content_content-editable"
     {id}
     contenteditable="true"
-    on:input={onInput}
-    on:click={onClick}
-    bind:innerHTML={$innerHtml}
-  />
+    on:input={viewModel.onInput}
+    on:compositionend={viewModel.onCompositionEnd}
+    on:click={viewModel.onClick}
+  >
+    {@html DomishObject.toHtml(viewModel.domishObjects)}
+  </div>
 </div>
 
 <style>

@@ -1,21 +1,13 @@
-<script context="module" lang="ts">
-  import {External} from '../External/External'
-
-  export function createDataFolderPickerOpenButtonProps() {
-    return {
-      isGrayedOut:
-        External.instance.dataFolder !== undefined &&
-        External.instance.pendingMutatedChunkIds.size === 0,
-    }
-  }
-</script>
-
 <script lang="ts">
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {CurrentState} from '../Internal/CurrentState'
   import {NullaryCommand} from '../Internal/NullaryCommand'
 
-  export let isGrayedOut: boolean
+  type DataFolderPickerOpenButtonViewModel = {
+    isGrayedOut: boolean
+  }
+
+  export let viewModel: DataFolderPickerOpenButtonViewModel
 
   function onClick() {
     doAsyncWithErrorCapture(async () => {
@@ -26,7 +18,7 @@
 </script>
 
 <div class="toolbar-icon-button" on:click={onClick}>
-  <div class="data-folder-picker-open-button_icon" class:grayed-out={isGrayedOut} />
+  <div class="data-folder-picker-open-button_icon" class:grayed-out={viewModel.isGrayedOut} />
 </div>
 
 <style>

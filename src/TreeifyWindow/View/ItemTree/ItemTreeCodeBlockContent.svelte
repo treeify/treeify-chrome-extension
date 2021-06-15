@@ -1,49 +1,22 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import hljs from 'highlight.js'
   import {List} from 'immutable'
-  import {Readable} from 'svelte/store'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
-  import {Internal} from '../../Internal/Internal'
+  import {ItemType} from '../../basicType'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  export function createItemTreeCodeBlockContentProps(itemPath: ItemPath) {
-    const itemId = ItemPath.getItemId(itemPath)
-
-    const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
-    return {
-      itemPath,
-      labels: Derived.getLabels(itemPath),
-      code: Internal.d(() => codeBlockItem.code),
-      language: Internal.d(() => codeBlockItem.language),
-      onFocus: (event: FocusEvent) => {
-        doWithErrorCapture(() => {
-          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
-          if (event.target instanceof Node) {
-            getSelection()?.setPosition(event.target)
-          }
-        })
-      },
-      onClick: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          CurrentState.setTargetItemPath(itemPath)
-          CurrentState.commit()
-        })
-      },
-    }
+  type ItemTreeCodeBlockContentViewModel = {
+    itemPath: ItemPath
+    labels: List<string>
+    itemType: ItemType.CODE_BLOCK
+    code: string
+    language: string
+    onFocus: (event: FocusEvent) => void
+    onClick: (event: Event) => void
   }
-</script>
 
-<script lang="ts">
-  export let itemPath: ItemPath
-  export let labels: Readable<List<string>> | undefined
-  export let code: Readable<string>
-  export let language: Readable<string>
-  export let onFocus: (event: FocusEvent) => void
-  export let onClick: (event: MouseEvent) => void
+  export let viewModel: ItemTreeCodeBlockContentViewModel
 
   function getHighlightedHtml(code: string, language: string): string {
     // ライブラリが対応していない言語の場合例外が投げられる
@@ -58,18 +31,24 @@
     }
   }
 
-  const id = ItemTreeContentView.focusableDomElementId(itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
-<div class="item-tree-code-block-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
-  {#if labels !== undefined && !$labels.isEmpty()}
+<div
+  class="item-tree-code-block-content"
+  {id}
+  tabindex="0"
+  on:focus={viewModel.onFocus}
+  on:click={viewModel.onClick}
+>
+  {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-code-block-content_labels">
-      {#each $labels.toArray() as label}
-        <Label text={label} />
+      {#each viewModel.labels.toArray() as label}
+        <Label viewModel={{text: label}} />
       {/each}
     </div>
   {/if}
-  <pre><code>{@html getHighlightedHtml($code, $language)}</code></pre>
+  <pre><code>{@html getHighlightedHtml(viewModel.code, viewModel.language)}</code></pre>
 </div>
 
 <style>

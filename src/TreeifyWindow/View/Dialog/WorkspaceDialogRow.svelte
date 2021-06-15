@@ -2,13 +2,13 @@
   import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {State} from '../../Internal/State'
+  import {Workspace} from '../../Internal/State'
 
-  type WorkspaceRecord = {id: WorkspaceId} & State.Workspace
+  type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
   export let workspace: WorkspaceRecord
 
-  const onInput = (event: Event) => {
+  const onInput = (event: InputEvent) => {
     doWithErrorCapture(() => {
       if (event.target instanceof HTMLInputElement) {
         CurrentState.setWorkspaceName(workspace.id, event.target.value)

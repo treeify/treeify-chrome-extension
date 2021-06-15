@@ -1,51 +1,15 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import hljs from 'highlight.js'
-  import {State} from 'src/TreeifyWindow/Internal/State'
-  import {assertNonNull} from '../../../Common/Debug/assert'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {ItemPath} from '../../Internal/ItemPath'
+  import {CodeBlockItemEditDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  export function createCodeBlockItemEditDialogProps(
-    codeBlockItemEditDialog: State.CodeBlockItemEditDialog
-  ) {
-    const targetItemPath = CurrentState.getTargetItemPath()
-    return {
-      ...codeBlockItemEditDialog,
-      onClickFinishButton: () => {
-        const targetItemId = ItemPath.getItemId(targetItemPath)
-
-        // コードを更新
-        const textarea = document.querySelector<HTMLTextAreaElement>('.code-block-edit-dialog_code')
-        assertNonNull(textarea)
-        CurrentState.setCodeBlockItemCode(targetItemId, textarea.value)
-
-        // 言語を更新
-        const input = document.querySelector<HTMLInputElement>('.code-block-edit-dialog_language')
-        assertNonNull(input)
-        CurrentState.setCodeBlockItemLanguage(targetItemId, input.value)
-
-        // タイムスタンプを更新
-        CurrentState.updateItemTimestamp(targetItemId)
-
-        // ダイアログを閉じる
-        CurrentState.setCodeBlockItemEditDialog(null)
-        CurrentState.commit()
-      },
-      onClickCancelButton: () => {
-        // ダイアログを閉じる
-        CurrentState.setCodeBlockItemEditDialog(null)
-        CurrentState.commit()
-      },
-    }
+  type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
+    onClickFinishButton: () => void
+    onClickCancelButton: () => void
   }
-</script>
 
-<script lang="ts">
-  export let code: string
-  export let language: string
-  export let onClickFinishButton: () => void
-  export let onClickCancelButton: () => void
+  export let viewModel: CodeBlockItemEditDialogViewModel
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
@@ -56,7 +20,7 @@
 
 <CommonDialog title="コードブロック編集" {onCloseDialog}>
   <div class="code-block-edit-dialog_content">
-    <textarea class="code-block-edit-dialog_code">{code}</textarea>
+    <textarea class="code-block-edit-dialog_code">{viewModel.code}</textarea>
     <div class="code-block-edit-dialog_language-area">
       <label>言語名</label>
       <input
@@ -64,7 +28,7 @@
         type="text"
         autocomplete="on"
         list="languages"
-        value={language}
+        value={viewModel.language}
       />
     </div>
     <datalist id="languages">
@@ -73,8 +37,8 @@
       {/each}
     </datalist>
     <div class="code-block-edit-dialog_button-area">
-      <button on:click={onClickFinishButton}>完了</button>
-      <button on:click={onClickCancelButton}>キャンセル</button>
+      <button on:click={viewModel.onClickFinishButton}>完了</button>
+      <button on:click={viewModel.onClickCancelButton}>キャンセル</button>
     </div>
   </div>
 </CommonDialog>

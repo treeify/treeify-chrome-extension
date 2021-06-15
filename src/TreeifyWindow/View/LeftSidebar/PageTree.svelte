@@ -2,11 +2,15 @@
   import PageTreeNode from './PageTreeNode.svelte'
   import {PageTreeNodeViewModel} from './PageTreeNodeView'
 
-  export let pageTreeRootNodeViewModel: PageTreeNodeViewModel
+  type PageTreeViewModel = {
+    pageTreeRootNodeViewModel: PageTreeNodeViewModel
+  }
+
+  export let viewModel: PageTreeViewModel
 </script>
 
 <div class="page-tree">
-  <PageTreeNode {...pageTreeRootNodeViewModel} />
+  <PageTreeNode viewModel={viewModel.pageTreeRootNodeViewModel} />
 </div>
 
 <style>

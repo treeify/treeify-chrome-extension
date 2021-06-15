@@ -1,181 +1,59 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {List} from 'immutable'
-  import {Readable} from 'svelte/store'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Derived} from '../../Internal/Derived'
-  import {InputId} from '../../Internal/InputId'
-  import {Internal} from '../../Internal/Internal'
+  import {ItemType} from '../../basicType'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {NullaryCommand} from '../../Internal/NullaryCommand'
-  import {get} from '../../svelte'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  export function createItemTreeWebPageContentProps(itemPath: ItemPath) {
-    const itemId = ItemPath.getItemId(itemPath)
-    const webPageItem = Internal.instance.state.webPageItems[itemId]
-    const isUnloaded = External.instance.tabItemCorrespondence.isUnloaded(itemId)
-    const isHardUnloaded = Derived.getTabIsHardUnloaded(itemId)
-
-    return {
-      itemPath,
-      labels: Derived.getLabels(itemPath),
-      title: Internal.d(() => CurrentState.getWebPageItemTitle(itemId)),
-      faviconUrl: Internal.d(() => webPageItem.faviconUrl),
-      isLoading: Derived.getTabIsLoading(itemId),
-      isSoftUnloaded: Derived.getTabIsSoftUnloaded(itemId),
-      isHardUnloaded: Derived.getTabIsHardUnloaded(itemId),
-      isUnread: Internal.d(() => webPageItem.isUnread),
-      isAudible: Derived.getTabIsAudible(itemId),
-      onFocus: (event: FocusEvent) => {
-        doWithErrorCapture(() => {
-          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
-          if (event.target instanceof Node) {
-            getSelection()?.setPosition(event.target)
-          }
-        })
-      },
-      onClickTitle: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          switch (InputId.fromMouseEvent(event)) {
-            case '0000MouseButton0':
-              CurrentState.setTargetItemPath(itemPath)
-              NullaryCommand.browseTabInDualWindowMode()
-              CurrentState.commit()
-              break
-            case '1000MouseButton0':
-              CurrentState.setTargetItemPath(itemPath)
-              CurrentState.commit()
-              break
-            case '0010MouseButton0':
-              CurrentState.setTargetItemPath(itemPath)
-              NullaryCommand.browseTab()
-              CurrentState.commit()
-              break
-          }
-        })
-      },
-      onClickFavicon: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          CurrentState.setTargetItemPath(itemPath)
-
-          switch (InputId.fromMouseEvent(event)) {
-            case '0000MouseButton0':
-              event.preventDefault()
-
-              if (get(isHardUnloaded)) {
-                // ハードアンロード状態の場合
-                NullaryCommand.loadSubtree()
-              } else {
-                // ソフトアンロード状態またはロード状態の場合
-                NullaryCommand.hardUnloadSubtree()
-              }
-
-              CurrentState.commit()
-              break
-            case '1000MouseButton0':
-              event.preventDefault()
-
-              if (get(isHardUnloaded)) {
-                // ハードアンロード状態の場合
-                NullaryCommand.loadItem()
-              } else {
-                // ソフトアンロード状態またはロード状態の場合
-                NullaryCommand.hardUnloadItem()
-              }
-
-              CurrentState.commit()
-              break
-            case '0100MouseButton0':
-              event.preventDefault()
-
-              if (isUnloaded) {
-                // アンロード状態の場合
-                NullaryCommand.loadSubtree()
-              } else {
-                // ロード状態の場合
-                NullaryCommand.softUnloadSubtree()
-              }
-
-              CurrentState.commit()
-              break
-            case '1100MouseButton0':
-              event.preventDefault()
-
-              if (isUnloaded) {
-                // アンロード状態の場合
-                NullaryCommand.loadItem()
-              } else {
-                // ロード状態の場合
-                NullaryCommand.softUnloadItem()
-              }
-
-              CurrentState.commit()
-              break
-          }
-        })
-      },
-      onDragStart: (event: DragEvent) => {
-        doWithErrorCapture(() => {
-          if (event.dataTransfer === null) return
-
-          const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
-          const domElement = document.getElementById(domElementId)
-          if (domElement === null) return
-          // ドラッグ中にマウスポインターに追随して表示される内容を設定
-          event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
-
-          event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
-        })
-      },
-    }
+  type ItemTreeWebPageContentViewModel = {
+    itemPath: ItemPath
+    itemType: ItemType.WEB_PAGE
+    labels: List<string>
+    title: string
+    faviconUrl: string
+    isLoading: boolean
+    isSoftUnloaded: boolean
+    isHardUnloaded: boolean
+    isUnread: boolean
+    isAudible: boolean
+    onFocus: (event: FocusEvent) => void
+    onClickTitle: (event: MouseEvent) => void
+    onClickFavicon: (event: MouseEvent) => void
+    onDragStart: (event: DragEvent) => void
   }
+
+  export let viewModel: ItemTreeWebPageContentViewModel
+
+  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
-<script lang="ts">
-  export let itemPath: ItemPath
-  export let labels: Readable<List<string>> | undefined
-  export let title: Readable<string>
-  export let faviconUrl: Readable<string>
-  export let isLoading: Readable<boolean>
-  export let isSoftUnloaded: Readable<boolean>
-  export let isHardUnloaded: Readable<boolean>
-  export let isUnread: Readable<boolean>
-  export let isAudible: Readable<boolean>
-  export let onFocus: (event: FocusEvent) => void
-  export let onClickTitle: (event: MouseEvent) => void
-  export let onClickFavicon: (event: MouseEvent) => void
-  export let onDragStart: (event: DragEvent) => void
-
-  const id = ItemTreeContentView.focusableDomElementId(itemPath)
-</script>
-
-<div class="item-tree-web-page-content" {id} tabindex="0" on:focus={onFocus}>
-  {#if $isLoading}
-    <div class="item-tree-web-page-content_favicon loading-indicator" on:click={onClickFavicon} />
-  {:else if $faviconUrl.length > 0}
+<div class="item-tree-web-page-content" {id} tabindex="0" on:focus={viewModel.onFocus}>
+  {#if viewModel.isLoading}
+    <div
+      class="item-tree-web-page-content_favicon loading-indicator"
+      on:click={viewModel.onClickFavicon}
+    />
+  {:else if viewModel.faviconUrl.length > 0}
     <img
       class="item-tree-web-page-content_favicon"
-      class:soft-unloaded-item={$isSoftUnloaded}
-      class:hard-unloaded-item={$isHardUnloaded}
-      src={$faviconUrl}
-      on:click={onClickFavicon}
+      class:soft-unloaded-item={viewModel.isSoftUnloaded}
+      class:hard-unloaded-item={viewModel.isHardUnloaded}
+      src={viewModel.faviconUrl}
+      on:click={viewModel.onClickFavicon}
     />
   {:else}
     <div
       class="item-tree-web-page-content_favicon default-favicon"
-      class:soft-unloaded-item={$isSoftUnloaded}
-      class:hard-unloaded-item={$isHardUnloaded}
-      on:click={onClickFavicon}
+      class:soft-unloaded-item={viewModel.isSoftUnloaded}
+      class:hard-unloaded-item={viewModel.isHardUnloaded}
+      on:click={viewModel.onClickFavicon}
     />
   {/if}
 
-  {#if labels !== undefined && !$labels.isEmpty()}
+  {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-web-page-content_labels">
-      {#each $labels.toArray() as label}
-        <Label text={label} />
+      {#each viewModel.labels.toArray() as label}
+        <Label viewModel={{text: label}} />
       {/each}
     </div>
   {:else}
@@ -183,17 +61,17 @@
   {/if}
   <div
     class="item-tree-web-page-content_title"
-    class:soft-unloaded-item={$isSoftUnloaded}
-    class:hard-unloaded-item={$isHardUnloaded}
-    class:unread={$isUnread}
-    title={$title}
+    class:soft-unloaded-item={viewModel.isSoftUnloaded}
+    class:hard-unloaded-item={viewModel.isHardUnloaded}
+    class:unread={viewModel.isUnread}
+    title={viewModel.title}
     draggable="true"
-    on:click={onClickTitle}
-    on:dragstart={onDragStart}
+    on:click={viewModel.onClickTitle}
+    on:dragstart={viewModel.onDragStart}
   >
-    {$title}
+    {viewModel.title}
   </div>
-  {#if $isAudible}
+  {#if viewModel.isAudible}
     <div class="item-tree-web-page-content_audible-icon" />
   {:else}
     <div class="grid-empty-cell" />

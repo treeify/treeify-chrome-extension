@@ -1,9 +1,9 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {is, List} from 'immutable'
   import {get} from 'svelte/store'
   import {assertNonNull, assertNonUndefined} from '../../../Common/Debug/assert'
   import {integer} from '../../../Common/integer'
-  import {ItemId, ItemType} from '../../basicType'
+  import {ItemType} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {
     focusItemTreeBackground,
@@ -13,56 +13,21 @@
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {DomishObject} from '../../Internal/DomishObject'
   import {onCopy, onCut, onPaste} from '../../Internal/importAndExport'
-  import {InnerHtml} from '../../Internal/InnerHtml'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
-  import {State} from '../../Internal/State'
   import {ItemTreeContentView} from './ItemTreeContentView'
-  import ItemTreeNode, {createItemTreeNodeProps} from './ItemTreeNode.svelte'
-  import {ItemTreeNodeProps} from './ItemTreeNodeView'
+  import ItemTreeNode from './ItemTreeNode.svelte'
+  import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
 
-  export function createItemTreeProps() {
-    const state = Internal.instance.state
-    const rootItemPath = List.of(CurrentState.getActivePageId())
-
-    const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
-    // 足跡表示数を計算
-    // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
-    const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.5))
-
-    // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
-    const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
-      return state.items[b].timestamp - state.items[a].timestamp
-    })
-
-    // 各アイテムに足跡順位を対応付け
-    const footprintRankMap = new Map<ItemId, integer>()
-    for (let i = 0; i < footprintCount; i++) {
-      footprintRankMap.set(sorted[i], i)
-    }
-
-    return {
-      rootNodeProps: createItemTreeNodeProps(footprintRankMap, footprintCount, rootItemPath),
-    }
+  type ItemTreeViewModel = {
+    rootNodeViewModel: ItemTreeNodeViewModel
   }
 
-  /**
-   * 全ての子孫と自身のアイテムIDを返す。
-   * ただし（折りたたみなどの理由で）表示されないアイテムはスキップする。
-   */
-  function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
-    yield ItemPath.getItemId(itemPath)
-    for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
-      yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
-    }
-  }
-</script>
-
-<script lang="ts">
-  export let rootNodeProps: ItemTreeNodeProps
+  export let viewModel: ItemTreeViewModel
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -134,8 +99,8 @@
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
-        const innerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-        const characterCount = InnerHtml.countCharacters(innerHtml)
+        const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
+        const characterCount = DomishObject.countCharacters(domishObjects)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
@@ -155,8 +120,8 @@
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
         event.preventDefault()
-        const innerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-        const characterCount = InnerHtml.countCharacters(innerHtml)
+        const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
+        const characterCount = DomishObject.countCharacters(domishObjects)
         External.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
@@ -200,8 +165,8 @@
       }
     } else {
       const targetItemId = ItemPath.getItemId(targetItemPath)
-      const innerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
-      const characterCount = InnerHtml.countCharacters(innerHtml)
+      const domishObjects = get(Internal.instance.state.textItems[targetItemId].domishObjects)
+      const characterCount = DomishObject.countCharacters(domishObjects)
 
       // キャレット位置が末尾以外のときはブラウザの挙動に任せる
       if (
@@ -277,8 +242,10 @@
       assertNonUndefined(originalXCoordinate)
 
       // 上のアイテムの最後の行の文字数を取得
-      const aboveItemInnerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
-      const lines = InnerHtml.toPlainText(aboveItemInnerHtml).split('\n')
+      const aboveItemDomishObjects = get(
+        Internal.instance.state.textItems[aboveItemId].domishObjects
+      )
+      const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
       const lastLine = lines[lines.length - 1]
 
       // 上のアイテムに一旦フォーカスする
@@ -287,7 +254,7 @@
       assertNonNull(aboveItemDomElement)
       aboveItemDomElement.focus()
 
-      const charactersCount = InnerHtml.countCharacters(aboveItemInnerHtml)
+      const charactersCount = DomishObject.countCharacters(aboveItemDomishObjects)
       // キャレット位置を最後の行の右端からスタートし、左にずらしていく
       let i = charactersCount
       for (; charactersCount - lastLine.length <= i; i--) {
@@ -389,8 +356,10 @@
       assertNonUndefined(originalXCoordinate)
 
       // 下のアイテムの最初の行の文字数を取得
-      const belowItemInnerHtml = get(Internal.instance.state.textItems[belowItemId].innerHtml)
-      const firstLine = InnerHtml.toPlainText(belowItemInnerHtml).split('\n')[0]
+      const belowItemDomishObjects = get(
+        Internal.instance.state.textItems[belowItemId].domishObjects
+      )
+      const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split('\n')[0]
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
       // TODO: 最適化の余地あり。二分探索が可能では？
@@ -488,8 +457,8 @@
       if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
         // ターゲットアイテムがテキストアイテムの場合
 
-        const innerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
-        const charactersCount = InnerHtml.countCharacters(innerHtml)
+        const domishObjects = get(Internal.instance.state.textItems[targetItemId].domishObjects)
+        const charactersCount = DomishObject.countCharacters(domishObjects)
         const textItemSelection = getTextItemSelectionFromDom()
         if (textItemSelection?.focusDistance !== charactersCount) {
           return
@@ -530,19 +499,21 @@
           // ターゲットアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const focusedItemInnerHtml = get(
-            Internal.instance.state.textItems[targetItemId].innerHtml
+          const focusedItemDomishObjects = get(
+            Internal.instance.state.textItems[targetItemId].domishObjects
           )
-          const aboveItemInnerHtml = get(Internal.instance.state.textItems[aboveItemId].innerHtml)
+          const aboveItemDomishObjects = get(
+            Internal.instance.state.textItems[aboveItemId].domishObjects
+          )
           // TODO: テキストノード同士が連結されないことが気がかり
-          CurrentState.setTextItemInnerHtml(
+          CurrentState.setTextItemDomishObjects(
             aboveItemId,
-            aboveItemInnerHtml.concat(focusedItemInnerHtml)
+            aboveItemDomishObjects.concat(focusedItemDomishObjects)
           )
 
           // 子リストを連結するため、子を全て弟としてエッジ追加。
           // アンインデントに似ているが元のエッジを削除しない点が異なる。
-          for (const childItemId of targetItem.childItemIds.reverse()) {
+          for (const childItemId of get(targetItem.childItemIds).reverse()) {
             CurrentState.insertLastChildItem(aboveItemId, childItemId)
           }
 
@@ -552,7 +523,7 @@
           // 上のアイテムの元の末尾にキャレットを移動する
           CurrentState.setTargetItemPath(aboveItemPath)
           External.instance.requestSetCaretDistanceAfterRendering(
-            InnerHtml.countCharacters(aboveItemInnerHtml)
+            DomishObject.countCharacters(aboveItemDomishObjects)
           )
 
           event.preventDefault()
@@ -575,8 +546,10 @@
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
 
-      const focusedItemInnerHtml = get(Internal.instance.state.textItems[targetItemId].innerHtml)
-      const characterCount = InnerHtml.countCharacters(focusedItemInnerHtml)
+      const focusedItemDomishObjects = get(
+        Internal.instance.state.textItems[targetItemId].domishObjects
+      )
+      const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
       if (
         selection.focusDistance === characterCount &&
         selection.anchorDistance === characterCount
@@ -596,16 +569,18 @@
           // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
 
           // テキストを連結
-          const belowItemInnerHtml = get(Internal.instance.state.textItems[belowItemId].innerHtml)
+          const belowItemDomishObjects = get(
+            Internal.instance.state.textItems[belowItemId].domishObjects
+          )
           // TODO: テキストノード同士が連結されないことが気がかり
-          CurrentState.setTextItemInnerHtml(
+          CurrentState.setTextItemDomishObjects(
             targetItemId,
-            focusedItemInnerHtml.concat(belowItemInnerHtml)
+            focusedItemDomishObjects.concat(belowItemDomishObjects)
           )
 
           // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
           // アンインデントに似ているが元のエッジを削除しない点が異なる。
-          for (const childItemId of belowItem.childItemIds) {
+          for (const childItemId of get(belowItem.childItemIds)) {
             CurrentState.insertLastChildItem(targetItemId, childItemId)
           }
 
@@ -614,7 +589,7 @@
 
           // 元のキャレット位置を維持する
           External.instance.requestSetCaretDistanceAfterRendering(
-            InnerHtml.countCharacters(focusedItemInnerHtml)
+            DomishObject.countCharacters(focusedItemDomishObjects)
           )
 
           event.preventDefault()
@@ -731,7 +706,7 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode {...rootNodeProps} />
+  <ItemTreeNode viewModel={viewModel.rootNodeViewModel} />
 </main>
 
 <style>

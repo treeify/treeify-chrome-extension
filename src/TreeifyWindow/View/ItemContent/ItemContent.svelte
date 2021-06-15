@@ -1,32 +1,41 @@
-<script context="module" lang="ts">
-  import {ItemId} from '../../basicType'
-  import {Internal} from '../../Internal/Internal'
-
-  export function createItemContentProps(itemId: ItemId) {
-    return {
-      itemId,
-      itemType: Internal.instance.state.items[itemId].itemType,
-    }
-  }
-</script>
-
 <script lang="ts">
   import {ItemType} from '../../basicType'
-  import TextItemContent, {createTextItemContentProps} from './TextItemContent.svelte'
+  import TextItemContent from './TextItemContent.svelte'
+  import {TextItemContentViewModel} from './TextItemContentView'
 
-  export let itemType: ItemType
-  export let itemId: ItemId
+  type ItemContentViewModel = TextItemContentViewModel
+
+  export let viewModel: ItemContentViewModel
 </script>
 
-{#if itemType === ItemType.TEXT}
-  <TextItemContent {...createTextItemContentProps(itemId)} />
-{:else if itemType === ItemType.WEB_PAGE}
-  <!-- TODO: 未実装 -->
-{:else if itemType === ItemType.IMAGE}
-  <!-- TODO: 未実装 -->
-{:else if itemType === ItemType.CODE_BLOCK}
-  <!-- TODO: 未実装 -->
+{#if viewModel.itemType === ItemType.TEXT}
+  <TextItemContent {viewModel} />
 {/if}
 
 <style>
+  :root {
+    /* 左サイドバーの背景色 */
+    --left-sidebar-background-color: hsl(0, 0%, 98%);
+
+    /* 左サイドバーの幅 */
+    --left-sidebar-width: 200px;
+  }
+
+  .left-sidebar {
+    width: var(--left-sidebar-width);
+    height: 100%;
+
+    overflow-y: auto;
+
+    background: var(--left-sidebar-background-color);
+    /* Dynalistを参考にしながら調整した影 */
+    box-shadow: 1.5px 0 3px hsl(0, 0%, 85%);
+  }
+
+  /* フローティング型の左サイドバー */
+  .left-sidebar.floating {
+    position: fixed;
+    /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
+    z-index: 1;
+  }
 </style>

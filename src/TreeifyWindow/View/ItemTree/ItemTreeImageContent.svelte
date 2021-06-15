@@ -1,64 +1,43 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {List} from 'immutable'
-  import {Derived} from 'src/TreeifyWindow/Internal/Derived'
-  import {Readable} from 'svelte/store'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Internal} from '../../Internal/Internal'
+  import {ItemType} from '../../basicType'
   import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
-  
-  export function createItemTreeImageContentProps(itemPath: ItemPath) {
-    const itemId = ItemPath.getItemId(itemPath)
-    const imageItem = Internal.instance.state.imageItems[itemId]
 
-    return {
-      itemPath,
-      labels: Derived.getLabels(itemPath),
-      url: imageItem.url,
-      caption: imageItem.caption,
-      onFocus: (event: FocusEvent) => {
-        doWithErrorCapture(() => {
-          // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
-          if (event.target instanceof Node) {
-            getSelection()?.setPosition(event.target)
-          }
-        })
-      },
-      onClick: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          CurrentState.setTargetItemPath(itemPath)
-          CurrentState.commit()
-        })
-      },
-    }
+  type ItemTreeImageContentViewModel = {
+    itemPath: ItemPath
+    labels: List<string>
+    itemType: ItemType.IMAGE
+    url: string
+    caption: string
+    onFocus: (event: FocusEvent) => void
+    onClick: (event: Event) => void
   }
+
+  export let viewModel: ItemTreeImageContentViewModel
+
+  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
 </script>
 
-<script lang="ts">
-  export let itemPath: ItemPath
-  export let labels: Readable<List<string>> | undefined
-  export let url: string
-  export let caption: string
-  export let onFocus: (event: FocusEvent) => void
-  export let onClick: (event: MouseEvent) => void
-
-  const id = ItemTreeContentView.focusableDomElementId(itemPath)
-</script>
-
-<div class="item-tree-image-content" {id} tabindex="0" on:focus={onFocus} on:click={onClick}>
-  {#if labels !== undefined && !$labels.isEmpty()}
+<div
+  class="item-tree-image-content"
+  {id}
+  tabindex="0"
+  on:focus={viewModel.onFocus}
+  on:click={viewModel.onClick}
+>
+  {#if !viewModel.labels.isEmpty()}
     <div class="item-tree-image-content_labels">
-      {#each $labels.toArray() as label}
-        <Label text={label} />
+      {#each viewModel.labels.toArray() as label}
+        <Label viewModel={{text: label}} />
       {/each}
     </div>
   {/if}
 
   <div class="item-tree-image-content_image-and-caption">
-    <img class="item-tree-image-content_image" src={url} />
-    <div class="item-tree-image-content_caption">{caption}</div>
+    <img class="item-tree-image-content_image" src={viewModel.url} />
+    <div class="item-tree-image-content_caption">{viewModel.caption}</div>
   </div>
 </div>
 

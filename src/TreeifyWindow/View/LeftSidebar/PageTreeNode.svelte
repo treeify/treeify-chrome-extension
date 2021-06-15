@@ -2,16 +2,16 @@
   import Color from 'color'
   import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
-  import {ItemId} from '../../basicType'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import PageTreeBulletAndIndent, {
-    createPageTreeBulletAndIndentProps,
-  } from './PageTreeBulletAndIndent.svelte'
-  import PageTreeContent, {createPageTreeContentProps} from './PageTreeContent.svelte'
+  import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
+  import {PageTreeBulletAndIndentViewModel} from './PageTreeBulletAndIndentView'
+  import PageTreeContent from './PageTreeContent.svelte'
+  import {PageTreeContentViewModel} from './PageTreeContentView'
   import PageTreeNode from './PageTreeNode.svelte'
 
   type PageTreeNodeViewModel = {
-    itemId: ItemId
+    bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
+    contentViewModel: PageTreeContentViewModel
     childNodeViewModels: List<PageTreeNodeViewModel>
     isActivePage: boolean
     isRoot: boolean
@@ -23,16 +23,7 @@
     onDrop: (event: DragEvent) => void
   }
 
-  export let itemId: ItemId
-  export let childNodeViewModels: List<PageTreeNodeViewModel>
-  export let isActivePage: boolean
-  export let isRoot: boolean
-  export let footprintRank: integer | undefined
-  export let footprintCount: integer
-  export let onClickContentArea: () => void
-  export let onClickCloseButton: () => void
-  export let onDragOver: (event: DragEvent) => void
-  export let onDrop: (event: DragEvent) => void
+  export let viewModel: PageTreeNodeViewModel
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,
@@ -52,38 +43,36 @@
     return strongestColor.mix(weakestColor, ratio)
   }
 
-  const footprintColor = calculateFootprintColor(footprintRank, footprintCount)
+  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
   const footprintLayerStyle =
     footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
 </script>
 
 <div class="page-tree-node">
-  {#if isRoot}
+  {#if viewModel.isRoot}
     <div class="grid-empty-cell" />
   {:else}
     <div class="page-tree-node_bullet-and-indent-area">
-      <PageTreeBulletAndIndent
-        {...createPageTreeBulletAndIndentProps(!childNodeViewModels.isEmpty())}
-      />
+      <PageTreeBulletAndIndent viewModel={viewModel.bulletAndIndentViewModel} />
     </div>
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
-      <div class="page-tree-node_body-area" class:active-page={isActivePage}>
+      <div class="page-tree-node_body-area" class:active-page={viewModel.isActivePage}>
         <div
           class="page-tree-node_content-area"
-          on:click={onClickContentArea}
-          on:dragover={onDragOver}
-          on:drop={onDrop}
+          on:click={viewModel.onClickContentArea}
+          on:dragover={viewModel.onDragOver}
+          on:drop={viewModel.onDrop}
         >
-          <PageTreeContent {...createPageTreeContentProps(itemId)} />
+          <PageTreeContent viewModel={viewModel.contentViewModel} />
         </div>
-        <div class="page-tree-node_close-button" on:click={onClickCloseButton} />
+        <div class="page-tree-node_close-button" on:click={viewModel.onClickCloseButton} />
       </div>
     </div>
     <div class="page-tree-node_children-area">
-      {#each childNodeViewModels.toArray() as childNodeViewModel}
-        <PageTreeNode {...childNodeViewModel} />
+      {#each viewModel.childNodeViewModels.toArray() as childNodeViewModel}
+        <PageTreeNode viewModel={childNodeViewModel} />
       {/each}
     </div>
   </div>

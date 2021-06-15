@@ -1,12 +1,25 @@
+import {is, List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {get} from 'svelte/store'
+
+/** ターゲットアイテムパスを返す */
+export function getTargetItemPath(): ItemPath {
+  return Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath
+}
 
 /** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
 export function setTargetItemPath(itemPath: ItemPath) {
   setTargetItemPathOnly(itemPath)
   setAnchorItemPath(itemPath)
+}
+
+/** ターゲットアイテムパスを返す */
+export function getAnchorItemPath(): ItemPath {
+  return Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath
 }
 
 /** アンカーアイテムパスを上書きする */
@@ -21,6 +34,30 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
   Internal.instance.state.pages[activePageId].targetItemPath = itemPath
   Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
+}
+
+/**
+ * 複数選択されているアイテムのリストを返す。
+ * 複数選択されていなければターゲットアイテムパスだけの単一要素リストを返す。
+ * 並び順は元の兄弟リスト内での並び順と同じ。
+ */
+export function getSelectedItemPaths(): List<ItemPath> {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const anchorItemPath = CurrentState.getAnchorItemPath()
+  if (is(targetItemPath, anchorItemPath)) {
+    // そもそも複数範囲されていない場合
+    return List.of(targetItemPath)
+  }
+
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  assertNonUndefined(parentItemId)
+  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
+  const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
+  const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
+  const upperIndex = Math.max(targetItemIndex, anchorItemIndex)
+  const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
+  return sliced.map((itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!)
 }
 
 /**
@@ -98,7 +135,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   if (parentItemPath === undefined) return undefined
 
   const parentItemId = ItemPath.getItemId(parentItemPath)
-  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が長男の場合
@@ -116,7 +153,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   if (parentItemPath === undefined) return undefined
 
   const parentItemId = ItemPath.getItemId(parentItemPath)
-  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が末弟の場合
@@ -141,7 +178,7 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   }
 
   const itemId = ItemPath.getItemId(itemPath)
-  const childItemIds = Internal.instance.state.items[itemId].childItemIds
+  const childItemIds = get(Internal.instance.state.items[itemId].childItemIds)
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }

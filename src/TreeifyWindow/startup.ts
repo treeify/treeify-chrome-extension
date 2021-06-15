@@ -16,7 +16,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {get} from 'src/TreeifyWindow/svelte'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import UAParser from 'ua-parser-js'
 
@@ -94,12 +93,12 @@ function onMouseMove(event: MouseEvent) {
     }
 
     // マウスの位置と動きに応じて左サイドバーを開閉する
-    if (!get(External.instance.shouldFloatingLeftSidebarShown)) {
+    if (!External.instance.shouldFloatingLeftSidebarShown) {
       // マウスポインターが画面左端に到達した時。
       // Treeifyウィンドウの左端が画面左端に近くないと発動しない点に注意。
       // 逆に言うと、Treeifyウィンドウが画面左端にぴったりくっついていなくても割とルーズに発動してくれる。
       if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
-        External.instance.shouldFloatingLeftSidebarShown.set(true)
+        External.instance.shouldFloatingLeftSidebarShown = true
         CurrentState.commit()
       }
     } else {
@@ -108,7 +107,7 @@ function onMouseMove(event: MouseEvent) {
       if (event.x > leftSidebar.getBoundingClientRect().right) {
         // mouseleaveイベントを使わない理由は、Treeifyウィンドウが画面左端にぴったりくっついていない状況で、
         // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
-        External.instance.shouldFloatingLeftSidebarShown.set(false)
+        External.instance.shouldFloatingLeftSidebarShown = false
         CurrentState.commit()
       }
     }
@@ -117,6 +116,9 @@ function onMouseMove(event: MouseEvent) {
 
 function onResize() {
   doAsyncWithErrorCapture(async () => {
+    // 左サイドバーの表示形態を変更する必要がある場合のために再描画する
+    CurrentState.commit()
+
     if (await TreeifyWindow.isDualWindowMode()) {
       TreeifyWindow.writeNarrowWidth(innerWidth)
     }

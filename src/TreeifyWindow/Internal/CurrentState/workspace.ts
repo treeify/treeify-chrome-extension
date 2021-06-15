@@ -4,11 +4,12 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
+import {get} from 'svelte/store'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 
-export function getCurrentWorkspaceId(): WorkspaceId {
-  // TODO: 最適化の余地あり（キャッシュ導入）
+/** このデバイスにおける現在のワークスペースのIDを返す */
+export function getCurrentWorkspaceId(): Timestamp {
   const savedCurrentWorkspaceId = localStorage.getItem(CURRENT_WORKSPACE_ID_KEY)
   if (savedCurrentWorkspaceId !== null) {
     const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
@@ -20,11 +21,12 @@ export function getCurrentWorkspaceId(): WorkspaceId {
 
   // 既存のワークスペースを適当に選んでIDを返す。
   // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-  const currentWorkspaceId = parseInt(Object.keys(Internal.instance.state.workspaces)[0])
+  const currentWorkspaceId = getWorkspaceIds().first() as WorkspaceId
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
   return currentWorkspaceId
 }
 
+/** このデバイスにおける現在のワークスペースのIDを設定する */
 export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
 }
@@ -72,7 +74,7 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 
 /** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
 export function getFilteredMountedPageIds(): List<ItemId> {
-  return Internal.instance.state.mountedPageIds.filter((pageId) => {
+  return get(Internal.instance.state.mountedPageIds).filter((pageId) => {
     const excludedItemIds = CurrentState.getExcludedItemIds()
 
     // ページが除外アイテムそのものの場合

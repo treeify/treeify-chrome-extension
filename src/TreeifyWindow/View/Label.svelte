@@ -1,8 +1,12 @@
 <script lang="ts">
-  export let text: string
+  type LabelViewModel = {
+    text: string
+  }
+
+  export let viewModel: LabelViewModel
 </script>
 
-<span class="label">{text}</span>
+<span class="label">{viewModel.text}</span>
 
 <style>
   .label {

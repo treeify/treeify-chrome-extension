@@ -1,5 +1,7 @@
 <script lang="ts">
   import {createFocusTrap, FocusTrap} from 'focus-trap'
+  import {onDestroy, onMount} from 'svelte'
+  import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {InputId} from '../../Internal/InputId'
 
@@ -7,25 +9,33 @@
 
   export let onCloseDialog: () => void
 
-  function setupFocusTrap(domElement: HTMLElement) {
-    return doWithErrorCapture(() => {
+  let focusTrap: FocusTrap | undefined
+
+  // focusTrapのターゲットとして指定するためにDOM要素が必要
+  let domElement: HTMLElement | undefined
+
+  onMount(() => {
+    doWithErrorCapture(() => {
       // フォーカストラップを作る
-      const focusTrap: FocusTrap = createFocusTrap(domElement, {
+      assert(focusTrap === undefined)
+      assertNonUndefined(domElement)
+      focusTrap = createFocusTrap(domElement, {
         returnFocusOnDeactivate: true,
         escapeDeactivates: false,
       })
       focusTrap.activate()
+    })
+  })
 
-      return {
-        destroy: () => {
-          doWithErrorCapture(() => {
-            // フォーカストラップを消す
-            focusTrap.deactivate()
-          })
-        },
+  onDestroy(() => {
+    doWithErrorCapture(() => {
+      // フォーカストラップを消す
+      if (focusTrap !== undefined) {
+        focusTrap.deactivate()
+        focusTrap = undefined
       }
     })
-  }
+  })
 
   const onClickBackdrop = (event: MouseEvent) => {
     doWithErrorCapture(() => {
@@ -50,7 +60,7 @@
   }
 </script>
 
-<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap>
+<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} bind:this={domElement}>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">{title}</div>
     <slot />

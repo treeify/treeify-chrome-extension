@@ -1,34 +1,18 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Internal} from '../../Internal/Internal'
-  import {ItemPath} from '../../Internal/ItemPath'
-  import {State} from '../../Internal/State'
+  import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
   import CommonDialog from './CommonDialog.svelte'
 
-  export function createDefaultWindowModeSettingDialogProps() {
-    const targetItemPath = CurrentState.getTargetItemPath()
-    const targetItemId = ItemPath.getItemId(targetItemPath)
-    const targetPageId = CurrentState.isPage(targetItemId)
-      ? targetItemId
-      : ItemPath.getRootItemId(targetItemPath)
-
-    return {
-      initialDefaultWindowMode: Internal.instance.state.pages[targetPageId].defaultWindowMode,
-      onClickCancelButton: () => {
-        // ダイアログを閉じる
-        CurrentState.setDefaultWindowModeSettingDialog(null)
-        CurrentState.commit()
-      },
-    }
+  type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
+    initialDefaultWindowMode: DefaultWindowMode
+    onClickFinishButton: () => void
+    onClickCancelButton: () => void
   }
-</script>
 
-<script lang="ts">
-  export let initialDefaultWindowMode: State.DefaultWindowMode
-  export let onClickCancelButton: () => void
+  export let viewModel: DefaultWindowModeSettingDialogViewModel
 
-  let selectedDefaultWindowMode = initialDefaultWindowMode
+  let selectedDefaultWindowMode = viewModel.initialDefaultWindowMode
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
@@ -36,34 +20,15 @@
     CurrentState.commit()
   }
 
-  const onClick = (event: Event) => {
+  const onClick = () => {
     doWithErrorCapture(() => {
-      if (event.target instanceof HTMLElement) {
-        const inputElement = event.target.querySelector("input[type='radio']")
-        if (inputElement instanceof HTMLInputElement) {
-          // inputElement.checked = true ではbind:groupをすり抜けてしまう模様
-          inputElement.click()
-        }
-      }
+      throw new Error('TODO: ラジオボタンをチェックする処理が未移植')
+
+      // const selector = `input[type='radio'][name='defaultWindowMode'][value='${value}']`
+      // const inputElement = document.querySelector<HTMLInputElement>(selector)
+      // assertNonNull(inputElement)
+      // inputElement.checked = true
     })
-  }
-
-  const onClickFinishButton = () => {
-    const targetItemPath = CurrentState.getTargetItemPath()
-    const targetItemId = ItemPath.getItemId(targetItemPath)
-    const targetPageId = CurrentState.isPage(targetItemId)
-      ? targetItemId
-      : ItemPath.getRootItemId(targetItemPath)
-
-    // デフォルトウィンドウモードを更新
-    CurrentState.setDefaultWindowMode(targetPageId, selectedDefaultWindowMode)
-
-    // タイムスタンプを更新
-    CurrentState.updateItemTimestamp(targetPageId)
-
-    // ダイアログを閉じる
-    CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
   }
 </script>
 
@@ -92,8 +57,8 @@
       </div>
     </form>
     <div class="default-window-mode-setting-dialog_button-area">
-      <button on:click={onClickFinishButton}>完了</button>
-      <button on:click={onClickCancelButton}>キャンセル</button>
+      <button on:click={viewModel.onClickFinishButton}>完了</button>
+      <button on:click={viewModel.onClickCancelButton}>キャンセル</button>
     </div>
   </div>
 </CommonDialog>
