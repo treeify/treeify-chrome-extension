@@ -43,6 +43,9 @@ export class Rerenderer {
 
   /** 再描画を実行する */
   rerender() {
+    // Treeifyウィンドウのタイトルを更新する
+    document.title = CurrentState.deriveTreeifyWindowTitle()
+
     this.#rerenderingPulse.set({})
 
     // DOM更新完了後に実行される
@@ -72,9 +75,6 @@ export class Rerenderer {
       })
 
       this.pendingTextItemSelection = undefined
-
-      // Treeifyウィンドウのタイトルを更新する
-      document.title = CurrentState.deriveTreeifyWindowTitle()
     })
   }
 
