@@ -135,7 +135,7 @@ export class DataFolder {
         }
       }
       if (Object.keys(chunkPack).length > 0) {
-        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer, 2)}
+        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer)}
       } else {
         // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
         return {fileName, undefined}
@@ -210,13 +210,10 @@ export class DataFolder {
    * 単純に全ファイルをコピーするだけでなく、メタデータファイルを自デバイス視点で更新する。
    */
   async copyFrom(deviceId: DeviceId) {
-    // 自デバイスフォルダ内の全ファイルとフォルダを削除
-    // TODO: 並列化できないか？あるいはフォルダをまるごと削除して空のフォルダを作り直すのは？
-    const ownDeviceFolderPath = DataFolder.getDeviceFolderPath()
-    const ownDeviceFolder = await this.getFolderHandle(ownDeviceFolderPath)
-    for await (const entryName of ownDeviceFolder.keys()) {
-      await ownDeviceFolder.removeEntry(entryName, {recursive: true})
-    }
+    // 自デバイスフォルダをクリア（全ファイルとフォルダを削除）
+    const devicesFolder = await this.getFolderHandle(DataFolder.devicesFolderPath)
+    await devicesFolder.removeEntry(DeviceId.get(), {recursive: true})
+    await devicesFolder.getDirectoryHandle(DeviceId.get(), {create: true})
 
     // 各ファイルを自デバイスフォルダにコピーする準備
     const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
