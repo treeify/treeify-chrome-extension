@@ -1,23 +1,14 @@
 import {List} from 'immutable'
 import md5 from 'md5'
 import {assertNonNull} from 'src/Common/Debug/assert'
-import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
-import {
-  focusItemTreeBackground,
-  setDomSelection,
-  TextItemSelection,
-} from 'src/TreeifyWindow/External/domTextSelection'
 import {TabItemCorrespondence} from 'src/TreeifyWindow/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
 import Root from '../View/Root.svelte'
 
 /** TODO: コメント */
@@ -42,9 +33,6 @@ export class External {
 
   /** 独自クリップボード */
   treeifyClipboard: TreeifyClipboard | undefined
-
-  // 次の描画が完了した際に設定すべきテキスト選択範囲
-  private pendingTextItemSelection: TextItemSelection | undefined
 
   /**
    * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
@@ -78,56 +66,10 @@ export class External {
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
     if (spaRoot instanceof HTMLElement) {
-      spaRoot.innerHTML = ''
       new Root({
         target: spaRoot,
-        props: {
-          viewModel: createRootViewModel(state),
-        },
       })
     }
-
-    // アイテムツリーのスクロール位置を復元
-    const itemTree = document.querySelector('.item-tree')
-    const scrollPosition = External.instance.scrollPositions.get(CurrentState.getActivePageId())
-    if (scrollPosition !== undefined && itemTree instanceof HTMLElement) {
-      itemTree.scrollTop = scrollPosition
-    }
-
-    doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-      if (CurrentState.getSelectedItemPaths().size === 1) {
-        const targetItemPath = CurrentState.getTargetItemPath()
-        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
-        const focusableElement = document.getElementById(targetElementId)
-        focusableElement?.focus()
-      } else {
-        // 複数選択の場合
-        focusItemTreeBackground()
-      }
-
-      if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
-        // キャレット位置、テキスト選択範囲を設定する
-        setDomSelection(document.activeElement, this.pendingTextItemSelection)
-      }
-    })
-
-    this.pendingTextItemSelection = undefined
-
-    // Treeifyウィンドウのタイトルを更新する
-    document.title = CurrentState.deriveTreeifyWindowTitle()
-  }
-
-  /**
-   * 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する。
-   * undefinedを指定されても何もしない。
-   */
-  requestSelectAfterRendering(textItemSelection: TextItemSelection | undefined) {
-    this.pendingTextItemSelection = textItemSelection
-  }
-
-  /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
-  requestSetCaretDistanceAfterRendering(distance: integer) {
-    this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
   }
 
   /** データフォルダへの差分書き込みの対象箇所を伝える */

@@ -1,5 +1,5 @@
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {External} from 'src/TreeifyWindow/External/External'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 /** 太字のトグルコマンド */
 export function toggleBold() {
@@ -33,7 +33,7 @@ function execTextEditCommand(commandName: string) {
     document.execCommand(commandName)
 
     // 元のキャレット位置に戻す
-    External.instance.requestSelectAfterRendering(textItemSelection)
+    Rerenderer.instance.requestSelectAfterRendering(textItemSelection)
   } else {
     document.execCommand(commandName)
   }

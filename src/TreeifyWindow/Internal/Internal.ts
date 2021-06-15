@@ -3,6 +3,7 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {writable} from 'svelte/store'
 
@@ -46,6 +47,8 @@ export class Internal {
 
   /** Stateへの変更を確定し、stateChangeListenerに通知する */
   commit() {
+    Rerenderer.instance.rerender()
+
     for (const stateChangeListener of this.stateChangeListeners) {
       stateChangeListener(this.state, this.mutatedPropertyPaths)
     }
