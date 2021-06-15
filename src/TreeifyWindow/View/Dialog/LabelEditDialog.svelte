@@ -1,6 +1,6 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {assertNonNull} from '../../../Common/Debug/assert'
+  import {assert, assertNonNull} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
@@ -35,14 +35,25 @@
     })
   }
 
-  const onClickDeleteButton = () => {
+  const onClickDeleteButton = (event: Event) => {
     doWithErrorCapture(() => {
-      throw new Error('TODO: 未移植。indexの取得方法を検討中')
-      // const values = getAllLabelInputValues()
-      // CurrentState.setLabelEditDialog({
-      //   labels: values.size > 1 ? values.remove(index) : List.of(''),
-      // })
-      // CurrentState.commit()
+      if (event.target instanceof HTMLElement) {
+      } else return
+
+      const elementNodeListOf = document.querySelectorAll('.label-edit-dialog_delete-button')
+      const index = List(elementNodeListOf).indexOf(event.target)
+      assert(index !== -1)
+      assert(viewModel.labels.size > 0)
+      if (viewModel.labels.size === 1) {
+        // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
+        CurrentState.setLabelEditDialog({labels: List.of('')})
+        CurrentState.commit()
+      } else {
+        // 該当する入力欄を削除する
+        const inputValues = getAllLabelInputValues()
+        CurrentState.setLabelEditDialog({labels: inputValues.remove(index)})
+        CurrentState.commit()
+      }
     })
   }
 

@@ -25,12 +25,13 @@
 </script>
 
 <CommonDialog title="ワークスペース" onCloseDialog={closeDialog}>
-  <div class="workspace-dialog_content" tabindex="0" />
-  {#each viewModel.workspaces.toArray() as workspace}
-    <WorkspaceDialogRow {workspace} />
-  {/each}
-  <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton} />
-  <button class="workspace-dialog_close-button" on:click={closeDialog}>閉じる</button>
+  <div class="workspace-dialog_content" tabindex="0">
+    {#each viewModel.workspaces.toArray() as workspace}
+      <WorkspaceDialogRow {workspace} />
+    {/each}
+    <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton} />
+    <button class="workspace-dialog_close-button" on:click={closeDialog}>閉じる</button>
+  </div>
 </CommonDialog>
 
 <style>
