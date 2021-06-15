@@ -51,21 +51,7 @@ export function createItemTreeTextContentViewModel(
           CurrentState.setTextItemDomishObjects(itemId, domishObjects)
           Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
           CurrentState.updateItemTimestamp(itemId)
-
-          // 本当はCurrentState.commit()を呼んでリアクティブに画面を更新したいのだが、
-          // 呼ぶと解決の難しい不具合が起こるので呼んでいない。
-          //
-          // 【不具合の詳細】
-          // 具体的には、IMEで文字を入力してからTabキーやSpaceキーで変換モードにした後、
-          // Enterキーを押さずに後続の文字を打ち始めると、打鍵が1回分なかったことになる。
-          // 例えばAキー、Iキー、Spaceキー、Gキー、Aキーという順に打鍵したとすると、
-          // 「愛が」になるのが正しいが、Gキーの打鍵がなかったことになり「愛あ」になる。
-          //
-          // 【CurrentState.commit()を呼ばないことによる悪影響】
-          // 編集中のテキストアイテムがページツリー内に表示されていたり、
-          // トランスクルードされてアイテムツリー内に表示されている場合、
-          // IME入力を完了してもそれらのViewに最新のテキストが反映されない。
-          // Viewに反映されないだけでModel(State)には反映されているので、次回の描画時に正しい表示になる。
+          Rerenderer.instance.rerender()
         }
       })
     },
