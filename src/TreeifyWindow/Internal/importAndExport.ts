@@ -9,7 +9,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
@@ -358,11 +357,10 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
   switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
-      const markedupText = MarkedupText.from(textItem.domishObjects)
       baseAttributes.type = 'text'
-      baseAttributes.text = markedupText.text
-      if (!markedupText.styles.isEmpty()) {
-        baseAttributes.styles = JSON.stringify(markedupText.styles.toArray())
+      baseAttributes.text = DomishObject.toPlainText(textItem.domishObjects)
+      if (!DomishObject.isPlainText(textItem.domishObjects)) {
+        baseAttributes.html = DomishObject.toHtml(textItem.domishObjects)
       }
       break
     case ItemType.WEB_PAGE:
@@ -584,7 +582,7 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
     case 'text':
     default:
       const textItemId = CurrentState.createTextItem()
-      // TODO: スタイル情報を取り込む
+      // TODO: html属性があればそちらを取り込む
       const domishObject: DomishObject.TextNode = {
         type: 'text',
         textContent: attributes.text,

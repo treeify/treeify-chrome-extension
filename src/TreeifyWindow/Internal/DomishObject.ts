@@ -237,4 +237,26 @@ export namespace DomishObject {
       }
     }
   }
+
+  /**
+   * プレーンテキストかどうかを判定する。
+   * 改行はプレーンテキストとして扱う。
+   */
+  export function isPlainText(domishObjects: List<DomishObject>): boolean {
+    for (const domishObject of domishObjects) {
+      switch (domishObject.type) {
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          return false
+        case 'br':
+        case 'text':
+          break
+        default:
+          assertNeverType(domishObject)
+      }
+    }
+    return true
+  }
 }
