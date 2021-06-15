@@ -1,4 +1,3 @@
-import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {
   focusItemTreeBackground,
@@ -57,22 +56,21 @@ export class Rerenderer {
         itemTree.scrollTop = scrollPosition
       }
 
-      doWithTimeMeasuring('フォーカスとキャレットの更新', () => {
-        if (CurrentState.getSelectedItemPaths().size === 1) {
-          const targetItemPath = CurrentState.getTargetItemPath()
-          const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
-          const focusableElement = document.getElementById(targetElementId)
-          focusableElement?.focus()
-        } else {
-          // 複数選択の場合
-          focusItemTreeBackground()
-        }
+      // フォーカスを設定する
+      if (CurrentState.getSelectedItemPaths().size === 1) {
+        const targetItemPath = CurrentState.getTargetItemPath()
+        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+        const focusableElement = document.getElementById(targetElementId)
+        focusableElement?.focus()
+      } else {
+        // 複数選択の場合
+        focusItemTreeBackground()
+      }
 
-        if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
-          // キャレット位置、テキスト選択範囲を設定する
-          setDomSelection(document.activeElement, this.pendingTextItemSelection)
-        }
-      })
+      if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
+        // キャレット位置、テキスト選択範囲を設定する
+        setDomSelection(document.activeElement, this.pendingTextItemSelection)
+      }
 
       this.pendingTextItemSelection = undefined
     })

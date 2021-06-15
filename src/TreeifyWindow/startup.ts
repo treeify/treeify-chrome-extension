@@ -1,5 +1,4 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
-import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
@@ -73,10 +72,7 @@ export async function cleanup() {
 }
 
 function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
-  doWithTimeMeasuring(
-    'External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)',
-    () => External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
-  )
+  External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
 }
 
 function onMouseMove(event: MouseEvent) {
