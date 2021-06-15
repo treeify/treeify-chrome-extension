@@ -3,6 +3,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type WebPageItemTitleSettingDialogViewModel = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
@@ -35,12 +36,12 @@ export function createWebPageItemTitleSettingDialogViewModel(
           }
           // タイトル設定ダイアログを閉じる
           CurrentState.setWebPageItemTitleSettingDialog(null)
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
         }
 
         if (InputId.fromKeyboardEvent(event) === '0000Escape') {
           CurrentState.setWebPageItemTitleSettingDialog(null)
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
         }
       })
     },

@@ -3,7 +3,6 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 import {writable} from 'svelte/store'
 
@@ -40,11 +39,6 @@ export class Internal {
   /** シングルトンインスタンスを破棄する */
   static cleanup() {
     this._instance = undefined
-  }
-
-  /** Stateへの変更を確定し、stateChangeListenerに通知する */
-  commit() {
-    Rerenderer.instance.rerender()
   }
 
   /** State内の書き換えた箇所を伝える */

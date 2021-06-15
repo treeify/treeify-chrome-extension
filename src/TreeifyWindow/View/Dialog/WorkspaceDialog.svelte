@@ -4,6 +4,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Workspace} from '../../Internal/State'
+  import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
 
@@ -19,7 +20,7 @@
   const closeDialog = () => {
     doWithErrorCapture(() => {
       CurrentState.setWorkspaceDialog(null)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 </script>

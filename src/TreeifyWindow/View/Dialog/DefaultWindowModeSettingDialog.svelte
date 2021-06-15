@@ -3,6 +3,7 @@
   import {CurrentState} from '../../Internal/CurrentState'
   import {ItemPath} from '../../Internal/ItemPath'
   import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
+  import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
 
   type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
@@ -17,7 +18,7 @@
   const onCloseDialog = () => {
     // ダイアログを閉じる
     CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 
   const onClick = (event: Event) => {
@@ -47,7 +48,7 @@
 
     // ダイアログを閉じる
     CurrentState.setDefaultWindowModeSettingDialog(null)
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 </script>
 

@@ -5,6 +5,7 @@ import {
   DefaultWindowModeSettingDialog,
   State,
 } from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
   initialDefaultWindowMode: DefaultWindowMode
@@ -28,7 +29,7 @@ export function createDefaultWindowModeSettingDialogViewModel(
     onClickCancelButton: () => {
       // ダイアログを閉じる
       CurrentState.setDefaultWindowModeSettingDialog(null)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     },
   }
 }

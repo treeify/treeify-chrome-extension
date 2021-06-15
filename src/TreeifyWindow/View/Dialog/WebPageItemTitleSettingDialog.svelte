@@ -2,13 +2,14 @@
   import {assert} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Rerenderer} from '../../Rerenderer'
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
         CurrentState.setWebPageItemTitleSettingDialog(null)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     })
   }

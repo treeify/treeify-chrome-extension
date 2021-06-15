@@ -39,7 +39,7 @@ export function createItemTreeTextContentViewModel(
           CurrentState.setTextItemDomishObjects(itemId, domishObjects)
 
           CurrentState.updateItemTimestamp(itemId)
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
         }
       })
     },
@@ -76,7 +76,7 @@ export function createItemTreeTextContentViewModel(
         // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
         Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       })
     },
   }

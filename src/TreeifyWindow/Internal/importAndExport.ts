@@ -12,6 +12,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {MarkedupText} from 'src/TreeifyWindow/Internal/MarkedupText'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {get} from 'svelte/store'
 import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
@@ -65,7 +66,7 @@ export function onCut(event: ClipboardEvent) {
       )
 
       NullaryCommand.deleteItem()
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     }
   })
 }
@@ -94,7 +95,7 @@ export function onPaste(event: ClipboardEvent) {
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
 
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
         return
       } else {
         External.instance.treeifyClipboard = undefined
@@ -107,7 +108,7 @@ export function onPaste(event: ClipboardEvent) {
       for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
         CurrentState.insertBelowItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
       }
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
       return
     }
 
@@ -123,7 +124,7 @@ export function onPaste(event: ClipboardEvent) {
         // TODO: Gyazoの画像はpngとは限らない
         CurrentState.setImageItemUrl(newItemId, text + '.png')
         CurrentState.insertBelowItem(targetItemPath, newItemId)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       } else {
         document.execCommand('insertText', false, text)
       }
@@ -197,7 +198,7 @@ export function pasteMultilineText(text: string) {
       for (const rootItemId of rootItemIds.reverse()) {
         CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), rootItemId)
       }
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
       return
     }
   }
@@ -206,7 +207,7 @@ export function pasteMultilineText(text: string) {
   for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
     CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), itemId)
   }
-  CurrentState.commit()
+  Rerenderer.instance.rerender()
 }
 
 // 指定されたインデント単位のインデント形式テキストかどうか判定する。

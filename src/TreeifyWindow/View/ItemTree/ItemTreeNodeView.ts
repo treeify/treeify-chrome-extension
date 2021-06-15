@@ -11,6 +11,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
   createItemTreeContentViewModel,
   ItemTreeContentView,
@@ -85,7 +86,7 @@ export function createItemTreeNodeViewModel(
           event.preventDefault()
           CurrentState.setTargetItemPath(itemPath)
           NullaryCommand.deleteItem()
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
         }
       })
     },
@@ -101,7 +102,7 @@ export function createItemTreeNodeViewModel(
             Command.execute(command)
           }
         }
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       })
     },
     onDragStart: (event) => {
@@ -120,7 +121,7 @@ export function createItemTreeNodeViewModel(
     onClickHiddenTabsCount: (event: MouseEvent) => {
       CurrentState.setTargetItemPath(itemPath)
       NullaryCommand.hardUnloadSubtree()
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     },
   }
 }

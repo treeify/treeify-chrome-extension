@@ -1,6 +1,7 @@
 <script lang="ts">
   import {List} from 'immutable'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {ItemContentViewModel} from '../ItemContent/ItemContentView'
   import CommonDialog from './CommonDialog.svelte'
@@ -14,7 +15,7 @@
   const closeDialog = () => {
     // ダイアログを閉じる
     CurrentState.setOtherParentsDialog(null)
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 </script>
 
