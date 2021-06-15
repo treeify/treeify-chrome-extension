@@ -19,6 +19,7 @@
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {Rerenderer} from '../../Rerenderer'
   import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
   import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
@@ -101,7 +102,7 @@
         event.preventDefault()
         const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
         const characterCount = DomishObject.countCharacters(domishObjects)
-        External.instance.requestSetCaretDistanceAfterRendering(characterCount)
+        Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
       } else {
@@ -122,7 +123,7 @@
         event.preventDefault()
         const domishObjects = get(Internal.instance.state.textItems[aboveItemId].domishObjects)
         const characterCount = DomishObject.countCharacters(domishObjects)
-        External.instance.requestSetCaretDistanceAfterRendering(characterCount)
+        Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
         CurrentState.commit()
       } else {
@@ -154,7 +155,7 @@
       if (belowItemType === ItemType.TEXT) {
         // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
         event.preventDefault()
-        External.instance.requestSetCaretDistanceAfterRendering(0)
+        Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
         CurrentState.setTargetItemPath(belowItemPath)
         CurrentState.commit()
       } else {
@@ -180,7 +181,7 @@
       if (belowItemType === ItemType.TEXT) {
         // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
         event.preventDefault()
-        External.instance.requestSetCaretDistanceAfterRendering(0)
+        Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
         CurrentState.setTargetItemPath(belowItemPath)
         CurrentState.commit()
       } else {
@@ -207,7 +208,7 @@
       event.preventDefault()
 
       CurrentState.setTargetItemPath(aboveItemPath)
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
       CurrentState.commit()
       return
     }
@@ -262,7 +263,7 @@
         const caretXCoordinate = getCaretXCoordinate()!
         if (caretXCoordinate === originalXCoordinate) {
           CurrentState.setTargetItemPath(aboveItemPath)
-          External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
           CurrentState.commit()
           return
         }
@@ -273,7 +274,7 @@
       // もしi < 0なら既にsetCaretPosition(0)が実行済みなので、このままreturnしていい
       if (i < 0) {
         CurrentState.setTargetItemPath(aboveItemPath)
-        External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
         CurrentState.commit()
         return
       }
@@ -292,7 +293,7 @@
     }
 
     CurrentState.setTargetItemPath(aboveItemPath)
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
     CurrentState.commit()
   }
 
@@ -311,7 +312,7 @@
       event.preventDefault()
 
       CurrentState.setTargetItemPath(belowItemPath)
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
       CurrentState.commit()
       return
     }
@@ -388,7 +389,7 @@
       }
     }
     CurrentState.setTargetItemPath(belowItemPath)
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
     CurrentState.commit()
   }
 
@@ -522,7 +523,7 @@
 
           // 上のアイテムの元の末尾にキャレットを移動する
           CurrentState.setTargetItemPath(aboveItemPath)
-          External.instance.requestSetCaretDistanceAfterRendering(
+          Rerenderer.instance.requestSetCaretDistanceAfterRendering(
             DomishObject.countCharacters(aboveItemDomishObjects)
           )
 
@@ -588,7 +589,7 @@
           CurrentState.deleteItem(belowItemId)
 
           // 元のキャレット位置を維持する
-          External.instance.requestSetCaretDistanceAfterRendering(
+          Rerenderer.instance.requestSetCaretDistanceAfterRendering(
             DomishObject.countCharacters(focusedItemDomishObjects)
           )
 

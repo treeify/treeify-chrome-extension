@@ -1,11 +1,11 @@
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {get} from 'svelte/store'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
@@ -51,7 +51,7 @@ export function indentItem() {
     CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
 
     // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -91,7 +91,7 @@ export function unindentItem() {
     CurrentState.setTargetItemPath(siblingItemPath)
 
     // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -145,7 +145,7 @@ export function moveItemUpward() {
   CurrentState.setAnchorItemPath(newAnchorItemPath)
 
   // キャレット位置、テキスト選択範囲を維持する
-  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 }
 
 /**
@@ -176,7 +176,7 @@ export function moveItemDownward() {
   }
 
   // キャレット位置、テキスト選択範囲を維持する
-  External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
   if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下のアイテムが子を表示していない場合
@@ -232,7 +232,7 @@ export function moveItemToPrevSibling() {
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
 
     // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     moveItemUpward()
   }
@@ -263,7 +263,7 @@ export function moveItemToNextSibling() {
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
 
     // キャレット位置、テキスト選択範囲を維持する
-    External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
     moveItemDownward()
   }
@@ -305,7 +305,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
       return
     }
 
@@ -318,7 +318,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
 
@@ -337,7 +337,7 @@ export function enterKeyDefault() {
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     } else {
       // キャレット位置が後半なら
 
@@ -357,7 +357,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     }
   } else {
     // ターゲットアイテムがテキストアイテム以外の場合
@@ -524,7 +524,7 @@ export function toggleGrayedOut() {
     CurrentState.setTargetItemPath(firstFollowingItemPath)
     const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
     if (Internal.instance.state.items[firstFollowingItemId].itemType === ItemType.TEXT) {
-      External.instance.requestSetCaretDistanceAfterRendering(0)
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     }
   }
 }

@@ -2,11 +2,11 @@ import {List} from 'immutable'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
-import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {get} from 'svelte/store'
 
 export type ItemTreeTextContentViewModel = {
@@ -32,7 +32,7 @@ export function createItemTreeTextContentViewModel(
     onInput: (event) => {
       doWithErrorCapture(() => {
         if (!event.isComposing && event.target instanceof Node) {
-          External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
@@ -49,7 +49,7 @@ export function createItemTreeTextContentViewModel(
           // contenteditableな要素のinnerHTMLをModelに反映する
           const domishObjects = DomishObject.fromChildren(event.target)
           CurrentState.setTextItemDomishObjects(itemId, domishObjects)
-          External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
           CurrentState.updateItemTimestamp(itemId)
 
           // 本当はCurrentState.commit()を呼んでリアクティブに画面を更新したいのだが、
@@ -74,7 +74,7 @@ export function createItemTreeTextContentViewModel(
         CurrentState.setTargetItemPath(itemPath)
 
         // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
-        External.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
         CurrentState.commit()
       })
