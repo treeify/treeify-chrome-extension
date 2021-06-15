@@ -13,10 +13,7 @@ export class Internal {
 
   readonly state: State = Internal.createSampleState()
 
-  private readonly mutatedPropertyPaths = new Set<PropertyPath>()
-  private readonly stateChangeListeners = new Set<
-    (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
-  >()
+  private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
 
   private constructor(initialState: State) {
     this.state = initialState
@@ -48,22 +45,17 @@ export class Internal {
   /** Stateへの変更を確定し、stateChangeListenerに通知する */
   commit() {
     Rerenderer.instance.rerender()
-
-    for (const stateChangeListener of this.stateChangeListeners) {
-      stateChangeListener(this.state, this.mutatedPropertyPaths)
-    }
-    this.mutatedPropertyPaths.clear()
   }
 
   /** State内の書き換えた箇所を伝える */
   markAsMutated(propertyPath: PropertyPath) {
-    this.mutatedPropertyPaths.add(propertyPath)
+    for (let onMutateListener of this.onMutateListeners) {
+      onMutateListener(propertyPath)
+    }
   }
 
-  addStateChangeListener(
-    listener: (newState: State, mutatedPropertyPaths: Set<PropertyPath>) => void
-  ) {
-    this.stateChangeListeners.add(listener)
+  addOnMutateListener(listener: (propertyPath: PropertyPath) => void) {
+    this.onMutateListeners.add(listener)
   }
 
   dumpCurrentState() {

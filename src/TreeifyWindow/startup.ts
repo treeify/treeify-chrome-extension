@@ -28,7 +28,7 @@ export async function startup(initialState: State) {
 
   External.instance.render(initialState)
 
-  Internal.instance.addStateChangeListener(onStateChange)
+  Internal.instance.addOnMutateListener(onMutateState)
 
   // バックグラウンドページなどからのメッセージを受信する
   chrome.runtime.onMessage.addListener(onMessage)
@@ -71,8 +71,8 @@ export async function cleanup() {
   spaRoot.innerHTML = ''
 }
 
-function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
-  External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
+function onMutateState(propertyPath: PropertyPath) {
+  External.instance.onMutateState(propertyPath)
 }
 
 function onMouseMove(event: MouseEvent) {
