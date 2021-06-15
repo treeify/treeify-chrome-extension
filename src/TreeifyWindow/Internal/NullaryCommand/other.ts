@@ -10,7 +10,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {cleanup, startup} from 'src/TreeifyWindow/startup'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {get} from 'svelte/store'
 
 /**
  * データフォルダに現在の状態を書き込む。
@@ -90,7 +89,7 @@ export function selectAllBelowItems() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
-  const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const lastSiblingItemId: ItemId = siblingItemIds.last()
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(lastSiblingItemPath)
@@ -108,7 +107,7 @@ export function selectAllAboveItems() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
-  const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const firstSiblingItemId: ItemId = siblingItemIds.first()
   const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
   assertNonUndefined(firstSiblingItemPath)

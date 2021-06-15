@@ -6,7 +6,6 @@ import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-import {get} from 'svelte/store'
 
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
@@ -282,7 +281,7 @@ export function enterKeyDefault() {
     assertNonNull(selection)
 
     const characterCount = DomishObject.countCharacters(
-      get(Internal.instance.state.textItems[targetItemId].domishObjects)
+      Internal.instance.state.textItems[targetItemId].domishObjects
     )
     const textItemSelection = getTextItemSelectionFromDom()
     assertNonUndefined(textItemSelection)
@@ -441,7 +440,7 @@ export function deleteItemItself() {
   // アクティブページを削除しようとしている場合、何もしない
   if (!ItemPath.hasParent(targetItemPath)) return
 
-  const childItemIds = get(Internal.instance.state.items[targetItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.isEmpty()) {
     // 上のアイテムをフォーカス
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
