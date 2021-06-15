@@ -59,7 +59,7 @@
     })
   })
 
-  const style = `
+  $: style = `
     left: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.left}px;
     top: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.top}px;
     width: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.width}px;

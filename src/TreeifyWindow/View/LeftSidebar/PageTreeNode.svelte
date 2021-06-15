@@ -43,9 +43,8 @@
     return strongestColor.mix(weakestColor, ratio)
   }
 
-  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const footprintLayerStyle =
-    footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
+  $: footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
+  $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
 </script>
 
 <div class="page-tree-node">

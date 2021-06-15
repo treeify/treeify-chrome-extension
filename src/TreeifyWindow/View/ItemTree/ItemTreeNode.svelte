@@ -54,10 +54,9 @@
     return strongestColor.mix(weakestColor, ratio)
   }
 
-  const footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
-  const footprintLayerStyle =
-    footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
-  const childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
+  $: footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
+  $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
+  $: childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
 <div class="item-tree-node" class:multi-selected={viewModel.selected === 'multi'}>
