@@ -526,7 +526,11 @@
       }
     } else {
       // ターゲットアイテムがテキストアイテム以外の場合
-      // TODO: アイテム削除コマンドを実行するのがいいと思う
+
+      event.preventDefault()
+      // ターゲットアイテムを削除する
+      NullaryCommand.deleteItem()
+      Rerenderer.instance.rerender()
     }
   }
 
@@ -589,7 +593,16 @@
       }
     } else {
       // ターゲットアイテムがテキストアイテム以外の場合
-      // TODO: アイテム削除コマンドを実行するのがいいと思う
+
+      event.preventDefault()
+      // ターゲットアイテムを削除する
+      NullaryCommand.deleteItem()
+      // 下のアイテムをフォーカスする
+      const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
+      if (belowItemPath !== undefined) {
+        CurrentState.setTargetItemPath(belowItemPath)
+      }
+      Rerenderer.instance.rerender()
     }
   }
 
