@@ -5,7 +5,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import {get} from 'svelte/store'
 
 /** 対象ウェブページアイテムに対応するタブをdiscardする */
 export function softUnloadItem() {
@@ -72,7 +71,7 @@ export function loadItem() {
   // discarded状態のタブをバックグラウンドで非discarded化できれば望ましいのだがそのようなAPIが見当たらない。
   if (tabId !== undefined) return
 
-  const url = get(Internal.instance.state.webPageItems[targetItemId].url)
+  const url = Internal.instance.state.webPageItems[targetItemId].url
   const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
   External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
   chrome.tabs.create({url, active: false})
@@ -84,7 +83,7 @@ export function loadSubtree() {
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
     if (tabId === undefined) {
-      const url = get(Internal.instance.state.webPageItems[subtreeItemId].url)
+      const url = Internal.instance.state.webPageItems[subtreeItemId].url
       const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
       External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(subtreeItemId))
       chrome.tabs.create({url, active: false})
@@ -110,7 +109,7 @@ export function browseTab() {
     chrome.windows.update(tab.windowId, {focused: true})
   } else {
     // 対応するタブがなければ開く
-    const url = get(Internal.instance.state.webPageItems[targetItemId].url)
+    const url = Internal.instance.state.webPageItems[targetItemId].url
     const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
     External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
     chrome.tabs.create({url, active: true}, (tab) => {

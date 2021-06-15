@@ -4,7 +4,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {PageTreeTextContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeTextContentView'
 import {PageTreeWebPageContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
-import {get} from 'svelte/store'
 
 export type PageTreeContentViewModel =
   | PageTreeTextContentViewModel
@@ -19,13 +18,13 @@ export function createPageTreeContentViewModel(
     case ItemType.TEXT:
       return {
         itemType: ItemType.TEXT,
-        domishObjects: get(state.textItems[itemId].domishObjects),
+        domishObjects: state.textItems[itemId].domishObjects,
       }
     case ItemType.WEB_PAGE:
       return {
         itemType: ItemType.WEB_PAGE,
         title: CurrentState.deriveWebPageItemTitle(itemId),
-        faviconUrl: get(state.webPageItems[itemId].faviconUrl),
+        faviconUrl: state.webPageItems[itemId].faviconUrl,
       }
     case ItemType.IMAGE:
       // TODO: 未対応

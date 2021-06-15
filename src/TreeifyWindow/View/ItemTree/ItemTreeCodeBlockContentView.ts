@@ -5,7 +5,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-import {get} from 'svelte/store'
 
 export type ItemTreeCodeBlockContentViewModel = {
   itemPath: ItemPath
@@ -28,8 +27,8 @@ export function createItemTreeCodeBlockContentViewModel(
     itemPath,
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.CODE_BLOCK,
-    code: get(codeBlockItem.code),
-    language: get(codeBlockItem.language),
+    code: codeBlockItem.code,
+    language: codeBlockItem.language,
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

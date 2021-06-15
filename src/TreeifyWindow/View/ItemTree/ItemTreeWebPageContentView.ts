@@ -9,7 +9,6 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
-import {get} from 'svelte/store'
 
 export type ItemTreeWebPageContentViewModel = {
   itemPath: ItemPath
@@ -44,11 +43,11 @@ export function createItemTreeWebPageContentViewModel(
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.WEB_PAGE,
     title: CurrentState.deriveWebPageItemTitle(itemId),
-    faviconUrl: get(webPageItem.faviconUrl),
+    faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',
     isSoftUnloaded: tab?.discarded === true,
     isHardUnloaded: tab === undefined,
-    isUnread: get(webPageItem.isUnread),
+    isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     onFocus: (event) => {
       doWithErrorCapture(() => {

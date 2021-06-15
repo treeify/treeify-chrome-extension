@@ -5,7 +5,6 @@ import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {Writable} from 'svelte/store'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
@@ -20,7 +19,7 @@ export type State = {
    * マウントされているページたちのアイテムID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: Writable<List<ItemId>>
+  mountedPageIds: List<ItemId>
   /** 削除され再利用されるアイテムID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId
@@ -43,16 +42,16 @@ export type State = {
  */
 export type Item = {
   itemType: ItemType
-  childItemIds: Writable<List<ItemId>>
+  childItemIds: List<ItemId>
   parents: {[K in ItemId]: Edge}
   /** 足跡表示機能で使われるタイムスタンプ */
-  timestamp: Writable<Timestamp>
+  timestamp: Timestamp
   /**
    * このアイテムにアドホックに付与されるCSSクラスのリスト。
    * 付与されたアイテム本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
-  cssClasses: Writable<List<string>>
+  cssClasses: List<string>
 }
 
 export type Edge = {
@@ -79,42 +78,42 @@ export function createDefaultEdge(): Edge {
 
 /** テキストアイテムが固有で持つデータの型 */
 export type TextItem = {
-  domishObjects: Writable<List<DomishObject>>
+  domishObjects: List<DomishObject>
 }
 
 /** ウェブページアイテムが固有で持つデータの型 */
 export type WebPageItem = {
-  url: Writable<string>
+  url: string
   /**
    * ファビコンのURL。
    * 指定なしの場合は空文字列。
    * アンロード後もファビコンを表示するために、このオブジェクトで保持する。
    */
-  faviconUrl: Writable<string>
+  faviconUrl: string
   /**
    * タブのタイトル。
    * アンロード後もタイトルを表示するために、このオブジェクトで保持する。
    */
-  tabTitle: Writable<string>
+  tabTitle: string
   /**
    * タブのタイトルを上書き表示するためのタイトル。
    * nullの場合はtabTitleがこのウェブページアイテムのタイトルとして扱われる。
    */
-  title: Writable<string | null>
+  title: string | null
   /** 未読フラグ */
-  isUnread: Writable<boolean>
+  isUnread: boolean
 }
 
 /** 画像アイテムが固有で持つデータの型 */
 export type ImageItem = {
-  url: Writable<string>
-  caption: Writable<string>
+  url: string
+  caption: string
 }
 
 /** コードブロックアイテムが固有で持つデータの型 */
 export type CodeBlockItem = {
-  code: Writable<string>
-  language: Writable<string>
+  code: string
+  language: string
 }
 
 /** 各ページが持つデータの型 */

@@ -4,7 +4,6 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
-import {get} from 'svelte/store'
 
 /** ターゲットアイテムパスを返す */
 export function getTargetItemPath(): ItemPath {
@@ -51,7 +50,7 @@ export function getSelectedItemPaths(): List<ItemPath> {
 
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   assertNonUndefined(parentItemId)
-  const childItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const targetItemIndex = childItemIds.indexOf(ItemPath.getItemId(targetItemPath))
   const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
   const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
@@ -135,7 +134,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   if (parentItemPath === undefined) return undefined
 
   const parentItemId = ItemPath.getItemId(parentItemPath)
-  const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が長男の場合
@@ -153,7 +152,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   if (parentItemPath === undefined) return undefined
 
   const parentItemId = ItemPath.getItemId(parentItemPath)
-  const siblingItemIds = get(Internal.instance.state.items[parentItemId].childItemIds)
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が末弟の場合
@@ -178,7 +177,7 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   }
 
   const itemId = ItemPath.getItemId(itemPath)
-  const childItemIds = get(Internal.instance.state.items[itemId].childItemIds)
+  const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }

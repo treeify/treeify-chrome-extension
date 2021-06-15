@@ -5,7 +5,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {CodeBlockItem, Item} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
 
 /**
  * 新しい空のコードブロックアイテムを作成し、CurrentStateに登録する。
@@ -16,17 +15,17 @@ export function createCodeBlockItem(): ItemId {
 
   const newItem: Item = {
     itemType: ItemType.CODE_BLOCK,
-    childItemIds: writable(List.of()),
+    childItemIds: List.of(),
     parents: {},
-    timestamp: writable(Timestamp.now()),
-    cssClasses: writable(List.of()),
+    timestamp: Timestamp.now(),
+    cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
   const codeBlockItem: CodeBlockItem = {
-    code: writable(''),
-    language: writable(''),
+    code: '',
+    language: '',
   }
   Internal.instance.state.codeBlockItems[newItemId] = codeBlockItem
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', newItemId))
@@ -42,12 +41,12 @@ export function deleteCodeBlockItemEntry(itemId: ItemId) {
 
 /** コードブロックアイテムのコードを設定する */
 export function setCodeBlockItemCode(itemId: ItemId, code: string) {
-  Internal.instance.state.codeBlockItems[itemId].code.set(code)
+  Internal.instance.state.codeBlockItems[itemId].code = code
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId, 'code'))
 }
 
 /** コードブロックアイテムの言語を設定する */
 export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
-  Internal.instance.state.codeBlockItems[itemId].language.set(language)
+  Internal.instance.state.codeBlockItems[itemId].language = language
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId, 'language'))
 }

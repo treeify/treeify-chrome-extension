@@ -7,7 +7,6 @@ import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-import {get} from 'svelte/store'
 
 export type ItemTreeTextContentViewModel = {
   itemPath: ItemPath
@@ -28,7 +27,7 @@ export function createItemTreeTextContentViewModel(
     itemPath,
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEXT,
-    domishObjects: get(state.textItems[itemId].domishObjects),
+    domishObjects: state.textItems[itemId].domishObjects,
     onInput: (event: Event) => {
       doWithErrorCapture(() => {
         if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {

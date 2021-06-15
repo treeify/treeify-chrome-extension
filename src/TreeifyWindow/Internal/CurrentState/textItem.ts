@@ -6,11 +6,10 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {Item, TextItem} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
-import {writable} from 'svelte/store'
 
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
-  Internal.instance.state.textItems[textItemId].domishObjects.set(domishObjects)
+  Internal.instance.state.textItems[textItemId].domishObjects = domishObjects
   Internal.instance.markAsMutated(PropertyPath.of('textItems', textItemId, 'domishObjects'))
 }
 
@@ -23,15 +22,15 @@ export function createTextItem(): ItemId {
 
   const newItem: Item = {
     itemType: ItemType.TEXT,
-    childItemIds: writable(List.of()),
+    childItemIds: List.of(),
     parents: {},
-    timestamp: writable(Timestamp.now()),
-    cssClasses: writable(List.of()),
+    timestamp: Timestamp.now(),
+    cssClasses: List.of(),
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
 
-  const newTextItem: TextItem = {domishObjects: writable(List.of())}
+  const newTextItem: TextItem = {domishObjects: List.of()}
   Internal.instance.state.textItems[newItemId] = newTextItem
   Internal.instance.markAsMutated(PropertyPath.of('textItems', newItemId))
 
