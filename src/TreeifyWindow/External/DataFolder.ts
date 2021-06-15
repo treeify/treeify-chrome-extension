@@ -135,7 +135,7 @@ export class DataFolder {
         }
       }
       if (Object.keys(chunkPack).length > 0) {
-        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer, 2)}
+        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer)}
       } else {
         // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
         return {fileName, undefined}
