@@ -117,6 +117,13 @@ export namespace DomishObject {
     }
   }
 
+  /** HTML文字列をDomishObjectに変換する */
+  export function fromHtml(html: string): List<DomishObject> {
+    const templateElement = document.createElement('template')
+    templateElement.innerHTML = html
+    return DomishObject.fromChildren(templateElement.content)
+  }
+
   /**
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
@@ -236,5 +243,27 @@ export namespace DomishObject {
           assertNeverType(domishObject)
       }
     }
+  }
+
+  /**
+   * プレーンテキストかどうかを判定する。
+   * 改行はプレーンテキストとして扱う。
+   */
+  export function isPlainText(domishObjects: List<DomishObject>): boolean {
+    for (const domishObject of domishObjects) {
+      switch (domishObject.type) {
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          return false
+        case 'br':
+        case 'text':
+          break
+        default:
+          assertNeverType(domishObject)
+      }
+    }
+    return true
   }
 }
