@@ -471,11 +471,29 @@
 
   /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
   function onBackspace(event: KeyboardEvent) {
+    // 複数選択中は選択されたアイテムを削除して終了
+    if (CurrentState.getSelectedItemPaths().size > 1) {
+      event.preventDefault()
+      NullaryCommand.deleteItem()
+      Rerenderer.instance.rerender()
+      return
+    }
+
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
     const targetItem = Internal.instance.state.items[targetItemId]
     if (targetItem.itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
+
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      // 空の子なしアイテムなら
+      if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+        event.preventDefault()
+        // ターゲットアイテムを削除して終了
+        NullaryCommand.deleteItem()
+        Rerenderer.instance.rerender()
+        return
+      }
 
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
@@ -526,16 +544,49 @@
       }
     } else {
       // ターゲットアイテムがテキストアイテム以外の場合
-      // TODO: アイテム削除コマンドを実行するのがいいと思う
+
+      event.preventDefault()
+      // ターゲットアイテムを削除する
+      NullaryCommand.deleteItem()
+      Rerenderer.instance.rerender()
     }
   }
 
   /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
   function onDelete(event: KeyboardEvent) {
+    // 複数選択中は選択されたアイテムを削除して終了
+    if (CurrentState.getSelectedItemPaths().size > 1) {
+      event.preventDefault()
+      NullaryCommand.deleteItem()
+      // 下のアイテムをフォーカスする
+      const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
+      if (belowItemPath !== undefined) {
+        CurrentState.setTargetItemPath(belowItemPath)
+      }
+      Rerenderer.instance.rerender()
+      return
+    }
+
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+    const targetItem = Internal.instance.state.items[targetItemId]
+    if (targetItem.itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
+
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      // 空の子なしアイテムなら
+      if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+        event.preventDefault()
+        // ターゲットアイテムを削除して終了
+        NullaryCommand.deleteItem()
+        // 下のアイテムをフォーカスする
+        const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
+        if (belowItemPath !== undefined) {
+          CurrentState.setTargetItemPath(belowItemPath)
+        }
+        Rerenderer.instance.rerender()
+        return
+      }
 
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
@@ -589,7 +640,16 @@
       }
     } else {
       // ターゲットアイテムがテキストアイテム以外の場合
-      // TODO: アイテム削除コマンドを実行するのがいいと思う
+
+      event.preventDefault()
+      // ターゲットアイテムを削除する
+      NullaryCommand.deleteItem()
+      // 下のアイテムをフォーカスする
+      const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
+      if (belowItemPath !== undefined) {
+        CurrentState.setTargetItemPath(belowItemPath)
+      }
+      Rerenderer.instance.rerender()
     }
   }
 
