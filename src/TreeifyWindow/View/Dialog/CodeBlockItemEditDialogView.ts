@@ -2,6 +2,7 @@ import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {CodeBlockItemEditDialog, State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
   onClickFinishButton: () => void
@@ -34,12 +35,12 @@ export function createCodeBlockItemEditDialogViewModel(
 
       // ダイアログを閉じる
       CurrentState.setCodeBlockItemEditDialog(null)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     },
     onClickCancelButton: () => {
       // ダイアログを閉じる
       CurrentState.setCodeBlockItemEditDialog(null)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     },
   }
 }

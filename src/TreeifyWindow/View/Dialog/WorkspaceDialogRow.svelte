@@ -3,6 +3,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Workspace} from '../../Internal/State'
+  import {Rerenderer} from '../../Rerenderer'
 
   type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
@@ -19,14 +20,14 @@
   const onClickRadioButton = () => {
     doWithErrorCapture(() => {
       CurrentState.setCurrentWorkspaceId(workspace.id)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 
   const onClickDeleteButton = () => {
     doWithErrorCapture(() => {
       CurrentState.deleteWorkspace(workspace.id)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 </script>

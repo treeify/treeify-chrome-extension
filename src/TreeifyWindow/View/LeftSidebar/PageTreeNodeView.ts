@@ -9,6 +9,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
   createPageTreeBulletAndIndentViewModel,
   PageTreeBulletAndIndentViewModel,
@@ -114,7 +115,7 @@ export function createPageTreeNodeViewModel(
         CurrentState.switchActivePage(itemId)
         // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
         External.instance.shouldFloatingLeftSidebarShown = false
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       })
     },
     onClickCloseButton: () => {
@@ -134,7 +135,7 @@ export function createPageTreeNodeViewModel(
           CurrentState.switchActivePage(hottestPageId)
         }
 
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       })
     },
     onDragOver: (event) => {
@@ -166,7 +167,7 @@ export function createPageTreeNodeViewModel(
         }
 
         CurrentState.updateItemTimestamp(draggedItemId)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       })
     },
   }

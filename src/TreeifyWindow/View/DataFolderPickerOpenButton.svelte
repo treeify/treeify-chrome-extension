@@ -1,7 +1,7 @@
 <script lang="ts">
   import {doAsyncWithErrorCapture} from '../errorCapture'
-  import {CurrentState} from '../Internal/CurrentState'
   import {NullaryCommand} from '../Internal/NullaryCommand'
+  import {Rerenderer} from '../Rerenderer'
 
   type DataFolderPickerOpenButtonViewModel = {
     isGrayedOut: boolean
@@ -12,7 +12,7 @@
   function onClick() {
     doAsyncWithErrorCapture(async () => {
       await NullaryCommand.saveToDataFolder()
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 </script>

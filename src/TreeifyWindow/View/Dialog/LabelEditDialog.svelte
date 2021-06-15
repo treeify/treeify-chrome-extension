@@ -5,6 +5,7 @@
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
   import {LabelEditDialog} from '../../Internal/State'
+  import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
 
   type LabelEditDialogViewModel = LabelEditDialog
@@ -14,7 +15,7 @@
   const closeDialog = () => {
     // ダイアログを閉じる
     CurrentState.setLabelEditDialog(null)
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 
   const onClickAddButton = () => {
@@ -22,7 +23,7 @@
       CurrentState.setLabelEditDialog({
         labels: getAllLabelInputValues().push(''),
       })
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 
@@ -31,7 +32,7 @@
       const labels = getAllLabelInputValues().filter((label) => label !== '')
       CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
       CurrentState.setLabelEditDialog(null)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 
@@ -47,12 +48,12 @@
       if (viewModel.labels.size === 1) {
         // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
         CurrentState.setLabelEditDialog({labels: List.of('')})
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       } else {
         // 該当する入力欄を削除する
         const inputValues = getAllLabelInputValues()
         CurrentState.setLabelEditDialog({labels: inputValues.remove(index)})
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     })
   }

@@ -1,5 +1,4 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
-import {doWithTimeMeasuring} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
@@ -12,10 +11,10 @@ import {
   onWindowFocusChanged,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
-import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import UAParser from 'ua-parser-js'
 
@@ -29,7 +28,7 @@ export async function startup(initialState: State) {
 
   External.instance.render(initialState)
 
-  Internal.instance.addStateChangeListener(onStateChange)
+  Internal.instance.addOnMutateListener(onMutateState)
 
   // バックグラウンドページなどからのメッセージを受信する
   chrome.runtime.onMessage.addListener(onMessage)
@@ -72,11 +71,8 @@ export async function cleanup() {
   spaRoot.innerHTML = ''
 }
 
-function onStateChange(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
-  doWithTimeMeasuring(
-    'External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)',
-    () => External.instance.postMutatedPropertyPaths(newState, mutatedPropertyPaths)
-  )
+function onMutateState(propertyPath: PropertyPath) {
+  External.instance.onMutateState(propertyPath)
 }
 
 function onMouseMove(event: MouseEvent) {
@@ -96,7 +92,7 @@ function onMouseMove(event: MouseEvent) {
       // 逆に言うと、Treeifyウィンドウが画面左端にぴったりくっついていなくても割とルーズに発動してくれる。
       if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
         External.instance.shouldFloatingLeftSidebarShown = true
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     } else {
       const leftSidebar = document.querySelector('.left-sidebar')
@@ -105,7 +101,7 @@ function onMouseMove(event: MouseEvent) {
         // mouseleaveイベントを使わない理由は、Treeifyウィンドウが画面左端にぴったりくっついていない状況で、
         // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
         External.instance.shouldFloatingLeftSidebarShown = false
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     }
   })
@@ -114,7 +110,7 @@ function onMouseMove(event: MouseEvent) {
 function onResize() {
   doAsyncWithErrorCapture(async () => {
     // 左サイドバーの表示形態を変更する必要がある場合のために再描画する
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
 
     if (await TreeifyWindow.isDualWindowMode()) {
       TreeifyWindow.writeNarrowWidth(innerWidth)

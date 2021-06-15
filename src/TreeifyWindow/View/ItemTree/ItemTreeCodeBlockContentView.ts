@@ -4,6 +4,7 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {get} from 'svelte/store'
 
 export type ItemTreeCodeBlockContentViewModel = {
@@ -40,7 +41,7 @@ export function createItemTreeCodeBlockContentViewModel(
     onClick: (event) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       })
     },
   }

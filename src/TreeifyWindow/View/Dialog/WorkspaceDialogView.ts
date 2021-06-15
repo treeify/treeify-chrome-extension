@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State, Workspace} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
@@ -25,7 +26,7 @@ export function createWorkspaceDialogViewModel(state: State): WorkspaceDialogVie
     workspaces: List(workspaces),
     onClickAddButton: () => {
       CurrentState.createWorkspace()
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     },
   }
 }

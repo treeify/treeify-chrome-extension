@@ -5,6 +5,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {get} from 'svelte/store'
 
 export type ItemTreeSpoolViewModel = {
@@ -70,11 +71,11 @@ export function createItemTreeSpoolViewModel(
               break
             case '1000MouseButton0':
               NullaryCommand.turnIntoNonPageAndExpand()
-              CurrentState.commit()
+              Rerenderer.instance.rerender()
           }
           break
       }
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     })
   }
 

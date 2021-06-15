@@ -2,6 +2,7 @@
   import hljs from 'highlight.js'
   import {CurrentState} from '../../Internal/CurrentState'
   import {CodeBlockItemEditDialog} from '../../Internal/State'
+  import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
 
   type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
@@ -14,7 +15,7 @@
   const onCloseDialog = () => {
     // ダイアログを閉じる
     CurrentState.setCodeBlockItemEditDialog(null)
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 </script>
 

@@ -74,7 +74,7 @@
         for (const command of commands) {
           Command.execute(command)
         }
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     })
   }
@@ -104,12 +104,12 @@
         const characterCount = DomishObject.countCharacters(domishObjects)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       } else {
         // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
         event.preventDefault()
         CurrentState.setTargetItemPath(aboveItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     } else {
       // キャレット位置が先頭以外のときはブラウザの挙動に任せる
@@ -125,12 +125,12 @@
         const characterCount = DomishObject.countCharacters(domishObjects)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
         CurrentState.setTargetItemPath(aboveItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       } else {
         // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
         event.preventDefault()
         CurrentState.setTargetItemPath(aboveItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     }
   }
@@ -157,12 +157,12 @@
         event.preventDefault()
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
         CurrentState.setTargetItemPath(belowItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       } else {
         // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
         event.preventDefault()
         CurrentState.setTargetItemPath(belowItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     } else {
       const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -183,12 +183,12 @@
         event.preventDefault()
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
         CurrentState.setTargetItemPath(belowItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       } else {
         // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
         event.preventDefault()
         CurrentState.setTargetItemPath(belowItemPath)
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
       }
     }
   }
@@ -209,7 +209,7 @@
 
       CurrentState.setTargetItemPath(aboveItemPath)
       Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
       return
     }
 
@@ -264,7 +264,7 @@
         if (caretXCoordinate === originalXCoordinate) {
           CurrentState.setTargetItemPath(aboveItemPath)
           Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
           return
         }
         if (caretXCoordinate < originalXCoordinate) {
@@ -275,7 +275,7 @@
       if (i < 0) {
         CurrentState.setTargetItemPath(aboveItemPath)
         Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-        CurrentState.commit()
+        Rerenderer.instance.rerender()
         return
       }
 
@@ -294,7 +294,7 @@
 
     CurrentState.setTargetItemPath(aboveItemPath)
     Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 
   /**
@@ -313,7 +313,7 @@
 
       CurrentState.setTargetItemPath(belowItemPath)
       Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
       return
     }
 
@@ -390,7 +390,7 @@
     }
     CurrentState.setTargetItemPath(belowItemPath)
     Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 
   function setCaretPosition(position: integer) {
@@ -440,7 +440,7 @@
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
     // 複数選択中はアイテムツリー自体をフォーカスする
     focusItemTreeBackground()
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 
   /**
@@ -471,7 +471,7 @@
     CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
     // 複数選択中はアイテムツリー自体をフォーカスする
     focusItemTreeBackground()
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   }
 
   /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
@@ -528,7 +528,7 @@
           )
 
           event.preventDefault()
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
         }
       }
     } else {
@@ -594,7 +594,7 @@
           )
 
           event.preventDefault()
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
         }
       }
     } else {
@@ -612,7 +612,7 @@
 
       // クリックしたのと同じ扱いにする
       NullaryCommand.browseTab()
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     }
   }
 
@@ -681,7 +681,7 @@
           }
 
           CurrentState.updateItemTimestamp(draggedItemId)
-          CurrentState.commit()
+          Rerenderer.instance.rerender()
           return
         }
       }

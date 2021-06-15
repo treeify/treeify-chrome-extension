@@ -12,6 +12,7 @@ import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import {get} from 'svelte/store'
 import UAParser from 'ua-parser-js'
@@ -104,7 +105,7 @@ export function onCreated(tab: Tab) {
       }
     }
 
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   })
 }
 
@@ -124,7 +125,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
     assertNonUndefined(itemId)
     reflectInWebPageItem(itemId, tab)
 
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   })
 }
 
@@ -155,7 +156,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
       CurrentState.deleteItemItself(itemId)
     }
 
-    CurrentState.commit()
+    Rerenderer.instance.rerender()
   })
 }
 
@@ -165,7 +166,7 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)
       CurrentState.setIsUnreadFlag(itemId, false)
-      CurrentState.commit()
+      Rerenderer.instance.rerender()
     }
   })
 }

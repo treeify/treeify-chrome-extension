@@ -72,13 +72,11 @@ export class External {
     }
   }
 
-  /** データフォルダへの差分書き込みの対象箇所を伝える */
-  postMutatedPropertyPaths(newState: State, mutatedPropertyPaths: Set<PropertyPath>) {
+  onMutateState(propertyPath: PropertyPath) {
     if (this.dataFolder === undefined) return
 
-    for (const mutatedPropertyPath of mutatedPropertyPaths) {
-      this.pendingMutatedChunkIds.add(Chunk.convertToChunkId(mutatedPropertyPath))
-    }
+    // データフォルダへの差分書き込みの対象箇所を伝える
+    this.pendingMutatedChunkIds.add(Chunk.convertToChunkId(propertyPath))
   }
 
   getTreeifyClipboardHash(): string | undefined {

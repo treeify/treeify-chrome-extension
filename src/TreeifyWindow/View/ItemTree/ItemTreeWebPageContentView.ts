@@ -7,6 +7,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {get} from 'svelte/store'
 
@@ -63,16 +64,16 @@ export function createItemTreeWebPageContentViewModel(
           case '0000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTabInDualWindowMode()
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
           case '0010MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTab()
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
         }
       })
@@ -93,7 +94,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.hardUnloadSubtree()
             }
 
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
             event.preventDefault()
@@ -106,7 +107,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.hardUnloadItem()
             }
 
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
           case '0100MouseButton0':
             event.preventDefault()
@@ -119,7 +120,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.softUnloadSubtree()
             }
 
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
           case '1100MouseButton0':
             event.preventDefault()
@@ -132,7 +133,7 @@ export function createItemTreeWebPageContentViewModel(
               NullaryCommand.softUnloadItem()
             }
 
-            CurrentState.commit()
+            Rerenderer.instance.rerender()
             break
         }
       })
