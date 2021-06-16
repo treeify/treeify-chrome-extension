@@ -16,13 +16,9 @@ import {
   moveItemToPrevSibling,
   moveItemUpward,
   removeEdge,
-  showPage,
   toggleCollapsed,
   toggleGrayedOut,
   toggleHighlighted,
-  togglePaged,
-  turnIntoAndShowPage,
-  turnIntoNonPageAndExpand,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 import {
@@ -33,6 +29,12 @@ import {
   selectAllBelowItems,
   toDualWindowMode,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/other'
+import {
+  showPage,
+  togglePaged,
+  turnIntoAndShowPage,
+  turnIntoNonPageAndExpand,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/page'
 import {
   insertLineBreak,
   toggleBold,
@@ -51,6 +53,9 @@ import {
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/page'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 
 /**
