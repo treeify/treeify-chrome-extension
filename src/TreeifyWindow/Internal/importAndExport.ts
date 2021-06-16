@@ -587,7 +587,7 @@ function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
         // html属性がない場合はtext属性をプレーンテキストとして使う
         const domishObject: DomishObject.TextNode = {
           type: 'text',
-          textContent: document.createTextNode(attributes.text).textContent ?? '',
+          textContent: attributes.text,
         }
         CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
       }
