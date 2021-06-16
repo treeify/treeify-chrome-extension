@@ -292,7 +292,7 @@ export function insertPrevSiblingItem(
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, parentItemId, edge)
 
-  return itemPath
+  return ItemPath.createSiblingItemPath(itemPath, newItemId)!
 }
 
 /**

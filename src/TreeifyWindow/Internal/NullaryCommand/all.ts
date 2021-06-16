@@ -10,21 +10,19 @@ import {
   deleteItem,
   deleteItemItself,
   enterKeyDefault,
+  removeEdge,
+  toggleCollapsed,
+  toggleGrayedOut,
+  toggleHighlighted,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/item'
+import {
   indentItem,
   moveItemDownward,
   moveItemToNextSibling,
   moveItemToPrevSibling,
   moveItemUpward,
-  removeEdge,
-  showPage,
-  toggleCollapsed,
-  toggleGrayedOut,
-  toggleHighlighted,
-  togglePaged,
-  turnIntoAndShowPage,
-  turnIntoNonPageAndExpand,
   unindentItem,
-} from 'src/TreeifyWindow/Internal/NullaryCommand/item'
+} from 'src/TreeifyWindow/Internal/NullaryCommand/itemMove'
 import {
   copyForTransclusion,
   excludeFromCurrentWorkspace,
@@ -34,6 +32,13 @@ import {
   toDualWindowMode,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 import {
+  showPage,
+  togglePaged,
+  turnIntoAndShowPage,
+  turnIntoNonPageAndExpand,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/page'
+import {
+  groupingItems,
   insertLineBreak,
   toggleBold,
   toggleItalic,
@@ -49,8 +54,12 @@ import {
 } from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/itemMove'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/page'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/other'
 
 /**
@@ -85,6 +94,7 @@ export const functions: {[name: string]: () => void} = {
   toggleUnderline,
   toggleItalic,
   toggleStrikethrough,
+  groupingItems,
   hardUnloadItem,
   hardUnloadSubtree,
   loadItem,
