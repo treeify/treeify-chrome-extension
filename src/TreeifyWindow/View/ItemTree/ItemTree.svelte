@@ -239,7 +239,7 @@
 
       // 上のアイテムの最後の行の文字数を取得
       const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-      const lines = DomishObject.toPlainText(aboveItemDomishObjects).split('\n')
+      const lines = DomishObject.toPlainText(aboveItemDomishObjects).split(/\r?\n/)
       const lastLine = lines[lines.length - 1]
 
       // 上のアイテムに一旦フォーカスする
@@ -351,7 +351,7 @@
 
       // 下のアイテムの最初の行の文字数を取得
       const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
-      const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split('\n')[0]
+      const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split(/\r?\n/)[0]
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
       // TODO: 最適化の余地あり。二分探索が可能では？

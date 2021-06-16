@@ -21,7 +21,7 @@ export class StackTrace {
      */
     const stack = new Error().stack
     if (stack === undefined) throw Error('new Error().stackがundefined。')
-    this.stackTraceLines = stack.split(/\n/)
+    this.stackTraceLines = stack.split(/\r?\n/)
   }
 
   /**
