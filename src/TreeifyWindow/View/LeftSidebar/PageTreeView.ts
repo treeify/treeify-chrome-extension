@@ -1,15 +1,15 @@
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createPageTreeRootNodeViewModel,
-  PageTreeNodeViewModel,
+  createPageTreeRootNodeProps,
+  PageTreeNodeProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
 
-export type PageTreeViewModel = {
-  pageTreeRootNodeViewModel: PageTreeNodeViewModel
+export type PageTreeProps = {
+  pageTreeRootNodeProps: PageTreeNodeProps
 }
 
-export function createPageTreeViewModel(state: State): PageTreeViewModel {
+export function createPageTreeProps(state: State): PageTreeProps {
   return {
-    pageTreeRootNodeViewModel: createPageTreeRootNodeViewModel(state),
+    pageTreeRootNodeProps: createPageTreeRootNodeProps(state),
   }
 }

@@ -1,23 +1,20 @@
 <script lang="ts">
-  import {
-    PageTreeBulletAndIndentViewModel,
-    PageTreeBulletState,
-  } from './PageTreeBulletAndIndentView'
+  import {PageTreeBulletAndIndentProps, PageTreeBulletState} from './PageTreeBulletAndIndentView'
 
-  export let viewModel: PageTreeBulletAndIndentViewModel
+  export let props: PageTreeBulletAndIndentProps
 </script>
 
 <div class="page-tree-bullet-and-indent">
-  {#if viewModel.bulletState === PageTreeBulletState.EXPANDED}
+  {#if props.bulletState === PageTreeBulletState.EXPANDED}
     <div class="page-tree-bullet-and-indent_indent-area">
       <div class="page-tree-bullet-and-indent_indent-line" />
     </div>
   {/if}
   <div
     class="page-tree-bullet-and-indent_bullet-area"
-    class:no-children={viewModel.bulletState === PageTreeBulletState.NO_CHILDREN}
-    class:expanded={viewModel.bulletState === PageTreeBulletState.EXPANDED}
-    class:collapsed={viewModel.bulletState === PageTreeBulletState.COLLAPSED}
+    class:no-children={props.bulletState === PageTreeBulletState.NO_CHILDREN}
+    class:expanded={props.bulletState === PageTreeBulletState.EXPANDED}
+    class:collapsed={props.bulletState === PageTreeBulletState.COLLAPSED}
   />
 </div>
 

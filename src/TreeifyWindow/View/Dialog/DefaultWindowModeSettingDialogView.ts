@@ -7,14 +7,14 @@ import {
 } from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
+export type DefaultWindowModeSettingDialogProps = DefaultWindowModeSettingDialog & {
   initialDefaultWindowMode: DefaultWindowMode
   onClickCancelButton: () => void
 }
 
-export function createDefaultWindowModeSettingDialogViewModel(
+export function createDefaultWindowModeSettingDialogProps(
   state: State
-): DefaultWindowModeSettingDialogViewModel | undefined {
+): DefaultWindowModeSettingDialogProps | undefined {
   if (state.defaultWindowModeSettingDialog === null) return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()

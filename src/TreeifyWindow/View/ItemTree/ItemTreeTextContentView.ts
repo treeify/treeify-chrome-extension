@@ -8,7 +8,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type ItemTreeTextContentViewModel = {
+export type ItemTreeTextContentProps = {
   itemPath: ItemPath
   itemType: ItemType.TEXT
   labels: List<string>
@@ -18,10 +18,10 @@ export type ItemTreeTextContentViewModel = {
   onClick: (event: Event) => void
 }
 
-export function createItemTreeTextContentViewModel(
+export function createItemTreeTextContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeTextContentViewModel {
+): ItemTreeTextContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   return {
     itemPath,

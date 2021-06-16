@@ -2,17 +2,12 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {PageTreeTextContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeTextContentView'
-import {PageTreeWebPageContentViewModel} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
+import {PageTreeTextContentProps} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeTextContentView'
+import {PageTreeWebPageContentProps} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeWebPageContentView'
 
-export type PageTreeContentViewModel =
-  | PageTreeTextContentViewModel
-  | PageTreeWebPageContentViewModel
+export type PageTreeContentProps = PageTreeTextContentProps | PageTreeWebPageContentProps
 
-export function createPageTreeContentViewModel(
-  state: State,
-  itemId: ItemId
-): PageTreeContentViewModel {
+export function createPageTreeContentProps(state: State, itemId: ItemId): PageTreeContentProps {
   const itemType = state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:

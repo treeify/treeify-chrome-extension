@@ -5,9 +5,9 @@
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
   import PageTreeContent from './PageTreeContent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
-  import {PageTreeNodeViewModel} from './PageTreeNodeView'
+  import {PageTreeNodeProps} from './PageTreeNodeView'
 
-  export let viewModel: PageTreeNodeViewModel
+  export let props: PageTreeNodeProps
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,
@@ -27,35 +27,35 @@
     return strongestColor.mix(weakestColor, ratio)
   }
 
-  $: footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
+  $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
   $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
 </script>
 
 <div class="page-tree-node">
-  {#if viewModel.isRoot}
+  {#if props.isRoot}
     <div class="grid-empty-cell" />
   {:else}
     <div class="page-tree-node_bullet-and-indent-area">
-      <PageTreeBulletAndIndent viewModel={viewModel.bulletAndIndentViewModel} />
+      <PageTreeBulletAndIndent props={props.bulletAndIndentProps} />
     </div>
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
-      <div class="page-tree-node_body-area" class:active-page={viewModel.isActivePage}>
+      <div class="page-tree-node_body-area" class:active-page={props.isActivePage}>
         <div
           class="page-tree-node_content-area"
-          on:click={viewModel.onClickContentArea}
-          on:dragover={viewModel.onDragOver}
-          on:drop={viewModel.onDrop}
+          on:click={props.onClickContentArea}
+          on:dragover={props.onDragOver}
+          on:drop={props.onDrop}
         >
-          <PageTreeContent viewModel={viewModel.contentViewModel} />
+          <PageTreeContent props={props.contentProps} />
         </div>
-        <div class="page-tree-node_close-button" on:click={viewModel.onClickCloseButton} />
+        <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
       </div>
     </div>
     <div class="page-tree-node_children-area">
-      {#each viewModel.childNodeViewModels.toArray() as childNodeViewModel}
-        <PageTreeNode viewModel={childNodeViewModel} />
+      {#each props.childNodePropss.toArray() as childNodeProps}
+        <PageTreeNode props={childNodeProps} />
       {/each}
     </div>
   </div>

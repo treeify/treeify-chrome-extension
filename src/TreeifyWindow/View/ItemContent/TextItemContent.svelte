@@ -1,11 +1,11 @@
 <script lang="ts">
   import {DomishObject} from '../../Internal/DomishObject'
-  import {TextItemContentViewModel} from './TextItemContentView'
+  import {TextItemContentProps} from './TextItemContentView'
 
-  export let viewModel: TextItemContentViewModel
+  export let props: TextItemContentProps
 </script>
 
-<div>{@html DomishObject.toHtml(viewModel.domishObjects)}</div>
+<div>{@html DomishObject.toHtml(props.domishObjects)}</div>
 
 <style>
 </style>

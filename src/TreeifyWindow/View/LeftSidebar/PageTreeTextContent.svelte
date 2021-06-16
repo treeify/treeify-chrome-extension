@@ -1,11 +1,11 @@
 <script lang="ts">
   import {DomishObject} from '../../Internal/DomishObject'
-  import {PageTreeTextContentViewModel} from './PageTreeTextContentView'
+  import {PageTreeTextContentProps} from './PageTreeTextContentView'
 
-  export let viewModel: PageTreeTextContentViewModel
+  export let props: PageTreeTextContentProps
 </script>
 
-<div>{@html DomishObject.toHtml(viewModel.domishObjects)}</div>
+<div>{@html DomishObject.toHtml(props.domishObjects)}</div>
 
 <style>
 </style>

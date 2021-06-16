@@ -6,7 +6,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type ItemTreeCodeBlockContentViewModel = {
+export type ItemTreeCodeBlockContentProps = {
   itemPath: ItemPath
   labels: List<string>
   itemType: ItemType.CODE_BLOCK
@@ -16,10 +16,10 @@ export type ItemTreeCodeBlockContentViewModel = {
   onClick: (event: Event) => void
 }
 
-export function createItemTreeCodeBlockContentViewModel(
+export function createItemTreeCodeBlockContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeCodeBlockContentViewModel {
+): ItemTreeCodeBlockContentProps {
   const itemId = ItemPath.getItemId(itemPath)
 
   const codeBlockItem = state.codeBlockItems[itemId]

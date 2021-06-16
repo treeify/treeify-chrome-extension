@@ -2,9 +2,9 @@
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {NullaryCommand} from '../Internal/NullaryCommand'
   import {Rerenderer} from '../Rerenderer'
-  import {DataFolderPickerOpenButtonViewModel} from './DataFolderPickerOpenButtonView'
+  import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonView'
 
-  export let viewModel: DataFolderPickerOpenButtonViewModel
+  export let props: DataFolderPickerOpenButtonProps
 
   function onClick() {
     doAsyncWithErrorCapture(async () => {
@@ -15,7 +15,7 @@
 </script>
 
 <div class="toolbar-icon-button" on:click={onClick}>
-  <div class="data-folder-picker-open-button_icon" class:grayed-out={viewModel.isGrayedOut} />
+  <div class="data-folder-picker-open-button_icon" class:grayed-out={props.isGrayedOut} />
 </div>
 
 <style>

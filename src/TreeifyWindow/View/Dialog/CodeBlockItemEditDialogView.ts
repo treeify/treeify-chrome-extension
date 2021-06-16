@@ -4,14 +4,14 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {CodeBlockItemEditDialog, State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
+export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
   onClickFinishButton: () => void
   onClickCancelButton: () => void
 }
 
-export function createCodeBlockItemEditDialogViewModel(
+export function createCodeBlockItemEditDialogProps(
   state: State
-): CodeBlockItemEditDialogViewModel | undefined {
+): CodeBlockItemEditDialogProps | undefined {
   if (state.codeBlockItemEditDialog === null) return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()

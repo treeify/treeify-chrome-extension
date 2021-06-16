@@ -5,15 +5,15 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createItemTreeNodeViewModel,
-  ItemTreeNodeViewModel,
+  createItemTreeNodeProps,
+  ItemTreeNodeProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
 
-export type ItemTreeViewModel = {
-  rootNodeViewModel: ItemTreeNodeViewModel
+export type ItemTreeProps = {
+  rootNodeProps: ItemTreeNodeProps
 }
 
-export function createItemTreeViewModel(state: State): ItemTreeViewModel {
+export function createItemTreeProps(state: State): ItemTreeProps {
   const rootItemPath = List.of(CurrentState.getActivePageId())
 
   const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
@@ -33,12 +33,7 @@ export function createItemTreeViewModel(state: State): ItemTreeViewModel {
   }
 
   return {
-    rootNodeViewModel: createItemTreeNodeViewModel(
-      state,
-      footprintRankMap,
-      footprintCount,
-      rootItemPath
-    ),
+    rootNodeProps: createItemTreeNodeProps(state, footprintRankMap, footprintCount, rootItemPath),
   }
 }
 

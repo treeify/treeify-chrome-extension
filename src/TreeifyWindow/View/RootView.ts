@@ -1,63 +1,60 @@
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createDataFolderPickerOpenButtonViewModel,
-  DataFolderPickerOpenButtonViewModel,
+  createDataFolderPickerOpenButtonProps,
+  DataFolderPickerOpenButtonProps,
 } from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonView'
 import {
-  CodeBlockItemEditDialogViewModel,
-  createCodeBlockItemEditDialogViewModel,
+  CodeBlockItemEditDialogProps,
+  createCodeBlockItemEditDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogView'
 import {
-  createDefaultWindowModeSettingDialogViewModel,
-  DefaultWindowModeSettingDialogViewModel,
+  createDefaultWindowModeSettingDialogProps,
+  DefaultWindowModeSettingDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/DefaultWindowModeSettingDialogView'
 import {
-  createLabelEditDialogViewModel,
-  LabelEditDialogViewModel,
+  createLabelEditDialogProps,
+  LabelEditDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/LabelEditDialogView'
 import {
-  createOtherParentsDialogViewModel,
-  OtherParentsDialogViewModel,
+  createOtherParentsDialogProps,
+  OtherParentsDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/OtherParentsDialogView'
 import {
-  createWebPageItemTitleSettingDialogViewModel,
-  WebPageItemTitleSettingDialogViewModel,
+  createWebPageItemTitleSettingDialogProps,
+  WebPageItemTitleSettingDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogView'
 import {
-  createWorkspaceDialogViewModel,
-  WorkspaceDialogViewModel,
+  createWorkspaceDialogProps,
+  WorkspaceDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/WorkspaceDialogView'
+import {createItemTreeProps, ItemTreeProps} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
 import {
-  createItemTreeViewModel,
-  ItemTreeViewModel,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeView'
-import {
-  createLeftSidebarViewModel,
-  LeftSidebarViewModel,
+  createLeftSidebarProps,
+  LeftSidebarProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarView'
 
-export type RootViewModel = {
-  leftSidebarViewModel: LeftSidebarViewModel | undefined
-  itemTreeViewModel: ItemTreeViewModel
-  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-  codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
-  defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
-  workspaceDialog: WorkspaceDialogViewModel | undefined
-  labelEditDialog: LabelEditDialogViewModel | undefined
-  otherParentsDialog: OtherParentsDialogViewModel | undefined
-  dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
+export type RootProps = {
+  leftSidebarProps: LeftSidebarProps | undefined
+  itemTreeProps: ItemTreeProps
+  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogProps | undefined
+  codeBlockItemEditDialogProps: CodeBlockItemEditDialogProps | undefined
+  defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogProps | undefined
+  workspaceDialog: WorkspaceDialogProps | undefined
+  labelEditDialog: LabelEditDialogProps | undefined
+  otherParentsDialog: OtherParentsDialogProps | undefined
+  dataFolderPickerOpenButtonProps: DataFolderPickerOpenButtonProps
 }
 
-export function createRootViewModel(state: State): RootViewModel {
+export function createRootProps(state: State): RootProps {
   return {
-    leftSidebarViewModel: createLeftSidebarViewModel(state),
-    itemTreeViewModel: createItemTreeViewModel(state),
-    webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogViewModel(state),
-    dataFolderPickerOpenButtonViewModel: createDataFolderPickerOpenButtonViewModel(),
-    codeBlockItemEditDialogViewModel: createCodeBlockItemEditDialogViewModel(state),
-    defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogViewModel(state),
-    workspaceDialog: createWorkspaceDialogViewModel(state),
-    labelEditDialog: createLabelEditDialogViewModel(state),
-    otherParentsDialog: createOtherParentsDialogViewModel(state),
+    leftSidebarProps: createLeftSidebarProps(state),
+    itemTreeProps: createItemTreeProps(state),
+    webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogProps(state),
+    dataFolderPickerOpenButtonProps: createDataFolderPickerOpenButtonProps(),
+    codeBlockItemEditDialogProps: createCodeBlockItemEditDialogProps(state),
+    defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogProps(state),
+    workspaceDialog: createWorkspaceDialogProps(state),
+    labelEditDialog: createLabelEditDialogProps(state),
+    otherParentsDialog: createOtherParentsDialogProps(state),
   }
 }

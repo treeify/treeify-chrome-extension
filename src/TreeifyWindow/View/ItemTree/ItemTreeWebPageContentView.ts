@@ -10,7 +10,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 
-export type ItemTreeWebPageContentViewModel = {
+export type ItemTreeWebPageContentProps = {
   itemPath: ItemPath
   itemType: ItemType.WEB_PAGE
   labels: List<string>
@@ -27,10 +27,10 @@ export type ItemTreeWebPageContentViewModel = {
   onDragStart: (event: DragEvent) => void
 }
 
-export function createItemTreeWebPageContentViewModel(
+export function createItemTreeWebPageContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeWebPageContentViewModel {
+): ItemTreeWebPageContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)

@@ -1,31 +1,31 @@
 <script lang="ts">
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
-  import {ItemTreeImageContentViewModel} from './ItemTreeImageContentView'
+  import {ItemTreeImageContentProps} from './ItemTreeImageContentView'
 
-  export let viewModel: ItemTreeImageContentViewModel
+  export let props: ItemTreeImageContentProps
 
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div
   class="item-tree-image-content"
   {id}
   tabindex="0"
-  on:focus={viewModel.onFocus}
-  on:click={viewModel.onClick}
+  on:focus={props.onFocus}
+  on:click={props.onClick}
 >
-  {#if !viewModel.labels.isEmpty()}
+  {#if !props.labels.isEmpty()}
     <div class="item-tree-image-content_labels">
-      {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}} />
+      {#each props.labels.toArray() as label}
+        <Label props={{text: label}} />
       {/each}
     </div>
   {/if}
 
   <div class="item-tree-image-content_image-and-caption">
-    <img class="item-tree-image-content_image" src={viewModel.url} />
-    <div class="item-tree-image-content_caption">{viewModel.caption}</div>
+    <img class="item-tree-image-content_image" src={props.url} />
+    <div class="item-tree-image-content_caption">{props.caption}</div>
   </div>
 </div>
 

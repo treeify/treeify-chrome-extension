@@ -13,18 +13,18 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
-  createItemTreeContentViewModel,
+  createItemTreeContentProps,
+  ItemTreeContentProps,
   ItemTreeContentView,
-  ItemTreeContentViewModel,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
 import {
-  createItemTreeSpoolViewModel,
+  createItemTreeSpoolProps,
   deriveBulletState,
   ItemTreeBulletState,
-  ItemTreeSpoolViewModel,
+  ItemTreeSpoolProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
 
-export type ItemTreeNodeViewModel = {
+export type ItemTreeNodeProps = {
   itemPath: ItemPath
   isActivePage: boolean
   /**
@@ -39,22 +39,22 @@ export type ItemTreeNodeViewModel = {
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
-  contentViewModel: ItemTreeContentViewModel
-  childItemViewModels: List<ItemTreeNodeViewModel>
-  spoolViewModel: ItemTreeSpoolViewModel
+  contentProps: ItemTreeContentProps
+  childItemPropss: List<ItemTreeNodeProps>
+  spoolProps: ItemTreeSpoolProps
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
   onClickHiddenTabsCount: (event: MouseEvent) => void
 }
 
-// 再帰的にアイテムツリーのViewModelを作る
-export function createItemTreeNodeViewModel(
+// 再帰的にアイテムツリーのPropsを作る
+export function createItemTreeNodeProps(
   state: State,
   footprintRankMap: Map<ItemId, integer>,
   footprintCount: integer,
   itemPath: ItemPath
-): ItemTreeNodeViewModel {
+): ItemTreeNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
   const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
@@ -68,10 +68,10 @@ export function createItemTreeNodeViewModel(
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-    spoolViewModel: createItemTreeSpoolViewModel(state, itemPath),
-    contentViewModel: createItemTreeContentViewModel(state, itemPath, item.itemType),
-    childItemViewModels: displayingChildItemIds.map((childItemId: ItemId) => {
-      return createItemTreeNodeViewModel(
+    spoolProps: createItemTreeSpoolProps(state, itemPath),
+    contentProps: createItemTreeContentProps(state, itemPath, item.itemType),
+    childItemPropss: displayingChildItemIds.map((childItemId: ItemId) => {
+      return createItemTreeNodeProps(
         state,
         footprintRankMap,
         footprintCount,

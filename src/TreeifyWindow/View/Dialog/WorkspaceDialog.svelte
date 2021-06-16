@@ -4,9 +4,9 @@
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
-  import {WorkspaceDialogViewModel} from './WorkspaceDialogView'
+  import {WorkspaceDialogProps} from './WorkspaceDialogView'
 
-  export let viewModel: WorkspaceDialogViewModel
+  export let props: WorkspaceDialogProps
 
   const closeDialog = () => {
     doWithErrorCapture(() => {
@@ -18,10 +18,10 @@
 
 <CommonDialog title="ワークスペース" onCloseDialog={closeDialog}>
   <div class="workspace-dialog_content" tabindex="0">
-    {#each viewModel.workspaces.toArray() as workspace}
+    {#each props.workspaces.toArray() as workspace}
       <WorkspaceDialogRow {workspace} />
     {/each}
-    <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton} />
+    <div class="workspace-dialog_add-button" on:click={props.onClickAddButton} />
     <button class="workspace-dialog_close-button" on:click={closeDialog}>閉じる</button>
   </div>
 </CommonDialog>

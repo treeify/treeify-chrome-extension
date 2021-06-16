@@ -3,9 +3,9 @@
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import CommonDialog from './CommonDialog.svelte'
-  import {OtherParentsDialogViewModel} from './OtherParentsDialogView'
+  import {OtherParentsDialogProps} from './OtherParentsDialogView'
 
-  export let viewModel: OtherParentsDialogViewModel
+  export let props: OtherParentsDialogProps
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -17,9 +17,9 @@
 <CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
-      {#each viewModel.itemContentViewModels.toArray() as itemContentViewModel}
+      {#each props.itemContentPropss.toArray() as itemContentProps}
         <div class="other-parents-dialog_row-wrapper">
-          <ItemContent viewModel={itemContentViewModel} />
+          <ItemContent props={itemContentProps} />
         </div>
       {/each}
     </div>

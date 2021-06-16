@@ -21,9 +21,9 @@
   import {Rerenderer} from '../../Rerenderer'
   import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeViewModel} from './ItemTreeView'
+  import {ItemTreeProps} from './ItemTreeView'
 
-  export let viewModel: ItemTreeViewModel
+  export let props: ItemTreeProps
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -768,7 +768,7 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode viewModel={viewModel.rootNodeViewModel} />
+  <ItemTreeNode props={props.rootNodeProps} />
 </main>
 
 <style>

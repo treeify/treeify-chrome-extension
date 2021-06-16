@@ -19,9 +19,9 @@
   import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {onDestroy, onMount} from 'svelte'
   import {assertNonUndefined} from '../../../Common/Debug/assert'
-  import {WebPageItemTitleSettingDialogViewModel} from './WebPageItemTitleSettingDialogView'
+  import {WebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogView'
 
-  export let viewModel: WebPageItemTitleSettingDialogViewModel
+  export let props: WebPageItemTitleSettingDialogProps
 
   let focusTrap: FocusTrap | undefined
 
@@ -54,10 +54,10 @@
   })
 
   $: style = `
-    left: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.left}px;
-    top: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.top}px;
-    width: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.width}px;
-    height: ${viewModel.webPageItemTitleSettingDialog.targetItemRect.height}px;
+    left: ${props.webPageItemTitleSettingDialog.targetItemRect.left}px;
+    top: ${props.webPageItemTitleSettingDialog.targetItemRect.top}px;
+    width: ${props.webPageItemTitleSettingDialog.targetItemRect.width}px;
+    height: ${props.webPageItemTitleSettingDialog.targetItemRect.height}px;
   `
 </script>
 
@@ -66,8 +66,8 @@
     <input
       type="text"
       class="web-page-item-title-setting-dialog_text-box"
-      value={viewModel.initialTitle}
-      on:keydown={viewModel.onKeyDown}
+      value={props.initialTitle}
+      on:keydown={props.onKeyDown}
     />
   </div>
 </div>

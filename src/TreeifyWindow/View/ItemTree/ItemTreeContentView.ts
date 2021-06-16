@@ -3,43 +3,40 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createItemTreeCodeBlockContentViewModel,
-  ItemTreeCodeBlockContentViewModel,
+  createItemTreeCodeBlockContentProps,
+  ItemTreeCodeBlockContentProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentView'
 import {
-  createItemTreeImageContentViewModel,
-  ItemTreeImageContentViewModel,
+  createItemTreeImageContentProps,
+  ItemTreeImageContentProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
 import {
-  createItemTreeWebPageContentViewModel,
-  ItemTreeWebPageContentViewModel,
+  createItemTreeWebPageContentProps,
+  ItemTreeWebPageContentProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
-import {
-  createItemTreeTextContentViewModel,
-  ItemTreeTextContentViewModel,
-} from './ItemTreeTextContentView'
+import {createItemTreeTextContentProps, ItemTreeTextContentProps} from './ItemTreeTextContentView'
 
-export type ItemTreeContentViewModel =
-  | ItemTreeTextContentViewModel
-  | ItemTreeWebPageContentViewModel
-  | ItemTreeImageContentViewModel
-  | ItemTreeCodeBlockContentViewModel
+export type ItemTreeContentProps =
+  | ItemTreeTextContentProps
+  | ItemTreeWebPageContentProps
+  | ItemTreeImageContentProps
+  | ItemTreeCodeBlockContentProps
 
-export function createItemTreeContentViewModel(
+export function createItemTreeContentProps(
   state: State,
   itemPath: ItemPath,
   itemType: ItemType
-): ItemTreeContentViewModel {
+): ItemTreeContentProps {
   // アイテムタイプごとの固有部分を追加して返す
   switch (itemType) {
     case ItemType.TEXT:
-      return createItemTreeTextContentViewModel(state, itemPath)
+      return createItemTreeTextContentProps(state, itemPath)
     case ItemType.WEB_PAGE:
-      return createItemTreeWebPageContentViewModel(state, itemPath)
+      return createItemTreeWebPageContentProps(state, itemPath)
     case ItemType.IMAGE:
-      return createItemTreeImageContentViewModel(state, itemPath)
+      return createItemTreeImageContentProps(state, itemPath)
     case ItemType.CODE_BLOCK:
-      return createItemTreeCodeBlockContentViewModel(state, itemPath)
+      return createItemTreeCodeBlockContentProps(state, itemPath)
     default:
       assertNeverType(itemType)
   }

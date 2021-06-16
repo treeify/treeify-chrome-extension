@@ -1,10 +1,10 @@
 <script lang="ts">
   import hljs from 'highlight.js'
   import Label from '../Label.svelte'
-  import {ItemTreeCodeBlockContentViewModel} from './ItemTreeCodeBlockContentView'
+  import {ItemTreeCodeBlockContentProps} from './ItemTreeCodeBlockContentView'
   import {ItemTreeContentView} from './ItemTreeContentView'
 
-  export let viewModel: ItemTreeCodeBlockContentViewModel
+  export let props: ItemTreeCodeBlockContentProps
 
   function getHighlightedHtml(code: string, language: string): string {
     // ライブラリが対応していない言語の場合例外が投げられる
@@ -19,24 +19,24 @@
     }
   }
 
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div
   class="item-tree-code-block-content"
   {id}
   tabindex="0"
-  on:focus={viewModel.onFocus}
-  on:click={viewModel.onClick}
+  on:focus={props.onFocus}
+  on:click={props.onClick}
 >
-  {#if !viewModel.labels.isEmpty()}
+  {#if !props.labels.isEmpty()}
     <div class="item-tree-code-block-content_labels">
-      {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}} />
+      {#each props.labels.toArray() as label}
+        <Label props={{text: label}} />
       {/each}
     </div>
   {/if}
-  <pre><code>{@html getHighlightedHtml(viewModel.code, viewModel.language)}</code></pre>
+  <pre><code>{@html getHighlightedHtml(props.code, props.language)}</code></pre>
 </div>
 
 <style>

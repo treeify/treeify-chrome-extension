@@ -1,4 +1,4 @@
-export type PageTreeBulletAndIndentViewModel = {
+export type PageTreeBulletAndIndentProps = {
   bulletState: PageTreeBulletState
 }
 
@@ -8,9 +8,9 @@ export enum PageTreeBulletState {
   COLLAPSED,
 }
 
-export function createPageTreeBulletAndIndentViewModel(
+export function createPageTreeBulletAndIndentProps(
   hasChildren: boolean
-): PageTreeBulletAndIndentViewModel {
+): PageTreeBulletAndIndentProps {
   if (hasChildren) {
     return {
       bulletState: PageTreeBulletState.EXPANDED,

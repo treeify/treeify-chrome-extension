@@ -1,13 +1,13 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
-  import {ItemContentViewModel} from './ItemContentView'
+  import {ItemContentProps} from './ItemContentView'
   import TextItemContent from './TextItemContent.svelte'
 
-  export let viewModel: ItemContentViewModel
+  export let props: ItemContentProps
 </script>
 
-{#if viewModel.itemType === ItemType.TEXT}
-  <TextItemContent {viewModel} />
+{#if props.itemType === ItemType.TEXT}
+  <TextItemContent {props} />
 {/if}
 
 <style>
