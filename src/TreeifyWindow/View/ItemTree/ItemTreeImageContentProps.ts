@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import {is, List} from 'immutable'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
@@ -45,6 +45,13 @@ export function createItemTreeImageContentProps(
             event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             Rerenderer.instance.rerender()
+            break
+          case '0100MouseButton0':
+            event.preventDefault()
+            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
+              CurrentState.setTargetItemPathOnly(itemPath)
+              Rerenderer.instance.rerender()
+            }
             break
         }
       })

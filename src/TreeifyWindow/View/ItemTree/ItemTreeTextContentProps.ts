@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import {is, List} from 'immutable'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
@@ -65,6 +65,13 @@ export function createItemTreeTextContentProps(
             Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
             Rerenderer.instance.rerender()
+            break
+          case '0100MouseButton0':
+            event.preventDefault()
+            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
+              CurrentState.setTargetItemPathOnly(itemPath)
+              Rerenderer.instance.rerender()
+            }
             break
         }
       })
