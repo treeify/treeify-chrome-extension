@@ -75,5 +75,4 @@ export function groupingItems() {
   }
 
   CurrentState.setTargetItemPath(newItemPath)
-  // Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
 }
