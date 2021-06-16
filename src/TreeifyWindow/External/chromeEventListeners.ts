@@ -165,6 +165,17 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)
       CurrentState.setIsUnreadFlag(itemId, false)
+
+      // もしタブに対応するアイテムがアクティブページに所属していれば、それをターゲットする
+      // TODO: itemPathの可視性の確認が必要だと思う
+      const activePageId = CurrentState.getActivePageId()
+      for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
+        if (ItemPath.getRootItemId(itemPath) === activePageId) {
+          CurrentState.setTargetItemPath(itemPath)
+          break
+        }
+      }
+
       Rerenderer.instance.rerender()
     }
   })
