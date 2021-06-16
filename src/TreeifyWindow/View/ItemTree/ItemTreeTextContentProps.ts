@@ -4,6 +4,7 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
+import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
@@ -15,7 +16,7 @@ export type ItemTreeTextContentProps = {
   domishObjects: List<DomishObject>
   onInput: (event: Event) => void
   onCompositionEnd: (event: CompositionEvent) => void
-  onClick: (event: Event) => void
+  onClick: (event: MouseEvent) => void
 }
 
 export function createItemTreeTextContentProps(
@@ -56,12 +57,16 @@ export function createItemTreeTextContentProps(
     },
     onClick: (event) => {
       doWithErrorCapture(() => {
-        CurrentState.setTargetItemPath(itemPath)
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            CurrentState.setTargetItemPath(itemPath)
 
-        // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
-        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+            // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
+            Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
-        Rerenderer.instance.rerender()
+            Rerenderer.instance.rerender()
+            break
+        }
       })
     },
   }
