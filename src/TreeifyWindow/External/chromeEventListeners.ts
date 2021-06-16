@@ -153,9 +153,10 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     } else if (CurrentState.isItem(itemId)) {
       // 対応するウェブページアイテムを削除する
       CurrentState.deleteItemItself(itemId)
-    }
+      // TODO: targetItemPathがダングリングポインタになる不具合がある
 
-    Rerenderer.instance.rerender()
+      Rerenderer.instance.rerender()
+    }
   })
 }
 
@@ -165,6 +166,16 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
     if (itemId !== undefined) {
       CurrentState.updateItemTimestamp(itemId)
       CurrentState.setIsUnreadFlag(itemId, false)
+
+      // もしタブに対応するアイテムがアクティブページに所属していれば、それをターゲットする
+      const activePageId = CurrentState.getActivePageId()
+      for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
+        if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
+          CurrentState.setTargetItemPath(itemPath)
+          break
+        }
+      }
+
       Rerenderer.instance.rerender()
     }
   })

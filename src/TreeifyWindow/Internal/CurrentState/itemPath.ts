@@ -181,3 +181,16 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }
+
+/** 与えられたアイテムパスがアイテムツリー上で表示されるべきものかどうかを判定する */
+export function isVisible(itemPath: ItemPath): boolean {
+  for (let i = 1; i < itemPath.size - 1; i++) {
+    const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath.take(i))
+    const nextItemId = itemPath.get(i + 1)
+    assertNonUndefined(nextItemId)
+    if (!displayingChildItemIds.contains(nextItemId)) {
+      return false
+    }
+  }
+  return true
+}
