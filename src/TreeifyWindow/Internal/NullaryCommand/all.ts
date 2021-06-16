@@ -10,17 +10,19 @@ import {
   deleteItem,
   deleteItemItself,
   enterKeyDefault,
+  removeEdge,
+  toggleCollapsed,
+  toggleGrayedOut,
+  toggleHighlighted,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/item'
+import {
   indentItem,
   moveItemDownward,
   moveItemToNextSibling,
   moveItemToPrevSibling,
   moveItemUpward,
-  removeEdge,
-  toggleCollapsed,
-  toggleGrayedOut,
-  toggleHighlighted,
   unindentItem,
-} from 'src/TreeifyWindow/Internal/NullaryCommand/item'
+} from 'src/TreeifyWindow/Internal/NullaryCommand/itemMove'
 import {
   copyForTransclusion,
   excludeFromCurrentWorkspace,
@@ -51,6 +53,7 @@ import {
 } from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/itemMove'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
