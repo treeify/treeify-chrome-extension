@@ -38,6 +38,7 @@ import {
   turnIntoNonPageAndExpand,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/page'
 import {
+  groupingItems,
   insertLineBreak,
   toggleBold,
   toggleItalic,
@@ -93,6 +94,7 @@ export const functions: {[name: string]: () => void} = {
   toggleUnderline,
   toggleItalic,
   toggleStrikethrough,
+  groupingItems,
   hardUnloadItem,
   hardUnloadSubtree,
   loadItem,

@@ -1,4 +1,7 @@
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 /** 太字のトグルコマンド */
@@ -42,4 +45,35 @@ function execTextEditCommand(commandName: string) {
 /** contenteditableな要素で改行を実行する */
 export function insertLineBreak() {
   document.execCommand('insertLineBreak')
+}
+
+/**
+ * 選択したアイテムをグルーピングする。
+ * 具体的には新しい空のテキストアイテムを作り、選択されたアイテムをその子リストに移動する。
+ */
+export function groupingItems() {
+  if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) {
+    // アクティブページの親を作るわけにはいかないので何もしない
+    return
+  }
+
+  // 空のテキストアイテムを作って配置する
+  const newItemId = CurrentState.createTextItem()
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const newItemPath = CurrentState.insertPrevSiblingItem(selectedItemPaths.first(), newItemId)
+
+  // 選択されたアイテムを移動する
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    const parentItemId = ItemPath.getParentItemId(selectedItemPath)
+    assertNonUndefined(parentItemId)
+    const edge = CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
+
+    CurrentState.insertLastChildItem(newItemId, selectedItemId, edge)
+
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
+
+  CurrentState.setTargetItemPath(newItemPath)
+  // Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
 }
