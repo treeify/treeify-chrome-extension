@@ -1,27 +1,10 @@
 <script lang="ts">
-  import {integer} from '../../../Common/integer'
+  import {ItemTreeBulletState, ItemTreeSpoolProps} from './ItemTreeSpoolProps'
 
-  type ItemTreeSpoolViewModel = {
-    bulletState: ItemTreeBulletState
-    /**
-     * expand時に表示されるアイテム数。
-     * collapsed状態以外の場合は常に0。
-     */
-    hiddenItemsCount: integer
-    onClick: (event: MouseEvent) => void
-  }
-
-  enum ItemTreeBulletState {
-    NO_CHILDREN,
-    EXPANDED,
-    COLLAPSED,
-    PAGE,
-  }
-
-  export let viewModel: ItemTreeSpoolViewModel
+  export let props: ItemTreeSpoolProps
 
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
-  $: limitedHiddenItemsCount = Math.min(viewModel.hiddenItemsCount, 10)
+  $: limitedHiddenItemsCount = Math.min(props.hiddenItemsCount, 10)
   $: outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
   $: outerCircleStyle = `
     width: ${outerCircleRadiusEm}em;
@@ -29,17 +12,17 @@
   `
 </script>
 
-<div class="item-tree-spool" on:click={viewModel.onClick}>
-  {#if viewModel.bulletState === ItemTreeBulletState.EXPANDED}
+<div class="item-tree-spool" on:click={props.onClick}>
+  {#if props.bulletState === ItemTreeBulletState.EXPANDED}
     <div class="item-tree-spool_indent-area">
       <div class="item-tree-spool_indent-line" />
     </div>
   {/if}
   <div class="item-tree-spool_bullet-area">
-    {#if viewModel.bulletState === ItemTreeBulletState.PAGE}
+    {#if props.bulletState === ItemTreeBulletState.PAGE}
       <div class="item-tree-spool_page-icon" />
     {:else}
-      {#if viewModel.bulletState === ItemTreeBulletState.COLLAPSED}
+      {#if props.bulletState === ItemTreeBulletState.COLLAPSED}
         <div class="item-tree-spool_outer-circle" style={outerCircleStyle} />
       {/if}
       <div class="item-tree-spool_inner-circle" />
@@ -49,7 +32,7 @@
 
 <style>
   :root {
-    /* バレットの外側の円の直径は{@link ItemTreeSpoolView.ts}で動的に設定している */
+    /* バレットの外側の円の直径は{@link ItemTreeSpoolProps.ts}で動的に設定している */
     /* バレットの外側の円の色 */
     --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
     /* バレットの外側の円のマウスホバー時の色 */

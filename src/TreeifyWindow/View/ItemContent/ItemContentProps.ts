@@ -2,17 +2,17 @@ import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {
-  createTextItemContentViewModel,
-  TextItemContentViewModel,
-} from 'src/TreeifyWindow/View/ItemContent/TextItemContentView'
+  createTextItemContentProps,
+  TextItemContentProps,
+} from 'src/TreeifyWindow/View/ItemContent/TextItemContentProps'
 
-export type ItemContentViewModel = TextItemContentViewModel
+export type ItemContentProps = TextItemContentProps
 
-export function createItemContentViewModel(itemId: ItemId) {
+export function createItemContentProps(itemId: ItemId) {
   const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
-      return createTextItemContentViewModel(itemId)
+      return createTextItemContentProps(itemId)
     case ItemType.WEB_PAGE:
     case ItemType.IMAGE:
     case ItemType.CODE_BLOCK:

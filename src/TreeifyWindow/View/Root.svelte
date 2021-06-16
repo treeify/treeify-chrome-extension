@@ -2,50 +2,26 @@
   import {List} from 'immutable'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-  import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
+  import {createRootProps, RootProps} from 'src/TreeifyWindow/View/RootProps'
   import {derived, Readable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
-  import {DataFolderPickerOpenButtonViewModel} from './DataFolderPickerOpenButtonView'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
-  import {CodeBlockItemEditDialogViewModel} from './Dialog/CodeBlockItemEditDialogView'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
-  import {DefaultWindowModeSettingDialogViewModel} from './Dialog/DefaultWindowModeSettingDialogView'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
-  import {LabelEditDialogViewModel} from './Dialog/LabelEditDialogView'
   import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
-  import {OtherParentsDialogViewModel} from './Dialog/OtherParentsDialogView'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
-  import {WebPageItemTitleSettingDialogViewModel} from './Dialog/WebPageItemTitleSettingDialogView'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
-  import {WorkspaceDialogViewModel} from './Dialog/WorkspaceDialogView'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
-  import {ItemTreeViewModel} from './ItemTree/ItemTreeView'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
-  import {LeftSidebarViewModel} from './LeftSidebar/LeftSidebarView'
 
-  type RootViewModel = {
-    leftSidebarViewModel: LeftSidebarViewModel | undefined
-    itemTreeViewModel: ItemTreeViewModel
-    webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-    codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
-    defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
-    workspaceDialog: WorkspaceDialogViewModel | undefined
-    labelEditDialog: LabelEditDialogViewModel | undefined
-    otherParentsDialog: OtherParentsDialogViewModel | undefined
-    dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
-  }
-
-  const viewModelStream: Readable<RootViewModel> = derived(
-    Rerenderer.instance.rerenderingPulse,
-    () => {
-      return createRootViewModel(Internal.instance.state)
-    }
-  )
-  $: viewModel = $viewModelStream
+  const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
+    return createRootProps(Internal.instance.state)
+  })
+  $: props = $propsStream
 
   function onClickExportButton() {
     doWithErrorCapture(() => {
@@ -66,34 +42,34 @@
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
       <FullWindowModeButton />
-      <DataFolderPickerOpenButton viewModel={viewModel.dataFolderPickerOpenButtonViewModel} />
+      <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
     </div>
     <div class="sidebar-layout">
-      {#if viewModel.leftSidebarViewModel !== undefined}
-        <LeftSidebar viewModel={viewModel.leftSidebarViewModel} />
+      {#if props.leftSidebarProps !== undefined}
+        <LeftSidebar props={props.leftSidebarProps} />
       {:else}
         <div class="grid-empty-cell" />
       {/if}
-      <ItemTree viewModel={viewModel.itemTreeViewModel} />
+      <ItemTree props={props.itemTreeProps} />
     </div>
   </div>
-  {#if viewModel.webPageItemTitleSettingDialog !== undefined}
-    <WebPageItemTitleSettingDialog viewModel={viewModel.webPageItemTitleSettingDialog} />
+  {#if props.webPageItemTitleSettingDialog !== undefined}
+    <WebPageItemTitleSettingDialog props={props.webPageItemTitleSettingDialog} />
   {/if}
-  {#if viewModel.codeBlockItemEditDialogViewModel !== undefined}
-    <CodeBlockItemEditDialog viewModel={viewModel.codeBlockItemEditDialogViewModel} />
+  {#if props.codeBlockItemEditDialogProps !== undefined}
+    <CodeBlockItemEditDialog props={props.codeBlockItemEditDialogProps} />
   {/if}
-  {#if viewModel.defaultWindowModeSettingDialog !== undefined}
-    <DefaultWindowModeSettingDialog viewModel={viewModel.defaultWindowModeSettingDialog} />
+  {#if props.defaultWindowModeSettingDialog !== undefined}
+    <DefaultWindowModeSettingDialog props={props.defaultWindowModeSettingDialog} />
   {/if}
-  {#if viewModel.workspaceDialog !== undefined}
-    <WorkspaceDialog viewModel={viewModel.workspaceDialog} />
+  {#if props.workspaceDialog !== undefined}
+    <WorkspaceDialog props={props.workspaceDialog} />
   {/if}
-  {#if viewModel.labelEditDialog !== undefined}
-    <LabelEditDialog viewModel={viewModel.labelEditDialog} />
+  {#if props.labelEditDialog !== undefined}
+    <LabelEditDialog props={props.labelEditDialog} />
   {/if}
-  {#if viewModel.otherParentsDialog !== undefined}
-    <OtherParentsDialog viewModel={viewModel.otherParentsDialog} />
+  {#if props.otherParentsDialog !== undefined}
+    <OtherParentsDialog props={props.otherParentsDialog} />
   {/if}
 </div>
 

@@ -1,21 +1,16 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
+  import {PageTreeContentProps} from './PageTreeContentProps'
   import PageTreeTextContent from './PageTreeTextContent.svelte'
-  import {PageTreeTextContentViewModel} from './PageTreeTextContentView'
   import PageTreeWebPageContent from './PageTreeWebPageContent.svelte'
-  import {PageTreeWebPageContentViewModel} from './PageTreeWebPageContentView'
 
-  type PageTreeContentViewModel =
-    | PageTreeTextContentViewModel
-    | PageTreeWebPageContentViewModel
-
-  export let viewModel: PageTreeContentViewModel
+  export let props: PageTreeContentProps
 </script>
 
-{#if viewModel.itemType === ItemType.TEXT}
-  <PageTreeTextContent {viewModel} />
-{:else if viewModel.itemType === ItemType.WEB_PAGE}
-  <PageTreeWebPageContent {viewModel} />
+{#if props.itemType === ItemType.TEXT}
+  <PageTreeTextContent {props} />
+{:else if props.itemType === ItemType.WEB_PAGE}
+  <PageTreeWebPageContent {props} />
 {/if}
 
 <style>

@@ -4,14 +4,14 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State, Workspace} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-type WorkspaceRecord = {id: WorkspaceId} & Workspace
+export type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
-export type WorkspaceDialogViewModel = {
+export type WorkspaceDialogProps = {
   workspaces: List<WorkspaceRecord>
   onClickAddButton: () => void
 }
 
-export function createWorkspaceDialogViewModel(state: State): WorkspaceDialogViewModel | undefined {
+export function createWorkspaceDialogProps(state: State): WorkspaceDialogProps | undefined {
   if (state.workspaceDialog === null) return undefined
 
   const workspaces = []

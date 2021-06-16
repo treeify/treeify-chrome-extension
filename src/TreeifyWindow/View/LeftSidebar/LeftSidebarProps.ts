@@ -1,31 +1,28 @@
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {
-  createPageTreeViewModel,
-  PageTreeViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
+import {createPageTreeProps, PageTreeProps} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeProps'
 
-export type LeftSidebarViewModel = {
-  pageTreeViewModel: PageTreeViewModel
+export type LeftSidebarProps = {
+  pageTreeProps: PageTreeProps
   isFloating: boolean
 }
 
 /**
- * 左サイドバーのViewModelを作る。
+ * 左サイドバーのPropsを作る。
  * 左サイドバーを非表示にする場合はundefinedを返す。
  */
-export function createLeftSidebarViewModel(state: State): LeftSidebarViewModel | undefined {
+export function createLeftSidebarProps(state: State): LeftSidebarProps | undefined {
   // Treeifyウィンドウの横幅が画面横幅の50%以上のときは左サイドバーを表示する。
   // window.outerWidthを使うとウィンドウ最大化および最大化解除時に実態と異なる値になる（Macで確認済み）。
   // TODO: スレッショルドを50%固定ではなく変更可能にする
   if (window.innerWidth >= screen.width * 0.5) {
     return {
-      pageTreeViewModel: createPageTreeViewModel(state),
+      pageTreeProps: createPageTreeProps(state),
       isFloating: false,
     }
   } else if (External.instance.shouldFloatingLeftSidebarShown) {
     return {
-      pageTreeViewModel: createPageTreeViewModel(state),
+      pageTreeProps: createPageTreeProps(state),
       isFloating: true,
     }
   }

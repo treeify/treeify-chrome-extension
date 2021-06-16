@@ -5,16 +5,16 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type WebPageItemTitleSettingDialogViewModel = {
+export type WebPageItemTitleSettingDialogProps = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
   /** タイトル入力欄のテキストの初期値 */
   initialTitle: string
   onKeyDown: (event: KeyboardEvent) => void
 }
 
-export function createWebPageItemTitleSettingDialogViewModel(
+export function createWebPageItemTitleSettingDialogProps(
   state: State
-): WebPageItemTitleSettingDialogViewModel | undefined {
+): WebPageItemTitleSettingDialogProps | undefined {
   if (state.webPageItemTitleSettingDialog === null) return undefined
 
   const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath

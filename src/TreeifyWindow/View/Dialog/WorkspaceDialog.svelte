@@ -1,21 +1,12 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Workspace} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
+  import {WorkspaceDialogProps} from './WorkspaceDialogProps'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
 
-  type WorkspaceRecord = {id: WorkspaceId} & Workspace
-
-  type WorkspaceDialogViewModel = {
-    workspaces: List<WorkspaceRecord>
-    onClickAddButton: () => void
-  }
-
-  export let viewModel: WorkspaceDialogViewModel
+  export let props: WorkspaceDialogProps
 
   const closeDialog = () => {
     doWithErrorCapture(() => {
@@ -27,10 +18,10 @@
 
 <CommonDialog title="ワークスペース" onCloseDialog={closeDialog}>
   <div class="workspace-dialog_content" tabindex="0">
-    {#each viewModel.workspaces.toArray() as workspace}
+    {#each props.workspaces.toArray() as workspace}
       <WorkspaceDialogRow {workspace} />
     {/each}
-    <div class="workspace-dialog_add-button" on:click={viewModel.onClickAddButton} />
+    <div class="workspace-dialog_add-button" on:click={props.onClickAddButton} />
     <button class="workspace-dialog_close-button" on:click={closeDialog}>閉じる</button>
   </div>
 </CommonDialog>

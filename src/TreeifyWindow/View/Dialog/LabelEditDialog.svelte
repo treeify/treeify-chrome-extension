@@ -4,13 +4,11 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
-  import {LabelEditDialog} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
+  import {LabelEditDialogProps} from './LabelEditDialogProps'
 
-  type LabelEditDialogViewModel = LabelEditDialog
-
-  export let viewModel: LabelEditDialogViewModel
+  export let props: LabelEditDialogProps
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -44,8 +42,8 @@
       const elementNodeListOf = document.querySelectorAll('.label-edit-dialog_delete-button')
       const index = List(elementNodeListOf).indexOf(event.target)
       assert(index !== -1)
-      assert(viewModel.labels.size > 0)
-      if (viewModel.labels.size === 1) {
+      assert(props.labels.size > 0)
+      if (props.labels.size === 1) {
         // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
         CurrentState.setLabelEditDialog({labels: List.of('')})
         Rerenderer.instance.rerender()
@@ -82,7 +80,7 @@
 
 <CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
   <div class="label-edit-dialog_content">
-    {#each viewModel.labels.toArray() as label}
+    {#each props.labels.toArray() as label}
       <div class="label-edit-dialog_label-row">
         <input
           type="text"

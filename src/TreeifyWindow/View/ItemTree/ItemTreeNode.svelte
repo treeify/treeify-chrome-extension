@@ -1,40 +1,13 @@
 <script lang="ts">
   import Color from 'color'
-  import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import {ItemPath} from '../../Internal/ItemPath'
   import ItemTreeContent from './ItemTreeContent.svelte'
-  import {ItemTreeContentViewModel} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
+  import {ItemTreeNodeProps} from './ItemTreeNodeProps'
   import ItemTreeSpool from './ItemTreeSpool.svelte'
-  import {ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
 
-  type ItemTreeNodeViewModel = {
-    itemPath: ItemPath
-    isActivePage: boolean
-    /**
-     * このアイテムが選択されているかどうかを示す値。
-     * 複数選択されたアイテムのうちの1つならmulti。
-     * 単一選択されたアイテムならsingle。
-     * 選択されていないならnon。
-     */
-    selected: 'single' | 'multi' | 'non'
-    isTranscluded: boolean
-    cssClasses: List<string>
-    footprintRank: integer | undefined
-    footprintCount: integer
-    hiddenTabsCount: integer
-    contentViewModel: ItemTreeContentViewModel
-    childItemViewModels: List<ItemTreeNodeViewModel>
-    spoolViewModel: ItemTreeSpoolViewModel
-    onMouseDownContentArea: (event: MouseEvent) => void
-    onClickDeleteButton: (event: MouseEvent) => void
-    onDragStart: (event: DragEvent) => void
-    onClickHiddenTabsCount: (event: MouseEvent) => void
-  }
-
-  export let viewModel: ItemTreeNodeViewModel
+  export let props: ItemTreeNodeProps
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,
@@ -54,57 +27,57 @@
     return strongestColor.mix(weakestColor, ratio)
   }
 
-  $: footprintColor = calculateFootprintColor(viewModel.footprintRank, viewModel.footprintCount)
+  $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
   $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
-  $: childrenCssClasses = viewModel.cssClasses.map((cssClass) => cssClass + '-children')
+  $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div class="item-tree-node" class:multi-selected={viewModel.selected === 'multi'}>
-  {#if viewModel.isActivePage}
+<div class="item-tree-node" class:multi-selected={props.selected === 'multi'}>
+  {#if props.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
     <!-- バレットとインデントラインの領域 -->
     <div
-      class={'item-tree-node_spool-area ' + viewModel.cssClasses.join(' ')}
-      class:transcluded={viewModel.isTranscluded}
+      class={'item-tree-node_spool-area ' + props.cssClasses.join(' ')}
+      class:transcluded={props.isTranscluded}
       draggable="true"
-      on:dragstart={viewModel.onDragStart}
+      on:dragstart={props.onDragStart}
     >
-      <ItemTreeSpool viewModel={viewModel.spoolViewModel} />
+      <ItemTreeSpool props={props.spoolProps} />
     </div>
   {/if}
   <div class="item-tree-node_body-and-children-area">
     <!-- ボディ領域 -->
-    <div class={viewModel.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+    <div class={props.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
       <!-- 足跡表示用のレイヤー -->
       <div class="item-tree-node_footprint-layer" style={footprintLayerStyle}>
         <!-- コンテンツ領域 -->
         <div
-          data-item-path={JSON.stringify(viewModel.itemPath.toArray())}
+          data-item-path={JSON.stringify(props.itemPath.toArray())}
           class="item-tree-node_content-area"
-          class:single-selected={viewModel.selected === 'single'}
-          on:mousedown={viewModel.onMouseDownContentArea}
+          class:single-selected={props.selected === 'single'}
+          on:mousedown={props.onMouseDownContentArea}
         >
-          <ItemTreeContent viewModel={viewModel.contentViewModel} />
+          <ItemTreeContent props={props.contentProps} />
         </div>
       </div>
       <!-- 隠れているタブ数 -->
-      {#if viewModel.hiddenTabsCount > 0}
-        <div class="item-tree-node_hidden-tabs-count" on:click={viewModel.onClickHiddenTabsCount}>
-          {Math.min(99, viewModel.hiddenTabsCount)}
+      {#if props.hiddenTabsCount > 0}
+        <div class="item-tree-node_hidden-tabs-count" on:click={props.onClickHiddenTabsCount}>
+          {Math.min(99, props.hiddenTabsCount)}
         </div>
       {:else}
         <div class="grid-empty-cell" />
       {/if}
       <!-- 削除ボタン -->
-      <div class="item-tree-node_delete-button" on:click={viewModel.onClickDeleteButton}>
+      <div class="item-tree-node_delete-button" on:click={props.onClickDeleteButton}>
         <div class="item-tree-node_delete-button-icon" />
       </div>
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-      {#each viewModel.childItemViewModels.toArray() as itemViewModel (itemViewModel.itemPath.toString())}
-        <ItemTreeNode viewModel={itemViewModel} />
+      {#each props.childItemPropses.toArray() as itemProps (itemProps.itemPath.toString())}
+        <ItemTreeNode props={itemProps} />
       {/each}
     </div>
   </div>

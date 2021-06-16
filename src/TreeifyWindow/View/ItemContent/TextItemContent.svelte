@@ -1,17 +1,11 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
+  import {TextItemContentProps} from './TextItemContentProps'
 
-  type TextItemContentViewModel = {
-    itemType: ItemType.TEXT
-    domishObjects: List<DomishObject>
-  }
-
-  export let viewModel: TextItemContentViewModel
+  export let props: TextItemContentProps
 </script>
 
-<div>{@html DomishObject.toHtml(viewModel.domishObjects)}</div>
+<div>{@html DomishObject.toHtml(props.domishObjects)}</div>
 
 <style>
 </style>

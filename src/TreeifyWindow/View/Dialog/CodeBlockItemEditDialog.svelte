@@ -1,16 +1,11 @@
 <script lang="ts">
   import hljs from 'highlight.js'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {CodeBlockItemEditDialog} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
+  import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
 
-  type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
-    onClickFinishButton: () => void
-    onClickCancelButton: () => void
-  }
-
-  export let viewModel: CodeBlockItemEditDialogViewModel
+  export let props: CodeBlockItemEditDialogProps
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
@@ -21,7 +16,7 @@
 
 <CommonDialog title="コードブロック編集" {onCloseDialog}>
   <div class="code-block-edit-dialog_content">
-    <textarea class="code-block-edit-dialog_code">{viewModel.code}</textarea>
+    <textarea class="code-block-edit-dialog_code">{props.code}</textarea>
     <div class="code-block-edit-dialog_language-area">
       <label>言語名</label>
       <input
@@ -29,7 +24,7 @@
         type="text"
         autocomplete="on"
         list="languages"
-        value={viewModel.language}
+        value={props.language}
       />
     </div>
     <datalist id="languages">
@@ -38,8 +33,8 @@
       {/each}
     </datalist>
     <div class="code-block-edit-dialog_button-area">
-      <button on:click={viewModel.onClickFinishButton}>完了</button>
-      <button on:click={viewModel.onClickCancelButton}>キャンセル</button>
+      <button on:click={props.onClickFinishButton}>完了</button>
+      <button on:click={props.onClickCancelButton}>キャンセル</button>
     </div>
   </div>
 </CommonDialog>

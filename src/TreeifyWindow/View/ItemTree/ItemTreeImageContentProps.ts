@@ -6,7 +6,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type ItemTreeImageContentViewModel = {
+export type ItemTreeImageContentProps = {
   itemPath: ItemPath
   labels: List<string>
   itemType: ItemType.IMAGE
@@ -16,10 +16,10 @@ export type ItemTreeImageContentViewModel = {
   onClick: (event: Event) => void
 }
 
-export function createItemTreeImageContentViewModel(
+export function createItemTreeImageContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeImageContentViewModel {
+): ItemTreeImageContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const imageItem = state.imageItems[itemId]
 

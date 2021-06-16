@@ -1,31 +1,19 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
-  import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentView'
+  import {ItemTreeContentView} from './ItemTreeContentProps'
+  import {ItemTreeTextContentProps} from './ItemTreeTextContentProps'
 
-  type ItemTreeTextContentViewModel = {
-    itemPath: ItemPath
-    itemType: ItemType.TEXT
-    labels: List<string>
-    domishObjects: List<DomishObject>
-    onInput: (event: Event) => void
-    onCompositionEnd: (event: CompositionEvent) => void
-    onClick: (event: Event) => void
-  }
+  export let props: ItemTreeTextContentProps
 
-  export let viewModel: ItemTreeTextContentViewModel
-
-  const id = ItemTreeContentView.focusableDomElementId(viewModel.itemPath)
+  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div class="item-tree-text-content">
-  {#if !viewModel.labels.isEmpty()}
+  {#if !props.labels.isEmpty()}
     <div class="item-tree-text-content_labels">
-      {#each viewModel.labels.toArray() as label}
-        <Label viewModel={{text: label}} />
+      {#each props.labels.toArray() as label}
+        <Label props={{text: label}} />
       {/each}
     </div>
   {/if}
@@ -33,11 +21,11 @@
     class="item-tree-text-content_content-editable"
     {id}
     contenteditable="true"
-    on:input={viewModel.onInput}
-    on:compositionend={viewModel.onCompositionEnd}
-    on:click={viewModel.onClick}
+    on:input={props.onInput}
+    on:compositionend={props.onCompositionEnd}
+    on:click={props.onClick}
   >
-    {@html DomishObject.toHtml(viewModel.domishObjects)}
+    {@html DomishObject.toHtml(props.domishObjects)}
   </div>
 </div>
 

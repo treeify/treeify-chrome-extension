@@ -19,15 +19,11 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
-  import {ItemTreeContentView} from './ItemTreeContentView'
+  import {ItemTreeContentView} from './ItemTreeContentProps'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
+  import {ItemTreeProps} from './ItemTreeProps'
 
-  type ItemTreeViewModel = {
-    rootNodeViewModel: ItemTreeNodeViewModel
-  }
-
-  export let viewModel: ItemTreeViewModel
+  export let props: ItemTreeProps
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -772,7 +768,7 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode viewModel={viewModel.rootNodeViewModel} />
+  <ItemTreeNode props={props.rootNodeProps} />
 </main>
 
 <style>

@@ -1,16 +1,11 @@
 <script lang="ts">
-  import {List} from 'immutable'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {ItemContentViewModel} from '../ItemContent/ItemContentView'
   import CommonDialog from './CommonDialog.svelte'
+  import {OtherParentsDialogProps} from './OtherParentsDialogProps'
 
-  type OtherParentsDialogViewModel = {
-    itemContentViewModels: List<ItemContentViewModel>
-  }
-
-  export let viewModel: OtherParentsDialogViewModel
+  export let props: OtherParentsDialogProps
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -22,9 +17,9 @@
 <CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
-      {#each viewModel.itemContentViewModels.toArray() as itemContentViewModel}
+      {#each props.itemContentPropses.toArray() as itemContentProps}
         <div class="other-parents-dialog_row-wrapper">
-          <ItemContent viewModel={itemContentViewModel} />
+          <ItemContent props={itemContentProps} />
         </div>
       {/each}
     </div>

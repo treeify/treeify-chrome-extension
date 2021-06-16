@@ -1,10 +1,10 @@
 import {External} from 'src/TreeifyWindow/External/External'
 
-export type DataFolderPickerOpenButtonViewModel = {
+export type DataFolderPickerOpenButtonProps = {
   isGrayedOut: boolean
 }
 
-export function createDataFolderPickerOpenButtonViewModel(): DataFolderPickerOpenButtonViewModel {
+export function createDataFolderPickerOpenButtonProps(): DataFolderPickerOpenButtonProps {
   return {
     isGrayedOut:
       External.instance.dataFolder !== undefined &&

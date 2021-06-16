@@ -11,18 +11,18 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
-  createPageTreeBulletAndIndentViewModel,
-  PageTreeBulletAndIndentViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
+  createPageTreeBulletAndIndentProps,
+  PageTreeBulletAndIndentProps,
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentProps'
 import {
-  createPageTreeContentViewModel,
-  PageTreeContentViewModel,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
+  createPageTreeContentProps,
+  PageTreeContentProps,
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentProps'
 
-export type PageTreeNodeViewModel = {
-  bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
-  contentViewModel: PageTreeContentViewModel
-  childNodeViewModels: List<PageTreeNodeViewModel>
+export type PageTreeNodeProps = {
+  bulletAndIndentProps: PageTreeBulletAndIndentProps
+  contentProps: PageTreeContentProps
+  childNodePropses: List<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   footprintRank: integer | undefined
@@ -33,7 +33,7 @@ export type PageTreeNodeViewModel = {
   onDrop: (event: DragEvent) => void
 }
 
-export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewModel {
+export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   const filteredPageIds = CurrentState.getFilteredMountedPageIds()
   const itemPaths = filteredPageIds.flatMap((itemId) => [
     ...searchItemPathForMountedPage(state, List.of(itemId)),
@@ -46,7 +46,7 @@ export function createPageTreeRootNodeViewModel(state: State): PageTreeNodeViewM
       }, lexicographicalOrder)
     })
 
-  return createPageTreeNodeViewModel(state, TOP_ITEM_ID, pageTreeEdges, filteredPageIds)
+  return createPageTreeNodeProps(state, TOP_ITEM_ID, pageTreeEdges, filteredPageIds)
 }
 
 // アイテムパスを兄弟順位リストに変換する
@@ -81,12 +81,12 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
   }
 }
 
-export function createPageTreeNodeViewModel(
+export function createPageTreeNodeProps(
   state: State,
   itemId: ItemId,
   pageTreeEdges: Seq.Keyed<ItemId, Collection<integer, ItemPath>>,
   filteredPageIds: List<ItemId>
-): PageTreeNodeViewModel {
+): PageTreeNodeProps {
   const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
 
@@ -95,10 +95,10 @@ export function createPageTreeNodeViewModel(
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
-    bulletAndIndentViewModel: createPageTreeBulletAndIndentViewModel(hasChildren),
-    contentViewModel: createPageTreeContentViewModel(state, itemId),
-    childNodeViewModels: childPagePaths.map((childPagePath) =>
-      createPageTreeNodeViewModel(
+    bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren),
+    contentProps: createPageTreeContentProps(state, itemId),
+    childNodePropses: childPagePaths.map((childPagePath) =>
+      createPageTreeNodeProps(
         state,
         ItemPath.getItemId(childPagePath),
         pageTreeEdges,

@@ -2,18 +2,13 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
+  import {DefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
 
-  type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
-    initialDefaultWindowMode: DefaultWindowMode
-    onClickCancelButton: () => void
-  }
+  export let props: DefaultWindowModeSettingDialogProps
 
-  export let viewModel: DefaultWindowModeSettingDialogViewModel
-
-  let selectedDefaultWindowMode = viewModel.initialDefaultWindowMode
+  let selectedDefaultWindowMode = props.initialDefaultWindowMode
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
@@ -78,7 +73,7 @@
     </form>
     <div class="default-window-mode-setting-dialog_button-area">
       <button on:click={onClickFinishButton}>完了</button>
-      <button on:click={viewModel.onClickCancelButton}>キャンセル</button>
+      <button on:click={props.onClickCancelButton}>キャンセル</button>
     </div>
   </div>
 </CommonDialog>
