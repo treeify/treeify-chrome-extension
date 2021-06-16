@@ -110,7 +110,7 @@ export namespace DomishObject {
         case 'br':
           return `<br>`
         case 'text':
-          return domishObject.textContent
+          return escape(domishObject.textContent)
         default:
           assertNeverType(domishObject)
       }
@@ -265,5 +265,11 @@ export namespace DomishObject {
       }
     }
     return true
+  }
+
+  function escape(plainText: string): string {
+    const divElement = document.createElement('div')
+    divElement.innerText = plainText
+    return divElement.innerHTML
   }
 }
