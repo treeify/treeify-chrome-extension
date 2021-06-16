@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import {is, List} from 'immutable'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {External} from 'src/TreeifyWindow/External/External'
@@ -61,15 +61,25 @@ export function createItemTreeWebPageContentProps(
       doWithErrorCapture(() => {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTabInDualWindowMode()
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             Rerenderer.instance.rerender()
             break
+          case '0100MouseButton0':
+            event.preventDefault()
+            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
+              CurrentState.setTargetItemPathOnly(itemPath)
+              Rerenderer.instance.rerender()
+            }
+            break
           case '0010MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTab()
             Rerenderer.instance.rerender()
