@@ -28,7 +28,7 @@ export enum ItemType {
 }
 
 /**
- * chrome.tabs.Tab型のidプロパティを表す型。
+ * chrome.tabs.Tab型のidプロパティ用の型。
  * 可読性のために導入。
  */
 export type TabId = integer
