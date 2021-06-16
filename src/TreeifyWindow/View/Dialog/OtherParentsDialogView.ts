@@ -8,7 +8,7 @@ import {
 } from 'src/TreeifyWindow/View/ItemContent/ItemContentView'
 
 export type OtherParentsDialogProps = {
-  itemContentPropss: List<ItemContentProps>
+  itemContentPropses: List<ItemContentProps>
 }
 
 export function createOtherParentsDialogProps(state: State): OtherParentsDialogProps | undefined {
@@ -17,8 +17,8 @@ export function createOtherParentsDialogProps(state: State): OtherParentsDialogP
   const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
   const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
-  const itemContentPropss = parentItemIds
+  const itemContentPropses = parentItemIds
     .filter((itemId) => targetParentItemId !== itemId)
     .map(createItemContentProps)
-  return {itemContentPropss}
+  return {itemContentPropses}
 }

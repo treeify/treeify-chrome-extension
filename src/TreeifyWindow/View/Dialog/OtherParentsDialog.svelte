@@ -17,7 +17,7 @@
 <CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
-      {#each props.itemContentPropss.toArray() as itemContentProps}
+      {#each props.itemContentPropses.toArray() as itemContentProps}
         <div class="other-parents-dialog_row-wrapper">
           <ItemContent props={itemContentProps} />
         </div>

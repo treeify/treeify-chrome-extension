@@ -76,7 +76,7 @@
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
-      {#each props.childItemPropss.toArray() as itemProps (itemProps.itemPath.toString())}
+      {#each props.childItemPropses.toArray() as itemProps (itemProps.itemPath.toString())}
         <ItemTreeNode props={itemProps} />
       {/each}
     </div>

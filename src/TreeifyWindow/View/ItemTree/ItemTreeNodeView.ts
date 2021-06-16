@@ -40,7 +40,7 @@ export type ItemTreeNodeProps = {
   footprintCount: integer
   hiddenTabsCount: integer
   contentProps: ItemTreeContentProps
-  childItemPropss: List<ItemTreeNodeProps>
+  childItemPropses: List<ItemTreeNodeProps>
   spoolProps: ItemTreeSpoolProps
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
@@ -70,7 +70,7 @@ export function createItemTreeNodeProps(
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
     spoolProps: createItemTreeSpoolProps(state, itemPath),
     contentProps: createItemTreeContentProps(state, itemPath, item.itemType),
-    childItemPropss: displayingChildItemIds.map((childItemId: ItemId) => {
+    childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
       return createItemTreeNodeProps(
         state,
         footprintRankMap,

@@ -22,7 +22,7 @@ import {
 export type PageTreeNodeProps = {
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: PageTreeContentProps
-  childNodePropss: List<PageTreeNodeProps>
+  childNodePropses: List<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   footprintRank: integer | undefined
@@ -97,7 +97,7 @@ export function createPageTreeNodeProps(
   return {
     bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren),
     contentProps: createPageTreeContentProps(state, itemId),
-    childNodePropss: childPagePaths.map((childPagePath) =>
+    childNodePropses: childPagePaths.map((childPagePath) =>
       createPageTreeNodeProps(
         state,
         ItemPath.getItemId(childPagePath),
