@@ -64,6 +64,7 @@
 
       // Enterキー押下は完了ボタン押下と同じ扱いにする
       if (InputId.fromKeyboardEvent(event) === '0000Enter') {
+        event.preventDefault()
         onClickFinishButton()
       }
     })
