@@ -1,6 +1,6 @@
 <script lang="ts">
   import {DomishObject} from '../../Internal/DomishObject'
-  import {PageTreeTextContentProps} from './PageTreeTextContentView'
+  import {PageTreeTextContentProps} from './PageTreeTextContentProps'
 
   export let props: PageTreeTextContentProps
 </script>

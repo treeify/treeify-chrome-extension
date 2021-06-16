@@ -3,8 +3,8 @@
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
+  import {WorkspaceDialogProps} from './WorkspaceDialogProps'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
-  import {WorkspaceDialogProps} from './WorkspaceDialogView'
 
   export let props: WorkspaceDialogProps
 

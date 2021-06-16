@@ -19,7 +19,7 @@
   import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {onDestroy, onMount} from 'svelte'
   import {assertNonUndefined} from '../../../Common/Debug/assert'
-  import {WebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogView'
+  import {WebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
 
   export let props: WebPageItemTitleSettingDialogProps
 

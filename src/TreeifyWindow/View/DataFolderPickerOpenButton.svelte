@@ -2,7 +2,7 @@
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {NullaryCommand} from '../Internal/NullaryCommand'
   import {Rerenderer} from '../Rerenderer'
-  import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonView'
+  import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonProps'
 
   export let props: DataFolderPickerOpenButtonProps
 

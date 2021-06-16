@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {PageTreeWebPageContentProps} from './PageTreeWebPageContentView'
+  import {PageTreeWebPageContentProps} from './PageTreeWebPageContentProps'
 
   export let props: PageTreeWebPageContentProps
 </script>

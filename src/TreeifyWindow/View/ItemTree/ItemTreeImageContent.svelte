@@ -1,7 +1,7 @@
 <script lang="ts">
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentView'
-  import {ItemTreeImageContentProps} from './ItemTreeImageContentView'
+  import {ItemTreeContentView} from './ItemTreeContentProps'
+  import {ItemTreeImageContentProps} from './ItemTreeImageContentProps'
 
   export let props: ItemTreeImageContentProps
 

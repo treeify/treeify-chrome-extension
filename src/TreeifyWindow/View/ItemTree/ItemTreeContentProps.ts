@@ -5,16 +5,16 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeCodeBlockContentProps,
   ItemTreeCodeBlockContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentProps'
 import {
   createItemTreeImageContentProps,
   ItemTreeImageContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentProps'
 import {
   createItemTreeWebPageContentProps,
   ItemTreeWebPageContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentView'
-import {createItemTreeTextContentProps, ItemTreeTextContentProps} from './ItemTreeTextContentView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentProps'
+import {createItemTreeTextContentProps, ItemTreeTextContentProps} from './ItemTreeTextContentProps'
 
 export type ItemTreeContentProps =
   | ItemTreeTextContentProps

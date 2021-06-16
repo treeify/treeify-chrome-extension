@@ -1,6 +1,6 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
-  import {PageTreeContentProps} from './PageTreeContentView'
+  import {PageTreeContentProps} from './PageTreeContentProps'
   import PageTreeTextContent from './PageTreeTextContent.svelte'
   import PageTreeWebPageContent from './PageTreeWebPageContent.svelte'
 

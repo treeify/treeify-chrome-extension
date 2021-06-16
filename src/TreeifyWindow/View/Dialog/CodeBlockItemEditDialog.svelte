@@ -2,7 +2,7 @@
   import hljs from 'highlight.js'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
-  import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogView'
+  import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
 
   export let props: CodeBlockItemEditDialogProps

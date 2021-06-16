@@ -1,6 +1,6 @@
 import {External} from 'src/TreeifyWindow/External/External'
 import {State} from 'src/TreeifyWindow/Internal/State'
-import {createPageTreeProps, PageTreeProps} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeView'
+import {createPageTreeProps, PageTreeProps} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeProps'
 
 export type LeftSidebarProps = {
   pageTreeProps: PageTreeProps

@@ -3,7 +3,7 @@
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import CommonDialog from './CommonDialog.svelte'
-  import {OtherParentsDialogProps} from './OtherParentsDialogView'
+  import {OtherParentsDialogProps} from './OtherParentsDialogProps'
 
   export let props: OtherParentsDialogProps
 

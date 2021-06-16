@@ -4,7 +4,7 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
-  import {DefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogView'
+  import {DefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
 
   export let props: DefaultWindowModeSettingDialogProps
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
-  import {ItemContentProps} from './ItemContentView'
+  import {ItemContentProps} from './ItemContentProps'
   import TextItemContent from './TextItemContent.svelte'
 
   export let props: ItemContentProps

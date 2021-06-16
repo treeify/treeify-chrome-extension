@@ -1,8 +1,8 @@
 <script lang="ts">
   import {DomishObject} from '../../Internal/DomishObject'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentView'
-  import {ItemTreeTextContentProps} from './ItemTreeTextContentView'
+  import {ItemTreeContentView} from './ItemTreeContentProps'
+  import {ItemTreeTextContentProps} from './ItemTreeTextContentProps'
 
   export let props: ItemTreeTextContentProps
 

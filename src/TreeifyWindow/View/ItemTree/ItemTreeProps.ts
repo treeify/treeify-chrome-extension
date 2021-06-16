@@ -7,7 +7,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeNodeProps,
   ItemTreeNodeProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeProps'
 
 export type ItemTreeProps = {
   rootNodeProps: ItemTreeNodeProps

@@ -13,11 +13,11 @@ import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentView'
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentProps'
 import {
   createPageTreeContentProps,
   PageTreeContentProps,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentView'
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentProps'
 
 export type PageTreeNodeProps = {
   bulletAndIndentProps: PageTreeBulletAndIndentProps

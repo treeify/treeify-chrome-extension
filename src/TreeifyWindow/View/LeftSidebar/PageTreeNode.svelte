@@ -5,7 +5,7 @@
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
   import PageTreeContent from './PageTreeContent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
-  import {PageTreeNodeProps} from './PageTreeNodeView'
+  import {PageTreeNodeProps} from './PageTreeNodeProps'
 
   export let props: PageTreeNodeProps
 

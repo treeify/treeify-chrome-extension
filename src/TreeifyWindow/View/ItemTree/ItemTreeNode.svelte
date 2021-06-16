@@ -4,7 +4,7 @@
   import {CssCustomProperty} from '../../CssCustomProperty'
   import ItemTreeContent from './ItemTreeContent.svelte'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeNodeProps} from './ItemTreeNodeView'
+  import {ItemTreeNodeProps} from './ItemTreeNodeProps'
   import ItemTreeSpool from './ItemTreeSpool.svelte'
 
   export let props: ItemTreeNodeProps

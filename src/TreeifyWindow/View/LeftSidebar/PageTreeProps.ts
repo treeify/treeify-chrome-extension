@@ -2,7 +2,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createPageTreeRootNodeProps,
   PageTreeNodeProps,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeView'
+} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeNodeProps'
 
 export type PageTreeProps = {
   pageTreeRootNodeProps: PageTreeNodeProps

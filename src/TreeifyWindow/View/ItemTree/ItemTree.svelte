@@ -19,9 +19,9 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
-  import {ItemTreeContentView} from './ItemTreeContentView'
+  import {ItemTreeContentView} from './ItemTreeContentProps'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeProps} from './ItemTreeView'
+  import {ItemTreeProps} from './ItemTreeProps'
 
   export let props: ItemTreeProps
 

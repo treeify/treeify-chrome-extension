@@ -5,7 +5,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemContentProps,
   ItemContentProps,
-} from 'src/TreeifyWindow/View/ItemContent/ItemContentView'
+} from 'src/TreeifyWindow/View/ItemContent/ItemContentProps'
 
 export type OtherParentsDialogProps = {
   itemContentPropses: List<ItemContentProps>

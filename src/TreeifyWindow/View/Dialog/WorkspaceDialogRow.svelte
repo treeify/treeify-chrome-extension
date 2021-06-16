@@ -2,7 +2,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
-  import {WorkspaceRecord} from './WorkspaceDialogView'
+  import {WorkspaceRecord} from './WorkspaceDialogProps'
 
   export let workspace: WorkspaceRecord
 

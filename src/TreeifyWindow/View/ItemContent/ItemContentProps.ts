@@ -4,7 +4,7 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {
   createTextItemContentProps,
   TextItemContentProps,
-} from 'src/TreeifyWindow/View/ItemContent/TextItemContentView'
+} from 'src/TreeifyWindow/View/ItemContent/TextItemContentProps'
 
 export type ItemContentProps = TextItemContentProps
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {ItemTreeBulletState, ItemTreeSpoolProps} from './ItemTreeSpoolView'
+  import {ItemTreeBulletState, ItemTreeSpoolProps} from './ItemTreeSpoolProps'
 
   export let props: ItemTreeSpoolProps
 
@@ -32,7 +32,7 @@
 
 <style>
   :root {
-    /* バレットの外側の円の直径は{@link ItemTreeSpoolView.ts}で動的に設定している */
+    /* バレットの外側の円の直径は{@link ItemTreeSpoolProps.ts}で動的に設定している */
     /* バレットの外側の円の色 */
     --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
     /* バレットの外側の円のマウスホバー時の色 */

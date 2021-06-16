@@ -1,6 +1,6 @@
 <script lang="ts">
   import {DomishObject} from '../../Internal/DomishObject'
-  import {TextItemContentProps} from './TextItemContentView'
+  import {TextItemContentProps} from './TextItemContentProps'
 
   export let props: TextItemContentProps
 </script>

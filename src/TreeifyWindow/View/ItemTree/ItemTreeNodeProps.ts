@@ -16,13 +16,13 @@ import {
   createItemTreeContentProps,
   ItemTreeContentProps,
   ItemTreeContentView,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
 import {
   createItemTreeSpoolProps,
   deriveBulletState,
   ItemTreeBulletState,
   ItemTreeSpoolProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolView'
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolProps'
 
 export type ItemTreeNodeProps = {
   itemPath: ItemPath

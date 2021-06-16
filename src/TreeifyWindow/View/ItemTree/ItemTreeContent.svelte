@@ -1,7 +1,7 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
   import ItemTreeCodeBlockContent from './ItemTreeCodeBlockContent.svelte'
-  import {ItemTreeContentProps} from './ItemTreeContentView'
+  import {ItemTreeContentProps} from './ItemTreeContentProps'
   import ItemTreeImageContent from './ItemTreeImageContent.svelte'
   import ItemTreeTextContent from './ItemTreeTextContent.svelte'
   import ItemTreeWebPageContent from './ItemTreeWebPageContent.svelte'

@@ -1,8 +1,8 @@
 <script lang="ts">
   import hljs from 'highlight.js'
   import Label from '../Label.svelte'
-  import {ItemTreeCodeBlockContentProps} from './ItemTreeCodeBlockContentView'
-  import {ItemTreeContentView} from './ItemTreeContentView'
+  import {ItemTreeCodeBlockContentProps} from './ItemTreeCodeBlockContentProps'
+  import {ItemTreeContentView} from './ItemTreeContentProps'
 
   export let props: ItemTreeCodeBlockContentProps
 

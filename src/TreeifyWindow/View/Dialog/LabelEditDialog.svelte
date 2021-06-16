@@ -6,7 +6,7 @@
   import {InputId} from '../../Internal/InputId'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
-  import {LabelEditDialogProps} from './LabelEditDialogView'
+  import {LabelEditDialogProps} from './LabelEditDialogProps'
 
   export let props: LabelEditDialogProps
 
