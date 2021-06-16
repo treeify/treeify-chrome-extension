@@ -42,6 +42,7 @@ export function createItemTreeImageContentProps(
       doWithErrorCapture(() => {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             Rerenderer.instance.rerender()
             break

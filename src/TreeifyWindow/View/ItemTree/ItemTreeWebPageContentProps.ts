@@ -61,15 +61,18 @@ export function createItemTreeWebPageContentProps(
       doWithErrorCapture(() => {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTabInDualWindowMode()
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             Rerenderer.instance.rerender()
             break
           case '0010MouseButton0':
+            event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTab()
             Rerenderer.instance.rerender()
