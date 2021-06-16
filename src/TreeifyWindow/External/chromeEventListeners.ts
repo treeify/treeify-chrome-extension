@@ -153,9 +153,10 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     } else if (CurrentState.isItem(itemId)) {
       // 対応するウェブページアイテムを削除する
       CurrentState.deleteItemItself(itemId)
-    }
+      // TODO: targetItemPathがダングリングポインタになる不具合がある
 
-    Rerenderer.instance.rerender()
+      Rerenderer.instance.rerender()
+    }
   })
 }
 
