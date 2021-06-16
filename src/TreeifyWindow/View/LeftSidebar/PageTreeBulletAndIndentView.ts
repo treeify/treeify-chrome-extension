@@ -2,7 +2,7 @@ export type PageTreeBulletAndIndentViewModel = {
   bulletState: PageTreeBulletState
 }
 
-enum PageTreeBulletState {
+export enum PageTreeBulletState {
   NO_CHILDREN,
   EXPANDED,
   COLLAPSED,

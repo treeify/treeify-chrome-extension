@@ -1,11 +1,8 @@
 <script lang="ts">
-  import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Workspace} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
-
-  type WorkspaceRecord = {id: WorkspaceId} & Workspace
+  import {WorkspaceRecord} from './WorkspaceDialogView'
 
   export let workspace: WorkspaceRecord
 

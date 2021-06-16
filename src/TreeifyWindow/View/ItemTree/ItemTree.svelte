@@ -21,11 +21,7 @@
   import {Rerenderer} from '../../Rerenderer'
   import {ItemTreeContentView} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
-
-  type ItemTreeViewModel = {
-    rootNodeViewModel: ItemTreeNodeViewModel
-  }
+  import {ItemTreeViewModel} from './ItemTreeView'
 
   export let viewModel: ItemTreeViewModel
 

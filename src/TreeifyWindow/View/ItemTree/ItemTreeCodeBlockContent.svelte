@@ -1,20 +1,8 @@
 <script lang="ts">
   import hljs from 'highlight.js'
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
-  import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
+  import {ItemTreeCodeBlockContentViewModel} from './ItemTreeCodeBlockContentView'
   import {ItemTreeContentView} from './ItemTreeContentView'
-
-  type ItemTreeCodeBlockContentViewModel = {
-    itemPath: ItemPath
-    labels: List<string>
-    itemType: ItemType.CODE_BLOCK
-    code: string
-    language: string
-    onFocus: (event: FocusEvent) => void
-    onClick: (event: Event) => void
-  }
 
   export let viewModel: ItemTreeCodeBlockContentViewModel
 

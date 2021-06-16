@@ -1,26 +1,7 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
-  import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
-
-  type ItemTreeWebPageContentViewModel = {
-    itemPath: ItemPath
-    itemType: ItemType.WEB_PAGE
-    labels: List<string>
-    title: string
-    faviconUrl: string
-    isLoading: boolean
-    isSoftUnloaded: boolean
-    isHardUnloaded: boolean
-    isUnread: boolean
-    isAudible: boolean
-    onFocus: (event: FocusEvent) => void
-    onClickTitle: (event: MouseEvent) => void
-    onClickFavicon: (event: MouseEvent) => void
-    onDragStart: (event: DragEvent) => void
-  }
+  import {ItemTreeWebPageContentViewModel} from './ItemTreeWebPageContentView'
 
   export let viewModel: ItemTreeWebPageContentViewModel
 

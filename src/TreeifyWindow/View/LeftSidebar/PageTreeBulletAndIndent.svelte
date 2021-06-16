@@ -1,13 +1,8 @@
 <script lang="ts">
-  type PageTreeBulletAndIndentViewModel = {
-    bulletState: PageTreeBulletState
-  }
-
-  enum PageTreeBulletState {
-    NO_CHILDREN,
-    EXPANDED,
-    COLLAPSED,
-  }
+  import {
+    PageTreeBulletAndIndentViewModel,
+    PageTreeBulletState,
+  } from './PageTreeBulletAndIndentView'
 
   export let viewModel: PageTreeBulletAndIndentViewModel
 </script>

@@ -1,11 +1,5 @@
 <script lang="ts">
-  import {ItemType} from '../../basicType'
-
-  type PageTreeWebPageContentViewModel = {
-    itemType: ItemType.WEB_PAGE
-    title: string
-    faviconUrl: string
-  }
+  import {PageTreeWebPageContentViewModel} from './PageTreeWebPageContentView'
 
   export let viewModel: PageTreeWebPageContentViewModel
 </script>

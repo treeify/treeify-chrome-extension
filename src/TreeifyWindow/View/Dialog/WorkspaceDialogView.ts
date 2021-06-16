@@ -4,7 +4,7 @@ import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State, Workspace} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-type WorkspaceRecord = {id: WorkspaceId} & Workspace
+export type WorkspaceRecord = {id: WorkspaceId} & Workspace
 
 export type WorkspaceDialogViewModel = {
   workspaces: List<WorkspaceRecord>

@@ -1,20 +1,8 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
-  import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
-
-  type ItemTreeTextContentViewModel = {
-    itemPath: ItemPath
-    itemType: ItemType.TEXT
-    labels: List<string>
-    domishObjects: List<DomishObject>
-    onInput: (event: Event) => void
-    onCompositionEnd: (event: CompositionEvent) => void
-    onClick: (event: Event) => void
-  }
+  import {ItemTreeTextContentViewModel} from './ItemTreeTextContentView'
 
   export let viewModel: ItemTreeTextContentViewModel
 

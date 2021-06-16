@@ -19,14 +19,7 @@
   import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {onDestroy, onMount} from 'svelte'
   import {assertNonUndefined} from '../../../Common/Debug/assert'
-  import {WebPageItemTitleSettingDialog} from '../../Internal/State'
-
-  type WebPageItemTitleSettingDialogViewModel = {
-    webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
-    /** タイトル入力欄のテキストの初期値 */
-    initialTitle: string
-    onKeyDown: (event: KeyboardEvent) => void
-  }
+  import {WebPageItemTitleSettingDialogViewModel} from './WebPageItemTitleSettingDialogView'
 
   export let viewModel: WebPageItemTitleSettingDialogViewModel
 

@@ -1,19 +1,7 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
-  import {ItemPath} from '../../Internal/ItemPath'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentView'
-
-  type ItemTreeImageContentViewModel = {
-    itemPath: ItemPath
-    labels: List<string>
-    itemType: ItemType.IMAGE
-    url: string
-    caption: string
-    onFocus: (event: FocusEvent) => void
-    onClick: (event: Event) => void
-  }
+  import {ItemTreeImageContentViewModel} from './ItemTreeImageContentView'
 
   export let viewModel: ItemTreeImageContentViewModel
 

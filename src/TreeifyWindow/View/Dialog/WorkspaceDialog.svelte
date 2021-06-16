@@ -1,19 +1,10 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {WorkspaceId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {Workspace} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
-
-  type WorkspaceRecord = {id: WorkspaceId} & Workspace
-
-  type WorkspaceDialogViewModel = {
-    workspaces: List<WorkspaceRecord>
-    onClickAddButton: () => void
-  }
+  import {WorkspaceDialogViewModel} from './WorkspaceDialogView'
 
   export let viewModel: WorkspaceDialogViewModel
 

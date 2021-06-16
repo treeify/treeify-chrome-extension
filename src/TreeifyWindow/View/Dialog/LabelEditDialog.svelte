@@ -4,11 +4,9 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
-  import {LabelEditDialog} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
-
-  type LabelEditDialogViewModel = LabelEditDialog
+  import {LabelEditDialogViewModel} from './LabelEditDialogView'
 
   export let viewModel: LabelEditDialogViewModel
 

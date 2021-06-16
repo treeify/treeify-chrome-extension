@@ -1,38 +1,11 @@
 <script lang="ts">
   import Color from 'color'
-  import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import {ItemPath} from '../../Internal/ItemPath'
   import ItemTreeContent from './ItemTreeContent.svelte'
-  import {ItemTreeContentViewModel} from './ItemTreeContentView'
   import ItemTreeNode from './ItemTreeNode.svelte'
+  import {ItemTreeNodeViewModel} from './ItemTreeNodeView'
   import ItemTreeSpool from './ItemTreeSpool.svelte'
-  import {ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
-
-  type ItemTreeNodeViewModel = {
-    itemPath: ItemPath
-    isActivePage: boolean
-    /**
-     * このアイテムが選択されているかどうかを示す値。
-     * 複数選択されたアイテムのうちの1つならmulti。
-     * 単一選択されたアイテムならsingle。
-     * 選択されていないならnon。
-     */
-    selected: 'single' | 'multi' | 'non'
-    isTranscluded: boolean
-    cssClasses: List<string>
-    footprintRank: integer | undefined
-    footprintCount: integer
-    hiddenTabsCount: integer
-    contentViewModel: ItemTreeContentViewModel
-    childItemViewModels: List<ItemTreeNodeViewModel>
-    spoolViewModel: ItemTreeSpoolViewModel
-    onMouseDownContentArea: (event: MouseEvent) => void
-    onClickDeleteButton: (event: MouseEvent) => void
-    onDragStart: (event: DragEvent) => void
-    onClickHiddenTabsCount: (event: MouseEvent) => void
-  }
 
   export let viewModel: ItemTreeNodeViewModel
 

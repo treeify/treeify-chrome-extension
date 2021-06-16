@@ -1,9 +1,7 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
+  import {ItemContentViewModel} from './ItemContentView'
   import TextItemContent from './TextItemContent.svelte'
-  import {TextItemContentViewModel} from './TextItemContentView'
-
-  type ItemContentViewModel = TextItemContentViewModel
 
   export let viewModel: ItemContentViewModel
 </script>

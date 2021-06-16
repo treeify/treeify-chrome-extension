@@ -2,42 +2,21 @@
   import {List} from 'immutable'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-  import {createRootViewModel} from 'src/TreeifyWindow/View/RootView'
+  import {createRootViewModel, RootViewModel} from 'src/TreeifyWindow/View/RootView'
   import {derived, Readable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
   import {toOpmlString} from '../Internal/importAndExport'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
-  import {DataFolderPickerOpenButtonViewModel} from './DataFolderPickerOpenButtonView'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
-  import {CodeBlockItemEditDialogViewModel} from './Dialog/CodeBlockItemEditDialogView'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
-  import {DefaultWindowModeSettingDialogViewModel} from './Dialog/DefaultWindowModeSettingDialogView'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
-  import {LabelEditDialogViewModel} from './Dialog/LabelEditDialogView'
   import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
-  import {OtherParentsDialogViewModel} from './Dialog/OtherParentsDialogView'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
-  import {WebPageItemTitleSettingDialogViewModel} from './Dialog/WebPageItemTitleSettingDialogView'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
-  import {WorkspaceDialogViewModel} from './Dialog/WorkspaceDialogView'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
-  import {ItemTreeViewModel} from './ItemTree/ItemTreeView'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
-  import {LeftSidebarViewModel} from './LeftSidebar/LeftSidebarView'
-
-  type RootViewModel = {
-    leftSidebarViewModel: LeftSidebarViewModel | undefined
-    itemTreeViewModel: ItemTreeViewModel
-    webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogViewModel | undefined
-    codeBlockItemEditDialogViewModel: CodeBlockItemEditDialogViewModel | undefined
-    defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogViewModel | undefined
-    workspaceDialog: WorkspaceDialogViewModel | undefined
-    labelEditDialog: LabelEditDialogViewModel | undefined
-    otherParentsDialog: OtherParentsDialogViewModel | undefined
-    dataFolderPickerOpenButtonViewModel: DataFolderPickerOpenButtonViewModel
-  }
 
   const viewModelStream: Readable<RootViewModel> = derived(
     Rerenderer.instance.rerenderingPulse,

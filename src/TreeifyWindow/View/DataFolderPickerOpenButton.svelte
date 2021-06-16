@@ -2,10 +2,7 @@
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {NullaryCommand} from '../Internal/NullaryCommand'
   import {Rerenderer} from '../Rerenderer'
-
-  type DataFolderPickerOpenButtonViewModel = {
-    isGrayedOut: boolean
-  }
+  import {DataFolderPickerOpenButtonViewModel} from './DataFolderPickerOpenButtonView'
 
   export let viewModel: DataFolderPickerOpenButtonViewModel
 

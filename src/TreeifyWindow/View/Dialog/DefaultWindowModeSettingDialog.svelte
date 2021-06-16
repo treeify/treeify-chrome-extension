@@ -2,14 +2,9 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {DefaultWindowMode, DefaultWindowModeSettingDialog} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
-
-  type DefaultWindowModeSettingDialogViewModel = DefaultWindowModeSettingDialog & {
-    initialDefaultWindowMode: DefaultWindowMode
-    onClickCancelButton: () => void
-  }
+  import {DefaultWindowModeSettingDialogViewModel} from './DefaultWindowModeSettingDialogView'
 
   export let viewModel: DefaultWindowModeSettingDialogViewModel
 

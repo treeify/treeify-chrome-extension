@@ -1,12 +1,6 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {ItemType} from '../../basicType'
   import {DomishObject} from '../../Internal/DomishObject'
-
-  type PageTreeTextContentViewModel = {
-    itemType: ItemType.TEXT
-    domishObjects: List<DomishObject>
-  }
+  import {PageTreeTextContentViewModel} from './PageTreeTextContentView'
 
   export let viewModel: PageTreeTextContentViewModel
 </script>

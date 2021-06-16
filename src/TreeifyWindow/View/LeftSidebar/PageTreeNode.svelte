@@ -1,27 +1,11 @@
 <script lang="ts">
   import Color from 'color'
-  import {List} from 'immutable'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
-  import {PageTreeBulletAndIndentViewModel} from './PageTreeBulletAndIndentView'
   import PageTreeContent from './PageTreeContent.svelte'
-  import {PageTreeContentViewModel} from './PageTreeContentView'
   import PageTreeNode from './PageTreeNode.svelte'
-
-  type PageTreeNodeViewModel = {
-    bulletAndIndentViewModel: PageTreeBulletAndIndentViewModel
-    contentViewModel: PageTreeContentViewModel
-    childNodeViewModels: List<PageTreeNodeViewModel>
-    isActivePage: boolean
-    isRoot: boolean
-    footprintRank: integer | undefined
-    footprintCount: integer
-    onClickContentArea: () => void
-    onClickCloseButton: () => void
-    onDragOver: (event: DragEvent) => void
-    onDrop: (event: DragEvent) => void
-  }
+  import {PageTreeNodeViewModel} from './PageTreeNodeView'
 
   export let viewModel: PageTreeNodeViewModel
 

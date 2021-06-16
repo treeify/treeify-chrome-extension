@@ -1,22 +1,5 @@
 <script lang="ts">
-  import {integer} from '../../../Common/integer'
-
-  type ItemTreeSpoolViewModel = {
-    bulletState: ItemTreeBulletState
-    /**
-     * expand時に表示されるアイテム数。
-     * collapsed状態以外の場合は常に0。
-     */
-    hiddenItemsCount: integer
-    onClick: (event: MouseEvent) => void
-  }
-
-  enum ItemTreeBulletState {
-    NO_CHILDREN,
-    EXPANDED,
-    COLLAPSED,
-    PAGE,
-  }
+  import {ItemTreeBulletState, ItemTreeSpoolViewModel} from './ItemTreeSpoolView'
 
   export let viewModel: ItemTreeSpoolViewModel
 

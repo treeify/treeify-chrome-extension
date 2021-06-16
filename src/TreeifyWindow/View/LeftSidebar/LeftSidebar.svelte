@@ -1,11 +1,6 @@
 <script lang="ts">
+  import {LeftSidebarViewModel} from './LeftSidebarView'
   import PageTree from './PageTree.svelte'
-  import {PageTreeViewModel} from './PageTreeView'
-
-  type LeftSidebarViewModel = {
-    pageTreeViewModel: PageTreeViewModel
-    isFloating: boolean
-  }
 
   export let viewModel: LeftSidebarViewModel
 </script>

@@ -1,14 +1,9 @@
 <script lang="ts">
-  import {List} from 'immutable'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {ItemContentViewModel} from '../ItemContent/ItemContentView'
   import CommonDialog from './CommonDialog.svelte'
-
-  type OtherParentsDialogViewModel = {
-    itemContentViewModels: List<ItemContentViewModel>
-  }
+  import {OtherParentsDialogViewModel} from './OtherParentsDialogView'
 
   export let viewModel: OtherParentsDialogViewModel
 

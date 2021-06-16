@@ -1,14 +1,9 @@
 <script lang="ts">
   import hljs from 'highlight.js'
   import {CurrentState} from '../../Internal/CurrentState'
-  import {CodeBlockItemEditDialog} from '../../Internal/State'
   import {Rerenderer} from '../../Rerenderer'
+  import {CodeBlockItemEditDialogViewModel} from './CodeBlockItemEditDialogView'
   import CommonDialog from './CommonDialog.svelte'
-
-  type CodeBlockItemEditDialogViewModel = CodeBlockItemEditDialog & {
-    onClickFinishButton: () => void
-    onClickCancelButton: () => void
-  }
 
   export let viewModel: CodeBlockItemEditDialogViewModel
 

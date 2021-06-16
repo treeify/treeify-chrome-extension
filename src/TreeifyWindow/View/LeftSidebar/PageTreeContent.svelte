@@ -1,13 +1,8 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
+  import {PageTreeContentViewModel} from './PageTreeContentView'
   import PageTreeTextContent from './PageTreeTextContent.svelte'
-  import {PageTreeTextContentViewModel} from './PageTreeTextContentView'
   import PageTreeWebPageContent from './PageTreeWebPageContent.svelte'
-  import {PageTreeWebPageContentViewModel} from './PageTreeWebPageContentView'
-
-  type PageTreeContentViewModel =
-    | PageTreeTextContentViewModel
-    | PageTreeWebPageContentViewModel
 
   export let viewModel: PageTreeContentViewModel
 </script>
