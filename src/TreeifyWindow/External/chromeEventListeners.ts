@@ -167,10 +167,9 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
       CurrentState.setIsUnreadFlag(itemId, false)
 
       // もしタブに対応するアイテムがアクティブページに所属していれば、それをターゲットする
-      // TODO: itemPathの可視性の確認が必要だと思う
       const activePageId = CurrentState.getActivePageId()
       for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
-        if (ItemPath.getRootItemId(itemPath) === activePageId) {
+        if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
           CurrentState.setTargetItemPath(itemPath)
           break
         }
