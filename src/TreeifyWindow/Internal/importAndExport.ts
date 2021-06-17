@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
+import {assertNeverType, assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
@@ -12,7 +12,6 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-import {Attributes, Element, js2xml, xml2js} from 'xml-js'
 
 export function onCopy(event: ClipboardEvent) {
   doWithErrorCapture(() => {
@@ -321,27 +320,30 @@ export function detectUrl(text: string): string | undefined {
   return undefined
 }
 
-function toOpmlOutlineElement(itemPath: ItemPath): Element {
-  const itemId = ItemPath.getItemId(itemPath)
-  const item = Internal.instance.state.items[itemId]
+function toOpmlOutlineElement(itemPath: ItemPath, xmlDocument: XMLDocument): Element {
+  const outlineElement = xmlDocument.createElement('outline')
 
-  return {
-    type: 'element',
-    name: 'outline',
-    attributes: toOpmlAttributes(itemPath),
-    elements: item.childItemIds
-      .map((childItemId) => toOpmlOutlineElement(itemPath.push(childItemId)))
-      .toArray(),
+  const attributes = toOpmlAttributes(itemPath)
+  for (const attrName in attributes) {
+    outlineElement.setAttribute(attrName, attributes[attrName])
   }
+
+  const childItemIds = Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
+  const children = childItemIds.map((childItemId) =>
+    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument)
+  )
+  outlineElement.append(...children)
+
+  return outlineElement
 }
 
-function toOpmlAttributes(itemPath: ItemPath): Attributes {
+function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
-  const baseAttributes: Attributes = {
+  const baseAttributes: {[T in string]: string} = {
     isPage: CurrentState.isPage(itemId).toString(),
-    itemId,
+    itemId: itemId.toString(),
   }
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
@@ -389,17 +391,6 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
       assertNeverType(item.itemType)
   }
 
-  // 属性値内の&を手動でXMLエスケープする。
-  // 本来はライブラリがやるべきだと思うが不具合でやってくれない。
-  // Pull requestは既に出ているので待っている状態。
-  // https://github.com/nashwaan/xml-js/pull/160
-  for (const key in baseAttributes) {
-    const attr = baseAttributes[key]
-    if (typeof attr === 'string') {
-      baseAttributes[key] = attr.replaceAll('&', '&amp;')
-    }
-  }
-
   return baseAttributes
 }
 
@@ -408,135 +399,120 @@ function toOpmlAttributes(itemPath: ItemPath): Attributes {
  * ページや折りたたまれたアイテムの子孫も含める。
  */
 export function toOpmlString(itemPaths: List<ItemPath>): string {
-  const xmlObject = {
-    declaration: {
-      attributes: {
-        version: '1.0',
-      },
-    },
-    elements: [
-      {
-        type: 'element',
-        name: 'opml',
-        attributes: {version: '2.0'},
-        elements: [
-          {
-            type: 'element',
-            name: 'head',
-          },
-          {
-            type: 'element',
-            name: 'body',
-            elements: itemPaths.map(toOpmlOutlineElement).toArray(),
-          },
-        ],
-      },
-    ],
+  const xmlDocument = document.implementation.createDocument(null, 'opml')
+  const opmlElement = xmlDocument.documentElement
+  opmlElement.setAttribute('version', '2.0')
+
+  const headElement = xmlDocument.createElement('head')
+  opmlElement.append(headElement)
+
+  const bodyElement = xmlDocument.createElement('body')
+  bodyElement.append(...itemPaths.map((itemPath) => toOpmlOutlineElement(itemPath, xmlDocument)))
+  opmlElement.append(bodyElement)
+
+  const xmlString = new XMLSerializer().serializeToString(xmlDocument)
+  // XML宣言が付いていない場合は付ける
+  if (xmlString.startsWith('<?xml')) {
+    return xmlString
+  } else {
+    return '<?xml version="1.0"?>' + xmlString
   }
-  return js2xml(xmlObject, {spaces: 2})
 }
 
 /**
- * 指定された文字列をOPMLとしてパースしてみる。
- * 成功したらbody要素直下のoutline要素の配列を返す。
- * 失敗したらundefinedを返す。
- * OPML 2.0だと仮定してパースするが、1.0でも偶然パースできることはある。
- * TODO: head > title要素の内容をスルーしてしまっているが何らかの形で取り込んだ方がいいのでは
+ * 基本的にOPML 2.0を想定したバリデーションを行うが、
+ * head要素を要求せず、さらにopml要素のversion属性が2.0であることを要求しないので、
+ * OPML 1.0文書でもパースに成功する場合がある（意図通り）。
  */
-export function tryParseAsOpml(couldXmlString: string): OutlineElement[] | undefined {
-  try {
-    const documentRoot = xml2js(couldXmlString)
+function tryParseAsOpml(possiblyOpml: string): List<Element> | undefined {
+  const doc = new DOMParser().parseFromString(possiblyOpml, 'text/xml')
 
-    // バリデーション
-    if (!(documentRoot.elements instanceof Array)) return undefined
-    const opmlElement: Element = documentRoot.elements[0]
-    assert(opmlElement.name === 'opml')
-    if (!(opmlElement.elements instanceof Array)) return undefined
-    const bodyElement = opmlElement.elements.find((element) => element.name === 'body')
-    assertNonUndefined(bodyElement)
-    if (!(bodyElement.elements instanceof Array)) return undefined
-    for (const outlineElement of bodyElement.elements) {
-      assertOutlineElement(outlineElement)
-    }
+  // 以下、OPMLフォーマットバリデーション
+  const opmlElement = doc.documentElement
+  if (opmlElement.tagName !== 'opml') return undefined
 
-    return bodyElement.elements as OutlineElement[]
-  } catch {
-    return undefined
+  if (doc.getElementsByTagName('opml').length !== 1) return undefined
+
+  const bodyElements = doc.getElementsByTagName('body')
+  if (bodyElements.length !== 1) return undefined
+
+  const bodyElement = bodyElements.item(0)!
+  if (bodyElement.parentNode !== opmlElement) return undefined
+
+  const topLevelElements = bodyElement.children
+  if (topLevelElements.length === 0) return undefined
+
+  for (const Element of topLevelElements) {
+    if (!isValidOutlineElement(Element)) return undefined
   }
+
+  return List(topLevelElements)
 }
 
-function assertOutlineElement(element: Element): asserts element is OutlineElement {
-  assert(element.name === 'outline')
-  assertNonUndefined(element.attributes)
-  // textはOPML 2.0では必須属性
-  assert(typeof element.attributes.text === 'string')
+function isValidOutlineElement(possiblyOutlineElement: Element): boolean {
+  if (possiblyOutlineElement.tagName !== 'outline') return false
 
-  if (element.elements instanceof Array) {
-    // 再帰的に子孫をバリデーション
-    for (const child of element.elements) {
-      assertOutlineElement(child)
-    }
+  // textはOPML 2.0では必須属性。
+  // TreeifyはOPML 2.0を強要はしないものの、text属性が無いと動作が複雑化するので必須属性としている。
+  if (!possiblyOutlineElement.hasAttribute('text')) return false
+
+  for (const childElement of possiblyOutlineElement.children) {
+    if (!isValidOutlineElement(childElement)) return false
   }
+
+  return true
 }
 
-// typeによる型定義ではelementsのmap時の型でエラーが起こるのでinterfaceを使う
-interface OutlineElement extends Element {
-  attributes: OutlineAttributes
-  elements?: Array<OutlineElement>
-}
-type OutlineAttributes = Attributes & {
-  text: string
-}
 type ItemAndEdge = {itemId: ItemId; edge: Edge}
 // トランスクルージョンを復元するために、OPML内に出現したアイテムIDを記録しておくオブジェクト。
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応するアイテムID。
 type ItemIdMap = {[K in string | number]: ItemId}
 
-function createItemsBasedOnOpml(elements: OutlineElement[]): ItemAndEdge[] {
+function createItemsBasedOnOpml(outlineElements: List<Element>): List<ItemAndEdge> {
   const itemIdMap = {}
-  return elements.map((element) => createItemBasedOnOpml(element, itemIdMap))
+  return outlineElements.map((element) => createItemBasedOnOpml(element, itemIdMap))
 }
 
-/** パースされたOPMLを元にアイテムを作る */
-function createItemBasedOnOpml(element: OutlineElement, itemIdMap: ItemIdMap): ItemAndEdge {
-  const attributes = element.attributes
-  const existingItemId = attributes.itemId !== undefined ? itemIdMap[attributes.itemId] : undefined
+/** パースされたOPMLのoutline要素を元にアイテムを作る */
+function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): ItemAndEdge {
+  const attrItemId = outlineElement.getAttribute('itemId')
+  const isCollapsed = outlineElement.getAttribute('isCollapsed') === 'true'
+  const edge = {isCollapsed, labels: extractLabels(outlineElement)}
+  const existingItemId = attrItemId !== null ? itemIdMap[attrItemId] : undefined
   if (existingItemId !== undefined) {
-    return {
-      itemId: existingItemId,
-      edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
-    }
+    return {itemId: existingItemId, edge}
   }
 
-  const itemId = createBaseItemBasedOnOpml(element)
-  if (attributes.itemId !== undefined) {
-    itemIdMap[attributes.itemId] = itemId
+  const itemId = createBaseItemBasedOnOpml(outlineElement)
+  if (attrItemId !== null) {
+    itemIdMap[attrItemId] = itemId
   }
 
-  const children = element.elements?.map((child) => createItemBasedOnOpml(child, itemIdMap)) ?? []
-  CurrentState.modifyChildItems(itemId, () => List(children).map((child) => child.itemId))
+  const children = List(outlineElement.children).map((child) =>
+    createItemBasedOnOpml(child, itemIdMap)
+  )
+  CurrentState.modifyChildItems(itemId, () => children.map((child) => child.itemId))
   for (const child of children) {
     CurrentState.addParent(child.itemId, itemId, child.edge)
   }
 
-  if (typeof attributes.cssClass === 'string') {
-    const cssClasses = List(attributes.cssClass.split(' '))
+  const attrCssClass = outlineElement.getAttribute('cssClass')
+  if (attrCssClass !== null) {
+    const cssClasses = List(attrCssClass.split(' '))
     CurrentState.setCssClasses(itemId, cssClasses)
   }
-  if (attributes.isPage === 'true') {
+  if (outlineElement.getAttribute('isPage') === 'true') {
     CurrentState.turnIntoPage(itemId)
   }
 
-  return {
-    itemId,
-    edge: {isCollapsed: attributes.isCollapsed === 'true', labels: extractLabels(attributes)},
-  }
+  return {itemId, edge}
 }
 
-function extractLabels(attribute: OutlineAttributes): List<string> {
+function extractLabels(outlineElement: Element): List<string> {
   try {
-    if (typeof attribute.labels === 'string') {
-      return List(JSON.parse(attribute.labels))
+    const attrLabels = outlineElement.getAttribute('labels')
+    if (attrLabels !== null) {
+      return List(JSON.parse(attrLabels))
     }
   } catch {
     return List.of()
@@ -544,50 +520,57 @@ function extractLabels(attribute: OutlineAttributes): List<string> {
   return List.of()
 }
 
-function createBaseItemBasedOnOpml(element: OutlineElement): ItemId {
-  const attributes = element.attributes
-  switch (attributes.type) {
+function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
+  const attrText = outlineElement.getAttribute('text')
+  assertNonNull(attrText)
+  const attrUrl = outlineElement.getAttribute('url')
+
+  switch (outlineElement.getAttribute('type')) {
     case 'link':
       const webPageItemId = CurrentState.createWebPageItem()
-      if (typeof attributes.url === 'string') {
-        CurrentState.setWebPageItemUrl(webPageItemId, attributes.url)
+      if (attrUrl !== null) {
+        CurrentState.setWebPageItemUrl(webPageItemId, attrUrl)
       }
-      if (typeof attributes.faviconUrl === 'string') {
-        CurrentState.setWebPageItemFaviconUrl(webPageItemId, attributes.faviconUrl)
+      const attrFaviconUrl = outlineElement.getAttribute('faviconUrl')
+      if (attrFaviconUrl !== null) {
+        CurrentState.setWebPageItemFaviconUrl(webPageItemId, attrFaviconUrl)
       }
-      if (typeof attributes.title === 'string') {
-        CurrentState.setWebPageItemTabTitle(webPageItemId, attributes.title)
-        CurrentState.setWebPageItemTitle(webPageItemId, attributes.text)
+      const attrTitle = outlineElement.getAttribute('title')
+      if (attrTitle !== null) {
+        CurrentState.setWebPageItemTabTitle(webPageItemId, attrTitle)
+        CurrentState.setWebPageItemTitle(webPageItemId, attrText)
       } else {
-        CurrentState.setWebPageItemTabTitle(webPageItemId, attributes.text)
+        CurrentState.setWebPageItemTabTitle(webPageItemId, attrText)
       }
       return webPageItemId
     case 'image':
       const imageItemId = CurrentState.createImageItem()
-      CurrentState.setImageItemCaption(imageItemId, attributes.text)
-      if (typeof attributes.url === 'string') {
-        CurrentState.setImageItemUrl(imageItemId, attributes.url)
+      CurrentState.setImageItemCaption(imageItemId, attrText)
+      if (attrUrl !== null) {
+        CurrentState.setImageItemUrl(imageItemId, attrUrl)
       }
       return imageItemId
     case 'code-block':
       const codeBlockItemId = CurrentState.createCodeBlockItem()
-      CurrentState.setCodeBlockItemCode(codeBlockItemId, attributes.text)
-      if (typeof attributes.language === 'string') {
-        CurrentState.setCodeBlockItemLanguage(codeBlockItemId, attributes.language)
+      CurrentState.setCodeBlockItemCode(codeBlockItemId, attrText)
+      const attrLanguage = outlineElement.getAttribute('language')
+      if (attrLanguage !== null) {
+        CurrentState.setCodeBlockItemLanguage(codeBlockItemId, attrLanguage)
       }
       return codeBlockItemId
     case 'text':
     default:
       const textItemId = CurrentState.createTextItem()
-      if (typeof attributes.html === 'string') {
+      const attrHtml = outlineElement.getAttribute('html')
+      if (attrHtml !== null) {
         // html属性がある場合はパースして使う
-        const domishObjects = DomishObject.fromHtml(attributes.html)
+        const domishObjects = DomishObject.fromHtml(attrHtml)
         CurrentState.setTextItemDomishObjects(textItemId, domishObjects)
       } else {
         // html属性がない場合はtext属性をプレーンテキストとして使う
         const domishObject: DomishObject.TextNode = {
           type: 'text',
-          textContent: attributes.text,
+          textContent: attrText,
         }
         CurrentState.setTextItemDomishObjects(textItemId, List.of(domishObject))
       }
