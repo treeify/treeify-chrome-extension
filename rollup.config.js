@@ -8,7 +8,7 @@ import sveltePreprocess from 'svelte-preprocess'
 
 export default {
   input: {
-    'Background/entryPoint': './src/Background/entryPoint.ts',
+    background: './src/Background/entryPoint.ts',
     'BrowserAction/entryPoint': './src/BrowserAction/entryPoint.ts',
     'ContentScript/entryPoint': './src/ContentScript/entryPoint.ts',
     'TreeifyWindow/entryPoint': './src/TreeifyWindow/entryPoint.ts',

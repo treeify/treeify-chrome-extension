@@ -1,13 +1,12 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "version": "0.1.0",
   "name": "Treeify",
   "description": "メモ、タブ、ブックマークをまとめてスマートに管理",
   "background": {
-    "page": "Background/index.html",
-    "persistent": false
+    "service_worker": "background.js"
   },
-  "browser_action": {
+  "action": {
     "default_icon": {
       "19": "app-icon/19px.png"
     },
@@ -39,7 +38,9 @@
     "48": "app-icon/48px.png",
     "128": "app-icon/128px.png"
   },
-  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
   "permissions": [
     "tabs"
   ]
