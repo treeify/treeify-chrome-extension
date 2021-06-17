@@ -1,19 +1,15 @@
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import CreateData = chrome.windows.CreateData
 
-entryPoint()
-
-// バックグラウンドページの起動時（≒Treeifyインストール時とブラウザ起動時）に実行される処理
-async function entryPoint() {
-  // Treeifyウィンドウを開く
-  await TreeifyWindow.open()
-
-  // chrome://extensions/shortcuts で設定されるコマンド呼び出しのリスナー
-  chrome.commands.onCommand.addListener((commandName) => {
-    switch (commandName) {
-      case 'open-treeify-window':
-        // Treeifyウィンドウを開く
-        TreeifyWindow.open()
-        break
-    }
-  })
+const createData: CreateData = {
+  url: chrome.runtime.getURL('TreeifyWindow/index.html'),
+  type: 'popup',
+  // TODO: フルウィンドウモードで終了した場合は、次回起動時もフルウィンドウモードになってほしい気がする
+  state: 'normal',
+  width: 300,
+  // windowオブジェクトが使えないので下記のようには指定できない
+  // height: screen.availHeight,
+  top: 0,
+  left: 0,
 }
+
+chrome.windows.create(createData)
