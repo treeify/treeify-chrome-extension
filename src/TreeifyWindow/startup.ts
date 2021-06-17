@@ -129,6 +129,12 @@ function onResize() {
 
 async function getLastFocusedWindowId(): Promise<integer> {
   return new Promise((resolve, reject) => {
-    chrome.windows.getLastFocused((window) => resolve(window.id))
+    chrome.windows.getLastFocused((window) => {
+      if (window.id !== undefined) {
+        resolve(window.id)
+      } else {
+        reject('window.id === undefined')
+      }
+    })
   })
 }
