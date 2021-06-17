@@ -246,3 +246,19 @@ export function toggleHighlighted() {
     CurrentState.updateItemTimestamp(targetItemId)
   }
 }
+
+/**
+ * 対象アイテムにダウトフル状態にする。
+ * もし既にダウトフル状態なら非ダウトフル状態に戻す。
+ */
+export function toggleDoubtful() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  for (const selectedItemPath of selectedItemPaths) {
+    const targetItemId = ItemPath.getItemId(selectedItemPath)
+
+    CurrentState.toggleCssClass(targetItemId, 'doubtful')
+
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetItemId)
+  }
+}
