@@ -46,7 +46,7 @@ export class SourceFileReader {
    */
   readLinesWithoutCache(relativeFilePath: string): string[] | undefined {
     const xhr = new XMLHttpRequest()
-    xhr.open('GET', chrome.extension.getURL(relativeFilePath), false)
+    xhr.open('GET', chrome.runtime.getURL(relativeFilePath), false)
     xhr.send()
     if (xhr.status !== 200) {
       return undefined

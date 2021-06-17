@@ -20,7 +20,7 @@ export namespace TreeifyWindow {
       // Treeifyウィンドウを開く
       await createWindow(
         fillWindowGaps({
-          url: chrome.extension.getURL('TreeifyWindow/index.html'),
+          url: chrome.runtime.getURL('TreeifyWindow/index.html'),
           type: 'popup',
           // TODO: フルウィンドウモードで終了した場合は、次回起動時もフルウィンドウモードになってほしい気がする
           state: 'normal',
@@ -47,7 +47,7 @@ export namespace TreeifyWindow {
       chrome.windows.getAll({populate: true, windowTypes: ['popup']}, (windows) => {
         for (const window of windows) {
           if (window.tabs?.length === 1) {
-            if (window.tabs[0].url === chrome.extension.getURL('TreeifyWindow/index.html')) {
+            if (window.tabs[0].url === chrome.runtime.getURL('TreeifyWindow/index.html')) {
               resolve(window.id)
               return
             }
@@ -104,7 +104,7 @@ export namespace TreeifyWindow {
       chrome.windows.getAll({populate: true, windowTypes: ['popup']}, (windows) => {
         for (const window of windows) {
           if (window.tabs?.length === 1) {
-            if (window.tabs[0].url === chrome.extension.getURL('TreeifyWindow/index.html')) {
+            if (window.tabs[0].url === chrome.runtime.getURL('TreeifyWindow/index.html')) {
               resolve(window)
               return
             }
@@ -134,6 +134,8 @@ export namespace TreeifyWindow {
 
     // ブラウザウィンドウの幅や位置を変更する
     for (const window of await getAllNormalWindows()) {
+      if (window.id === undefined) continue
+
       chrome.windows.update(
         window.id,
         fillWindowGaps({
@@ -155,6 +157,8 @@ export namespace TreeifyWindow {
     if (new UAParser().getOS().name !== 'Mac OS') {
       // ブラウザウィンドウの幅や位置を変更する
       for (const window of await getAllNormalWindows()) {
+        if (window.id === undefined) continue
+
         chrome.windows.update(window.id, {
           state: 'maximized',
           // 画面がちらつくので本当はfocused: falseにしたいのだがstate: 'maximized'と組み合わせるとエラーになるので妥協
@@ -174,6 +178,8 @@ export namespace TreeifyWindow {
 
       // ブラウザウィンドウの幅や位置を変更する
       for (const window of await getAllNormalWindows()) {
+        if (window.id === undefined) continue
+
         chrome.windows.update(window.id, {
           state: 'normal',
           left: 0,

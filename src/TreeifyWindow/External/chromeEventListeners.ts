@@ -112,7 +112,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
   doAsyncWithErrorCapture(async () => {
     // Treeifyウィンドウのタブだった場合は何もしない。
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
-    if (tab.url === chrome.extension.getURL('TreeifyWindow/index.html')) return
+    if (tab.url === chrome.runtime.getURL('TreeifyWindow/index.html')) return
 
     if (changeInfo.discarded) {
       // discardされたらタブIDが変わるのでアイテムIDとの対応関係を修正する
