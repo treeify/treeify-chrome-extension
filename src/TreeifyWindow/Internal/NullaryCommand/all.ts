@@ -12,6 +12,7 @@ import {
   enterKeyDefault,
   removeEdge,
   toggleCollapsed,
+  toggleDoubtful,
   toggleGrayedOut,
   toggleHighlighted,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/item'
@@ -90,6 +91,7 @@ export const functions: {[name: string]: () => void} = {
   turnIntoNonPageAndExpand,
   toggleGrayedOut,
   toggleHighlighted,
+  toggleDoubtful,
   toggleBold,
   toggleUnderline,
   toggleItalic,

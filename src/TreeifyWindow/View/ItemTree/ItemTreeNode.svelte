@@ -137,6 +137,13 @@
     background: var(--item-tree-focused-item-background-color);
   }
 
+  /* ダウトフル状態のアイテム */
+  :global(.doubtful) .item-tree-node_content-area {
+    text-decoration: underline dotted hsl(0, 100%, 70%);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.03em;
+  }
+
   /* 隠れているタブ数 */
   .item-tree-node_hidden-tabs-count {
     width: var(--item-tree-calculated-line-height);
