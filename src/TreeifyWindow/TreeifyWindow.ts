@@ -33,11 +33,6 @@ export namespace TreeifyWindow {
     }
   }
 
-  /** Treeifyウィンドウが既に存在するならtrueを返す */
-  export async function exists(): Promise<boolean> {
-    return (await findWindowId()) !== undefined
-  }
-
   /**
    * TreeifyウィンドウのウィンドウIDを取得する。
    * もしTreeifyウィンドウが存在しない場合はundefinedを返す。
