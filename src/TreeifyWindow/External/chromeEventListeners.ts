@@ -244,11 +244,8 @@ function findWebPageItemId(url: string): ItemId | undefined {
 
 // 要するにTreeifyウィンドウを除く全ウィンドウの全タブを返す
 async function getAllNormalTabs(): Promise<Tab[]> {
-  return new Promise((resolve) => {
-    chrome.windows.getAll({populate: true, windowTypes: ['normal']}, (windows) => {
-      resolve(windows.flatMap((window) => window.tabs ?? []))
-    })
-  })
+  const windows = await chrome.windows.getAll({populate: true, windowTypes: ['normal']})
+  return windows.flatMap((window) => window.tabs ?? [])
 }
 
 export function onWindowFocusChanged(windowId: integer) {

@@ -1,4 +1,4 @@
-import {assertNonNull} from 'src/Common/Debug/assert'
+import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {
@@ -128,13 +128,8 @@ function onResize() {
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {
-  return new Promise((resolve, reject) => {
-    chrome.windows.getLastFocused((window) => {
-      if (window.id !== undefined) {
-        resolve(window.id)
-      } else {
-        reject('window.id === undefined')
-      }
-    })
-  })
+  const window = await chrome.windows.getLastFocused()
+  // TODO: assertしていい理由が特にない
+  assertNonUndefined(window.id)
+  return window.id
 }

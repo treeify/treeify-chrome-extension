@@ -15,10 +15,10 @@ export namespace TreeifyWindow {
     const treeifyWindowId = await findWindowId()
     if (treeifyWindowId !== undefined) {
       // すでに開かれている場合、ウィンドウをフォーカスする
-      await focusWindow(treeifyWindowId)
+      await chrome.windows.update(treeifyWindowId, {focused: true})
     } else {
       // Treeifyウィンドウを開く
-      await createWindow(
+      await chrome.windows.create(
         fillWindowGaps({
           url: chrome.runtime.getURL('TreeifyWindow/index.html'),
           type: 'popup',
@@ -33,29 +33,20 @@ export namespace TreeifyWindow {
     }
   }
 
-  /** Treeifyウィンドウが既に存在するならtrueを返す */
-  export async function exists(): Promise<boolean> {
-    return (await findWindowId()) !== undefined
-  }
-
   /**
    * TreeifyウィンドウのウィンドウIDを取得する。
    * もしTreeifyウィンドウが存在しない場合はundefinedを返す。
    */
-  export function findWindowId(): Promise<integer | undefined> {
-    return new Promise((resolve, reject) => {
-      chrome.windows.getAll({populate: true, windowTypes: ['popup']}, (windows) => {
-        for (const window of windows) {
-          if (window.tabs?.length === 1) {
-            if (window.tabs[0].url === chrome.runtime.getURL('TreeifyWindow/index.html')) {
-              resolve(window.id)
-              return
-            }
-          }
+  export async function findWindowId(): Promise<integer | undefined> {
+    const windows = await chrome.windows.getAll({populate: true, windowTypes: ['popup']})
+    for (const window of windows) {
+      if (window.tabs?.length === 1) {
+        if (window.tabs[0].url === chrome.runtime.getURL('TreeifyWindow/index.html')) {
+          return window.id
         }
-        resolve(undefined)
-      })
-    })
+      }
+    }
+    return undefined
   }
 
   /** デュアルウィンドウモードかどうか判定する */
@@ -100,19 +91,16 @@ export namespace TreeifyWindow {
   }
 
   async function getTreeifyWindow(): Promise<chrome.windows.Window> {
-    return new Promise((resolve, reject) => {
-      chrome.windows.getAll({populate: true, windowTypes: ['popup']}, (windows) => {
-        for (const window of windows) {
-          if (window.tabs?.length === 1) {
-            if (window.tabs[0].url === chrome.runtime.getURL('TreeifyWindow/index.html')) {
-              resolve(window)
-              return
-            }
-          }
+    const windows = await chrome.windows.getAll({populate: true, windowTypes: ['popup']})
+
+    for (const window of windows) {
+      if (window.tabs?.length === 1) {
+        if (window.tabs[0].url === chrome.runtime.getURL('TreeifyWindow/index.html')) {
+          return window
         }
-        reject()
-      })
-    })
+      }
+    }
+    throw Error('Treeifyウィンドウが見つかりませんでした。')
   }
 
   /** デュアルウィンドウモードに変更する */
@@ -204,12 +192,9 @@ export namespace TreeifyWindow {
     }
   }
 
+  /** @deprecated */
   async function getAllNormalWindows(): Promise<chrome.windows.Window[]> {
-    return new Promise((resolve) => {
-      chrome.windows.getAll({windowTypes: ['normal']}, (windows) => {
-        resolve(windows)
-      })
-    })
+    return await chrome.windows.getAll({windowTypes: ['normal']})
   }
 
   export function writeNarrowWidth(width: integer) {
@@ -242,23 +227,6 @@ export namespace TreeifyWindow {
       return cloned
     }
     return rawData
-  }
-
-  // chrome.windows.create関数をasync化したユーティリティ関数。
-  // ただしこのPromiseをawaitしても、そのページ内のJavaScriptが読み込み完了になっているわけではない。
-  async function createWindow(createData: CreateData): Promise<chrome.windows.Window | undefined> {
-    return new Promise((resolve, reject) => {
-      chrome.windows.create(createData, (window) => {
-        resolve(window)
-      })
-    })
-  }
-
-  // ウィンドウをフォーカスする
-  async function focusWindow(windowId: integer): Promise<void> {
-    return new Promise((resolve, reject) => {
-      chrome.windows.update(windowId, {focused: true}, () => resolve())
-    })
   }
 
   /** Treeifyウィンドウ宛のメッセージを送信する */
