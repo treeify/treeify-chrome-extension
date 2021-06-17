@@ -485,6 +485,16 @@
       // 空の子なしアイテムなら
       if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
         event.preventDefault()
+
+        // 上のアイテムがテキストアイテムならキャレットを末尾に移す
+        const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
+        const aboveItemId = ItemPath.getItemId(aboveItemPath)
+        if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+          const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+          const characterCount = DomishObject.countCharacters(domishObjects)
+          Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+        }
+
         // ターゲットアイテムを削除して終了
         NullaryCommand.deleteItem()
         Rerenderer.instance.rerender()
