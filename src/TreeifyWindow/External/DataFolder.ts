@@ -223,23 +223,26 @@ export class DataFolder {
     })
     const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
 
+    // チャンクパックファイル群を自デバイスフォルダに書き込み
+    const chunkPackFileWritingPromises = chunkPackFileTexts.map(async ({fileName, text}) => {
+      const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
+      this.setCacheEntry(chunkPackFilePath, text)
+      return await this.writeTextFile(chunkPackFilePath, text)
+    })
+
     // メタデータファイルを更新しつつ取り込み
     const metadata = await this.readMetadataFile(deviceId)
     assertNonUndefined(metadata)
     metadata.known = await this.getAllOtherDeviceTimestamps()
     // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
 
-    // チャンクパックファイル群を自デバイスフォルダに書き込み
-    for (const {fileName, text} of chunkPackFileTexts) {
-      const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
-      this.setCacheEntry(chunkPackFilePath, text)
-      await this.writeTextFile(chunkPackFilePath, text)
-    }
     // メタデータファイルを自デバイスフォルダに書き込み
     const newMetadataText = JSON.stringify(metadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
-    await this.writeTextFile(metadataFilePath, newMetadataText)
+    const metadataFileWritingPromise = this.writeTextFile(metadataFilePath, newMetadataText)
+
+    await Promise.all([metadataFileWritingPromise, ...chunkPackFileWritingPromises])
   }
 
   // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
