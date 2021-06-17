@@ -36,8 +36,7 @@
 
   const onClickDeleteButton = (event: Event) => {
     doWithErrorCapture(() => {
-      if (event.target instanceof HTMLElement) {
-      } else return
+      if (!(event.target instanceof HTMLElement)) return
 
       const elementNodeListOf = document.querySelectorAll('.label-edit-dialog_delete-button')
       const index = List(elementNodeListOf).indexOf(event.target)
