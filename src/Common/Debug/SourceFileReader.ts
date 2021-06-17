@@ -51,6 +51,6 @@ export class SourceFileReader {
     if (xhr.status !== 200) {
       return undefined
     }
-    return xhr.responseText.split('\n')
+    return xhr.responseText.split(/\r?\n/)
   }
 }

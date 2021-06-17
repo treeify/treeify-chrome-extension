@@ -177,7 +177,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
-      return codeBlockItem.code.split('\n')[0]
+      return codeBlockItem.code.split(/\r?\n/)[0]
     default:
       assertNeverType(itemType)
   }
@@ -185,7 +185,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
 
 /** 複数行のテキストをできるだけ良い形でTreeifyに取り込む */
 export function pasteMultilineText(text: string) {
-  const lines = text.split('\n')
+  const lines = text.split(/\r?\n/)
 
   for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
     // TODO: 最適化の余地あり。パースの試行とパース成功確認後のアイテム生成の2回に分けてトラバースしている
