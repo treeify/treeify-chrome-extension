@@ -491,26 +491,6 @@
     if (targetItem.itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
 
-      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-      // 空の子なしアイテムなら
-      if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
-        event.preventDefault()
-
-        // 上のアイテムがテキストアイテムならキャレットを末尾に移す
-        const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
-        const aboveItemId = ItemPath.getItemId(aboveItemPath)
-        if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
-          const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-          const characterCount = DomishObject.countCharacters(domishObjects)
-          Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
-        }
-
-        // ターゲットアイテムを削除して終了
-        NullaryCommand.deleteItem()
-        Rerenderer.instance.rerender()
-        return
-      }
-
       const selection = getTextItemSelectionFromDom()
       assertNonUndefined(selection)
       if (selection.focusDistance === 0 && selection.anchorDistance === 0) {
@@ -521,6 +501,27 @@
         if (aboveItemPath === undefined) return
 
         const aboveItemId = ItemPath.getItemId(aboveItemPath)
+
+        const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+        // 空の子なしアイテムなら
+        if (
+          targetItem.childItemIds.isEmpty() &&
+          DomishObject.countCharacters(domishObjects) === 0
+        ) {
+          event.preventDefault()
+
+          // 上のアイテムがテキストアイテムならキャレットを末尾に移す
+          if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+            const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+            const characterCount = DomishObject.countCharacters(domishObjects)
+            Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+          }
+
+          // ターゲットアイテムを削除して終了
+          NullaryCommand.deleteItem()
+          Rerenderer.instance.rerender()
+          return
+        }
 
         if (Internal.instance.state.items[aboveItemId].itemType !== ItemType.TEXT) {
           // 上のアイテムがテキストアイテム以外の場合
