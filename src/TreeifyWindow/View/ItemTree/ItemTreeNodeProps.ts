@@ -91,6 +91,8 @@ export function createItemTreeNodeProps(
     },
     onClickDeleteButton: (event) => {
       doWithErrorCapture(() => {
+        Internal.instance.saveCurrentStateToUndoStack()
+
         CurrentState.setTargetItemPath(itemPath)
 
         const inputId = InputId.fromMouseEvent(event)

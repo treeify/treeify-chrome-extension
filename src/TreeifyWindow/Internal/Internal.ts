@@ -11,6 +11,10 @@ export class Internal {
 
   readonly state: State = Internal.createSampleState()
 
+  // Undo用。1つ前のState。
+  // 現状の実装ではUndoスタックの深さは1が上限である。
+  prevState: State | undefined
+
   private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
 
   private constructor(initialState: State) {
@@ -49,6 +53,12 @@ export class Internal {
 
   addOnMutateListener(listener: (propertyPath: PropertyPath) => void) {
     this.onMutateListeners.add(listener)
+  }
+
+  /** 現在のStateをUndoスタックに保存する */
+  saveCurrentStateToUndoStack() {
+    // TODO: 最適化の余地あり。毎回cloneするのではなく、パッチを適用する形にできると思う
+    this.prevState = State.clone(this.state)
   }
 
   dumpCurrentState() {
