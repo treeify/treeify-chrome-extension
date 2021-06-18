@@ -52,6 +52,7 @@ import {
   loadItem,
   loadSubtree,
   openNewTab,
+  toDualWindowModeAndOpenNewTab,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
 
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
@@ -102,6 +103,7 @@ export const functions: {[name: string]: () => void} = {
   loadItem,
   loadSubtree,
   openNewTab,
+  toDualWindowModeAndOpenNewTab,
   createEmptyCodeBlockItem,
   edit,
   showDefaultWindowModeSettingDialog,

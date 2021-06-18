@@ -109,7 +109,7 @@ export namespace TreeifyWindow {
     const treeifyWindowId = await findWindowId()
     assertNonUndefined(treeifyWindowId)
     const treeifyWindowWidth = readNarrowWidth() ?? initialWidth
-    chrome.windows.update(
+    const treeifyPromise = chrome.windows.update(
       treeifyWindowId,
       fillWindowGaps({
         state: 'normal',
@@ -120,11 +120,12 @@ export namespace TreeifyWindow {
       })
     )
 
-    // ブラウザウィンドウの幅や位置を変更する
-    for (const window of await getAllNormalWindows()) {
-      if (window.id === undefined) continue
+    const windows = await getAllNormalWindows()
+    const browserPromises = windows.map((window) => {
+      if (window.id === undefined) return new Promise(() => {})
 
-      chrome.windows.update(
+      // ブラウザウィンドウの幅や位置を変更する
+      return chrome.windows.update(
         window.id,
         fillWindowGaps({
           state: 'normal',
@@ -134,7 +135,9 @@ export namespace TreeifyWindow {
           height: screen.availHeight,
         })
       )
-    }
+    })
+
+    await Promise.all([treeifyPromise, ...browserPromises])
   }
 
   /** フルウィンドウモードに変更する */

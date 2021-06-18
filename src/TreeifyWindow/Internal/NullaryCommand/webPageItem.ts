@@ -129,8 +129,14 @@ export function browseTabInDualWindowMode() {
 }
 
 /** ChromeのCtrl+Tのデフォルトの挙動をコマンド化したもの */
-export function openNewTab() {
-  chrome.tabs.create({}, (tab) => {
-    chrome.windows.update(tab.windowId, {focused: true})
-  })
+export async function openNewTab() {
+  const tab = await chrome.tabs.create({})
+  await chrome.windows.update(tab.windowId, {focused: true})
+}
+
+/** デュアルウィンドウモードに変更しつつ新しいタブを開くコマンド */
+export async function toDualWindowModeAndOpenNewTab() {
+  await TreeifyWindow.toDualWindowMode()
+
+  await openNewTab()
 }
