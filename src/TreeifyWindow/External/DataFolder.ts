@@ -433,13 +433,16 @@ export class DataFolder {
          */
         return `items${Math.floor(itemId / 100)}.json`
       case 'pages':
+      case 'mountedPageIds':
+        // ミューテーションされる頻度が非常に高く、しかも同時にミューテーションされやすいグループ
+        return 'unstable.json'
       case 'availableItemIds':
       case 'maxItemId':
-        // ミューテーションされる頻度が非常に高いグループ
+        // ミューテーションされる頻度は高いが、同時にミューテーションされないことが多いので分けたいもの
         return `${firstKey}.json`
       default:
-        // その他のグループ
-        return `other.json`
+        // ミューテーションされる頻度が非常に低いグループ
+        return 'stable.json'
     }
   }
 }
