@@ -100,6 +100,8 @@ export class Internal {
         '1000ArrowDown': List.of({commandName: 'moveItemToNextSibling'}),
         '1100ArrowUp': List.of({commandName: 'moveItemUpward'}),
         '1100ArrowDown': List.of({commandName: 'moveItemDownward'}),
+        '0110ArrowDown': List.of({commandName: 'selectAllBelowItems'}),
+        '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
         '0000Enter': List.of({commandName: 'enterKeyDefault'}),
         '0100Enter': List.of({commandName: 'insertLineBreak'}),
         '1000Enter': List.of({commandName: 'hardUnloadSubtree'}, {commandName: 'toggleGrayedOut'}),
@@ -121,8 +123,6 @@ export class Internal {
         '0000F2': List.of({commandName: 'edit'}),
         '0100F2': List.of({commandName: 'showLabelEditDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
-        '0110ArrowDown': List.of({commandName: 'selectAllBelowItems'}),
-        '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
       },
       itemTreeDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
@@ -235,8 +235,7 @@ export class Internal {
       },
       imageItems: {
         7: {
-          url:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
+          url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
           caption: 'tamias',
         },
       },
@@ -278,6 +277,8 @@ export class Internal {
         '1000ArrowDown': List.of({commandName: 'moveItemToNextSibling'}),
         '1100ArrowUp': List.of({commandName: 'moveItemUpward'}),
         '1100ArrowDown': List.of({commandName: 'moveItemDownward'}),
+        '0110ArrowDown': List.of({commandName: 'selectAllBelowItems'}),
+        '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
         '0000Enter': List.of({commandName: 'enterKeyDefault'}),
         '0100Enter': List.of({commandName: 'insertLineBreak'}),
         '1000Enter': List.of({commandName: 'hardUnloadSubtree'}, {commandName: 'toggleGrayedOut'}),
@@ -299,8 +300,6 @@ export class Internal {
         '0000F2': List.of({commandName: 'edit'}),
         '0100F2': List.of({commandName: 'showLabelEditDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
-        '0110ArrowDown': List.of({commandName: 'selectAllBelowItems'}),
-        '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
       },
       itemTreeDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
