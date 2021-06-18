@@ -789,7 +789,9 @@
   on:paste={onPaste}
   on:scroll={onScroll}
 >
-  <ItemTreeNode props={props.rootNodeProps} />
+  {#key props.rootNodeProps.itemPath.toString()}
+    <ItemTreeNode props={props.rootNodeProps} />
+  {/key}
 </main>
 
 <style>
