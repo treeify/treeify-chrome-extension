@@ -7,6 +7,14 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
+/** 選択されたアイテムを折りたたむコマンド */
+export function collapseItem() {
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    CurrentState.setIsCollapsed(selectedItemPath, true)
+    CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+  }
+}
+
 /** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
   const targetItemPath = CurrentState.getTargetItemPath()

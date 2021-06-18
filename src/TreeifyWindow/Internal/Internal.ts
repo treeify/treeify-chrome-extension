@@ -114,7 +114,11 @@ export class Internal {
         '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
         '0000Enter': List.of({commandName: 'enterKeyDefault'}),
         '0100Enter': List.of({commandName: 'insertLineBreak'}),
-        '1000Enter': List.of({commandName: 'hardUnloadSubtree'}, {commandName: 'toggleGrayedOut'}),
+        '1000Enter': List.of(
+          {commandName: 'hardUnloadSubtree'},
+          {commandName: 'collapseItem'},
+          {commandName: 'toggleGrayedOut'}
+        ),
         '1000KeyT': List.of({commandName: 'toDualWindowModeAndOpenNewTab'}),
         '1000KeyL': List.of({commandName: 'toggleHighlighted'}),
         '1000KeyG': List.of({commandName: 'groupingItems'}),
@@ -291,7 +295,11 @@ export class Internal {
         '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
         '0000Enter': List.of({commandName: 'enterKeyDefault'}),
         '0100Enter': List.of({commandName: 'insertLineBreak'}),
-        '1000Enter': List.of({commandName: 'hardUnloadSubtree'}, {commandName: 'toggleGrayedOut'}),
+        '1000Enter': List.of(
+          {commandName: 'hardUnloadSubtree'},
+          {commandName: 'collapseItem'},
+          {commandName: 'toggleGrayedOut'}
+        ),
         '1000KeyT': List.of({commandName: 'toDualWindowModeAndOpenNewTab'}),
         '1000KeyL': List.of({commandName: 'toggleHighlighted'}),
         '1000KeyG': List.of({commandName: 'groupingItems'}),

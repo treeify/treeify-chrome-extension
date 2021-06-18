@@ -7,6 +7,7 @@ import {
   showWorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
+  collapseItem,
   deleteItem,
   deleteItemItself,
   enterKeyDefault,
@@ -69,6 +70,7 @@ export * from 'src/TreeifyWindow/Internal/NullaryCommand/other'
  * 動的にコマンド名からコマンド関数を得るために用いる。
  */
 export const functions: {[name: string]: () => void} = {
+  collapseItem,
   toggleCollapsed,
   indentItem,
   unindentItem,
