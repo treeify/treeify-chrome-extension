@@ -154,6 +154,8 @@
 
     border-radius: 50%;
     cursor: pointer;
+    
+    color: hsl(0, 0%, 40%);
   }
   .item-tree-node_hidden-tabs-count:hover {
     background: var(--item-tree-node-button-background-hover-color);
