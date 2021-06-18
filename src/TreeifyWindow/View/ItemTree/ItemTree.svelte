@@ -19,6 +19,7 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
+  import {restart} from '../../startup'
   import {ItemTreeContentView} from './ItemTreeContentProps'
   import ItemTreeNode from './ItemTreeNode.svelte'
   import {ItemTreeProps} from './ItemTreeProps'
@@ -60,12 +61,21 @@
         case '0000 ':
           onSpace(event)
           return
+        case '1000KeyZ':
+          event.preventDefault()
+          if (Internal.instance.prevState !== undefined) {
+            restart(Internal.instance.prevState)
+          }
+          return
       }
 
       const commands: List<Command> | undefined =
         Internal.instance.state.itemTreeKeyboardBinding[inputId]
       if (commands !== undefined) {
         event.preventDefault()
+
+        Internal.instance.saveCurrentStateToUndoStack()
+
         for (const command of commands) {
           Command.execute(command)
         }
