@@ -1,3 +1,4 @@
+import {dump} from 'src/Common/Debug/logger'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 
@@ -11,6 +12,9 @@ export function doWithErrorCapture<T>(f: () => T): T {
   try {
     return f()
   } catch (e) {
+    if (e instanceof Error) {
+      dump(e.name, e.message)
+    }
     alert(e)
     dumpCurrentMemory()
     throw e
@@ -22,6 +26,9 @@ export async function doAsyncWithErrorCapture<T>(f: () => Promise<T>): Promise<T
   try {
     return await f()
   } catch (e) {
+    if (e instanceof Error) {
+      dump(e.name, e.message)
+    }
     alert(e)
     dumpCurrentMemory()
     throw e
