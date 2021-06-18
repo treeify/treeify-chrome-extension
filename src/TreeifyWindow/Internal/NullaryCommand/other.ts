@@ -8,6 +8,7 @@ import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
+import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {restart} from 'src/TreeifyWindow/startup'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
@@ -58,6 +59,7 @@ export async function saveToDataFolder() {
       }
       External.instance.pendingMutatedChunkIds.clear()
       await External.instance.dataFolder.writeChunks(List(chunks))
+      Rerenderer.instance.rerender()
     } else {
       // もし自身の知らない他デバイスの更新があれば
       await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
