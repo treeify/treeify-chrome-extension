@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeNodeProps,
@@ -16,7 +15,7 @@ export type ItemTreeProps = {
 export function createItemTreeProps(state: State): ItemTreeProps {
   const rootItemPath = List.of(CurrentState.getActivePageId())
 
-  const allDisplayingItemIds = [...getAllDisplayingItemIds(state, rootItemPath)]
+  const allDisplayingItemIds = [...CurrentState.getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算
   // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
   const footprintCount = Math.floor(Math.pow(allDisplayingItemIds.length, 0.5))
@@ -34,16 +33,5 @@ export function createItemTreeProps(state: State): ItemTreeProps {
 
   return {
     rootNodeProps: createItemTreeNodeProps(state, footprintRankMap, footprintCount, rootItemPath),
-  }
-}
-
-/**
- * 全ての子孫と自身のアイテムIDを返す。
- * ただし（折りたたみなどの理由で）表示されないアイテムはスキップする。
- */
-function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
-  yield ItemPath.getItemId(itemPath)
-  for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
-    yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
   }
 }
