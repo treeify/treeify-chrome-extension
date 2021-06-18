@@ -232,11 +232,6 @@ export namespace TreeifyWindow {
     return rawData
   }
 
-  /** Treeifyウィンドウ宛のメッセージを送信する */
-  export function sendMessage(message: Message) {
-    chrome.runtime.sendMessage(message)
-  }
-
   /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
   export type Message = OnMouseMoveToLeftEnd | OnMouseEnter
 
