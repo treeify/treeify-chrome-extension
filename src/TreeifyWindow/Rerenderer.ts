@@ -5,7 +5,6 @@ import {
   setDomSelection,
   TextItemSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
-import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
 import {tick} from 'svelte'
@@ -51,13 +50,6 @@ export class Rerenderer {
 
     // DOM更新完了後に実行される
     tick().then(() => {
-      // アイテムツリーのスクロール位置を復元
-      const itemTree = document.querySelector('.item-tree')
-      const scrollPosition = External.instance.scrollPositions.get(CurrentState.getActivePageId())
-      if (scrollPosition !== undefined && itemTree instanceof HTMLElement) {
-        itemTree.scrollTop = scrollPosition
-      }
-
       // フォーカスを設定する
       if (CurrentState.getSelectedItemPaths().size === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
