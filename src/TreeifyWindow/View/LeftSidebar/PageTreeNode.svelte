@@ -2,8 +2,8 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
+  import ItemContent from '../ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
-  import PageTreeContent from './PageTreeContent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
   import {PageTreeNodeProps} from './PageTreeNodeProps'
 
@@ -48,7 +48,7 @@
           on:dragover={props.onDragOver}
           on:drop={props.onDrop}
         >
-          <PageTreeContent props={props.contentProps} />
+          <ItemContent props={props.contentProps} />
         </div>
         <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
       </div>
