@@ -1,11 +1,12 @@
 import CreateData = chrome.windows.CreateData
 
-;(async () => {
-  // Treeifyウィンドウがあればフォーカスする
+chrome.runtime.onInstalled.addListener(openTreeifyWindow)
+chrome.runtime.onStartup.addListener(openTreeifyWindow)
+
+async function openTreeifyWindow() {
   const windows = await chrome.windows.getAll({populate: true, windowTypes: ['popup']})
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   const treeifyWindowUrl = chrome.runtime.getURL('TreeifyWindow/index.html')
-
   if (tabs.find((tab) => tab.url === treeifyWindowUrl) === undefined) {
     const createData: CreateData = {
       url: chrome.runtime.getURL('TreeifyWindow/index.html'),
@@ -21,4 +22,4 @@ import CreateData = chrome.windows.CreateData
 
     await chrome.windows.create(createData)
   }
-})()
+}
