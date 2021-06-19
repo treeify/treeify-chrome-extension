@@ -1,6 +1,7 @@
 <script lang="ts">
   import hljs from 'highlight.js'
   import {CurrentState} from '../../Internal/CurrentState'
+  import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {Rerenderer} from '../../Rerenderer'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
@@ -12,11 +13,21 @@
     CurrentState.setCodeBlockItemEditDialog(null)
     Rerenderer.instance.rerender()
   }
+
+  function onPaste(event: ClipboardEvent) {
+    if (event.target instanceof HTMLTextAreaElement) {
+      event.preventDefault()
+
+      const text = event.clipboardData.getData('text/plain')
+      // 無駄なインデントを自動的に除去する機能
+      event.target.value = removeRedundantIndent(text)
+    }
+  }
 </script>
 
 <CommonDialog title="コードブロック編集" {onCloseDialog}>
   <div class="code-block-edit-dialog_content">
-    <textarea class="code-block-edit-dialog_code">{props.code}</textarea>
+    <textarea class="code-block-edit-dialog_code" on:paste={onPaste}>{props.code}</textarea>
     <div class="code-block-edit-dialog_language-area">
       <label>言語名</label>
       <input
