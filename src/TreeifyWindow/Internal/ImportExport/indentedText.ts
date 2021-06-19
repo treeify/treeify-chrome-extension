@@ -8,6 +8,30 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
+/**
+ * 与えられた複数行のテキストから無駄なインデントを除去する。
+ * インデント文字として認識するのは半角スペース、全角スペース、タブ文字のみ。
+ */
+export function removeRedundantIndent(indentedText: string): string {
+  const lines = List(indentedText.split(/\r?\n/))
+
+  const spaceCounts = lines.map((line) => {
+    return line.search(/[^ ]/)
+  })
+  const tabCounts = lines.map((line) => {
+    return line.search(/[^\t]/)
+  })
+  const fullWidthSpaceCounts = lines.map((line) => {
+    return line.search(/[^　]/)
+  })
+
+  const minSpaceCount = spaceCounts.filter((count) => count >= 0).min() ?? 0
+  const minTabCount = tabCounts.filter((count) => count >= 0).min() ?? 0
+  const minFullWidthSpaceCount = fullWidthSpaceCounts.filter((count) => count >= 0).min() ?? 0
+  const maxCount = Math.max(minSpaceCount, minTabCount, minFullWidthSpaceCount)
+  return lines.map((line) => line.substr(maxCount)).join('\n')
+}
+
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemPath: ItemPath): string {
   return exportAsIndentedLines(itemPath).join('\n')
