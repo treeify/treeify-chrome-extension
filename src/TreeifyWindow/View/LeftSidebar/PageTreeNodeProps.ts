@@ -11,17 +11,17 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
+  createItemContentProps,
+  ItemContentProps,
+} from 'src/TreeifyWindow/View/ItemContent/ItemContentProps'
+import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/PageTreeBulletAndIndentProps'
-import {
-  createPageTreeContentProps,
-  PageTreeContentProps,
-} from 'src/TreeifyWindow/View/LeftSidebar/PageTreeContentProps'
 
 export type PageTreeNodeProps = {
   bulletAndIndentProps: PageTreeBulletAndIndentProps
-  contentProps: PageTreeContentProps
+  contentProps: ItemContentProps
   childNodePropses: List<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
@@ -96,7 +96,7 @@ export function createPageTreeNodeProps(
 
   return {
     bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren),
-    contentProps: createPageTreeContentProps(state, itemId),
+    contentProps: createItemContentProps(itemId),
     childNodePropses: childPagePaths.map((childPagePath) =>
       createPageTreeNodeProps(
         state,
