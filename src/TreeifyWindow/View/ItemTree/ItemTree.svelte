@@ -9,7 +9,6 @@
     getTextItemSelectionFromDom,
     setDomSelection,
   } from '../../External/domTextSelection'
-  import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
   import {DomishObject} from '../../Internal/DomishObject'
@@ -757,13 +756,6 @@
       }
     })
   }
-
-  function onScroll(event: Event) {
-    // スクロール位置を保存する
-    if (event.target instanceof HTMLElement) {
-      External.instance.scrollPositions.set(CurrentState.getActivePageId(), event.target.scrollTop)
-    }
-  }
 </script>
 
 <main
@@ -775,7 +767,6 @@
   on:copy={onCopy}
   on:cut={onCut}
   on:paste={onPaste}
-  on:scroll={onScroll}
 >
   {#key props.rootNodeProps.itemPath.toString()}
     <ItemTreeNode props={props.rootNodeProps} />

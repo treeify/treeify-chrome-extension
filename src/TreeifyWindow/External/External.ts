@@ -38,12 +38,6 @@ export class External {
    */
   readonly hardUnloadedTabIds = new Set<integer>()
 
-  /**
-   * 各ページのスクロール位置の保存先。
-   * 再描画時にDOM要素を再利用しない限りスクロール位置がリセットされてしまうのでその対策用。
-   */
-  readonly scrollPositions = new Map<ItemId, integer>()
-
   private constructor() {}
 
   /** シングルトンインスタンスを取得する */
