@@ -55,3 +55,9 @@ body {
   opacity: 0.5;
   transition: opacity 0s, width 0s, height 0s;
 }
+
+.default-favicon {
+  /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
+  background: hsl(0, 0%, 40%);
+  -webkit-mask-image: url('./default-favicon.svg');
+}

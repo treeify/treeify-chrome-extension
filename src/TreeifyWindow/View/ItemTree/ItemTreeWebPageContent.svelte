@@ -102,12 +102,6 @@
     /* クリックして操作できることを示す */
     cursor: pointer;
   }
-  /* デフォルトファビコン */
-  .item-tree-web-page-content_favicon.default-favicon {
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 40%);
-    -webkit-mask-image: url('./default-favicon.svg');
-  }
 
   /* ローディングインジケータ */
   .loading-indicator {
