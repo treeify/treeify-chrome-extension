@@ -2,12 +2,15 @@
   import {ItemType} from '../../basicType'
   import {ItemContentProps} from './ItemContentProps'
   import TextItemContent from './TextItemContent.svelte'
+  import WebPageItemContent from './WebPageItemContent.svelte'
 
   export let props: ItemContentProps
 </script>
 
 {#if props.itemType === ItemType.TEXT}
   <TextItemContent {props} />
+{:else if props.itemType === ItemType.WEB_PAGE}
+  <WebPageItemContent {props} />
 {/if}
 
 <style>

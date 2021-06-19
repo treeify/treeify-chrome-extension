@@ -5,8 +5,12 @@ import {
   createTextItemContentProps,
   TextItemContentProps,
 } from 'src/TreeifyWindow/View/ItemContent/TextItemContentProps'
+import {
+  createWebPageItemContentProps,
+  WebPageItemContentProps,
+} from 'src/TreeifyWindow/View/ItemContent/WebPageItemContentProps'
 
-export type ItemContentProps = TextItemContentProps
+export type ItemContentProps = TextItemContentProps | WebPageItemContentProps
 
 export function createItemContentProps(itemId: ItemId) {
   const itemType = Internal.instance.state.items[itemId].itemType
@@ -14,6 +18,7 @@ export function createItemContentProps(itemId: ItemId) {
     case ItemType.TEXT:
       return createTextItemContentProps(itemId)
     case ItemType.WEB_PAGE:
+      return createWebPageItemContentProps(itemId)
     case ItemType.IMAGE:
     case ItemType.CODE_BLOCK:
       throw new Error('未実装')
