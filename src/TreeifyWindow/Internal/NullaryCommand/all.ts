@@ -4,6 +4,7 @@ import {
   showDefaultWindowModeSettingDialog,
   showLabelEditDialog,
   showOtherParentsDialog,
+  showSearchDialog,
   showWorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {
@@ -112,5 +113,6 @@ export const functions: {[name: string]: () => void} = {
   showWorkspaceDialog,
   showLabelEditDialog,
   showOtherParentsDialog,
+  showSearchDialog,
   saveToDataFolder,
 }

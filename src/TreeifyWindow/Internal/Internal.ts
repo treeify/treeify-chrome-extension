@@ -130,6 +130,7 @@ export class Internal {
         '1000KeyK': List.of({commandName: 'toggleStrikethrough'}),
         '1000KeyS': List.of({commandName: 'saveToDataFolder'}),
         '0010KeyC': List.of({commandName: 'copyForTransclusion'}),
+        '1100KeyF': List.of({commandName: 'showSearchDialog'}),
         '1000KeyL': List.of({commandName: 'createEmptyCodeBlockItem'}),
         '0010KeyW': List.of({commandName: 'showDefaultWindowModeSettingDialog'}),
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
@@ -148,6 +149,7 @@ export class Internal {
       workspaceDialog: null,
       labelEditDialog: null,
       otherParentsDialog: null,
+      searchDialog: null,
     }
   }
 
@@ -311,6 +313,7 @@ export class Internal {
         '1000KeyK': List.of({commandName: 'toggleStrikethrough'}),
         '1000KeyS': List.of({commandName: 'saveToDataFolder'}),
         '0010KeyC': List.of({commandName: 'copyForTransclusion'}),
+        '1100KeyF': List.of({commandName: 'showSearchDialog'}),
         '1000KeyL': List.of({commandName: 'createEmptyCodeBlockItem'}),
         '0010KeyW': List.of({commandName: 'showDefaultWindowModeSettingDialog'}),
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
@@ -329,6 +332,7 @@ export class Internal {
       workspaceDialog: null,
       labelEditDialog: null,
       otherParentsDialog: null,
+      searchDialog: null,
     }
   }
 }
