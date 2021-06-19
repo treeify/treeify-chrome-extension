@@ -13,7 +13,7 @@
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
   import {DomishObject} from '../../Internal/DomishObject'
-  import {onCopy, onCut, onPaste} from '../../Internal/importAndExport'
+  import {onCopy, onCut, onPaste} from '../../Internal/ImportExport/clipboard'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'

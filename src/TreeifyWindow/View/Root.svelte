@@ -1,12 +1,12 @@
 <script lang="ts">
   import {List} from 'immutable'
+  import {toOpmlString} from 'src/TreeifyWindow/Internal/ImportExport/opml'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
   import {createRootProps, RootProps} from 'src/TreeifyWindow/View/RootProps'
   import {derived, Readable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
-  import {toOpmlString} from '../Internal/importAndExport'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
