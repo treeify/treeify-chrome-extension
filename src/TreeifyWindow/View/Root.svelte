@@ -86,23 +86,6 @@
     --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
   }
 
-  :global(*) {
-    box-sizing: border-box;
-  }
-
-  :global(html) {
-    height: 100%;
-  }
-
-  :global(body) {
-    height: 100%;
-    margin: 0;
-  }
-
-  :global(.spa-root) {
-    height: 100%;
-  }
-
   .root {
     height: 100%;
     /* ダイアログなどを他の表示物に重ねて表示するための設定 */
