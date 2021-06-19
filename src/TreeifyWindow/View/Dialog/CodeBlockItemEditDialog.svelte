@@ -15,7 +15,7 @@
   }
 
   function onPaste(event: ClipboardEvent) {
-    if (event.target instanceof HTMLTextAreaElement) {
+    if (event.clipboardData !== null && event.target instanceof HTMLTextAreaElement) {
       event.preventDefault()
 
       const text = event.clipboardData.getData('text/plain')
