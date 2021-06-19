@@ -132,11 +132,11 @@
     /* アイコンと疑似リップルエフェクトを中央寄せにする */
     position: relative;
   }
-  :global(.toolbar-icon-button):hover {
+  :global(.toolbar-icon-button:hover) {
     background: var(--toolbar-icon-button-hover-background);
   }
   /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
-  :global(.toolbar-icon-button)::after {
+  :global(.toolbar-icon-button::after) {
     content: '';
 
     /* 中央寄せ */
@@ -155,7 +155,7 @@
     background: hsl(0, 0%, 50%);
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
-  :global(.toolbar-icon-button):active::after {
+  :global(.toolbar-icon-button:active::after) {
     width: 0;
     height: 0;
     opacity: 0.5;
