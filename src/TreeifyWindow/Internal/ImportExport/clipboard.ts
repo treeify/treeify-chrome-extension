@@ -12,6 +12,7 @@ import {
   toOpmlString,
   tryParseAsOpml,
 } from 'src/TreeifyWindow/Internal/ImportExport/opml'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyWindow/Internal/State'
@@ -47,6 +48,8 @@ export function onCut(event: ClipboardEvent) {
   doWithErrorCapture(() => {
     if (event.clipboardData === null) return
 
+    Internal.instance.saveCurrentStateToUndoStack()
+
     External.instance.treeifyClipboard = undefined
 
     const textSelection = getTextItemSelectionFromDom()
@@ -76,6 +79,8 @@ export function onCut(event: ClipboardEvent) {
 export function onPaste(event: ClipboardEvent) {
   doWithErrorCapture(() => {
     if (event.clipboardData === null) return
+
+    Internal.instance.saveCurrentStateToUndoStack()
 
     event.preventDefault()
     const targetItemPath = CurrentState.getTargetItemPath()
