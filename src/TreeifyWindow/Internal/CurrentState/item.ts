@@ -357,21 +357,6 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
   return edge
 }
 
-/**
- * 指定されたアイテムを起点とするサブツリーに含まれるアイテムIDを全て返す。
- * ただしページは終端ノードとして扱い、その子孫は無視する。
- */
-export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
-  yield itemId
-
-  // ページは終端ノードとして扱う
-  if (CurrentState.isPage(itemId)) return
-
-  for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
-    yield* getSubtreeItemIds(childItemId)
-  }
-}
-
 /** 新しい未使用のアイテムIDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds

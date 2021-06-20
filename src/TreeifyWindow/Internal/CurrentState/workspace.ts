@@ -89,13 +89,5 @@ export function shouldBeHidden(itemId: ItemId) {
   if (excludedItemIds.contains(itemId)) return true
 
   // 与えられたアイテムの先祖アイテムに除外アイテムが含まれているかどうか
-  return !Set(yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()
-}
-
-// 先祖アイテムのジェネレーター
-function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
-  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    yield parentItemId
-    yield* yieldAncestorItemIds(parentItemId)
-  }
+  return !Set(CurrentState.yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()
 }

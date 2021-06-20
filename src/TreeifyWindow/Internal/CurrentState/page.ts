@@ -3,7 +3,6 @@ import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {DefaultWindowMode, Page} from 'src/TreeifyWindow/Internal/State'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
@@ -122,25 +121,4 @@ export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function deriveTreeifyWindowTitle(): string {
   return getContentAsPlainText(CurrentState.getActivePageId())
-}
-
-/**
- * 指定されたアイテムが所属する全てのページのアイテムIDを返す。
- * 自身がページの場合は自身のアイテムIDを返す。
- * グラフ構造次第では同じアイテムIDを複数回返すこともあるので注意。
- */
-export function yieldItemPaths(itemId: ItemId): Generator<ItemPath> {
-  return _yieldItemPaths(List.of(itemId))
-}
-
-function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
-  const rootItemId = ItemPath.getRootItemId(itemPath)
-  if (CurrentState.isPage(rootItemId)) {
-    yield itemPath
-    return
-  }
-
-  for (const parentItemId of CurrentState.getParentItemIds(rootItemId)) {
-    yield* _yieldItemPaths(itemPath.unshift(parentItemId))
-  }
 }
