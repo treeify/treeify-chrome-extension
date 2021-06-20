@@ -1,7 +1,10 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 
-/** 全文検索用のunigram転置インデックス */
+/**
+ * 全文検索用のunigram転置インデックス。
+ * 大文字・小文字は区別しない形で保存される。
+ */
 export class UnigramSearchIndex {
   // 文字を出現アイテムIDに対応付けるMap。
   // 例えばitemIdが5のアイテムに'あ'という文字が含まれる場合、
@@ -14,18 +17,20 @@ export class UnigramSearchIndex {
   }
 
   addItemId(unigram: string, itemId: ItemId) {
-    const set = this.map.get(unigram)
+    const normalizedUnigram = UnigramSearchIndex.normalize(unigram)
+    const set = this.map.get(normalizedUnigram)
     if (set !== undefined) {
       set.add(itemId)
     } else {
       const newSet = new Set<ItemId>()
       newSet.add(itemId)
-      this.map.set(unigram, newSet)
+      this.map.set(normalizedUnigram, newSet)
     }
   }
 
   removeItemId(unigram: string, itemId: ItemId) {
-    const set = this.map.get(unigram)
+    const normalizedUnigram = UnigramSearchIndex.normalize(unigram)
+    const set = this.map.get(normalizedUnigram)
     if (set !== undefined) {
       set.delete(itemId)
     }
@@ -33,8 +38,14 @@ export class UnigramSearchIndex {
 
   /** 与えられた文字列に含まれる全ての文字を含むアイテムの集合を返す */
   search(text: string): Set<ItemId> {
-    const sets = List(new Set(text)).map((unigram) => this.getItemIds(unigram))
+    const unigrams = List(new Set(UnigramSearchIndex.normalize(text)))
+    const sets = unigrams.map((unigram) => this.getItemIds(unigram))
     return UnigramSearchIndex.intersection(sets)
+  }
+
+  // 大文字・小文字を区別せず検索するための正規化関数
+  static normalize(text: string): string {
+    return text.toLowerCase()
   }
 
   // 積集合を計算する

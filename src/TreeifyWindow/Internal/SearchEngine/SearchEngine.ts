@@ -27,7 +27,11 @@ export class SearchEngine {
     // TODO: ワークスペースごとの除外アイテムで検索結果をフィルタリングする
     return List(this.unigramSearchIndex.search(searchQuery)).filter((itemId) => {
       const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
-      return textTracks.find((text) => text.includes(searchQuery)) !== undefined
+      return textTracks.some((textTrack) => {
+        return UnigramSearchIndex.normalize(textTrack).includes(
+          UnigramSearchIndex.normalize(searchQuery)
+        )
+      })
     })
   }
 
