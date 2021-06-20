@@ -1,6 +1,7 @@
 import {List, Set} from 'immutable'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {UnigramSearchIndex} from 'src/TreeifyWindow/Internal/SearchEngine/UnigramSearchIndex'
@@ -24,10 +25,13 @@ export class SearchEngine {
 
   /** 全文検索を行う */
   search(searchQuery: string): List<ItemId> {
-    // TODO: ワークスペースごとの除外アイテムで検索結果をフィルタリングする
     return List(this.unigramSearchIndex.search(searchQuery)).filter((itemId) => {
+      // 除外アイテムで検索結果をフィルタリングする
+      if (CurrentState.shouldBeHidden(itemId)) return false
+
       const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
       return textTracks.some((textTrack) => {
+        // 大文字・小文字を区別せず検索する
         return UnigramSearchIndex.normalize(textTrack).includes(
           UnigramSearchIndex.normalize(searchQuery)
         )
