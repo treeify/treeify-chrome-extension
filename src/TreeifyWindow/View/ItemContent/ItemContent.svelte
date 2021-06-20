@@ -1,5 +1,6 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
+  import CodeBlockItemContent from './CodeBlockItemContent.svelte'
   import ImageItemContent from './ImageItemContent.svelte'
   import {ItemContentProps} from './ItemContentProps'
   import TextItemContent from './TextItemContent.svelte'
@@ -14,6 +15,8 @@
   <WebPageItemContent {props} />
 {:else if props.itemType === ItemType.IMAGE}
   <ImageItemContent {props} />
+{:else if props.itemType === ItemType.CODE_BLOCK}
+  <CodeBlockItemContent {props} />
 {/if}
 
 <style>
