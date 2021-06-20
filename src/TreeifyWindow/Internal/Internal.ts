@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {SearchEngine} from 'src/TreeifyWindow/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
@@ -9,16 +10,21 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 export class Internal {
   private static _instance: Internal | undefined
 
-  readonly state: State = Internal.createSampleState()
+  readonly state: State
+  /** Treeifyの項目の全文検索エンジン */
+  readonly searchEngine: SearchEngine
 
-  // Undo用。1つ前のState。
-  // 現状の実装ではUndoスタックの深さは1が上限である。
+  /**
+   * Undo用。1つ前のState。
+   * 現状の実装ではUndoスタックの深さは1が上限である。
+   */
   prevState: State | undefined
 
   private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
 
   private constructor(initialState: State) {
     this.state = initialState
+    this.searchEngine = new SearchEngine(this.state)
   }
 
   /**
