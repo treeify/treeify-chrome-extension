@@ -9,7 +9,9 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
-  Internal.instance.state.textItems[textItemId].domishObjects = domishObjects
+  Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
+    Internal.instance.state.textItems[textItemId].domishObjects = domishObjects
+  })
   Internal.instance.markAsMutated(PropertyPath.of('textItems', textItemId, 'domishObjects'))
 }
 

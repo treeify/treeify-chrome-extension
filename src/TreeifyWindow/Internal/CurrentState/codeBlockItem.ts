@@ -41,12 +41,16 @@ export function deleteCodeBlockItemEntry(itemId: ItemId) {
 
 /** コードブロックアイテムのコードを設定する */
 export function setCodeBlockItemCode(itemId: ItemId, code: string) {
-  Internal.instance.state.codeBlockItems[itemId].code = code
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.state.codeBlockItems[itemId].code = code
+  })
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId, 'code'))
 }
 
 /** コードブロックアイテムの言語を設定する */
 export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
-  Internal.instance.state.codeBlockItems[itemId].language = language
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.state.codeBlockItems[itemId].language = language
+  })
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId, 'language'))
 }

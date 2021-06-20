@@ -35,6 +35,23 @@ export class SearchEngine {
     })
   }
 
+  /**
+   * 指定されたアイテムのテキストトラックの変化に合わせて検索インデックスを更新する。
+   * アイテム内のテキストを更新する処理は全て第2引数の関数内で行うべし。
+   */
+  updateSearchIndex(itemId: ItemId, f: () => void) {
+    const oldUnigrams = SearchEngine.appearingUnigrams(itemId, Internal.instance.state)
+    f()
+    const newUnigrams = SearchEngine.appearingUnigrams(itemId, Internal.instance.state)
+
+    for (const unigram of oldUnigrams.subtract(newUnigrams)) {
+      this.unigramSearchIndex.removeItemId(unigram, itemId)
+    }
+    for (const unigram of newUnigrams.subtract(oldUnigrams)) {
+      this.unigramSearchIndex.addItemId(unigram, itemId)
+    }
+  }
+
   /** 指定されたアイテムが持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
   static getTextTracks(itemId: ItemId, state: State): List<string> {
     const itemType = state.items[itemId].itemType

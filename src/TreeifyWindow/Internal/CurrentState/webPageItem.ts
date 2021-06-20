@@ -44,13 +44,17 @@ export function deleteWebPageItemEntry(itemId: ItemId) {
 
 /** ウェブページアイテムのタブタイトルを設定する */
 export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
-  Internal.instance.state.webPageItems[itemId].tabTitle = tabTitle
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.state.webPageItems[itemId].tabTitle = tabTitle
+  })
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'tabTitle'))
 }
 
 /** ウェブページアイテムのタイトルを設定する */
 export function setWebPageItemTitle(itemId: ItemId, title: string | null) {
-  Internal.instance.state.webPageItems[itemId].title = title
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.state.webPageItems[itemId].title = title
+  })
   Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'title'))
 }
 

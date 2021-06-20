@@ -47,6 +47,8 @@ export function setImageItemUrl(itemId: ItemId, url: string) {
 
 /** 画像アイテムのキャプションを設定する */
 export function setImageItemCaption(itemId: ItemId, caption: string) {
-  Internal.instance.state.imageItems[itemId].caption = caption
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.state.imageItems[itemId].caption = caption
+  })
   Internal.instance.markAsMutated(PropertyPath.of('imageItems', itemId, 'caption'))
 }
