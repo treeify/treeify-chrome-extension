@@ -31,9 +31,8 @@ export function isVisible(itemPath: ItemPath): boolean {
 }
 
 /**
- * 指定されたアイテムが所属する全てのページのアイテムIDを返す。
- * 自身がページの場合は自身のアイテムIDを返す。
- * グラフ構造次第では同じアイテムIDを複数回返すこともあるので注意。
+ * 指定されたアイテムが所属するページまでのItemPathを返す。
+ * 自身がページの場合は自身のItemPathを返す。
  */
 export function yieldItemPaths(itemId: ItemId): Generator<ItemPath> {
   return _yieldItemPaths(List.of(itemId))
