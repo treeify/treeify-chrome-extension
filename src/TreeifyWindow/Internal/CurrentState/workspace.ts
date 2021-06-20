@@ -73,15 +73,23 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 
 /** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
 export function getFilteredMountedPageIds(): List<ItemId> {
-  return Internal.instance.state.mountedPageIds.filter((pageId) => {
-    const excludedItemIds = CurrentState.getExcludedItemIds()
-
-    // ページが除外アイテムそのものの場合
-    if (excludedItemIds.contains(pageId)) return false
-
-    // ページの先祖アイテムに除外アイテムが含まれているかどうか
-    return Set(yieldAncestorItemIds(pageId)).intersect(excludedItemIds).isEmpty()
+  return Internal.instance.state.mountedPageIds.filterNot((pageId) => {
+    return shouldBeHidden(pageId)
   })
+}
+
+/**
+ * 除外アイテムでのフィルタリング用関数。
+ * 与えられたアイテムが除外アイテムそのものであるか、先祖アイテムに除外アイテムが含まれる場合はtrueを返す。
+ */
+export function shouldBeHidden(itemId: ItemId) {
+  const excludedItemIds = CurrentState.getExcludedItemIds()
+
+  // 与えられたアイテムが除外アイテムそのものの場合
+  if (excludedItemIds.contains(itemId)) return true
+
+  // 与えられたアイテムの先祖アイテムに除外アイテムが含まれているかどうか
+  return !Set(yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()
 }
 
 // 先祖アイテムのジェネレーター
