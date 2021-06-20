@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {SearchEngine} from 'src/TreeifyWindow/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
@@ -9,16 +10,21 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 export class Internal {
   private static _instance: Internal | undefined
 
-  readonly state: State = Internal.createSampleState()
+  readonly state: State
+  /** Treeifyの項目の全文検索エンジン */
+  readonly searchEngine: SearchEngine
 
-  // Undo用。1つ前のState。
-  // 現状の実装ではUndoスタックの深さは1が上限である。
+  /**
+   * Undo用。1つ前のState。
+   * 現状の実装ではUndoスタックの深さは1が上限である。
+   */
   prevState: State | undefined
 
   private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
 
   private constructor(initialState: State) {
     this.state = initialState
+    this.searchEngine = new SearchEngine(this.state)
   }
 
   /**
@@ -130,6 +136,7 @@ export class Internal {
         '1000KeyK': List.of({commandName: 'toggleStrikethrough'}),
         '1000KeyS': List.of({commandName: 'saveToDataFolder'}),
         '0010KeyC': List.of({commandName: 'copyForTransclusion'}),
+        '1100KeyF': List.of({commandName: 'showSearchDialog'}),
         '1000KeyL': List.of({commandName: 'createEmptyCodeBlockItem'}),
         '0010KeyW': List.of({commandName: 'showDefaultWindowModeSettingDialog'}),
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
@@ -148,6 +155,7 @@ export class Internal {
       workspaceDialog: null,
       labelEditDialog: null,
       otherParentsDialog: null,
+      searchDialog: null,
     }
   }
 
@@ -311,6 +319,7 @@ export class Internal {
         '1000KeyK': List.of({commandName: 'toggleStrikethrough'}),
         '1000KeyS': List.of({commandName: 'saveToDataFolder'}),
         '0010KeyC': List.of({commandName: 'copyForTransclusion'}),
+        '1100KeyF': List.of({commandName: 'showSearchDialog'}),
         '1000KeyL': List.of({commandName: 'createEmptyCodeBlockItem'}),
         '0010KeyW': List.of({commandName: 'showDefaultWindowModeSettingDialog'}),
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
@@ -329,6 +338,7 @@ export class Internal {
       workspaceDialog: null,
       labelEditDialog: null,
       otherParentsDialog: null,
+      searchDialog: null,
     }
   }
 }

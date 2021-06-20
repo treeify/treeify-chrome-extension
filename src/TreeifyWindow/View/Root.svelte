@@ -12,6 +12,7 @@
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
   import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
+  import SearchDialog from './Dialog/SearchDialog.svelte'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
@@ -70,6 +71,9 @@
   {/if}
   {#if props.otherParentsDialog !== undefined}
     <OtherParentsDialog props={props.otherParentsDialog} />
+  {/if}
+  {#if props.searchDialog !== undefined}
+    <SearchDialog props={props.searchDialog} />
   {/if}
 </div>
 

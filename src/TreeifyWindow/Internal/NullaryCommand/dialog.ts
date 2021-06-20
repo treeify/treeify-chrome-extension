@@ -60,3 +60,8 @@ export function showLabelEditDialog() {
 export function showOtherParentsDialog() {
   CurrentState.setOtherParentsDialog({})
 }
+
+/** 検索ダイアログを表示する */
+export function showSearchDialog() {
+  CurrentState.setSearchDialog({})
+}

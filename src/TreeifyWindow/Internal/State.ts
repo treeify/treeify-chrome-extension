@@ -34,6 +34,7 @@ export type State = {
   workspaceDialog: WorkspaceDialog | null
   labelEditDialog: LabelEditDialog | null
   otherParentsDialog: OtherParentsDialog | null
+  searchDialog: SearchDialog | null
 }
 
 /**
@@ -167,6 +168,8 @@ export type LabelEditDialog = {
 }
 
 export type OtherParentsDialog = {}
+
+export type SearchDialog = {}
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */

@@ -5,6 +5,7 @@ import {
   DefaultWindowModeSettingDialog,
   LabelEditDialog,
   OtherParentsDialog,
+  SearchDialog,
   WebPageItemTitleSettingDialog,
   WorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/State'
@@ -43,4 +44,10 @@ export function setLabelEditDialog(value: LabelEditDialog | null) {
 export function setOtherParentsDialog(value: OtherParentsDialog | null) {
   Internal.instance.state.otherParentsDialog = value
   Internal.instance.markAsMutated(PropertyPath.of('otherParentsDialog'))
+}
+
+/** 検索ダイアログの状態を設定する */
+export function setSearchDialog(value: SearchDialog | null) {
+  Internal.instance.state.searchDialog = value
+  Internal.instance.markAsMutated(PropertyPath.of('searchDialog'))
 }
