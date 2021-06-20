@@ -730,22 +730,26 @@
 
             if (InputId.isFirstModifierKeyPressed(event)) {
               // エッジを追加する（トランスクルード）
-              CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
+              const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
+              CurrentState.setTargetItemPath(newItemPath)
             } else {
               // エッジを付け替える
               const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-              CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+              const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+              CurrentState.setTargetItemPath(newItemPath)
             }
           } else {
             // ドロップ先座標がドロップ先要素の下の方の場合
 
             if (InputId.isFirstModifierKeyPressed(event)) {
               // エッジを追加する（トランスクルード）
-              CurrentState.insertBelowItem(itemPath, draggedItemId)
+              const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId)
+              CurrentState.setTargetItemPath(newItemPath)
             } else {
               // エッジを付け替える
               const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-              CurrentState.insertBelowItem(itemPath, draggedItemId, edge)
+              const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId, edge)
+              CurrentState.setTargetItemPath(newItemPath)
             }
           }
 
