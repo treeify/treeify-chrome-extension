@@ -34,7 +34,7 @@
       assert(focusTrap === undefined)
       assertNonUndefined(domElement)
       focusTrap = createFocusTrap(domElement, {
-        returnFocusOnDeactivate: true,
+        returnFocusOnDeactivate: false,
         // この機能を使うとイベント発生順序の違いにより難解なエラーが起こるので、
         // ESCキー押下時にダイアログを閉じる処理は自前で実装する。
         escapeDeactivates: false,
