@@ -27,7 +27,7 @@
       Internal.instance.markAsMutated(PropertyPath.of('pages', containerPageId, 'targetItemPath'))
       Internal.instance.markAsMutated(PropertyPath.of('pages', containerPageId, 'anchorItemPath'))
 
-      // TODO: モーセ
+      CurrentState.moses(firstItemPath)
 
       // 所属ページに切り替える
       CurrentState.switchActivePage(containerPageId)

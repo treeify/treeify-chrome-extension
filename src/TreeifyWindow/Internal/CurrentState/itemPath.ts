@@ -181,3 +181,17 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }
+
+/**
+ * 与えられたItemPathの途中経路を全てexpandする。
+ * もし途中経路にページがあったとしても非ページ化までは行わない。
+ */
+export function moses(itemPath: ItemPath) {
+  const parentItemPath = ItemPath.getParent(itemPath)
+  if (parentItemPath !== undefined) {
+    if (CurrentState.getIsCollapsed(itemPath)) {
+      CurrentState.setIsCollapsed(itemPath, false)
+    }
+    moses(parentItemPath)
+  }
+}
