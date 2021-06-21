@@ -72,17 +72,19 @@ export async function cleanup() {
 }
 
 /**
- * 事実上の再起動を行う。
+ * 事実上の再起動を行う（ただしStateがinvalidだった場合は行わない）。
  * 実際にページをリロードするわけではないが、全てのシングルトンやグローバル変数に対して
  * 必要に応じてリセット処理を行う。
  * DOMの状態もリセットされ、初回描画からやり直される。
  */
 export async function restart(state: State) {
-  const dataFolder = External.instance.dataFolder
-  await cleanup()
-  // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
-  External.instance.dataFolder = dataFolder
-  await startup(state)
+  if (State.isValid(state)) {
+    const dataFolder = External.instance.dataFolder
+    await cleanup()
+    // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
+    External.instance.dataFolder = dataFolder
+    await startup(state)
+  }
 }
 
 function onMutateState(propertyPath: PropertyPath) {
