@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {tick} from 'svelte'
   import {ItemId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -8,6 +9,7 @@
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
+  import {ItemTreeContentView} from '../ItemTree/ItemTreeContentProps'
 
   export let itemId: ItemId
 
@@ -29,6 +31,17 @@
 
       // 所属ページに切り替える
       CurrentState.switchActivePage(containerPageId)
+
+      // 再描画完了後に対象アイテムに自動スクロールする
+      tick().then(() => {
+        const targetElementId = ItemTreeContentView.focusableDomElementId(firstItemPath)
+        const focusableElement = document.getElementById(targetElementId)
+        focusableElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'center',
+        })
+      })
 
       // 検索ダイアログを閉じる
       CurrentState.setSearchDialog(null)
