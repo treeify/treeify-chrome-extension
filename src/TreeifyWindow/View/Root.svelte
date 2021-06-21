@@ -1,7 +1,9 @@
 <script lang="ts">
   import {List} from 'immutable'
+  import {assert} from 'src/Common/Debug/assert'
   import {toOpmlString} from 'src/TreeifyWindow/Internal/ImportExport/opml'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+  import {State} from 'src/TreeifyWindow/Internal/State'
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
   import {createRootProps, RootProps} from 'src/TreeifyWindow/View/RootProps'
   import {derived, Readable} from 'svelte/store'
@@ -33,6 +35,8 @@
       aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
       aElement.download = fileName
       aElement.click()
+      
+      assert(State.isValid(Internal.instance.state))
     })
   }
 </script>
