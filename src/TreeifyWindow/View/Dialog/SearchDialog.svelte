@@ -47,14 +47,27 @@
       placeholder="検索ワード"
       on:input={onInput}
     />
-    {#each searchResult.toArray() as itemId (itemId.toString())}
-      <SearchResultRow {itemId} />
-    {/each}
+    <div class="search-dialog_result">
+      {#each searchResult.toArray() as itemId (itemId.toString())}
+        <SearchResultRow {itemId} />
+      {/each}
+    </div>
   </div>
 </CommonDialog>
 
 <style>
   .search-dialog_content {
+    max-width: 90vw;
+    max-height: 90vh;
+  
     padding: 1em;
+
+    /* 検索結果の領域をスクロール可能にするための設定 */
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  
+  .search-dialog_result {
+    overflow-y: auto;
   }
 </style>
