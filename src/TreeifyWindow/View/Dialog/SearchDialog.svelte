@@ -7,10 +7,10 @@
   import {Internal} from '../../Internal/Internal'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
-  import {LabelEditDialogProps} from './LabelEditDialogProps'
+  import {SearchDialogProps} from './SearchDialogProps'
   import SearchResultRow from './SearchResultRow.svelte'
 
-  export let props: LabelEditDialogProps
+  export let props: SearchDialogProps
 
   let searchResult: List<ItemId> = List.of()
 

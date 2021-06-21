@@ -1,5 +1,6 @@
 <script lang="ts">
   import {tick} from 'svelte'
+  import {assertNonNull} from '../../../Common/Debug/assert'
   import {ItemId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -36,6 +37,7 @@
       tick().then(() => {
         const targetElementId = ItemTreeContentView.focusableDomElementId(firstItemPath)
         const focusableElement = document.getElementById(targetElementId)
+        assertNonNull(focusableElement)
         focusableElement.scrollIntoView({
           behavior: 'auto',
           block: 'center',
