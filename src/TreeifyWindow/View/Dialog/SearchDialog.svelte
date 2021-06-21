@@ -6,10 +6,9 @@
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {Rerenderer} from '../../Rerenderer'
-  import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import CommonDialog from './CommonDialog.svelte'
   import {LabelEditDialogProps} from './LabelEditDialogProps'
+  import SearchResultRow from './SearchResultRow.svelte'
 
   export let props: LabelEditDialogProps
 
@@ -49,7 +48,7 @@
       on:input={onInput}
     />
     {#each searchResult.toArray() as itemId (itemId.toString())}
-      <ItemContent props={createItemContentProps(itemId)} />
+      <SearchResultRow {itemId} />
     {/each}
   </div>
 </CommonDialog>

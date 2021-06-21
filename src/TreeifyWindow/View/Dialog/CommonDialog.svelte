@@ -20,7 +20,10 @@
       assert(focusTrap === undefined)
       assertNonUndefined(domElement)
       focusTrap = createFocusTrap(domElement, {
-        returnFocusOnDeactivate: true,
+        // フォーカスは自前で管理するのでfocusTrapに管理されると困る。
+        // 具体的には検索結果へのジャンプ機能で自動スクロールが動かなくなる。
+        returnFocusOnDeactivate: false,
+
         escapeDeactivates: false,
       })
       focusTrap.activate()
