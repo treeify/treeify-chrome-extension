@@ -79,6 +79,20 @@ export class Rerenderer {
         target: spaRoot,
       })
     }
+
+    // DOM更新完了後に実行される
+    tick().then(() => {
+      // フォーカスを設定する
+      if (CurrentState.getSelectedItemPaths().size === 1) {
+        const targetItemPath = CurrentState.getTargetItemPath()
+        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+        const focusableElement = document.getElementById(targetElementId)
+        focusableElement?.focus()
+      } else {
+        // 複数選択の場合
+        focusItemTreeBackground()
+      }
+    })
   }
 
   /**
