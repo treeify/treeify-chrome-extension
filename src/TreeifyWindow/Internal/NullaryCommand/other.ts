@@ -2,10 +2,14 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
-import {focusItemTreeBackground} from 'src/TreeifyWindow/External/domTextSelection'
+import {
+  focusItemTreeBackground,
+  getTextItemSelectionFromDom,
+} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {Chunk} from 'src/TreeifyWindow/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {DomishObject} from 'src/TreeifyWindow/Internal/DomishObject'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
@@ -69,6 +73,36 @@ export async function saveToDataFolder() {
       await restart(state)
     }
   }
+}
+
+/**
+ * ターゲットテキストアイテムのテキストが全選択状態でなければテキストを全選択する。
+ * それ以外の場合はターゲットアイテムの兄弟リストを全て選択する。
+ */
+export function selectAll() {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const selection = getTextItemSelectionFromDom()
+  if (selection !== undefined) {
+    const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+    const selectedCharCount = Math.abs(selection.focusDistance - selection.anchorDistance)
+    if (DomishObject.countCharacters(domishObjects) !== selectedCharCount) {
+      document.execCommand('selectAll')
+      return
+    }
+  }
+
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  if (parentItemId === undefined) return
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const firstSiblingItemId: ItemId = siblingItemIds.first()
+  const lastSiblingItemId: ItemId = siblingItemIds.last()
+  const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
+  const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
+  assertNonUndefined(firstSiblingItemPath)
+  assertNonUndefined(lastSiblingItemPath)
+  CurrentState.setAnchorItemPath(firstSiblingItemPath)
+  CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
 }
 
 /**
