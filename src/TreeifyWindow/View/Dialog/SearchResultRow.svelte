@@ -1,7 +1,6 @@
 <script lang="ts">
   import {tick} from 'svelte'
   import {assertNonNull} from '../../../Common/Debug/assert'
-  import {ItemId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Internal} from '../../Internal/Internal'
@@ -12,30 +11,27 @@
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import {ItemTreeContentView} from '../ItemTree/ItemTreeContentProps'
 
-  export let itemId: ItemId
+  export let itemPath: ItemPath
 
   function onClick(event: MouseEvent) {
     doWithErrorCapture(() => {
-      // 所属ページとそこに至るItemPathを探索する
-      // TODO: マウントされているページを優先すべき & 足跡が新しいページを優先するべき
-      const firstItemPath = CurrentState.yieldItemPaths(itemId).next().value
-      const containerPageId = ItemPath.getRootItemId(firstItemPath)
+      const containerPageId = ItemPath.getRootItemId(itemPath)
 
-      // 得られたItemPathをtargetItemPathにする
+      // ジャンプ先のページのtargetItemPathを更新する
       const containerPage = Internal.instance.state.pages[containerPageId]
-      containerPage.targetItemPath = firstItemPath
-      containerPage.anchorItemPath = firstItemPath
+      containerPage.targetItemPath = itemPath
+      containerPage.anchorItemPath = itemPath
       Internal.instance.markAsMutated(PropertyPath.of('pages', containerPageId, 'targetItemPath'))
       Internal.instance.markAsMutated(PropertyPath.of('pages', containerPageId, 'anchorItemPath'))
 
-      CurrentState.moses(firstItemPath)
+      CurrentState.moses(itemPath)
 
-      // 所属ページに切り替える
+      // ページを切り替える
       CurrentState.switchActivePage(containerPageId)
 
       // 再描画完了後に対象アイテムに自動スクロールする
       tick().then(() => {
-        const targetElementId = ItemTreeContentView.focusableDomElementId(firstItemPath)
+        const targetElementId = ItemTreeContentView.focusableDomElementId(itemPath)
         const focusableElement = document.getElementById(targetElementId)
         assertNonNull(focusableElement)
         focusableElement.scrollIntoView({
@@ -53,7 +49,7 @@
 </script>
 
 <div class="search-result-row" on:click={onClick}>
-  <ItemContent props={createItemContentProps(itemId)} />
+  <ItemContent props={createItemContentProps(ItemPath.getItemId(itemPath))} />
 </div>
 
 <style>
