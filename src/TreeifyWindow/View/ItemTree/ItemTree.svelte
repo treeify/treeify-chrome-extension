@@ -4,11 +4,7 @@
   import {integer} from '../../../Common/integer'
   import {ItemType} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {
-    focusItemTreeBackground,
-    getTextItemSelectionFromDom,
-    setDomSelection,
-  } from '../../External/domTextSelection'
+  import {focusItemTreeBackground, getTextItemSelectionFromDom, setDomSelection} from '../../External/domTextSelection'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
   import {DomishObject} from '../../Internal/DomishObject'
@@ -18,7 +14,6 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
-  import {restart} from '../../startup'
   import {ItemTreeContentView} from './ItemTreeContentProps'
   import ItemTreeNode from './ItemTreeNode.svelte'
   import {ItemTreeProps} from './ItemTreeProps'
@@ -61,10 +56,11 @@
           onSpace(event)
           return
         case '1000KeyZ':
-          event.preventDefault()
-          if (Internal.instance.prevState !== undefined) {
-            restart(Internal.instance.prevState)
-          }
+          // TODO: データフォルダが破損する致命的不具合があるので一旦コメントアウト
+          // event.preventDefault()
+          // if (Internal.instance.prevState !== undefined) {
+          //   restart(Internal.instance.prevState)
+          // }
           return
       }
 
