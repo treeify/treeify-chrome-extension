@@ -24,6 +24,7 @@ export function deleteItem(itemId: ItemId) {
     } else {
       // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
       delete Internal.instance.state.items[childItemId].parents[itemId]
+      Internal.instance.markAsMutated(PropertyPath.of('items', childItemId, 'parents', itemId))
     }
   }
 
