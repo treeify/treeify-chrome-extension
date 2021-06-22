@@ -201,6 +201,9 @@ export function setLabels(itemPath: ItemPath, labels: List<string>) {
   const parentItemId = ItemPath.getParentItemId(itemPath)
   if (parentItemId !== undefined) {
     Internal.instance.state.items[itemId].parents[parentItemId].labels = labels
+    Internal.instance.markAsMutated(
+      PropertyPath.of('items', itemId, 'parents', parentItemId, 'labels')
+    )
   }
 }
 
