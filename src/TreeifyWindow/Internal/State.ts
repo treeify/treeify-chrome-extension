@@ -14,6 +14,7 @@ export type State = {
   webPageItems: {[K in ItemId]: WebPageItem}
   imageItems: {[K in ItemId]: ImageItem}
   codeBlockItems: {[K in ItemId]: CodeBlockItem}
+  texItems: {[K in ItemId]: TexItem}
   pages: {[K in ItemId]: Page}
   workspaces: {[K in WorkspaceId]: Workspace}
   /**
@@ -116,6 +117,11 @@ export type ImageItem = {
 export type CodeBlockItem = {
   code: string
   language: string
+}
+
+/** TeXアイテムが固有で持つデータの型 */
+export type TexItem = {
+  code: string
 }
 
 /** 各ページが持つデータの型 */
@@ -244,6 +250,9 @@ export namespace State {
               state.codeBlockItems[itemId],
               `codeBlockItems[${itemId}]が存在しない`
             )
+            break
+          case ItemType.TEX:
+            assertNonUndefined(state.texItems[itemId], `texItems[${itemId}]が存在しない`)
             break
           default:
             assertNeverType(item.itemType, `items[${itemId}]の不明なitemType "${item.itemType}"`)

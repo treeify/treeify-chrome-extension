@@ -54,6 +54,9 @@ export function deleteItem(itemId: ItemId) {
     case ItemType.CODE_BLOCK:
       CurrentState.deleteCodeBlockItemEntry(itemId)
       break
+    case ItemType.TEX:
+      CurrentState.deleteTexItemEntry(itemId)
+      break
     default:
       assertNeverType(itemType)
   }
@@ -110,6 +113,9 @@ export function deleteItemItself(itemId: ItemId) {
       break
     case ItemType.CODE_BLOCK:
       CurrentState.deleteCodeBlockItemEntry(itemId)
+      break
+    case ItemType.TEX:
+      CurrentState.deleteTexItemEntry(itemId)
       break
     default:
       assertNeverType(itemType)

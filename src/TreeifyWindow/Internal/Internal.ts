@@ -93,6 +93,7 @@ export class Internal {
       webPageItems: {},
       imageItems: {},
       codeBlockItems: {},
+      texItems: {},
       pages: {
         0: {
           targetItemPath: List.of(0),
@@ -273,6 +274,7 @@ export class Internal {
           language: 'javascript',
         },
       },
+      texItems: {},
       pages: {
         0: {
           targetItemPath: List.of(0),

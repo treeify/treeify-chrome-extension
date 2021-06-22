@@ -63,15 +63,16 @@ export class SearchEngine {
       case ItemType.TEXT:
         return List.of(DomishObject.toPlainText(state.textItems[itemId].domishObjects))
       case ItemType.WEB_PAGE:
-        // urlは含めるべきなのだろうか
         const webPageItem = state.webPageItems[itemId]
         return List.of(webPageItem.tabTitle, webPageItem.title ?? '')
       case ItemType.IMAGE:
-        // urlは含めるべきなのだろうか
         return List.of(state.imageItems[itemId].caption)
       case ItemType.CODE_BLOCK:
         const codeBlockItem = state.codeBlockItems[itemId]
         return List.of(codeBlockItem.code, codeBlockItem.language)
+      case ItemType.TEX:
+        const texItem = state.texItems[itemId]
+        return List.of(texItem.code)
       default:
         assertNeverType(itemType)
     }

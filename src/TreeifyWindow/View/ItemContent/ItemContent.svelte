@@ -3,6 +3,7 @@
   import CodeBlockItemContent from './CodeBlockItemContent.svelte'
   import ImageItemContent from './ImageItemContent.svelte'
   import {ItemContentProps} from './ItemContentProps'
+  import TexItemContent from './TexItemContent.svelte'
   import TextItemContent from './TextItemContent.svelte'
   import WebPageItemContent from './WebPageItemContent.svelte'
 
@@ -17,6 +18,8 @@
   <ImageItemContent {props} />
 {:else if props.itemType === ItemType.CODE_BLOCK}
   <CodeBlockItemContent {props} />
+{:else if props.itemType === ItemType.TEX}
+  <TexItemContent {props} />
 {/if}
 
 <style>

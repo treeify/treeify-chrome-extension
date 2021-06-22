@@ -3,6 +3,7 @@
   import ItemTreeCodeBlockContent from './ItemTreeCodeBlockContent.svelte'
   import {ItemTreeContentProps} from './ItemTreeContentProps'
   import ItemTreeImageContent from './ItemTreeImageContent.svelte'
+  import ItemTreeTexContent from './ItemTreeTexContent.svelte'
   import ItemTreeTextContent from './ItemTreeTextContent.svelte'
   import ItemTreeWebPageContent from './ItemTreeWebPageContent.svelte'
 
@@ -17,6 +18,8 @@
   <ItemTreeImageContent {props} />
 {:else if props.itemType === ItemType.CODE_BLOCK}
   <ItemTreeCodeBlockContent {props} />
+{:else if props.itemType === ItemType.TEX}
+  <ItemTreeTexContent {props} />
 {/if}
 
 <style>

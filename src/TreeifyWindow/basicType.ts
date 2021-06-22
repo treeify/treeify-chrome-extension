@@ -25,6 +25,7 @@ export enum ItemType {
   WEB_PAGE = 'Web page',
   IMAGE = 'Image',
   CODE_BLOCK = 'Code block',
+  TEX = 'TeX',
 }
 
 /**

@@ -64,6 +64,9 @@ export function getContentAsPlainText(itemId: ItemId): string {
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 一行目くらいしかまともに表示できるものは見当たらない
       return codeBlockItem.code.split(/\r?\n/)[0]
+    case ItemType.TEX:
+      const texItem = Internal.instance.state.texItems[itemId]
+      return texItem.code
     default:
       assertNeverType(itemType)
   }
