@@ -102,6 +102,7 @@ export class Internal {
       },
       workspaces: {
         [Timestamp.now()]: {
+          activePageId: 0,
           excludedItemIds: List.of(),
           name: 'ワークスペース1',
         },
@@ -286,6 +287,7 @@ export class Internal {
       },
       workspaces: {
         [Timestamp.now()]: {
+          activePageId: 0,
           excludedItemIds: List.of(),
           name: 'ワークスペース1',
         },

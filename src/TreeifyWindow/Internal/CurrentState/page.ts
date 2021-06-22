@@ -45,29 +45,16 @@ function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
   return 'keep'
 }
 
-const ACTIVE_PAGE_ID_KEY = 'ACTIVE_PAGE_ID_KEY'
-
-/**
- * localStorageのアクティブページIDを返す。
- * 保存されていない場合や値が不正な場合は適当なページIDを返す。
- */
+/** 現在のワークスペースのactiveItemIdを返す */
 export function getActivePageId(): ItemId {
-  const savedActivePageId = localStorage.getItem(ACTIVE_PAGE_ID_KEY)
-  if (savedActivePageId === null) {
-    return CurrentState.getFilteredMountedPageIds().last()
-  } else {
-    const activePageId = parseInt(savedActivePageId)
-    if (CurrentState.isPage(activePageId)) {
-      return activePageId
-    } else {
-      return CurrentState.getFilteredMountedPageIds().last()
-    }
-  }
+  return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].activePageId
 }
 
-/** localStorageにアクティブページIDを保存する */
+/** 現在のワークスペースのactiveItemIdを設定する */
 export function setActivePageId(itemId: ItemId) {
-  localStorage.setItem(ACTIVE_PAGE_ID_KEY, itemId.toString())
+  const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
+  Internal.instance.state.workspaces[currentWorkspaceId].activePageId = itemId
+  Internal.instance.markAsMutated(PropertyPath.of('workspaces', currentWorkspaceId, 'activePageId'))
 }
 
 /**
