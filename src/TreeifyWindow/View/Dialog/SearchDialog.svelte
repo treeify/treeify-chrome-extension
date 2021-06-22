@@ -37,9 +37,8 @@
       .toList()
       .map((group) => group.toList())
 
-    // TODO: ページの並びをソートする
-
-    searchResult = itemPathGroups
+    // ヒットしたアイテム数によってページの並びをソートする
+    searchResult = itemPathGroups.sortBy((itemPaths) => -itemPaths.size)
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
