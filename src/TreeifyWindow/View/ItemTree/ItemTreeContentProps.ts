@@ -11,6 +11,10 @@ import {
   ItemTreeImageContentProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentProps'
 import {
+  createItemTreeTexContentProps,
+  ItemTreeTexContentProps,
+} from 'src/TreeifyWindow/View/ItemTree/ItemTreeTexContentProps'
+import {
   createItemTreeWebPageContentProps,
   ItemTreeWebPageContentProps,
 } from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentProps'
@@ -21,6 +25,7 @@ export type ItemTreeContentProps =
   | ItemTreeWebPageContentProps
   | ItemTreeImageContentProps
   | ItemTreeCodeBlockContentProps
+  | ItemTreeTexContentProps
 
 export function createItemTreeContentProps(
   state: State,
@@ -38,7 +43,7 @@ export function createItemTreeContentProps(
     case ItemType.CODE_BLOCK:
       return createItemTreeCodeBlockContentProps(state, itemPath)
     case ItemType.TEX:
-      throw new Error('ItemTree用のTeXコンポーネントは未実装')
+      return createItemTreeTexContentProps(state, itemPath)
     default:
       assertNeverType(itemType)
   }
