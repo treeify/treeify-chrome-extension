@@ -125,6 +125,7 @@ export class Internal {
           {commandName: 'collapseItem'},
           {commandName: 'toggleGrayedOut'}
         ),
+        '1000KeyA': List.of({commandName: 'selectAll'}),
         '1000KeyT': List.of({commandName: 'toDualWindowModeAndOpenNewTab'}),
         '1000KeyH': List.of({commandName: 'toggleHighlighted'}),
         '1000KeyG': List.of({commandName: 'groupingItems'}),
@@ -308,6 +309,7 @@ export class Internal {
           {commandName: 'collapseItem'},
           {commandName: 'toggleGrayedOut'}
         ),
+        '1000KeyA': List.of({commandName: 'selectAll'}),
         '1000KeyT': List.of({commandName: 'toDualWindowModeAndOpenNewTab'}),
         '1000KeyH': List.of({commandName: 'toggleHighlighted'}),
         '1000KeyG': List.of({commandName: 'groupingItems'}),
