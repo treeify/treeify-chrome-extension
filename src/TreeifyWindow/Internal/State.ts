@@ -132,6 +132,7 @@ export type Page = {
 }
 
 export type Workspace = {
+  activePageId: ItemId
   /**
    * このワークスペースでページツリーや検索結果から除外したいアイテム群。
    * これに含まれるアイテムまたはその子孫アイテムはページツリーや検索結果から除外される。
