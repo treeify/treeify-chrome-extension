@@ -251,6 +251,9 @@ export namespace State {
               `codeBlockItems[${itemId}]が存在しない`
             )
             break
+          case ItemType.TEX:
+            assertNonUndefined(state.texItems[itemId], `texItems[${itemId}]が存在しない`)
+            break
           default:
             assertNeverType(item.itemType, `items[${itemId}]の不明なitemType "${item.itemType}"`)
         }

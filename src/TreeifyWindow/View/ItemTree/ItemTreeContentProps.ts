@@ -37,6 +37,8 @@ export function createItemTreeContentProps(
       return createItemTreeImageContentProps(state, itemPath)
     case ItemType.CODE_BLOCK:
       return createItemTreeCodeBlockContentProps(state, itemPath)
+    case ItemType.TEX:
+      throw new Error('ItemTree用のTeXコンポーネントは未実装')
     default:
       assertNeverType(itemType)
   }

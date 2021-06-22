@@ -74,6 +74,11 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
       baseAttributes.text = codeBlockItem.code
       baseAttributes.language = codeBlockItem.language
       break
+    case ItemType.TEX:
+      const texItem = Internal.instance.state.texItems[itemId]
+      baseAttributes.type = 'tex'
+      baseAttributes.text = texItem.code
+      break
     default:
       assertNeverType(item.itemType)
   }

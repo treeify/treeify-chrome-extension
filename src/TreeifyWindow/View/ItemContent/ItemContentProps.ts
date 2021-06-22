@@ -10,6 +10,10 @@ import {
   ImageItemContentProps,
 } from 'src/TreeifyWindow/View/ItemContent/ImageItemContentProps'
 import {
+  createTexItemContentProps,
+  TexItemContentProps,
+} from 'src/TreeifyWindow/View/ItemContent/TexItemContentProps'
+import {
   createTextItemContentProps,
   TextItemContentProps,
 } from 'src/TreeifyWindow/View/ItemContent/TextItemContentProps'
@@ -23,6 +27,7 @@ export type ItemContentProps =
   | WebPageItemContentProps
   | ImageItemContentProps
   | CodeBlockItemContentProps
+  | TexItemContentProps
 
 export function createItemContentProps(itemId: ItemId) {
   const itemType = Internal.instance.state.items[itemId].itemType
@@ -35,6 +40,8 @@ export function createItemContentProps(itemId: ItemId) {
       return createImageItemContentProps(itemId)
     case ItemType.CODE_BLOCK:
       return createCodeBlockItemContentProps(itemId)
+    case ItemType.TEX:
+      return createTexItemContentProps(itemId)
     default:
       assertNeverType(itemType)
   }

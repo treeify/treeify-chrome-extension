@@ -17,6 +17,9 @@
   <ItemTreeImageContent {props} />
 {:else if props.itemType === ItemType.CODE_BLOCK}
   <ItemTreeCodeBlockContent {props} />
+{:else if props.itemType === ItemType.TEX}
+  <!-- TODO: 未実装 -->
+  未実装
 {/if}
 
 <style>
