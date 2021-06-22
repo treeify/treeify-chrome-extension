@@ -1,18 +1,20 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {ItemId} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
+  import {ItemPath} from '../../Internal/ItemPath'
   import {Rerenderer} from '../../Rerenderer'
+  import ItemContent from '../ItemContent/ItemContent.svelte'
+  import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import CommonDialog from './CommonDialog.svelte'
   import {SearchDialogProps} from './SearchDialogProps'
   import SearchResultRow from './SearchResultRow.svelte'
 
   export let props: SearchDialogProps
 
-  let searchResult: List<ItemId> = List.of()
+  let searchResult: List<List<ItemPath>> = List.of()
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -24,7 +26,20 @@
     if (!(event.target instanceof HTMLInputElement)) return
 
     // インクリメンタルサーチを行う。もし重くなったら方針を見直す
-    searchResult = Internal.instance.searchEngine.search(event.target.value)
+    const itemIds = Internal.instance.searchEngine.search(event.target.value)
+
+    // ヒットしたアイテムの所属ページを探索し、その経路をItemPathとして収集する
+    const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
+
+    // ItemPathをページIDでグループ化する
+    const itemPathGroups: List<List<ItemPath>> = allItemPaths
+      .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
+      .toList()
+      .map((group) => group.toList())
+
+    // TODO: ページの並びをソートする
+
+    searchResult = itemPathGroups
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -48,8 +63,13 @@
       on:input={onInput}
     />
     <div class="search-dialog_result">
-      {#each searchResult.toArray() as itemId (itemId.toString())}
-        <SearchResultRow {itemId} />
+      {#each searchResult.toArray() as itemPathGroup (ItemPath.getRootItemId(itemPathGroup.first()))}
+        <ItemContent
+          props={createItemContentProps(ItemPath.getRootItemId(itemPathGroup.first()))}
+        />
+        {#each itemPathGroup.toArray() as itemPath (itemPath.toString())}
+          <SearchResultRow {itemPath} />
+        {/each}
       {/each}
     </div>
   </div>
@@ -59,14 +79,14 @@
   .search-dialog_content {
     max-width: 90vw;
     max-height: 90vh;
-  
+
     padding: 1em;
 
     /* 検索結果の領域をスクロール可能にするための設定 */
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
   }
-  
+
   .search-dialog_result {
     overflow-y: auto;
   }
