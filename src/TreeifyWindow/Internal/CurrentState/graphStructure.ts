@@ -1,6 +1,8 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
+import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -74,5 +76,28 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     yield parentItemId
     yield* yieldAncestorItemIds(parentItemId)
+  }
+}
+
+/**
+ * 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
+ * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+ */
+export function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
+  if (CurrentState.isPage(itemId)) {
+    if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
+      return 0
+    } else {
+      return 1
+    }
+  }
+
+  const sum = Internal.instance.state.items[itemId].childItemIds
+    .map((childItemId) => countLoadedTabsInSubtree(state, childItemId))
+    .reduce((a: integer, x) => a + x, 0)
+  if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
+    return sum
+  } else {
+    return 1 + sum
   }
 }

@@ -146,30 +146,9 @@ function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
 // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
 function countLoadedTabsInDescendants(state: State, itemId: ItemId): integer {
   if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-    return countLoadedTabsInSubtree(state, itemId)
+    return CurrentState.countLoadedTabsInSubtree(state, itemId)
   } else {
-    return countLoadedTabsInSubtree(state, itemId) - 1
-  }
-}
-
-// 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
-// ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
-function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
-  if (CurrentState.isPage(itemId)) {
-    if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-      return 0
-    } else {
-      return 1
-    }
-  }
-
-  const sum = Internal.instance.state.items[itemId].childItemIds
-    .map((childItemId) => countLoadedTabsInSubtree(state, childItemId))
-    .reduce((a: integer, x) => a + x, 0)
-  if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-    return sum
-  } else {
-    return 1 + sum
+    return CurrentState.countLoadedTabsInSubtree(state, itemId) - 1
   }
 }
 
