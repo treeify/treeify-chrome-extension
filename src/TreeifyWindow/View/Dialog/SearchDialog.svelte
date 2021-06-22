@@ -67,9 +67,11 @@
         <ItemContent
           props={createItemContentProps(ItemPath.getRootItemId(itemPathGroup.first()))}
         />
-        {#each itemPathGroup.toArray() as itemPath (itemPath.toString())}
-          <SearchResultRow {itemPath} />
-        {/each}
+        <div class="search-dialog_result-items-for-each-page">
+          {#each itemPathGroup.toArray() as itemPath (itemPath.toString())}
+            <SearchResultRow {itemPath} />
+          {/each}
+        </div>
       {/each}
     </div>
   </div>
@@ -89,5 +91,11 @@
 
   .search-dialog_result {
     overflow-y: auto;
+  }
+
+  .search-dialog_result-items-for-each-page {
+    border: solid 1px hsl(0, 0%, 70%);
+    border-radius: 0.7em;
+    padding: 0.5em 0.5em 0.5em 1em;
   }
 </style>
