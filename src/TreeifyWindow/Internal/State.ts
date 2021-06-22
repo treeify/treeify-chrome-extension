@@ -212,7 +212,7 @@ export namespace State {
         // 子アイテムの親マップに自身が含まれていることのチェック
         for (const childItemId of item.childItemIds) {
           assertNonUndefined(
-            state.items[childItemId].parents[itemId],
+            state.items[childItemId]?.parents?.[itemId],
             `items[${childItemId}]のparentsに${itemId}が無い`
           )
         }
@@ -220,7 +220,7 @@ export namespace State {
         for (const parentsKey in item.parents) {
           const parentItemId = parseInt(parentsKey)
           assert(
-            state.items[parentItemId].childItemIds.contains(itemId),
+            state.items[parentItemId]?.childItemIds?.contains(itemId),
             `items[${parentItemId}]のchildItemIdsに${itemId}が含まれていない`
           )
 
