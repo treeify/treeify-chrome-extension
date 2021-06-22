@@ -14,6 +14,7 @@ export type State = {
   webPageItems: {[K in ItemId]: WebPageItem}
   imageItems: {[K in ItemId]: ImageItem}
   codeBlockItems: {[K in ItemId]: CodeBlockItem}
+  texItems: {[K in ItemId]: TexItem}
   pages: {[K in ItemId]: Page}
   workspaces: {[K in WorkspaceId]: Workspace}
   /**
@@ -116,6 +117,11 @@ export type ImageItem = {
 export type CodeBlockItem = {
   code: string
   language: string
+}
+
+/** TeXアイテムが固有で持つデータの型 */
+export type TexItem = {
+  code: string
 }
 
 /** 各ページが持つデータの型 */
