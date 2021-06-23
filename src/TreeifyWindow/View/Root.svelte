@@ -9,7 +9,6 @@
   import {derived, Readable} from 'svelte/store'
   import {TOP_ITEM_ID} from '../basicType'
   import {doWithErrorCapture} from '../errorCapture'
-  import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
@@ -18,9 +17,11 @@
   import TexEditDialog from './Dialog/TexEditDialog.svelte'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
-  import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
+  import DataFolderPickerOpenButton from './Toolbar/DataFolderPickerOpenButton.svelte'
+  import FullWindowModeButton from './Toolbar/FullWindowModeButton.svelte'
+  import TexItemCreationButton from './Toolbar/TexItemCreationButton.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
     return createRootProps(Internal.instance.state)
@@ -36,7 +37,7 @@
       aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
       aElement.download = fileName
       aElement.click()
-      
+
       assert(State.isValid(Internal.instance.state))
     })
   }
@@ -47,6 +48,7 @@
     <div class="toolbar">
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
+      <TexItemCreationButton />
       <FullWindowModeButton />
       <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
     </div>
@@ -91,11 +93,6 @@
     --toolbar-height: 36px;
     /* ツールバーの背景 */
     --toolbar-background: hsl(0, 0%, 96%);
-
-    /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
-    --toolbar-icon-button-size: 32px;
-    /* ツールバーのボタンのマウスホバー時の背景 */
-    --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
   }
 
   .root {

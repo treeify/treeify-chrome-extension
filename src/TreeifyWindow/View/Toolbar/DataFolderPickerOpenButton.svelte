@@ -1,8 +1,9 @@
 <script lang="ts">
-  import {doAsyncWithErrorCapture} from '../errorCapture'
-  import {NullaryCommand} from '../Internal/NullaryCommand'
-  import {Rerenderer} from '../Rerenderer'
+  import {doAsyncWithErrorCapture} from '../../errorCapture'
+  import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {Rerenderer} from '../../Rerenderer'
   import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonProps'
+  import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   export let props: DataFolderPickerOpenButtonProps
 
@@ -14,9 +15,9 @@
   }
 </script>
 
-<div class="toolbar-icon-button" on:click={onClick}>
+<ToolbarIconButton on:click={onClick}>
   <div class="data-folder-picker-open-button_icon" class:grayed-out={props.isGrayedOut} />
-</div>
+</ToolbarIconButton>
 
 <style>
   :root {
