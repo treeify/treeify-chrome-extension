@@ -19,6 +19,7 @@
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
+  import CodeBlockItemCreationButton from './Toolbar/CodeBlockItemCreationButton.svelte'
   import DataFolderPickerOpenButton from './Toolbar/DataFolderPickerOpenButton.svelte'
   import FullWindowModeButton from './Toolbar/FullWindowModeButton.svelte'
   import TexItemCreationButton from './Toolbar/TexItemCreationButton.svelte'
@@ -48,6 +49,7 @@
     <div class="toolbar">
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
+      <CodeBlockItemCreationButton />
       <TexItemCreationButton />
       <FullWindowModeButton />
       <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
