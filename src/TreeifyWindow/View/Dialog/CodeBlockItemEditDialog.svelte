@@ -58,17 +58,18 @@
 </CommonDialog>
 
 <style>
-  .code-block-edit-dialog_code {
-    margin: 1em;
+  .code-block-edit-dialog_content {
+    padding: 1em;
+  }
 
+  .code-block-edit-dialog_code {
     outline: 1px solid hsl(0, 0%, 60%);
   }
 
   .code-block-edit-dialog_language-area {
     display: flex;
 
-    margin-left: 1em;
-    margin-right: 1em;
+    margin-top: 1em;
   }
 
   .code-block-edit-dialog_language {
@@ -77,7 +78,7 @@
 
   .code-block-edit-dialog_button-area {
     /* ボタン群を右寄せにする */
-    margin: 1em 1em 1em auto;
+    margin: 1em 0 0 auto;
     width: max-content;
   }
 </style>
