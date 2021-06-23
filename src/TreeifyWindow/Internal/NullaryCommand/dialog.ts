@@ -32,6 +32,9 @@ export function edit() {
         language: codeBlockItem.language,
       })
       break
+    case ItemType.TEX:
+      CurrentState.setTexEditDialog({})
+      break
   }
 }
 
