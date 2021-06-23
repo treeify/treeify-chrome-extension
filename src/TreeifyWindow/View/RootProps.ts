@@ -1,9 +1,5 @@
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createDataFolderPickerOpenButtonProps,
-  DataFolderPickerOpenButtonProps,
-} from 'src/TreeifyWindow/View/DataFolderPickerOpenButtonProps'
-import {
   CodeBlockItemEditDialogProps,
   createCodeBlockItemEditDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogProps'
@@ -40,6 +36,10 @@ import {
   createLeftSidebarProps,
   LeftSidebarProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarProps'
+import {
+  createDataFolderPickerOpenButtonProps,
+  DataFolderPickerOpenButtonProps,
+} from 'src/TreeifyWindow/View/Toolbar/DataFolderPickerOpenButtonProps'
 
 export type RootProps = {
   leftSidebarProps: LeftSidebarProps | undefined

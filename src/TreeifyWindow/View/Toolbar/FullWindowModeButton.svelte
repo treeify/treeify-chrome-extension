@@ -1,6 +1,6 @@
 <script lang="ts">
-  import {doAsyncWithErrorCapture} from '../errorCapture'
-  import {TreeifyWindow} from '../TreeifyWindow'
+  import {doAsyncWithErrorCapture} from '../../errorCapture'
+  import {TreeifyWindow} from '../../TreeifyWindow'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   function onClick() {

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {doWithErrorCapture} from '../errorCapture'
-  import {NullaryCommand} from '../Internal/NullaryCommand'
-  import {Rerenderer} from '../Rerenderer'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   function onClick() {
