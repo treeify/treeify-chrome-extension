@@ -157,6 +157,11 @@ export function createPageTreeNodeProps(
           // エッジを追加する（トランスクルード）
           CurrentState.insertFirstChildItem(itemId, draggedItemId)
         } else {
+          // targetItemPathが実在しなくなるので退避
+          const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
+          assertNonUndefined(aboveItemPath)
+          CurrentState.setTargetItemPath(aboveItemPath)
+
           // エッジを付け替える
           const edge = CurrentState.removeItemGraphEdge(
             ItemPath.getParentItemId(draggedItemPath)!,
