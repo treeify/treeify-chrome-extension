@@ -221,6 +221,12 @@ export async function matchTabsAndWebPageItems() {
       // URLの一致するウェブページアイテムがある場合
       const itemId: ItemId = webPageItemIds.last()
 
+      if (webPageItemIds.size === 1) {
+        urlToItemIds.delete(url)
+      } else {
+        urlToItemIds.set(url, webPageItemIds.pop())
+      }
+
       reflectInWebPageItem(itemId, tab)
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
     }
