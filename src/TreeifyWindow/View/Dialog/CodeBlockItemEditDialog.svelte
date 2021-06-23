@@ -63,6 +63,8 @@
   }
 
   .code-block-edit-dialog_code {
+    padding: 0.5em;
+
     outline: 1px solid hsl(0, 0%, 60%);
   }
 
