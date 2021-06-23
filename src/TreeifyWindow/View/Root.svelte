@@ -15,6 +15,7 @@
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
   import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
   import SearchDialog from './Dialog/SearchDialog.svelte'
+  import TexEditDialog from './Dialog/TexEditDialog.svelte'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
   import FullWindowModeButton from './FullWindowModeButton.svelte'
@@ -63,6 +64,9 @@
   {/if}
   {#if props.codeBlockItemEditDialogProps !== undefined}
     <CodeBlockItemEditDialog props={props.codeBlockItemEditDialogProps} />
+  {/if}
+  {#if props.texEditDialogProps !== undefined}
+    <TexEditDialog props={props.texEditDialogProps} />
   {/if}
   {#if props.defaultWindowModeSettingDialog !== undefined}
     <DefaultWindowModeSettingDialog props={props.defaultWindowModeSettingDialog} />

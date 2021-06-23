@@ -6,6 +6,7 @@ import {
   LabelEditDialog,
   OtherParentsDialog,
   SearchDialog,
+  TexEditDialog,
   WebPageItemTitleSettingDialog,
   WorkspaceDialog,
 } from 'src/TreeifyWindow/Internal/State'
@@ -20,6 +21,12 @@ export function setWebPageItemTitleSettingDialog(value: WebPageItemTitleSettingD
 export function setCodeBlockItemEditDialog(value: CodeBlockItemEditDialog | null) {
   Internal.instance.state.codeBlockItemEditDialog = value
   Internal.instance.markAsMutated(PropertyPath.of('codeBlockItemEditDialog'))
+}
+
+/** TeX編集ダイアログの状態を設定する */
+export function setTexEditDialog(value: TexEditDialog | null) {
+  Internal.instance.state.texEditDialog = value
+  Internal.instance.markAsMutated(PropertyPath.of('texEditDialog'))
 }
 
 /** デフォルトウィンドウモード設定ダイアログの状態を設定する */

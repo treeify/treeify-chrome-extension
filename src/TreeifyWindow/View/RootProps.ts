@@ -24,6 +24,10 @@ import {
   SearchDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/SearchDialogProps'
 import {
+  createTexEditDialogProps,
+  TexEditDialogProps,
+} from 'src/TreeifyWindow/View/Dialog/TexEditDialogProps'
+import {
   createWebPageItemTitleSettingDialogProps,
   WebPageItemTitleSettingDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/WebPageItemTitleSettingDialogProps'
@@ -42,6 +46,7 @@ export type RootProps = {
   itemTreeProps: ItemTreeProps
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogProps | undefined
   codeBlockItemEditDialogProps: CodeBlockItemEditDialogProps | undefined
+  texEditDialogProps: TexEditDialogProps | undefined
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialogProps | undefined
   workspaceDialog: WorkspaceDialogProps | undefined
   labelEditDialog: LabelEditDialogProps | undefined
@@ -57,6 +62,7 @@ export function createRootProps(state: State): RootProps {
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogProps(state),
     dataFolderPickerOpenButtonProps: createDataFolderPickerOpenButtonProps(),
     codeBlockItemEditDialogProps: createCodeBlockItemEditDialogProps(state),
+    texEditDialogProps: createTexEditDialogProps(state),
     defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogProps(state),
     workspaceDialog: createWorkspaceDialogProps(state),
     labelEditDialog: createLabelEditDialogProps(state),

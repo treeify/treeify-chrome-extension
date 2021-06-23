@@ -102,6 +102,8 @@
 
     background: hsl(0, 0%, 100%);
     box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
+
+    font-size: 14px;
   }
 
   .common-dialog_title-bar {

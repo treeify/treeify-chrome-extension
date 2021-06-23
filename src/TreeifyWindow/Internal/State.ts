@@ -32,6 +32,7 @@ export type State = {
   /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null
+  texEditDialog: TexEditDialog | null
   defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
   workspaceDialog: WorkspaceDialog | null
   labelEditDialog: LabelEditDialog | null
@@ -164,6 +165,8 @@ export type CodeBlockItemEditDialog = {
   code: string
   language: string
 }
+
+export type TexEditDialog = {}
 
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
 export type DefaultWindowModeSettingDialog = {}
