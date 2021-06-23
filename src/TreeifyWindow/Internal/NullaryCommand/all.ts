@@ -1,4 +1,3 @@
-import {createEmptyCodeBlockItem} from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
 import {
   edit,
   showDefaultWindowModeSettingDialog,
@@ -26,6 +25,10 @@ import {
   moveItemUpward,
   unindentItem,
 } from 'src/TreeifyWindow/Internal/NullaryCommand/itemMove'
+import {
+  createEmptyCodeBlockItem,
+  createEmptyTexItem,
+} from 'src/TreeifyWindow/Internal/NullaryCommand/minorItemType'
 import {
   copyForTransclusion,
   excludeFromCurrentWorkspace,
@@ -62,7 +65,7 @@ export * from 'src/TreeifyWindow/Internal/NullaryCommand/item'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/itemMove'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/textItem'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/webPageItem'
-export * from 'src/TreeifyWindow/Internal/NullaryCommand/codeBlockItem'
+export * from 'src/TreeifyWindow/Internal/NullaryCommand/minorItemType'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/page'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 export * from 'src/TreeifyWindow/Internal/NullaryCommand/other'
@@ -110,6 +113,7 @@ export const functions: {[name: string]: () => void} = {
   openNewTab,
   toDualWindowModeAndOpenNewTab,
   createEmptyCodeBlockItem,
+  createEmptyTexItem,
   edit,
   showDefaultWindowModeSettingDialog,
   showWorkspaceDialog,
