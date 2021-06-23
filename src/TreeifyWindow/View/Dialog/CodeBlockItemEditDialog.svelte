@@ -15,19 +15,26 @@
   }
 
   function onPaste(event: ClipboardEvent) {
-    if (event.clipboardData !== null && event.target instanceof HTMLTextAreaElement) {
+    if (event.clipboardData !== null && event.target instanceof HTMLDivElement) {
       event.preventDefault()
 
       const text = event.clipboardData.getData('text/plain')
       // 無駄なインデントを自動的に除去する機能
-      event.target.value = removeRedundantIndent(text)
+      event.target.textContent = removeRedundantIndent(text)
     }
   }
 </script>
 
 <CommonDialog title="コードブロック編集" {onCloseDialog}>
   <div class="code-block-edit-dialog_content">
-    <textarea class="code-block-edit-dialog_code" on:paste={onPaste}>{props.code}</textarea>
+    <div
+      class="code-block-edit-dialog_code"
+      contenteditable="plaintext-only"
+      tabindex="0"
+      on:paste={onPaste}
+    >
+      {props.code}
+    </div>
     <div class="code-block-edit-dialog_language-area">
       <label>言語名</label>
       <input
@@ -51,24 +58,10 @@
 </CommonDialog>
 
 <style>
-  .code-block-edit-dialog_content {
-    width: 90vw;
-    height: 50vh;
-
-    /* ダイアログ内の基本レイアウトは縦並び */
-    display: flex;
-    flex-direction: column;
-  }
-
   .code-block-edit-dialog_code {
-    /* 表示範囲をタイトルバーやボタンエリアを除くダイアログ全域に広げる */
-    flex: 1 0;
-
     margin: 1em;
 
-    white-space: nowrap;
-
-    resize: none;
+    outline: 1px solid hsl(0, 0%, 60%);
   }
 
   .code-block-edit-dialog_language-area {
@@ -85,5 +78,6 @@
   .code-block-edit-dialog_button-area {
     /* ボタン群を右寄せにする */
     margin: 1em 1em 1em auto;
+    width: max-content;
   }
 </style>

@@ -21,9 +21,9 @@ export function createCodeBlockItemEditDialogProps(
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       // コードを更新
-      const textarea = document.querySelector<HTMLTextAreaElement>('.code-block-edit-dialog_code')
-      assertNonNull(textarea)
-      CurrentState.setCodeBlockItemCode(targetItemId, textarea.value)
+      const editBox = document.querySelector<HTMLDivElement>('.code-block-edit-dialog_code')
+      assertNonNull(editBox)
+      CurrentState.setCodeBlockItemCode(targetItemId, editBox.textContent ?? '')
 
       // 言語を更新
       const input = document.querySelector<HTMLInputElement>('.code-block-edit-dialog_language')
