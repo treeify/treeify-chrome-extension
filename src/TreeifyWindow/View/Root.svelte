@@ -21,6 +21,7 @@
   import FullWindowModeButton from './FullWindowModeButton.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
+  import TexItemCreationButton from './TexItemCreationButton.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
     return createRootProps(Internal.instance.state)
@@ -36,7 +37,7 @@
       aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
       aElement.download = fileName
       aElement.click()
-      
+
       assert(State.isValid(Internal.instance.state))
     })
   }
@@ -47,6 +48,7 @@
     <div class="toolbar">
       <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
       <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
+      <TexItemCreationButton />
       <FullWindowModeButton />
       <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
     </div>
