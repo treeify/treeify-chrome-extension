@@ -33,6 +33,8 @@
   .item-tree-tex-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
+
+    min-height: var(--item-tree-calculated-line-height);
   }
 
   /* グレーアウト状態のコードブロックアイテム */
