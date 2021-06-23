@@ -21,9 +21,9 @@ export function createTexEditDialogProps(state: State): TexEditDialogProps | und
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
       // コードを更新
-      const textarea = document.querySelector<HTMLTextAreaElement>('.tex-edit-dialog_code')
-      assertNonNull(textarea)
-      CurrentState.setTexItemCode(targetItemId, textarea.value)
+      const editBox = document.querySelector<HTMLDivElement>('.tex-edit-dialog_code')
+      assertNonNull(editBox)
+      CurrentState.setTexItemCode(targetItemId, editBox.textContent ?? '')
 
       // タイムスタンプを更新
       CurrentState.updateItemTimestamp(targetItemId)
