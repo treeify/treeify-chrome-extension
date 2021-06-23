@@ -1,6 +1,7 @@
 <script lang="ts">
   import {doAsyncWithErrorCapture} from '../errorCapture'
   import {TreeifyWindow} from '../TreeifyWindow'
+  import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   function onClick() {
     doAsyncWithErrorCapture(async () => {
@@ -9,9 +10,9 @@
   }
 </script>
 
-<div class="toolbar-icon-button" on:click={onClick}>
+<ToolbarIconButton on:click={onClick}>
   <div class="full-window-mode-button_icon" />
-</div>
+</ToolbarIconButton>
 
 <style>
   :root {

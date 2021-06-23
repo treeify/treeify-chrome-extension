@@ -91,11 +91,6 @@
     --toolbar-height: 36px;
     /* ツールバーの背景 */
     --toolbar-background: hsl(0, 0%, 96%);
-
-    /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
-    --toolbar-icon-button-size: 32px;
-    /* ツールバーのボタンのマウスホバー時の背景 */
-    --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
   }
 
   .root {
