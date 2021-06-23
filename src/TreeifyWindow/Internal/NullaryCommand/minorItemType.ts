@@ -7,3 +7,11 @@ export function createEmptyCodeBlockItem() {
   // 作ったアイテムをフォーカスする
   CurrentState.setTargetItemPath(newItemPath)
 }
+
+/** 空のTeXアイテムを作る */
+export function createEmptyTexItem() {
+  const newItemId = CurrentState.createTexItem()
+  const newItemPath = CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), newItemId)
+  // 作ったアイテムをフォーカスする
+  CurrentState.setTargetItemPath(newItemPath)
+}
