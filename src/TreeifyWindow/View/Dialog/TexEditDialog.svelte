@@ -18,7 +18,7 @@
 
   function onInput(event: Event) {
     if (event.target instanceof HTMLElement) {
-      currentCode = event.target.textContent
+      currentCode = event.target.textContent ?? ''
     }
   }
 </script>
