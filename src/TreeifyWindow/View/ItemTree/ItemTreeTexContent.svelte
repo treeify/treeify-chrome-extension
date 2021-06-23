@@ -23,7 +23,9 @@
       {/each}
     </div>
   {/if}
-  <div class="item-tree-tex-content_rendered-tex">{@html katex.renderToString(props.code)}</div>
+  <div class="item-tree-tex-content_rendered-tex">
+    {@html katex.renderToString(props.code, {throwOnError: false})}
+  </div>
 </div>
 
 <style>
