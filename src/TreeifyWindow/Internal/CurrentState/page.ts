@@ -18,17 +18,7 @@ export async function switchActivePage(itemId: ItemId) {
   CurrentState.setActivePageId(itemId)
 
   // ウィンドウモードの自動切り替え機能
-  switch (deriveDefaultWindowMode(itemId)) {
-    case 'dual':
-      await TreeifyWindow.toDualWindowMode()
-      break
-    case 'full':
-      await TreeifyWindow.toFullWindowMode()
-      break
-    case 'floating':
-      // TODO: フローティングウィンドウモードへの変更は未実装
-      break
-  }
+  await toDefaultWindowMode()
 }
 
 function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
@@ -43,6 +33,20 @@ function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
   if (parentItemId !== undefined) return deriveDefaultWindowMode(parentItemId)
 
   return 'keep'
+}
+
+async function toDefaultWindowMode() {
+  switch (deriveDefaultWindowMode(CurrentState.getActivePageId())) {
+    case 'dual':
+      await TreeifyWindow.toDualWindowMode()
+      break
+    case 'full':
+      await TreeifyWindow.toFullWindowMode()
+      break
+    case 'floating':
+      // TODO: フローティングウィンドウモードへの変更は未実装
+      break
+  }
 }
 
 /** 現在のワークスペースのactiveItemIdを返す */
