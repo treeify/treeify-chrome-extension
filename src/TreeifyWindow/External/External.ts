@@ -16,7 +16,9 @@ export class External {
   /** データフォルダ */
   dataFolder: DataFolder | undefined
   /** データフォルダに書き込むべきChunkId群 */
-  readonly pendingMutatedChunkIds = new Set<ChunkId>()
+  pendingMutatedChunkIds = new Set<ChunkId>()
+  /** Undo用 */
+  prevPendingMutatedChunkIds: Set<ChunkId> | undefined
 
   /** フローティング型の左サイドバーを表示するべきかどうか */
   shouldFloatingLeftSidebarShown: boolean = false

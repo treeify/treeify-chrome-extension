@@ -4,7 +4,13 @@
   import {integer} from '../../../Common/integer'
   import {ItemType} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {focusItemTreeBackground, getTextItemSelectionFromDom, setDomSelection} from '../../External/domTextSelection'
+  import {matchTabsAndWebPageItems} from '../../External/chromeEventListeners'
+  import {
+    focusItemTreeBackground,
+    getTextItemSelectionFromDom,
+    setDomSelection,
+  } from '../../External/domTextSelection'
+  import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
   import {DomishObject} from '../../Internal/DomishObject'
@@ -56,11 +62,8 @@
           onSpace(event)
           return
         case '1000KeyZ':
-          // TODO: データフォルダが破損する致命的不具合があるので一旦コメントアウト
-          // event.preventDefault()
-          // if (Internal.instance.prevState !== undefined) {
-          //   restart(Internal.instance.prevState)
-          // }
+          event.preventDefault()
+          undo()
           return
       }
 
@@ -674,6 +677,23 @@
 
       // クリックしたのと同じ扱いにする
       NullaryCommand.browseTab()
+      Rerenderer.instance.rerender()
+    }
+  }
+
+  async function undo() {
+    if (External.instance.hardUnloadedTabIds.size > 0) return
+    if (External.instance.urlToItemIdsForTabCreation.size > 0) return
+
+    if (Internal.instance.prevState !== undefined) {
+      assertNonUndefined(External.instance.prevPendingMutatedChunkIds)
+
+      Internal.instance.state = Internal.instance.prevState
+      Internal.instance.prevState = undefined
+      External.instance.pendingMutatedChunkIds = External.instance.prevPendingMutatedChunkIds
+      External.instance.prevPendingMutatedChunkIds = undefined
+      await matchTabsAndWebPageItems()
+
       Rerenderer.instance.rerender()
     }
   }

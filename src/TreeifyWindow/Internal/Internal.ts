@@ -1,6 +1,8 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
+import {External} from 'src/TreeifyWindow/External/External'
+import {ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyWindow/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -10,7 +12,7 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 export class Internal {
   private static _instance: Internal | undefined
 
-  readonly state: State
+  state: State
   /** Treeifyの項目の全文検索エンジン */
   readonly searchEngine: SearchEngine
 
@@ -65,6 +67,10 @@ export class Internal {
   saveCurrentStateToUndoStack() {
     // TODO: 最適化の余地あり。毎回cloneするのではなく、パッチを適用する形にできると思う
     this.prevState = State.clone(this.state)
+
+    External.instance.prevPendingMutatedChunkIds = new Set<ChunkId>(
+      External.instance.pendingMutatedChunkIds
+    )
   }
 
   dumpCurrentState() {
