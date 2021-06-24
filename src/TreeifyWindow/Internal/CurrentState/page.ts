@@ -11,7 +11,11 @@ import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 export async function switchActivePage(itemId: ItemId) {
   // マウントされたページがmountedPageIdsの末尾に来るようにする。
   // （ページツリーの足跡表示を実現するための処理）
-  unmountPage(itemId)
+  const mountedPageIds = Internal.instance.state.mountedPageIds
+  const index = mountedPageIds.indexOf(itemId)
+  if (index !== -1) {
+    Internal.instance.state.mountedPageIds = mountedPageIds.remove(index)
+  }
   Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
   Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 

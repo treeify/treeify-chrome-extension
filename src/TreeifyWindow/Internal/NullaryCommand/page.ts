@@ -6,7 +6,11 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
  * ターゲットアイテムが非ページならページ化する。
  */
 export function togglePaged() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const targetItemPath = CurrentState.getTargetItemPath()
+  // アクティブページに対しては何もしない
+  if (targetItemPath.size === 1) return
+
+  const targetItemId = ItemPath.getItemId(targetItemPath)
 
   if (CurrentState.isPage(targetItemId)) {
     CurrentState.unmountPage(targetItemId)
@@ -36,6 +40,9 @@ export function turnIntoAndShowPage() {
 /** 対象を非ページ化し、expandする */
 export function turnIntoNonPageAndExpand() {
   const targetItemPath = CurrentState.getTargetItemPath()
+  // アクティブページに対しては何もしない
+  if (targetItemPath.size === 1) return
+
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   CurrentState.unmountPage(targetItemId)

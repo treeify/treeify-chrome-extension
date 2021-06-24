@@ -119,6 +119,8 @@ export function createPageTreeNodeProps(
     },
     onClickCloseButton: () => {
       doWithErrorCapture(() => {
+        if (itemId === TOP_ITEM_ID) return
+
         CurrentState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
