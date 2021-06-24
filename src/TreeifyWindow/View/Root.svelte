@@ -1,14 +1,8 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {assert} from 'src/Common/Debug/assert'
-  import {toOpmlString} from 'src/TreeifyWindow/Internal/ImportExport/opml'
   import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-  import {State} from 'src/TreeifyWindow/Internal/State'
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
   import {createRootProps, RootProps} from 'src/TreeifyWindow/View/RootProps'
   import {derived, Readable} from 'svelte/store'
-  import {TOP_ITEM_ID} from '../basicType'
-  import {doWithErrorCapture} from '../errorCapture'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
@@ -19,41 +13,17 @@
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
   import ItemTree from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
-  import CodeBlockItemCreationButton from './Toolbar/CodeBlockItemCreationButton.svelte'
-  import DataFolderPickerOpenButton from './Toolbar/DataFolderPickerOpenButton.svelte'
-  import FullWindowModeButton from './Toolbar/FullWindowModeButton.svelte'
-  import TexItemCreationButton from './Toolbar/TexItemCreationButton.svelte'
+  import Toolbar from './Toolbar/Toolbar.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
     return createRootProps(Internal.instance.state)
   })
   $: props = $propsStream
-
-  function onClickExportButton() {
-    doWithErrorCapture(() => {
-      const fileName = 'treeify.opml'
-
-      const content = toOpmlString(List.of(List.of(TOP_ITEM_ID)))
-      const aElement = document.createElement('a')
-      aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
-      aElement.download = fileName
-      aElement.click()
-
-      assert(State.isValid(Internal.instance.state))
-    })
-  }
 </script>
 
 <div class="root">
   <div class="toolbar-and-sidebar-layout">
-    <div class="toolbar">
-      <!-- TODO: このボタンはここではなく設定画面の中にあるべき -->
-      <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
-      <CodeBlockItemCreationButton />
-      <TexItemCreationButton />
-      <FullWindowModeButton />
-      <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
-    </div>
+    <Toolbar props={props.toolbarProps} />
     <div class="sidebar-layout">
       {#if props.leftSidebarProps !== undefined}
         <LeftSidebar props={props.leftSidebarProps} />
@@ -90,13 +60,6 @@
 </div>
 
 <style>
-  :root {
-    /* ツールバーの高さ */
-    --toolbar-height: 36px;
-    /* ツールバーの背景 */
-    --toolbar-background: hsl(0, 0%, 96%);
-  }
-
   .root {
     height: 100%;
     /* ダイアログなどを他の表示物に重ねて表示するための設定 */
@@ -113,23 +76,6 @@
 
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  .toolbar {
-    /* ボタンなどを横に並べる */
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    /* 左サイドバーにも影が落ちるように左サイドバーより高くする */
-    position: relative;
-    z-index: 2;
-
-    height: var(--toolbar-height);
-
-    background: var(--toolbar-background);
-    /* Dynalistを参考にしながら調整した影 */
-    box-shadow: 0 1.5px 3px hsl(0, 0%, 85%);
   }
 
   /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
