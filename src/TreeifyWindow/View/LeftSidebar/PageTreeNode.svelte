@@ -40,18 +40,19 @@
     </div>
   {/if}
   <div class="page-tree-node_body-and-children-area">
-    <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
-      <div class="page-tree-node_body-area" class:active-page={props.isActivePage}>
+    <div class="page-tree-node_body-area">
+      <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
         <div
           class="page-tree-node_content-area"
+          class:active-page={props.isActivePage}
           on:click={props.onClickContentArea}
           on:dragover={props.onDragOver}
           on:drop={props.onDrop}
         >
           <ItemContent props={props.contentProps} />
         </div>
-        <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
       </div>
+      <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
     </div>
     <div class="page-tree-node_children-area">
       {#each props.childNodePropses.toArray() as childNodeProps}
@@ -90,14 +91,6 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
   }
-  .page-tree-node_body-area.active-page {
-    /* アクティブページの強調表示 */
-    background: var(--page-tree-active-page-background-color);
-  }
-
-  .page-tree-node_body-area:hover {
-    background: var(--page-tree-hover-item-background-color);
-  }
 
   .page-tree-node_content-area {
     cursor: default;
@@ -105,6 +98,14 @@
     /* ページツリーではテキストは折り返さない */
     overflow-x: hidden;
     white-space: nowrap;
+  }
+  .page-tree-node_content-area.active-page {
+    /* アクティブページの強調表示 */
+    background: var(--page-tree-active-page-background-color);
+  }
+
+  .page-tree-node_content-area:hover {
+    background: var(--page-tree-hover-item-background-color);
   }
 
   .page-tree-node_close-button {
