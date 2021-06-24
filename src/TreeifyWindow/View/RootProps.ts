@@ -36,10 +36,7 @@ import {
   createLeftSidebarProps,
   LeftSidebarProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarProps'
-import {
-  createDataFolderPickerOpenButtonProps,
-  DataFolderPickerOpenButtonProps,
-} from 'src/TreeifyWindow/View/Toolbar/DataFolderPickerOpenButtonProps'
+import {createToolbarProps, ToolbarProps} from 'src/TreeifyWindow/View/Toolbar/ToolbarProps'
 
 export type RootProps = {
   leftSidebarProps: LeftSidebarProps | undefined
@@ -52,7 +49,7 @@ export type RootProps = {
   labelEditDialog: LabelEditDialogProps | undefined
   otherParentsDialog: OtherParentsDialogProps | undefined
   searchDialog: SearchDialogProps | undefined
-  dataFolderPickerOpenButtonProps: DataFolderPickerOpenButtonProps
+  toolbarProps: ToolbarProps
 }
 
 export function createRootProps(state: State): RootProps {
@@ -60,7 +57,7 @@ export function createRootProps(state: State): RootProps {
     leftSidebarProps: createLeftSidebarProps(state),
     itemTreeProps: createItemTreeProps(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogProps(state),
-    dataFolderPickerOpenButtonProps: createDataFolderPickerOpenButtonProps(),
+    toolbarProps: createToolbarProps(),
     codeBlockItemEditDialogProps: createCodeBlockItemEditDialogProps(state),
     texEditDialogProps: createTexEditDialogProps(state),
     defaultWindowModeSettingDialog: createDefaultWindowModeSettingDialogProps(state),
