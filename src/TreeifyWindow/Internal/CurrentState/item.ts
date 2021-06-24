@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {ItemId, ItemType} from 'src/TreeifyWindow/basicType'
+import {ItemId, ItemType, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
@@ -16,6 +16,8 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
  * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItem(itemId: ItemId) {
+  assert(itemId !== TOP_ITEM_ID)
+
   const item = Internal.instance.state.items[itemId]
   for (const childItemId of item.childItemIds) {
     if (CurrentState.countParents(childItemId) === 1) {
@@ -75,6 +77,8 @@ export function deleteItem(itemId: ItemId) {
  * キャレットの移動（ターゲットアイテムの変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
+  assert(itemId !== TOP_ITEM_ID)
+
   const item = Internal.instance.state.items[itemId]
   const childItemIds = item.childItemIds
 
