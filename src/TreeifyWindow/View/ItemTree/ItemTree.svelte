@@ -795,7 +795,7 @@
 
 <style>
   :root {
-    --item-tree-base-font-size: 16px;
+    --item-tree-base-font-size: 15px;
 
     /*
         アイテムツリーのテキスト全般に適用されるline-height。
