@@ -89,6 +89,8 @@ export class Internal {
           parents: {},
           timestamp: Timestamp.now(),
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
       },
       textItems: {
@@ -177,6 +179,8 @@ export class Internal {
           parents: {},
           timestamp: 1604284090000,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         1: {
           itemType: ItemType.TEXT,
@@ -184,6 +188,8 @@ export class Internal {
           parents: {0: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090001,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         2: {
           itemType: ItemType.TEXT,
@@ -191,6 +197,8 @@ export class Internal {
           parents: {0: {isCollapsed: true, labels: List.of()}},
           timestamp: 1604284090002,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         3: {
           itemType: ItemType.TEXT,
@@ -198,6 +206,8 @@ export class Internal {
           parents: {1: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090003,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         4: {
           itemType: ItemType.TEXT,
@@ -205,6 +215,8 @@ export class Internal {
           parents: {2: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090004,
           cssClasses: List.of('grayed-out'),
+          cite: '',
+          citeUrl: '',
         },
         5: {
           itemType: ItemType.WEB_PAGE,
@@ -212,6 +224,8 @@ export class Internal {
           parents: {0: {isCollapsed: false, labels: List.of('サンプル')}},
           timestamp: 1604284090005,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         6: {
           itemType: ItemType.TEXT,
@@ -219,6 +233,8 @@ export class Internal {
           parents: {1: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090006,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         7: {
           itemType: ItemType.IMAGE,
@@ -226,6 +242,8 @@ export class Internal {
           parents: {1: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090007,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
         8: {
           itemType: ItemType.CODE_BLOCK,
@@ -233,6 +251,8 @@ export class Internal {
           parents: {0: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090008,
           cssClasses: List.of(),
+          cite: '',
+          citeUrl: '',
         },
       },
       textItems: {

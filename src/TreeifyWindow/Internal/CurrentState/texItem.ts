@@ -19,6 +19,8 @@ export function createTexItem(): ItemId {
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
+    cite: '',
+    citeUrl: '',
   }
   Internal.instance.state.items[newItemId] = newItem
   Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))

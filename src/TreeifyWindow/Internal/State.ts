@@ -56,6 +56,8 @@ export type Item = {
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
   cssClasses: List<string>
+  cite: string
+  citeUrl: string
 }
 
 export type Edge = {
