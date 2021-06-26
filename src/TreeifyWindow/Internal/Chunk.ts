@@ -33,6 +33,7 @@ export namespace Chunk {
     'webPageItems',
     'imageItems',
     'codeBlockItems',
+    'texItems',
   ])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
