@@ -6,6 +6,7 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
+import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
 export type ItemTreeImageContentProps = {
   itemPath: ItemPath
@@ -13,6 +14,7 @@ export type ItemTreeImageContentProps = {
   itemType: ItemType.IMAGE
   url: string
   caption: string
+  citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
   onClick: (event: MouseEvent) => void
 }
@@ -30,6 +32,7 @@ export function createItemTreeImageContentProps(
     itemType: ItemType.IMAGE,
     url: imageItem.url,
     caption: imageItem.caption,
+    citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

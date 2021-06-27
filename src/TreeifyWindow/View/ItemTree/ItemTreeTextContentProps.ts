@@ -8,12 +8,14 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
+import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
 export type ItemTreeTextContentProps = {
   itemPath: ItemPath
   itemType: ItemType.TEXT
   labels: List<string>
   domishObjects: List<DomishObject>
+  citeProps: CiteProps | undefined
   onInput: (event: Event) => void
   onCompositionEnd: (event: CompositionEvent) => void
   onClick: (event: MouseEvent) => void
@@ -29,6 +31,7 @@ export function createItemTreeTextContentProps(
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEXT,
     domishObjects: state.textItems[itemId].domishObjects,
+    citeProps: createCiteProps(itemPath),
     onInput: (event: Event) => {
       doWithErrorCapture(() => {
         if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {

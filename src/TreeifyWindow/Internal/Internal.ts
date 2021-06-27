@@ -242,8 +242,8 @@ export class Internal {
           parents: {1: {isCollapsed: false, labels: List.of()}},
           timestamp: 1604284090007,
           cssClasses: List.of(),
-          cite: '',
-          citeUrl: '',
+          cite: 'Tamias - Wikipedia',
+          citeUrl: 'https://en.wikipedia.org/wiki/Tamias',
         },
         8: {
           itemType: ItemType.CODE_BLOCK,

@@ -8,6 +8,7 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
+import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
 
 export type ItemTreeWebPageContentProps = {
@@ -21,6 +22,7 @@ export type ItemTreeWebPageContentProps = {
   isHardUnloaded: boolean
   isUnread: boolean
   isAudible: boolean
+  citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
@@ -49,6 +51,7 @@ export function createItemTreeWebPageContentProps(
     isHardUnloaded: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
+    citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
