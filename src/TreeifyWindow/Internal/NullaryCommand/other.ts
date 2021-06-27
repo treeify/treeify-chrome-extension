@@ -119,7 +119,7 @@ export function selectAllBelowItems() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
 
-  // 複数選択中はアイテムツリー自体をフォーカスする
+  // 複数選択中はメインエリア自体をフォーカスする
   focusItemTreeBackground()
 }
 
@@ -137,7 +137,7 @@ export function selectAllAboveItems() {
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 
-  // 複数選択中はアイテムツリー自体をフォーカスする
+  // 複数選択中はメインエリア自体をフォーカスする
   focusItemTreeBackground()
 }
 

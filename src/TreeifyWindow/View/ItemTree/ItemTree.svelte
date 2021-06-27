@@ -437,7 +437,7 @@
 
     event.preventDefault()
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
-    // 複数選択中はアイテムツリー自体をフォーカスする
+    // 複数選択中はメインエリア自体をフォーカスする
     focusItemTreeBackground()
     Rerenderer.instance.rerender()
   }
@@ -468,12 +468,12 @@
 
     event.preventDefault()
     CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
-    // 複数選択中はアイテムツリー自体をフォーカスする
+    // 複数選択中はメインエリア自体をフォーカスする
     focusItemTreeBackground()
     Rerenderer.instance.rerender()
   }
 
-  /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
+  /** メインエリア上でBackspaceキーを押したときのデフォルトの挙動 */
   function onBackspace(event: KeyboardEvent) {
     // 複数選択中は選択されたアイテムを削除して終了
     if (CurrentState.getSelectedItemPaths().size > 1) {
@@ -567,7 +567,7 @@
     }
   }
 
-  /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
+  /** メインエリア上でDeleteキーを押したときのデフォルトの挙動 */
   function onDelete(event: KeyboardEvent) {
     // 複数選択中は選択されたアイテムを削除して終了
     if (CurrentState.getSelectedItemPaths().size > 1) {
@@ -668,7 +668,7 @@
     }
   }
 
-  /** アイテムツリー上でSpaceキーを押したときのデフォルトの挙動 */
+  /** メインエリア上でSpaceキーを押したときのデフォルトの挙動 */
   function onSpace(event: KeyboardEvent) {
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     const targetItemType = Internal.instance.state.items[targetItemId].itemType
@@ -798,11 +798,11 @@
     --item-tree-base-font-size: 15px;
 
     /*
-        アイテムツリーのテキスト全般に適用されるline-height。
+        メインエリアのテキスト全般に適用されるline-height。
         階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
         */
     --item-tree-line-height: 1.45;
-    /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+    /* メインエリア内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
     --item-tree-font-size-multiplicator: 99.5%;
 
     /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */

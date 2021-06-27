@@ -78,7 +78,7 @@
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
+  /* 左サイドバーとメインエリアを横に並べるレイアウト */
   .sidebar-layout {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);

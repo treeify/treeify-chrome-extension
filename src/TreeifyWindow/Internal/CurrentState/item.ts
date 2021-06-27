@@ -144,7 +144,7 @@ export function isItem(itemId: ItemId): boolean {
   return undefined !== Internal.instance.state.items[itemId]
 }
 
-/** 与えられたアイテムがアイテムツリー上で表示する子アイテムのリストを返す */
+/** 与えられたアイテムがメインエリア上で表示する子アイテムのリストを返す */
 export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]

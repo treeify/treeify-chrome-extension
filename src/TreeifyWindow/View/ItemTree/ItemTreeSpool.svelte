@@ -92,7 +92,7 @@
     background: var(--highlighted-item-bullet-hover-color);
   }
 
-  /* アイテムツリーのバレットとインデントのルート要素 */
+  /* メインエリアのバレットとインデントのルート要素 */
   .item-tree-spool {
     width: var(--item-tree-calculated-line-height);
     height: 100%;
@@ -109,7 +109,7 @@
     position: relative;
   }
 
-  /* アイテムツリーのバレットの外側の円（展開状態用） */
+  /* メインエリアのバレットの外側の円（展開状態用） */
   .item-tree-spool_outer-circle {
     /* widthとheightがJavaScriptで設定される */
 
@@ -126,7 +126,7 @@
     background: var(--item-tree-bullet-outer-circle-hover-color);
   }
 
-  /* アイテムツリーのバレットの内側の円 */
+  /* メインエリアのバレットの内側の円 */
   .item-tree-spool_inner-circle {
     width: var(--item-tree-bullet-inner-circle-diameter);
     height: var(--item-tree-bullet-inner-circle-diameter);

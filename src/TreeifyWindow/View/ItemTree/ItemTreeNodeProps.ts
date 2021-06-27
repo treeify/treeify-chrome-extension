@@ -48,7 +48,6 @@ export type ItemTreeNodeProps = {
   onClickHiddenTabsCount: (event: MouseEvent) => void
 }
 
-// 再帰的にアイテムツリーのPropsを作る
 export function createItemTreeNodeProps(
   state: State,
   footprintRankMap: Map<ItemId, integer>,

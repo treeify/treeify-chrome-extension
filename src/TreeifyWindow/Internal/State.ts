@@ -25,9 +25,9 @@ export type State = {
   /** 削除され再利用されるアイテムID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId
-  /** アイテムツリー領域におけるキーボード入力とコマンドの対応付け */
+  /** メインエリア領域におけるキーボード入力とコマンドの対応付け */
   itemTreeKeyboardBinding: {[K in InputId]: List<Command>}
-  /** アイテムツリーの削除ボタンのマウス入力とコマンドの対応付け */
+  /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
   itemTreeDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
   /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
@@ -129,7 +129,7 @@ export type TexItem = {
 
 /** 各ページが持つデータの型 */
 export type Page = {
-  /** アイテムツリー内で操作対象となるアイテム */
+  /** メインエリア内で操作対象となるアイテム */
   targetItemPath: ItemPath
   /**
    * アイテム複数選択時の範囲の一端。

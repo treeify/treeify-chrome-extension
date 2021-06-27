@@ -149,7 +149,7 @@ export function moveItemDownward() {
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
   const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
-  // 該当アイテムがない場合（アイテムツリーの下端の場合）は何もしない
+  // 該当アイテムがない場合（メインエリアの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
   // 1つ下のアイテムの下にアイテムを移動する

@@ -29,7 +29,7 @@
     <div class="item-tree-image-content_caption">{props.caption}</div>
   </div>
   {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps}/>
+    <Cite props={props.citeProps} />
   {/if}
 </div>
 
@@ -45,7 +45,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* これを指定しないとアイテムツリーの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
+    /* これを指定しないとメインエリアの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
     width: fit-content;
   }
 
