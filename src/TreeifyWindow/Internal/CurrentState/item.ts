@@ -346,7 +346,7 @@ export function insertNextSiblingItem(
  * 指定されたアイテムパスが子を表示している場合は最初の子になるよう配置する。
  */
 export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge): ItemPath {
-  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
+  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.size === 1) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
     return itemPath.push(newItemId)
   } else {
