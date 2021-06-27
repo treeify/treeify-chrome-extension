@@ -123,6 +123,35 @@
     border-radius: 50%;
     cursor: pointer;
   }
+  .page-tree-node_tabs-count-button:hover {
+    background: hsl(0, 0%, 90%);
+  }
+  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+  .page-tree-node_tabs-count-button::after {
+    content: '';
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+    border-radius: 50%;
+
+    background: hsl(0, 0%, 50%);
+  }
+  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+  .page-tree-node_tabs-count-button:active::after {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+    transition: opacity 0s, width 0s, height 0s;
+  }
 
   .page-tree-node_tabs-count {
     /* 中央寄せ */
