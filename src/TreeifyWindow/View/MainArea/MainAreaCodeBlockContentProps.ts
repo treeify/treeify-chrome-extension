@@ -19,7 +19,7 @@ export type MainAreaCodeBlockContentProps = {
   onClick: (event: MouseEvent) => void
 }
 
-export function createItemTreeCodeBlockContentProps(
+export function createMainAreaCodeBlockContentProps(
   state: State,
   itemPath: ItemPath
 ): MainAreaCodeBlockContentProps {

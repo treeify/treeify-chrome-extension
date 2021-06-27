@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {ItemTreeBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
+  import {MainAreaBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
 
   export let props: MainAreaSpoolProps
 
@@ -13,16 +13,16 @@
 </script>
 
 <div class="item-tree-spool" on:click={props.onClick}>
-  {#if props.bulletState === ItemTreeBulletState.EXPANDED}
+  {#if props.bulletState === MainAreaBulletState.EXPANDED}
     <div class="item-tree-spool_indent-area">
       <div class="item-tree-spool_indent-line" />
     </div>
   {/if}
   <div class="item-tree-spool_bullet-area">
-    {#if props.bulletState === ItemTreeBulletState.PAGE}
+    {#if props.bulletState === MainAreaBulletState.PAGE}
       <div class="item-tree-spool_page-icon" />
     {:else}
-      {#if props.bulletState === ItemTreeBulletState.COLLAPSED}
+      {#if props.bulletState === MainAreaBulletState.COLLAPSED}
         <div class="item-tree-spool_outer-circle" style={outerCircleStyle} />
       {/if}
       <div class="item-tree-spool_inner-circle" />

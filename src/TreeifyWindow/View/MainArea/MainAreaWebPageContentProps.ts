@@ -9,7 +9,7 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
+import {MainAreaContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
@@ -29,7 +29,7 @@ export type MainAreaWebPageContentProps = {
   onDragStart: (event: DragEvent) => void
 }
 
-export function createItemTreeWebPageContentProps(
+export function createMainAreaWebPageContentProps(
   state: State,
   itemPath: ItemPath
 ): MainAreaWebPageContentProps {
@@ -154,7 +154,7 @@ export function createItemTreeWebPageContentProps(
       doWithErrorCapture(() => {
         if (event.dataTransfer === null) return
 
-        const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+        const domElementId = MainAreaContentView.focusableDomElementId(itemPath)
         const domElement = document.getElementById(domElementId)
         if (domElement === null) return
         // ドラッグ中にマウスポインターに追随して表示される内容を設定

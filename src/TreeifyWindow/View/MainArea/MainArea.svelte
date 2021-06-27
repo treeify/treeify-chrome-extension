@@ -6,7 +6,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {matchTabsAndWebPageItems} from '../../External/chromeEventListeners'
   import {
-    focusItemTreeBackground,
+    focusMainAreaBackground,
     getTextItemSelectionFromDom,
     setDomSelection,
   } from '../../External/domTextSelection'
@@ -20,8 +20,8 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
-  import {ItemTreeContentView} from './MainAreaContentProps'
-  import ItemTreeNode from './MainAreaNode.svelte'
+  import {MainAreaContentView} from './MainAreaContentProps'
+  import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
 
   export let props: MainAreaProps
@@ -251,7 +251,7 @@
       const lastLine = lines[lines.length - 1]
 
       // 上のアイテムに一旦フォーカスする
-      const aboveItemDomElementId = ItemTreeContentView.focusableDomElementId(aboveItemPath)
+      const aboveItemDomElementId = MainAreaContentView.focusableDomElementId(aboveItemPath)
       const aboveItemDomElement = document.getElementById(aboveItemDomElementId)
       assertNonNull(aboveItemDomElement)
       aboveItemDomElement.focus()
@@ -363,7 +363,7 @@
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
       // TODO: 最適化の余地あり。二分探索が可能では？
-      const belowItemDomElementId = ItemTreeContentView.focusableDomElementId(belowItemPath)
+      const belowItemDomElementId = MainAreaContentView.focusableDomElementId(belowItemPath)
       const belowItemDomElement = document.getElementById(belowItemDomElementId)
       assertNonNull(belowItemDomElement)
       belowItemDomElement.focus()
@@ -438,7 +438,7 @@
     event.preventDefault()
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
     // 複数選択中はメインエリア自体をフォーカスする
-    focusItemTreeBackground()
+    focusMainAreaBackground()
     Rerenderer.instance.rerender()
   }
 
@@ -469,7 +469,7 @@
     event.preventDefault()
     CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
     // 複数選択中はメインエリア自体をフォーカスする
-    focusItemTreeBackground()
+    focusMainAreaBackground()
     Rerenderer.instance.rerender()
   }
 
@@ -789,7 +789,7 @@
   on:paste={onPaste}
 >
   {#key props.rootNodeProps.itemPath.toString()}
-    <ItemTreeNode props={props.rootNodeProps} />
+    <MainAreaNode props={props.rootNodeProps} />
   {/key}
 </main>
 

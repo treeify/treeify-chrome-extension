@@ -19,7 +19,7 @@ export type MainAreaImageContentProps = {
   onClick: (event: MouseEvent) => void
 }
 
-export function createItemTreeImageContentProps(
+export function createMainAreaImageContentProps(
   state: State,
   itemPath: ItemPath
 ): MainAreaImageContentProps {

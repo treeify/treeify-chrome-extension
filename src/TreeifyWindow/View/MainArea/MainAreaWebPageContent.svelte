@@ -1,12 +1,12 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './MainAreaContentProps'
+  import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
 
   export let props: MainAreaWebPageContentProps
 
-  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
+  const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div class="item-tree-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>

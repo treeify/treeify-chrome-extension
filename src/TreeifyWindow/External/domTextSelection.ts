@@ -137,7 +137,7 @@ function getCharacterCount(node: Node): integer {
  * それでいてメインエリアに対するキーボード操作を可能とするために用いられる。
  * 具体的には複数選択時にこの関数が用いられる。
  */
-export function focusItemTreeBackground() {
+export function focusMainAreaBackground() {
   const itemTree = document.querySelector<HTMLElement>('.item-tree')
   itemTree?.focus()
   // focusだけでなくselectionも設定しないとcopyイベント等が発行されない

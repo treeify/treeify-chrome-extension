@@ -1,25 +1,25 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
-  import ItemTreeCodeBlockContent from './MainAreaCodeBlockContent.svelte'
+  import MainAreaCodeBlockContent from './MainAreaCodeBlockContent.svelte'
   import {MainAreaContentProps} from './MainAreaContentProps'
-  import ItemTreeImageContent from './MainAreaImageContent.svelte'
-  import ItemTreeTexContent from './MainAreaTexContent.svelte'
-  import ItemTreeTextContent from './MainAreaTextContent.svelte'
-  import ItemTreeWebPageContent from './MainAreaWebPageContent.svelte'
+  import MainAreaImageContent from './MainAreaImageContent.svelte'
+  import MainAreaTexContent from './MainAreaTexContent.svelte'
+  import MainAreaTextContent from './MainAreaTextContent.svelte'
+  import MainAreaWebPageContent from './MainAreaWebPageContent.svelte'
 
   export let props: MainAreaContentProps
 </script>
 
 {#if props.itemType === ItemType.TEXT}
-  <ItemTreeTextContent {props} />
+  <MainAreaTextContent {props} />
 {:else if props.itemType === ItemType.WEB_PAGE}
-  <ItemTreeWebPageContent {props} />
+  <MainAreaWebPageContent {props} />
 {:else if props.itemType === ItemType.IMAGE}
-  <ItemTreeImageContent {props} />
+  <MainAreaImageContent {props} />
 {:else if props.itemType === ItemType.CODE_BLOCK}
-  <ItemTreeCodeBlockContent {props} />
+  <MainAreaCodeBlockContent {props} />
 {:else if props.itemType === ItemType.TEX}
-  <ItemTreeTexContent {props} />
+  <MainAreaTexContent {props} />
 {/if}
 
 <style>

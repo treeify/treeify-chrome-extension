@@ -13,14 +13,14 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
-  createItemTreeContentProps,
-  ItemTreeContentView,
+  createMainAreaContentProps,
   MainAreaContentProps,
+  MainAreaContentView,
 } from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 import {
-  createItemTreeSpoolProps,
+  createMainAreaSpoolProps,
   deriveBulletState,
-  ItemTreeBulletState,
+  MainAreaBulletState,
   MainAreaSpoolProps,
 } from 'src/TreeifyWindow/View/MainArea/MainAreaSpoolProps'
 
@@ -48,7 +48,7 @@ export type MainAreaNodeProps = {
   onClickHiddenTabsCount: (event: MouseEvent) => void
 }
 
-export function createItemTreeNodeProps(
+export function createMainAreaNodeProps(
   state: State,
   footprintRankMap: Map<ItemId, integer>,
   footprintCount: integer,
@@ -67,10 +67,10 @@ export function createItemTreeNodeProps(
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-    spoolProps: createItemTreeSpoolProps(state, itemPath),
-    contentProps: createItemTreeContentProps(state, itemPath, item.itemType),
+    spoolProps: createMainAreaSpoolProps(state, itemPath),
+    contentProps: createMainAreaContentProps(state, itemPath, item.itemType),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
-      return createItemTreeNodeProps(
+      return createMainAreaNodeProps(
         state,
         footprintRankMap,
         footprintCount,
@@ -109,7 +109,7 @@ export function createItemTreeNodeProps(
       doWithErrorCapture(() => {
         if (event.dataTransfer === null) return
 
-        const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+        const domElementId = MainAreaContentView.focusableDomElementId(itemPath)
         const domElement = document.getElementById(domElementId)
         if (domElement === null) return
         // ドラッグ中にマウスポインターに追随して表示される内容を設定
@@ -129,11 +129,11 @@ export function createItemTreeNodeProps(
 function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
   switch (bulletState) {
-    case ItemTreeBulletState.NO_CHILDREN:
-    case ItemTreeBulletState.EXPANDED:
-    case ItemTreeBulletState.PAGE:
+    case MainAreaBulletState.NO_CHILDREN:
+    case MainAreaBulletState.EXPANDED:
+    case MainAreaBulletState.PAGE:
       return 0
-    case ItemTreeBulletState.COLLAPSED:
+    case MainAreaBulletState.COLLAPSED:
       return countLoadedTabsInDescendants(state, ItemPath.getItemId(itemPath))
     default:
       assertNeverType(bulletState)

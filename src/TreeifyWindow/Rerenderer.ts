@@ -1,12 +1,12 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {
-  focusItemTreeBackground,
+  focusMainAreaBackground,
   setDomSelection,
   TextItemSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
+import {MainAreaContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 import {tick} from 'svelte'
 import {Readable, writable} from 'svelte/store'
 import Root from './View/Root.svelte'
@@ -53,12 +53,12 @@ export class Rerenderer {
       // フォーカスを設定する
       if (CurrentState.getSelectedItemPaths().size === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
-        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+        const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
         focusableElement?.focus()
       } else {
         // 複数選択の場合
-        focusItemTreeBackground()
+        focusMainAreaBackground()
       }
 
       if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
@@ -85,12 +85,12 @@ export class Rerenderer {
       // フォーカスを設定する
       if (CurrentState.getSelectedItemPaths().size === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
-        const targetElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+        const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
         focusableElement?.focus()
       } else {
         // 複数選択の場合
-        focusItemTreeBackground()
+        focusMainAreaBackground()
       }
     })
   }

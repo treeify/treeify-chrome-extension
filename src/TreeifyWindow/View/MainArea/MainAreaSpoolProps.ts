@@ -8,7 +8,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type MainAreaSpoolProps = {
-  bulletState: ItemTreeBulletState
+  bulletState: MainAreaBulletState
   /**
    * expand時に表示されるアイテム数。
    * collapsed状態以外の場合は常に0。
@@ -17,14 +17,14 @@ export type MainAreaSpoolProps = {
   onClick: (event: MouseEvent) => void
 }
 
-export enum ItemTreeBulletState {
+export enum MainAreaBulletState {
   NO_CHILDREN,
   EXPANDED,
   COLLAPSED,
   PAGE,
 }
 
-export function createItemTreeSpoolProps(state: State, itemPath: ItemPath): MainAreaSpoolProps {
+export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): MainAreaSpoolProps {
   const bulletState = deriveBulletState(state, itemPath)
 
   const onClick = (event: MouseEvent) => {
@@ -33,24 +33,14 @@ export function createItemTreeSpoolProps(state: State, itemPath: ItemPath): Main
 
       const inputId = InputId.fromMouseEvent(event)
       switch (bulletState) {
-        case ItemTreeBulletState.NO_CHILDREN:
+        case MainAreaBulletState.NO_CHILDREN:
           switch (inputId) {
             case '1000MouseButton0':
               NullaryCommand.turnIntoAndShowPage()
               break
           }
           break
-        case ItemTreeBulletState.EXPANDED:
-          switch (inputId) {
-            case '0000MouseButton0':
-              NullaryCommand.toggleCollapsed()
-              break
-            case '1000MouseButton0':
-              NullaryCommand.turnIntoAndShowPage()
-              break
-          }
-          break
-        case ItemTreeBulletState.COLLAPSED:
+        case MainAreaBulletState.EXPANDED:
           switch (inputId) {
             case '0000MouseButton0':
               NullaryCommand.toggleCollapsed()
@@ -60,7 +50,17 @@ export function createItemTreeSpoolProps(state: State, itemPath: ItemPath): Main
               break
           }
           break
-        case ItemTreeBulletState.PAGE:
+        case MainAreaBulletState.COLLAPSED:
+          switch (inputId) {
+            case '0000MouseButton0':
+              NullaryCommand.toggleCollapsed()
+              break
+            case '1000MouseButton0':
+              NullaryCommand.turnIntoAndShowPage()
+              break
+          }
+          break
+        case MainAreaBulletState.PAGE:
           switch (inputId) {
             case '0000MouseButton0':
               NullaryCommand.showPage()
@@ -80,7 +80,7 @@ export function createItemTreeSpoolProps(state: State, itemPath: ItemPath): Main
 
 function countHiddenItems(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
-  if (bulletState !== ItemTreeBulletState.COLLAPSED) return 0
+  if (bulletState !== MainAreaBulletState.COLLAPSED) return 0
 
   const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
     return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
@@ -88,16 +88,16 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   return counts.size + counts.reduce((a: integer, x) => a + x, 0)
 }
 
-export function deriveBulletState(state: State, itemPath: ItemPath): ItemTreeBulletState {
+export function deriveBulletState(state: State, itemPath: ItemPath): MainAreaBulletState {
   const itemId = ItemPath.getItemId(itemPath)
   if (state.pages[itemId] !== undefined) {
-    return ItemTreeBulletState.PAGE
+    return MainAreaBulletState.PAGE
   } else if (state.items[itemId].childItemIds.size === 0) {
-    return ItemTreeBulletState.NO_CHILDREN
+    return MainAreaBulletState.NO_CHILDREN
   } else {
     CurrentState.getIsCollapsed(itemPath)
     return CurrentState.getIsCollapsed(itemPath)
-      ? ItemTreeBulletState.COLLAPSED
-      : ItemTreeBulletState.EXPANDED
+      ? MainAreaBulletState.COLLAPSED
+      : MainAreaBulletState.EXPANDED
   }
 }

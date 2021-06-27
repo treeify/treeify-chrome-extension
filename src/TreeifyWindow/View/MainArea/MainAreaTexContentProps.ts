@@ -18,7 +18,7 @@ export type MainAreaTexContentProps = {
   onClick: (event: MouseEvent) => void
 }
 
-export function createItemTreeTexContentProps(
+export function createMainAreaTexContentProps(
   state: State,
   itemPath: ItemPath
 ): MainAreaTexContentProps {

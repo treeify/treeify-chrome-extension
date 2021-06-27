@@ -2,10 +2,10 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import ItemTreeContent from './MainAreaContent.svelte'
-  import ItemTreeNode from './MainAreaNode.svelte'
+  import MainAreaContent from './MainAreaContent.svelte'
+  import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaNodeProps} from './MainAreaNodeProps'
-  import ItemTreeSpool from './MainAreaSpool.svelte'
+  import MainAreaSpool from './MainAreaSpool.svelte'
 
   export let props: MainAreaNodeProps
 
@@ -43,7 +43,7 @@
       draggable="true"
       on:dragstart={props.onDragStart}
     >
-      <ItemTreeSpool props={props.spoolProps} />
+      <MainAreaSpool props={props.spoolProps} />
     </div>
   {/if}
   <div class="item-tree-node_body-and-children-area">
@@ -58,7 +58,7 @@
           class:single-selected={props.selected === 'single'}
           on:mousedown={props.onMouseDownContentArea}
         >
-          <ItemTreeContent props={props.contentProps} />
+          <MainAreaContent props={props.contentProps} />
         </div>
       </div>
       <!-- 隠れているタブ数 -->
@@ -77,7 +77,7 @@
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
       {#each props.childItemPropses.toArray() as itemProps (itemProps.itemPath.toString())}
-        <ItemTreeNode props={itemProps} />
+        <MainAreaNode props={itemProps} />
       {/each}
     </div>
   </div>

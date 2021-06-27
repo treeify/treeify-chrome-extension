@@ -3,7 +3,7 @@
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
-  import {ItemTreeContentView} from './MainAreaContentProps'
+  import {MainAreaContentView} from './MainAreaContentProps'
 
   export let props: MainAreaCodeBlockContentProps
 
@@ -20,7 +20,7 @@
     }
   }
 
-  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
+  const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div

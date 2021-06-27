@@ -2,12 +2,12 @@
   import katex from 'katex'
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './MainAreaContentProps'
+  import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaTexContentProps} from './MainAreaTexContentProps'
 
   export let props: MainAreaTexContentProps
 
-  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
+  const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div

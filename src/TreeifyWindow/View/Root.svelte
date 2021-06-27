@@ -12,7 +12,7 @@
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
-  import ItemTree from './MainArea/MainArea.svelte'
+  import MainArea from './MainArea/MainArea.svelte'
   import Toolbar from './Toolbar/Toolbar.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
@@ -30,7 +30,7 @@
       {:else}
         <div class="grid-empty-cell" />
       {/if}
-      <ItemTree props={props.itemTreeProps} />
+      <MainArea props={props.itemTreeProps} />
     </div>
   </div>
   {#if props.webPageItemTitleSettingDialog !== undefined}

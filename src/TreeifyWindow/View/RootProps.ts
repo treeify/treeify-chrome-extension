@@ -35,7 +35,7 @@ import {
   createLeftSidebarProps,
   LeftSidebarProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarProps'
-import {createItemTreeProps, MainAreaProps} from 'src/TreeifyWindow/View/MainArea/MainAreaProps'
+import {createMainAreaProps, MainAreaProps} from 'src/TreeifyWindow/View/MainArea/MainAreaProps'
 import {createToolbarProps, ToolbarProps} from 'src/TreeifyWindow/View/Toolbar/ToolbarProps'
 
 export type RootProps = {
@@ -55,7 +55,7 @@ export type RootProps = {
 export function createRootProps(state: State): RootProps {
   return {
     leftSidebarProps: createLeftSidebarProps(state),
-    itemTreeProps: createItemTreeProps(state),
+    itemTreeProps: createMainAreaProps(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogProps(state),
     toolbarProps: createToolbarProps(),
     codeBlockItemEditDialogProps: createCodeBlockItemEditDialogProps(state),

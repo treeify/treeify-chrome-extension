@@ -2,12 +2,12 @@
   import {DomishObject} from '../../Internal/DomishObject'
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './MainAreaContentProps'
+  import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaTextContentProps} from './MainAreaTextContentProps'
 
   export let props: MainAreaTextContentProps
 
-  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
+  const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
 <div class="item-tree-text-content">
