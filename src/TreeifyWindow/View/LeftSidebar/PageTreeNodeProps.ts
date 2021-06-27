@@ -27,8 +27,10 @@ export type PageTreeNodeProps = {
   isRoot: boolean
   footprintRank: integer | undefined
   footprintCount: integer
+  tabsCount: integer
   onClickContentArea: () => void
   onClickCloseButton: () => void
+  onClickTabsCount: () => void
   onDragOver: (event: DragEvent) => void
   onDrop: (event: DragEvent) => void
 }
@@ -109,6 +111,7 @@ export function createPageTreeNodeProps(
     isRoot: itemId === TOP_ITEM_ID,
     footprintRank: rank <= footprintCount ? rank : undefined,
     footprintCount,
+    tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
     onClickContentArea: () => {
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
@@ -137,6 +140,21 @@ export function createPageTreeNodeProps(
         }
 
         Rerenderer.instance.rerender()
+      })
+    },
+    onClickTabsCount: () => {
+      doWithErrorCapture(() => {
+        // ページ全体をハードアンロードする
+        for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+          const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+          if (tabId !== undefined) {
+            // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
+            External.instance.hardUnloadedTabIds.add(tabId)
+
+            // 対応するタブを閉じる
+            chrome.tabs.remove(tabId)
+          }
+        }
       })
     },
     onDragOver: (event) => {

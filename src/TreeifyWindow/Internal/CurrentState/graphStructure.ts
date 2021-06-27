@@ -1,6 +1,8 @@
-import {List} from 'immutable'
+import {List, Set} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyWindow/basicType'
+import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -57,11 +59,13 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
 export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
-  // ページは終端ノードとして扱う
-  if (CurrentState.isPage(itemId)) return
-
   for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
-    yield* getSubtreeItemIds(childItemId)
+    if (CurrentState.isPage(childItemId)) {
+      // ページは終端ノードとして扱う
+      yield childItemId
+    } else {
+      yield* getSubtreeItemIds(childItemId)
+    }
   }
 }
 
@@ -75,4 +79,14 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
     yield parentItemId
     yield* yieldAncestorItemIds(parentItemId)
   }
+}
+
+/**
+ * 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
+ * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+ */
+export function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
+  return Set(CurrentState.getSubtreeItemIds(itemId)).filter(
+    (itemId) => !External.instance.tabItemCorrespondence.isUnloaded(itemId)
+  ).size
 }

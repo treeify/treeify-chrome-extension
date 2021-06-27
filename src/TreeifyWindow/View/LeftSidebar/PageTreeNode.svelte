@@ -40,18 +40,25 @@
     </div>
   {/if}
   <div class="page-tree-node_body-and-children-area">
-    <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
-      <div class="page-tree-node_body-area" class:active-page={props.isActivePage}>
+    <div class="page-tree-node_body-area">
+      <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
         <div
           class="page-tree-node_content-area"
+          class:active-page={props.isActivePage}
           on:click={props.onClickContentArea}
           on:dragover={props.onDragOver}
           on:drop={props.onDrop}
         >
           <ItemContent props={props.contentProps} />
         </div>
-        <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
       </div>
+      {#if props.tabsCount > 0}
+        <div class="page-tree-node_tabs-count-button" on:click={props.onClickTabsCount}>
+          <div class="page-tree-node_tabs-count">{props.tabsCount}</div>
+        </div>
+      {:else}
+        <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
+      {/if}
     </div>
     <div class="page-tree-node_children-area">
       {#each props.childNodePropses.toArray() as childNodeProps}
@@ -90,14 +97,6 @@
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
   }
-  .page-tree-node_body-area.active-page {
-    /* アクティブページの強調表示 */
-    background: var(--page-tree-active-page-background-color);
-  }
-
-  .page-tree-node_body-area:hover {
-    background: var(--page-tree-hover-item-background-color);
-  }
 
   .page-tree-node_content-area {
     cursor: default;
@@ -105,6 +104,63 @@
     /* ページツリーではテキストは折り返さない */
     overflow-x: hidden;
     white-space: nowrap;
+  }
+  .page-tree-node_content-area.active-page {
+    /* アクティブページの強調表示 */
+    background: var(--page-tree-active-page-background-color);
+  }
+
+  .page-tree-node_content-area:hover {
+    background: var(--page-tree-hover-item-background-color);
+  }
+
+  .page-tree-node_tabs-count-button {
+    width: var(--page-tree-close-button-size);
+    height: var(--page-tree-close-button-size);
+
+    position: relative;
+
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .page-tree-node_tabs-count-button:hover {
+    background: hsl(0, 0%, 90%);
+  }
+  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+  .page-tree-node_tabs-count-button::after {
+    content: '';
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+    border-radius: 50%;
+
+    background: hsl(0, 0%, 50%);
+  }
+  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+  .page-tree-node_tabs-count-button:active::after {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+    transition: opacity 0s, width 0s, height 0s;
+  }
+
+  .page-tree-node_tabs-count {
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: hsl(0, 0%, 40%);
   }
 
   .page-tree-node_close-button {
@@ -116,13 +172,13 @@
     -webkit-mask-image: url('close-icon2.svg');
 
     /* マウスホバー時にのみ表示 */
-    display: none;
+    visibility: hidden;
 
     /* ボタンであることを示す */
     cursor: pointer;
   }
   .page-tree-node_body-area:hover .page-tree-node_close-button {
     /* マウスホバー時にのみ表示 */
-    display: initial;
+    visibility: visible;
   }
 </style>
