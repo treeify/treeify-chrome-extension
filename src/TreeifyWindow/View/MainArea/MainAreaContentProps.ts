@@ -4,34 +4,34 @@ import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
   createItemTreeCodeBlockContentProps,
-  ItemTreeCodeBlockContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeCodeBlockContentProps'
+  MainAreaCodeBlockContentProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaCodeBlockContentProps'
 import {
   createItemTreeImageContentProps,
-  ItemTreeImageContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeImageContentProps'
+  MainAreaImageContentProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaImageContentProps'
 import {
   createItemTreeTexContentProps,
-  ItemTreeTexContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeTexContentProps'
+  MainAreaTexContentProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaTexContentProps'
 import {
   createItemTreeWebPageContentProps,
-  ItemTreeWebPageContentProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeWebPageContentProps'
-import {createItemTreeTextContentProps, ItemTreeTextContentProps} from './ItemTreeTextContentProps'
+  MainAreaWebPageContentProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaWebPageContentProps'
+import {createItemTreeTextContentProps, MainAreaTextContentProps} from './MainAreaTextContentProps'
 
-export type ItemTreeContentProps =
-  | ItemTreeTextContentProps
-  | ItemTreeWebPageContentProps
-  | ItemTreeImageContentProps
-  | ItemTreeCodeBlockContentProps
-  | ItemTreeTexContentProps
+export type MainAreaContentProps =
+  | MainAreaTextContentProps
+  | MainAreaWebPageContentProps
+  | MainAreaImageContentProps
+  | MainAreaCodeBlockContentProps
+  | MainAreaTexContentProps
 
 export function createItemTreeContentProps(
   state: State,
   itemPath: ItemPath,
   itemType: ItemType
-): ItemTreeContentProps {
+): MainAreaContentProps {
   // アイテムタイプごとの固有部分を追加して返す
   switch (itemType) {
     case ItemType.TEXT:

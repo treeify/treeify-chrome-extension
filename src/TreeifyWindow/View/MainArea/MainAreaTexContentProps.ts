@@ -8,7 +8,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
-export type ItemTreeTexContentProps = {
+export type MainAreaTexContentProps = {
   itemPath: ItemPath
   labels: List<string>
   itemType: ItemType.TEX
@@ -21,7 +21,7 @@ export type ItemTreeTexContentProps = {
 export function createItemTreeTexContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeTexContentProps {
+): MainAreaTexContentProps {
   const itemId = ItemPath.getItemId(itemPath)
 
   const texItem = state.texItems[itemId]

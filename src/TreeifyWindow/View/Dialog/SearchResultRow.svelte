@@ -9,7 +9,7 @@
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
-  import {ItemTreeContentView} from '../ItemTree/ItemTreeContentProps'
+  import {ItemTreeContentView} from '../MainArea/MainAreaContentProps'
 
   export let itemPath: ItemPath
 

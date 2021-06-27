@@ -1,10 +1,10 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentProps'
-  import {ItemTreeWebPageContentProps} from './ItemTreeWebPageContentProps'
+  import {ItemTreeContentView} from './MainAreaContentProps'
+  import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
 
-  export let props: ItemTreeWebPageContentProps
+  export let props: MainAreaWebPageContentProps
 
   const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
 </script>

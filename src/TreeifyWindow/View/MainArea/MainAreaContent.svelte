@@ -1,13 +1,13 @@
 <script lang="ts">
   import {ItemType} from '../../basicType'
-  import ItemTreeCodeBlockContent from './ItemTreeCodeBlockContent.svelte'
-  import {ItemTreeContentProps} from './ItemTreeContentProps'
-  import ItemTreeImageContent from './ItemTreeImageContent.svelte'
-  import ItemTreeTexContent from './ItemTreeTexContent.svelte'
-  import ItemTreeTextContent from './ItemTreeTextContent.svelte'
-  import ItemTreeWebPageContent from './ItemTreeWebPageContent.svelte'
+  import ItemTreeCodeBlockContent from './MainAreaCodeBlockContent.svelte'
+  import {MainAreaContentProps} from './MainAreaContentProps'
+  import ItemTreeImageContent from './MainAreaImageContent.svelte'
+  import ItemTreeTexContent from './MainAreaTexContent.svelte'
+  import ItemTreeTextContent from './MainAreaTextContent.svelte'
+  import ItemTreeWebPageContent from './MainAreaWebPageContent.svelte'
 
-  export let props: ItemTreeContentProps
+  export let props: MainAreaContentProps
 </script>
 
 {#if props.itemType === ItemType.TEXT}

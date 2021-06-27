@@ -6,7 +6,7 @@ import {
   TextItemSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 import {tick} from 'svelte'
 import {Readable, writable} from 'svelte/store'
 import Root from './View/Root.svelte'

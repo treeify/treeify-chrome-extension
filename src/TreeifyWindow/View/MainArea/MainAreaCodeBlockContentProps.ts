@@ -8,7 +8,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
-export type ItemTreeCodeBlockContentProps = {
+export type MainAreaCodeBlockContentProps = {
   itemPath: ItemPath
   labels: List<string>
   itemType: ItemType.CODE_BLOCK
@@ -22,7 +22,7 @@ export type ItemTreeCodeBlockContentProps = {
 export function createItemTreeCodeBlockContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeCodeBlockContentProps {
+): MainAreaCodeBlockContentProps {
   const itemId = ItemPath.getItemId(itemPath)
 
   const codeBlockItem = state.codeBlockItems[itemId]

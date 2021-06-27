@@ -2,12 +2,12 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import ItemTreeContent from './ItemTreeContent.svelte'
-  import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeNodeProps} from './ItemTreeNodeProps'
-  import ItemTreeSpool from './ItemTreeSpool.svelte'
+  import ItemTreeContent from './MainAreaContent.svelte'
+  import ItemTreeNode from './MainAreaNode.svelte'
+  import {MainAreaNodeProps} from './MainAreaNodeProps'
+  import ItemTreeSpool from './MainAreaSpool.svelte'
 
-  export let props: ItemTreeNodeProps
+  export let props: MainAreaNodeProps
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,
@@ -154,7 +154,7 @@
 
     border-radius: 50%;
     cursor: pointer;
-    
+
     color: hsl(0, 0%, 40%);
   }
   .item-tree-node_hidden-tabs-count:hover {

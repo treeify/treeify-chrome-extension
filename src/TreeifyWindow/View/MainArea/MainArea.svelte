@@ -20,11 +20,11 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
-  import {ItemTreeContentView} from './ItemTreeContentProps'
-  import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeProps} from './ItemTreeProps'
+  import {ItemTreeContentView} from './MainAreaContentProps'
+  import ItemTreeNode from './MainAreaNode.svelte'
+  import {MainAreaProps} from './MainAreaProps'
 
-  export let props: ItemTreeProps
+  export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {

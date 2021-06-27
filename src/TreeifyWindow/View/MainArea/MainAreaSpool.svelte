@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {ItemTreeBulletState, ItemTreeSpoolProps} from './ItemTreeSpoolProps'
+  import {ItemTreeBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
 
-  export let props: ItemTreeSpoolProps
+  export let props: MainAreaSpoolProps
 
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
   $: limitedHiddenItemsCount = Math.min(props.hiddenItemsCount, 10)
@@ -32,7 +32,7 @@
 
 <style>
   :root {
-    /* バレットの外側の円の直径は{@link ItemTreeSpoolProps.ts}で動的に設定している */
+    /* バレットの外側の円の直径は{@link MainAreaSpoolProps.ts}で動的に設定している */
     /* バレットの外側の円の色 */
     --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
     /* バレットの外側の円のマウスホバー時の色 */

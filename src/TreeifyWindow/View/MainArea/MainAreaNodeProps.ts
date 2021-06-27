@@ -14,17 +14,17 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
   createItemTreeContentProps,
-  ItemTreeContentProps,
   ItemTreeContentView,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
+  MainAreaContentProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 import {
   createItemTreeSpoolProps,
   deriveBulletState,
   ItemTreeBulletState,
-  ItemTreeSpoolProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolProps'
+  MainAreaSpoolProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaSpoolProps'
 
-export type ItemTreeNodeProps = {
+export type MainAreaNodeProps = {
   itemPath: ItemPath
   isActivePage: boolean
   /**
@@ -39,9 +39,9 @@ export type ItemTreeNodeProps = {
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
-  contentProps: ItemTreeContentProps
-  childItemPropses: List<ItemTreeNodeProps>
-  spoolProps: ItemTreeSpoolProps
+  contentProps: MainAreaContentProps
+  childItemPropses: List<MainAreaNodeProps>
+  spoolProps: MainAreaSpoolProps
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
@@ -53,7 +53,7 @@ export function createItemTreeNodeProps(
   footprintRankMap: Map<ItemId, integer>,
   footprintCount: integer,
   itemPath: ItemPath
-): ItemTreeNodeProps {
+): MainAreaNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
   const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)

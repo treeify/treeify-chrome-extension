@@ -9,9 +9,9 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 
-export type ItemTreeWebPageContentProps = {
+export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
   itemType: ItemType.WEB_PAGE
   labels: List<string>
@@ -32,7 +32,7 @@ export type ItemTreeWebPageContentProps = {
 export function createItemTreeWebPageContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeWebPageContentProps {
+): MainAreaWebPageContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)

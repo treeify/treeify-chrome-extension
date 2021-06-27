@@ -11,8 +11,8 @@
   import TexEditDialog from './Dialog/TexEditDialog.svelte'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
-  import ItemTree from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
+  import ItemTree from './MainArea/MainArea.svelte'
   import Toolbar from './Toolbar/Toolbar.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {

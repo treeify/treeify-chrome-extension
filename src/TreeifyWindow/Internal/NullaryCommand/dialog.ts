@@ -3,7 +3,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
+import {ItemTreeContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {

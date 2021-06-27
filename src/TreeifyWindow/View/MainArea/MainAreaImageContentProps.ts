@@ -8,7 +8,7 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
-export type ItemTreeImageContentProps = {
+export type MainAreaImageContentProps = {
   itemPath: ItemPath
   labels: List<string>
   itemType: ItemType.IMAGE
@@ -22,7 +22,7 @@ export type ItemTreeImageContentProps = {
 export function createItemTreeImageContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeImageContentProps {
+): MainAreaImageContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const imageItem = state.imageItems[itemId]
 

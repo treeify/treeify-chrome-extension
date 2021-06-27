@@ -2,10 +2,10 @@
   import {DomishObject} from '../../Internal/DomishObject'
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentProps'
-  import {ItemTreeTextContentProps} from './ItemTreeTextContentProps'
+  import {ItemTreeContentView} from './MainAreaContentProps'
+  import {MainAreaTextContentProps} from './MainAreaTextContentProps'
 
-  export let props: ItemTreeTextContentProps
+  export let props: MainAreaTextContentProps
 
   const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
 </script>
@@ -29,7 +29,7 @@
     {@html DomishObject.toHtml(props.domishObjects)}
   </div>
   {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps}/>
+    <Cite props={props.citeProps} />
   {/if}
 </div>
 

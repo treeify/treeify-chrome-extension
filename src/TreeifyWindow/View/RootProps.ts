@@ -31,16 +31,16 @@ import {
   createWorkspaceDialogProps,
   WorkspaceDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/WorkspaceDialogProps'
-import {createItemTreeProps, ItemTreeProps} from 'src/TreeifyWindow/View/ItemTree/ItemTreeProps'
 import {
   createLeftSidebarProps,
   LeftSidebarProps,
 } from 'src/TreeifyWindow/View/LeftSidebar/LeftSidebarProps'
+import {createItemTreeProps, MainAreaProps} from 'src/TreeifyWindow/View/MainArea/MainAreaProps'
 import {createToolbarProps, ToolbarProps} from 'src/TreeifyWindow/View/Toolbar/ToolbarProps'
 
 export type RootProps = {
   leftSidebarProps: LeftSidebarProps | undefined
-  itemTreeProps: ItemTreeProps
+  itemTreeProps: MainAreaProps
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogProps | undefined
   codeBlockItemEditDialogProps: CodeBlockItemEditDialogProps | undefined
   texEditDialogProps: TexEditDialogProps | undefined

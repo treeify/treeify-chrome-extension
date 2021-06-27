@@ -2,10 +2,10 @@
   import hljs from 'highlight.js'
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeCodeBlockContentProps} from './ItemTreeCodeBlockContentProps'
-  import {ItemTreeContentView} from './ItemTreeContentProps'
+  import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
+  import {ItemTreeContentView} from './MainAreaContentProps'
 
-  export let props: ItemTreeCodeBlockContentProps
+  export let props: MainAreaCodeBlockContentProps
 
   function getHighlightedHtml(code: string, language: string): string {
     // ライブラリが対応していない言語の場合例外が投げられる

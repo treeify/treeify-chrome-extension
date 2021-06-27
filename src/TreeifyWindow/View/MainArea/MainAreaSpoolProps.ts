@@ -7,7 +7,7 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
-export type ItemTreeSpoolProps = {
+export type MainAreaSpoolProps = {
   bulletState: ItemTreeBulletState
   /**
    * expand時に表示されるアイテム数。
@@ -24,7 +24,7 @@ export enum ItemTreeBulletState {
   PAGE,
 }
 
-export function createItemTreeSpoolProps(state: State, itemPath: ItemPath): ItemTreeSpoolProps {
+export function createItemTreeSpoolProps(state: State, itemPath: ItemPath): MainAreaSpoolProps {
   const bulletState = deriveBulletState(state, itemPath)
 
   const onClick = (event: MouseEvent) => {
