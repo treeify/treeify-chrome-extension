@@ -53,6 +53,14 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
 }
 
 /**
+ * 指定されたアイテムが所属するページIDの集合を返す。
+ * 自身がページの場合は自身のみを返す。
+ */
+export function getPageIdsBelongingTo(itemId: ItemId): Set<ItemId> {
+  return Set(yieldItemPaths(itemId)).map((itemPath) => ItemPath.getRootItemId(itemPath))
+}
+
+/**
  * 指定されたアイテムを起点とするサブツリーに含まれるアイテムIDを全て返す。
  * ただしページは終端ノードとして扱い、その子孫は無視する。
  */

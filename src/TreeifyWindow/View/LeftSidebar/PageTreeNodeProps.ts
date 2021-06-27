@@ -1,4 +1,4 @@
-import {Collection, List, Seq} from 'immutable'
+import {Collection, List, Seq, Set} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
@@ -25,6 +25,7 @@ export type PageTreeNodeProps = {
   childNodePropses: List<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
+  isAudible: boolean
   footprintRank: integer | undefined
   footprintCount: integer
   tabsCount: integer
@@ -109,6 +110,7 @@ export function createPageTreeNodeProps(
     ),
     isActivePage: CurrentState.getActivePageId() === itemId,
     isRoot: itemId === TOP_ITEM_ID,
+    isAudible: getAudiblePageIds().contains(itemId),
     footprintRank: rank <= footprintCount ? rank : undefined,
     footprintCount,
     tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
@@ -212,4 +214,13 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     yield* searchItemPathForMountedPage(state, itemIds.unshift(parentItemId))
   }
+}
+
+function getAudiblePageIds(): Set<ItemId> {
+  const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
+  const audibleItemIds = audibleTabIds.map((tabId) =>
+    External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+  ) as List<ItemId>
+
+  return Set(audibleItemIds.flatMap(CurrentState.getPageIdsBelongingTo))
 }
