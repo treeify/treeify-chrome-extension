@@ -43,6 +43,13 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
     baseAttributes.labels = JSON.stringify(labels.toArray())
   }
 
+  if (item.cite !== '') {
+    baseAttributes.cite = item.cite
+  }
+  if (item.citeUrl !== '') {
+    baseAttributes.citeUrl = item.citeUrl
+  }
+
   switch (item.itemType) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
@@ -195,6 +202,15 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
   }
   if (outlineElement.getAttribute('isPage') === 'true') {
     CurrentState.turnIntoPage(itemId)
+  }
+
+  const attrCite = outlineElement.getAttribute('cite')
+  if (attrCite !== null) {
+    CurrentState.setCite(itemId, attrCite)
+  }
+  const attrCiteUrl = outlineElement.getAttribute('citeUrl')
+  if (attrCiteUrl !== null) {
+    CurrentState.setCiteUrl(itemId, attrCiteUrl)
   }
 
   return {itemId, edge}

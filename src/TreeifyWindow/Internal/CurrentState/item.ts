@@ -414,3 +414,13 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   }
   Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
 }
+
+export function setCite(itemId: ItemId, cite: string) {
+  Internal.instance.state.items[itemId].cite = cite
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cite'))
+}
+
+export function setCiteUrl(itemId: ItemId, citeUrl: string) {
+  Internal.instance.state.items[itemId].citeUrl = citeUrl
+  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'citeUrl'))
+}
