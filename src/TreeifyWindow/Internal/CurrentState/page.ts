@@ -39,7 +39,7 @@ function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
   return 'keep'
 }
 
-export async function toDefaultWindowMode() {
+async function toDefaultWindowMode() {
   switch (deriveDefaultWindowMode(CurrentState.getActivePageId())) {
     case 'dual':
       await TreeifyWindow.toDualWindowMode()

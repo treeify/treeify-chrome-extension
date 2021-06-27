@@ -172,13 +172,11 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
       for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
         if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
           CurrentState.setTargetItemPath(itemPath)
-          Rerenderer.instance.rerender()
-          return
+          break
         }
       }
 
-      // アクティブページに所属していないタブが最前面に来たので、デフォルトウィンドウモードにリセットする
-      CurrentState.toDefaultWindowMode()
+      Rerenderer.instance.rerender()
     }
   })
 }
