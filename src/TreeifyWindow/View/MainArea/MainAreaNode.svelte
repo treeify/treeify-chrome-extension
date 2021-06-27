@@ -67,12 +67,11 @@
           {Math.min(99, props.hiddenTabsCount)}
         </div>
       {:else}
-        <div class="grid-empty-cell" />
+        <!-- 削除ボタン -->
+        <div class="main-area-node_delete-button" on:click={props.onClickDeleteButton}>
+          <div class="main-area-node_delete-button-icon" />
+        </div>
       {/if}
-      <!-- 削除ボタン -->
-      <div class="main-area-node_delete-button" on:click={props.onClickDeleteButton}>
-        <div class="main-area-node_delete-button-icon" />
-      </div>
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('main-area-node_children-area').join(' ')}>
@@ -121,7 +120,7 @@
     padding: var(--main-area-body-area-vertical-padding) 0;
     /* コンテンツ領域とボタン類を横に並べる */
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .main-area-node_content-area {
