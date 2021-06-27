@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TabId} from 'src/TreeifyWindow/basicType'
 import Tab = chrome.tabs.Tab
@@ -46,6 +47,15 @@ export class TabItemCorrespondence {
   isUnloaded(itemId: ItemId): boolean {
     const tabId = this.getTabIdBy(itemId)
     return tabId === undefined || this.getTab(tabId)?.discarded === true
+  }
+
+  /** 全てのaudibleなタブのIDを返す */
+  getAllAudibleTabIds(): List<TabId> {
+    const audibleTabs = List(this.tabIdToTab.values()).filter((tab) => tab.audible === true)
+    return audibleTabs.map((tab) => {
+      assertNonUndefined(tab.id)
+      return tab.id
+    })
   }
 
   dumpCurrentState() {

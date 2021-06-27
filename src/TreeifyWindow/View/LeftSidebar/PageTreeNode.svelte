@@ -52,6 +52,11 @@
           <ItemContent props={props.contentProps} />
         </div>
       </div>
+      {#if props.isAudible}
+        <div class="page-tree-node_audible-icon" />
+      {:else}
+        <div class="grid-empty-cell" />
+      {/if}
       {#if props.tabsCount > 0}
         <div class="page-tree-node_tabs-count-button" on:click={props.onClickTabsCount}>
           <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
@@ -81,6 +86,9 @@
     /* 最も古い足跡の色（線形補間の一端） */
     --page-tree-weakest-footprint-color: hsl(60, 90%, 96%);
 
+    /* audibleタブを含むことを示すアイコンのサイズ（正方形の一辺の長さ） */
+    --page-tree-audible-icon-size: 1em;
+
     /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
     --page-tree-close-button-size: 1.1em;
   }
@@ -94,7 +102,7 @@
   /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
   .page-tree-node_body-area {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) auto auto;
     align-items: center;
   }
 
@@ -112,6 +120,16 @@
 
   .page-tree-node_content-area:hover {
     background: var(--page-tree-hover-item-background-color);
+  }
+
+  /* ウェブページアイテムの音がなっていることを示すアイコン */
+  .page-tree-node_audible-icon {
+    width: var(--page-tree-audible-icon-size);
+    height: var(--page-tree-audible-icon-size);
+
+    background: hsl(0, 0%, 35%);
+    -webkit-mask: url('./audible-icon.svg');
+    -webkit-mask-size: contain;
   }
 
   .page-tree-node_tabs-count-button {
