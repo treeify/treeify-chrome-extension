@@ -52,7 +52,13 @@
           <ItemContent props={props.contentProps} />
         </div>
       </div>
-      <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
+      {#if props.tabsCount > 0}
+        <div class="page-tree-node_tabs-count-button" on:click={props.onClickTabsCount}>
+          <div class="page-tree-node_tabs-count">{props.tabsCount}</div>
+        </div>
+      {:else}
+        <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
+      {/if}
     </div>
     <div class="page-tree-node_children-area">
       {#each props.childNodePropses.toArray() as childNodeProps}
@@ -108,6 +114,26 @@
     background: var(--page-tree-hover-item-background-color);
   }
 
+  .page-tree-node_tabs-count-button {
+    width: var(--page-tree-close-button-size);
+    height: var(--page-tree-close-button-size);
+
+    position: relative;
+
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .page-tree-node_tabs-count {
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    color: hsl(0, 0%, 40%);
+  }
+
   .page-tree-node_close-button {
     width: var(--page-tree-close-button-size);
     height: var(--page-tree-close-button-size);
@@ -117,13 +143,13 @@
     -webkit-mask-image: url('close-icon2.svg');
 
     /* マウスホバー時にのみ表示 */
-    display: none;
+    visibility: hidden;
 
     /* ボタンであることを示す */
     cursor: pointer;
   }
   .page-tree-node_body-area:hover .page-tree-node_close-button {
     /* マウスホバー時にのみ表示 */
-    display: initial;
+    visibility: visible;
   }
 </style>
