@@ -6,12 +6,14 @@ import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
+import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
 export type ItemTreeTexContentProps = {
   itemPath: ItemPath
   labels: List<string>
   itemType: ItemType.TEX
   code: string
+  citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
   onClick: (event: MouseEvent) => void
 }
@@ -28,6 +30,7 @@ export function createItemTreeTexContentProps(
     labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEX,
     code: texItem.code,
+    citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

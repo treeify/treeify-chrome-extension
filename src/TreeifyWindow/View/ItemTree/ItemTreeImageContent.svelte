@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentProps'
   import {ItemTreeImageContentProps} from './ItemTreeImageContentProps'
@@ -27,6 +28,9 @@
     <img class="item-tree-image-content_image" src={props.url} />
     <div class="item-tree-image-content_caption">{props.caption}</div>
   </div>
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps}/>
+  {/if}
 </div>
 
 <style>

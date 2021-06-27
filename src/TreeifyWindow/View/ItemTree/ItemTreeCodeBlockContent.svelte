@@ -1,5 +1,6 @@
 <script lang="ts">
   import hljs from 'highlight.js'
+  import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {ItemTreeCodeBlockContentProps} from './ItemTreeCodeBlockContentProps'
   import {ItemTreeContentView} from './ItemTreeContentProps'
@@ -37,6 +38,9 @@
     </div>
   {/if}
   <pre><code>{@html getHighlightedHtml(props.code, props.language)}</code></pre>
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps} />
+  {/if}
 </div>
 
 <style>
