@@ -26,9 +26,9 @@ export type State = {
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** メインエリア領域におけるキーボード入力とコマンドの対応付け */
-  itemTreeKeyboardBinding: {[K in InputId]: List<Command>}
+  mainAreaKeyboardBinding: {[K in InputId]: List<Command>}
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
-  itemTreeDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
+  mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
   /** 各ダイアログの状態 */
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
   codeBlockItemEditDialog: CodeBlockItemEditDialog | null

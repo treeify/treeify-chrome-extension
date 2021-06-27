@@ -40,7 +40,7 @@ import {createToolbarProps, ToolbarProps} from 'src/TreeifyWindow/View/Toolbar/T
 
 export type RootProps = {
   leftSidebarProps: LeftSidebarProps | undefined
-  itemTreeProps: MainAreaProps
+  mainAreaProps: MainAreaProps
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialogProps | undefined
   codeBlockItemEditDialogProps: CodeBlockItemEditDialogProps | undefined
   texEditDialogProps: TexEditDialogProps | undefined
@@ -55,7 +55,7 @@ export type RootProps = {
 export function createRootProps(state: State): RootProps {
   return {
     leftSidebarProps: createLeftSidebarProps(state),
-    itemTreeProps: createMainAreaProps(state),
+    mainAreaProps: createMainAreaProps(state),
     webPageItemTitleSettingDialog: createWebPageItemTitleSettingDialogProps(state),
     toolbarProps: createToolbarProps(),
     codeBlockItemEditDialogProps: createCodeBlockItemEditDialogProps(state),

@@ -30,7 +30,7 @@
       {:else}
         <div class="grid-empty-cell" />
       {/if}
-      <MainArea props={props.itemTreeProps} />
+      <MainArea props={props.mainAreaProps} />
     </div>
   </div>
   {#if props.webPageItemTitleSettingDialog !== undefined}

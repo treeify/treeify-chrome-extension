@@ -95,7 +95,7 @@ export function createMainAreaNodeProps(
         CurrentState.setTargetItemPath(itemPath)
 
         const inputId = InputId.fromMouseEvent(event)
-        const commands: List<Command> | undefined = state.itemTreeDeleteButtonMouseBinding[inputId]
+        const commands: List<Command> | undefined = state.mainAreaDeleteButtonMouseBinding[inputId]
         if (commands !== undefined) {
           event.preventDefault()
           for (const command of commands) {

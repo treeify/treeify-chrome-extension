@@ -68,7 +68,7 @@
       }
 
       const commands: List<Command> | undefined =
-        Internal.instance.state.itemTreeKeyboardBinding[inputId]
+        Internal.instance.state.mainAreaKeyboardBinding[inputId]
       if (commands !== undefined) {
         event.preventDefault()
 
