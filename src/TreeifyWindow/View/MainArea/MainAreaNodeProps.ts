@@ -13,18 +13,18 @@ import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {
-  createItemTreeContentProps,
-  ItemTreeContentProps,
-  ItemTreeContentView,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
+  createMainAreaContentProps,
+  MainAreaContentProps,
+  MainAreaContentView,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 import {
-  createItemTreeSpoolProps,
+  createMainAreaSpoolProps,
   deriveBulletState,
-  ItemTreeBulletState,
-  ItemTreeSpoolProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeSpoolProps'
+  MainAreaBulletState,
+  MainAreaSpoolProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaSpoolProps'
 
-export type ItemTreeNodeProps = {
+export type MainAreaNodeProps = {
   itemPath: ItemPath
   isActivePage: boolean
   /**
@@ -39,22 +39,21 @@ export type ItemTreeNodeProps = {
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
-  contentProps: ItemTreeContentProps
-  childItemPropses: List<ItemTreeNodeProps>
-  spoolProps: ItemTreeSpoolProps
+  contentProps: MainAreaContentProps
+  childItemPropses: List<MainAreaNodeProps>
+  spoolProps: MainAreaSpoolProps
   onMouseDownContentArea: (event: MouseEvent) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
   onClickHiddenTabsCount: (event: MouseEvent) => void
 }
 
-// 再帰的にアイテムツリーのPropsを作る
-export function createItemTreeNodeProps(
+export function createMainAreaNodeProps(
   state: State,
   footprintRankMap: Map<ItemId, integer>,
   footprintCount: integer,
   itemPath: ItemPath
-): ItemTreeNodeProps {
+): MainAreaNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
   const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
@@ -68,10 +67,10 @@ export function createItemTreeNodeProps(
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-    spoolProps: createItemTreeSpoolProps(state, itemPath),
-    contentProps: createItemTreeContentProps(state, itemPath, item.itemType),
+    spoolProps: createMainAreaSpoolProps(state, itemPath),
+    contentProps: createMainAreaContentProps(state, itemPath, item.itemType),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
-      return createItemTreeNodeProps(
+      return createMainAreaNodeProps(
         state,
         footprintRankMap,
         footprintCount,
@@ -96,7 +95,7 @@ export function createItemTreeNodeProps(
         CurrentState.setTargetItemPath(itemPath)
 
         const inputId = InputId.fromMouseEvent(event)
-        const commands: List<Command> | undefined = state.itemTreeDeleteButtonMouseBinding[inputId]
+        const commands: List<Command> | undefined = state.mainAreaDeleteButtonMouseBinding[inputId]
         if (commands !== undefined) {
           event.preventDefault()
           for (const command of commands) {
@@ -110,7 +109,7 @@ export function createItemTreeNodeProps(
       doWithErrorCapture(() => {
         if (event.dataTransfer === null) return
 
-        const domElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+        const domElementId = MainAreaContentView.focusableDomElementId(itemPath)
         const domElement = document.getElementById(domElementId)
         if (domElement === null) return
         // ドラッグ中にマウスポインターに追随して表示される内容を設定
@@ -130,11 +129,11 @@ export function createItemTreeNodeProps(
 function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
   switch (bulletState) {
-    case ItemTreeBulletState.NO_CHILDREN:
-    case ItemTreeBulletState.EXPANDED:
-    case ItemTreeBulletState.PAGE:
+    case MainAreaBulletState.NO_CHILDREN:
+    case MainAreaBulletState.EXPANDED:
+    case MainAreaBulletState.PAGE:
       return 0
-    case ItemTreeBulletState.COLLAPSED:
+    case MainAreaBulletState.COLLAPSED:
       return countLoadedTabsInDescendants(state, ItemPath.getItemId(itemPath))
     default:
       assertNeverType(bulletState)

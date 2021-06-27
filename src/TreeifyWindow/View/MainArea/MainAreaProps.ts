@@ -4,15 +4,15 @@ import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
-  createItemTreeNodeProps,
-  ItemTreeNodeProps,
-} from 'src/TreeifyWindow/View/ItemTree/ItemTreeNodeProps'
+  createMainAreaNodeProps,
+  MainAreaNodeProps,
+} from 'src/TreeifyWindow/View/MainArea/MainAreaNodeProps'
 
-export type ItemTreeProps = {
-  rootNodeProps: ItemTreeNodeProps
+export type MainAreaProps = {
+  rootNodeProps: MainAreaNodeProps
 }
 
-export function createItemTreeProps(state: State): ItemTreeProps {
+export function createMainAreaProps(state: State): MainAreaProps {
   const rootItemPath = List.of(CurrentState.getActivePageId())
 
   const allDisplayingItemIds = [...CurrentState.getAllDisplayingItemIds(state, rootItemPath)]
@@ -32,6 +32,6 @@ export function createItemTreeProps(state: State): ItemTreeProps {
   }
 
   return {
-    rootNodeProps: createItemTreeNodeProps(state, footprintRankMap, footprintCount, rootItemPath),
+    rootNodeProps: createMainAreaNodeProps(state, footprintRankMap, footprintCount, rootItemPath),
   }
 }

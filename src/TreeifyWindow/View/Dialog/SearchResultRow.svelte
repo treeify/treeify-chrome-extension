@@ -9,7 +9,7 @@
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
-  import {ItemTreeContentView} from '../ItemTree/ItemTreeContentProps'
+  import {MainAreaContentView} from '../MainArea/MainAreaContentProps'
 
   export let itemPath: ItemPath
 
@@ -31,7 +31,7 @@
 
       // 再描画完了後に対象アイテムに自動スクロールする
       tick().then(() => {
-        const targetElementId = ItemTreeContentView.focusableDomElementId(itemPath)
+        const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
         const focusableElement = document.getElementById(targetElementId)
         assertNonNull(focusableElement)
         focusableElement.scrollIntoView({

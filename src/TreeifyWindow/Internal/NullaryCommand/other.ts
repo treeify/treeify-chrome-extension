@@ -3,7 +3,7 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyWindow/basicType'
 import {DataFolder} from 'src/TreeifyWindow/External/DataFolder'
 import {
-  focusItemTreeBackground,
+  focusMainAreaBackground,
   getTextItemSelectionFromDom,
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
@@ -119,8 +119,8 @@ export function selectAllBelowItems() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
 
-  // 複数選択中はアイテムツリー自体をフォーカスする
-  focusItemTreeBackground()
+  // 複数選択中はメインエリア自体をフォーカスする
+  focusMainAreaBackground()
 }
 
 /**
@@ -137,8 +137,8 @@ export function selectAllAboveItems() {
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 
-  // 複数選択中はアイテムツリー自体をフォーカスする
-  focusItemTreeBackground()
+  // 複数選択中はメインエリア自体をフォーカスする
+  focusMainAreaBackground()
 }
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */

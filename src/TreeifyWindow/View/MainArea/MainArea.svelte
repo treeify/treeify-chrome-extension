@@ -6,7 +6,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {matchTabsAndWebPageItems} from '../../External/chromeEventListeners'
   import {
-    focusItemTreeBackground,
+    focusMainAreaBackground,
     getTextItemSelectionFromDom,
     setDomSelection,
   } from '../../External/domTextSelection'
@@ -20,11 +20,11 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
-  import {ItemTreeContentView} from './ItemTreeContentProps'
-  import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeProps} from './ItemTreeProps'
+  import {MainAreaContentView} from './MainAreaContentProps'
+  import MainAreaNode from './MainAreaNode.svelte'
+  import {MainAreaProps} from './MainAreaProps'
 
-  export let props: ItemTreeProps
+  export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
@@ -68,7 +68,7 @@
       }
 
       const commands: List<Command> | undefined =
-        Internal.instance.state.itemTreeKeyboardBinding[inputId]
+        Internal.instance.state.mainAreaKeyboardBinding[inputId]
       if (commands !== undefined) {
         event.preventDefault()
 
@@ -251,7 +251,7 @@
       const lastLine = lines[lines.length - 1]
 
       // 上のアイテムに一旦フォーカスする
-      const aboveItemDomElementId = ItemTreeContentView.focusableDomElementId(aboveItemPath)
+      const aboveItemDomElementId = MainAreaContentView.focusableDomElementId(aboveItemPath)
       const aboveItemDomElement = document.getElementById(aboveItemDomElementId)
       assertNonNull(aboveItemDomElement)
       aboveItemDomElement.focus()
@@ -363,7 +363,7 @@
 
       // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
       // TODO: 最適化の余地あり。二分探索が可能では？
-      const belowItemDomElementId = ItemTreeContentView.focusableDomElementId(belowItemPath)
+      const belowItemDomElementId = MainAreaContentView.focusableDomElementId(belowItemPath)
       const belowItemDomElement = document.getElementById(belowItemDomElementId)
       assertNonNull(belowItemDomElement)
       belowItemDomElement.focus()
@@ -437,8 +437,8 @@
 
     event.preventDefault()
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
-    // 複数選択中はアイテムツリー自体をフォーカスする
-    focusItemTreeBackground()
+    // 複数選択中はメインエリア自体をフォーカスする
+    focusMainAreaBackground()
     Rerenderer.instance.rerender()
   }
 
@@ -468,12 +468,12 @@
 
     event.preventDefault()
     CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
-    // 複数選択中はアイテムツリー自体をフォーカスする
-    focusItemTreeBackground()
+    // 複数選択中はメインエリア自体をフォーカスする
+    focusMainAreaBackground()
     Rerenderer.instance.rerender()
   }
 
-  /** アイテムツリー上でBackspaceキーを押したときのデフォルトの挙動 */
+  /** メインエリア上でBackspaceキーを押したときのデフォルトの挙動 */
   function onBackspace(event: KeyboardEvent) {
     // 複数選択中は選択されたアイテムを削除して終了
     if (CurrentState.getSelectedItemPaths().size > 1) {
@@ -567,7 +567,7 @@
     }
   }
 
-  /** アイテムツリー上でDeleteキーを押したときのデフォルトの挙動 */
+  /** メインエリア上でDeleteキーを押したときのデフォルトの挙動 */
   function onDelete(event: KeyboardEvent) {
     // 複数選択中は選択されたアイテムを削除して終了
     if (CurrentState.getSelectedItemPaths().size > 1) {
@@ -668,7 +668,7 @@
     }
   }
 
-  /** アイテムツリー上でSpaceキーを押したときのデフォルトの挙動 */
+  /** メインエリア上でSpaceキーを押したときのデフォルトの挙動 */
   function onSpace(event: KeyboardEvent) {
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     const targetItemType = Internal.instance.state.items[targetItemId].itemType
@@ -716,7 +716,7 @@
       if (parentItemId === undefined) return
 
       // 全アイテムをリスト化し、Y座標でソート
-      const elements = document.getElementsByClassName('item-tree-node_content-area')
+      const elements = document.getElementsByClassName('main-area-node_content-area')
       const sortedElements = List(elements).sortBy((element) => {
         return element.getBoundingClientRect().bottom
       }) as List<HTMLElement>
@@ -779,7 +779,7 @@
 </script>
 
 <main
-  class="item-tree"
+  class="main-area"
   tabindex="0"
   on:keydown={onKeyDown}
   on:dragover={onDragOver}
@@ -789,33 +789,33 @@
   on:paste={onPaste}
 >
   {#key props.rootNodeProps.itemPath.toString()}
-    <ItemTreeNode props={props.rootNodeProps} />
+    <MainAreaNode props={props.rootNodeProps} />
   {/key}
 </main>
 
 <style>
   :root {
-    --item-tree-base-font-size: 15px;
+    --main-area-base-font-size: 15px;
 
     /*
-        アイテムツリーのテキスト全般に適用されるline-height。
+        メインエリアのテキスト全般に適用されるline-height。
         階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
         */
-    --item-tree-line-height: 1.45;
-    /* アイテムツリー内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
-    --item-tree-font-size-multiplicator: 99.5%;
+    --main-area-line-height: 1.45;
+    /* メインエリア内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
+    --main-area-font-size-multiplicator: 99.5%;
 
     /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-    --item-tree-calculated-line-height: calc(
-      1em * var(--item-tree-line-height) + var(--item-tree-body-area-vertical-padding)
+    --main-area-calculated-line-height: calc(
+      1em * var(--main-area-line-height) + var(--main-area-body-area-vertical-padding)
     );
   }
 
-  .item-tree {
+  .main-area {
     overflow-y: auto;
 
-    font-size: var(--item-tree-base-font-size);
-    line-height: var(--item-tree-line-height);
+    font-size: var(--main-area-base-font-size);
+    line-height: var(--main-area-line-height);
 
     padding-left: 15px;
     padding-top: 15px;

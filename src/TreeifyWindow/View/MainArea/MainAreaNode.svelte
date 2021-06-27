@@ -2,12 +2,12 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import ItemTreeContent from './ItemTreeContent.svelte'
-  import ItemTreeNode from './ItemTreeNode.svelte'
-  import {ItemTreeNodeProps} from './ItemTreeNodeProps'
-  import ItemTreeSpool from './ItemTreeSpool.svelte'
+  import MainAreaContent from './MainAreaContent.svelte'
+  import MainAreaNode from './MainAreaNode.svelte'
+  import {MainAreaNodeProps} from './MainAreaNodeProps'
+  import MainAreaSpool from './MainAreaSpool.svelte'
 
-  export let props: ItemTreeNodeProps
+  export let props: MainAreaNodeProps
 
   function calculateFootprintColor(
     footprintRank: integer | undefined,
@@ -15,8 +15,8 @@
   ): Color | undefined {
     if (footprintRank === undefined) return undefined
 
-    const strongestColor = CssCustomProperty.getColor('--item-tree-strongest-footprint-color')
-    const weakestColor = CssCustomProperty.getColor('--item-tree-weakest-footprint-color')
+    const strongestColor = CssCustomProperty.getColor('--main-area-strongest-footprint-color')
+    const weakestColor = CssCustomProperty.getColor('--main-area-weakest-footprint-color')
 
     if (footprintCount === 1) {
       return strongestColor
@@ -32,52 +32,52 @@
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div class="item-tree-node" class:multi-selected={props.selected === 'multi'}>
+<div class="main-area-node" class:multi-selected={props.selected === 'multi'}>
   {#if props.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
     <!-- バレットとインデントラインの領域 -->
     <div
-      class={'item-tree-node_spool-area ' + props.cssClasses.join(' ')}
+      class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
       draggable="true"
       on:dragstart={props.onDragStart}
     >
-      <ItemTreeSpool props={props.spoolProps} />
+      <MainAreaSpool props={props.spoolProps} />
     </div>
   {/if}
-  <div class="item-tree-node_body-and-children-area">
+  <div class="main-area-node_body-and-children-area">
     <!-- ボディ領域 -->
-    <div class={props.cssClasses.unshift('item-tree-node_body-area').join(' ')}>
+    <div class={props.cssClasses.unshift('main-area-node_body-area').join(' ')}>
       <!-- 足跡表示用のレイヤー -->
-      <div class="item-tree-node_footprint-layer" style={footprintLayerStyle}>
+      <div class="main-area-node_footprint-layer" style={footprintLayerStyle}>
         <!-- コンテンツ領域 -->
         <div
           data-item-path={JSON.stringify(props.itemPath.toArray())}
-          class="item-tree-node_content-area"
+          class="main-area-node_content-area"
           class:single-selected={props.selected === 'single'}
           on:mousedown={props.onMouseDownContentArea}
         >
-          <ItemTreeContent props={props.contentProps} />
+          <MainAreaContent props={props.contentProps} />
         </div>
       </div>
       <!-- 隠れているタブ数 -->
       {#if props.hiddenTabsCount > 0}
-        <div class="item-tree-node_hidden-tabs-count" on:click={props.onClickHiddenTabsCount}>
+        <div class="main-area-node_hidden-tabs-count" on:click={props.onClickHiddenTabsCount}>
           {Math.min(99, props.hiddenTabsCount)}
         </div>
       {:else}
         <div class="grid-empty-cell" />
       {/if}
       <!-- 削除ボタン -->
-      <div class="item-tree-node_delete-button" on:click={props.onClickDeleteButton}>
-        <div class="item-tree-node_delete-button-icon" />
+      <div class="main-area-node_delete-button" on:click={props.onClickDeleteButton}>
+        <div class="main-area-node_delete-button-icon" />
       </div>
     </div>
     <!-- 子リスト領域 -->
-    <div class={childrenCssClasses.unshift('item-tree-node_children-area').join(' ')}>
+    <div class={childrenCssClasses.unshift('main-area-node_children-area').join(' ')}>
       {#each props.childItemPropses.toArray() as itemProps (itemProps.itemPath.toString())}
-        <ItemTreeNode props={itemProps} />
+        <MainAreaNode props={itemProps} />
       {/each}
     </div>
   </div>
@@ -86,82 +86,82 @@
 <style>
   :root {
     /* ボディ領域の上下パディング */
-    --item-tree-body-area-vertical-padding: 0.5px;
+    --main-area-body-area-vertical-padding: 0.5px;
 
     /* フォーカスアイテムの背景色 */
-    --item-tree-focused-item-background-color: hsl(240, 100%, 96.8%);
+    --main-area-focused-item-background-color: hsl(240, 100%, 96.8%);
     /* マウスホバーアイテムの背景色 */
-    --item-tree-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
+    --main-area-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
 
     /* 複数選択されたアイテムの背景色 */
-    --item-tree-selected-item-background-color: hsl(216, 89%, 85%);
+    --main-area-selected-item-background-color: hsl(216, 89%, 85%);
 
     /* 最も新しい足跡の色（線形補間の一端） */
-    --item-tree-strongest-footprint-color: hsl(0, 100%, 97.3%);
+    --main-area-strongest-footprint-color: hsl(0, 100%, 97.3%);
     /* 最も古い足跡の色（線形補間の一端） */
-    --item-tree-weakest-footprint-color: hsl(60, 100%, 97.3%);
+    --main-area-weakest-footprint-color: hsl(60, 100%, 97.3%);
 
     /* グレーアウト状態のアイテムの標準的なテキスト色 */
     --grayed-out-item-text-color: hsl(0, 0%, 75%);
 
     /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-    --item-tree-delete-button-size: 0.8em;
+    --main-area-delete-button-size: 0.8em;
     /* 削除ボタンなどのマウスホバー時の背景 */
-    --item-tree-node-button-background-hover-color: hsl(0, 0%, 90%);
+    --main-area-node-button-background-hover-color: hsl(0, 0%, 90%);
   }
 
-  .item-tree-node {
+  .main-area-node {
     /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
   }
 
   /* ボディ領域 */
-  .item-tree-node_body-area {
-    padding: var(--item-tree-body-area-vertical-padding) 0;
+  .main-area-node_body-area {
+    padding: var(--main-area-body-area-vertical-padding) 0;
     /* コンテンツ領域とボタン類を横に並べる */
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
   }
 
-  .item-tree-node_content-area {
+  .main-area-node_content-area {
     height: 100%;
   }
   /* マウスホバー時のコンテンツ領域 */
-  .item-tree-node_content-area:hover {
+  .main-area-node_content-area:hover {
     /* マウスホバーアイテムの強調表示 */
-    background: var(--item-tree-mouse-hover-item-background-color);
+    background: var(--main-area-mouse-hover-item-background-color);
   }
   /* 単一選択されたアイテムのコンテンツ領域 */
-  .single-selected.item-tree-node_content-area {
-    background: var(--item-tree-focused-item-background-color);
+  .single-selected.main-area-node_content-area {
+    background: var(--main-area-focused-item-background-color);
   }
 
   /* ダウトフル状態のアイテム */
-  :global(.doubtful) .item-tree-node_content-area {
+  :global(.doubtful) .main-area-node_content-area {
     text-decoration: underline dotted hsl(0, 100%, 70%);
     text-decoration-thickness: 2px;
     text-underline-offset: 0.03em;
   }
 
   /* 隠れているタブ数 */
-  .item-tree-node_hidden-tabs-count {
-    width: var(--item-tree-calculated-line-height);
-    height: var(--item-tree-calculated-line-height);
+  .main-area-node_hidden-tabs-count {
+    width: var(--main-area-calculated-line-height);
+    height: var(--main-area-calculated-line-height);
 
     position: relative;
     text-align: center;
 
     border-radius: 50%;
     cursor: pointer;
-    
+
     color: hsl(0, 0%, 40%);
   }
-  .item-tree-node_hidden-tabs-count:hover {
-    background: var(--item-tree-node-button-background-hover-color);
+  .main-area-node_hidden-tabs-count:hover {
+    background: var(--main-area-node-button-background-hover-color);
   }
   /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
-  .item-tree-node_hidden-tabs-count::after {
+  .main-area-node_hidden-tabs-count::after {
     content: '';
 
     /* 中央寄せ */
@@ -180,7 +180,7 @@
     background: hsl(0, 0%, 50%);
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
-  .item-tree-node_hidden-tabs-count:active::after {
+  .main-area-node_hidden-tabs-count:active::after {
     width: 0;
     height: 0;
     opacity: 0.5;
@@ -188,9 +188,9 @@
   }
 
   /* 各アイテムの削除ボタン */
-  .item-tree-node_delete-button {
-    width: var(--item-tree-calculated-line-height);
-    height: var(--item-tree-calculated-line-height);
+  .main-area-node_delete-button {
+    width: var(--main-area-calculated-line-height);
+    height: var(--main-area-calculated-line-height);
 
     border-radius: 50%;
 
@@ -203,17 +203,17 @@
     /* ボタンであることを示す */
     cursor: pointer;
   }
-  .item-tree-node_body-area:hover .item-tree-node_delete-button {
+  .main-area-node_body-area:hover .main-area-node_delete-button {
     /* マウスホバー時にのみ表示 */
     visibility: visible;
   }
-  .item-tree-node_delete-button:hover {
-    background: var(--item-tree-node-button-background-hover-color);
+  .main-area-node_delete-button:hover {
+    background: var(--main-area-node-button-background-hover-color);
   }
 
-  .item-tree-node_delete-button-icon {
-    width: var(--item-tree-delete-button-size);
-    height: var(--item-tree-delete-button-size);
+  .main-area-node_delete-button-icon {
+    width: var(--main-area-delete-button-size);
+    height: var(--main-area-delete-button-size);
 
     /* 中央寄せ */
     position: absolute;
@@ -226,9 +226,9 @@
     -webkit-mask-image: url('close-icon.svg');
   }
 
-  .item-tree-node_children-area {
+  .main-area-node_children-area {
     /* 階層の深さに応じてフォントサイズを小さくする */
-    font-size: var(--item-tree-font-size-multiplicator);
+    font-size: var(--main-area-font-size-multiplicator);
   }
 
   /*
@@ -236,9 +236,9 @@
     他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
     CSSの優先順位のためにファイルの下の方で定義する。
     */
-  .multi-selected.item-tree-node,
-  .multi-selected .item-tree-node_content-area,
-  .multi-selected .item-tree-node_body-area {
-    background: var(--item-tree-selected-item-background-color);
+  .multi-selected.main-area-node,
+  .multi-selected .main-area-node_content-area,
+  .multi-selected .main-area-node_body-area {
+    background: var(--main-area-selected-item-background-color);
   }
 </style>

@@ -132,16 +132,16 @@ function getCharacterCount(node: Node): integer {
 }
 
 /**
- * アイテムツリー自体をフォーカスする。
- * これはアイテムツリー内のいずれのアイテムもフォーカスせず、
- * それでいてアイテムツリーに対するキーボード操作を可能とするために用いられる。
+ * メインエリア自体をフォーカスする。
+ * これはメインエリア内のいずれのアイテムもフォーカスせず、
+ * それでいてメインエリアに対するキーボード操作を可能とするために用いられる。
  * 具体的には複数選択時にこの関数が用いられる。
  */
-export function focusItemTreeBackground() {
-  const itemTree = document.querySelector<HTMLElement>('.item-tree')
-  itemTree?.focus()
+export function focusMainAreaBackground() {
+  const mainArea = document.querySelector<HTMLElement>('.main-area')
+  mainArea?.focus()
   // focusだけでなくselectionも設定しないとcopyイベント等が発行されない
-  if (itemTree instanceof Node) {
-    getSelection()?.setPosition(itemTree)
+  if (mainArea instanceof Node) {
+    getSelection()?.setPosition(mainArea)
   }
 }

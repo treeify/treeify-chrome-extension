@@ -8,28 +8,30 @@ import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyWindow/View/CiteProps'
 
-export type ItemTreeTexContentProps = {
+export type MainAreaImageContentProps = {
   itemPath: ItemPath
   labels: List<string>
-  itemType: ItemType.TEX
-  code: string
+  itemType: ItemType.IMAGE
+  url: string
+  caption: string
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
   onClick: (event: MouseEvent) => void
 }
 
-export function createItemTreeTexContentProps(
+export function createMainAreaImageContentProps(
   state: State,
   itemPath: ItemPath
-): ItemTreeTexContentProps {
+): MainAreaImageContentProps {
   const itemId = ItemPath.getItemId(itemPath)
+  const imageItem = state.imageItems[itemId]
 
-  const texItem = state.texItems[itemId]
   return {
     itemPath,
     labels: CurrentState.getLabels(itemPath),
-    itemType: ItemType.TEX,
-    code: texItem.code,
+    itemType: ItemType.IMAGE,
+    url: imageItem.url,
+    caption: imageItem.caption,
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {

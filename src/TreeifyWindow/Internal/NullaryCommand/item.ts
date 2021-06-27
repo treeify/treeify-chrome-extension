@@ -23,7 +23,7 @@ export function toggleCollapsed() {
   CurrentState.updateItemTimestamp(targetItemId)
 }
 
-/** アイテムツリー上でEnterキーを押したときのデフォルトの挙動 */
+/** メインエリア上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)

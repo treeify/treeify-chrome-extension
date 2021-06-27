@@ -11,8 +11,8 @@
   import TexEditDialog from './Dialog/TexEditDialog.svelte'
   import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
   import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
-  import ItemTree from './ItemTree/ItemTree.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
+  import MainArea from './MainArea/MainArea.svelte'
   import Toolbar from './Toolbar/Toolbar.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
@@ -30,7 +30,7 @@
       {:else}
         <div class="grid-empty-cell" />
       {/if}
-      <ItemTree props={props.itemTreeProps} />
+      <MainArea props={props.mainAreaProps} />
     </div>
   </div>
   {#if props.webPageItemTitleSettingDialog !== undefined}
@@ -78,7 +78,7 @@
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  /* 左サイドバーとアイテムツリーを横に並べるレイアウト */
+  /* 左サイドバーとメインエリアを横に並べるレイアウト */
   .sidebar-layout {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);

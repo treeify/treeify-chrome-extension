@@ -3,7 +3,7 @@ import {ItemType} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {ItemTreeContentView} from 'src/TreeifyWindow/View/ItemTree/ItemTreeContentProps'
+import {MainAreaContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 
 /** アイテムの種類に応じた編集系ダイアログなどを出す */
 export function edit() {
@@ -14,10 +14,10 @@ export function edit() {
       break
     case ItemType.WEB_PAGE:
       // ウェブページアイテムのタイトル設定ダイアログを表示する
-      const domElementId = ItemTreeContentView.focusableDomElementId(targetItemPath)
+      const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
       const domElement = document
         .getElementById(domElementId)
-        ?.querySelector('.item-tree-web-page-content_title')
+        ?.querySelector('.main-area-web-page-content_title')
       if (domElement != null) {
         CurrentState.setWebPageItemTitleSettingDialog({
           targetItemRect: domElement.getBoundingClientRect(),

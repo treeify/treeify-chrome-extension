@@ -19,7 +19,7 @@ export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Gene
   }
 }
 
-/** 与えられたアイテムパスがアイテムツリー上で表示されるべきものかどうかを判定する */
+/** 与えられたアイテムパスがメインエリア上で表示されるべきものかどうかを判定する */
 export function isVisible(itemPath: ItemPath): boolean {
   for (let i = 1; i < itemPath.size - 1; i++) {
     const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath.take(i))

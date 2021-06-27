@@ -119,7 +119,7 @@ export class Internal {
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
       maxItemId: 0,
-      itemTreeKeyboardBinding: {
+      mainAreaKeyboardBinding: {
         '0000Tab': List.of({commandName: 'indentItem'}),
         '0100Tab': List.of({commandName: 'unindentItem'}),
         '1000ArrowUp': List.of({commandName: 'moveItemToPrevSibling'}),
@@ -155,7 +155,7 @@ export class Internal {
         '0100F2': List.of({commandName: 'showLabelEditDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
       },
-      itemTreeDeleteButtonMouseBinding: {
+      mainAreaDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },
@@ -323,7 +323,7 @@ export class Internal {
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
       maxItemId: 8,
-      itemTreeKeyboardBinding: {
+      mainAreaKeyboardBinding: {
         '0000Tab': List.of({commandName: 'indentItem'}),
         '0100Tab': List.of({commandName: 'unindentItem'}),
         '1000ArrowUp': List.of({commandName: 'moveItemToPrevSibling'}),
@@ -359,7 +359,7 @@ export class Internal {
         '0100F2': List.of({commandName: 'showLabelEditDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
       },
-      itemTreeDeleteButtonMouseBinding: {
+      mainAreaDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },

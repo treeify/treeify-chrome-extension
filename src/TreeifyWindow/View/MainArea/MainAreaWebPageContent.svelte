@@ -1,24 +1,24 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
-  import {ItemTreeContentView} from './ItemTreeContentProps'
-  import {ItemTreeWebPageContentProps} from './ItemTreeWebPageContentProps'
+  import {MainAreaContentView} from './MainAreaContentProps'
+  import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
 
-  export let props: ItemTreeWebPageContentProps
+  export let props: MainAreaWebPageContentProps
 
-  const id = ItemTreeContentView.focusableDomElementId(props.itemPath)
+  const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
-<div class="item-tree-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <div class="item-tree-web-page-content_body">
+<div class="main-area-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>
+  <div class="main-area-web-page-content_body">
     {#if props.isLoading}
       <div
-        class="item-tree-web-page-content_favicon loading-indicator"
+        class="main-area-web-page-content_favicon loading-indicator"
         on:click={props.onClickFavicon}
       />
     {:else if props.faviconUrl.length > 0}
       <img
-        class="item-tree-web-page-content_favicon"
+        class="main-area-web-page-content_favicon"
         class:soft-unloaded-item={props.isSoftUnloaded}
         class:hard-unloaded-item={props.isHardUnloaded}
         src={props.faviconUrl}
@@ -26,7 +26,7 @@
       />
     {:else}
       <div
-        class="item-tree-web-page-content_favicon default-favicon"
+        class="main-area-web-page-content_favicon default-favicon"
         class:soft-unloaded-item={props.isSoftUnloaded}
         class:hard-unloaded-item={props.isHardUnloaded}
         on:click={props.onClickFavicon}
@@ -34,7 +34,7 @@
     {/if}
 
     {#if !props.labels.isEmpty()}
-      <div class="item-tree-web-page-content_labels">
+      <div class="main-area-web-page-content_labels">
         {#each props.labels.toArray() as label}
           <Label props={{text: label}} />
         {/each}
@@ -43,7 +43,7 @@
       <div class="grid-empty-cell" />
     {/if}
     <div
-      class="item-tree-web-page-content_title"
+      class="main-area-web-page-content_title"
       class:soft-unloaded-item={props.isSoftUnloaded}
       class:hard-unloaded-item={props.isHardUnloaded}
       class:unread={props.isUnread}
@@ -55,7 +55,7 @@
       {props.title}
     </div>
     {#if props.isAudible}
-      <div class="item-tree-web-page-content_audible-icon" />
+      <div class="main-area-web-page-content_audible-icon" />
     {:else}
       <div class="grid-empty-cell" />
     {/if}
@@ -68,15 +68,15 @@
 <style>
   :root {
     /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
-    --item-tree-favicon-size: 1em;
+    --main-area-favicon-size: 1em;
 
     /* 未読ウェブページアイテムのタイトルの色 */
-    --item-tree-unread-web-page-item-title-color: hsl(240, 50%, 45%);
+    --main-area-unread-web-page-item-title-color: hsl(240, 50%, 45%);
 
     /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
-    --item-tree-audible-icon-size: 1em;
+    --main-area-audible-icon-size: 1em;
     /* ウェブページアイテムの音がなっていることを示すアイコンの色 */
-    --item-tree-audible-icon-color: hsl(0, 0%, 35%);
+    --main-area-audible-icon-color: hsl(0, 0%, 35%);
 
     /* アンロード済みウェブページアイテムのopacity */
     --soft-unloaded-web-page-item-opacity: 75%;
@@ -84,12 +84,12 @@
   }
 
   /* ウェブページアイテムのコンテンツ領域のルート */
-  .item-tree-web-page-content {
+  .main-area-web-page-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
   }
 
-  .item-tree-web-page-content_body {
+  .main-area-web-page-content_body {
     /* ファビコン、ラベル、タイトル、audibleアイコンを横並びにする */
     display: grid;
     grid-template-columns: auto auto minmax(0, 1fr) auto;
@@ -97,15 +97,15 @@
   }
 
   /* グレーアウト状態のウェブページアイテムのタイトル */
-  :global(.grayed-out) .item-tree-web-page-content_title,
-  :global(.grayed-out-children) .item-tree-web-page-content_title {
+  :global(.grayed-out) .main-area-web-page-content_title,
+  :global(.grayed-out-children) .main-area-web-page-content_title {
     color: var(--grayed-out-item-text-color);
   }
 
   /* ウェブページアイテムのファビコン */
-  .item-tree-web-page-content_favicon {
-    width: var(--item-tree-favicon-size);
-    height: var(--item-tree-favicon-size);
+  .main-area-web-page-content_favicon {
+    width: var(--main-area-favicon-size);
+    height: var(--main-area-favicon-size);
 
     /* クリックして操作できることを示す */
     cursor: pointer;
@@ -131,17 +131,17 @@
   }
 
   /* ウェブページアイテムの音がなっていることを示すアイコン */
-  .item-tree-web-page-content_audible-icon {
-    width: var(--item-tree-audible-icon-size);
-    height: var(--item-tree-audible-icon-size);
+  .main-area-web-page-content_audible-icon {
+    width: var(--main-area-audible-icon-size);
+    height: var(--main-area-audible-icon-size);
 
-    background: var(--item-tree-audible-icon-color);
+    background: var(--main-area-audible-icon-color);
     -webkit-mask: url('./audible-icon.svg');
     -webkit-mask-size: contain;
   }
 
   /* ウェブページアイテムのタイトル */
-  .item-tree-web-page-content_title {
+  .main-area-web-page-content_title {
     cursor: default;
 
     /*
@@ -157,23 +157,23 @@
   }
 
   /* 未読ウェブページアイテムのタイトルの強調表示 */
-  .item-tree-web-page-content_title.unread {
-    color: var(--item-tree-unread-web-page-item-title-color);
+  .main-area-web-page-content_title.unread {
+    color: var(--main-area-unread-web-page-item-title-color);
   }
 
   /* アンロード済みウェブページアイテムのタイトルのグレーアウト */
-  .item-tree-web-page-content_title.soft-unloaded-item {
+  .main-area-web-page-content_title.soft-unloaded-item {
     filter: opacity(var(--soft-unloaded-web-page-item-opacity));
   }
-  .item-tree-web-page-content_title.hard-unloaded-item {
+  .main-area-web-page-content_title.hard-unloaded-item {
     filter: opacity(var(--hard-unloaded-web-page-item-opacity));
   }
 
   /* アンロード済みウェブページアイテムのファビコンのグレーアウト */
-  .item-tree-web-page-content_favicon.soft-unloaded-item {
+  .main-area-web-page-content_favicon.soft-unloaded-item {
     filter: opacity(var(--soft-unloaded-web-page-item-opacity));
   }
-  .item-tree-web-page-content_favicon.hard-unloaded-item {
+  .main-area-web-page-content_favicon.hard-unloaded-item {
     filter: opacity(var(--hard-unloaded-web-page-item-opacity));
   }
 </style>
