@@ -54,7 +54,7 @@
       </div>
       {#if props.tabsCount > 0}
         <div class="page-tree-node_tabs-count-button" on:click={props.onClickTabsCount}>
-          <div class="page-tree-node_tabs-count">{props.tabsCount}</div>
+          <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
         </div>
       {:else}
         <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
