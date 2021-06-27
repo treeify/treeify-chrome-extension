@@ -138,7 +138,7 @@ function getCharacterCount(node: Node): integer {
  * 具体的には複数選択時にこの関数が用いられる。
  */
 export function focusMainAreaBackground() {
-  const mainArea = document.querySelector<HTMLElement>('.item-tree')
+  const mainArea = document.querySelector<HTMLElement>('.main-area')
   mainArea?.focus()
   // focusだけでなくselectionも設定しないとcopyイベント等が発行されない
   if (mainArea instanceof Node) {

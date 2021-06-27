@@ -17,7 +17,7 @@ export function edit() {
       const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
       const domElement = document
         .getElementById(domElementId)
-        ?.querySelector('.item-tree-web-page-content_title')
+        ?.querySelector('.main-area-web-page-content_title')
       if (domElement != null) {
         CurrentState.setWebPageItemTitleSettingDialog({
           targetItemRect: domElement.getBoundingClientRect(),

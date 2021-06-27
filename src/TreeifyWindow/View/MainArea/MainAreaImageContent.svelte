@@ -10,23 +10,23 @@
 </script>
 
 <div
-  class="item-tree-image-content"
+  class="main-area-image-content"
   {id}
   tabindex="0"
   on:focus={props.onFocus}
   on:click={props.onClick}
 >
   {#if !props.labels.isEmpty()}
-    <div class="item-tree-image-content_labels">
+    <div class="main-area-image-content_labels">
       {#each props.labels.toArray() as label}
         <Label props={{text: label}} />
       {/each}
     </div>
   {/if}
 
-  <div class="item-tree-image-content_image-and-caption">
-    <img class="item-tree-image-content_image" src={props.url} />
-    <div class="item-tree-image-content_caption">{props.caption}</div>
+  <div class="main-area-image-content_image-and-caption">
+    <img class="main-area-image-content_image" src={props.url} />
+    <div class="main-area-image-content_caption">{props.caption}</div>
   </div>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
@@ -35,13 +35,13 @@
 
 <style>
   /* 画像アイテムのコンテンツ領域のルート */
-  .item-tree-image-content {
+  .main-area-image-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
   }
 
   /* 画像とキャプションを中央揃えにする */
-  .item-tree-image-content_image-and-caption {
+  .main-area-image-content_image-and-caption {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,19 +49,19 @@
     width: fit-content;
   }
 
-  .item-tree-image-content_image {
+  .main-area-image-content_image {
     /* 画像が表示領域の横幅をはみ出さないよう設定 */
     max-width: 100%;
     height: auto;
   }
 
   /* グレーアウト状態の画像 */
-  :global(.grayed-out) .item-tree-image-content_image {
+  :global(.grayed-out) .main-area-image-content_image {
     filter: opacity(50%);
   }
 
   /* グレーアウト状態のキャプション */
-  :global(.grayed-out) .item-tree-image-content_caption {
+  :global(.grayed-out) .main-area-image-content_caption {
     color: hsl(0, 0%, 50%);
   }
 </style>

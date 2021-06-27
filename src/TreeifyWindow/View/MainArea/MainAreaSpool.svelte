@@ -12,20 +12,20 @@
   `
 </script>
 
-<div class="item-tree-spool" on:click={props.onClick}>
+<div class="main-area-spool" on:click={props.onClick}>
   {#if props.bulletState === MainAreaBulletState.EXPANDED}
-    <div class="item-tree-spool_indent-area">
-      <div class="item-tree-spool_indent-line" />
+    <div class="main-area-spool_indent-area">
+      <div class="main-area-spool_indent-line" />
     </div>
   {/if}
-  <div class="item-tree-spool_bullet-area">
+  <div class="main-area-spool_bullet-area">
     {#if props.bulletState === MainAreaBulletState.PAGE}
-      <div class="item-tree-spool_page-icon" />
+      <div class="main-area-spool_page-icon" />
     {:else}
       {#if props.bulletState === MainAreaBulletState.COLLAPSED}
-        <div class="item-tree-spool_outer-circle" style={outerCircleStyle} />
+        <div class="main-area-spool_outer-circle" style={outerCircleStyle} />
       {/if}
-      <div class="item-tree-spool_inner-circle" />
+      <div class="main-area-spool_inner-circle" />
     {/if}
   </div>
 </div>
@@ -34,15 +34,15 @@
   :root {
     /* バレットの外側の円の直径は{@link MainAreaSpoolProps.ts}で動的に設定している */
     /* バレットの外側の円の色 */
-    --item-tree-bullet-outer-circle-color: hsl(0, 0%, 80%);
+    --main-area-bullet-outer-circle-color: hsl(0, 0%, 80%);
     /* バレットの外側の円のマウスホバー時の色 */
-    --item-tree-bullet-outer-circle-hover-color: hsl(0, 0%, 70%);
+    --main-area-bullet-outer-circle-hover-color: hsl(0, 0%, 70%);
     /* バレットの内側の円の直径 */
-    --item-tree-bullet-inner-circle-diameter: 0.45em;
+    --main-area-bullet-inner-circle-diameter: 0.45em;
     /* バレットの内側の円の色 */
-    --item-tree-bullet-inner-circle-color: hsl(0, 0%, 35%);
+    --main-area-bullet-inner-circle-color: hsl(0, 0%, 35%);
     /* バレットの内側の円のマウスホバー時の色 */
-    --item-tree-bullet-inner-circle-hover-color: hsl(0, 0%, 0%);
+    --main-area-bullet-inner-circle-hover-color: hsl(0, 0%, 0%);
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
     --bullet-page-icon-size: 1em;
 
@@ -57,44 +57,44 @@
     --highlighted-item-bullet-hover-color: hsl(0, 100%, 40%);
 
     /* インデントラインの太さ */
-    --item-tree-indent-line-width: 1px;
+    --main-area-indent-line-width: 1px;
     /* インデントラインの色 */
-    --item-tree-indent-line-color: hsl(0, 0%, 88%);
+    --main-area-indent-line-color: hsl(0, 0%, 88%);
     /* インデントラインの色（ホバー時） */
-    --item-tree-indent-line-hover-color: hsl(0, 0%, 70%);
+    --main-area-indent-line-hover-color: hsl(0, 0%, 70%);
   }
 
   /* トランスクルードされたアイテムの強調表示 */
-  :global(.transcluded) .item-tree-spool_inner-circle {
+  :global(.transcluded) .main-area-spool_inner-circle {
     background: var(--transcluded-item-bullet-color);
   }
-  :global(.transcluded) .item-tree-spool:hover .item-tree-spool_inner-circle {
+  :global(.transcluded) .main-area-spool:hover .main-area-spool_inner-circle {
     background: var(--transcluded-item-bullet-hover-color);
   }
-  :global(.transcluded) .item-tree-spool_page-icon {
+  :global(.transcluded) .main-area-spool_page-icon {
     background: var(--transcluded-item-bullet-color);
   }
-  :global(.transcluded) .item-tree-spool:hover .item-tree-spool_page-icon {
+  :global(.transcluded) .main-area-spool:hover .main-area-spool_page-icon {
     background: var(--transcluded-item-bullet-hover-color);
   }
 
   /* ハイライト状態のアイテムの強調表示 */
-  :global(.highlighted) .item-tree-spool_inner-circle {
+  :global(.highlighted) .main-area-spool_inner-circle {
     background: var(--highlighted-item-bullet-color);
   }
-  :global(.highlighted) .item-tree-spool:hover .item-tree-spool_inner-circle {
+  :global(.highlighted) .main-area-spool:hover .main-area-spool_inner-circle {
     background: var(--highlighted-item-bullet-hover-color);
   }
-  :global(.highlighted) .item-tree-spool_page-icon {
+  :global(.highlighted) .main-area-spool_page-icon {
     background: var(--highlighted-item-bullet-color);
   }
-  :global(.highlighted) .item-tree-spool:hover .item-tree-spool_page-icon {
+  :global(.highlighted) .main-area-spool:hover .main-area-spool_page-icon {
     background: var(--highlighted-item-bullet-hover-color);
   }
 
   /* メインエリアのバレットとインデントのルート要素 */
-  .item-tree-spool {
-    width: var(--item-tree-calculated-line-height);
+  .main-area-spool {
+    width: var(--main-area-calculated-line-height);
     height: 100%;
     /* インデントラインをバレットの裏まで描画するための設定 */
     position: relative;
@@ -102,19 +102,19 @@
     cursor: pointer;
   }
 
-  .item-tree-spool_bullet-area {
-    width: var(--item-tree-calculated-line-height);
-    height: var(--item-tree-calculated-line-height);
+  .main-area-spool_bullet-area {
+    width: var(--main-area-calculated-line-height);
+    height: var(--main-area-calculated-line-height);
     /* 外側の円と内側の円を重ねて描画するための設定 */
     position: relative;
   }
 
   /* メインエリアのバレットの外側の円（展開状態用） */
-  .item-tree-spool_outer-circle {
+  .main-area-spool_outer-circle {
     /* widthとheightがJavaScriptで設定される */
 
     border-radius: 50%;
-    background: var(--item-tree-bullet-outer-circle-color);
+    background: var(--main-area-bullet-outer-circle-color);
 
     /* 中央寄せ */
     position: absolute;
@@ -122,16 +122,16 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  .item-tree-spool:hover .item-tree-spool_outer-circle {
-    background: var(--item-tree-bullet-outer-circle-hover-color);
+  .main-area-spool:hover .main-area-spool_outer-circle {
+    background: var(--main-area-bullet-outer-circle-hover-color);
   }
 
   /* メインエリアのバレットの内側の円 */
-  .item-tree-spool_inner-circle {
-    width: var(--item-tree-bullet-inner-circle-diameter);
-    height: var(--item-tree-bullet-inner-circle-diameter);
+  .main-area-spool_inner-circle {
+    width: var(--main-area-bullet-inner-circle-diameter);
+    height: var(--main-area-bullet-inner-circle-diameter);
     border-radius: 50%;
-    background: var(--item-tree-bullet-inner-circle-color);
+    background: var(--main-area-bullet-inner-circle-color);
 
     /* 中央寄せ */
     position: absolute;
@@ -139,17 +139,17 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  .item-tree-spool:hover .item-tree-spool_inner-circle {
-    background: var(--item-tree-bullet-inner-circle-hover-color);
+  .main-area-spool:hover .main-area-spool_inner-circle {
+    background: var(--main-area-bullet-inner-circle-hover-color);
   }
 
   /* ページのバレット */
-  .item-tree-spool_page-icon {
+  .main-area-spool_page-icon {
     width: var(--bullet-page-icon-size);
     height: var(--bullet-page-icon-size);
 
     /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: var(--item-tree-bullet-inner-circle-color);
+    background: var(--main-area-bullet-inner-circle-color);
     -webkit-mask-image: url('./page-icon.svg');
 
     /* 中央寄せ */
@@ -158,29 +158,29 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  .item-tree-spool:hover .item-tree-spool_page-icon {
-    background: var(--item-tree-bullet-inner-circle-hover-color);
+  .main-area-spool:hover .main-area-spool_page-icon {
+    background: var(--main-area-bullet-inner-circle-hover-color);
   }
 
   /* インデント領域 */
-  .item-tree-spool_indent-area {
+  .main-area-spool_indent-area {
     position: absolute;
     /* バレットの中心のY座標から子リストの下端までの領域にする */
-    top: calc(var(--item-tree-calculated-line-height) / 2);
-    height: calc(100% - var(--item-tree-calculated-line-height) / 2);
+    top: calc(var(--main-area-calculated-line-height) / 2);
+    height: calc(100% - var(--main-area-calculated-line-height) / 2);
     width: 100%;
   }
 
   /* インデントライン */
-  .item-tree-spool_indent-line {
-    background: var(--item-tree-indent-line-color);
-    width: var(--item-tree-indent-line-width);
+  .main-area-spool_indent-line {
+    background: var(--main-area-indent-line-color);
+    width: var(--main-area-indent-line-width);
     height: 100%;
     margin: 0 auto;
   }
 
   /* バレットとインデントの領域のホバー時のインデントライン */
-  .item-tree-spool:hover .item-tree-spool_indent-line {
-    background: var(--item-tree-indent-line-hover-color);
+  .main-area-spool:hover .main-area-spool_indent-line {
+    background: var(--main-area-indent-line-hover-color);
   }
 </style>

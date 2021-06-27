@@ -11,20 +11,20 @@
 </script>
 
 <div
-  class="item-tree-tex-content"
+  class="main-area-tex-content"
   {id}
   tabindex="0"
   on:focus={props.onFocus}
   on:click={props.onClick}
 >
   {#if !props.labels.isEmpty()}
-    <div class="item-tree-tex-content_labels">
+    <div class="main-area-tex-content_labels">
       {#each props.labels.toArray() as label}
         <Label props={{text: label}} />
       {/each}
     </div>
   {/if}
-  <div class="item-tree-tex-content_rendered-tex">
+  <div class="main-area-tex-content_rendered-tex">
     {@html katex.renderToString(props.code, {throwOnError: false})}
   </div>
   {#if props.citeProps !== undefined}
@@ -34,15 +34,15 @@
 
 <style>
   /* コードブロックアイテムのコンテンツ領域のルート */
-  .item-tree-tex-content {
+  .main-area-tex-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
 
-    min-height: var(--item-tree-calculated-line-height);
+    min-height: var(--main-area-calculated-line-height);
   }
 
   /* グレーアウト状態のコードブロックアイテム */
-  :global(.grayed-out) .item-tree-tex-content {
+  :global(.grayed-out) .main-area-tex-content {
     filter: opacity(50%);
   }
 </style>

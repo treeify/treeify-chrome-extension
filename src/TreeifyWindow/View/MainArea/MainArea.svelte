@@ -716,7 +716,7 @@
       if (parentItemId === undefined) return
 
       // 全アイテムをリスト化し、Y座標でソート
-      const elements = document.getElementsByClassName('item-tree-node_content-area')
+      const elements = document.getElementsByClassName('main-area-node_content-area')
       const sortedElements = List(elements).sortBy((element) => {
         return element.getBoundingClientRect().bottom
       }) as List<HTMLElement>
@@ -779,7 +779,7 @@
 </script>
 
 <main
-  class="item-tree"
+  class="main-area"
   tabindex="0"
   on:keydown={onKeyDown}
   on:dragover={onDragOver}
@@ -795,27 +795,27 @@
 
 <style>
   :root {
-    --item-tree-base-font-size: 15px;
+    --main-area-base-font-size: 15px;
 
     /*
         メインエリアのテキスト全般に適用されるline-height。
         階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
         */
-    --item-tree-line-height: 1.45;
+    --main-area-line-height: 1.45;
     /* メインエリア内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
-    --item-tree-font-size-multiplicator: 99.5%;
+    --main-area-font-size-multiplicator: 99.5%;
 
     /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
-    --item-tree-calculated-line-height: calc(
-      1em * var(--item-tree-line-height) + var(--item-tree-body-area-vertical-padding)
+    --main-area-calculated-line-height: calc(
+      1em * var(--main-area-line-height) + var(--main-area-body-area-vertical-padding)
     );
   }
 
-  .item-tree {
+  .main-area {
     overflow-y: auto;
 
-    font-size: var(--item-tree-base-font-size);
-    line-height: var(--item-tree-line-height);
+    font-size: var(--main-area-base-font-size);
+    line-height: var(--main-area-line-height);
 
     padding-left: 15px;
     padding-top: 15px;
