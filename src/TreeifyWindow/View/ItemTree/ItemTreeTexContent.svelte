@@ -1,5 +1,6 @@
 <script lang="ts">
   import katex from 'katex'
+  import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentProps'
   import {ItemTreeTexContentProps} from './ItemTreeTexContentProps'
@@ -26,6 +27,9 @@
   <div class="item-tree-tex-content_rendered-tex">
     {@html katex.renderToString(props.code, {throwOnError: false})}
   </div>
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps} />
+  {/if}
 </div>
 
 <style>

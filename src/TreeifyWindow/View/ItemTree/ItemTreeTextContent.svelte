@@ -1,5 +1,6 @@
 <script lang="ts">
   import {DomishObject} from '../../Internal/DomishObject'
+  import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentProps'
   import {ItemTreeTextContentProps} from './ItemTreeTextContentProps'
@@ -27,6 +28,9 @@
   >
     {@html DomishObject.toHtml(props.domishObjects)}
   </div>
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps}/>
+  {/if}
 </div>
 
 <style>

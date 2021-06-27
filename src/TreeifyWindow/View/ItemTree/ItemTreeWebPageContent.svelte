@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {ItemTreeContentView} from './ItemTreeContentProps'
   import {ItemTreeWebPageContentProps} from './ItemTreeWebPageContentProps'
@@ -9,53 +10,58 @@
 </script>
 
 <div class="item-tree-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>
-  {#if props.isLoading}
-    <div
-      class="item-tree-web-page-content_favicon loading-indicator"
-      on:click={props.onClickFavicon}
-    />
-  {:else if props.faviconUrl.length > 0}
-    <img
-      class="item-tree-web-page-content_favicon"
-      class:soft-unloaded-item={props.isSoftUnloaded}
-      class:hard-unloaded-item={props.isHardUnloaded}
-      src={props.faviconUrl}
-      on:click={props.onClickFavicon}
-    />
-  {:else}
-    <div
-      class="item-tree-web-page-content_favicon default-favicon"
-      class:soft-unloaded-item={props.isSoftUnloaded}
-      class:hard-unloaded-item={props.isHardUnloaded}
-      on:click={props.onClickFavicon}
-    />
-  {/if}
+  <div class="item-tree-web-page-content_body">
+    {#if props.isLoading}
+      <div
+        class="item-tree-web-page-content_favicon loading-indicator"
+        on:click={props.onClickFavicon}
+      />
+    {:else if props.faviconUrl.length > 0}
+      <img
+        class="item-tree-web-page-content_favicon"
+        class:soft-unloaded-item={props.isSoftUnloaded}
+        class:hard-unloaded-item={props.isHardUnloaded}
+        src={props.faviconUrl}
+        on:click={props.onClickFavicon}
+      />
+    {:else}
+      <div
+        class="item-tree-web-page-content_favicon default-favicon"
+        class:soft-unloaded-item={props.isSoftUnloaded}
+        class:hard-unloaded-item={props.isHardUnloaded}
+        on:click={props.onClickFavicon}
+      />
+    {/if}
 
-  {#if !props.labels.isEmpty()}
-    <div class="item-tree-web-page-content_labels">
-      {#each props.labels.toArray() as label}
-        <Label props={{text: label}} />
-      {/each}
+    {#if !props.labels.isEmpty()}
+      <div class="item-tree-web-page-content_labels">
+        {#each props.labels.toArray() as label}
+          <Label props={{text: label}} />
+        {/each}
+      </div>
+    {:else}
+      <div class="grid-empty-cell" />
+    {/if}
+    <div
+      class="item-tree-web-page-content_title"
+      class:soft-unloaded-item={props.isSoftUnloaded}
+      class:hard-unloaded-item={props.isHardUnloaded}
+      class:unread={props.isUnread}
+      title={props.title}
+      draggable="true"
+      on:click={props.onClickTitle}
+      on:dragstart={props.onDragStart}
+    >
+      {props.title}
     </div>
-  {:else}
-    <div class="grid-empty-cell" />
-  {/if}
-  <div
-    class="item-tree-web-page-content_title"
-    class:soft-unloaded-item={props.isSoftUnloaded}
-    class:hard-unloaded-item={props.isHardUnloaded}
-    class:unread={props.isUnread}
-    title={props.title}
-    draggable="true"
-    on:click={props.onClickTitle}
-    on:dragstart={props.onDragStart}
-  >
-    {props.title}
+    {#if props.isAudible}
+      <div class="item-tree-web-page-content_audible-icon" />
+    {:else}
+      <div class="grid-empty-cell" />
+    {/if}
   </div>
-  {#if props.isAudible}
-    <div class="item-tree-web-page-content_audible-icon" />
-  {:else}
-    <div class="grid-empty-cell" />
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps} />
   {/if}
 </div>
 
@@ -79,13 +85,15 @@
 
   /* ウェブページアイテムのコンテンツ領域のルート */
   .item-tree-web-page-content {
+    /* フォーカス時の枠線を非表示 */
+    outline: 0 solid transparent;
+  }
+
+  .item-tree-web-page-content_body {
     /* ファビコン、ラベル、タイトル、audibleアイコンを横並びにする */
     display: grid;
     grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: center;
-
-    /* フォーカス時の枠線を非表示 */
-    outline: 0 solid transparent;
   }
 
   /* グレーアウト状態のウェブページアイテムのタイトル */
