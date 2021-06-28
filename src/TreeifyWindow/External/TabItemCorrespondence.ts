@@ -29,6 +29,11 @@ export class TabItemCorrespondence {
     this.tabIdToTab.set(tabId, tab)
   }
 
+  /** Tabオブジェクトを削除する */
+  unregisterTab(tabId: TabId) {
+    this.tabIdToTab.delete(tabId)
+  }
+
   /** タブIDとアイテムIDを結びつける */
   tieTabAndItem(tabId: TabId, itemId: ItemId) {
     this.tabIdToItemId.set(tabId, itemId)
