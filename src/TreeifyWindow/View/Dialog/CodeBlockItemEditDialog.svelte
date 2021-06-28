@@ -1,5 +1,6 @@
 <script lang="ts">
   import hljs from 'highlight.js/lib/core'
+  import {detectLanguage} from '../../highlightJs'
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
@@ -13,6 +14,12 @@
       const text = event.clipboardData.getData('text/plain')
       // 無駄なインデントを自動的に除去する機能
       event.target.textContent = removeRedundantIndent(text)
+
+      // 言語を自動検出する
+      const languageElement = document.querySelector('.code-block-edit-dialog_language')
+      if (languageElement instanceof HTMLInputElement && languageElement.value === '') {
+        languageElement.value = detectLanguage(event.target.textContent)
+      }
     }
   }
 </script>

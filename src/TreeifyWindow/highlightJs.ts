@@ -99,6 +99,7 @@ import xml from 'highlight.js/lib/languages/xml'
 import xquery from 'highlight.js/lib/languages/xquery'
 import yaml from 'highlight.js/lib/languages/yaml'
 import zephir from 'highlight.js/lib/languages/zephir'
+import {Set} from 'immutable'
 
 /** シンタックスハイライトした結果のHTML文字列を返す */
 export function getHighlightedHtml(code: string, language: string): string {
@@ -112,6 +113,12 @@ export function getHighlightedHtml(code: string, language: string): string {
   } catch {
     return code
   }
+}
+
+/** 与えられたコードの言語を自動検出して言語名を返す */
+export function detectLanguage(code: string): string {
+  const autoHighlightResult = hljs.highlightAuto(code, autoDetectionLanguages.toArray())
+  return autoHighlightResult.language ?? ''
 }
 
 /**
@@ -323,3 +330,14 @@ const languageDefinitions = {
   yaml,
   zephir,
 }
+
+const languagesToExcludeFromAutoDetection = Set.of(
+  // typescript検出用
+  'qml',
+  // typescript検出用
+  'reasonml'
+)
+
+export const autoDetectionLanguages = Set(Object.keys(languageDefinitions)).subtract(
+  languagesToExcludeFromAutoDetection
+)
