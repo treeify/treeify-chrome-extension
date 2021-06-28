@@ -1,4 +1,4 @@
-import {assert, assertNonNull} from 'src/Common/Debug/assert'
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {
   focusMainAreaBackground,
@@ -6,8 +6,6 @@ import {
   TextItemSelection,
 } from 'src/TreeifyWindow/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {Internal} from 'src/TreeifyWindow/Internal/Internal'
-import {State} from 'src/TreeifyWindow/Internal/State'
 import {MainAreaContentView} from 'src/TreeifyWindow/View/MainArea/MainAreaContentProps'
 import {tick} from 'svelte'
 import {Readable, writable} from 'svelte/store'
@@ -45,9 +43,6 @@ export class Rerenderer {
 
   /** DOMを再描画する */
   rerender() {
-    // TODO: 不具合調査用。重い処理なのでこんな頻度で実行すべきでない
-    assert(State.isValid(Internal.instance.state))
-
     // Treeifyウィンドウのタイトルを更新する
     document.title = CurrentState.deriveTreeifyWindowTitle()
 
