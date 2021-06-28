@@ -22,13 +22,12 @@ export async function startup(initialState: State) {
   External.instance.lastFocusedWindowId = await getLastFocusedWindowId()
 
   Internal.initialize(initialState)
+  Internal.instance.addOnMutateListener(onMutateState)
 
   // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
   await matchTabsAndWebPageItems()
 
   Rerenderer.instance.renderForFirstTime()
-
-  Internal.instance.addOnMutateListener(onMutateState)
 
   // バックグラウンドページなどからのメッセージを受信する
   chrome.runtime.onMessage.addListener(onMessage)
