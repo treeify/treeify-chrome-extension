@@ -167,6 +167,7 @@ export class Internal {
       labelEditDialog: null,
       otherParentsDialog: null,
       searchDialog: null,
+      citationSettingDialog: null,
     }
   }
 
@@ -371,6 +372,7 @@ export class Internal {
       labelEditDialog: null,
       otherParentsDialog: null,
       searchDialog: null,
+      citationSettingDialog: null,
     }
   }
 }

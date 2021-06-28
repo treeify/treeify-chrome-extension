@@ -1,6 +1,7 @@
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {
+  CitationSettingDialog,
   CodeBlockItemEditDialog,
   DefaultWindowModeSettingDialog,
   LabelEditDialog,
@@ -57,4 +58,10 @@ export function setOtherParentsDialog(value: OtherParentsDialog | null) {
 export function setSearchDialog(value: SearchDialog | null) {
   Internal.instance.state.searchDialog = value
   Internal.instance.markAsMutated(PropertyPath.of('searchDialog'))
+}
+
+/** 出典設定ダイアログの状態を設定する */
+export function setCitationSettingDialog(value: CitationSettingDialog | null) {
+  Internal.instance.state.citationSettingDialog = value
+  Internal.instance.markAsMutated(PropertyPath.of('citationSettingDialog'))
 }
