@@ -121,8 +121,7 @@ function onMouseMove(event: MouseEvent) {
       }
     } else {
       const leftSidebar = document.querySelector('.left-sidebar')
-      assertNonNull(leftSidebar)
-      if (event.x > leftSidebar.getBoundingClientRect().right) {
+      if (leftSidebar !== null && event.x > leftSidebar.getBoundingClientRect().right) {
         // mouseleaveイベントを使わない理由は、Treeifyウィンドウが画面左端にぴったりくっついていない状況で、
         // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
         External.instance.shouldFloatingLeftSidebarShown = false
