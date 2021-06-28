@@ -1,24 +1,11 @@
 <script lang="ts">
-  import hljs from 'highlight.js'
+  import {getHighlightedHtml} from '../../highlightJs'
   import Cite from '../Cite.svelte'
   import Label from '../Label.svelte'
   import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
   import {MainAreaContentView} from './MainAreaContentProps'
 
   export let props: MainAreaCodeBlockContentProps
-
-  function getHighlightedHtml(code: string, language: string): string {
-    // ライブラリが対応していない言語の場合例外が投げられる
-    try {
-      const highlightResult = hljs.highlight(code, {
-        ignoreIllegals: true,
-        language,
-      })
-      return highlightResult.value
-    } catch {
-      return code
-    }
-  }
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>

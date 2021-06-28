@@ -1,11 +1,11 @@
 <script lang="ts">
-  import hljs from 'highlight.js'
+  import hljs from 'highlight.js/lib/core'
   import {CurrentState} from '../../Internal/CurrentState'
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {Rerenderer} from '../../Rerenderer'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
-
+  
   export let props: CodeBlockItemEditDialogProps
 
   const onCloseDialog = () => {

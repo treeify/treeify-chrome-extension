@@ -1,21 +1,8 @@
 <script lang="ts">
-  import hljs from 'highlight.js'
+  import {getHighlightedHtml} from '../../highlightJs'
   import {CodeBlockItemContentProps} from './CodeBlocktemContentProps'
 
   export let props: CodeBlockItemContentProps
-
-  function getHighlightedHtml(code: string, language: string): string {
-    // ライブラリが対応していない言語の場合例外が投げられる
-    try {
-      const highlightResult = hljs.highlight(code, {
-        ignoreIllegals: true,
-        language,
-      })
-      return highlightResult.value
-    } catch {
-      return code
-    }
-  }
 </script>
 
 <div class="code-block-item-content">
