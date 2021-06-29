@@ -29,16 +29,8 @@ export type State = {
   mainAreaKeyboardBinding: {[K in InputId]: List<Command>}
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
   mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
-  /** 各ダイアログの状態 */
-  webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog | null
-  codeBlockItemEditDialog: CodeBlockItemEditDialog | null
-  texEditDialog: TexEditDialog | null
-  defaultWindowModeSettingDialog: DefaultWindowModeSettingDialog | null
-  workspaceDialog: WorkspaceDialog | null
-  labelEditDialog: LabelEditDialog | null
-  otherParentsDialog: OtherParentsDialog | null
-  searchDialog: SearchDialog | null
-  citationSettingDialog: CitationSettingDialog | null
+  /** ダイアログの状態 */
+  dialog: Dialog | null
 }
 
 /**

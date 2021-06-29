@@ -12,11 +12,11 @@ export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
 export function createCodeBlockItemEditDialogProps(
   state: State
 ): CodeBlockItemEditDialogProps | undefined {
-  if (state.codeBlockItemEditDialog === null) return undefined
+  if (state.dialog?.type !== 'CodeBlockItemEditDialog') return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()
   return {
-    ...state.codeBlockItemEditDialog,
+    ...state.dialog,
     onClickFinishButton: () => {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 

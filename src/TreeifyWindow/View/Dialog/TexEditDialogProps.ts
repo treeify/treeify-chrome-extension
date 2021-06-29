@@ -12,7 +12,7 @@ export type TexEditDialogProps = {
 }
 
 export function createTexEditDialogProps(state: State): TexEditDialogProps | undefined {
-  if (state.texEditDialog === null) return undefined
+  if (state.dialog?.type !== 'TexEditDialog') return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()
   return {

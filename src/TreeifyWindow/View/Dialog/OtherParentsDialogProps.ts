@@ -12,7 +12,7 @@ export type OtherParentsDialogProps = {
 }
 
 export function createOtherParentsDialogProps(state: State): OtherParentsDialogProps | undefined {
-  if (state.otherParentsDialog === null) return undefined
+  if (state.dialog?.type !== 'OtherParentsDialog') return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))

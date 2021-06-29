@@ -14,7 +14,7 @@ export type CitationSettingDialogProps = {
 export function createCitationSettingDialogProps(
   state: State
 ): CitationSettingDialogProps | undefined {
-  if (state.citationSettingDialog === null) return undefined
+  if (state.dialog?.type !== 'CitationSettingDialog') return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const item = state.items[ItemPath.getItemId(targetItemPath)]

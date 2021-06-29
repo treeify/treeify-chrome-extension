@@ -15,7 +15,7 @@ export type DefaultWindowModeSettingDialogProps = DefaultWindowModeSettingDialog
 export function createDefaultWindowModeSettingDialogProps(
   state: State
 ): DefaultWindowModeSettingDialogProps | undefined {
-  if (state.defaultWindowModeSettingDialog === null) return undefined
+  if (state.dialog?.type !== 'DefaultWindowModeSettingDialog') return undefined
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -24,7 +24,7 @@ export function createDefaultWindowModeSettingDialogProps(
     : ItemPath.getRootItemId(targetItemPath)
 
   return {
-    ...state.defaultWindowModeSettingDialog,
+    ...state.dialog,
     initialDefaultWindowMode: state.pages[targetPageId].defaultWindowMode,
     onClickCancelButton: () => {
       // ダイアログを閉じる

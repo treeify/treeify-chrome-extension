@@ -12,7 +12,7 @@ export type WorkspaceDialogProps = {
 }
 
 export function createWorkspaceDialogProps(state: State): WorkspaceDialogProps | undefined {
-  if (state.workspaceDialog === null) return undefined
+  if (state.dialog?.type !== 'WorkspaceDialog') return undefined
 
   const workspaces = []
   for (const key in state.workspaces) {

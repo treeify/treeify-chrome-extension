@@ -15,13 +15,13 @@ export type WebPageItemTitleSettingDialogProps = {
 export function createWebPageItemTitleSettingDialogProps(
   state: State
 ): WebPageItemTitleSettingDialogProps | undefined {
-  if (state.webPageItemTitleSettingDialog === null) return undefined
+  if (state.dialog?.type !== 'WebPageItemTitleSettingDialog') return undefined
 
   const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   return {
-    webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+    webPageItemTitleSettingDialog: state.dialog,
     initialTitle: CurrentState.deriveWebPageItemTitle(targetItemId),
     onKeyDown: (event) => {
       doWithErrorCapture(() => {
