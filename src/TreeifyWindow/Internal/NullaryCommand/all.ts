@@ -1,5 +1,6 @@
 import {
   edit,
+  showCitationSettingDialog,
   showDefaultWindowModeSettingDialog,
   showLabelEditDialog,
   showOtherParentsDialog,
@@ -120,5 +121,6 @@ export const functions: {[name: string]: () => void} = {
   showLabelEditDialog,
   showOtherParentsDialog,
   showSearchDialog,
+  showCitationSettingDialog,
   saveToDataFolder,
 }

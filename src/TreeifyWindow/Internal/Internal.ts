@@ -3,6 +3,7 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyWindow/basicType'
 import {External} from 'src/TreeifyWindow/External/External'
 import {ChunkId} from 'src/TreeifyWindow/Internal/Chunk'
+import {showCitationSettingDialog} from 'src/TreeifyWindow/Internal/NullaryCommand/dialog'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyWindow/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyWindow/Internal/State'
@@ -154,6 +155,7 @@ export class Internal {
         '0000F2': List.of({commandName: 'edit'}),
         '0100F2': List.of({commandName: 'showLabelEditDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
+        '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
       },
       mainAreaDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
@@ -359,6 +361,7 @@ export class Internal {
         '0000F2': List.of({commandName: 'edit'}),
         '0100F2': List.of({commandName: 'showLabelEditDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
+        '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
       },
       mainAreaDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),

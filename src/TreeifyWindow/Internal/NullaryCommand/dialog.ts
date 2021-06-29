@@ -68,3 +68,8 @@ export function showOtherParentsDialog() {
 export function showSearchDialog() {
   CurrentState.setSearchDialog({})
 }
+
+/** 出典設定ダイアログを表示する */
+export function showCitationSettingDialog() {
+  CurrentState.setCitationSettingDialog({})
+}
