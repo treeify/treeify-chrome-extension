@@ -149,12 +149,7 @@ export type Workspace = {
  */
 export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep' | 'inherit'
 
-/** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
-export type WebPageItemTitleSettingDialog = {
-  type: 'WebPageItemTitleSettingDialog'
-  /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
-  targetItemRect: DOMRect
-}
+export type CitationSettingDialog = {type: 'CitationSettingDialog'}
 
 /** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
 export type CodeBlockItemEditDialog = {
@@ -163,12 +158,8 @@ export type CodeBlockItemEditDialog = {
   language: string
 }
 
-export type TexEditDialog = {type: 'TexEditDialog'}
-
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
 export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
-
-export type WorkspaceDialog = {type: 'WorkspaceDialog'}
 
 /** ラベル編集ダイアログが持つ内部状態の型 */
 export type LabelEditDialog = {
@@ -180,18 +171,27 @@ export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
 export type SearchDialog = {type: 'SearchDialog'}
 
-export type CitationSettingDialog = {type: 'CitationSettingDialog'}
+export type TexEditDialog = {type: 'TexEditDialog'}
+
+/** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
+export type WebPageItemTitleSettingDialog = {
+  type: 'WebPageItemTitleSettingDialog'
+  /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
+  targetItemRect: DOMRect
+}
+
+export type WorkspaceDialog = {type: 'WorkspaceDialog'}
 
 export type Dialog =
-  | WebPageItemTitleSettingDialog
+  | CitationSettingDialog
   | CodeBlockItemEditDialog
-  | TexEditDialog
   | DefaultWindowModeSettingDialog
-  | WorkspaceDialog
   | LabelEditDialog
   | OtherParentsDialog
   | SearchDialog
-  | CitationSettingDialog
+  | TexEditDialog
+  | WebPageItemTitleSettingDialog
+  | WorkspaceDialog
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */

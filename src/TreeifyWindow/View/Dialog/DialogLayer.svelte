@@ -22,20 +22,14 @@
   export let props: DialogLayerProps
 </script>
 
-{#if props.dialog?.type === 'WebPageItemTitleSettingDialog'}
-  <WebPageItemTitleSettingDialog props={createWebPageItemTitleSettingDialogProps(props.dialog)} />
+{#if props.dialog?.type === 'CitationSettingDialog'}
+  <CitationSettingDialog props={createCitationSettingDialogProps(props.dialog)} />
 {/if}
 {#if props.dialog?.type === 'CodeBlockItemEditDialog'}
   <CodeBlockItemEditDialog props={createCodeBlockItemEditDialogProps(props.dialog)} />
 {/if}
-{#if props.dialog?.type === 'TexEditDialog'}
-  <TexEditDialog props={createTexEditDialogProps(props.dialog)} />
-{/if}
 {#if props.dialog?.type === 'DefaultWindowModeSettingDialog'}
   <DefaultWindowModeSettingDialog props={createDefaultWindowModeSettingDialogProps(props.dialog)} />
-{/if}
-{#if props.dialog?.type === 'WorkspaceDialog'}
-  <WorkspaceDialog props={createWorkspaceDialogProps(props.dialog)} />
 {/if}
 {#if props.dialog?.type === 'LabelEditDialog'}
   <LabelEditDialog props={createLabelEditDialogProps(props.dialog)} />
@@ -46,6 +40,12 @@
 {#if props.dialog?.type === 'SearchDialog'}
   <SearchDialog props={createSearchDialogProps(props.dialog)} />
 {/if}
-{#if props.dialog?.type === 'CitationSettingDialog'}
-  <CitationSettingDialog props={createCitationSettingDialogProps(props.dialog)} />
+{#if props.dialog?.type === 'TexEditDialog'}
+  <TexEditDialog props={createTexEditDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'WebPageItemTitleSettingDialog'}
+  <WebPageItemTitleSettingDialog props={createWebPageItemTitleSettingDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'WorkspaceDialog'}
+  <WorkspaceDialog props={createWorkspaceDialogProps(props.dialog)} />
 {/if}
