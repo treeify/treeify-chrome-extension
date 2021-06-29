@@ -1,7 +1,7 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {CodeBlockItemEditDialog, State} from 'src/TreeifyWindow/Internal/State'
+import {CodeBlockItemEditDialog} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
@@ -10,13 +10,11 @@ export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
 }
 
 export function createCodeBlockItemEditDialogProps(
-  state: State
-): CodeBlockItemEditDialogProps | undefined {
-  if (state.dialog?.type !== 'CodeBlockItemEditDialog') return undefined
-
+  dialog: CodeBlockItemEditDialog
+): CodeBlockItemEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   return {
-    ...state.dialog,
+    ...dialog,
     onClickFinishButton: () => {
       const targetItemId = ItemPath.getItemId(targetItemPath)
 

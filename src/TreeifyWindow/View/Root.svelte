@@ -3,15 +3,7 @@
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
   import {createRootProps, RootProps} from 'src/TreeifyWindow/View/RootProps'
   import {derived, Readable} from 'svelte/store'
-  import CitationSettingDialog from './Dialog/CitationSettingDialog.svelte'
-  import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
-  import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
-  import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
-  import OtherParentsDialog from './Dialog/OtherParentsDialog.svelte'
-  import SearchDialog from './Dialog/SearchDialog.svelte'
-  import TexEditDialog from './Dialog/TexEditDialog.svelte'
-  import WebPageItemTitleSettingDialog from './Dialog/WebPageItemTitleSettingDialog.svelte'
-  import WorkspaceDialog from './Dialog/WorkspaceDialog.svelte'
+  import DialogLayer from './Dialog/DialogLayer.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
   import MainArea from './MainArea/MainArea.svelte'
   import Toolbar from './Toolbar/Toolbar.svelte'
@@ -34,33 +26,7 @@
       <MainArea props={props.mainAreaProps} />
     </div>
   </div>
-  {#if props.webPageItemTitleSettingDialog !== undefined}
-    <WebPageItemTitleSettingDialog props={props.webPageItemTitleSettingDialog} />
-  {/if}
-  {#if props.codeBlockItemEditDialogProps !== undefined}
-    <CodeBlockItemEditDialog props={props.codeBlockItemEditDialogProps} />
-  {/if}
-  {#if props.texEditDialogProps !== undefined}
-    <TexEditDialog props={props.texEditDialogProps} />
-  {/if}
-  {#if props.defaultWindowModeSettingDialog !== undefined}
-    <DefaultWindowModeSettingDialog props={props.defaultWindowModeSettingDialog} />
-  {/if}
-  {#if props.workspaceDialog !== undefined}
-    <WorkspaceDialog props={props.workspaceDialog} />
-  {/if}
-  {#if props.labelEditDialog !== undefined}
-    <LabelEditDialog props={props.labelEditDialog} />
-  {/if}
-  {#if props.otherParentsDialog !== undefined}
-    <OtherParentsDialog props={props.otherParentsDialog} />
-  {/if}
-  {#if props.searchDialog !== undefined}
-    <SearchDialog props={props.searchDialog} />
-  {/if}
-  {#if props.citationSettingDialog !== undefined}
-    <CitationSettingDialog props={props.citationSettingDialog} />
-  {/if}
+  <DialogLayer props={props.dialogLayerProps} />
 </div>
 
 <style>
