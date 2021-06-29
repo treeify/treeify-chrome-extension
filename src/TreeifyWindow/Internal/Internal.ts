@@ -88,6 +88,26 @@ export class Internal {
     }
   }
 
+  /** State内の指定されたプロパティを削除する */
+  delete(propertyPath: PropertyPath) {
+    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
+    Internal._delete(propertyKeys, this.state)
+    for (let onMutateListener of this.onMutateListeners) {
+      onMutateListener(propertyPath)
+    }
+  }
+
+  private static _delete(propertyKeys: List<string>, state: any) {
+    const firstKey = propertyKeys.first(undefined)
+    assertNonUndefined(firstKey)
+
+    if (propertyKeys.size === 1) {
+      delete state[firstKey]
+    } else {
+      this._delete(propertyKeys.shift(), state[firstKey])
+    }
+  }
+
   addOnMutateListener(listener: (propertyPath: PropertyPath) => void) {
     this.onMutateListeners.add(listener)
   }
