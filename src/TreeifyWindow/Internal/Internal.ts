@@ -60,6 +60,34 @@ export class Internal {
     }
   }
 
+  /** State内の指定されたプロパティを書き換える */
+  mutate(value: any, propertyPath: PropertyPath) {
+    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
+    if (Internal._mutate(value, propertyKeys, this.state)) {
+      for (let onMutateListener of this.onMutateListeners) {
+        onMutateListener(propertyPath)
+      }
+    }
+  }
+
+  // 指定されたプロパティに値を設定する。
+  // 設定前後で値が変わらなかったら（===だったら）falseを返す
+  private static _mutate(value: any, propertyKeys: List<string>, state: any): boolean {
+    const firstKey = propertyKeys.first(undefined)
+    assertNonUndefined(firstKey)
+
+    if (propertyKeys.size === 1) {
+      if (state[firstKey] !== value) {
+        state[firstKey] = value
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return this._mutate(value, propertyKeys.shift(), state[firstKey])
+    }
+  }
+
   addOnMutateListener(listener: (propertyPath: PropertyPath) => void) {
     this.onMutateListeners.add(listener)
   }
