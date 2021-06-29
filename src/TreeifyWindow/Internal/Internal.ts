@@ -53,13 +53,6 @@ export class Internal {
     this._instance = undefined
   }
 
-  /** State内の書き換えた箇所を伝える */
-  markAsMutated(propertyPath: PropertyPath) {
-    for (let onMutateListener of this.onMutateListeners) {
-      onMutateListener(propertyPath)
-    }
-  }
-
   /** State内の指定されたプロパティを書き換える */
   mutate(value: any, propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
