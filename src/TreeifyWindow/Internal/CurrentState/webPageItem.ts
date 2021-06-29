@@ -38,8 +38,7 @@ export function createWebPageItem(): ItemId {
 
 /** StateのwebPageItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteWebPageItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.webPageItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId))
+  Internal.instance.delete(PropertyPath.of('webPageItems', itemId))
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */

@@ -35,8 +35,7 @@ export function createImageItem(): ItemId {
 
 /** StateのimageItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteImageItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.imageItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('imageItems', itemId))
+  Internal.instance.delete(PropertyPath.of('imageItems', itemId))
 }
 
 /** 画像アイテムのURLを設定する */

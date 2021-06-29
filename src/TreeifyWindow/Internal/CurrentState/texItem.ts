@@ -32,8 +32,7 @@ export function createTexItem(): ItemId {
 
 /** StateのtexItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteTexItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.texItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('texItems', itemId))
+  Internal.instance.delete(PropertyPath.of('texItems', itemId))
 }
 
 /** TeXアイテムのコードを設定する */

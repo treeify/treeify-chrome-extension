@@ -43,6 +43,5 @@ export function createTextItem(): ItemId {
 
 /** StateのtextItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteTextItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.textItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('textItems', itemId))
+  Internal.instance.delete(PropertyPath.of('textItems', itemId))
 }

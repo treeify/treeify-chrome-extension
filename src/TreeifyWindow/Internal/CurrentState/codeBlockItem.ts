@@ -35,8 +35,7 @@ export function createCodeBlockItem(): ItemId {
 
 /** StateのcodeBlockItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteCodeBlockItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.codeBlockItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId))
+  Internal.instance.delete(PropertyPath.of('codeBlockItems', itemId))
 }
 
 /** コードブロックアイテムのコードを設定する */

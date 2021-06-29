@@ -107,8 +107,7 @@ export function turnIntoPage(itemId: ItemId) {
 export function turnIntoNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
-  delete Internal.instance.state.pages[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
+  Internal.instance.delete(PropertyPath.of('pages', itemId))
 }
 
 export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {

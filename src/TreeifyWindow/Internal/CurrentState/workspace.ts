@@ -68,8 +68,7 @@ export function createWorkspace() {
 
 /** 指定されたワークスペースを削除する */
 export function deleteWorkspace(workspaceId: WorkspaceId) {
-  delete Internal.instance.state.workspaces[workspaceId]
-  Internal.instance.markAsMutated(PropertyPath.of('workspaces', workspaceId))
+  Internal.instance.delete(PropertyPath.of('workspaces', workspaceId))
 }
 
 /** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */

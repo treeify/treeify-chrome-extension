@@ -25,8 +25,7 @@ export function deleteItem(itemId: ItemId) {
       deleteItem(childItemId)
     } else {
       // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
-      delete Internal.instance.state.items[childItemId].parents[itemId]
-      Internal.instance.markAsMutated(PropertyPath.of('items', childItemId, 'parents', itemId))
+      Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
     }
   }
 
@@ -135,8 +134,7 @@ export function deleteItemItself(itemId: ItemId) {
 
 /** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.items[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId))
+  Internal.instance.delete(PropertyPath.of('items', itemId))
 }
 
 /** 指定されたIDのアイテムが存在するかどうかを調べる */
@@ -366,8 +364,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 
   const edge = Internal.instance.state.items[itemId].parents[parentItemId]
   // アイテムの親リストから親アイテムを削除する
-  delete Internal.instance.state.items[itemId].parents[parentItemId]
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parents', parentItemId))
+  Internal.instance.delete(PropertyPath.of('items', itemId, 'parents', parentItemId))
   return edge
 }
 
