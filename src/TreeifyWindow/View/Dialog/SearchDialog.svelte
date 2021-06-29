@@ -78,18 +78,11 @@
 
 <style>
   .search-dialog_content {
-    max-width: 90vw;
-    max-height: 90vh;
-
     padding: 1em;
-
-    /* 検索結果の領域をスクロール可能にするための設定 */
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr);
   }
 
-  .search-dialog_result {
-    overflow-y: auto;
+  .search-dialog_search-query {
+    width: 100%;
   }
 
   .search-dialog_result-items-for-each-page {
