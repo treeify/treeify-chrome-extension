@@ -66,7 +66,9 @@
 <div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} bind:this={domElement}>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">{title}</div>
-    <slot />
+    <div class="common-dialog_content-area">
+      <slot />
+    </div>
   </div>
 </div>
 
@@ -75,6 +77,7 @@
     --common-dialog-border-radius: 5px;
 
     --common-dialog-title-bar-background: hsl(0, 0%, 25%);
+    --common-dialog-title-bar-height: 2.2em;
   }
 
   .common-dialog {
@@ -96,21 +99,29 @@
   }
 
   .common-dialog_frame {
+    max-width: 90vw;
+
     border-radius: var(--common-dialog-border-radius);
     /* 子要素を角丸からはみ出させない */
     overflow: hidden;
 
     background: hsl(0, 0%, 100%);
     box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
-
-    font-size: 14px;
   }
 
   .common-dialog_title-bar {
     font-size: 15px;
-    padding: 0.3em;
+    line-height: var(--common-dialog-title-bar-height);
+    padding-left: 0.5em;
 
     background: var(--common-dialog-title-bar-background);
     color: white;
+  }
+
+  .common-dialog_content-area {
+    max-height: calc(90vh - var(--common-dialog-title-bar-height));
+    overflow-y: auto;
+
+    font-size: 14px;
   }
 </style>
