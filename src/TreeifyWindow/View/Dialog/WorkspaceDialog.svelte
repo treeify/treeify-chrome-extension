@@ -16,7 +16,7 @@
   }
 </script>
 
-<CommonDialog title="ワークスペース" onCloseDialog={closeDialog}>
+<CommonDialog title="ワークスペース">
   <div class="workspace-dialog_content" tabindex="0">
     {#each props.workspaces.toArray() as workspace}
       <WorkspaceDialogRow {workspace} />

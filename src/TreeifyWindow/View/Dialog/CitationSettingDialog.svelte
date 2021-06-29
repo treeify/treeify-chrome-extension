@@ -1,19 +1,11 @@
 <script lang="ts">
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Rerenderer} from '../../Rerenderer'
   import {CitationSettingDialogProps} from './CitationSettingDialogProps'
   import CommonDialog from './CommonDialog.svelte'
 
   export let props: CitationSettingDialogProps
-
-  const onCloseDialog = () => {
-    // ダイアログを閉じる
-    CurrentState.setDialog(null)
-    Rerenderer.instance.rerender()
-  }
 </script>
 
-<CommonDialog title="出典設定" {onCloseDialog}>
+<CommonDialog title="出典設定">
   <div class="citation-setting-dialog_content">
     <div class="citation-setting-dialog_input-area">
       <label>出典タイトル</label>

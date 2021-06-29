@@ -1,18 +1,10 @@
 <script lang="ts">
   import hljs from 'highlight.js/lib/core'
-  import {CurrentState} from '../../Internal/CurrentState'
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
-  import {Rerenderer} from '../../Rerenderer'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
 
   export let props: CodeBlockItemEditDialogProps
-
-  const onCloseDialog = () => {
-    // ダイアログを閉じる
-    CurrentState.setDialog(null)
-    Rerenderer.instance.rerender()
-  }
 
   function onPaste(event: ClipboardEvent) {
     if (event.clipboardData !== null && event.target instanceof HTMLDivElement) {
@@ -25,7 +17,7 @@
   }
 </script>
 
-<CommonDialog title="コードブロック編集" {onCloseDialog}>
+<CommonDialog title="コードブロック編集">
   <div class="code-block-edit-dialog_content">
     <div
       class="code-block-edit-dialog_code"

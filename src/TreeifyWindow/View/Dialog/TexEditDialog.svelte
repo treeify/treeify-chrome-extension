@@ -1,7 +1,5 @@
 <script lang="ts">
   import katex from 'katex'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import {TexEditDialogProps} from './TexEditDialogProps'
 
@@ -10,12 +8,6 @@
   // リアルタイムプレビュー用の変数
   let currentCode = props.code
 
-  const onCloseDialog = () => {
-    // ダイアログを閉じる
-    CurrentState.setDialog(null)
-    Rerenderer.instance.rerender()
-  }
-
   function onInput(event: Event) {
     if (event.target instanceof HTMLElement) {
       currentCode = event.target.textContent ?? ''
@@ -23,7 +15,7 @@
   }
 </script>
 
-<CommonDialog title="TeX編集" {onCloseDialog}>
+<CommonDialog title="TeX編集">
   <div class="tex-edit-dialog_content">
     <div
       class="tex-edit-dialog_code"
