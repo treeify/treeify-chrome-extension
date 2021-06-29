@@ -85,6 +85,11 @@ export function createMainAreaNodeProps(
           CurrentState.setTargetItemPath(itemPath)
           NullaryCommand.deleteItem()
           Rerenderer.instance.rerender()
+        } else if (inputId === '1000MouseButton1') {
+          event.preventDefault()
+          CurrentState.setTargetItemPath(itemPath)
+          NullaryCommand.deleteItemItself()
+          Rerenderer.instance.rerender()
         }
       })
     },
