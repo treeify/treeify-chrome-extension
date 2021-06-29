@@ -1,5 +1,9 @@
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {
+  CitationSettingDialogProps,
+  createCitationSettingDialogProps,
+} from 'src/TreeifyWindow/View/Dialog/CitationSettingDialogProps'
+import {
   CodeBlockItemEditDialogProps,
   createCodeBlockItemEditDialogProps,
 } from 'src/TreeifyWindow/View/Dialog/CodeBlockItemEditDialogProps'
@@ -49,6 +53,7 @@ export type RootProps = {
   labelEditDialog: LabelEditDialogProps | undefined
   otherParentsDialog: OtherParentsDialogProps | undefined
   searchDialog: SearchDialogProps | undefined
+  citationSettingDialog: CitationSettingDialogProps | undefined
   toolbarProps: ToolbarProps
 }
 
@@ -65,5 +70,6 @@ export function createRootProps(state: State): RootProps {
     labelEditDialog: createLabelEditDialogProps(state),
     otherParentsDialog: createOtherParentsDialogProps(state),
     searchDialog: createSearchDialogProps(state),
+    citationSettingDialog: createCitationSettingDialogProps(state),
   }
 }

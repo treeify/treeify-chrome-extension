@@ -3,6 +3,7 @@
   import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
   import {createRootProps, RootProps} from 'src/TreeifyWindow/View/RootProps'
   import {derived, Readable} from 'svelte/store'
+  import CitationSettingDialog from './Dialog/CitationSettingDialog.svelte'
   import CodeBlockItemEditDialog from './Dialog/CodeBlockItemEditDialog.svelte'
   import DefaultWindowModeSettingDialog from './Dialog/DefaultWindowModeSettingDialog.svelte'
   import LabelEditDialog from './Dialog/LabelEditDialog.svelte'
@@ -56,6 +57,9 @@
   {/if}
   {#if props.searchDialog !== undefined}
     <SearchDialog props={props.searchDialog} />
+  {/if}
+  {#if props.citationSettingDialog !== undefined}
+    <CitationSettingDialog props={props.citationSettingDialog} />
   {/if}
 </div>
 
