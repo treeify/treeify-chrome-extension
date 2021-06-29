@@ -31,6 +31,10 @@ export function setAnchorItemPath(itemPath: ItemPath) {
 export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
   Internal.instance.mutate(itemPath, PropertyPath.of('pages', activePageId, 'targetItemPath'))
+
+  // ダイアログを開いた状態でターゲットアイテムが変わった際に起こる問題への対策。
+  // 例えばダイアログを開いた状態でブラウザウィンドウでタブを閉じるとターゲットアイテムが変わりうる。
+  CurrentState.setDialog(null)
 }
 
 /**
