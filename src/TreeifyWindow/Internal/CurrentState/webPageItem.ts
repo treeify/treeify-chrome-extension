@@ -22,8 +22,7 @@ export function createWebPageItem(): ItemId {
     cite: '',
     citeUrl: '',
   }
-  Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
   const webPageItem: WebPageItem = {
     url: '',
@@ -32,44 +31,38 @@ export function createWebPageItem(): ItemId {
     title: null,
     isUnread: false,
   }
-  Internal.instance.state.webPageItems[newItemId] = webPageItem
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', newItemId))
+  Internal.instance.mutate(webPageItem, PropertyPath.of('webPageItems', newItemId))
 
   return newItemId
 }
 
 /** StateのwebPageItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteWebPageItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.webPageItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId))
+  Internal.instance.delete(PropertyPath.of('webPageItems', itemId))
 }
 
 /** ウェブページアイテムのタブタイトルを設定する */
 export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.state.webPageItems[itemId].tabTitle = tabTitle
+    Internal.instance.mutate(tabTitle, PropertyPath.of('webPageItems', itemId, 'tabTitle'))
   })
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'tabTitle'))
 }
 
 /** ウェブページアイテムのタイトルを設定する */
 export function setWebPageItemTitle(itemId: ItemId, title: string | null) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.state.webPageItems[itemId].title = title
+    Internal.instance.mutate(title, PropertyPath.of('webPageItems', itemId, 'title'))
   })
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'title'))
 }
 
 /** ウェブページアイテムのURLを設定する */
 export function setWebPageItemUrl(itemId: ItemId, url: string) {
-  Internal.instance.state.webPageItems[itemId].url = url
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'url'))
+  Internal.instance.mutate(url, PropertyPath.of('webPageItems', itemId, 'url'))
 }
 
 /** ウェブページアイテムのファビコンURLを設定する */
 export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
-  Internal.instance.state.webPageItems[itemId].faviconUrl = url
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
+  Internal.instance.mutate(url, PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
 }
 
 export function deriveWebPageItemTitle(itemId: ItemId): string {
@@ -80,6 +73,5 @@ export function deriveWebPageItemTitle(itemId: ItemId): string {
 
 /** ウェブページアイテムの未読フラグを上書き設定する */
 export function setIsUnreadFlag(itemId: ItemId, isUnread: boolean) {
-  Internal.instance.state.webPageItems[itemId].isUnread = isUnread
-  Internal.instance.markAsMutated(PropertyPath.of('webPageItems', itemId, 'isUnread'))
+  Internal.instance.mutate(isUnread, PropertyPath.of('webPageItems', itemId, 'isUnread'))
 }

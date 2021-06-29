@@ -18,11 +18,14 @@
       const containerPageId = ItemPath.getRootItemId(itemPath)
 
       // ジャンプ先のページのtargetItemPathを更新する
-      const containerPage = Internal.instance.state.pages[containerPageId]
-      containerPage.targetItemPath = itemPath
-      containerPage.anchorItemPath = itemPath
-      Internal.instance.markAsMutated(PropertyPath.of('pages', containerPageId, 'targetItemPath'))
-      Internal.instance.markAsMutated(PropertyPath.of('pages', containerPageId, 'anchorItemPath'))
+      Internal.instance.mutate(
+        itemPath,
+        PropertyPath.of('pages', containerPageId, 'targetItemPath')
+      )
+      Internal.instance.mutate(
+        itemPath,
+        PropertyPath.of('pages', containerPageId, 'anchorItemPath')
+      )
 
       CurrentState.moses(itemPath)
 

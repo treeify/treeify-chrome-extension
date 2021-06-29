@@ -25,8 +25,7 @@ export function deleteItem(itemId: ItemId) {
       deleteItem(childItemId)
     } else {
       // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
-      delete Internal.instance.state.items[childItemId].parents[itemId]
-      Internal.instance.markAsMutated(PropertyPath.of('items', childItemId, 'parents', itemId))
+      Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
     }
   }
 
@@ -135,8 +134,7 @@ export function deleteItemItself(itemId: ItemId) {
 
 /** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.items[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId))
+  Internal.instance.delete(PropertyPath.of('items', itemId))
 }
 
 /** 指定されたIDのアイテムが存在するかどうかを調べる */
@@ -166,8 +164,8 @@ export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed = isCollapsed
-  Internal.instance.markAsMutated(
+  Internal.instance.mutate(
+    isCollapsed,
     PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
   )
 }
@@ -205,8 +203,8 @@ export function setLabels(itemPath: ItemPath, labels: List<string>) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   if (parentItemId !== undefined) {
-    Internal.instance.state.items[itemId].parents[parentItemId].labels = labels
-    Internal.instance.markAsMutated(
+    Internal.instance.mutate(
+      labels,
       PropertyPath.of('items', itemId, 'parents', parentItemId, 'labels')
     )
   }
@@ -214,8 +212,7 @@ export function setLabels(itemPath: ItemPath, labels: List<string>) {
 
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
-  Internal.instance.state.items[itemId].timestamp = Timestamp.now()
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'timestamp'))
+  Internal.instance.mutate(Timestamp.now(), PropertyPath.of('items', itemId, 'timestamp'))
 }
 
 /** 指定されたアイテムの親アイテムIDのリストを返す */
@@ -232,8 +229,10 @@ export function countParents(itemId: ItemId): integer {
 
 /** 指定されたアイテムに親アイテムを追加する */
 export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
-  Internal.instance.state.items[itemid].parents[parentItemId] = edge ?? createDefaultEdge()
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemid, 'parents', parentItemId))
+  Internal.instance.mutate(
+    edge ?? createDefaultEdge(),
+    PropertyPath.of('items', itemid, 'parents', parentItemId)
+  )
 }
 
 /**
@@ -242,9 +241,8 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  * @param f 子アイテムリストを受け取って新しい子アイテムリストを返す関数
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
-  const item = Internal.instance.state.items[itemId]
-  item.childItemIds = f(item.childItemIds)
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'childItemIds'))
+  const childItemIds = Internal.instance.state.items[itemId].childItemIds
+  Internal.instance.mutate(f(childItemIds), PropertyPath.of('items', itemId, 'childItemIds'))
 }
 
 /**
@@ -366,8 +364,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 
   const edge = Internal.instance.state.items[itemId].parents[parentItemId]
   // アイテムの親リストから親アイテムを削除する
-  delete Internal.instance.state.items[itemId].parents[parentItemId]
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'parents', parentItemId))
+  Internal.instance.delete(PropertyPath.of('items', itemId, 'parents', parentItemId))
   return edge
 }
 
@@ -376,26 +373,24 @@ export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds
   const last = availableItemIds.last(undefined)
   if (last !== undefined) {
-    Internal.instance.state.availableItemIds = availableItemIds.pop()
-    Internal.instance.markAsMutated(PropertyPath.of('availableItemIds'))
+    Internal.instance.mutate(availableItemIds.pop(), PropertyPath.of('availableItemIds'))
     return last
   } else {
-    Internal.instance.markAsMutated(PropertyPath.of('maxItemId'))
-    return ++Internal.instance.state.maxItemId
+    const maxItemId = Internal.instance.state.maxItemId
+    Internal.instance.mutate(maxItemId + 1, PropertyPath.of('maxItemId'))
+    return maxItemId + 1
   }
 }
 
 /** 使われなくなったアイテムIDを登録する */
 export function recycleItemId(itemId: ItemId) {
-  const state = Internal.instance.state
-  state.availableItemIds = state.availableItemIds.push(itemId)
-  Internal.instance.markAsMutated(PropertyPath.of('availableItemIds'))
+  const availableItemIds = Internal.instance.state.availableItemIds
+  Internal.instance.mutate(availableItemIds.push(itemId), PropertyPath.of('availableItemIds'))
 }
 
 /** 指定されたアイテムのCSSクラスリストを上書き設定する */
 export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
-  Internal.instance.state.items[itemId].cssClasses = cssClasses
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
+  Internal.instance.mutate(cssClasses, PropertyPath.of('items', itemId, 'cssClasses'))
 }
 
 /**
@@ -408,19 +403,22 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
 
   const index = cssClasses.indexOf(cssClass)
   if (index === -1) {
-    item.cssClasses = cssClasses.push(cssClass)
+    Internal.instance.mutate(
+      cssClasses.push(cssClass),
+      PropertyPath.of('items', itemId, 'cssClasses')
+    )
   } else {
-    item.cssClasses = cssClasses.remove(index)
+    Internal.instance.mutate(
+      cssClasses.remove(index),
+      PropertyPath.of('items', itemId, 'cssClasses')
+    )
   }
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cssClasses'))
 }
 
 export function setCite(itemId: ItemId, cite: string) {
-  Internal.instance.state.items[itemId].cite = cite
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'cite'))
+  Internal.instance.mutate(cite, PropertyPath.of('items', itemId, 'cite'))
 }
 
 export function setCiteUrl(itemId: ItemId, citeUrl: string) {
-  Internal.instance.state.items[itemId].citeUrl = citeUrl
-  Internal.instance.markAsMutated(PropertyPath.of('items', itemId, 'citeUrl'))
+  Internal.instance.mutate(citeUrl, PropertyPath.of('items', itemId, 'citeUrl'))
 }

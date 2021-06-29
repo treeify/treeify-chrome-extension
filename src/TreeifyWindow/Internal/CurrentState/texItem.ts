@@ -22,26 +22,22 @@ export function createTexItem(): ItemId {
     cite: '',
     citeUrl: '',
   }
-  Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
   const texItem: TexItem = {code: ''}
-  Internal.instance.state.texItems[newItemId] = texItem
-  Internal.instance.markAsMutated(PropertyPath.of('texItems', newItemId))
+  Internal.instance.mutate(texItem, PropertyPath.of('texItems', newItemId))
 
   return newItemId
 }
 
 /** StateのtexItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteTexItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.texItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('texItems', itemId))
+  Internal.instance.delete(PropertyPath.of('texItems', itemId))
 }
 
 /** TeXアイテムのコードを設定する */
 export function setTexItemCode(itemId: ItemId, code: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.state.texItems[itemId].code = code
+    Internal.instance.mutate(code, PropertyPath.of('texItems', itemId, 'code'))
   })
-  Internal.instance.markAsMutated(PropertyPath.of('texItems', itemId, 'code'))
 }

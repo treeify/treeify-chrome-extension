@@ -53,10 +53,51 @@ export class Internal {
     this._instance = undefined
   }
 
-  /** State内の書き換えた箇所を伝える */
-  markAsMutated(propertyPath: PropertyPath) {
+  /** State内の指定されたプロパティを書き換える */
+  mutate(value: any, propertyPath: PropertyPath) {
+    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
+    if (Internal._mutate(value, propertyKeys, this.state)) {
+      for (let onMutateListener of this.onMutateListeners) {
+        onMutateListener(propertyPath)
+      }
+    }
+  }
+
+  // 指定されたプロパティに値を設定する。
+  // 設定前後で値が変わらなかったら（===だったら）falseを返す
+  private static _mutate(value: any, propertyKeys: List<string>, state: any): boolean {
+    const firstKey = propertyKeys.first(undefined)
+    assertNonUndefined(firstKey)
+
+    if (propertyKeys.size === 1) {
+      if (state[firstKey] !== value) {
+        state[firstKey] = value
+        return true
+      } else {
+        return false
+      }
+    } else {
+      return this._mutate(value, propertyKeys.shift(), state[firstKey])
+    }
+  }
+
+  /** State内の指定されたプロパティを削除する */
+  delete(propertyPath: PropertyPath) {
+    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
+    Internal._delete(propertyKeys, this.state)
     for (let onMutateListener of this.onMutateListeners) {
       onMutateListener(propertyPath)
+    }
+  }
+
+  private static _delete(propertyKeys: List<string>, state: any) {
+    const firstKey = propertyKeys.first(undefined)
+    assertNonUndefined(firstKey)
+
+    if (propertyKeys.size === 1) {
+      delete state[firstKey]
+    } else {
+      this._delete(propertyKeys.shift(), state[firstKey])
     }
   }
 

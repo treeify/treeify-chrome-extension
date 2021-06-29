@@ -22,37 +22,32 @@ export function createCodeBlockItem(): ItemId {
     cite: '',
     citeUrl: '',
   }
-  Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
   const codeBlockItem: CodeBlockItem = {
     code: '',
     language: '',
   }
-  Internal.instance.state.codeBlockItems[newItemId] = codeBlockItem
-  Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', newItemId))
+  Internal.instance.mutate(codeBlockItem, PropertyPath.of('codeBlockItems', newItemId))
 
   return newItemId
 }
 
 /** StateのcodeBlockItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
 export function deleteCodeBlockItemEntry(itemId: ItemId) {
-  delete Internal.instance.state.codeBlockItems[itemId]
-  Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId))
+  Internal.instance.delete(PropertyPath.of('codeBlockItems', itemId))
 }
 
 /** コードブロックアイテムのコードを設定する */
 export function setCodeBlockItemCode(itemId: ItemId, code: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.state.codeBlockItems[itemId].code = code
+    Internal.instance.mutate(code, PropertyPath.of('codeBlockItems', itemId, 'code'))
   })
-  Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId, 'code'))
 }
 
 /** コードブロックアイテムの言語を設定する */
 export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.state.codeBlockItems[itemId].language = language
+    Internal.instance.mutate(language, PropertyPath.of('codeBlockItems', itemId, 'language'))
   })
-  Internal.instance.markAsMutated(PropertyPath.of('codeBlockItems', itemId, 'language'))
 }
