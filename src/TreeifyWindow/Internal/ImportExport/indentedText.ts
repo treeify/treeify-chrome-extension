@@ -34,25 +34,33 @@ export function removeRedundantIndent(indentedText: string): string {
 
 /** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemPath: ItemPath): string {
-  return exportAsIndentedLines(itemPath).join('\n')
+  return List(yieldIndentedLines(itemPath, '  ')).join('\n')
 }
 
-function exportAsIndentedLines(itemPath: ItemPath, indentLevel = 0): List<string> {
-  const line = '  '.repeat(indentLevel) + getContentAsPlainText(ItemPath.getItemId(itemPath))
+function* yieldIndentedLines(
+  itemPath: ItemPath,
+  indentUnit: string,
+  depth: integer = 0
+): Generator<string> {
+  const indent = indentUnit.repeat(depth)
+  for (const contentLine of extractPlainText(itemPath).split(/\r?\n/)) {
+    yield indent + contentLine
+  }
 
-  const childLines = CurrentState.getDisplayingChildItemIds(itemPath).flatMap((childItemId) => {
-    return exportAsIndentedLines(itemPath.push(childItemId), indentLevel + 1)
-  })
-  return childLines.unshift(line)
+  for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
+    const childItemPath = itemPath.push(childItemId)
+    yield* yieldIndentedLines(childItemPath, indentUnit, depth + 1)
+  }
 }
 
-/** アイテムタイプごとのフォーマットでコンテンツをプレーンテキスト化する */
-export function getContentAsPlainText(itemId: ItemId): string {
+/** 指定されたアイテム単体のプレーンテキスト表現を生成する */
+export function extractPlainText(itemPath: ItemPath): string {
+  const itemId = ItemPath.getItemId(itemPath)
   const itemType = Internal.instance.state.items[itemId].itemType
   switch (itemType) {
     case ItemType.TEXT:
       const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
-      return DomishObject.toSingleLinePlainText(domishObjects)
+      return DomishObject.toPlainText(domishObjects)
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
       const title = CurrentState.deriveWebPageItemTitle(itemId)
@@ -62,8 +70,7 @@ export function getContentAsPlainText(itemId: ItemId): string {
       return `${imageItem.caption} ${imageItem.url}`
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
-      // 一行目くらいしかまともに表示できるものは見当たらない
-      return codeBlockItem.code.split(/\r?\n/)[0]
+      return codeBlockItem.code
     case ItemType.TEX:
       const texItem = Internal.instance.state.texItems[itemId]
       return texItem.code

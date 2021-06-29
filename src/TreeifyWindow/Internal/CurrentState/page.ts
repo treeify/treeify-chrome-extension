@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {ItemId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
-import {getContentAsPlainText} from 'src/TreeifyWindow/Internal/ImportExport/indentedText'
+import {extractPlainText} from 'src/TreeifyWindow/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {DefaultWindowMode, Page} from 'src/TreeifyWindow/Internal/State'
@@ -116,5 +116,5 @@ export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function deriveTreeifyWindowTitle(): string {
-  return getContentAsPlainText(CurrentState.getActivePageId())
+  return extractPlainText(List.of(CurrentState.getActivePageId()))
 }
