@@ -159,33 +159,47 @@ export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep' | 'inherit
 
 /** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {
+  type: 'WebPageItemTitleSettingDialog'
   /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
   targetItemRect: DOMRect
 }
 
 /** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
 export type CodeBlockItemEditDialog = {
+  type: 'CodeBlockItemEditDialog'
   code: string
   language: string
 }
 
-export type TexEditDialog = {}
+export type TexEditDialog = {type: 'TexEditDialog'}
 
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
-export type DefaultWindowModeSettingDialog = {}
+export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
 
-export type WorkspaceDialog = {}
+export type WorkspaceDialog = {type: 'WorkspaceDialog'}
 
 /** ラベル編集ダイアログが持つ内部状態の型 */
 export type LabelEditDialog = {
+  type: 'LabelEditDialog'
   labels: List<string>
 }
 
-export type OtherParentsDialog = {}
+export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
-export type SearchDialog = {}
+export type SearchDialog = {type: 'SearchDialog'}
 
-export type CitationSettingDialog = {}
+export type CitationSettingDialog = {type: 'CitationSettingDialog'}
+
+export type Dialog =
+  | WebPageItemTitleSettingDialog
+  | CodeBlockItemEditDialog
+  | TexEditDialog
+  | DefaultWindowModeSettingDialog
+  | WorkspaceDialog
+  | LabelEditDialog
+  | OtherParentsDialog
+  | SearchDialog
+  | CitationSettingDialog
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */
