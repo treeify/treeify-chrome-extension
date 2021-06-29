@@ -9,7 +9,7 @@
 
   const closeDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setOtherParentsDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 </script>

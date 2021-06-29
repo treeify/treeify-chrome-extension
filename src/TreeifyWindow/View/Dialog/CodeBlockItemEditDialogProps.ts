@@ -34,12 +34,12 @@ export function createCodeBlockItemEditDialogProps(
       CurrentState.updateItemTimestamp(targetItemId)
 
       // ダイアログを閉じる
-      CurrentState.setCodeBlockItemEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setCodeBlockItemEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
   }

@@ -29,12 +29,12 @@ export function createTexEditDialogProps(state: State): TexEditDialogProps | und
       CurrentState.updateItemTimestamp(targetItemId)
 
       // ダイアログを閉じる
-      CurrentState.setTexEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setTexEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
   }

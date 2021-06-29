@@ -12,7 +12,7 @@
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setTexEditDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 

@@ -8,7 +8,7 @@
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
-        CurrentState.setWebPageItemTitleSettingDialog(null)
+        CurrentState.setDialog(null)
         Rerenderer.instance.rerender()
       }
     })

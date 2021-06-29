@@ -10,7 +10,7 @@
 
   const closeDialog = () => {
     doWithErrorCapture(() => {
-      CurrentState.setWorkspaceDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     })
   }

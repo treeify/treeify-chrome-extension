@@ -28,7 +28,7 @@ export function createDefaultWindowModeSettingDialogProps(
     initialDefaultWindowMode: state.pages[targetPageId].defaultWindowMode,
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setDefaultWindowModeSettingDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
   }

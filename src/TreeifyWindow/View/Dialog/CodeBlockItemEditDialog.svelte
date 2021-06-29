@@ -5,12 +5,12 @@
   import {Rerenderer} from '../../Rerenderer'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
-  
+
   export let props: CodeBlockItemEditDialogProps
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setCodeBlockItemEditDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 

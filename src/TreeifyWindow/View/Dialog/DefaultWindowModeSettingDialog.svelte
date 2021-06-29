@@ -12,7 +12,7 @@
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setDefaultWindowModeSettingDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 
@@ -42,7 +42,7 @@
     CurrentState.updateItemTimestamp(targetPageId)
 
     // ダイアログを閉じる
-    CurrentState.setDefaultWindowModeSettingDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 </script>

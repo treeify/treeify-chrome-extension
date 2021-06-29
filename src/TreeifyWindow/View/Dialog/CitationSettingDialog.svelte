@@ -8,7 +8,7 @@
 
   const onCloseDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setCitationSettingDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 </script>

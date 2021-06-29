@@ -35,12 +35,12 @@ export function createWebPageItemTitleSettingDialogProps(
             CurrentState.setWebPageItemTitle(targetItemId, event.target.value)
           }
           // タイトル設定ダイアログを閉じる
-          CurrentState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.setDialog(null)
           Rerenderer.instance.rerender()
         }
 
         if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-          CurrentState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.setDialog(null)
           Rerenderer.instance.rerender()
         }
       })
