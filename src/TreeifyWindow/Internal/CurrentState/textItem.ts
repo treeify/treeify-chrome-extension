@@ -10,9 +10,11 @@ import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 /** 指定されたテキストアイテムのdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
   Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
-    Internal.instance.state.textItems[textItemId].domishObjects = domishObjects
+    Internal.instance.mutate(
+      domishObjects,
+      PropertyPath.of('textItems', textItemId, 'domishObjects')
+    )
   })
-  Internal.instance.markAsMutated(PropertyPath.of('textItems', textItemId, 'domishObjects'))
 }
 
 /**
@@ -31,12 +33,10 @@ export function createTextItem(): ItemId {
     cite: '',
     citeUrl: '',
   }
-  Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
   const newTextItem: TextItem = {domishObjects: List.of()}
-  Internal.instance.state.textItems[newItemId] = newTextItem
-  Internal.instance.markAsMutated(PropertyPath.of('textItems', newItemId))
+  Internal.instance.mutate(newTextItem, PropertyPath.of('textItems', newItemId))
 
   return newItemId
 }

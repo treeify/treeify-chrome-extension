@@ -24,15 +24,13 @@ export function getAnchorItemPath(): ItemPath {
 /** アンカーアイテムパスを上書きする */
 export function setAnchorItemPath(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
-  Internal.instance.state.pages[activePageId].anchorItemPath = itemPath
-  Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'anchorItemPath'))
+  Internal.instance.mutate(itemPath, PropertyPath.of('pages', activePageId, 'anchorItemPath'))
 }
 
 /** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
-  Internal.instance.state.pages[activePageId].targetItemPath = itemPath
-  Internal.instance.markAsMutated(PropertyPath.of('pages', activePageId, 'targetItemPath'))
+  Internal.instance.mutate(itemPath, PropertyPath.of('pages', activePageId, 'targetItemPath'))
 }
 
 /**

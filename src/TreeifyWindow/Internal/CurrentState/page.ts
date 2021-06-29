@@ -14,10 +14,13 @@ export async function switchActivePage(itemId: ItemId) {
   const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
-    Internal.instance.state.mountedPageIds = mountedPageIds.remove(index)
+    Internal.instance.mutate(
+      mountedPageIds.remove(index).push(itemId),
+      PropertyPath.of('mountedPageIds')
+    )
+  } else {
+    Internal.instance.mutate(mountedPageIds.push(itemId), PropertyPath.of('mountedPageIds'))
   }
-  Internal.instance.state.mountedPageIds = Internal.instance.state.mountedPageIds.push(itemId)
-  Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
 
   CurrentState.setActivePageId(itemId)
 
@@ -61,8 +64,10 @@ export function getActivePageId(): ItemId {
 /** 現在のワークスペースのactiveItemIdを設定する */
 export function setActivePageId(itemId: ItemId) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
-  Internal.instance.state.workspaces[currentWorkspaceId].activePageId = itemId
-  Internal.instance.markAsMutated(PropertyPath.of('workspaces', currentWorkspaceId, 'activePageId'))
+  Internal.instance.mutate(
+    itemId,
+    PropertyPath.of('workspaces', currentWorkspaceId, 'activePageId')
+  )
 }
 
 /**
@@ -73,8 +78,7 @@ export function unmountPage(itemId: ItemId) {
   const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
-    Internal.instance.state.mountedPageIds = mountedPageIds.remove(index)
-    Internal.instance.markAsMutated(PropertyPath.of('mountedPageIds'))
+    Internal.instance.mutate(mountedPageIds.remove(index), PropertyPath.of('mountedPageIds'))
   }
 }
 
@@ -93,8 +97,7 @@ export function turnIntoPage(itemId: ItemId) {
     anchorItemPath: List.of(itemId),
     defaultWindowMode: 'inherit',
   }
-  Internal.instance.state.pages[itemId] = page
-  Internal.instance.markAsMutated(PropertyPath.of('pages', itemId))
+  Internal.instance.mutate(page, PropertyPath.of('pages', itemId))
 }
 
 /**
@@ -109,8 +112,7 @@ export function turnIntoNonPage(itemId: ItemId) {
 }
 
 export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
-  Internal.instance.state.pages[itemId].defaultWindowMode = value
-  Internal.instance.markAsMutated(PropertyPath.of('pages', itemId, 'defaultWindowMode'))
+  Internal.instance.mutate(value, PropertyPath.of('pages', itemId, 'defaultWindowMode'))
 }
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */

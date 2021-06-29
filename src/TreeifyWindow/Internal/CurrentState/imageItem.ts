@@ -22,15 +22,13 @@ export function createImageItem(): ItemId {
     cite: '',
     citeUrl: '',
   }
-  Internal.instance.state.items[newItemId] = newItem
-  Internal.instance.markAsMutated(PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
   const imageItem: ImageItem = {
     url: '',
     caption: '',
   }
-  Internal.instance.state.imageItems[newItemId] = imageItem
-  Internal.instance.markAsMutated(PropertyPath.of('imageItems', newItemId))
+  Internal.instance.mutate(imageItem, PropertyPath.of('imageItems', newItemId))
 
   return newItemId
 }
@@ -43,14 +41,12 @@ export function deleteImageItemEntry(itemId: ItemId) {
 
 /** 画像アイテムのURLを設定する */
 export function setImageItemUrl(itemId: ItemId, url: string) {
-  Internal.instance.state.imageItems[itemId].url = url
-  Internal.instance.markAsMutated(PropertyPath.of('imageItems', itemId, 'url'))
+  Internal.instance.mutate(url, PropertyPath.of('imageItems', itemId, 'url'))
 }
 
 /** 画像アイテムのキャプションを設定する */
 export function setImageItemCaption(itemId: ItemId, caption: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.state.imageItems[itemId].caption = caption
+    Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
   })
-  Internal.instance.markAsMutated(PropertyPath.of('imageItems', itemId, 'caption'))
 }

@@ -3,6 +3,7 @@ import {ItemId, WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
+import {Workspace} from 'src/TreeifyWindow/Internal/State'
 import {Timestamp} from 'src/TreeifyWindow/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -43,27 +44,26 @@ export function getExcludedItemIds(): List<ItemId> {
 /** 現在のワークスペースの除外アイテムリストを設定する */
 export function setExcludedItemIds(itemIds: List<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
-  Internal.instance.state.workspaces[currentWorkspaceId].excludedItemIds = itemIds
-  Internal.instance.markAsMutated(
+  Internal.instance.mutate(
+    itemIds,
     PropertyPath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
   )
 }
 
 /** ワークスペースの名前を設定する */
 export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
-  Internal.instance.state.workspaces[workspaceId].name = name
-  Internal.instance.markAsMutated(PropertyPath.of('workspaces', workspaceId, 'name'))
+  Internal.instance.mutate(name, PropertyPath.of('workspaces', workspaceId, 'name'))
 }
 
 /** 空のワークスペースを作成する */
 export function createWorkspace() {
   const workspaceId = Timestamp.now()
-  Internal.instance.state.workspaces[workspaceId] = {
+  const workspace: Workspace = {
     activePageId: CurrentState.getActivePageId(),
     excludedItemIds: List.of(),
     name: `ワークスペース${CurrentState.getWorkspaceIds().count() + 1}`,
   }
-  Internal.instance.markAsMutated(PropertyPath.of('workspaces', workspaceId))
+  Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
 }
 
 /** 指定されたワークスペースを削除する */
