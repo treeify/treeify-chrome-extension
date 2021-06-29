@@ -45,7 +45,7 @@
       })
 
       // 検索ダイアログを閉じる
-      CurrentState.setSearchDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     })
   }

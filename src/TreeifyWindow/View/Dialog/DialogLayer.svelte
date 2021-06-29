@@ -1,0 +1,51 @@
+<script lang="ts">
+  import CitationSettingDialog from './CitationSettingDialog.svelte'
+  import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
+  import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
+  import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
+  import DefaultWindowModeSettingDialog from './DefaultWindowModeSettingDialog.svelte'
+  import {createDefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
+  import {DialogLayerProps} from './DialogLayer'
+  import LabelEditDialog from './LabelEditDialog.svelte'
+  import {createLabelEditDialogProps} from './LabelEditDialogProps'
+  import OtherParentsDialog from './OtherParentsDialog.svelte'
+  import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
+  import SearchDialog from './SearchDialog.svelte'
+  import {createSearchDialogProps} from './SearchDialogProps'
+  import TexEditDialog from './TexEditDialog.svelte'
+  import {createTexEditDialogProps} from './TexEditDialogProps'
+  import WebPageItemTitleSettingDialog from './WebPageItemTitleSettingDialog.svelte'
+  import {createWebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
+  import WorkspaceDialog from './WorkspaceDialog.svelte'
+  import {createWorkspaceDialogProps} from './WorkspaceDialogProps'
+
+  export let props: DialogLayerProps
+</script>
+
+{#if props.dialog?.type === 'WebPageItemTitleSettingDialog'}
+  <WebPageItemTitleSettingDialog props={createWebPageItemTitleSettingDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'CodeBlockItemEditDialog'}
+  <CodeBlockItemEditDialog props={createCodeBlockItemEditDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'TexEditDialog'}
+  <TexEditDialog props={createTexEditDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'DefaultWindowModeSettingDialog'}
+  <DefaultWindowModeSettingDialog props={createDefaultWindowModeSettingDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'WorkspaceDialog'}
+  <WorkspaceDialog props={createWorkspaceDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'LabelEditDialog'}
+  <LabelEditDialog props={createLabelEditDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'OtherParentsDialog'}
+  <OtherParentsDialog props={createOtherParentsDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'SearchDialog'}
+  <SearchDialog props={createSearchDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'CitationSettingDialog'}
+  <CitationSettingDialog props={createCitationSettingDialogProps(props.dialog)} />
+{/if}

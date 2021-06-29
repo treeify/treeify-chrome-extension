@@ -2,7 +2,7 @@ import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {State, WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
+import {WebPageItemTitleSettingDialog} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type WebPageItemTitleSettingDialogProps = {
@@ -13,15 +13,13 @@ export type WebPageItemTitleSettingDialogProps = {
 }
 
 export function createWebPageItemTitleSettingDialogProps(
-  state: State
-): WebPageItemTitleSettingDialogProps | undefined {
-  if (state.webPageItemTitleSettingDialog === null) return undefined
-
-  const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
+  dialog: WebPageItemTitleSettingDialog
+): WebPageItemTitleSettingDialogProps {
+  const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   return {
-    webPageItemTitleSettingDialog: state.webPageItemTitleSettingDialog,
+    webPageItemTitleSettingDialog: dialog,
     initialTitle: CurrentState.deriveWebPageItemTitle(targetItemId),
     onKeyDown: (event) => {
       doWithErrorCapture(() => {
@@ -35,12 +33,12 @@ export function createWebPageItemTitleSettingDialogProps(
             CurrentState.setWebPageItemTitle(targetItemId, event.target.value)
           }
           // タイトル設定ダイアログを閉じる
-          CurrentState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.setDialog(null)
           Rerenderer.instance.rerender()
         }
 
         if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-          CurrentState.setWebPageItemTitleSettingDialog(null)
+          CurrentState.setDialog(null)
           Rerenderer.instance.rerender()
         }
       })

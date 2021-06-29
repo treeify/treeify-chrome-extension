@@ -1,7 +1,7 @@
-import {LabelEditDialog, State} from 'src/TreeifyWindow/Internal/State'
+import {LabelEditDialog} from 'src/TreeifyWindow/Internal/State'
 
 export type LabelEditDialogProps = LabelEditDialog
 
-export function createLabelEditDialogProps(state: State): LabelEditDialogProps | undefined {
-  return state.labelEditDialog ?? undefined
+export function createLabelEditDialogProps(dialog: LabelEditDialog): LabelEditDialogProps {
+  return dialog
 }

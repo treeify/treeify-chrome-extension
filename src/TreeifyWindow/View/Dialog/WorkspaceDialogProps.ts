@@ -1,7 +1,8 @@
 import {List} from 'immutable'
 import {WorkspaceId} from 'src/TreeifyWindow/basicType'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
-import {State, Workspace} from 'src/TreeifyWindow/Internal/State'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {Workspace, WorkspaceDialog} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type WorkspaceRecord = {id: WorkspaceId} & Workspace
@@ -11,9 +12,8 @@ export type WorkspaceDialogProps = {
   onClickAddButton: () => void
 }
 
-export function createWorkspaceDialogProps(state: State): WorkspaceDialogProps | undefined {
-  if (state.workspaceDialog === null) return undefined
-
+export function createWorkspaceDialogProps(dialog: WorkspaceDialog): WorkspaceDialogProps {
+  const state = Internal.instance.state
   const workspaces = []
   for (const key in state.workspaces) {
     const workspaceId = parseInt(key)

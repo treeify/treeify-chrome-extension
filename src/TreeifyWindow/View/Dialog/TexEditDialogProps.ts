@@ -2,7 +2,7 @@ import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {State} from 'src/TreeifyWindow/Internal/State'
+import {TexEditDialog} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type TexEditDialogProps = {
@@ -11,9 +11,7 @@ export type TexEditDialogProps = {
   onClickCancelButton: () => void
 }
 
-export function createTexEditDialogProps(state: State): TexEditDialogProps | undefined {
-  if (state.texEditDialog === null) return undefined
-
+export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   return {
     code: Internal.instance.state.texItems[ItemPath.getItemId(targetItemPath)].code,
@@ -29,12 +27,12 @@ export function createTexEditDialogProps(state: State): TexEditDialogProps | und
       CurrentState.updateItemTimestamp(targetItemId)
 
       // ダイアログを閉じる
-      CurrentState.setTexEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setTexEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
   }

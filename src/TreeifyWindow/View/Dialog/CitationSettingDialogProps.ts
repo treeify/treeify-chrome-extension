@@ -1,7 +1,8 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
-import {State} from 'src/TreeifyWindow/Internal/State'
+import {CitationSettingDialog} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 
 export type CitationSettingDialogProps = {
@@ -12,12 +13,10 @@ export type CitationSettingDialogProps = {
 }
 
 export function createCitationSettingDialogProps(
-  state: State
-): CitationSettingDialogProps | undefined {
-  if (state.citationSettingDialog === null) return undefined
-
+  dialog: CitationSettingDialog
+): CitationSettingDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
-  const item = state.items[ItemPath.getItemId(targetItemPath)]
+  const item = Internal.instance.state.items[ItemPath.getItemId(targetItemPath)]
   return {
     cite: item.cite,
     citeUrl: item.citeUrl,
@@ -40,12 +39,12 @@ export function createCitationSettingDialogProps(
       CurrentState.updateItemTimestamp(targetItemId)
 
       // ダイアログを閉じる
-      CurrentState.setCitationSettingDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setCitationSettingDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     },
   }

@@ -3,11 +3,11 @@
   import {onDestroy, onMount} from 'svelte'
   import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
+  import {Rerenderer} from '../../Rerenderer'
 
   export let title: string
-
-  export let onCloseDialog: () => void
 
   let focusTrap: FocusTrap | undefined
 
@@ -44,7 +44,8 @@
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
-        onCloseDialog()
+        CurrentState.setDialog(null)
+        Rerenderer.instance.rerender()
       }
     })
   }
@@ -57,7 +58,8 @@
       if (event.isComposing) return
 
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        onCloseDialog()
+        CurrentState.setDialog(null)
+        Rerenderer.instance.rerender()
       }
     })
   }

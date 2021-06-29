@@ -5,7 +5,6 @@
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
-  import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import CommonDialog from './CommonDialog.svelte'
@@ -15,12 +14,6 @@
   export let props: SearchDialogProps
 
   let searchResult: List<List<ItemPath>> = List.of()
-
-  const closeDialog = () => {
-    // ダイアログを閉じる
-    CurrentState.setSearchDialog(null)
-    Rerenderer.instance.rerender()
-  }
 
   function onInput(event: Event) {
     if (!(event.target instanceof HTMLInputElement)) return
@@ -53,7 +46,7 @@
   }
 </script>
 
-<CommonDialog title="検索" onCloseDialog={closeDialog}>
+<CommonDialog title="検索">
   <div class="search-dialog_content">
     <input
       type="text"

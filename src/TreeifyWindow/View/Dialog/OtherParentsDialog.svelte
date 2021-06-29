@@ -9,12 +9,12 @@
 
   const closeDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setOtherParentsDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 </script>
 
-<CommonDialog title="他のトランスクルード元" onCloseDialog={closeDialog}>
+<CommonDialog title="他のトランスクルード元">
   <div class="other-parents-dialog_content">
     <div class="other-parents-dialog_item-content-list">
       {#each props.itemContentPropses.toArray() as itemContentProps}

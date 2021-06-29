@@ -12,15 +12,13 @@
 
   const closeDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setLabelEditDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.setLabelEditDialog({
-        labels: getAllLabelInputValues().push(''),
-      })
+      CurrentState.setDialog({type: 'LabelEditDialog', labels: getAllLabelInputValues().push('')})
       Rerenderer.instance.rerender()
     })
   }
@@ -29,7 +27,7 @@
     doWithErrorCapture(() => {
       const labels = getAllLabelInputValues().filter((label) => label !== '')
       CurrentState.setLabels(CurrentState.getTargetItemPath(), labels)
-      CurrentState.setLabelEditDialog(null)
+      CurrentState.setDialog(null)
       Rerenderer.instance.rerender()
     })
   }
@@ -44,12 +42,12 @@
       assert(props.labels.size > 0)
       if (props.labels.size === 1) {
         // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
-        CurrentState.setLabelEditDialog({labels: List.of('')})
+        CurrentState.setDialog({type: 'LabelEditDialog', labels: List.of('')})
         Rerenderer.instance.rerender()
       } else {
         // 該当する入力欄を削除する
         const inputValues = getAllLabelInputValues()
-        CurrentState.setLabelEditDialog({labels: inputValues.remove(index)})
+        CurrentState.setDialog({type: 'LabelEditDialog', labels: inputValues.remove(index)})
         Rerenderer.instance.rerender()
       }
     })
@@ -77,7 +75,7 @@
   }
 </script>
 
-<CommonDialog title="ラベル編集" onCloseDialog={closeDialog}>
+<CommonDialog title="ラベル編集">
   <div class="label-edit-dialog_content">
     {#each props.labels.toArray() as label}
       <div class="label-edit-dialog_label-row">

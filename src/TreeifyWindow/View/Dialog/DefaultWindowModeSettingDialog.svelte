@@ -10,12 +10,6 @@
 
   let selectedDefaultWindowMode = props.initialDefaultWindowMode
 
-  const onCloseDialog = () => {
-    // ダイアログを閉じる
-    CurrentState.setDefaultWindowModeSettingDialog(null)
-    Rerenderer.instance.rerender()
-  }
-
   const onClick = (event: Event) => {
     doWithErrorCapture(() => {
       if (event.target instanceof HTMLElement) {
@@ -42,12 +36,12 @@
     CurrentState.updateItemTimestamp(targetPageId)
 
     // ダイアログを閉じる
-    CurrentState.setDefaultWindowModeSettingDialog(null)
+    CurrentState.setDialog(null)
     Rerenderer.instance.rerender()
   }
 </script>
 
-<CommonDialog title="デフォルトウィンドウモード設定" {onCloseDialog}>
+<CommonDialog title="デフォルトウィンドウモード設定">
   <div class="default-window-mode-setting-dialog_content">
     <form class="default-window-mode-setting-dialog_option-list">
       <div class="default-window-mode-setting-dialog_option" on:click={onClick}>

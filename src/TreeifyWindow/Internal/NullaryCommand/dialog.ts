@@ -19,7 +19,8 @@ export function edit() {
         .getElementById(domElementId)
         ?.querySelector('.main-area-web-page-content_title')
       if (domElement != null) {
-        CurrentState.setWebPageItemTitleSettingDialog({
+        CurrentState.setDialog({
+          type: 'WebPageItemTitleSettingDialog',
           targetItemRect: domElement.getBoundingClientRect(),
         })
       }
@@ -27,25 +28,26 @@ export function edit() {
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[targetItemId]
-      CurrentState.setCodeBlockItemEditDialog({
+      CurrentState.setDialog({
+        type: 'CodeBlockItemEditDialog',
         code: codeBlockItem.code,
         language: codeBlockItem.language,
       })
       break
     case ItemType.TEX:
-      CurrentState.setTexEditDialog({})
+      CurrentState.setDialog({type: 'TexEditDialog'})
       break
   }
 }
 
 /** デフォルトウィンドウモード設定ダイアログを表示する */
 export function showDefaultWindowModeSettingDialog() {
-  CurrentState.setDefaultWindowModeSettingDialog({})
+  CurrentState.setDialog({type: 'DefaultWindowModeSettingDialog'})
 }
 
 /** ワークスペースダイアログを表示する */
 export function showWorkspaceDialog() {
-  CurrentState.setWorkspaceDialog({})
+  CurrentState.setDialog({type: 'WorkspaceDialog'})
 }
 
 /** ラベル編集ダイアログを表示する */
@@ -53,23 +55,23 @@ export function showLabelEditDialog() {
   const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
   if (labels.isEmpty()) {
     // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
-    CurrentState.setLabelEditDialog({labels: List.of('')})
+    CurrentState.setDialog({type: 'LabelEditDialog', labels: List.of('')})
   } else {
-    CurrentState.setLabelEditDialog({labels})
+    CurrentState.setDialog({type: 'LabelEditDialog', labels})
   }
 }
 
 /** 他のトランスクルード元ダイアログを表示する */
 export function showOtherParentsDialog() {
-  CurrentState.setOtherParentsDialog({})
+  CurrentState.setDialog({type: 'OtherParentsDialog'})
 }
 
 /** 検索ダイアログを表示する */
 export function showSearchDialog() {
-  CurrentState.setSearchDialog({})
+  CurrentState.setDialog({type: 'SearchDialog'})
 }
 
 /** 出典設定ダイアログを表示する */
 export function showCitationSettingDialog() {
-  CurrentState.setCitationSettingDialog({})
+  CurrentState.setDialog({type: 'CitationSettingDialog'})
 }
