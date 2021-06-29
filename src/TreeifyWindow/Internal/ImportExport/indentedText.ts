@@ -81,7 +81,7 @@ export function extractPlainText(itemPath: ItemPath): string {
 
 /** 複数行のテキストをできるだけ良い形でTreeifyに取り込む */
 export function pasteMultilineText(text: string) {
-  const lines = text.split(/\r?\n/)
+  const lines = removeRedundantIndent(text).split(/\r?\n/)
 
   for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
     // TODO: 最適化の余地あり。パースの試行とパース成功確認後のアイテム生成の2回に分けてトラバースしている
