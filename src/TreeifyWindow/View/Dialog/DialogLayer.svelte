@@ -8,8 +8,8 @@
   import DefaultWindowModeSettingDialog from './DefaultWindowModeSettingDialog.svelte'
   import {createDefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
   import {DialogLayerProps} from './DialogLayer'
-  import LabelEditDialog from './LabelEditDialog.svelte'
-  import {createLabelEditDialogProps} from './LabelEditDialogProps'
+  import LabelSettingDialog from './LabelSettingDialog.svelte'
+  import {createLabelSettingDialogProps} from './LabelSettingDialogProps'
   import OtherParentsDialog from './OtherParentsDialog.svelte'
   import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
   import SearchDialog from './SearchDialog.svelte'
@@ -36,8 +36,8 @@
 {#if props.dialog?.type === 'DefaultWindowModeSettingDialog'}
   <DefaultWindowModeSettingDialog props={createDefaultWindowModeSettingDialogProps(props.dialog)} />
 {/if}
-{#if props.dialog?.type === 'LabelEditDialog'}
-  <LabelEditDialog props={createLabelEditDialogProps(props.dialog)} />
+{#if props.dialog?.type === 'LabelSettingDialog'}
+  <LabelSettingDialog props={createLabelSettingDialogProps(props.dialog)} />
 {/if}
 {#if props.dialog?.type === 'OtherParentsDialog'}
   <OtherParentsDialog props={createOtherParentsDialogProps(props.dialog)} />

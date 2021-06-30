@@ -6,9 +6,9 @@
   import {InputId} from '../../Internal/InputId'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
-  import {LabelEditDialogProps} from './LabelEditDialogProps'
-
-  export let props: LabelEditDialogProps
+  import {LabelSettingDialogProps} from './LabelSettingDialogProps'
+  
+  export let props: LabelSettingDialogProps
 
   const closeDialog = () => {
     // ダイアログを閉じる
@@ -18,7 +18,7 @@
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.setDialog({type: 'LabelEditDialog', labels: getAllLabelInputValues().push('')})
+      CurrentState.setDialog({type: 'LabelSettingDialog', labels: getAllLabelInputValues().push('')})
       Rerenderer.instance.rerender()
     })
   }
@@ -36,18 +36,18 @@
     doWithErrorCapture(() => {
       if (!(event.target instanceof HTMLElement)) return
 
-      const elementNodeListOf = document.querySelectorAll('.label-edit-dialog_delete-button')
+      const elementNodeListOf = document.querySelectorAll('.label-setting-dialog_delete-button')
       const index = List(elementNodeListOf).indexOf(event.target)
       assert(index !== -1)
       assert(props.labels.size > 0)
       if (props.labels.size === 1) {
         // 入力欄が残り1個のときは、入力欄を0個にする代わりに空欄にする
-        CurrentState.setDialog({type: 'LabelEditDialog', labels: List.of('')})
+        CurrentState.setDialog({type: 'LabelSettingDialog', labels: List.of('')})
         Rerenderer.instance.rerender()
       } else {
         // 該当する入力欄を削除する
         const inputValues = getAllLabelInputValues()
-        CurrentState.setDialog({type: 'LabelEditDialog', labels: inputValues.remove(index)})
+        CurrentState.setDialog({type: 'LabelSettingDialog', labels: inputValues.remove(index)})
         Rerenderer.instance.rerender()
       }
     })
@@ -67,7 +67,7 @@
 
   // 全てのラベル入力欄の内容テキストを返す
   function getAllLabelInputValues(): List<string> {
-    const dialogDomElement = document.querySelector('.label-edit-dialog_content')
+    const dialogDomElement = document.querySelector('.label-setting-dialog_content')
     assertNonNull(dialogDomElement)
 
     const inputElements = dialogDomElement.querySelectorAll('input')
@@ -75,23 +75,23 @@
   }
 </script>
 
-<CommonDialog title="ラベル編集">
-  <div class="label-edit-dialog_content">
+<CommonDialog title="ラベル設定">
+  <div class="label-setting-dialog_content">
     {#each props.labels.toArray() as label}
-      <div class="label-edit-dialog_label-row">
+      <div class="label-setting-dialog_label-row">
         <input
           type="text"
-          class="label-edit-dialog_label-name"
+          class="label-setting-dialog_label-name"
           value={label}
           on:keydown={onKeyDown}
         />
-        <div class="label-edit-dialog_delete-button" on:click={onClickDeleteButton} />
+        <div class="label-setting-dialog_delete-button" on:click={onClickDeleteButton} />
       </div>
     {/each}
-    <div class="label-edit-dialog_add-button" on:click={onClickAddButton} />
-    <div class="label-edit-dialog_button-area">
-      <button class="label-edit-dialog_finish-button" on:click={onClickFinishButton}>完了</button>
-      <button class="label-edit-dialog_cancel-button" on:click={closeDialog}>キャンセル</button>
+    <div class="label-setting-dialog_add-button" on:click={onClickAddButton} />
+    <div class="label-setting-dialog_button-area">
+      <button class="label-setting-dialog_finish-button" on:click={onClickFinishButton}>完了</button>
+      <button class="label-setting-dialog_cancel-button" on:click={closeDialog}>キャンセル</button>
     </div>
   </div>
 </CommonDialog>
@@ -99,17 +99,17 @@
 <style>
   :root {
     /* 作成ボタンのサイズ（正方形の一辺の長さ） */
-    --label-edit-dialog-add-button-size: 22px;
+    --label-setting-dialog-add-button-size: 22px;
 
     /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-    --label-edit-dialog-delete-button-size: 19px;
+    --label-setting-dialog-delete-button-size: 19px;
   }
 
-  .label-edit-dialog_content {
+  .label-setting-dialog_content {
     padding: 1em;
   }
 
-  .label-edit-dialog_label-row {
+  .label-setting-dialog_label-row {
     display: flex;
     align-items: center;
 
@@ -117,13 +117,13 @@
 
     font-size: 100%;
   }
-  .label-edit-dialog_label-row:first-child {
+  .label-setting-dialog_label-row:first-child {
     margin-top: 0;
   }
 
-  .label-edit-dialog_delete-button {
-    width: var(--label-edit-dialog-delete-button-size);
-    height: var(--label-edit-dialog-delete-button-size);
+  .label-setting-dialog_delete-button {
+    width: var(--label-setting-dialog-delete-button-size);
+    height: var(--label-setting-dialog-delete-button-size);
 
     background: hsl(0, 0%, 40%);
     -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
@@ -132,9 +132,9 @@
     cursor: pointer;
   }
 
-  .label-edit-dialog_add-button {
-    width: var(--label-edit-dialog-add-button-size);
-    height: var(--label-edit-dialog-add-button-size);
+  .label-setting-dialog_add-button {
+    width: var(--label-setting-dialog-add-button-size);
+    height: var(--label-setting-dialog-add-button-size);
 
     margin: 3px auto;
 
@@ -145,7 +145,7 @@
     cursor: pointer;
   }
 
-  .label-edit-dialog_button-area {
+  .label-setting-dialog_button-area {
     /* 右寄せにする */
     width: max-content;
     margin-left: auto;

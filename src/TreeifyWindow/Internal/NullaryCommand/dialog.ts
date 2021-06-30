@@ -50,14 +50,14 @@ export function showWorkspaceDialog() {
   CurrentState.setDialog({type: 'WorkspaceDialog'})
 }
 
-/** ラベル編集ダイアログを表示する */
-export function showLabelEditDialog() {
+/** ラベル設定ダイアログを表示する */
+export function showLabelSettingDialog() {
   const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
   if (labels.isEmpty()) {
     // 空の入力欄を1つ表示するよう設定する（入力欄が0個だと見た目が奇妙だしわざわざ+ボタンを押すのが面倒）
-    CurrentState.setDialog({type: 'LabelEditDialog', labels: List.of('')})
+    CurrentState.setDialog({type: 'LabelSettingDialog', labels: List.of('')})
   } else {
-    CurrentState.setDialog({type: 'LabelEditDialog', labels})
+    CurrentState.setDialog({type: 'LabelSettingDialog', labels})
   }
 }
 

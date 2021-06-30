@@ -46,8 +46,8 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     onClick: () => NullaryCommand.showCitationSettingDialog(),
   })
   result.push({
-    title: 'ラベルを編集…',
-    onClick: () => NullaryCommand.showLabelEditDialog(),
+    title: 'ラベルを設定…',
+    onClick: () => NullaryCommand.showLabelSettingDialog(),
   })
 
   return List(result)
