@@ -164,8 +164,8 @@ export type ContextMenuDialog = {type: 'ContextMenuDialog'}
 export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
 
 /** ラベル設定ダイアログが持つ内部状態の型 */
-export type LabelEditDialog = {
-  type: 'LabelEditDialog'
+export type LabelSettingDialog = {
+  type: 'LabelSettingDialog'
   labels: List<string>
 }
 
@@ -189,7 +189,7 @@ export type Dialog =
   | CodeBlockItemEditDialog
   | ContextMenuDialog
   | DefaultWindowModeSettingDialog
-  | LabelEditDialog
+  | LabelSettingDialog
   | OtherParentsDialog
   | SearchDialog
   | TexEditDialog
