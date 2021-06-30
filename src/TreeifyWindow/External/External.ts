@@ -23,6 +23,12 @@ export class External {
   /** フローティング型の左サイドバーを表示するべきかどうか */
   shouldFloatingLeftSidebarShown: boolean = false
 
+  /**
+   * 独自コンテキストメニューを表示する座標を決定するために使う。
+   * event.clientXおよびclientYが代入される。
+   */
+  mousePosition: {x: integer; y: integer} | undefined
+
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 
