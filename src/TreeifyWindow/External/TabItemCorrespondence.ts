@@ -63,6 +63,11 @@ export class TabItemCorrespondence {
     })
   }
 
+  /** 指定されたURLを持つタブを返す */
+  getTabsByUrl(url: string): List<Tab> {
+    return List(this.tabIdToTab.values()).filter((tab) => tab.url === url)
+  }
+
   dumpCurrentState() {
     console.groupCollapsed('ダンプ：TabItemCorrespondence#tabIdToTab')
     const stateString = JSON.stringify(Object.fromEntries(this.tabIdToTab), undefined, 2)
