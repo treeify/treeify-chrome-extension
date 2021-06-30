@@ -1,4 +1,7 @@
 import {List} from 'immutable'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
+import {Internal} from 'src/TreeifyWindow/Internal/Internal'
+import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyWindow/Internal/NullaryCommand'
 
 export type ContextMenuItemProps = {
@@ -7,12 +10,17 @@ export type ContextMenuItemProps = {
 }
 
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+
   const result: ContextMenuItemProps[] = []
 
-  result.push({
-    title: 'ハードアンロード',
-    onClick: () => NullaryCommand.hardUnloadSubtree(),
-  })
+  if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
+    result.push({
+      title: 'タブを閉じる',
+      onClick: () => NullaryCommand.hardUnloadSubtree(),
+    })
+  }
 
   result.push({
     title: 'トランスクルード用コピー',
