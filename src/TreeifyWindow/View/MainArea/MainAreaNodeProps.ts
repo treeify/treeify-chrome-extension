@@ -43,6 +43,7 @@ export type MainAreaNodeProps = {
   childItemPropses: List<MainAreaNodeProps>
   spoolProps: MainAreaSpoolProps
   onMouseDownContentArea: (event: MouseEvent) => void
+  onContextMenu: (event: Event) => void
   onClickDeleteButton: (event: MouseEvent) => void
   onDragStart: (event: DragEvent) => void
   onClickHiddenTabsCount: (event: MouseEvent) => void
@@ -92,6 +93,13 @@ export function createMainAreaNodeProps(
           Rerenderer.instance.rerender()
         }
       })
+    },
+    onContextMenu: (event: Event) => {
+      // 独自コンテキストメニューを表示
+      event.preventDefault()
+      CurrentState.setTargetItemPath(itemPath)
+      NullaryCommand.showContextMenuDialog()
+      Rerenderer.instance.rerender()
     },
     onClickDeleteButton: (event) => {
       doWithErrorCapture(() => {

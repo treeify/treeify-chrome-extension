@@ -3,6 +3,8 @@
   import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
   import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
   import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
+  import ContextMenuDialog from './ContextMenuDialog.svelte'
+  import {createContextMenuDialogProps} from './ContextMenuDialogProps'
   import DefaultWindowModeSettingDialog from './DefaultWindowModeSettingDialog.svelte'
   import {createDefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
   import {DialogLayerProps} from './DialogLayer'
@@ -27,6 +29,9 @@
 {/if}
 {#if props.dialog?.type === 'CodeBlockItemEditDialog'}
   <CodeBlockItemEditDialog props={createCodeBlockItemEditDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'ContextMenuDialog'}
+  <ContextMenuDialog props={createContextMenuDialogProps(props.dialog)} />
 {/if}
 {#if props.dialog?.type === 'DefaultWindowModeSettingDialog'}
   <DefaultWindowModeSettingDialog props={createDefaultWindowModeSettingDialogProps(props.dialog)} />
