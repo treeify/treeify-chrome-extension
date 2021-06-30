@@ -15,6 +15,7 @@
 </script>
 
 <script lang="ts">
+  import ContextMenuItem from './ContextMenuItem.svelte'
   import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {ContextMenuDialogProps} from './ContextMenuDialogProps'
 
@@ -47,7 +48,9 @@
 
 <div class="context-menu-dialog" on:click={onClickBackdrop} use:setupFocusTrap>
   <div class="context-menu-dialog_frame" {style}>
-    <div tabindex="0">ハードアンロード</div>
+    {#each props.contextMenuItemPropses.toArray() as contextMenuItemProps}
+      <ContextMenuItem props={contextMenuItemProps} />
+    {/each}
   </div>
 </div>
 
@@ -65,11 +68,10 @@
     /* topとleftはstyle属性で動的に設定する */
     position: absolute;
 
-    background: hsl(0, 0%, 100%);
+    background: hsl(0, 0%, 96%);
 
     box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
 
     padding: 0.5em;
-    font-size: 14px;
   }
 </style>
