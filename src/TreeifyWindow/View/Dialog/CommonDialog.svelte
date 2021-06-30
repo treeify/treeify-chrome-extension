@@ -1,7 +1,5 @@
 <script lang="ts">
-  import {createFocusTrap, FocusTrap} from 'focus-trap'
-  import {onDestroy, onMount} from 'svelte'
-  import {assert, assertNonUndefined} from '../../../Common/Debug/assert'
+  import {createFocusTrap} from 'focus-trap'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
@@ -9,36 +7,26 @@
 
   export let title: string
 
-  let focusTrap: FocusTrap | undefined
-
-  // focusTrapのターゲットとして指定するためにDOM要素が必要
-  let domElement: HTMLElement | undefined
-
-  onMount(() => {
-    doWithErrorCapture(() => {
+  function setupFocusTrap(domElement: HTMLElement) {
+    return doWithErrorCapture(() => {
       // フォーカストラップを作る
-      assert(focusTrap === undefined)
-      assertNonUndefined(domElement)
-      focusTrap = createFocusTrap(domElement, {
-        // フォーカスは自前で管理するのでfocusTrapに管理されると困る。
+      const focusTrap = createFocusTrap(domElement, {
+        // フォーカスは自前で管理するのでfocusTrapに勝手に操作されると困る。
         // 具体的には検索結果へのジャンプ機能で自動スクロールが動かなくなる。
         returnFocusOnDeactivate: false,
 
         escapeDeactivates: false,
       })
       focusTrap.activate()
-    })
-  })
 
-  onDestroy(() => {
-    doWithErrorCapture(() => {
-      // フォーカストラップを消す
-      if (focusTrap !== undefined) {
-        focusTrap.deactivate()
-        focusTrap = undefined
+      return {
+        destroy: () => {
+          // フォーカストラップを消す
+          focusTrap.deactivate()
+        },
       }
     })
-  })
+  }
 
   const onClickBackdrop = (event: MouseEvent) => {
     doWithErrorCapture(() => {
@@ -65,7 +53,7 @@
   }
 </script>
 
-<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} bind:this={domElement}>
+<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">{title}</div>
     <div class="common-dialog_content-area">
