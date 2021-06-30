@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
@@ -11,12 +12,14 @@ import {
   onWindowFocusChanged,
 } from 'src/TreeifyWindow/External/chromeEventListeners'
 import {External} from 'src/TreeifyWindow/External/External'
+import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
 import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 import UAParser from 'ua-parser-js'
+import OnClickData = chrome.contextMenus.OnClickData
 
 export async function startup(initialState: State) {
   External.instance.lastFocusedWindowId = await getLastFocusedWindowId()
@@ -40,6 +43,8 @@ export async function startup(initialState: State) {
 
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
 
+  chrome.contextMenus.onClicked.addListener(onClickContextMenu)
+
   document.addEventListener('mousemove', onMouseMove)
 
   window.addEventListener('resize', onResize)
@@ -52,6 +57,8 @@ export async function cleanup() {
   window.removeEventListener('resize', onResize)
 
   document.removeEventListener('mousemove', onMouseMove)
+
+  chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
 
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
 
@@ -88,6 +95,37 @@ export async function restart(state: State) {
 
 function onMutateState(propertyPath: PropertyPath) {
   External.instance.onMutateState(propertyPath)
+}
+
+function onClickContextMenu(info: OnClickData) {
+  if (info.menuItemId === 'selection' && info.selectionText !== undefined) {
+    // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
+    const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(info.pageUrl)
+    const tab = tabs.first(undefined)
+    assertNonUndefined(tab)
+
+    const itemId =
+      tab.id !== undefined ? External.instance.tabItemCorrespondence.getItemIdBy(tab.id) : undefined
+    if (itemId !== undefined) {
+      const newItemId = CurrentState.createTextItem()
+      CurrentState.setTextItemDomishObjects(
+        newItemId,
+        List.of({
+          type: 'text',
+          textContent: info.selectionText,
+        })
+      )
+
+      // 出典を設定
+      if (tab.title !== undefined) {
+        CurrentState.setCite(newItemId, tab.title)
+      }
+      CurrentState.setCiteUrl(newItemId, info.pageUrl)
+
+      CurrentState.insertLastChildItem(itemId, newItemId)
+      Rerenderer.instance.rerender()
+    }
+  }
 }
 
 function onMouseMove(event: MouseEvent) {
