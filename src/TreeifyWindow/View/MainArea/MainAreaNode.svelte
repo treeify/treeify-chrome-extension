@@ -57,6 +57,7 @@
           class="main-area-node_content-area"
           class:single-selected={props.selected === 'single'}
           on:mousedown={props.onMouseDownContentArea}
+          on:contextmenu={props.onContextMenu}
         >
           <MainAreaContent props={props.contentProps} />
         </div>

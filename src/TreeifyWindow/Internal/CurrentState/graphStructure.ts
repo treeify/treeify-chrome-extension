@@ -98,3 +98,13 @@ export function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer 
     (itemId) => !External.instance.tabItemCorrespondence.isUnloaded(itemId)
   ).size
 }
+
+/**
+ * 指定されたアイテムのサブツリーに対応するタブを数える。
+ * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
+ */
+export function countTabsInSubtree(state: State, itemId: ItemId): integer {
+  return Set(CurrentState.getSubtreeItemIds(itemId)).filter(
+    (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+  ).size
+}

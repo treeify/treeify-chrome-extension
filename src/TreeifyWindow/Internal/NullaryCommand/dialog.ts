@@ -75,3 +75,8 @@ export function showSearchDialog() {
 export function showCitationSettingDialog() {
   CurrentState.setDialog({type: 'CitationSettingDialog'})
 }
+
+/** 独自コンテキストメニューを表示する */
+export function showContextMenuDialog() {
+  CurrentState.setDialog({type: 'ContextMenuDialog'})
+}

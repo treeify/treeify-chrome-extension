@@ -158,6 +158,8 @@ export type CodeBlockItemEditDialog = {
   language: string
 }
 
+export type ContextMenuDialog = {type: 'ContextMenuDialog'}
+
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
 export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
 
@@ -185,6 +187,7 @@ export type WorkspaceDialog = {type: 'WorkspaceDialog'}
 export type Dialog =
   | CitationSettingDialog
   | CodeBlockItemEditDialog
+  | ContextMenuDialog
   | DefaultWindowModeSettingDialog
   | LabelEditDialog
   | OtherParentsDialog
