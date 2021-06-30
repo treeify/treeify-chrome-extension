@@ -1,5 +1,4 @@
 <script context="module" lang="ts">
-  import {assert} from '../../../Common/Debug/assert'
   import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
@@ -17,41 +16,28 @@
 
 <script lang="ts">
   import {createFocusTrap, FocusTrap} from 'focus-trap'
-  import {onDestroy, onMount} from 'svelte'
-  import {assertNonUndefined} from '../../../Common/Debug/assert'
   import {WebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
 
   export let props: WebPageItemTitleSettingDialogProps
 
-  let focusTrap: FocusTrap | undefined
-
-  // focusTrapのターゲットとして指定するためにDOM要素が必要
-  let domElement: HTMLElement | undefined
-
-  onMount(() => {
-    doWithErrorCapture(() => {
+  function setupFocusTrap(domElement: HTMLElement) {
+    return doWithErrorCapture(() => {
       // フォーカストラップを作る
-      assert(focusTrap === undefined)
-      assertNonUndefined(domElement)
-      focusTrap = createFocusTrap(domElement, {
+      const focusTrap = createFocusTrap(domElement, {
         returnFocusOnDeactivate: false,
-        // この機能を使うとイベント発生順序の違いにより難解なエラーが起こるので、
-        // ESCキー押下時にダイアログを閉じる処理は自前で実装する。
+
         escapeDeactivates: false,
       })
       focusTrap.activate()
-    })
-  })
 
-  onDestroy(() => {
-    doWithErrorCapture(() => {
-      // フォーカストラップを消す
-      if (focusTrap !== undefined) {
-        focusTrap.deactivate()
-        focusTrap = undefined
+      return {
+        destroy: () => {
+          // フォーカストラップを消す
+          focusTrap.deactivate()
+        },
       }
     })
-  })
+  }
 
   $: style = `
     left: ${props.webPageItemTitleSettingDialog.targetItemRect.left}px;
@@ -61,7 +47,7 @@
   `
 </script>
 
-<div class="web-page-item-title-setting-dialog" on:click={onClickBackdrop} bind:this={domElement}>
+<div class="web-page-item-title-setting-dialog" on:click={onClickBackdrop} use:setupFocusTrap>
   <div class="web-page-item-title-setting-dialog_frame" {style}>
     <input
       type="text"
