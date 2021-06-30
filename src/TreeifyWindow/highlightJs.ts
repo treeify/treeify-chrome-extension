@@ -124,195 +124,202 @@ export function getHighlightedHtml(code: string, language: string): string {
  * Treeify開発者の判断でコメントアウトしてある。
  */
 export function registerLanguages() {
-  // hljs.registerLanguage('1c', 1c)
-  // hljs.registerLanguage('abnf', abnf)
-  // hljs.registerLanguage('accesslog', accesslog)
-  // hljs.registerLanguage('actionscript', actionscript)
-  // hljs.registerLanguage('ada', ada)
-  // hljs.registerLanguage('angelscript', angelscript)
-  // hljs.registerLanguage('apache', apache)
-  hljs.registerLanguage('applescript', applescript)
-  // hljs.registerLanguage('arcade', arcade)
-  hljs.registerLanguage('arduino', arduino)
-  // hljs.registerLanguage('armasm', armasm)
-  // hljs.registerLanguage('asciidoc', asciidoc)
-  // hljs.registerLanguage('aspectj', aspectj)
-  hljs.registerLanguage('autohotkey', autohotkey)
-  // hljs.registerLanguage('autoit', autoit)
-  // hljs.registerLanguage('avrasm', avrasm)
-  hljs.registerLanguage('awk', awk)
-  // hljs.registerLanguage('axapta', axapta)
-  hljs.registerLanguage('bash', bash)
-  hljs.registerLanguage('basic', basic)
-  // hljs.registerLanguage('bnf', bnf)
-  // hljs.registerLanguage('brainfuck', brainfuck)
-  hljs.registerLanguage('c', c)
-  // hljs.registerLanguage('cal', cal)
-  // hljs.registerLanguage('capnproto', capnproto)
-  // hljs.registerLanguage('ceylon', ceylon)
-  hljs.registerLanguage('clean', clean)
-  hljs.registerLanguage('clojure', clojure)
-  // hljs.registerLanguage('clojure-repl', clojure-repl)
-  // hljs.registerLanguage('cmake', cmake)
-  hljs.registerLanguage('coffeescript', coffeescript)
-  hljs.registerLanguage('coq', coq)
-  // hljs.registerLanguage('cos', cos)
-  hljs.registerLanguage('cpp', cpp)
-  // hljs.registerLanguage('crmsh', crmsh)
-  hljs.registerLanguage('crystal', crystal)
-  hljs.registerLanguage('csharp', csharp)
-  hljs.registerLanguage('csp', csp)
-  hljs.registerLanguage('css', css)
-  hljs.registerLanguage('d', d)
-  hljs.registerLanguage('dart', dart)
-  hljs.registerLanguage('delphi', delphi)
-  hljs.registerLanguage('diff', diff)
-  hljs.registerLanguage('django', django)
-  // hljs.registerLanguage('dns', dns)
-  hljs.registerLanguage('dockerfile', dockerfile)
-  // hljs.registerLanguage('dos', dos)
-  // hljs.registerLanguage('dsconfig', dsconfig)
-  // hljs.registerLanguage('dts', dts)
-  // hljs.registerLanguage('dust', dust)
-  // hljs.registerLanguage('ebnf', ebnf)
-  hljs.registerLanguage('elixir', elixir)
-  hljs.registerLanguage('elm', elm)
-  // hljs.registerLanguage('erb', erb)
-  hljs.registerLanguage('erlang', erlang)
-  // hljs.registerLanguage('erlang-repl', erlang-repl)
-  // hljs.registerLanguage('excel', excel)
-  // hljs.registerLanguage('fix', fix)
-  // hljs.registerLanguage('flix', flix)
-  hljs.registerLanguage('fortran', fortran)
-  hljs.registerLanguage('fsharp', fsharp)
-  // hljs.registerLanguage('gams', gams)
-  // hljs.registerLanguage('gauss', gauss)
-  // hljs.registerLanguage('gcode', gcode)
-  // hljs.registerLanguage('gherkin', gherkin)
-  hljs.registerLanguage('glsl', glsl)
-  // hljs.registerLanguage('gml', gml)
-  hljs.registerLanguage('go', go)
-  // hljs.registerLanguage('golo', golo)
-  hljs.registerLanguage('gradle', gradle)
-  hljs.registerLanguage('groovy', groovy)
-  hljs.registerLanguage('haml', haml)
-  // hljs.registerLanguage('handlebars', handlebars)
-  hljs.registerLanguage('haskell', haskell)
-  hljs.registerLanguage('haxe', haxe)
-  hljs.registerLanguage('hsp', hsp)
-  // hljs.registerLanguage('http', http)
-  // hljs.registerLanguage('hy', hy)
-  // hljs.registerLanguage('inform7', inform7)
-  hljs.registerLanguage('ini', ini)
-  // hljs.registerLanguage('irpf90', irpf90)
-  // hljs.registerLanguage('isbl', isbl)
-  hljs.registerLanguage('java', java)
-  hljs.registerLanguage('javascript', javascript)
-  // hljs.registerLanguage('jboss-cli', jboss-cli)
-  hljs.registerLanguage('json', json)
-  hljs.registerLanguage('julia', julia)
-  // hljs.registerLanguage('julia-repl', julia-repl)
-  hljs.registerLanguage('kotlin', kotlin)
-  // hljs.registerLanguage('lasso', lasso)
-  hljs.registerLanguage('latex', latex)
-  // hljs.registerLanguage('ldif', ldif)
-  // hljs.registerLanguage('leaf', leaf)
-  hljs.registerLanguage('less', less)
-  hljs.registerLanguage('lisp', lisp)
-  // hljs.registerLanguage('livecodeserver', livecodeserver)
-  hljs.registerLanguage('livescript', livescript)
-  hljs.registerLanguage('llvm', llvm)
-  // hljs.registerLanguage('lsl', lsl)
-  hljs.registerLanguage('lua', lua)
-  hljs.registerLanguage('makefile', makefile)
-  hljs.registerLanguage('markdown', markdown)
-  hljs.registerLanguage('mathematica', mathematica)
-  hljs.registerLanguage('matlab', matlab)
-  hljs.registerLanguage('maxima', maxima)
-  hljs.registerLanguage('mel', mel)
-  // hljs.registerLanguage('mercury', mercury)
-  // hljs.registerLanguage('mipsasm', mipsasm)
-  // hljs.registerLanguage('mizar', mizar)
-  // hljs.registerLanguage('mojolicious', mojolicious)
-  // hljs.registerLanguage('monkey', monkey)
-  // hljs.registerLanguage('moonscript', moonscript)
-  // hljs.registerLanguage('n1ql', n1ql)
-  // hljs.registerLanguage('nestedtext', nestedtext)
-  hljs.registerLanguage('nginx', nginx)
-  hljs.registerLanguage('nim', nim)
-  // hljs.registerLanguage('nix', nix)
-  // hljs.registerLanguage('node-repl', node-repl)
-  hljs.registerLanguage('nsis', nsis)
-  hljs.registerLanguage('objectivec', objectivec)
-  hljs.registerLanguage('ocaml', ocaml)
-  hljs.registerLanguage('openscad', openscad)
-  // hljs.registerLanguage('oxygene', oxygene)
-  // hljs.registerLanguage('parser3', parser3)
-  hljs.registerLanguage('perl', perl)
-  // hljs.registerLanguage('pf', pf)
-  hljs.registerLanguage('pgsql', pgsql)
-  hljs.registerLanguage('php', php)
-  // hljs.registerLanguage('php-template', php-template)
-  // hljs.registerLanguage('plaintext', plaintext)
-  // hljs.registerLanguage('pony', pony)
-  hljs.registerLanguage('powershell', powershell)
-  hljs.registerLanguage('processing', processing)
-  // hljs.registerLanguage('profile', profile)
-  hljs.registerLanguage('prolog', prolog)
-  // hljs.registerLanguage('properties', properties)
-  hljs.registerLanguage('protobuf', protobuf)
-  hljs.registerLanguage('puppet', puppet)
-  // hljs.registerLanguage('purebasic', purebasic)
-  hljs.registerLanguage('python', python)
-  // hljs.registerLanguage('python-repl', python-repl)
-  // hljs.registerLanguage('q', q)
-  hljs.registerLanguage('qml', qml)
-  hljs.registerLanguage('r', r)
-  hljs.registerLanguage('reasonml', reasonml)
-  // hljs.registerLanguage('rib', rib)
-  // hljs.registerLanguage('roboconf', roboconf)
-  // hljs.registerLanguage('routeros', routeros)
-  // hljs.registerLanguage('rsl', rsl)
-  hljs.registerLanguage('ruby', ruby)
-  // hljs.registerLanguage('ruleslanguage', ruleslanguage)
-  hljs.registerLanguage('rust', rust)
-  hljs.registerLanguage('sas', sas)
-  hljs.registerLanguage('scala', scala)
-  hljs.registerLanguage('scheme', scheme)
-  hljs.registerLanguage('scilab', scilab)
-  hljs.registerLanguage('scss', scss)
-  hljs.registerLanguage('shell', shell)
-  // hljs.registerLanguage('smali', smali)
-  hljs.registerLanguage('smalltalk', smalltalk)
-  hljs.registerLanguage('sml', sml)
-  // hljs.registerLanguage('sqf', sqf)
-  hljs.registerLanguage('sql', sql)
-  hljs.registerLanguage('stan', stan)
-  hljs.registerLanguage('stata', stata)
-  // hljs.registerLanguage('step21', step21)
-  hljs.registerLanguage('stylus', stylus)
-  // hljs.registerLanguage('subunit', subunit)
-  hljs.registerLanguage('swift', swift)
-  // hljs.registerLanguage('taggerscript', taggerscript)
-  // hljs.registerLanguage('tap', tap)
-  hljs.registerLanguage('tcl', tcl)
-  hljs.registerLanguage('thrift', thrift)
-  // hljs.registerLanguage('tp', tp)
-  hljs.registerLanguage('twig', twig)
-  hljs.registerLanguage('typescript', typescript)
-  // hljs.registerLanguage('vala', vala)
-  hljs.registerLanguage('vbnet', vbnet)
-  hljs.registerLanguage('vbscript', vbscript)
-  // hljs.registerLanguage('vbscript-html', vbscript-html)
-  hljs.registerLanguage('verilog', verilog)
-  hljs.registerLanguage('vhdl', vhdl)
-  hljs.registerLanguage('vim', vim)
-  hljs.registerLanguage('wasm', wasm)
-  // hljs.registerLanguage('wren', wren)
-  // hljs.registerLanguage('x86asm', x86asm)
-  // hljs.registerLanguage('xl', xl)
-  hljs.registerLanguage('xml', xml)
-  hljs.registerLanguage('xquery', xquery)
-  hljs.registerLanguage('yaml', yaml)
-  hljs.registerLanguage('zephir', zephir)
+  for (const languageDefinitionsKey in languageDefinitions) {
+    // @ts-ignore
+    hljs.registerLanguage(languageDefinitionsKey, languageDefinitions[languageDefinitionsKey])
+  }
+}
+
+const languageDefinitions = {
+  // 1c,
+  // abnf,
+  // accesslog,
+  // actionscript,
+  // ada,
+  // angelscript,
+  // apache,
+  applescript,
+  // arcade,
+  arduino,
+  // armasm,
+  // asciidoc,
+  // aspectj,
+  autohotkey,
+  // autoit,
+  // avrasm,
+  awk,
+  // axapta,
+  bash,
+  basic,
+  // bnf,
+  // brainfuck,
+  c,
+  // cal,
+  // capnproto,
+  // ceylon,
+  clean,
+  clojure,
+  // clojure-repl,
+  // cmake,
+  coffeescript,
+  coq,
+  // cos,
+  cpp,
+  // crmsh,
+  crystal,
+  csharp,
+  csp,
+  css,
+  d,
+  dart,
+  delphi,
+  diff,
+  django,
+  // dns,
+  dockerfile,
+  // dos,
+  // dsconfig,
+  // dts,
+  // dust,
+  // ebnf,
+  elixir,
+  elm,
+  // erb,
+  erlang,
+  // erlang-repl,
+  // excel,
+  // fix,
+  // flix,
+  fortran,
+  fsharp,
+  // gams,
+  // gauss,
+  // gcode,
+  // gherkin,
+  glsl,
+  // gml,
+  go,
+  // golo,
+  gradle,
+  groovy,
+  haml,
+  // handlebars,
+  haskell,
+  haxe,
+  hsp,
+  // http,
+  // hy,
+  // inform7,
+  ini,
+  // irpf90,
+  // isbl,
+  java,
+  javascript,
+  // jboss-cli,
+  json,
+  julia,
+  // julia-repl,
+  kotlin,
+  // lasso,
+  latex,
+  // ldif,
+  // leaf,
+  less,
+  lisp,
+  // livecodeserver,
+  livescript,
+  llvm,
+  // lsl,
+  lua,
+  makefile,
+  markdown,
+  mathematica,
+  matlab,
+  maxima,
+  mel,
+  // mercury,
+  // mipsasm,
+  // mizar,
+  // mojolicious,
+  // monkey,
+  // moonscript,
+  // n1ql,
+  // nestedtext,
+  nginx,
+  nim,
+  // nix,
+  // node-repl,
+  nsis,
+  objectivec,
+  ocaml,
+  openscad,
+  // oxygene,
+  // parser3,
+  perl,
+  // pf,
+  pgsql,
+  php,
+  // php-template,
+  // plaintext,
+  // pony,
+  powershell,
+  processing,
+  // profile,
+  prolog,
+  // properties,
+  protobuf,
+  puppet,
+  // purebasic,
+  python,
+  // python-repl,
+  // q,
+  qml,
+  r,
+  reasonml,
+  // rib,
+  // roboconf,
+  // routeros,
+  // rsl,
+  ruby,
+  // ruleslanguage,
+  rust,
+  sas,
+  scala,
+  scheme,
+  scilab,
+  scss,
+  shell,
+  // smali,
+  smalltalk,
+  sml,
+  // sqf,
+  sql,
+  stan,
+  stata,
+  // step21,
+  stylus,
+  // subunit,
+  swift,
+  // taggerscript,
+  // tap,
+  tcl,
+  thrift,
+  // tp,
+  twig,
+  typescript,
+  // vala,
+  vbnet,
+  vbscript,
+  // vbscript-html,
+  verilog,
+  vhdl,
+  vim,
+  wasm,
+  // wren,
+  // x86asm,
+  // xl,
+  xml,
+  xquery,
+  yaml,
+  zephir,
 }
