@@ -75,7 +75,7 @@
   }
 </script>
 
-<CommonDialog title="ラベル編集">
+<CommonDialog title="ラベル設定">
   <div class="label-edit-dialog_content">
     {#each props.labels.toArray() as label}
       <div class="label-edit-dialog_label-row">

@@ -163,7 +163,7 @@ export type ContextMenuDialog = {type: 'ContextMenuDialog'}
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
 export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
 
-/** ラベル編集ダイアログが持つ内部状態の型 */
+/** ラベル設定ダイアログが持つ内部状態の型 */
 export type LabelEditDialog = {
   type: 'LabelEditDialog'
   labels: List<string>

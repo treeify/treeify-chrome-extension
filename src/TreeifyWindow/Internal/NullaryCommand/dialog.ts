@@ -50,7 +50,7 @@ export function showWorkspaceDialog() {
   CurrentState.setDialog({type: 'WorkspaceDialog'})
 }
 
-/** ラベル編集ダイアログを表示する */
+/** ラベル設定ダイアログを表示する */
 export function showLabelEditDialog() {
   const labels = CurrentState.getLabels(CurrentState.getTargetItemPath())
   if (labels.isEmpty()) {
