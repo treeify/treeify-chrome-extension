@@ -70,9 +70,9 @@
   /* ウェブページアイテムのタイトル設定ダイアログ */
   .web-page-item-title-setting-dialog_frame {
     /*
-        ウェブページアイテムの位置に合わせたフローティング。
-        left, top, width, heightがJavaScriptで設定される。
-        */
+    ウェブページアイテムの位置に合わせたフローティング。
+    left, top, width, heightがJavaScriptで設定される。
+    */
     position: absolute;
   }
 
