@@ -22,6 +22,13 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
+  if (CurrentState.countParents(targetItemId) >= 2) {
+    result.push({
+      title: '他のトランスクルード元を表示…',
+      onClick: () => NullaryCommand.showOtherParentsDialog(),
+    })
+  }
+
   result.push({
     title: 'トランスクルード用コピー',
     onClick: () => NullaryCommand.copyForTransclusion(),
