@@ -72,6 +72,9 @@ export class Rerenderer {
 
   /** DOMの初回描画を行う */
   renderForFirstTime() {
+    // Treeifyウィンドウのタイトルを更新する
+    document.title = CurrentState.deriveTreeifyWindowTitle()
+
     const spaRoot = document.querySelector('.spa-root')
     assertNonNull(spaRoot)
     if (spaRoot instanceof HTMLElement) {
