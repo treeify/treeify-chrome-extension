@@ -63,10 +63,6 @@ export function createMainAreaTextContentProps(
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             CurrentState.setTargetItemPath(itemPath)
-
-            // 再描画によってDOM要素が再生成され、キャレット位置がリセットされるので上書きするよう設定する
-            Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
             Rerenderer.instance.rerender()
             break
           case '0100MouseButton0':
