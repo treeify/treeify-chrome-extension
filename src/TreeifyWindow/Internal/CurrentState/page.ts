@@ -116,5 +116,12 @@ export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
 
 /** Treeifyウィンドウのタイトルとして表示する文字列を返す */
 export function deriveTreeifyWindowTitle(): string {
-  return extractPlainText(List.of(CurrentState.getActivePageId()))
+  const activePageId = CurrentState.getActivePageId()
+  const parentPageIds = CurrentState.getParentPageIds(activePageId)
+  const parentPageId = parentPageIds.first(undefined)
+  if (parentPageId !== undefined) {
+    return `${extractPlainText(List.of(activePageId))} - ${extractPlainText(List.of(parentPageId))}`
+  } else {
+    return extractPlainText(List.of(activePageId))
+  }
 }
