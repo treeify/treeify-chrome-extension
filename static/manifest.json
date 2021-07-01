@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "name": "Treeify",
-  "description": "メモ、タブ、ブックマークをまとめてスマートに管理",
+  "description": "大量のメモ、タブ、ブックマークをまとめてスマートに管理",
   "background": {
     "service_worker": "background.js"
   },
@@ -25,14 +25,6 @@
       "run_at": "document_start"
     }
   ],
-  "commands": {
-    "open-treeify-window": {
-      "suggested_key": {
-        "default": "Ctrl + B"
-      },
-      "description": "Treeifyウィンドウを開く（最前面化）"
-    }
-  },
   "icons": {
     "16": "app-icon/16px.png",
     "48": "app-icon/48px.png",
