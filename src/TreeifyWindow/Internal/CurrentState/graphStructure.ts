@@ -60,6 +60,13 @@ export function getPageIdsBelongingTo(itemId: ItemId): Set<ItemId> {
   return Set(yieldItemPaths(itemId)).map((itemPath) => ItemPath.getRootItemId(itemPath))
 }
 
+/** 指定されたページが所属するページIDの集合を返す */
+export function getParentPageIds(pageId: ItemId): Set<ItemId> {
+  return CurrentState.getParentItemIds(pageId)
+    .flatMap((parentItemId) => CurrentState.getPageIdsBelongingTo(parentItemId))
+    .toSet()
+}
+
 /**
  * 指定されたアイテムを起点とするサブツリーに含まれるアイテムIDを全て返す。
  * ただしページは終端ノードとして扱い、その子孫は無視する。
