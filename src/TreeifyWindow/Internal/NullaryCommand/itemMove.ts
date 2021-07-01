@@ -238,7 +238,7 @@ export function moveItemToNextSibling() {
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
 
-    for (const selectedItemPath of selectedItemPaths) {
+    for (const selectedItemPath of selectedItemPaths.reverse()) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
       // 既存の親子関係を削除
       const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId, selectedItemId)
