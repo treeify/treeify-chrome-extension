@@ -25,14 +25,6 @@
       "run_at": "document_start"
     }
   ],
-  "commands": {
-    "open-treeify-window": {
-      "suggested_key": {
-        "default": "Ctrl + B"
-      },
-      "description": "Treeifyウィンドウを開く（最前面化）"
-    }
-  },
   "icons": {
     "16": "app-icon/16px.png",
     "48": "app-icon/48px.png",
