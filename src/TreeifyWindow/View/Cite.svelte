@@ -25,6 +25,12 @@
     margin-left: auto;
     display: block;
     width: max-content;
+    
+    /* テキストが長すぎる場合への対策 */
+    max-width: 80%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .main-area-image-content_cite a {
     color: inherit;
