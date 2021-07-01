@@ -1,6 +1,5 @@
 import {List} from 'immutable'
 import {doWithErrorCapture} from 'src/TreeifyWindow/errorCapture'
-import {getTextItemSelectionFromDom} from 'src/TreeifyWindow/External/domTextSelection'
 import {External} from 'src/TreeifyWindow/External/External'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {
@@ -24,8 +23,7 @@ export function onCopy(event: ClipboardEvent) {
 
     External.instance.treeifyClipboard = undefined
 
-    const textSelection = getTextItemSelectionFromDom()
-    if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+    if (getSelection()?.isCollapsed === false) {
       // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
     } else {
       // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
@@ -52,8 +50,7 @@ export function onCut(event: ClipboardEvent) {
 
     External.instance.treeifyClipboard = undefined
 
-    const textSelection = getTextItemSelectionFromDom()
-    if (textSelection?.focusDistance !== textSelection?.anchorDistance) {
+    if (getSelection()?.isCollapsed === false) {
       // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
     } else {
       // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
