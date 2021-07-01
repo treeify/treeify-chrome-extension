@@ -168,6 +168,8 @@ export function createPageTreeNodeProps(
         if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
 
         const data = event.dataTransfer.getData('application/treeify')
+        if (data === '') return
+
         const draggedItemPath: ItemPath = List(JSON.parse(data))
         const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
