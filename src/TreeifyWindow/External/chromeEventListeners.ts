@@ -72,6 +72,11 @@ export function onCreated(tab: Tab) {
         const newItemPath = CurrentState.insertBelowItem(targetItemPath, newWebPageItemId)
         if (tab.active) {
           CurrentState.setTargetItemPath(newItemPath)
+
+          // 空のテキストアイテム上で新しいタブを開いた場合は空のテキストアイテムを削除する
+          if (CurrentState.isEmptyTextItem(targetItemId)) {
+            CurrentState.deleteItem(targetItemId)
+          }
         }
       } else {
         const openerItemId = External.instance.tabItemCorrespondence.getItemIdBy(tab.openerTabId)
