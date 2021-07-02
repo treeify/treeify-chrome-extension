@@ -35,6 +35,10 @@
 
       const prevIndex = (index - 1) % focusableElements.size
       focusableElements.get(prevIndex)!.focus()
+    } else if (inputId === "0000Enter" || inputId === "0000Space") {
+      if (event.target instanceof HTMLElement) {
+        event.target.click()
+      }
     }
   }
 </script>
