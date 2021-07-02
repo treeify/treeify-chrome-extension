@@ -1,4 +1,5 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {detectLanguage} from 'src/TreeifyWindow/highlightJs'
 import {CurrentState} from 'src/TreeifyWindow/Internal/CurrentState'
 import {InputId} from 'src/TreeifyWindow/Internal/InputId'
 import {ItemPath} from 'src/TreeifyWindow/Internal/ItemPath'
@@ -21,12 +22,11 @@ export function createCodeBlockItemEditDialogProps(
     // コードを更新
     const editBox = document.querySelector<HTMLDivElement>('.code-block-edit-dialog_code')
     assertNonNull(editBox)
-    CurrentState.setCodeBlockItemCode(targetItemId, editBox.textContent ?? '')
+    const code = editBox.textContent ?? ''
+    CurrentState.setCodeBlockItemCode(targetItemId, code)
 
-    // 言語を更新
-    const input = document.querySelector<HTMLInputElement>('.code-block-edit-dialog_language')
-    assertNonNull(input)
-    CurrentState.setCodeBlockItemLanguage(targetItemId, input.value)
+    // 言語を自動検出
+    CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(targetItemId)
