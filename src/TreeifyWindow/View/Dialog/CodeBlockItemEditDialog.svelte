@@ -4,7 +4,7 @@
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
-
+  
   export let props: CodeBlockItemEditDialogProps
 
   function onPaste(event: ClipboardEvent) {
@@ -25,7 +25,7 @@
 </script>
 
 <CommonDialog title="コードブロック編集">
-  <div class="code-block-edit-dialog_content">
+  <div class="code-block-edit-dialog_content" on:keydown={props.onKeyDown}>
     <div
       class="code-block-edit-dialog_code"
       contenteditable="plaintext-only"
