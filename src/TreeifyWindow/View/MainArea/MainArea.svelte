@@ -5,7 +5,11 @@
   import {ItemType} from '../../basicType'
   import {doWithErrorCapture} from '../../errorCapture'
   import {matchTabsAndWebPageItems} from '../../External/chromeEventListeners'
-  import {focusMainAreaBackground, getTextItemSelectionFromDom, setDomSelection} from '../../External/domTextSelection'
+  import {
+    focusMainAreaBackground,
+    getTextItemSelectionFromDom,
+    setDomSelection,
+  } from '../../External/domTextSelection'
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -19,7 +23,7 @@
   import {MainAreaContentView} from './MainAreaContentProps'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
-  
+
   export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
@@ -706,8 +710,8 @@
       if (event.dataTransfer === null) return
 
       const data = event.dataTransfer.getData('application/treeify')
-      if (data === "") return
-      
+      if (data === '') return
+
       const draggedItemPath: ItemPath = List(JSON.parse(data))
       // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
       const parentItemId = ItemPath.getParentItemId(draggedItemPath)

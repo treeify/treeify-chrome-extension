@@ -7,7 +7,7 @@
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import {LabelSettingDialogProps} from './LabelSettingDialogProps'
-  
+
   export let props: LabelSettingDialogProps
 
   const closeDialog = () => {
@@ -18,7 +18,10 @@
 
   const onClickAddButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.setDialog({type: 'LabelSettingDialog', labels: getAllLabelInputValues().push('')})
+      CurrentState.setDialog({
+        type: 'LabelSettingDialog',
+        labels: getAllLabelInputValues().push(''),
+      })
       Rerenderer.instance.rerender()
     })
   }
@@ -90,7 +93,8 @@
     {/each}
     <div class="label-setting-dialog_add-button" on:click={onClickAddButton} />
     <div class="label-setting-dialog_button-area">
-      <button class="label-setting-dialog_finish-button" on:click={onClickFinishButton}>完了</button>
+      <button class="label-setting-dialog_finish-button" on:click={onClickFinishButton}>完了</button
+      >
       <button class="label-setting-dialog_cancel-button" on:click={closeDialog}>キャンセル</button>
     </div>
   </div>
