@@ -1,6 +1,4 @@
 <script lang="ts">
-  import hljs from 'highlight.js/lib/core'
-  import {detectLanguage} from '../../highlightJs'
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
@@ -14,12 +12,6 @@
       const text = event.clipboardData.getData('text/plain')
       // 無駄なインデントを自動的に除去する機能
       event.target.textContent = removeRedundantIndent(text)
-
-      // 言語を自動検出する
-      const languageElement = document.querySelector('.code-block-edit-dialog_language')
-      if (languageElement instanceof HTMLInputElement && languageElement.value === '') {
-        languageElement.value = detectLanguage(event.target.textContent)
-      }
     }
   }
 </script>
@@ -34,21 +26,6 @@
     >
       {props.code}
     </div>
-    <div class="code-block-edit-dialog_language-area">
-      <label>言語名</label>
-      <input
-        class="code-block-edit-dialog_language"
-        type="text"
-        autocomplete="on"
-        list="languages"
-        value={props.language}
-      />
-    </div>
-    <datalist id="languages">
-      {#each hljs.listLanguages() as language}
-        <option value={language} />
-      {/each}
-    </datalist>
     <div class="code-block-edit-dialog_button-area">
       <button on:click={props.onClickFinishButton}>完了</button>
       <button on:click={props.onClickCancelButton}>キャンセル</button>
@@ -65,16 +42,6 @@
     padding: 0.5em;
 
     outline: 1px solid hsl(0, 0%, 60%);
-  }
-
-  .code-block-edit-dialog_language-area {
-    display: flex;
-
-    margin-top: 1em;
-  }
-
-  .code-block-edit-dialog_language {
-    flex: 1 0;
   }
 
   .code-block-edit-dialog_button-area {

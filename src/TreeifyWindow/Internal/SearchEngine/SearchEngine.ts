@@ -69,7 +69,7 @@ export class SearchEngine {
         return List.of(state.imageItems[itemId].caption)
       case ItemType.CODE_BLOCK:
         const codeBlockItem = state.codeBlockItems[itemId]
-        return List.of(codeBlockItem.code, codeBlockItem.language)
+        return List.of(codeBlockItem.code)
       case ItemType.TEX:
         const texItem = state.texItems[itemId]
         return List.of(texItem.code)
