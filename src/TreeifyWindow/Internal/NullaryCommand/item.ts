@@ -87,8 +87,14 @@ export function enterKeyDefault() {
 
       // 新規アイテムを兄として追加する
       const newItemId = CurrentState.createTextItem()
-      CurrentState.insertPrevSiblingItem(targetItemPath, newItemId)
+      const newItemPath = CurrentState.insertPrevSiblingItem(targetItemPath, newItemId)
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
+
+      // キャレットが先頭にある場合のみ新規アイテムをフォーカスする。
+      // WorkFlowyと同じ挙動。
+      if (textItemSelection.focusDistance === 0) {
+        CurrentState.setTargetItemPath(newItemPath)
+      }
 
       // キャレット位置を更新する
       Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
