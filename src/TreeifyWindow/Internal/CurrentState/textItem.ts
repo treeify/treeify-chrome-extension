@@ -45,3 +45,21 @@ export function createTextItem(): ItemId {
 export function deleteTextItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('textItems', itemId))
 }
+
+/**
+ * 与えられたアイテムが下記の条件をすべて満たすかどうかを判定する。
+ * ・空のテキストアイテムである
+ * ・子を持たない
+ * ・親を複数持たない
+ */
+export function isEmptyTextItem(itemId: ItemId): boolean {
+  const item = Internal.instance.state.items[itemId]
+  if (item.itemType !== ItemType.TEXT) return false
+
+  if (!item.childItemIds.isEmpty()) return false
+
+  if (CurrentState.countParents(itemId) >= 2) return false
+
+  const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
+  return DomishObject.countCharacters(domishObjects) === 0
+}
