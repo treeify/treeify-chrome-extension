@@ -1,13 +1,13 @@
 <script lang="ts">
   import {CitationSettingDialogProps} from './CitationSettingDialogProps'
   import CommonDialog from './CommonDialog.svelte'
-
+  
   export let props: CitationSettingDialogProps
 </script>
 
 <CommonDialog title="出典設定">
   <div class="citation-setting-dialog_content">
-    <div class="citation-setting-dialog_input-area">
+    <div class="citation-setting-dialog_input-area" on:keydown={props.onKeyDown}>
       <label>出典タイトル</label>
       <input type="text" class="citation-setting-dialog_cite" value={props.cite} />
       <label>出典URL</label>
