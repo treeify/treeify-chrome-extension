@@ -2,7 +2,7 @@
   import katex from 'katex'
   import CommonDialog from './CommonDialog.svelte'
   import {TexEditDialogProps} from './TexEditDialogProps'
-
+  
   export let props: TexEditDialogProps
 
   // リアルタイムプレビュー用の変数
@@ -16,7 +16,7 @@
 </script>
 
 <CommonDialog title="TeX編集">
-  <div class="tex-edit-dialog_content">
+  <div class="tex-edit-dialog_content" on:keydown={props.onKeyDown}>
     <div
       class="tex-edit-dialog_code"
       contenteditable="plaintext-only"
