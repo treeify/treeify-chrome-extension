@@ -23,23 +23,27 @@
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
       const inputId = InputId.fromKeyboardEvent(event)
-      if (inputId === "0000ArrowDown") {
+      if (inputId === '0000ArrowDown') {
         // フォーカスを次の要素に移す
-        const focusableElements = List(document.querySelectorAll('.context-menu-item')) as List<HTMLElement>
-        const index = focusableElements.findIndex(element => document.activeElement === element)
+        const focusableElements = List(
+          document.querySelectorAll('.context-menu-item')
+        ) as List<HTMLElement>
+        const index = focusableElements.findIndex((element) => document.activeElement === element)
         if (index === -1) return
 
         const nextIndex = (index + 1) % focusableElements.size
         focusableElements.get(nextIndex)!.focus()
-      } else if (inputId === "0000ArrowUp") {
+      } else if (inputId === '0000ArrowUp') {
         // フォーカスを前の要素に移す
-        const focusableElements = List(document.querySelectorAll('.context-menu-item')) as List<HTMLElement>
-        const index = focusableElements.findIndex(element => document.activeElement === element)
+        const focusableElements = List(
+          document.querySelectorAll('.context-menu-item')
+        ) as List<HTMLElement>
+        const index = focusableElements.findIndex((element) => document.activeElement === element)
         if (index === -1) return
 
         const prevIndex = (index - 1) % focusableElements.size
         focusableElements.get(prevIndex)!.focus()
-      } else if (inputId === "0000Enter" || inputId === "0000Space") {
+      } else if (inputId === '0000Enter' || inputId === '0000Space') {
         if (event.target instanceof HTMLElement) {
           event.target.click()
         }
@@ -48,7 +52,9 @@
   }
 </script>
 
-<div class="context-menu-item" tabindex="0" on:click={onClick} on:keydown={onKeyDown}>{props.title}</div>
+<div class="context-menu-item" tabindex="0" on:click={onClick} on:keydown={onKeyDown}>
+  {props.title}
+</div>
 
 <style>
   .context-menu-item {
