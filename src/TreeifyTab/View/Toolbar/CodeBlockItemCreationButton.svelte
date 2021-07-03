@@ -7,6 +7,7 @@
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyCodeBlockItem()
+      NullaryCommand.edit()
       Rerenderer.instance.rerender()
     })
   }
