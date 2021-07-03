@@ -7,11 +7,3 @@ window.addEventListener('mousemove', (event) => {
     })
   }
 })
-
-document.addEventListener('mouseenter', (event) => {
-  chrome.runtime.sendMessage({
-    type: 'OnMouseEnter',
-    x: event.screenX,
-    y: event.screenY,
-  })
-})

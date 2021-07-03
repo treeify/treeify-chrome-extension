@@ -17,8 +17,6 @@ import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {State} from 'src/TreeifyWindow/Internal/State'
 import {Rerenderer} from 'src/TreeifyWindow/Rerenderer'
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
-import UAParser from 'ua-parser-js'
 import OnClickData = chrome.contextMenus.OnClickData
 
 export async function startup(initialState: State) {
@@ -131,14 +129,6 @@ function onClickContextMenu(info: OnClickData) {
 function onMouseMove(event: MouseEvent) {
   doWithErrorCapture(() => {
     External.instance.mousePosition = {x: event.clientX, y: event.clientY}
-
-    // Macではフォーカスを持っていないウィンドウの操作に一手間かかるので、マウスが乗った時点でフォーカスする
-    if (
-      new UAParser().getOS().name === 'Mac OS' &&
-      External.instance.lastFocusedWindowId !== chrome.windows.WINDOW_ID_NONE
-    ) {
-      TreeifyWindow.open()
-    }
 
     // マウスの位置と動きに応じて左サイドバーを開閉する
     if (!External.instance.shouldFloatingLeftSidebarShown) {
