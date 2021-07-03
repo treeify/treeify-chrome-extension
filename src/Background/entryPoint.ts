@@ -1,18 +1,16 @@
 chrome.runtime.onInstalled.addListener(async () => {
   // 全ての既存タブでContent scriptを動かす
-  // TODO: flatMapを使って簡潔に書ける
-  for (const window of await chrome.windows.getAll({populate: true})) {
-    if (window.tabs === undefined) continue
+  const windows = await chrome.windows.getAll({populate: true})
+  const tabs = windows.flatMap((window) => window.tabs ?? [])
+  for (const tab of tabs) {
+    if (tab.id === undefined) continue
+    if (tab.url?.startsWith('chrome://')) continue
+    if (tab.url?.startsWith(chrome.runtime.getURL('TreeifyWindow/index.html'))) continue
 
-    for (const tab of window.tabs) {
-      if (tab.id === undefined) continue
-      if (tab.url?.startsWith('chrome://')) continue
-
-      chrome.scripting.executeScript({
-        target: {tabId: tab.id},
-        files: ['ContentScript/entryPoint.js'],
-      })
-    }
+    chrome.scripting.executeScript({
+      target: {tabId: tab.id},
+      files: ['ContentScript/entryPoint.js'],
+    })
   }
 
   await openTreeifyWindow()
