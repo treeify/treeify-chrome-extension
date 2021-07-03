@@ -29,13 +29,6 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (CurrentState.isPage(targetItemId)) {
-    result.push({
-      title: 'デフォルトウィンドウモードを設定…',
-      onClick: () => NullaryCommand.showDefaultWindowModeSettingDialog(),
-    })
-  }
-
   result.push({
     title: 'トランスクルード用コピー',
     onClick: () => NullaryCommand.copyForTransclusion(),
