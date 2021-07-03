@@ -1,7 +1,6 @@
-import CreateData = chrome.windows.CreateData
-
 chrome.runtime.onInstalled.addListener(async () => {
   // 全ての既存タブでContent scriptを動かす
+  // TODO: flatMapを使って簡潔に書ける
   for (const window of await chrome.windows.getAll({populate: true})) {
     if (window.tabs === undefined) continue
 
@@ -21,22 +20,12 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.runtime.onStartup.addListener(openTreeifyWindow)
 
 async function openTreeifyWindow() {
-  const windows = await chrome.windows.getAll({populate: true, windowTypes: ['popup']})
+  const windows = await chrome.windows.getAll({populate: true})
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   const treeifyWindowUrl = chrome.runtime.getURL('TreeifyWindow/index.html')
   if (tabs.find((tab) => tab.url === treeifyWindowUrl) === undefined) {
-    const createData: CreateData = {
+    await chrome.tabs.create({
       url: chrome.runtime.getURL('TreeifyWindow/index.html'),
-      type: 'popup',
-      // TODO: フルウィンドウモードで終了した場合は、次回起動時もフルウィンドウモードになってほしい気がする
-      state: 'normal',
-      width: 300,
-      // windowオブジェクトが使えないので下記のようには指定できない
-      // height: screen.availHeight,
-      top: 0,
-      left: 0,
-    }
-
-    await chrome.windows.create(createData)
+    })
   }
 }

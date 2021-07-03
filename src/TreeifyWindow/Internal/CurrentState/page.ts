@@ -5,7 +5,6 @@ import {extractPlainText} from 'src/TreeifyWindow/Internal/ImportExport/indented
 import {Internal} from 'src/TreeifyWindow/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyWindow/Internal/PropertyPath'
 import {DefaultWindowMode, Page} from 'src/TreeifyWindow/Internal/State'
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
@@ -23,37 +22,6 @@ export async function switchActivePage(itemId: ItemId) {
   }
 
   CurrentState.setActivePageId(itemId)
-
-  // ウィンドウモードの自動切り替え機能
-  await toDefaultWindowMode()
-}
-
-function deriveDefaultWindowMode(itemId: ItemId): DefaultWindowMode {
-  const page: Page | undefined = Internal.instance.state.pages[itemId]
-  if (page !== undefined && page.defaultWindowMode !== 'inherit') {
-    return page.defaultWindowMode
-  }
-
-  // 設定されていなければ親ページの設定を参照する。
-  // 親ページが複数ある場合の選択は未定義でいいと思うので、適当に選ぶ。
-  const parentItemId: ItemId | undefined = CurrentState.getParentItemIds(itemId).first()
-  if (parentItemId !== undefined) return deriveDefaultWindowMode(parentItemId)
-
-  return 'keep'
-}
-
-async function toDefaultWindowMode() {
-  switch (deriveDefaultWindowMode(CurrentState.getActivePageId())) {
-    case 'dual':
-      await TreeifyWindow.toDualWindowMode()
-      break
-    case 'full':
-      await TreeifyWindow.toFullWindowMode()
-      break
-    case 'floating':
-      // TODO: フローティングウィンドウモードへの変更は未実装
-      break
-  }
 }
 
 /** 現在のワークスペースのactiveItemIdを返す */

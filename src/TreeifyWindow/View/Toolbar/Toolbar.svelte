@@ -8,7 +8,6 @@
   import {State} from '../../Internal/State'
   import CodeBlockItemCreationButton from './CodeBlockItemCreationButton.svelte'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
-  import FullWindowModeButton from './FullWindowModeButton.svelte'
   import TexItemCreationButton from './TexItemCreationButton.svelte'
   import {ToolbarProps} from './ToolbarProps'
 
@@ -34,7 +33,6 @@
   <button on:click={onClickExportButton}>OPMLファイルをエクスポート</button>
   <CodeBlockItemCreationButton />
   <TexItemCreationButton />
-  <FullWindowModeButton />
   <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
 </div>
 

@@ -66,7 +66,7 @@ export function createMainAreaWebPageContentProps(
           case '0000MouseButton0':
             event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.browseTabInDualWindowMode()
+            NullaryCommand.browseTab()
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
