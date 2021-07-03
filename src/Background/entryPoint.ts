@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(async () => {
   for (const tab of tabs) {
     if (tab.id === undefined) continue
     if (tab.url?.startsWith('chrome://')) continue
-    if (tab.url?.startsWith(chrome.runtime.getURL('TreeifyWindow/index.html'))) continue
+    if (tab.url?.startsWith(chrome.runtime.getURL('TreeifyTab/index.html'))) continue
 
     chrome.scripting.executeScript({
       target: {tabId: tab.id},
@@ -13,17 +13,17 @@ chrome.runtime.onInstalled.addListener(async () => {
     })
   }
 
-  await openTreeifyWindow()
+  await openTreeifyTab()
 })
-chrome.runtime.onStartup.addListener(openTreeifyWindow)
+chrome.runtime.onStartup.addListener(openTreeifyTab)
 
-async function openTreeifyWindow() {
+async function openTreeifyTab() {
   const windows = await chrome.windows.getAll({populate: true})
   const tabs = windows.flatMap((window) => window.tabs ?? [])
-  const treeifyWindowUrl = chrome.runtime.getURL('TreeifyWindow/index.html')
-  if (tabs.find((tab) => tab.url === treeifyWindowUrl) === undefined) {
+  const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
+  if (tabs.find((tab) => tab.url === treeifyTabUrl) === undefined) {
     await chrome.tabs.create({
-      url: chrome.runtime.getURL('TreeifyWindow/index.html'),
+      url: chrome.runtime.getURL('TreeifyTab/index.html'),
     })
   }
 }

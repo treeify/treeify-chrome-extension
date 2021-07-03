@@ -1,7 +1,7 @@
-import {TreeifyWindow} from 'src/TreeifyWindow/TreeifyWindow'
+import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
 // Treeifyウィンドウを開く
-await TreeifyWindow.open()
+await TreeifyTab.open()
 
 // ブラウザアクションのポップアップを閉じる
 window.close()
