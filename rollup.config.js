@@ -11,7 +11,7 @@ export default {
     background: './src/Background/entryPoint.ts',
     'BrowserAction/entryPoint': './src/BrowserAction/entryPoint.ts',
     'ContentScript/entryPoint': './src/ContentScript/entryPoint.ts',
-    'TreeifyWindow/entryPoint': './src/TreeifyWindow/entryPoint.ts',
+    'TreeifyTab/entryPoint': './src/TreeifyTab/entryPoint.ts',
   },
   output: {
     dir: 'dist',
