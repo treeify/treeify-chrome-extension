@@ -5,7 +5,6 @@ import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -179,7 +178,7 @@ export function createPageTreeNodeProps(
         // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
         if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
-        if (InputId.isFirstModifierKeyPressed(event)) {
+        if (event.altKey) {
           // エッジを追加する（トランスクルード）
           CurrentState.insertFirstChildItem(itemId, draggedItemId)
         } else {

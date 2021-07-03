@@ -23,7 +23,7 @@
   import {MainAreaContentView} from './MainAreaContentProps'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
-  
+
   export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
@@ -306,7 +306,7 @@
     const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
     // 下のアイテムが存在しない場合はブラウザの挙動に任せる
     if (belowItemPath === undefined) return
-  
+
     // 複数選択などの場合、下のアイテムをフォーカスするだけで終了
     const targetItemPath = CurrentState.getTargetItemPath()
     if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
@@ -742,7 +742,7 @@
             // ドロップ先がアクティブページなら何もしない
             if (!ItemPath.hasParent(itemPath)) return
 
-            if (InputId.isFirstModifierKeyPressed(event)) {
+            if (event.altKey) {
               // エッジを追加する（トランスクルード）
               const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
               CurrentState.setTargetItemPath(newItemPath)
@@ -755,7 +755,7 @@
           } else {
             // ドロップ先座標がドロップ先要素の下の方の場合
 
-            if (InputId.isFirstModifierKeyPressed(event)) {
+            if (event.altKey) {
               // エッジを追加する（トランスクルード）
               const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId)
               CurrentState.setTargetItemPath(newItemPath)
