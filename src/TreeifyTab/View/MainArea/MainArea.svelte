@@ -58,7 +58,7 @@
         case '0000Delete':
           onDelete(event)
           return
-        case '0000 ':
+        case '0000Space':
           onSpace(event)
           return
         case '1000KeyZ':
@@ -674,8 +674,6 @@
     const targetItemType = Internal.instance.state.items[targetItemId].itemType
     if (targetItemType === ItemType.WEB_PAGE) {
       event.preventDefault()
-
-      // クリックしたのと同じ扱いにする
       NullaryCommand.browseTab()
       Rerenderer.instance.rerender()
     }
