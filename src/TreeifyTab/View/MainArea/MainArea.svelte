@@ -23,7 +23,7 @@
   import {MainAreaContentView} from './MainAreaContentProps'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
-
+  
   export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
@@ -206,17 +206,16 @@
     // 上のアイテムが存在しない場合はブラウザの挙動に任せる
     if (aboveItemPath === undefined) return
 
-    // 複数選択の場合、上のアイテムをフォーカスするだけで終了
-    if (selectedItemPaths.size > 1) {
+    // 複数選択などの場合、上のアイテムをフォーカスするだけで終了
+    const targetItemPath = CurrentState.getTargetItemPath()
+    if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
       event.preventDefault()
-
       CurrentState.setTargetItemPath(aboveItemPath)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
       Rerenderer.instance.rerender()
       return
     }
 
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
 
@@ -307,18 +306,17 @@
     const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
     // 下のアイテムが存在しない場合はブラウザの挙動に任せる
     if (belowItemPath === undefined) return
-
-    // 複数選択の場合、下のアイテムをフォーカスするだけで終了
-    if (selectedItemPaths.size > 1) {
+  
+    // 複数選択などの場合、下のアイテムをフォーカスするだけで終了
+    const targetItemPath = CurrentState.getTargetItemPath()
+    if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
       event.preventDefault()
-
       CurrentState.setTargetItemPath(belowItemPath)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
       Rerenderer.instance.rerender()
       return
     }
 
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
       // ターゲットアイテムがテキストアイテムの場合
 
