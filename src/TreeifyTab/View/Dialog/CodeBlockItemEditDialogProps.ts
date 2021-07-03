@@ -3,6 +3,7 @@ import {detectLanguage} from 'src/TreeifyTab/highlightJs'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {CodeBlockItemEditDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
@@ -19,17 +20,25 @@ export function createCodeBlockItemEditDialogProps(
   const onClickFinishButton = () => {
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
-    // コードを更新
     const editBox = document.querySelector<HTMLDivElement>('.code-block-edit-dialog_code')
     assertNonNull(editBox)
     const code = editBox.textContent ?? ''
-    CurrentState.setCodeBlockItemCode(targetItemId, code)
 
-    // 言語を自動検出
-    CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
+    if (code.trim() !== '') {
+      // コードが空でない場合
 
-    // タイムスタンプを更新
-    CurrentState.updateItemTimestamp(targetItemId)
+      // コードを更新
+      CurrentState.setCodeBlockItemCode(targetItemId, code)
+      // 言語を自動検出
+      CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
+      // タイムスタンプを更新
+      CurrentState.updateItemTimestamp(targetItemId)
+    } else {
+      // コードが空の場合
+
+      // コードブロックアイテムを削除
+      NullaryCommand.removeEdge()
+    }
 
     // ダイアログを閉じる
     CurrentState.setDialog(null)
