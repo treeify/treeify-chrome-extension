@@ -190,7 +190,7 @@ export async function matchTabsAndWebPageItems() {
     urlToItemIds.set(url, (urlToItemIds.get(url) ?? List.of()).push(itemId))
   }
 
-  for (const tab of await getAllNormalTabs()) {
+  for (const tab of await getAllNonTreeifyTabs()) {
     assertNonUndefined(tab.id)
 
     const url = tab.pendingUrl ?? tab.url ?? ''
@@ -236,10 +236,13 @@ function findWebPageItemId(url: string): ItemId | undefined {
   return undefined
 }
 
-// 要するにTreeifyウィンドウを除く全ウィンドウの全タブを返す
-async function getAllNormalTabs(): Promise<Tab[]> {
-  const windows = await chrome.windows.getAll({populate: true, windowTypes: ['normal']})
-  return windows.flatMap((window) => window.tabs ?? [])
+// Treeifyタブを除く全タブを返す
+async function getAllNonTreeifyTabs(): Promise<Tab[]> {
+  const windows = await chrome.windows.getAll({populate: true})
+  const tabs = windows.flatMap((window) => window.tabs ?? [])
+  return tabs.filter(
+    (tab) => !tab.url?.startsWith(chrome.runtime.getURL('TreeifyWindow/index.html'))
+  )
 }
 
 export function onWindowFocusChanged(windowId: integer) {
