@@ -427,7 +427,7 @@
         // ターゲットアイテムがテキストアイテムの場合
 
         const textItemSelection = getTextItemSelectionFromDom()
-        if (textItemSelection?.focusDistance !== 0) {
+        if (textItemSelection !== undefined && textItemSelection.focusDistance > 0) {
           return
         }
       }
@@ -458,7 +458,7 @@
         const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
         const charactersCount = DomishObject.countCharacters(domishObjects)
         const textItemSelection = getTextItemSelectionFromDom()
-        if (textItemSelection?.focusDistance !== charactersCount) {
+        if (textItemSelection !== undefined && textItemSelection.focusDistance < charactersCount) {
           return
         }
       }
