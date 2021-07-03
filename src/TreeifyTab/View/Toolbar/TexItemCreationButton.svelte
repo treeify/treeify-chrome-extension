@@ -7,6 +7,7 @@
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyTexItem()
+      NullaryCommand.edit()
       Rerenderer.instance.rerender()
     })
   }
