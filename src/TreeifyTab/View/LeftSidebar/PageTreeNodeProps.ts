@@ -126,6 +126,7 @@ export function createPageTreeNodeProps(
       doWithErrorCapture(() => {
         if (itemId === TOP_ITEM_ID) return
 
+        Internal.instance.saveCurrentStateToUndoStack()
         CurrentState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
@@ -146,6 +147,7 @@ export function createPageTreeNodeProps(
     },
     onClickTabsCount: () => {
       doWithErrorCapture(() => {
+        Internal.instance.saveCurrentStateToUndoStack()
         // ページ全体をハードアンロードする
         for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
           const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
