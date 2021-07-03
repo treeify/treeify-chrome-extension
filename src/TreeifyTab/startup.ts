@@ -25,7 +25,7 @@ export async function startup(initialState: State) {
   Internal.initialize(initialState)
   Internal.instance.addOnMutateListener(onMutateState)
 
-  // Treeifyウィンドウ起動時点で既に存在するタブをウェブページアイテムと紐付ける
+  // Treeifyタブ起動時点で既に存在するタブをウェブページアイテムと紐付ける
   await matchTabsAndWebPageItems()
 
   Rerenderer.instance.renderForFirstTime()
@@ -134,14 +134,14 @@ function onMouseMove(event: MouseEvent) {
     if (!External.instance.shouldFloatingLeftSidebarShown) {
       const gap = event.screenX - event.clientX
       if (gap > 0) {
-        // Treeifyウィンドウ左端と画面左端の間に隙間がある場合
+        // Treeifyタブ左端と画面左端の間に隙間がある場合
 
         if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
           External.instance.shouldFloatingLeftSidebarShown = true
           Rerenderer.instance.rerender()
         }
       } else {
-        // Treeifyウィンドウ左端と画面左端の間に隙間がない場合
+        // Treeifyタブ左端と画面左端の間に隙間がない場合
 
         if (event.screenX === 0 && event.movementX === 0) {
           External.instance.shouldFloatingLeftSidebarShown = true
@@ -151,7 +151,7 @@ function onMouseMove(event: MouseEvent) {
     } else {
       const leftSidebar = document.querySelector('.left-sidebar')
       if (leftSidebar !== null && event.x > leftSidebar.getBoundingClientRect().right) {
-        // mouseleaveイベントを使わない理由は、Treeifyウィンドウが画面左端にぴったりくっついていない状況で、
+        // mouseleaveイベントを使わない理由は、Treeifyタブが画面左端にぴったりくっついていない状況で、
         // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
         External.instance.shouldFloatingLeftSidebarShown = false
         Rerenderer.instance.rerender()

@@ -82,7 +82,7 @@ export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
   Internal.instance.mutate(value, PropertyPath.of('pages', itemId, 'defaultWindowMode'))
 }
 
-/** Treeifyウィンドウのタイトルとして表示する文字列を返す */
+/** Treeifyタブのタイトルとして表示する文字列を返す */
 export function deriveTreeifyTabTitle(): string {
   const activePageId = CurrentState.getActivePageId()
   const parentPageIds = CurrentState.getParentPageIds(activePageId)

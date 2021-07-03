@@ -96,7 +96,7 @@ export function onCreated(tab: Tab) {
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   doAsyncWithErrorCapture(async () => {
-    // Treeifyウィンドウのタブだった場合は何もしない。
+    // Treeifyタブだった場合は何もしない。
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
     if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
 
@@ -170,7 +170,7 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
 }
 
 function OnMouseMoveToLeftEnd() {
-  // Treeifyウィンドウを最前面化する
+  // Treeifyタブを最前面化する
   // TODO: 誤差だろうけれど最適化の余地が一応ある
   TreeifyTab.open()
 }

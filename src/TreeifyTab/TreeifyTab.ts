@@ -3,8 +3,8 @@ import {TabId} from 'src/TreeifyTab/basicType'
 
 export namespace TreeifyTab {
   /**
-   * Treeifyウィンドウを開く。
-   * すでに開かれている場合はTreeifyウィンドウをフォーカス（最前面化）する。
+   * Treeifyタブを開く。
+   * すでに開かれている場合はTreeifyタブを最前面化する。
    */
   export async function open() {
     const treeifyTabId = await findTabId()
@@ -32,7 +32,7 @@ export namespace TreeifyTab {
     return undefined
   }
 
-  /** Treeifyウィンドウ向けのメッセージ型のUnion型 */
+  /** Treeifyタブ向けのメッセージ型のUnion型 */
   export type Message = OnMouseMoveToLeftEnd | OnMouseEnter
 
   export type OnMouseMoveToLeftEnd = {

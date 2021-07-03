@@ -43,7 +43,7 @@ export class Rerenderer {
 
   /** DOMを再描画する */
   rerender() {
-    // Treeifyウィンドウのタイトルを更新する
+    // Treeifyタブのタイトルを更新する
     document.title = CurrentState.deriveTreeifyTabTitle()
 
     this.#rerenderingPulse.set({})
@@ -72,7 +72,7 @@ export class Rerenderer {
 
   /** DOMの初回描画を行う */
   renderForFirstTime() {
-    // Treeifyウィンドウのタイトルを更新する
+    // Treeifyタブのタイトルを更新する
     document.title = CurrentState.deriveTreeifyTabTitle()
 
     const spaRoot = document.querySelector('.spa-root')
