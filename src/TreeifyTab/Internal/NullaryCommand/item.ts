@@ -158,6 +158,14 @@ export function removeEdge() {
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
+  // 上のアイテムがテキストアイテムの場合、キャレットを末尾に移動する
+  const aboveItemId = ItemPath.getItemId(aboveItemPath)
+  if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+    const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+    const characterCount = DomishObject.countCharacters(domishObjects)
+    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+  }
+
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     if (CurrentState.countParents(selectedItemId) >= 2) {
@@ -182,6 +190,14 @@ export function deleteItem() {
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
+
+  // 上のアイテムがテキストアイテムの場合、キャレットを末尾に移動する
+  const aboveItemId = ItemPath.getItemId(aboveItemPath)
+  if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+    const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+    const characterCount = DomishObject.countCharacters(domishObjects)
+    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+  }
 
   // 対象アイテムを削除
   for (const selectedItemPath of selectedItemPaths) {
