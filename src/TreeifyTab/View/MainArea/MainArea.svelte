@@ -819,10 +819,7 @@
     font-size: var(--main-area-base-font-size);
     line-height: var(--main-area-line-height);
 
-    padding-left: 15px;
-    padding-top: 15px;
-    /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
-    padding-bottom: 150px;
+    padding: 15px 300px 150px 15px;
 
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
