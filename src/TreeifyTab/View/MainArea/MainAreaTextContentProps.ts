@@ -61,16 +61,16 @@ export function createMainAreaTextContentProps(
     onClick: (event) => {
       doWithErrorCapture(() => {
         switch (InputId.fromMouseEvent(event)) {
-          case '0000MouseButton0':
-            CurrentState.setTargetItemPath(itemPath)
-            Rerenderer.instance.rerender()
-            break
           case '0100MouseButton0':
             event.preventDefault()
             if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
               CurrentState.setTargetItemPathOnly(itemPath)
               Rerenderer.instance.rerender()
             }
+            break
+          default:
+            CurrentState.setTargetItemPath(itemPath)
+            Rerenderer.instance.rerender()
             break
         }
       })
