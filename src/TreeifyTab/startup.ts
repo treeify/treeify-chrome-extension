@@ -115,10 +115,7 @@ function onClickContextMenu(info: OnClickData) {
       )
 
       // 出典を設定
-      if (tab.title !== undefined) {
-        CurrentState.setCite(newItemId, tab.title)
-      }
-      CurrentState.setCiteUrl(newItemId, info.pageUrl)
+      CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
 
       CurrentState.insertLastChildItem(itemId, newItemId)
       Rerenderer.instance.rerender()

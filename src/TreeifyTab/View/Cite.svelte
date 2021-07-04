@@ -4,15 +4,15 @@
   export let props: CiteProps
 </script>
 
-{#if props.cite !== '' && props.citeUrl !== ''}
+{#if props.title !== '' && props.url !== ''}
   <cite class="main-area-image-content_cite"
-    ><a href={props.citeUrl} on:click={props.onClick}>{props.cite}</a></cite
+    ><a href={props.url} on:click={props.onClick}>{props.title}</a></cite
   >
-{:else if props.cite !== '' && props.citeUrl === ''}
-  <cite class="main-area-image-content_cite">{props.cite}</cite>
-{:else if props.cite === '' && props.citeUrl !== ''}
+{:else if props.title !== '' && props.url === ''}
+  <cite class="main-area-image-content_cite">{props.title}</cite>
+{:else if props.title === '' && props.url !== ''}
   <cite class="main-area-image-content_cite"
-    ><a href={props.citeUrl} on:click={props.onClick}>{props.citeUrl}</a></cite
+    ><a href={props.url} on:click={props.onClick}>{props.url}</a></cite
   >
 {/if}
 

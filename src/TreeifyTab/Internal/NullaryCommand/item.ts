@@ -5,6 +5,8 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
+import {Cite} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /** 選択されたアイテムを折りたたむコマンド */
@@ -240,13 +242,13 @@ export function deleteItemItself() {
 export function toggleGrayedOut() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
-    const targetItemId = ItemPath.getItemId(selectedItemPath)
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-    CurrentState.toggleCssClass(targetItemId, 'grayed-out')
+    CurrentState.toggleCssClass(selectedItemId, 'grayed-out')
 
     // タイムスタンプを更新
     // TODO: 設定で無効化できるようにする
-    CurrentState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(selectedItemId)
   }
 
   // フォーカスを下のアイテムに移動する。
@@ -268,12 +270,12 @@ export function toggleGrayedOut() {
 export function toggleHighlighted() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
-    const targetItemId = ItemPath.getItemId(selectedItemPath)
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-    CurrentState.toggleCssClass(targetItemId, 'highlighted')
+    CurrentState.toggleCssClass(selectedItemId, 'highlighted')
 
     // タイムスタンプを更新
-    CurrentState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(selectedItemId)
   }
 }
 
@@ -284,11 +286,32 @@ export function toggleHighlighted() {
 export function toggleDoubtful() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
-    const targetItemId = ItemPath.getItemId(selectedItemPath)
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-    CurrentState.toggleCssClass(targetItemId, 'doubtful')
+    CurrentState.toggleCssClass(selectedItemId, 'doubtful')
 
     // タイムスタンプを更新
-    CurrentState.updateItemTimestamp(targetItemId)
+    CurrentState.updateItemTimestamp(selectedItemId)
+  }
+}
+
+/**
+ * 対象アイテムが出典付きなら出典情報を削除する。
+ * 出典がない場合はタイトル、URLともに空文字列の出典情報を付ける。
+ */
+export function toggleCitation() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+
+    if (Internal.instance.state.items[selectedItemId].cite === null) {
+      const emptyCite: Cite = {title: '', url: ''}
+      Internal.instance.mutate(emptyCite, PropertyPath.of('items', selectedItemId, 'cite'))
+    } else {
+      Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'cite'))
+    }
+
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(selectedItemId)
   }
 }

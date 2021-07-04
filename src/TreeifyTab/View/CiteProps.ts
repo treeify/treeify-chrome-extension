@@ -4,26 +4,26 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
 export type CiteProps = {
-  cite: string
-  citeUrl: string
+  title: string
+  url: string
   onClick: (event: MouseEvent) => void
 }
 
 export function createCiteProps(itemPath: ItemPath): CiteProps | undefined {
   const itemId = ItemPath.getItemId(itemPath)
-  const item = Internal.instance.state.items[itemId]
-  if (item.cite === '' && item.citeUrl === '') return undefined
+  const cite = Internal.instance.state.items[itemId].cite
+  if (cite === null) return undefined
 
   return {
-    cite: item.cite,
-    citeUrl: item.citeUrl,
+    title: cite.title,
+    url: cite.url,
     onClick: (event: MouseEvent) => {
       doAsyncWithErrorCapture(async () => {
         // TODO: 修飾キー+クリックでタブをバックグラウンドで開けるようにするのが有力
 
         CurrentState.setTargetItemPath(itemPath)
         // タブを開く
-        await chrome.tabs.create({url: item.citeUrl})
+        await chrome.tabs.create({url: cite.url})
       })
     },
   }
