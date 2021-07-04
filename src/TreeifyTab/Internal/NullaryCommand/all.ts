@@ -1,3 +1,4 @@
+import {copyForTransclusion} from 'src/TreeifyTab/Internal/NullaryCommand/clipboard'
 import {
   edit,
   showCitationSettingDialog,
@@ -31,7 +32,6 @@ import {
   createEmptyTexItem,
 } from 'src/TreeifyTab/Internal/NullaryCommand/minorItemType'
 import {
-  copyForTransclusion,
   saveToDataFolder,
   selectAll,
   selectAllAboveItems,
@@ -66,7 +66,7 @@ export * from 'src/TreeifyTab/Internal/NullaryCommand/webPageItem'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/minorItemType'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/page'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/dialog'
-export * from 'src/TreeifyTab/Internal/NullaryCommand/importExport'
+export * from 'src/TreeifyTab/Internal/NullaryCommand/clipboard'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/other'
 
 /**

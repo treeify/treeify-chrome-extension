@@ -140,24 +140,6 @@ export function selectAllAboveItems() {
   focusMainAreaBackground()
 }
 
-/** トランスクルードするために独自クリップボードに情報を書き込む */
-export async function copyForTransclusion() {
-  const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  External.instance.treeifyClipboard = {selectedItemPaths}
-
-  // 「独自クリップボードにコピー→他アプリで何かをコピー→Treeify上でペースト」としたとき、
-  // 本来なら他アプリ由来のデータが貼り付けられるべきなのに独自クリップボードが優先されてしまう問題の対策。
-  // クリップボードが上書きされたことを検出するために独自クリップボードのハッシュ値をクリップボードに書き込む。
-  const treeifyClipboardHash = External.instance.getTreeifyClipboardHash()
-  assertNonUndefined(treeifyClipboardHash)
-  const blob = new Blob([treeifyClipboardHash], {type: 'text/plain'})
-  await navigator.clipboard.write([
-    new ClipboardItem({
-      [blob.type]: blob,
-    }),
-  ])
-}
-
 /**
  * ターゲットアイテムをワークスペースの除外アイテムリストに入れる。
  * もし既に除外されていれば除外を解除する。
