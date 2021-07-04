@@ -23,7 +23,7 @@
   import {MainAreaContentView} from './MainAreaContentProps'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
-
+  
   export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
@@ -97,42 +97,36 @@
 
     const textItemSelection = getTextItemSelectionFromDom()
     if (textItemSelection === undefined) {
+      event.preventDefault()
+      CurrentState.setTargetItemPath(aboveItemPath)
+  
       const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
-        event.preventDefault()
         const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
         const characterCount = DomishObject.countCharacters(domishObjects)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
-        CurrentState.setTargetItemPath(aboveItemPath)
-        Rerenderer.instance.rerender()
-      } else {
-        // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
-        event.preventDefault()
-        CurrentState.setTargetItemPath(aboveItemPath)
-        Rerenderer.instance.rerender()
       }
+      
+      Rerenderer.instance.rerender()
     } else {
       // キャレット位置が先頭以外のときはブラウザの挙動に任せる
       if (textItemSelection.focusDistance > 0 || textItemSelection.anchorDistance > 0) {
         return
       }
 
+      event.preventDefault()
+      CurrentState.setTargetItemPath(aboveItemPath)
+      
       const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
-        event.preventDefault()
         const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
         const characterCount = DomishObject.countCharacters(domishObjects)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
-        CurrentState.setTargetItemPath(aboveItemPath)
-        Rerenderer.instance.rerender()
-      } else {
-        // 上のアイテムがテキストアイテム以外の場合、それをフォーカスする
-        event.preventDefault()
-        CurrentState.setTargetItemPath(aboveItemPath)
-        Rerenderer.instance.rerender()
       }
+      
+      Rerenderer.instance.rerender()
     }
   }
 
