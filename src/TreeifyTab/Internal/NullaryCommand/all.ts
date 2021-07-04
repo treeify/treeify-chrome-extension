@@ -32,11 +32,11 @@ import {
 } from 'src/TreeifyTab/Internal/NullaryCommand/minorItemType'
 import {
   copyForTransclusion,
-  excludeFromCurrentWorkspace,
   saveToDataFolder,
   selectAll,
   selectAllAboveItems,
   selectAllBelowItems,
+  toggleExcluded,
 } from 'src/TreeifyTab/Internal/NullaryCommand/other'
 import {
   showPage,
@@ -86,7 +86,7 @@ export const functions: {[name: string]: () => void} = {
   selectAllBelowItems,
   selectAllAboveItems,
   copyForTransclusion,
-  excludeFromCurrentWorkspace,
+  toggleExcluded,
   enterKeyDefault,
   removeEdge,
   deleteItem,

@@ -160,11 +160,16 @@ export async function copyForTransclusion() {
 
 /**
  * ターゲットアイテムをワークスペースの除外アイテムリストに入れる。
+ * もし既に除外されていれば除外を解除する。
  * ただしトップページは除外できない。
  */
-export function excludeFromCurrentWorkspace() {
+export function toggleExcluded() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
   const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
-  CurrentState.setExcludedItemIds(selectedItemIds.union(excludedItemIds).toList())
+
+  // いわゆるxorのメソッドが見当たらないので同等の処理をする
+  const union = selectedItemIds.union(excludedItemIds)
+  const intersection = selectedItemIds.intersect(excludedItemIds)
+  CurrentState.setExcludedItemIds(union.subtract(intersection).toList())
 }
