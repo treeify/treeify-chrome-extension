@@ -61,7 +61,6 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
       return
     }
 
@@ -74,7 +73,6 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
 
@@ -97,9 +95,6 @@ export function enterKeyDefault() {
       if (textItemSelection.focusDistance === 0) {
         CurrentState.setTargetItemPath(newItemPath)
       }
-
-      // キャレット位置を更新する
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     } else {
       // キャレット位置が後半なら
 
@@ -119,7 +114,6 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
     }
   } else {
     // ターゲットアイテムがテキストアイテム以外の場合
@@ -251,15 +245,11 @@ export function toggleGrayedOut() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  // フォーカスを下のアイテムに移動する。
-  // これは複数のアイテムを連続でグレーアウトする際に有用な挙動である。
+  // フォーカスを下のアイテムに移動する
+  // TODO: コマンドを分離する
   const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
   if (firstFollowingItemPath !== undefined) {
     CurrentState.setTargetItemPath(firstFollowingItemPath)
-    const firstFollowingItemId = ItemPath.getItemId(firstFollowingItemPath)
-    if (Internal.instance.state.items[firstFollowingItemId].itemType === ItemType.TEXT) {
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
-    }
   }
 }
 

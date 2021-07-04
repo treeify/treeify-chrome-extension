@@ -97,8 +97,6 @@
 
     const textItemSelection = getTextItemSelectionFromDom()
     if (textItemSelection === undefined) {
-      // ターゲットアイテムが非テキストアイテムだと断定する
-
       const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
@@ -152,21 +150,9 @@
 
     const textItemSelection = getTextItemSelectionFromDom()
     if (textItemSelection === undefined) {
-      // ターゲットアイテムが非テキストアイテムだと断定する
-
-      const belowItemType = Internal.instance.state.items[belowItemId].itemType
-      if (belowItemType === ItemType.TEXT) {
-        // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
-        event.preventDefault()
-        Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
-        CurrentState.setTargetItemPath(belowItemPath)
-        Rerenderer.instance.rerender()
-      } else {
-        // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
-        event.preventDefault()
-        CurrentState.setTargetItemPath(belowItemPath)
-        Rerenderer.instance.rerender()
-      }
+      event.preventDefault()
+      CurrentState.setTargetItemPath(belowItemPath)
+      Rerenderer.instance.rerender()
     } else {
       const targetItemId = ItemPath.getItemId(targetItemPath)
       const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
@@ -184,7 +170,6 @@
       if (belowItemType === ItemType.TEXT) {
         // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
         event.preventDefault()
-        Rerenderer.instance.requestSetCaretDistanceAfterRendering(0)
         CurrentState.setTargetItemPath(belowItemPath)
         Rerenderer.instance.rerender()
       } else {
