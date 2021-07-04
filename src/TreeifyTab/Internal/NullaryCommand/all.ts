@@ -66,6 +66,7 @@ export * from 'src/TreeifyTab/Internal/NullaryCommand/webPageItem'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/minorItemType'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/page'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/dialog'
+export * from 'src/TreeifyTab/Internal/NullaryCommand/importExport'
 export * from 'src/TreeifyTab/Internal/NullaryCommand/other'
 
 /**

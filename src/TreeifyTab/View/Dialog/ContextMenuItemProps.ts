@@ -35,6 +35,11 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   })
 
   result.push({
+    title: 'Markdown形式でコピー',
+    onClick: () => NullaryCommand.copyAsMarkdownText(),
+  })
+
+  result.push({
     title: '出典を設定…',
     onClick: () => NullaryCommand.showCitationSettingDialog(),
   })

@@ -220,21 +220,53 @@ export namespace DomishObject {
   }
 
   /**
-   * 単一行のプレーンテキストに変換する。リッチテキスト要素は無視される。
-   * br要素は半角スペースに変換する。
+   * Markdown形式のテキストを生成する。
+   * テキストアイテム内の改行は空白スペース2つ+改行に変換する。
    */
-  export function toSingleLinePlainText(value: DomishObject | List<DomishObject>): string {
+  export function toMultiLineMarkdownText(value: DomishObject | List<DomishObject>): string {
     if (value instanceof List) {
       const domishObjects = value as List<DomishObject>
-      return domishObjects.map(toSingleLinePlainText).join('')
+      return domishObjects.map(toMultiLineMarkdownText).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
         case 'b':
+          return `**${toMultiLineMarkdownText(domishObject.children)}**`
         case 'u':
+          return `<u>${toMultiLineMarkdownText(domishObject.children)}</u>`
         case 'i':
+          return `*${toMultiLineMarkdownText(domishObject.children)}*`
         case 'strike':
-          return toSingleLinePlainText(domishObject.children)
+          return `~~${toMultiLineMarkdownText(domishObject.children)}~~`
+        case 'br':
+          return '  \n'
+        case 'text':
+          return domishObject.textContent
+        default:
+          assertNeverType(domishObject)
+      }
+    }
+  }
+
+  /**
+   * Markdown形式のテキストを生成する。
+   * テキストアイテム内の改行は半角スペース1つに置換する。
+   */
+  export function toSingleLineMarkdownText(value: DomishObject | List<DomishObject>): string {
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      return domishObjects.map(toSingleLineMarkdownText).join('')
+    } else {
+      const domishObject = value as DomishObject
+      switch (domishObject.type) {
+        case 'b':
+          return `**${toSingleLineMarkdownText(domishObject.children)}**`
+        case 'u':
+          return `<u>${toSingleLineMarkdownText(domishObject.children)}</u>`
+        case 'i':
+          return `*${toSingleLineMarkdownText(domishObject.children)}*`
+        case 'strike':
+          return `~~${toSingleLineMarkdownText(domishObject.children)}~~`
         case 'br':
           return ' '
         case 'text':
