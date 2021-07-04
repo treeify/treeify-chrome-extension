@@ -61,6 +61,7 @@
     outline: 0 solid transparent;
 
     font-size: 13px;
+    padding: 0.1em 0.5em;
 
     cursor: pointer;
   }

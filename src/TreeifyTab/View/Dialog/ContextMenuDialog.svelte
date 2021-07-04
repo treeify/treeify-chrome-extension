@@ -98,7 +98,5 @@
     background: hsl(0, 0%, 96%);
 
     box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
-
-    padding: 0.5em;
   }
 </style>
