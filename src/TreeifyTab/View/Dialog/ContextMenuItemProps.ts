@@ -15,6 +15,13 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
 
   const result: ContextMenuItemProps[] = []
 
+  if (ItemPath.hasParent(targetItemPath)) {
+    result.push({
+      title: '削除',
+      onClick: () => NullaryCommand.removeEdge(),
+    })
+  }
+
   if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
     result.push({
       title: 'タブを閉じる',
@@ -47,6 +54,18 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     title: 'ラベルを設定…',
     onClick: () => NullaryCommand.showLabelSettingDialog(),
   })
+
+  if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
+    result.push({
+      title: '現在のワークスペースからの除外を解除',
+      onClick: () => NullaryCommand.toggleExcluded(),
+    })
+  } else {
+    result.push({
+      title: '現在のワークスペースのページツリーや検索結果から除外',
+      onClick: () => NullaryCommand.toggleExcluded(),
+    })
+  }
 
   return List(result)
 }
