@@ -30,8 +30,7 @@ export function createTextItem(): ItemId {
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
-    cite: '',
-    citeUrl: '',
+    cite: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 

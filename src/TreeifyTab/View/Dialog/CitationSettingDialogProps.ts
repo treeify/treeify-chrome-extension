@@ -7,8 +7,8 @@ import {CitationSettingDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type CitationSettingDialogProps = {
-  cite: string
-  citeUrl: string
+  title: string
+  url: string
   onKeyDown: (event: KeyboardEvent) => void
   onClickFinishButton: () => void
   onClickCancelButton: () => void
@@ -23,16 +23,18 @@ export function createCitationSettingDialogProps(
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
     // citeプロパティを更新
-    const citeElement = document.querySelector<HTMLInputElement>('.citation-setting-dialog_cite')
-    assertNonNull(citeElement)
-    CurrentState.setCite(targetItemId, citeElement.value)
-
-    // citeUrlプロパティを更新
+    const citeTitleElement = document.querySelector<HTMLInputElement>(
+      '.citation-setting-dialog_cite-title'
+    )
     const citeUrlElement = document.querySelector<HTMLInputElement>(
       '.citation-setting-dialog_cite-url'
     )
+    assertNonNull(citeTitleElement)
     assertNonNull(citeUrlElement)
-    CurrentState.setCiteUrl(targetItemId, citeUrlElement.value)
+    CurrentState.setCite(targetItemId, {
+      title: citeTitleElement.value,
+      url: citeUrlElement.value,
+    })
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(targetItemId)
@@ -43,8 +45,8 @@ export function createCitationSettingDialogProps(
   }
 
   return {
-    cite: item.cite,
-    citeUrl: item.citeUrl,
+    title: item.cite?.title ?? '',
+    url: item.cite?.url ?? '',
     onKeyDown: (event) => {
       switch (InputId.fromKeyboardEvent(event)) {
         case '0000Enter':

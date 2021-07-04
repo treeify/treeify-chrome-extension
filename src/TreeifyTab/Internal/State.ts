@@ -49,8 +49,7 @@ export type Item = {
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
   cssClasses: List<string>
-  cite: string
-  citeUrl: string
+  cite: Cite | null
 }
 
 export type Edge = {
@@ -73,6 +72,11 @@ export type Edge = {
 }
 export function createDefaultEdge(): Edge {
   return {isCollapsed: false, labels: List.of()}
+}
+
+export type Cite = {
+  title: string
+  url: string
 }
 
 /** テキストアイテムが固有で持つデータの型 */

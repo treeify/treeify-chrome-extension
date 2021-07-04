@@ -7,7 +7,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {createDefaultEdge, Edge} from 'src/TreeifyTab/Internal/State'
+import {Cite, createDefaultEdge, Edge} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
@@ -415,10 +415,6 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   }
 }
 
-export function setCite(itemId: ItemId, cite: string) {
+export function setCite(itemId: ItemId, cite: Cite) {
   Internal.instance.mutate(cite, PropertyPath.of('items', itemId, 'cite'))
-}
-
-export function setCiteUrl(itemId: ItemId, citeUrl: string) {
-  Internal.instance.mutate(citeUrl, PropertyPath.of('items', itemId, 'citeUrl'))
 }
