@@ -50,6 +50,13 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     title: '出典を設定…',
     onClick: () => NullaryCommand.showCitationSettingDialog(),
   })
+  if (Internal.instance.state.items[targetItemId].cite !== null) {
+    result.push({
+      title: '出典を削除',
+      onClick: () => NullaryCommand.toggleCitation(),
+    })
+  }
+
   result.push({
     title: 'ラベルを設定…',
     onClick: () => NullaryCommand.showLabelSettingDialog(),
