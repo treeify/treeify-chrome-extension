@@ -37,6 +37,11 @@
     --page-tree-bullet-triangle-width: 0.5em;
     /* 子を持つノードのバレット（二等辺三角形▼）の高さ */
     --page-tree-bullet-triangle-height: 0.3em;
+
+    /* バレットの色 */
+    --page-tree-bullet-color: hsl(0, 0%, 50%);
+    /* バレットの色（ホバー時） */
+    --page-tree-bullet-hover-color: hsl(0, 0%, 40%);
   }
 
   .page-tree-bullet-and-indent {
@@ -91,7 +96,10 @@
     border-width: var(--page-tree-bullet-triangle-height)
       calc(var(--page-tree-bullet-triangle-width) / 2) 0
       calc(var(--page-tree-bullet-triangle-width) / 2);
-    border-color: hsl(0, 0%, 50%) transparent transparent transparent;
+    border-color: var(--page-tree-bullet-color) transparent transparent transparent;
+  }
+  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_bullet-area.expanded {
+    border-color: var(--page-tree-bullet-hover-color) transparent transparent transparent;
   }
 
   /* 折りたたみ済み状態のバレット */
@@ -101,7 +109,10 @@
     border-style: solid;
     border-width: calc(var(--page-tree-bullet-triangle-width) / 2) 0
       calc(var(--page-tree-bullet-triangle-width) / 2) var(--page-tree-bullet-triangle-height);
-    border-color: transparent transparent transparent hsl(0, 0%, 50%);
+    border-color: transparent transparent transparent var(--page-tree-bullet-color);
+  }
+  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_bullet-area.collapsed {
+    border-color: transparent transparent transparent var(--page-tree-bullet-hover-color);
   }
 
   /* 子を持たないノードのバレット */
@@ -109,6 +120,9 @@
     width: var(--page-tree-bullet-dot-diameter);
     height: var(--page-tree-bullet-dot-diameter);
     border-radius: 50%;
-    background: hsl(0, 0%, 50%);
+    background: var(--page-tree-bullet-color);
+  }
+  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_bullet-area.no-children {
+    background: var(--page-tree-bullet-hover-color);
   }
 </style>
