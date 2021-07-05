@@ -1,7 +1,10 @@
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
+import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /** 対象アイテムをMarkdown形式に変換し、クリップボードに入れる（text/plain） */
 export function copyAsMarkdownText() {
@@ -31,4 +34,31 @@ export async function copyForTransclusion() {
       [blob.type]: blob,
     }),
   ])
+}
+
+export async function pasteAsPlainText() {
+  const text = await navigator.clipboard.readText()
+
+  const textItemSelection = getTextItemSelectionFromDom()
+  if (textItemSelection !== undefined) {
+    // テキストアイテムがフォーカスを持っている場合
+
+    // 改行付きテキストをそのままinsertTextするとdiv要素やp要素が出現してしまうので、強制的にbr要素にする
+    const lines = text.split(/\r?\n/)
+    for (let i = 0; i < lines.length; i++) {
+      document.execCommand('insertText', false, lines[i])
+      if (i !== lines.length - 1) {
+        document.execCommand('insertLineBreak')
+      }
+    }
+  } else {
+    // テキストアイテムがフォーカスを持っていない場合
+
+    const newTextItem = CurrentState.createTextItem()
+    CurrentState.setTextItemDomishObjects(newTextItem, DomishObject.fromPlainText(text))
+    CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), newTextItem)
+
+    // このコマンドは非同期コマンドなのでこのタイミングで再描画が必要
+    Rerenderer.instance.rerender()
+  }
 }

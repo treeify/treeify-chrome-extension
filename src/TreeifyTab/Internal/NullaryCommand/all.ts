@@ -1,4 +1,7 @@
-import {copyForTransclusion} from 'src/TreeifyTab/Internal/NullaryCommand/clipboard'
+import {
+  copyForTransclusion,
+  pasteAsPlainText,
+} from 'src/TreeifyTab/Internal/NullaryCommand/clipboard'
 import {
   edit,
   showCitationSettingDialog,
@@ -86,6 +89,7 @@ export const functions: {[name: string]: () => void} = {
   selectAllBelowItems,
   selectAllAboveItems,
   copyForTransclusion,
+  pasteAsPlainText,
   toggleExcluded,
   enterKeyDefault,
   removeEdge,

@@ -219,6 +219,21 @@ export namespace DomishObject {
     }
   }
 
+  export function fromPlainText(text: string): List<DomishObject> {
+    const domishObjectArray: DomishObject[] = []
+    const lines = text.split(/\r?\n/)
+    for (let i = 0; i < lines.length; i++) {
+      // 通常の半角スペースをいわゆる「&nbsp;」に変換してからテキストノード化する
+      const nbsp = String.fromCharCode(160)
+      const line = lines[i].replaceAll(' ', nbsp)
+      domishObjectArray.push({type: 'text', textContent: line})
+      if (i !== lines.length - 1) {
+        domishObjectArray.push({type: 'br'})
+      }
+    }
+    return List(domishObjectArray)
+  }
+
   /**
    * Markdown形式のテキストを生成する。
    * テキストアイテム内の改行は空白スペース2つ+改行に変換する。
