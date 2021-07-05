@@ -1,3 +1,6 @@
+import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+
 export type PageTreeBulletAndIndentProps = {
   bulletState: PageTreeBulletState
 }
@@ -9,11 +12,18 @@ export enum PageTreeBulletState {
 }
 
 export function createPageTreeBulletAndIndentProps(
-  hasChildren: boolean
+  hasChildren: boolean,
+  itemPath: ItemPath
 ): PageTreeBulletAndIndentProps {
   if (hasChildren) {
-    return {
-      bulletState: PageTreeBulletState.EXPANDED,
+    if (ItemPath.hasParent(itemPath) && CurrentState.getIsCollapsed(itemPath)) {
+      return {
+        bulletState: PageTreeBulletState.COLLAPSED,
+      }
+    } else {
+      return {
+        bulletState: PageTreeBulletState.EXPANDED,
+      }
     }
   } else {
     return {

@@ -91,6 +91,10 @@ export function createPageTreeNodeProps(
 ): PageTreeNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
+  const displayingChildPagePaths =
+    ItemPath.hasParent(itemPath) && CurrentState.getIsCollapsed(itemPath)
+      ? List.of<ItemPath>()
+      : childPagePaths
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
 
   // TODO: パラメータをカスタマイズ可能にする
@@ -98,9 +102,9 @@ export function createPageTreeNodeProps(
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
-    bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren),
+    bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren, itemPath),
     contentProps: createItemContentProps(itemId),
-    childNodePropses: childPagePaths.map((childPagePath) =>
+    childNodePropses: displayingChildPagePaths.map((childPagePath) =>
       createPageTreeNodeProps(state, childPagePath, pageTreeEdges, filteredPageIds)
     ),
     isActivePage: CurrentState.getActivePageId() === itemId,
