@@ -6,8 +6,8 @@
 </script>
 
 <CommonDialog title="出典設定">
-  <div class="citation-setting-dialog_content">
-    <div class="citation-setting-dialog_input-area" on:keydown={props.onKeyDown}>
+  <div class="citation-setting-dialog_content" on:keydown={props.onKeyDown}>
+    <div class="citation-setting-dialog_input-area">
       <label>出典タイトル</label>
       <input type="text" class="citation-setting-dialog_cite-title" value={props.title} />
       <label>出典URL</label>
