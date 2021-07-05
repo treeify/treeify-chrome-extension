@@ -22,7 +22,6 @@
     font-size: 15px;
     line-height: var(--page-tree-line-height);
 
-    /* ある程度大きめに余白をとっておかないと、下端付近でのスクロールの余裕がなくて窮屈になる */
-    padding-bottom: 150px;
+    padding: 10px 5px 150px 10px;
   }
 </style>
