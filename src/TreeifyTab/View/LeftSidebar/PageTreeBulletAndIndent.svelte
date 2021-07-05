@@ -94,6 +94,16 @@
     border-color: hsl(0, 0%, 50%) transparent transparent transparent;
   }
 
+  /* 折りたたみ済み状態のバレット */
+  .page-tree-bullet-and-indent_bullet-area.collapsed {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: calc(var(--page-tree-bullet-triangle-width) / 2) 0
+      calc(var(--page-tree-bullet-triangle-width) / 2) var(--page-tree-bullet-triangle-height);
+    border-color: transparent transparent transparent hsl(0, 0%, 50%);
+  }
+
   /* 子を持たないノードのバレット */
   .page-tree-bullet-and-indent_bullet-area.no-children {
     width: var(--page-tree-bullet-dot-diameter);
