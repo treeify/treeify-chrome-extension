@@ -2,16 +2,25 @@
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
-  
+
   export let props: CodeBlockItemEditDialogProps
 
   function onPaste(event: ClipboardEvent) {
-    if (event.clipboardData !== null && event.target instanceof HTMLDivElement) {
+    if (event.clipboardData !== null) {
       event.preventDefault()
 
-      const text = event.clipboardData.getData('text/plain')
-      // 無駄なインデントを自動的に除去する機能
-      event.target.textContent = removeRedundantIndent(text)
+      // 無駄なインデントを自動的に除去する
+      const text = removeRedundantIndent(event.clipboardData.getData('text/plain'))
+
+      // 改行を含むテキストをそのままdocument.execCommand('insertText', false, text)としても
+      // うまくいかないので改行をbr要素にする
+      const lines = text.split(/\r?\n/)
+      for (let i = 0; i < lines.length; i++) {
+        document.execCommand('insertText', false, lines[i])
+        if (i !== lines.length - 1) {
+          document.execCommand('insertLineBreak')
+        }
+      }
     }
   }
 </script>
