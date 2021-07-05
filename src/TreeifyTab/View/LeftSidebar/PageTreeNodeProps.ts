@@ -48,7 +48,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       }, lexicographicalOrder)
     })
 
-  return createPageTreeNodeProps(state, TOP_ITEM_ID, pageTreeEdges, filteredPageIds)
+  return createPageTreeNodeProps(state, List.of(TOP_ITEM_ID), pageTreeEdges, filteredPageIds)
 }
 
 // アイテムパスを兄弟順位リストに変換する
@@ -85,10 +85,11 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
 
 export function createPageTreeNodeProps(
   state: State,
-  itemId: ItemId,
+  itemPath: ItemPath,
   pageTreeEdges: Seq.Keyed<ItemId, Collection<integer, ItemPath>>,
   filteredPageIds: List<ItemId>
 ): PageTreeNodeProps {
+  const itemId = ItemPath.getItemId(itemPath)
   const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
 
@@ -100,12 +101,7 @@ export function createPageTreeNodeProps(
     bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren),
     contentProps: createItemContentProps(itemId),
     childNodePropses: childPagePaths.map((childPagePath) =>
-      createPageTreeNodeProps(
-        state,
-        ItemPath.getItemId(childPagePath),
-        pageTreeEdges,
-        filteredPageIds
-      )
+      createPageTreeNodeProps(state, childPagePath, pageTreeEdges, filteredPageIds)
     ),
     isActivePage: CurrentState.getActivePageId() === itemId,
     isRoot: itemId === TOP_ITEM_ID,
