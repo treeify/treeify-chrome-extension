@@ -4,7 +4,7 @@
   export let props: PageTreeBulletAndIndentProps
 </script>
 
-<div class="page-tree-bullet-and-indent">
+<div class="page-tree-bullet-and-indent" on:click={props.onClick}>
   {#if props.bulletState === PageTreeBulletState.EXPANDED}
     <div class="page-tree-bullet-and-indent_indent-area">
       <div class="page-tree-bullet-and-indent_indent-line" />
