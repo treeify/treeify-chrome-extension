@@ -12,6 +12,7 @@ export type ContextMenuItemProps = {
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
+  const item = Internal.instance.state.items[targetItemId]
 
   const result: ContextMenuItemProps[] = []
 
@@ -50,7 +51,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     title: '出典を設定…',
     onClick: () => NullaryCommand.showCitationSettingDialog(),
   })
-  if (Internal.instance.state.items[targetItemId].cite !== null) {
+  if (item.cite?.title === '' && item.cite.url === '') {
     result.push({
       title: '出典を削除',
       onClick: () => NullaryCommand.toggleCitation(),
