@@ -197,3 +197,13 @@ export function moses(itemPath: ItemPath) {
     moses(parentItemPath)
   }
 }
+
+/** 2つのItemPathが兄弟かどうか判定する */
+export function isSibling(lhs: ItemPath, rhs: ItemPath): boolean {
+  if (lhs.size !== rhs.size || !is(lhs.pop(), rhs.pop())) return false
+
+  const parentItemId = ItemPath.getParentItemId(lhs)
+  if (parentItemId === undefined) return false
+
+  return Internal.instance.state.items[parentItemId].childItemIds.contains(ItemPath.getItemId(rhs))
+}

@@ -722,9 +722,11 @@
             if (!ItemPath.hasParent(itemPath)) return
 
             if (event.altKey) {
-              // エッジを追加する（トランスクルード）
-              const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
-              CurrentState.setTargetItemPath(newItemPath)
+              if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
+                // エッジを追加する（トランスクルード）
+                const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
+                CurrentState.setTargetItemPath(newItemPath)
+              }
             } else {
               // エッジを付け替える
               const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
@@ -735,9 +737,11 @@
             // ドロップ先座標がドロップ先要素の下の方の場合
 
             if (event.altKey) {
-              // エッジを追加する（トランスクルード）
-              const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId)
-              CurrentState.setTargetItemPath(newItemPath)
+              if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
+                // エッジを追加する（トランスクルード）
+                const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId)
+                CurrentState.setTargetItemPath(newItemPath)
+              }
             } else {
               // エッジを付け替える
               const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)

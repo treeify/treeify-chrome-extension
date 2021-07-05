@@ -179,8 +179,10 @@ export function createPageTreeNodeProps(
         if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
 
         if (event.altKey) {
-          // エッジを追加する（トランスクルード）
-          CurrentState.insertFirstChildItem(itemId, draggedItemId)
+          if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
+            // エッジを追加する（トランスクルード）
+            CurrentState.insertFirstChildItem(itemId, draggedItemId)
+          }
         } else {
           // targetItemPathが実在しなくなるので退避
           const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)

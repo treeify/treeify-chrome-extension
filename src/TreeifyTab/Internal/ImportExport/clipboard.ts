@@ -72,7 +72,6 @@ export function onCut(event: ClipboardEvent) {
   })
 }
 
-// ペースト時にプレーンテキスト化する
 export function onPaste(event: ClipboardEvent) {
   doWithErrorCapture(() => {
     if (event.clipboardData === null) return
@@ -88,14 +87,15 @@ export function onPaste(event: ClipboardEvent) {
     if (External.instance.treeifyClipboard !== undefined) {
       // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
       if (text === External.instance.getTreeifyClipboardHash()) {
-        // TODO: 兄弟リスト内に同一アイテムが複数含まれてしまう場合のエラー処理を追加する
-
         // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
-          const selectedItemId = ItemPath.getItemId(selectedItemPath)
-          // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-          const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
-          CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+          // 兄弟リスト内に同一アイテムを入れてしまわないようガード
+          if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
+            const selectedItemId = ItemPath.getItemId(selectedItemPath)
+            // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
+            const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
+            CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+          }
         }
 
         Rerenderer.instance.rerender()
