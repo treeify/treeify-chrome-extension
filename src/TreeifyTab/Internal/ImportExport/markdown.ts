@@ -32,26 +32,31 @@ export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
 
 function toMultiLineMarkdownContent(itemPath: ItemPath): string {
   const itemId = ItemPath.getItemId(itemPath)
-  const itemType = Internal.instance.state.items[itemId].itemType
-  switch (itemType) {
+  const item = Internal.instance.state.items[itemId]
+  // Markdownの引用記法のための接頭辞と接尾辞
+  const prefix = item.cite !== null ? '> ' : ''
+  const postfix = item.cite !== null ? '\n' : ''
+
+  switch (item.itemType) {
     case ItemType.TEXT:
       const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
-      return DomishObject.toMultiLineMarkdownText(domishObjects)
+      return prefix + DomishObject.toMultiLineMarkdownText(domishObjects) + postfix
     case ItemType.WEB_PAGE:
       const webPageItem = Internal.instance.state.webPageItems[itemId]
-      const title = CurrentState.deriveWebPageItemTitle(itemId)
-      return `[${title}](${webPageItem.url})  `
+      const title = CurrentState.deriveWebPageItemTitle(itemId) + postfix
+      return prefix + `[${title}](${webPageItem.url})  `
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  `
+      return prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      // 軽く確認したところコードブロックと引用は両立できないようなので無視する
       return '```' + codeBlockItem.language + '\n' + codeBlockItem.code + '\n```'
     case ItemType.TEX:
       const texItem = Internal.instance.state.texItems[itemId]
-      return `$$ ${texItem.code} $$`
+      return prefix + `$$ ${texItem.code} $$` + postfix
     default:
-      assertNeverType(itemType)
+      assertNeverType(item.itemType)
   }
 }
 
