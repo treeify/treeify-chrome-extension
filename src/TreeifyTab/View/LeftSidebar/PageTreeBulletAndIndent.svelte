@@ -25,7 +25,7 @@
     /* インデントラインの色 */
     --page-tree-indent-line-color: hsl(0, 0%, 80%);
     /* インデントラインの色（ホバー時） */
-    --page-tree-indent-line-hover-color: hsl(0, 0%, 70%);
+    --page-tree-indent-line-hover-color: hsl(0, 0%, 60%);
 
     /* バレット領域のサイズ（正方形の一辺の長さ） */
     --page-tree-bullet-area-size: 0.7em;
@@ -41,7 +41,7 @@
     /* バレットの色 */
     --page-tree-bullet-color: hsl(0, 0%, 50%);
     /* バレットの色（ホバー時） */
-    --page-tree-bullet-hover-color: hsl(0, 0%, 40%);
+    --page-tree-bullet-hover-color: hsl(0, 0%, 30%);
   }
 
   .page-tree-bullet-and-indent {
