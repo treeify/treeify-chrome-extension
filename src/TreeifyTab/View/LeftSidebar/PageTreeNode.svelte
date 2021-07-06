@@ -45,7 +45,7 @@
         <div
           class="page-tree-node_content-area"
           class:active-page={props.isActivePage}
-          on:click={props.onClickContentArea}
+          on:mousedown={props.onClickContentArea}
           on:dragover={props.onDragOver}
           on:drop={props.onDrop}
         >
@@ -58,11 +58,11 @@
         <div class="grid-empty-cell" />
       {/if}
       {#if props.tabsCount > 0}
-        <div class="page-tree-node_tabs-count-button" on:click={props.onClickTabsCount}>
+        <div class="page-tree-node_tabs-count-button" on:mousedown={props.onClickTabsCount}>
           <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
         </div>
       {:else}
-        <div class="page-tree-node_close-button" on:click={props.onClickCloseButton} />
+        <div class="page-tree-node_close-button" on:mousedown={props.onClickCloseButton} />
       {/if}
     </div>
     <div class="page-tree-node_children-area">
