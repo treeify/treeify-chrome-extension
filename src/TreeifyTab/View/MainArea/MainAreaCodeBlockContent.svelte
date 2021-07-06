@@ -15,7 +15,7 @@
   {id}
   tabindex="0"
   on:focus={props.onFocus}
-  on:click={props.onClick}
+  on:mousedown={props.onClick}
 >
   {#if !props.labels.isEmpty()}
     <div class="main-area-code-block-content_labels">

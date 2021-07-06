@@ -24,7 +24,7 @@
     contenteditable="true"
     on:input={props.onInput}
     on:compositionend={props.onCompositionEnd}
-    on:click={props.onClick}
+    on:mousedown={props.onClick}
   >
     {@html DomishObject.toHtml(props.domishObjects)}
   </div>
