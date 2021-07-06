@@ -14,7 +14,7 @@
     {#if props.isLoading}
       <div
         class="main-area-web-page-content_favicon loading-indicator"
-        on:click={props.onClickFavicon}
+        on:mousedown={props.onClickFavicon}
       />
     {:else if props.faviconUrl.length > 0}
       <img
@@ -22,14 +22,14 @@
         class:soft-unloaded-item={props.isSoftUnloaded}
         class:hard-unloaded-item={props.isHardUnloaded}
         src={props.faviconUrl}
-        on:click={props.onClickFavicon}
+        on:mousedown={props.onClickFavicon}
       />
     {:else}
       <div
         class="main-area-web-page-content_favicon default-favicon"
         class:soft-unloaded-item={props.isSoftUnloaded}
         class:hard-unloaded-item={props.isHardUnloaded}
-        on:click={props.onClickFavicon}
+        on:mousedown={props.onClickFavicon}
       />
     {/if}
 

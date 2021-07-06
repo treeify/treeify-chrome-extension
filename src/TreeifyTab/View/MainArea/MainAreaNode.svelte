@@ -64,12 +64,12 @@
       </div>
       <!-- 隠れているタブ数 -->
       {#if props.hiddenTabsCount > 0}
-        <div class="main-area-node_hidden-tabs-count" on:click={props.onClickHiddenTabsCount}>
+        <div class="main-area-node_hidden-tabs-count" on:mousedown={props.onClickHiddenTabsCount}>
           {Math.min(99, props.hiddenTabsCount)}
         </div>
       {:else}
         <!-- 削除ボタン -->
-        <div class="main-area-node_delete-button" on:click={props.onClickDeleteButton}>
+        <div class="main-area-node_delete-button" on:mousedown={props.onClickDeleteButton}>
           <div class="main-area-node_delete-button-icon" />
         </div>
       {/if}
