@@ -314,8 +314,8 @@ export namespace State {
           `items[${availableItemId}]が存在するが、これはavailableItemIdsに含まれる値`
         )
         assert(
-          availableItemId < state.maxItemId,
-          `availableItemId ${availableItemId}がmaxItemId未満でない`
+          availableItemId <= state.maxItemId,
+          `availableItemId ${availableItemId}がmaxItemIdを超えている`
         )
       }
 
