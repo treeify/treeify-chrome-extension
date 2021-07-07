@@ -14,6 +14,12 @@ export function createEmptyCodeBlockItem() {
     // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
     CurrentState.deleteItem(targetItemId)
   }
+
+  CurrentState.setDialog({
+    type: 'CodeBlockItemEditDialog',
+    code: '',
+    language: '',
+  })
 }
 
 /** 空のTeXアイテムを作る */
@@ -29,4 +35,6 @@ export function createEmptyTexItem() {
     // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
     CurrentState.deleteItem(targetItemId)
   }
+
+  CurrentState.setDialog({type: 'TexEditDialog'})
 }
