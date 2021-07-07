@@ -1,4 +1,4 @@
-import {is, List} from 'immutable'
+import {is} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
@@ -14,7 +14,6 @@ import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentP
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
   itemType: ItemType.WEB_PAGE
-  labels: List<string>
   title: string
   faviconUrl: string
   isLoading: boolean
@@ -42,7 +41,6 @@ export function createMainAreaWebPageContentProps(
 
   return {
     itemPath,
-    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.WEB_PAGE,
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,

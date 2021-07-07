@@ -1,10 +1,9 @@
 <script lang="ts">
   import {getHighlightedHtml} from '../../highlightJs'
   import Cite from '../Cite.svelte'
-  import Label from '../Label.svelte'
   import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
   import {MainAreaContentView} from './MainAreaContentProps'
-
+  
   export let props: MainAreaCodeBlockContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -17,13 +16,6 @@
   on:focus={props.onFocus}
   on:mousedown={props.onClick}
 >
-  {#if !props.labels.isEmpty()}
-    <div class="main-area-code-block-content_labels">
-      {#each props.labels.toArray() as label}
-        <Label props={{text: label}} />
-      {/each}
-    </div>
-  {/if}
   <pre><code>{@html getHighlightedHtml(props.code, props.language)}</code></pre>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />

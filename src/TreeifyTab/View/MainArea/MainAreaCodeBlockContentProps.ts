@@ -1,4 +1,4 @@
-import {is, List} from 'immutable'
+import {is} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -10,7 +10,6 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaCodeBlockContentProps = {
   itemPath: ItemPath
-  labels: List<string>
   itemType: ItemType.CODE_BLOCK
   code: string
   language: string
@@ -28,7 +27,6 @@ export function createMainAreaCodeBlockContentProps(
   const codeBlockItem = state.codeBlockItems[itemId]
   return {
     itemPath,
-    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.CODE_BLOCK,
     code: codeBlockItem.code,
     language: codeBlockItem.language,

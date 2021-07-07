@@ -8,8 +8,6 @@
   import DefaultWindowModeSettingDialog from './DefaultWindowModeSettingDialog.svelte'
   import {createDefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
   import {DialogLayerProps} from './DialogLayer'
-  import LabelSettingDialog from './LabelSettingDialog.svelte'
-  import {createLabelSettingDialogProps} from './LabelSettingDialogProps'
   import OtherParentsDialog from './OtherParentsDialog.svelte'
   import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
   import SearchDialog from './SearchDialog.svelte'
@@ -20,7 +18,7 @@
   import {createWebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
   import WorkspaceDialog from './WorkspaceDialog.svelte'
   import {createWorkspaceDialogProps} from './WorkspaceDialogProps'
-
+  
   export let props: DialogLayerProps
 </script>
 
@@ -35,9 +33,6 @@
 {/if}
 {#if props.dialog?.type === 'DefaultWindowModeSettingDialog'}
   <DefaultWindowModeSettingDialog props={createDefaultWindowModeSettingDialogProps(props.dialog)} />
-{/if}
-{#if props.dialog?.type === 'LabelSettingDialog'}
-  <LabelSettingDialog props={createLabelSettingDialogProps(props.dialog)} />
 {/if}
 {#if props.dialog?.type === 'OtherParentsDialog'}
   <OtherParentsDialog props={createOtherParentsDialogProps(props.dialog)} />

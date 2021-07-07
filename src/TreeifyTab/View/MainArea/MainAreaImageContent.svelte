@@ -1,9 +1,8 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
-  import Label from '../Label.svelte'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaImageContentProps} from './MainAreaImageContentProps'
-
+  
   export let props: MainAreaImageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -16,14 +15,6 @@
   on:focus={props.onFocus}
   on:mousedown={props.onClick}
 >
-  {#if !props.labels.isEmpty()}
-    <div class="main-area-image-content_labels">
-      {#each props.labels.toArray() as label}
-        <Label props={{text: label}} />
-      {/each}
-    </div>
-  {/if}
-
   <div class="main-area-image-content_image-and-caption">
     <img class="main-area-image-content_image" src={props.url} />
     <div class="main-area-image-content_caption">{props.caption}</div>

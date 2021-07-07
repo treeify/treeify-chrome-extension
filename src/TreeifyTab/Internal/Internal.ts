@@ -194,7 +194,6 @@ export class Internal {
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
         '0010KeyE': List.of({commandName: 'toggleExcluded'}),
         '0000F2': List.of({commandName: 'edit'}),
-        '0100F2': List.of({commandName: 'showLabelSettingDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
         '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
       },
@@ -220,7 +219,7 @@ export class Internal {
         1: {
           itemType: ItemType.TEXT,
           childItemIds: List.of(3, 6, 7),
-          parents: {0: {isCollapsed: false, labels: List.of()}},
+          parents: {0: {isCollapsed: false}},
           timestamp: 1604284090001,
           cssClasses: List.of(),
           cite: null,
@@ -228,7 +227,7 @@ export class Internal {
         2: {
           itemType: ItemType.TEXT,
           childItemIds: List.of(4),
-          parents: {0: {isCollapsed: true, labels: List.of()}},
+          parents: {0: {isCollapsed: true}},
           timestamp: 1604284090002,
           cssClasses: List.of(),
           cite: null,
@@ -236,7 +235,7 @@ export class Internal {
         3: {
           itemType: ItemType.TEXT,
           childItemIds: List.of(),
-          parents: {1: {isCollapsed: false, labels: List.of()}},
+          parents: {1: {isCollapsed: false}},
           timestamp: 1604284090003,
           cssClasses: List.of(),
           cite: null,
@@ -244,7 +243,7 @@ export class Internal {
         4: {
           itemType: ItemType.TEXT,
           childItemIds: List.of(),
-          parents: {2: {isCollapsed: false, labels: List.of()}},
+          parents: {2: {isCollapsed: false}},
           timestamp: 1604284090004,
           cssClasses: List.of('grayed-out'),
           cite: null,
@@ -252,7 +251,7 @@ export class Internal {
         5: {
           itemType: ItemType.WEB_PAGE,
           childItemIds: List.of(),
-          parents: {0: {isCollapsed: false, labels: List.of('サンプル')}},
+          parents: {0: {isCollapsed: false}},
           timestamp: 1604284090005,
           cssClasses: List.of(),
           cite: null,
@@ -260,7 +259,7 @@ export class Internal {
         6: {
           itemType: ItemType.TEXT,
           childItemIds: List.of(),
-          parents: {1: {isCollapsed: false, labels: List.of()}},
+          parents: {1: {isCollapsed: false}},
           timestamp: 1604284090006,
           cssClasses: List.of(),
           cite: null,
@@ -268,7 +267,7 @@ export class Internal {
         7: {
           itemType: ItemType.IMAGE,
           childItemIds: List.of(),
-          parents: {1: {isCollapsed: false, labels: List.of()}},
+          parents: {1: {isCollapsed: false}},
           timestamp: 1604284090007,
           cssClasses: List.of(),
           cite: {
@@ -279,7 +278,7 @@ export class Internal {
         8: {
           itemType: ItemType.CODE_BLOCK,
           childItemIds: List.of(),
-          parents: {0: {isCollapsed: false, labels: List.of()}},
+          parents: {0: {isCollapsed: false}},
           timestamp: 1604284090008,
           cssClasses: List.of(),
           cite: null,
@@ -387,7 +386,6 @@ export class Internal {
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
         '0010KeyE': List.of({commandName: 'toggleExcluded'}),
         '0000F2': List.of({commandName: 'edit'}),
-        '0100F2': List.of({commandName: 'showLabelSettingDialog'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
         '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
       },

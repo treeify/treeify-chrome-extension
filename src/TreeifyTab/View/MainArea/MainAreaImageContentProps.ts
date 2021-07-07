@@ -1,4 +1,4 @@
-import {is, List} from 'immutable'
+import {is} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -10,7 +10,6 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaImageContentProps = {
   itemPath: ItemPath
-  labels: List<string>
   itemType: ItemType.IMAGE
   url: string
   caption: string
@@ -28,7 +27,6 @@ export function createMainAreaImageContentProps(
 
   return {
     itemPath,
-    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.IMAGE,
     url: imageItem.url,
     caption: imageItem.caption,
