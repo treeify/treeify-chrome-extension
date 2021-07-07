@@ -17,6 +17,7 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 import OnClickData = chrome.contextMenus.OnClickData
 
 export async function startup(initialState: State) {
@@ -43,6 +44,8 @@ export async function startup(initialState: State) {
 
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
 
+  chrome.commands.onCommand.addListener(onCommand)
+
   document.addEventListener('mousemove', onMouseMove)
 
   window.addEventListener('resize', onResize)
@@ -55,6 +58,8 @@ export async function cleanup() {
   window.removeEventListener('resize', onResize)
 
   document.removeEventListener('mousemove', onMouseMove)
+
+  chrome.commands.onCommand.removeListener(onCommand)
 
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
 
@@ -120,6 +125,21 @@ function onClickContextMenu(info: OnClickData) {
       CurrentState.insertLastChildItem(itemId, newItemId)
       Rerenderer.instance.rerender()
     }
+  }
+}
+
+async function onCommand(commandName: string) {
+  switch (commandName) {
+    case 'show-treeify-tab':
+      TreeifyTab.open()
+      break
+    case 'close-tab-and-show-treeify-tab':
+      TreeifyTab.open()
+      const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
+      if (tab.id !== undefined) {
+        chrome.tabs.remove(tab.id)
+      }
+      break
   }
 }
 
