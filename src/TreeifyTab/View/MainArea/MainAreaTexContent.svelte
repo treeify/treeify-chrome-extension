@@ -1,10 +1,9 @@
 <script lang="ts">
   import katex from 'katex'
   import Cite from '../Cite.svelte'
-  import Label from '../Label.svelte'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaTexContentProps} from './MainAreaTexContentProps'
-
+  
   export let props: MainAreaTexContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -17,13 +16,6 @@
   on:focus={props.onFocus}
   on:mousedown={props.onClick}
 >
-  {#if !props.labels.isEmpty()}
-    <div class="main-area-tex-content_labels">
-      {#each props.labels.toArray() as label}
-        <Label props={{text: label}} />
-      {/each}
-    </div>
-  {/if}
   <div class="main-area-tex-content_rendered-tex">
     {@html katex.renderToString(props.code, {throwOnError: false})}
   </div>

@@ -1,4 +1,3 @@
-import {List} from 'immutable'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -93,7 +92,7 @@ export function onPaste(event: ClipboardEvent) {
           if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
             // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-            const initialEdge: Edge = {isCollapsed: true, labels: List.of()}
+            const initialEdge: Edge = {isCollapsed: true}
             CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
           }
         }

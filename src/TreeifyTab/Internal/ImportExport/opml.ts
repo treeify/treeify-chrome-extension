@@ -38,10 +38,6 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
   if (!item.cssClasses.isEmpty()) {
     baseAttributes.cssClass = item.cssClasses.join(' ')
   }
-  const labels = CurrentState.getLabels(itemPath)
-  if (!labels.isEmpty()) {
-    baseAttributes.labels = JSON.stringify(labels.toArray())
-  }
 
   if (item.cite !== null) {
     if (item.cite.title !== '') {
@@ -178,7 +174,7 @@ export function createItemsBasedOnOpml(outlineElements: List<Element>): List<Ite
 function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): ItemAndEdge {
   const attrItemId = outlineElement.getAttribute('itemId')
   const isCollapsed = outlineElement.getAttribute('isCollapsed') === 'true'
-  const edge = {isCollapsed, labels: extractLabels(outlineElement)}
+  const edge = {isCollapsed}
   const existingItemId = attrItemId !== null ? itemIdMap[attrItemId] : undefined
   if (existingItemId !== undefined) {
     return {itemId: existingItemId, edge}
@@ -216,18 +212,6 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
   }
 
   return {itemId, edge}
-}
-
-function extractLabels(outlineElement: Element): List<string> {
-  try {
-    const attrLabels = outlineElement.getAttribute('labels')
-    if (attrLabels !== null) {
-      return List(JSON.parse(attrLabels))
-    }
-  } catch {
-    return List.of()
-  }
-  return List.of()
 }
 
 function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {

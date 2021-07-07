@@ -14,7 +14,6 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 export type MainAreaTextContentProps = {
   itemPath: ItemPath
   itemType: ItemType.TEXT
-  labels: List<string>
   domishObjects: List<DomishObject>
   citeProps: CiteProps | undefined
   onInput: (event: Event) => void
@@ -29,7 +28,6 @@ export function createMainAreaTextContentProps(
   const itemId = ItemPath.getItemId(itemPath)
   return {
     itemPath,
-    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEXT,
     domishObjects: state.textItems[itemId].domishObjects,
     citeProps: createCiteProps(itemPath),

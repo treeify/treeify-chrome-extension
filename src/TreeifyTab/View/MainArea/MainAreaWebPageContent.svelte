@@ -1,9 +1,8 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
-  import Label from '../Label.svelte'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
-
+  
   export let props: MainAreaWebPageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -33,15 +32,6 @@
       />
     {/if}
 
-    {#if !props.labels.isEmpty()}
-      <div class="main-area-web-page-content_labels">
-        {#each props.labels.toArray() as label}
-          <Label props={{text: label}} />
-        {/each}
-      </div>
-    {:else}
-      <div class="grid-empty-cell" />
-    {/if}
     <div
       class="main-area-web-page-content_title"
       class:soft-unloaded-item={props.isSoftUnloaded}
@@ -92,7 +82,7 @@
   .main-area-web-page-content_body {
     /* ファビコン、ラベル、タイトル、audibleアイコンを横並びにする */
     display: grid;
-    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
   }
 

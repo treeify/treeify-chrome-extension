@@ -63,15 +63,9 @@ export type Edge = {
    * リスクはあるが直感的に面白そうなこちらに賭けてみた。
    */
   isCollapsed: boolean
-
-  /**
-   * いわゆる意味ネットワークのように、エッジが持つラベルのデータ。
-   * List型なので複数設定できる。List内の並び順がそのまま画面表示上の並び順として使われる。
-   */
-  labels: List<string>
 }
 export function createDefaultEdge(): Edge {
-  return {isCollapsed: false, labels: List.of()}
+  return {isCollapsed: false}
 }
 
 export type Cite = {
@@ -167,12 +161,6 @@ export type ContextMenuDialog = {type: 'ContextMenuDialog'}
 /** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
 export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
 
-/** ラベル設定ダイアログが持つ内部状態の型 */
-export type LabelSettingDialog = {
-  type: 'LabelSettingDialog'
-  labels: List<string>
-}
-
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
 export type SearchDialog = {type: 'SearchDialog'}
@@ -193,7 +181,6 @@ export type Dialog =
   | CodeBlockItemEditDialog
   | ContextMenuDialog
   | DefaultWindowModeSettingDialog
-  | LabelSettingDialog
   | OtherParentsDialog
   | SearchDialog
   | TexEditDialog

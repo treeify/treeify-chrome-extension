@@ -58,11 +58,6 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  result.push({
-    title: 'ラベルを設定…',
-    onClick: () => NullaryCommand.showLabelSettingDialog(),
-  })
-
   if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
     result.push({
       title: '現在のワークスペースからの除外を解除',

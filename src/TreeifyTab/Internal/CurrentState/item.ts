@@ -181,35 +181,6 @@ export function getIsCollapsed(itemPath: ItemPath): boolean {
   return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
-/**
- * 指定されたアイテムパスのラベルを返す。
- * 親を持たないアイテムパスの場合、空リストを返す。
- */
-export function getLabels(itemPath: ItemPath): List<string> {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  if (parentItemId !== undefined) {
-    return Internal.instance.state.items[itemId].parents[parentItemId].labels
-  } else {
-    return List.of()
-  }
-}
-
-/**
- * 指定されたアイテムパスのラベルを設定する。
- * 親を持たないアイテムパスの場合、何もしない。
- */
-export function setLabels(itemPath: ItemPath, labels: List<string>) {
-  const itemId = ItemPath.getItemId(itemPath)
-  const parentItemId = ItemPath.getParentItemId(itemPath)
-  if (parentItemId !== undefined) {
-    Internal.instance.mutate(
-      labels,
-      PropertyPath.of('items', itemId, 'parents', parentItemId, 'labels')
-    )
-  }
-}
-
 /** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   Internal.instance.mutate(Timestamp.now(), PropertyPath.of('items', itemId, 'timestamp'))

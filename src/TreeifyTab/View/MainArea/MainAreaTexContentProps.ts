@@ -1,4 +1,4 @@
-import {is, List} from 'immutable'
+import {is} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -10,7 +10,6 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaTexContentProps = {
   itemPath: ItemPath
-  labels: List<string>
   itemType: ItemType.TEX
   code: string
   citeProps: CiteProps | undefined
@@ -27,7 +26,6 @@ export function createMainAreaTexContentProps(
   const texItem = state.texItems[itemId]
   return {
     itemPath,
-    labels: CurrentState.getLabels(itemPath),
     itemType: ItemType.TEX,
     code: texItem.code,
     citeProps: createCiteProps(itemPath),
