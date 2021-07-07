@@ -98,7 +98,7 @@ export function createPageTreeNodeProps(
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
 
   // TODO: パラメータをカスタマイズ可能にする
-  const footprintCount = Math.floor(Math.pow(filteredPageIds.size, 0.5))
+  const footprintCount = Math.floor(filteredPageIds.size ** 0.5)
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {

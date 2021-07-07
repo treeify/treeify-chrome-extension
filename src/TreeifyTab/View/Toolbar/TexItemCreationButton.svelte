@@ -3,11 +3,10 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-
+  
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyTexItem()
-      NullaryCommand.edit()
       Rerenderer.instance.rerender()
     })
   }
