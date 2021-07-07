@@ -25,6 +25,14 @@
       "run_at": "document_start"
     }
   ],
+  "commands": {
+    "show-treeify-tab": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Space"
+      },
+      "description": "Treeifyタブに切り替え"
+    }
+  },
   "icons": {
     "16": "app-icon/16px.png",
     "48": "app-icon/48px.png",

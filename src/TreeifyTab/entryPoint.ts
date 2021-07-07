@@ -3,6 +3,7 @@ import {doAsyncWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {registerLanguages} from 'src/TreeifyTab/highlightJs'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {startup} from 'src/TreeifyTab/startup'
+import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
 doAsyncWithErrorCapture(async () => {
   console.log('デバイスID = ' + DeviceId.get())
@@ -15,6 +16,14 @@ doAsyncWithErrorCapture(async () => {
   })
   window.addEventListener('unload', () => {
     chrome.contextMenus.removeAll()
+  })
+
+  chrome.commands.onCommand.addListener((command) => {
+    switch (command) {
+      case 'show-treeify-tab':
+        TreeifyTab.open()
+        break
+    }
   })
 
   registerLanguages()
