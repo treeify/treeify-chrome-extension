@@ -4,6 +4,14 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
+export function createEmptyTextItem() {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const newItemId = CurrentState.createTextItem()
+  const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
+  // 作ったアイテムをフォーカスする
+  CurrentState.setTargetItemPath(newItemPath)
+}
+
 /** 太字のトグルコマンド */
 export function toggleBold() {
   execTextEditCommand('bold')
