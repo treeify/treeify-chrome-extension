@@ -47,6 +47,7 @@ import {
   turnIntoNonPageAndExpand,
 } from 'src/TreeifyTab/Internal/NullaryCommand/page'
 import {
+  createEmptyTextItem,
   groupingItems,
   insertLineBreak,
   toggleBold,
@@ -113,6 +114,7 @@ export const functions: {[name: string]: () => void} = {
   loadSubtree,
   createEmptyCodeBlockItem,
   createEmptyTexItem,
+  createEmptyTextItem,
   edit,
   showDefaultWindowModeSettingDialog,
   showWorkspaceDialog,
