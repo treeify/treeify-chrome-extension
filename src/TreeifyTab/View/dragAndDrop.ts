@@ -1,10 +1,11 @@
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type ItemDragData = {
   itemPath: ItemPath
 }
 
-let itemDragData: ItemDragData | undefined
+export let itemDragData: ItemDragData | undefined
 
 /**
  * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
@@ -25,6 +26,7 @@ export function onItemDragStart(
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && isAfterMouseDown) {
       itemDragData = onDragStart(event)
+      Rerenderer.instance.rerender()
     }
     isAfterMouseDown = false
   }
@@ -51,6 +53,7 @@ export function onItemDrop(
     if (itemDragData !== undefined) {
       onDrop(event, itemDragData)
       itemDragData = undefined
+      Rerenderer.instance.rerender()
     }
   }
 
@@ -69,11 +72,15 @@ export function onItemDrop(
  */
 export function dragStateResetter(element: HTMLElement) {
   function onMouseUp(event: MouseEvent) {
-    itemDragData = undefined
+    if (itemDragData !== undefined) {
+      itemDragData = undefined
+      Rerenderer.instance.rerender()
+    }
   }
   function onMouseMove(event: MouseEvent) {
-    if (!(event.buttons & 1)) {
+    if (!(event.buttons & 1) && itemDragData !== undefined) {
       itemDragData = undefined
+      Rerenderer.instance.rerender()
     }
   }
 
