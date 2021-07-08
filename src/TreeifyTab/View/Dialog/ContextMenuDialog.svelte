@@ -97,6 +97,11 @@
 
     background: hsl(0, 0%, 96%);
 
-    box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
+    border: hsl(0, 0%, 80%) 1px solid;
+    border-radius: 3px;
+    /* 子要素を角丸からはみ出させない */
+    overflow: hidden;
+
+    box-shadow: 2px 2px 4px hsl(0, 0%, 85%);
   }
 </style>
