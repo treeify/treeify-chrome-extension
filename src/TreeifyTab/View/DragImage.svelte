@@ -21,6 +21,7 @@
 <style>
   .drag-image {
     position: absolute;
+    z-index: 40;
 
     pointer-events: none;
   }
