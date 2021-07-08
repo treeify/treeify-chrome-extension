@@ -1,5 +1,7 @@
 <script lang="ts">
+  import {assert} from '../../../Common/Debug/assert'
   import {doAsyncWithErrorCapture} from '../../errorCapture'
+  import {External} from '../../External/External'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonProps'
@@ -9,6 +11,9 @@
 
   function onClick() {
     doAsyncWithErrorCapture(async () => {
+      assert(External.instance.urlToItemIdsForTabCreation.size === 0)
+      assert(External.instance.hardUnloadedTabIds.size === 0)
+
       await NullaryCommand.saveToDataFolder()
       Rerenderer.instance.rerender()
     })
