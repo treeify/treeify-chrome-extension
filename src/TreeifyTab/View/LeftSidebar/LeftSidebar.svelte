@@ -32,7 +32,6 @@
   /* フローティング型の左サイドバー */
   .left-sidebar.floating {
     position: fixed;
-    /* TODO: この安易なz-index指定は必ずやトラブルの原因になるであろう */
-    z-index: 1;
+    z-index: 10;
   }
 </style>
