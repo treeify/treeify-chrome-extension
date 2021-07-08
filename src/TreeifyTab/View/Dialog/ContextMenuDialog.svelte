@@ -61,7 +61,7 @@
     })
   }
 
-  $: style = `
+  const style = `
     left: ${props.mousePosition.x}px;
     top: ${props.mousePosition.y}px;
   `
