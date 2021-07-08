@@ -38,9 +38,7 @@
       class:hard-unloaded-item={props.isHardUnloaded}
       class:unread={props.isUnread}
       title={props.title}
-      draggable="true"
       on:click={props.onClickTitle}
-      on:dragstart={props.onDragStart}
     >
       {props.title}
     </div>

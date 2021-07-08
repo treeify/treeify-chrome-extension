@@ -2,6 +2,7 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
+  import {onItemDragStart} from '../dragAndDrop'
   import MainAreaContent from './MainAreaContent.svelte'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaNodeProps} from './MainAreaNodeProps'
@@ -40,8 +41,7 @@
     <div
       class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
-      draggable="true"
-      on:dragstart={props.onDragStart}
+      use:onItemDragStart={props.onDragStart}
     >
       <MainAreaSpool props={props.spoolProps} />
     </div>
@@ -122,6 +122,10 @@
     /* コンテンツ領域とボタン類を横に並べる */
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .main-area-node_spool-area {
+    user-select: none;
   }
 
   .main-area-node_content-area {

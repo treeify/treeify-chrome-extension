@@ -9,7 +9,7 @@ import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
-import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import {ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
@@ -25,7 +25,7 @@ export type MainAreaWebPageContentProps = {
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
-  onDragStart: (event: DragEvent) => void
+  onDragStart: () => ItemDragData
 }
 
 export function createMainAreaWebPageContentProps(
@@ -148,17 +148,9 @@ export function createMainAreaWebPageContentProps(
         }
       })
     },
-    onDragStart: (event) => {
-      doWithErrorCapture(() => {
-        if (event.dataTransfer === null) return
-
-        const domElementId = MainAreaContentView.focusableDomElementId(itemPath)
-        const domElement = document.getElementById(domElementId)
-        if (domElement === null) return
-        // ドラッグ中にマウスポインターに追随して表示される内容を設定
-        event.dataTransfer.setDragImage(domElement, 0, domElement.offsetHeight / 2)
-
-        event.dataTransfer.setData('application/treeify', JSON.stringify(itemPath))
+    onDragStart: () => {
+      return doWithErrorCapture(() => {
+        return {itemPath}
       })
     },
   }

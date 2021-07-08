@@ -4,6 +4,8 @@
   import {createRootProps, RootProps} from 'src/TreeifyTab/View/RootProps'
   import {derived, Readable} from 'svelte/store'
   import DialogLayer from './Dialog/DialogLayer.svelte'
+  import {dragStateResetter} from './dragAndDrop'
+  import DragImage from './DragImage.svelte'
   import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
   import MainArea from './MainArea/MainArea.svelte'
   import Toolbar from './Toolbar/Toolbar.svelte'
@@ -14,7 +16,7 @@
   $: props = $propsStream
 </script>
 
-<div class="root">
+<div class="root" use:dragStateResetter>
   <div class="toolbar-and-sidebar-layout">
     <Toolbar props={props.toolbarProps} />
     <div class="sidebar-layout">
@@ -27,6 +29,9 @@
     </div>
   </div>
   <DialogLayer props={props.dialogLayerProps} />
+  {#if props.dragImageProps !== undefined}
+    <DragImage props={props.dragImageProps} />
+  {/if}
 </div>
 
 <style>

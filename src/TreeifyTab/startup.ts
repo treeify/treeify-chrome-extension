@@ -155,14 +155,12 @@ function onMouseMove(event: MouseEvent) {
 
         if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
           External.instance.shouldFloatingLeftSidebarShown = true
-          Rerenderer.instance.rerender()
         }
       } else {
         // Treeifyタブ左端と画面左端の間に隙間がない場合
 
         if (event.screenX === 0 && event.movementX === 0) {
           External.instance.shouldFloatingLeftSidebarShown = true
-          Rerenderer.instance.rerender()
         }
       }
     } else {
@@ -171,9 +169,10 @@ function onMouseMove(event: MouseEvent) {
         // mouseleaveイベントを使わない理由は、Treeifyタブが画面左端にぴったりくっついていない状況で、
         // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
         External.instance.shouldFloatingLeftSidebarShown = false
-        Rerenderer.instance.rerender()
       }
     }
+
+    Rerenderer.instance.rerender()
   })
 }
 

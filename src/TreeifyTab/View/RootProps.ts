@@ -1,5 +1,6 @@
 import {State} from 'src/TreeifyTab/Internal/State'
 import {createDialogLayerProps, DialogLayerProps} from 'src/TreeifyTab/View/Dialog/DialogLayer'
+import {createDragImageProps, DragImageProps} from 'src/TreeifyTab/View/DragImageProps'
 import {
   createLeftSidebarProps,
   LeftSidebarProps,
@@ -12,6 +13,7 @@ export type RootProps = {
   mainAreaProps: MainAreaProps
   toolbarProps: ToolbarProps
   dialogLayerProps: DialogLayerProps
+  dragImageProps: DragImageProps | undefined
 }
 
 export function createRootProps(state: State): RootProps {
@@ -20,5 +22,6 @@ export function createRootProps(state: State): RootProps {
     mainAreaProps: createMainAreaProps(state),
     toolbarProps: createToolbarProps(),
     dialogLayerProps: createDialogLayerProps(state),
+    dragImageProps: createDragImageProps(),
   }
 }

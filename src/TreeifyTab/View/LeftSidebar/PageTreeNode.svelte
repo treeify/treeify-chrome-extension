@@ -2,6 +2,7 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
+  import {onItemDrop} from '../dragAndDrop'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
@@ -46,8 +47,7 @@
           class="page-tree-node_content-area"
           class:active-page={props.isActivePage}
           on:mousedown={props.onClickContentArea}
-          on:dragover={props.onDragOver}
-          on:drop={props.onDrop}
+          use:onItemDrop={props.onDrop}
         >
           <ItemContent props={props.contentProps} />
         </div>

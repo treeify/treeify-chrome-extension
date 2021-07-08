@@ -52,7 +52,7 @@
 
     /* 左サイドバーにも影が落ちるように左サイドバーより高くする */
     position: relative;
-    z-index: 2;
+    z-index: 20;
 
     height: var(--toolbar-height);
 
