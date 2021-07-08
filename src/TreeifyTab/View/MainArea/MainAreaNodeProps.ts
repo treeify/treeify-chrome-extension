@@ -93,12 +93,21 @@ export function createMainAreaNodeProps(
           CurrentState.setTargetItemPath(itemPath)
           NullaryCommand.deleteItemItself()
           Rerenderer.instance.rerender()
+        } else if (inputId === '1000MouseButton2') {
+          event.preventDefault()
+          Internal.instance.saveCurrentStateToUndoStack()
+          CurrentState.setTargetItemPath(itemPath)
+          NullaryCommand.removeEdge()
+          Rerenderer.instance.rerender()
         }
       })
     },
     onContextMenu: (event: Event) => {
       // 独自コンテキストメニューを表示
       event.preventDefault()
+      if (event instanceof MouseEvent) {
+        if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
+      }
       CurrentState.setTargetItemPath(itemPath)
       NullaryCommand.showContextMenuDialog()
       Rerenderer.instance.rerender()
