@@ -20,10 +20,11 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
+  import {ItemDragData, onItemDrop} from '../dragAndDrop'
   import {MainAreaContentView} from './MainAreaContentProps'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
-  
+
   export let props: MainAreaProps
 
   function onKeyDown(event: KeyboardEvent) {
@@ -99,7 +100,7 @@
     if (textItemSelection === undefined) {
       event.preventDefault()
       CurrentState.setTargetItemPath(aboveItemPath)
-  
+
       const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
@@ -107,7 +108,7 @@
         const characterCount = DomishObject.countCharacters(domishObjects)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
       }
-      
+
       Rerenderer.instance.rerender()
     } else {
       // キャレット位置が先頭以外のときはブラウザの挙動に任せる
@@ -117,7 +118,7 @@
 
       event.preventDefault()
       CurrentState.setTargetItemPath(aboveItemPath)
-      
+
       const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
       if (aboveItemType === ItemType.TEXT) {
         // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
@@ -125,7 +126,7 @@
         const characterCount = DomishObject.countCharacters(domishObjects)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
       }
-      
+
       Rerenderer.instance.rerender()
     }
   }
@@ -673,21 +674,9 @@
     }
   }
 
-  function onDragOver(event: DragEvent) {
+  function onDrop(event: MouseEvent, data: ItemDragData) {
     doWithErrorCapture(() => {
-      // ドロップを動作させるために必要
-      event.preventDefault()
-    })
-  }
-
-  function onDrop(event: DragEvent) {
-    doWithErrorCapture(() => {
-      if (event.dataTransfer === null) return
-
-      const data = event.dataTransfer.getData('application/treeify')
-      if (data === '') return
-
-      const draggedItemPath: ItemPath = List(JSON.parse(data))
+      const draggedItemPath = data.itemPath
       // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
       const parentItemId = ItemPath.getParentItemId(draggedItemPath)
       if (parentItemId === undefined) return
@@ -763,11 +752,10 @@
   class="main-area"
   tabindex="0"
   on:keydown={onKeyDown}
-  on:dragover={onDragOver}
-  on:drop={onDrop}
   on:copy={onCopy}
   on:cut={onCut}
   on:paste={onPaste}
+  use:onItemDrop={onDrop}
 >
   {#key props.rootNodeProps.itemPath.toString()}
     <MainAreaNode props={props.rootNodeProps} />

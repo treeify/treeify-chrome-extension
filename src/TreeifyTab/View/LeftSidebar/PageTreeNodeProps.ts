@@ -9,6 +9,7 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import {ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 import {
   createItemContentProps,
   ItemContentProps,
@@ -31,8 +32,7 @@ export type PageTreeNodeProps = {
   onClickContentArea: () => void
   onClickCloseButton: () => void
   onClickTabsCount: () => void
-  onDragOver: (event: DragEvent) => void
-  onDrop: (event: DragEvent) => void
+  onDrop: (event: MouseEvent, data: ItemDragData) => void
 }
 
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
@@ -160,18 +160,11 @@ export function createPageTreeNodeProps(
         }
       })
     },
-    onDragOver: (event) => {
-      // ドロップを動作させるために必要
-      event.preventDefault()
-    },
-    onDrop: (event) => {
+    onDrop: (event: MouseEvent, data: ItemDragData) => {
       doWithErrorCapture(() => {
-        if (event.dataTransfer === null || !(event.target instanceof HTMLElement)) return
+        if (!(event.target instanceof HTMLElement)) return
 
-        const data = event.dataTransfer.getData('application/treeify')
-        if (data === '') return
-
-        const draggedItemPath: ItemPath = List(JSON.parse(data))
+        const draggedItemPath = data.itemPath
         const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
         // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
