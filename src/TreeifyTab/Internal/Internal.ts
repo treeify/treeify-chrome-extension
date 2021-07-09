@@ -57,7 +57,7 @@ export class Internal {
   mutate(value: any, propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
     if (Internal._mutate(value, propertyKeys, this.state)) {
-      for (let onMutateListener of this.onMutateListeners) {
+      for (const onMutateListener of this.onMutateListeners) {
         onMutateListener(propertyPath)
       }
     }
@@ -85,7 +85,7 @@ export class Internal {
   delete(propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
     Internal._delete(propertyKeys, this.state)
-    for (let onMutateListener of this.onMutateListeners) {
+    for (const onMutateListener of this.onMutateListeners) {
       onMutateListener(propertyPath)
     }
   }
@@ -160,199 +160,6 @@ export class Internal {
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
       maxItemId: 0,
-      mainAreaKeyboardBinding: {
-        '0000Tab': List.of({commandName: 'indentItem'}),
-        '0100Tab': List.of({commandName: 'unindentItem'}),
-        '1000ArrowUp': List.of({commandName: 'moveItemToPrevSibling'}),
-        '1000ArrowDown': List.of({commandName: 'moveItemToNextSibling'}),
-        '1100ArrowUp': List.of({commandName: 'moveItemUpward'}),
-        '1100ArrowDown': List.of({commandName: 'moveItemDownward'}),
-        '0110ArrowDown': List.of({commandName: 'selectAllBelowItems'}),
-        '0110ArrowUp': List.of({commandName: 'selectAllAboveItems'}),
-        '0000Enter': List.of({commandName: 'enterKeyDefault'}),
-        '0100Enter': List.of({commandName: 'insertLineBreak'}),
-        '1000Enter': List.of(
-          {commandName: 'hardUnloadSubtree'},
-          {commandName: 'collapseItem'},
-          {commandName: 'toggleGrayedOut'}
-        ),
-        '1100Enter': List.of({commandName: 'createEmptyTextItem'}),
-        '1100Backspace': List.of({commandName: 'removeEdge'}),
-        '1000KeyA': List.of({commandName: 'selectAll'}),
-        '1000KeyH': List.of({commandName: 'toggleHighlighted'}),
-        '1000KeyG': List.of({commandName: 'groupingItems'}),
-        '1000KeyD': List.of({commandName: 'removeEdge'}),
-        '1100KeyD': List.of({commandName: 'deleteItemItself'}),
-        '1000KeyP': List.of({commandName: 'toggleCollapsed'}),
-        '1000KeyB': List.of({commandName: 'toggleBold'}),
-        '1000KeyU': List.of({commandName: 'toggleDoubtful'}),
-        '1000KeyI': List.of({commandName: 'toggleItalic'}),
-        '1000KeyK': List.of({commandName: 'toggleStrikethrough'}),
-        '1000KeyS': List.of({commandName: 'saveToDataFolder'}),
-        '0010KeyC': List.of({commandName: 'copyForTransclusion'}),
-        '1100KeyV': List.of({commandName: 'pasteAsPlainText'}),
-        '1100KeyF': List.of({commandName: 'showSearchDialog'}),
-        '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
-        '0010KeyE': List.of({commandName: 'toggleExcluded'}),
-        '0000F2': List.of({commandName: 'edit'}),
-        '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
-        '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
-      },
-      mainAreaDeleteButtonMouseBinding: {
-        '0000MouseButton0': List.of({commandName: 'removeEdge'}),
-        '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
-      },
-      dialog: null,
-    }
-  }
-
-  static createSampleState(): State {
-    return {
-      items: {
-        0: {
-          itemType: ItemType.TEXT,
-          childItemIds: List.of(1, 2, 5, 8),
-          parents: {},
-          timestamp: 1604284090000,
-          cssClasses: List.of(),
-          cite: null,
-        },
-        1: {
-          itemType: ItemType.TEXT,
-          childItemIds: List.of(3, 6, 7),
-          parents: {0: {isCollapsed: false}},
-          timestamp: 1604284090001,
-          cssClasses: List.of(),
-          cite: null,
-        },
-        2: {
-          itemType: ItemType.TEXT,
-          childItemIds: List.of(4),
-          parents: {0: {isCollapsed: true}},
-          timestamp: 1604284090002,
-          cssClasses: List.of(),
-          cite: null,
-        },
-        3: {
-          itemType: ItemType.TEXT,
-          childItemIds: List.of(),
-          parents: {1: {isCollapsed: false}},
-          timestamp: 1604284090003,
-          cssClasses: List.of(),
-          cite: null,
-        },
-        4: {
-          itemType: ItemType.TEXT,
-          childItemIds: List.of(),
-          parents: {2: {isCollapsed: false}},
-          timestamp: 1604284090004,
-          cssClasses: List.of('grayed-out'),
-          cite: null,
-        },
-        5: {
-          itemType: ItemType.WEB_PAGE,
-          childItemIds: List.of(),
-          parents: {0: {isCollapsed: false}},
-          timestamp: 1604284090005,
-          cssClasses: List.of(),
-          cite: null,
-        },
-        6: {
-          itemType: ItemType.TEXT,
-          childItemIds: List.of(),
-          parents: {1: {isCollapsed: false}},
-          timestamp: 1604284090006,
-          cssClasses: List.of(),
-          cite: null,
-        },
-        7: {
-          itemType: ItemType.IMAGE,
-          childItemIds: List.of(),
-          parents: {1: {isCollapsed: false}},
-          timestamp: 1604284090007,
-          cssClasses: List.of(),
-          cite: {
-            title: 'Tamias - Wikipedia',
-            url: 'https://en.wikipedia.org/wiki/Tamias',
-          },
-        },
-        8: {
-          itemType: ItemType.CODE_BLOCK,
-          childItemIds: List.of(),
-          parents: {0: {isCollapsed: false}},
-          timestamp: 1604284090008,
-          cssClasses: List.of(),
-          cite: null,
-        },
-      },
-      textItems: {
-        0: {
-          domishObjects: List.of({type: 'text', textContent: 'Top'}),
-        },
-        1: {
-          domishObjects: List.of({type: 'text', textContent: 'isCollapsed false'}),
-        },
-        2: {
-          domishObjects: List.of({type: 'text', textContent: 'isCollapsed true'}),
-        },
-        3: {
-          domishObjects: List.of({type: 'text', textContent: 'visible child'}),
-        },
-        4: {
-          domishObjects: List.of({type: 'text', textContent: 'invisible child'}),
-        },
-        6: {
-          domishObjects: List.of({type: 'text', textContent: '子ページ'}),
-        },
-      },
-      webPageItems: {
-        5: {
-          url: 'https://ao-system.net/favicon/',
-          faviconUrl: 'https://ao-system.net/favicon.ico',
-          tabTitle: 'ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます',
-          title: null,
-          isUnread: true,
-        },
-      },
-      imageItems: {
-        7: {
-          url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg',
-          caption: 'tamias',
-        },
-      },
-      codeBlockItems: {
-        8: {
-          code:
-            "const url = 'https://google.com/'\n" +
-            'if (url.length > 10 || /https:/.test(url)) {\n' +
-            '  console.log(`OK: ${url.length}`)\n' +
-            '}\n',
-          language: 'javascript',
-        },
-      },
-      texItems: {},
-      pages: {
-        0: {
-          targetItemPath: List.of(0),
-          anchorItemPath: List.of(0),
-          defaultWindowMode: 'keep',
-        },
-        6: {
-          targetItemPath: List.of(6),
-          anchorItemPath: List.of(6),
-          defaultWindowMode: 'inherit',
-        },
-      },
-      workspaces: {
-        [Timestamp.now()]: {
-          activePageId: 0,
-          excludedItemIds: List.of(),
-          name: 'ワークスペース1',
-        },
-      },
-      mountedPageIds: List.of(0),
-      availableItemIds: List.of(),
-      maxItemId: 8,
       mainAreaKeyboardBinding: {
         '0000Tab': List.of({commandName: 'indentItem'}),
         '0100Tab': List.of({commandName: 'unindentItem'}),
