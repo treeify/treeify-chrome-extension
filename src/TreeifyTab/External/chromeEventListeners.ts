@@ -15,7 +15,7 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
-export const onMessage = (message: TreeifyTab.Message, sender: MessageSender) => {
+export const onMessage = (message: any, sender: MessageSender) => {
   doWithErrorCapture(() => {
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
