@@ -19,7 +19,9 @@ export const onMessage = (message: TreeifyTab.Message, sender: MessageSender) =>
   doWithErrorCapture(() => {
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
-        OnMouseMoveToLeftEnd()
+        // Treeifyタブを最前面化する
+        // TODO: 誤差だろうけれど最適化の余地が一応ある
+        TreeifyTab.open()
         break
       // TODO: 網羅性チェックをしていない理由はなんだろう？
     }
@@ -167,12 +169,6 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
       Rerenderer.instance.rerender()
     }
   })
-}
-
-function OnMouseMoveToLeftEnd() {
-  // Treeifyタブを最前面化する
-  // TODO: 誤差だろうけれど最適化の余地が一応ある
-  TreeifyTab.open()
 }
 
 /**
