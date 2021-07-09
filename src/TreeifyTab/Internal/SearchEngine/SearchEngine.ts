@@ -26,8 +26,7 @@ export class SearchEngine {
 
   /** 全文検索を行う */
   search(searchQuery: string): List<ItemId> {
-    // 半角スペースまたは全角スペースで区切ったものを検索ワードと呼ぶ
-    const searchWords = List(searchQuery.split(/[ 　]/).filter((str) => str !== ''))
+    const searchWords = List(searchQuery.split(/\s/).filter((str) => str !== ''))
     if (searchWords.isEmpty()) return List.of()
 
     // 検索ワードごとに、ヒットするアイテムの全ItemPathの集合を生成する
@@ -118,7 +117,9 @@ export class SearchEngine {
 
   // 全アイテムが先祖-子孫関係にある場合にtrueを返す
   static isInclusive(itemIds: List<ItemId>): boolean {
-    const list = itemIds.map((itemId) => Set(CurrentState.yieldAncestorItemIds(itemId)))
+    const list = itemIds.map((itemId) => {
+      return Set(CurrentState.yieldAncestorItemIds(itemId)).add(itemId)
+    })
 
     const sorted = list.sortBy((itemPath) => itemPath.size)
     for (let i = 0; i < sorted.size - 1; i++) {
