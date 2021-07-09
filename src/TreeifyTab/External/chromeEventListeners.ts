@@ -132,7 +132,7 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   CurrentState.setWebPageItemFaviconUrl(itemId, tab.favIconUrl ?? '')
 }
 
-export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
+export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   doWithErrorCapture(() => {
     External.instance.tabItemCorrespondence.unregisterTab(tabId)
 
@@ -155,7 +155,7 @@ export async function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   })
 }
 
-export async function onActivated(tabActiveInfo: TabActiveInfo) {
+export function onActivated(tabActiveInfo: TabActiveInfo) {
   doWithErrorCapture(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
     if (itemId !== undefined) {
