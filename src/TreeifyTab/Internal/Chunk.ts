@@ -57,15 +57,6 @@ export namespace Chunk {
     }
   }
 
-  /** Stateに変更を加えた全てのPropertyPath集合から、ChunkIdの集合を生成する */
-  export function extractChunkIds(propertyPaths: Set<PropertyPath>): Set<ChunkId> {
-    const result = new Set<ChunkId>()
-    for (const propertyPath of propertyPaths) {
-      result.add(convertToChunkId(propertyPath))
-    }
-    return result
-  }
-
   /** PropertyPathからChunkIdに変換する */
   export function convertToChunkId(propertyPath: PropertyPath): ChunkId {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
