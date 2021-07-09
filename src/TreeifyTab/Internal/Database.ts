@@ -58,7 +58,7 @@ export namespace Database {
 
         // 初期データを投入する
         const allChunks = Chunk.createAllChunks(Internal.createInitialState())
-        await Promise.all(allChunks.map((chunk) => writeChunk(chunk, objectStore)))
+        await writeChunks(allChunks, objectStore)
 
         // 動作確認用のサンプルOPMLデータをクリップボードに入れる
         // TODO: リリース前に削除するか、ビルドフラグを導入して分岐する
@@ -121,6 +121,10 @@ export namespace Database {
         }
       }
     })
+  }
+
+  export async function writeChunks(chunks: List<Chunk>, givenObjectStore?: IDBObjectStore) {
+    await Promise.all(chunks.map((chunk) => writeChunk(chunk, givenObjectStore)))
   }
 
   // IndexedDBではImmutable.jsのList型をそのまま保存できないので一旦配列に変換する
