@@ -15,23 +15,28 @@
 
   let searchResult: List<List<ItemPath>> = List.of()
 
-  function onInput(event: Event) {
+  function onKeyDownSearchQuery(event: KeyboardEvent) {
+    if (event.isComposing) return
     if (!(event.target instanceof HTMLInputElement)) return
 
-    // インクリメンタルサーチを行う。もし重くなったら方針を見直す
-    const itemIds = Internal.instance.searchEngine.search(event.target.value)
+    // Enterキー押下時
+    if (InputId.fromKeyboardEvent(event) === '0000Enter') {
+      event.preventDefault()
 
-    // ヒットしたアイテムの所属ページを探索し、その経路をItemPathとして収集する
-    const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
+      const itemIds = Internal.instance.searchEngine.search(event.target.value)
 
-    // ItemPathをページIDでグループ化する
-    const itemPathGroups: List<List<ItemPath>> = allItemPaths
-      .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
-      .toList()
-      .map((group) => group.toList())
+      // ヒットしたアイテムの所属ページを探索し、その経路をItemPathとして収集する
+      const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
 
-    // ヒットしたアイテム数によってページの並びをソートする
-    searchResult = itemPathGroups.sortBy((itemPaths) => -itemPaths.size)
+      // ItemPathをページIDでグループ化する
+      const itemPathGroups: List<List<ItemPath>> = allItemPaths
+        .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
+        .toList()
+        .map((group) => group.toList())
+
+      // ヒットしたアイテム数によってページの並びをソートする
+      searchResult = itemPathGroups.sortBy((itemPaths) => -itemPaths.size)
+    }
   }
 
   const onKeyDown = (event: KeyboardEvent) => {
@@ -52,7 +57,7 @@
       type="text"
       class="search-dialog_search-query"
       placeholder="検索ワード"
-      on:input={onInput}
+      on:keydown={onKeyDownSearchQuery}
     />
     <div class="search-dialog_result">
       {#each searchResult.toArray() as itemPathGroup (ItemPath.getRootItemId(itemPathGroup.first()))}
