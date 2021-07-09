@@ -1,9 +1,10 @@
-import {List, Set} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
+import {is, List, Set} from 'immutable'
+import {assert, assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {UnigramSearchIndex} from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import {State} from 'src/TreeifyTab/Internal/State'
 
@@ -24,19 +25,34 @@ export class SearchEngine {
   }
 
   /** 全文検索を行う */
-  search(searchQuery: string): List<ItemId> {
-    return List(this.unigramSearchIndex.search(searchQuery)).filter((itemId) => {
-      // 除外アイテムで検索結果をフィルタリングする
-      if (CurrentState.shouldBeHidden(itemId)) return false
+  search(searchQuery: string): List<ItemPath> {
+    // 半角スペースまたは全角スペースで区切ったものを検索ワードと呼ぶ
+    const searchWords = List(searchQuery.split(/[ 　]/).filter((str) => str !== ''))
+    if (searchWords.isEmpty()) return List.of()
 
-      const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
-      return textTracks.some((textTrack) => {
-        // 大文字・小文字を区別せず検索する
-        return UnigramSearchIndex.normalize(textTrack).includes(
-          UnigramSearchIndex.normalize(searchQuery)
-        )
-      })
+    // 検索ワードごとに、ヒットするアイテムの全ItemPathの集合を生成する
+    const hitItemPathSets = searchWords.map((searchWord) => {
+      return Set(this.unigramSearchIndex.search(searchWord))
+        .filter((itemId) => {
+          // 除外アイテムで検索結果をフィルタリングする
+          if (CurrentState.shouldBeHidden(itemId)) return false
+
+          const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
+          return textTracks.some((textTrack) => {
+            // 大文字・小文字を区別せず検索する
+            return UnigramSearchIndex.normalize(textTrack).includes(
+              UnigramSearchIndex.normalize(searchWord)
+            )
+          })
+        })
+        .flatMap((itemId) => CurrentState.yieldItemPaths(itemId))
     })
+
+    const combination = List(SearchEngine.combination(hitItemPathSets))
+    // ItemPathの組み合わせのうち、包含関係にあるものだけをピックアップする
+    const filtered = combination.filter(SearchEngine.isInclusive)
+    // 生き残った組み合わせに含まれる全ItemPathを返す
+    return SearchEngine.removeDuplicates(filtered.flatMap((list) => list))
   }
 
   /**
@@ -81,5 +97,45 @@ export class SearchEngine {
   /** 指定されたアイテムのテキストトラックに含まれる文字の集合を返す */
   static appearingUnigrams(itemId: ItemId, state: State): Set<string> {
     return Set(this.getTextTracks(itemId, state).join(''))
+  }
+
+  // 要するに[{1, 2}, {3, 4}]を[1, 3], [1, 4], [2, 3], [2, 4]に変換する
+  static *combination<T>(sets: List<Set<T>>): Generator<List<T>> {
+    assert(sets.size > 0)
+
+    if (sets.size === 1) {
+      const first: Set<T> = sets.first()
+      for (const element of first) {
+        yield List.of(element)
+      }
+    } else {
+      const last: Set<T> = sets.last()
+      for (const sublist of this.combination(sets.pop())) {
+        for (const element of last) {
+          yield sublist.push(element)
+        }
+      }
+    }
+  }
+
+  // 全ItemPathが先祖-子孫関係にある場合にtrueを返す
+  static isInclusive(itemPaths: List<ItemPath>): boolean {
+    const sorted = itemPaths.sortBy((itemPath) => itemPath.size)
+    for (let i = 0; i < sorted.size - 1; i++) {
+      const lhs = sorted.get(i)!
+      const rhs = sorted.get(i + 1)!
+      if (!is(lhs, rhs.take(lhs.size))) {
+        return false
+      }
+    }
+    return true
+  }
+
+  static removeDuplicates(itemPaths: List<ItemPath>): List<ItemPath> {
+    const map = new Map<string, ItemPath>()
+    for (const itemPath of itemPaths) {
+      map.set(itemPath.toString(), itemPath)
+    }
+    return List(map.values())
   }
 }
