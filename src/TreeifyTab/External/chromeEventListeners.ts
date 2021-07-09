@@ -15,13 +15,20 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
-export const onMessage = (message: TreeifyTab.Message, sender: MessageSender) => {
+export const onMessage = (message: any, sender: MessageSender) => {
   doWithErrorCapture(() => {
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
-        OnMouseMoveToLeftEnd()
+        // Treeifyタブを最前面化する
+        // TODO: 誤差だろうけれど最適化の余地が一応ある
+        TreeifyTab.open()
         break
-      // TODO: 網羅性チェックをしていない理由はなんだろう？
+      case 'OnMouseMoveToRightEnd':
+        TreeifyTab.open()
+        if (sender.tab?.id !== undefined) {
+          chrome.tabs.remove(sender.tab.id)
+        }
+        break
     }
   })
 }
@@ -169,12 +176,6 @@ export async function onActivated(tabActiveInfo: TabActiveInfo) {
   })
 }
 
-function OnMouseMoveToLeftEnd() {
-  // Treeifyタブを最前面化する
-  // TODO: 誤差だろうけれど最適化の余地が一応ある
-  TreeifyTab.open()
-}
-
 /**
  * 既存のタブとウェブページアイテムのマッチングを行う。
  * URLが完全一致しているかどうかで判定する。
@@ -219,21 +220,6 @@ export async function matchTabsAndWebPageItems() {
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
     }
   }
-}
-
-// 指定されたURLを持つウェブページアイテムを探す。
-// もし複数該当する場合は最初に見つかったものを返す。
-// 見つからなかった場合はundefinedを返す。
-function findWebPageItemId(url: string): ItemId | undefined {
-  const webPageItems = Internal.instance.state.webPageItems
-  for (const itemId in webPageItems) {
-    const webPageItem = webPageItems[itemId]
-    if (url === webPageItem.url) {
-      // URLが一致するウェブページアイテムが見つかった場合
-      return parseInt(itemId)
-    }
-  }
-  return undefined
 }
 
 // Treeifyタブを除く全タブを返す

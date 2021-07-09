@@ -1,4 +1,3 @@
-import {integer} from 'src/Common/integer'
 import {TabId} from 'src/TreeifyTab/basicType'
 
 export namespace TreeifyTab {
@@ -30,20 +29,5 @@ export namespace TreeifyTab {
       }
     }
     return undefined
-  }
-
-  /** Treeifyタブ向けのメッセージ型のUnion型 */
-  export type Message = OnMouseMoveToLeftEnd | OnMouseEnter
-
-  export type OnMouseMoveToLeftEnd = {
-    type: 'OnMouseMoveToLeftEnd'
-  }
-
-  export type OnMouseEnter = {
-    type: 'OnMouseEnter'
-    /** event.screenX */
-    x: integer
-    /** event.screenY */
-    y: integer
   }
 }
