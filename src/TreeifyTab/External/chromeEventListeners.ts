@@ -114,9 +114,9 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
     }
 
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-    assertNonUndefined(itemId)
-    reflectInWebPageItem(itemId, tab)
+    if (itemId === undefined) return
 
+    reflectInWebPageItem(itemId, tab)
     Rerenderer.instance.rerender()
   })
 }
@@ -158,21 +158,20 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
 export function onActivated(tabActiveInfo: TabActiveInfo) {
   doWithErrorCapture(() => {
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
-    if (itemId !== undefined) {
-      CurrentState.updateItemTimestamp(itemId)
-      CurrentState.setIsUnreadFlag(itemId, false)
+    if (itemId === undefined) return
 
-      // もしタブに対応するアイテムがアクティブページに所属していれば、それをターゲットする
-      const activePageId = CurrentState.getActivePageId()
-      for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
-        if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
-          CurrentState.setTargetItemPath(itemPath)
-          break
-        }
+    CurrentState.updateItemTimestamp(itemId)
+    CurrentState.setIsUnreadFlag(itemId, false)
+
+    // もしタブに対応するアイテムがアクティブページに所属していれば、それをターゲットする
+    const activePageId = CurrentState.getActivePageId()
+    for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
+      if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
+        CurrentState.setTargetItemPath(itemPath)
+        break
       }
-
-      Rerenderer.instance.rerender()
     }
+    Rerenderer.instance.rerender()
   })
 }
 
