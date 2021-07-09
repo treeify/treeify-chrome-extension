@@ -37,7 +37,7 @@ export namespace Chunk {
   ])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
-  export function createAllChunks(state: State): List<Chunk | undefined> {
+  export function createAllChunks(state: State): List<Chunk> {
     return List(yieldAllChunkIds(state)).map((chunkId) => {
       return create(state, chunkId)
     })
