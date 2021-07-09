@@ -58,7 +58,7 @@ export namespace Database {
 
         // 初期データを投入する
         const allChunks = Chunk.createAllChunks(Internal.createInitialState())
-        await Promise.all(allChunks.map((chunk) => writeChunk(chunk, objectStore)))
+        await writeChunks(allChunks, objectStore)
 
         // 動作確認用のサンプルOPMLデータをクリップボードに入れる
         // TODO: リリース前に削除するか、ビルドフラグを導入して分岐する
@@ -100,19 +100,31 @@ export namespace Database {
       const objectStore =
         givenObjectStore ??
         getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
-      const request = objectStore.put({
-        id: chunk.id,
-        data: convertListToArray(chunk.data),
-      })
-      // 書き込みリクエスト成功時
-      request.onsuccess = () => {
-        resolve(request.result)
-      }
-      // 書き込みリクエスト失敗時
-      request.onerror = () => {
-        reject(request.error)
+      if (chunk.data !== undefined) {
+        const request = objectStore.put({
+          id: chunk.id,
+          data: convertListToArray(chunk.data),
+        })
+        request.onsuccess = () => {
+          resolve(request.result)
+        }
+        request.onerror = () => {
+          reject(request.error)
+        }
+      } else {
+        const request = objectStore.delete(chunk.id)
+        request.onsuccess = () => {
+          resolve(request.result)
+        }
+        request.onerror = () => {
+          reject(request.error)
+        }
       }
     })
+  }
+
+  export async function writeChunks(chunks: List<Chunk>, givenObjectStore?: IDBObjectStore) {
+    await Promise.all(chunks.map((chunk) => writeChunk(chunk, givenObjectStore)))
   }
 
   // IndexedDBではImmutable.jsのList型をそのまま保存できないので一旦配列に変換する
@@ -146,6 +158,24 @@ export namespace Database {
     }
 
     return value
+  }
+
+  /** チャンクストアの全チャンクを削除する */
+  export async function clearAllChunks(givenObjectStore?: IDBObjectStore) {
+    return new Promise((resolve, reject) => {
+      const objectStore =
+        givenObjectStore ??
+        getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+      const request = objectStore.clear()
+      // 書き込みリクエスト成功時
+      request.onsuccess = () => {
+        resolve(request.result)
+      }
+      // 書き込みリクエスト失敗時
+      request.onerror = () => {
+        reject(request.error)
+      }
+    })
   }
 }
 

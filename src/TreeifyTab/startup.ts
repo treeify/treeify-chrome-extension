@@ -12,7 +12,9 @@ import {
   onWindowFocusChanged,
 } from 'src/TreeifyTab/External/chromeEventListeners'
 import {External} from 'src/TreeifyTab/External/External'
+import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {Database} from 'src/TreeifyTab/Internal/Database'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -92,6 +94,12 @@ export async function restart(state: State) {
     await cleanup()
     // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
     External.instance.dataFolder = dataFolder
+
+    // IndexedDBを新しいStateと一致するよう更新
+    await Database.clearAllChunks()
+    // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
+    Database.writeChunks(Chunk.createAllChunks(state))
+
     await startup(state)
   }
 }
