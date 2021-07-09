@@ -216,9 +216,9 @@ function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Gen
 
 function getAudiblePageIds(): Set<ItemId> {
   const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
-  const audibleItemIds = audibleTabIds.map((tabId) =>
-    External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-  ) as List<ItemId>
+  const audibleItemIds = audibleTabIds
+    .map((tabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId))
+    .filter((itemId) => itemId !== undefined) as List<ItemId>
 
   return Set(audibleItemIds.flatMap(CurrentState.getPageIdsBelongingTo))
 }

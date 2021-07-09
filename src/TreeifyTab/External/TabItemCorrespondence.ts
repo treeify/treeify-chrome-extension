@@ -16,6 +16,12 @@ export class TabItemCorrespondence {
     return this.itemIdToTabId.get(itemId)
   }
 
+  /**
+   * タブに対応するアイテムIDを返す。
+   * 「ウェブページアイテムを削除→対応するタブを閉じる」という処理が行われる際、
+   * アイテム削除からchrome.tabs.onRemovedイベント発生までにタイムラグがあるので、
+   * その間はこの関数の戻り値がundefinedになることに要注意。
+   */
   getItemIdBy(tabId: TabId): ItemId | undefined {
     return this.tabIdToItemId.get(tabId)
   }
