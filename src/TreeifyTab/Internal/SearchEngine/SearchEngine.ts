@@ -4,7 +4,6 @@ import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {UnigramSearchIndex} from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import {State} from 'src/TreeifyTab/Internal/State'
 
@@ -26,20 +25,26 @@ export class SearchEngine {
 
   /** 全文検索を行う */
   search(searchQuery: string): List<ItemId> {
-    const searchWords = List(searchQuery.split(/\s/).filter((str) => str !== ''))
-    if (searchWords.isEmpty()) return List.of()
+    const {andSearchWords, notSearchWords} = SearchEngine.parseSearchQuery(searchQuery)
+    if (andSearchWords.isEmpty()) return List.of()
+
+    const normalizedNotSearchWords = notSearchWords.map(UnigramSearchIndex.normalize)
 
     // 検索ワードごとに、ヒットするアイテムの全ItemPathの集合を生成する
-    const hitItemIdSets = searchWords.map((searchWord) => {
-      return Set(this.unigramSearchIndex.search(searchWord)).filter((itemId) => {
+    const hitItemIdSets = andSearchWords.map((andSearchWord) => {
+      const normalizedAndSearchWord = UnigramSearchIndex.normalize(andSearchWord)
+
+      return Set(this.unigramSearchIndex.search(andSearchWord)).filter((itemId) => {
         // 除外アイテムで検索結果をフィルタリングする
         if (CurrentState.shouldBeHidden(itemId)) return false
 
         const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
         return textTracks.some((textTrack) => {
           // 大文字・小文字を区別せず検索する
-          return UnigramSearchIndex.normalize(textTrack).includes(
-            UnigramSearchIndex.normalize(searchWord)
+          const normalizedTextTrack = UnigramSearchIndex.normalize(textTrack)
+          return (
+            normalizedTextTrack.includes(normalizedAndSearchWord) &&
+            normalizedNotSearchWords.every((word) => !normalizedTextTrack.includes(word))
           )
         })
       })
@@ -132,11 +137,24 @@ export class SearchEngine {
     return true
   }
 
-  static removeDuplicates(itemPaths: List<ItemPath>): List<ItemPath> {
-    const map = new Map<string, ItemPath>()
-    for (const itemPath of itemPaths) {
-      map.set(itemPath.toString(), itemPath)
+  // 検索クエリをAND検索ワードとNOT検索ワードに分解する
+  static parseSearchQuery(searchQuery: string): {
+    andSearchWords: List<string>
+    notSearchWords: List<string>
+  } {
+    const searchWords = List(searchQuery.split(/\s/).filter((str) => str !== ''))
+    const andSearchWords = []
+    const notSearchWords = []
+    for (const searchWord of searchWords) {
+      if (searchWord.startsWith('-') && searchWord.length >= 2) {
+        notSearchWords.push(searchWord.substring(1))
+      } else {
+        andSearchWords.push(searchWord)
+      }
     }
-    return List(map.values())
+    return {
+      andSearchWords: List(andSearchWords),
+      notSearchWords: List(notSearchWords),
+    }
   }
 }
