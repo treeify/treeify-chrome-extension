@@ -23,7 +23,12 @@ export const onMessage = (message: any, sender: MessageSender) => {
         // TODO: 誤差だろうけれど最適化の余地が一応ある
         TreeifyTab.open()
         break
-      // TODO: 網羅性チェックをしていない理由はなんだろう？
+      case 'OnMouseMoveToRightEnd':
+        TreeifyTab.open()
+        if (sender.tab?.id !== undefined) {
+          chrome.tabs.remove(sender.tab.id)
+        }
+        break
     }
   })
 }
