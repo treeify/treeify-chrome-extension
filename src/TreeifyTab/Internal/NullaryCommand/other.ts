@@ -34,8 +34,7 @@ export async function saveToDataFolder() {
 
         // メモリ上のStateを自デバイスフォルダに書き込む
         const allChunks = Chunk.createAllChunks(Internal.instance.state)
-        const filtered = allChunks.filter((chunks) => chunks !== undefined) as List<Chunk>
-        await External.instance.dataFolder.writeChunks(filtered)
+        await External.instance.dataFolder.writeChunks(allChunks)
       } else {
         // 自デバイスフォルダの内容からStateを読み込んで事実上の再起動を行う
         const state = Chunk.inflateStateFromChunks(chunks)
