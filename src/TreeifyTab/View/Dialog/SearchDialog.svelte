@@ -1,6 +1,7 @@
 <script lang="ts">
   import {List} from 'immutable'
   import {doWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
@@ -18,7 +19,10 @@
     if (!(event.target instanceof HTMLInputElement)) return
 
     // インクリメンタルサーチを行う。もし重くなったら方針を見直す
-    const allItemPaths = Internal.instance.searchEngine.search(event.target.value)
+    const itemIds = Internal.instance.searchEngine.search(event.target.value)
+
+    // ヒットしたアイテムの所属ページを探索し、その経路をItemPathとして収集する
+    const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
 
     // ItemPathをページIDでグループ化する
     const itemPathGroups: List<List<ItemPath>> = allItemPaths

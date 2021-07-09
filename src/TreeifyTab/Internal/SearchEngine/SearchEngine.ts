@@ -1,4 +1,4 @@
-import {is, List, Set} from 'immutable'
+import {List, Set} from 'immutable'
 import {assert, assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -25,34 +25,32 @@ export class SearchEngine {
   }
 
   /** 全文検索を行う */
-  search(searchQuery: string): List<ItemPath> {
+  search(searchQuery: string): List<ItemId> {
     // 半角スペースまたは全角スペースで区切ったものを検索ワードと呼ぶ
     const searchWords = List(searchQuery.split(/[ 　]/).filter((str) => str !== ''))
     if (searchWords.isEmpty()) return List.of()
 
     // 検索ワードごとに、ヒットするアイテムの全ItemPathの集合を生成する
-    const hitItemPathSets = searchWords.map((searchWord) => {
-      return Set(this.unigramSearchIndex.search(searchWord))
-        .filter((itemId) => {
-          // 除外アイテムで検索結果をフィルタリングする
-          if (CurrentState.shouldBeHidden(itemId)) return false
+    const hitItemIdSets = searchWords.map((searchWord) => {
+      return Set(this.unigramSearchIndex.search(searchWord)).filter((itemId) => {
+        // 除外アイテムで検索結果をフィルタリングする
+        if (CurrentState.shouldBeHidden(itemId)) return false
 
-          const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
-          return textTracks.some((textTrack) => {
-            // 大文字・小文字を区別せず検索する
-            return UnigramSearchIndex.normalize(textTrack).includes(
-              UnigramSearchIndex.normalize(searchWord)
-            )
-          })
+        const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
+        return textTracks.some((textTrack) => {
+          // 大文字・小文字を区別せず検索する
+          return UnigramSearchIndex.normalize(textTrack).includes(
+            UnigramSearchIndex.normalize(searchWord)
+          )
         })
-        .flatMap((itemId) => CurrentState.yieldItemPaths(itemId))
+      })
     })
 
-    const combination = List(SearchEngine.combination(hitItemPathSets))
-    // ItemPathの組み合わせのうち、包含関係にあるものだけをピックアップする
+    const combination = List(SearchEngine.combination(hitItemIdSets))
+    // ItemIdの組み合わせのうち、包含関係にあるものだけをピックアップする
     const filtered = combination.filter(SearchEngine.isInclusive)
-    // 生き残った組み合わせに含まれる全ItemPathを返す
-    return SearchEngine.removeDuplicates(filtered.flatMap((list) => list))
+    // 生き残った組み合わせに含まれる全ItemIdを返す
+    return Set(filtered.flatMap((list) => list)).toList()
   }
 
   /**
@@ -118,13 +116,15 @@ export class SearchEngine {
     }
   }
 
-  // 全ItemPathが先祖-子孫関係にある場合にtrueを返す
-  static isInclusive(itemPaths: List<ItemPath>): boolean {
-    const sorted = itemPaths.sortBy((itemPath) => itemPath.size)
+  // 全アイテムが先祖-子孫関係にある場合にtrueを返す
+  static isInclusive(itemIds: List<ItemId>): boolean {
+    const list = itemIds.map((itemId) => Set(CurrentState.yieldAncestorItemIds(itemId)))
+
+    const sorted = list.sortBy((itemPath) => itemPath.size)
     for (let i = 0; i < sorted.size - 1; i++) {
       const lhs = sorted.get(i)!
       const rhs = sorted.get(i + 1)!
-      if (!is(lhs, rhs.take(lhs.size))) {
+      if (!lhs.isSubset(rhs)) {
         return false
       }
     }
