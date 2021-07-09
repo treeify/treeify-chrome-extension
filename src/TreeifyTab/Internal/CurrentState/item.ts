@@ -84,8 +84,11 @@ export function deleteItemItself(itemId: ItemId) {
   // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
     const parents = Internal.instance.state.items[childItemId].parents
+    const parent = parents[itemId]
     delete parents[itemId]
-    Object.assign(parents, item.parents)
+    for (const parentsKey in item.parents) {
+      parents[parentsKey] = {...parent}
+    }
   }
 
   // 全ての親アイテムの子リストから自身を削除し、代わりに自身の子リストを挿入する
