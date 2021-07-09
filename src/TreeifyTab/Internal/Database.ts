@@ -100,17 +100,25 @@ export namespace Database {
       const objectStore =
         givenObjectStore ??
         getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+      if (chunk.data !== undefined) {
       const request = objectStore.put({
         id: chunk.id,
         data: convertListToArray(chunk.data),
       })
-      // 書き込みリクエスト成功時
       request.onsuccess = () => {
         resolve(request.result)
       }
-      // 書き込みリクエスト失敗時
       request.onerror = () => {
         reject(request.error)
+      }
+      } else {
+        const request = objectStore.delete(chunk.id)
+        request.onsuccess = () => {
+          resolve(request.result)
+        }
+        request.onerror = () => {
+          reject(request.error)
+        }
       }
     })
   }
