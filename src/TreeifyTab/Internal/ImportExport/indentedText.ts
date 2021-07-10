@@ -1,5 +1,5 @@
 import {List} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
+import {assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -82,6 +82,7 @@ export function extractPlainText(itemPath: ItemPath): string {
 /** 複数行のテキストをできるだけ良い形でTreeifyに取り込む */
 export function pasteMultilineText(text: string) {
   const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
   const lines = removeRedundantIndent(text).split(/\r?\n/)
 
   for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
@@ -95,8 +96,12 @@ export function pasteMultilineText(text: string) {
 
       // ターゲットを更新する
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      if (belowItemPath !== undefined) {
-        CurrentState.setTargetItemPath(belowItemPath)
+      assertNonUndefined(belowItemPath)
+      CurrentState.setTargetItemPath(belowItemPath)
+
+      // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+      if (CurrentState.isEmptyTextItem(targetItemId)) {
+        CurrentState.deleteItem(targetItemId)
       }
 
       Rerenderer.instance.rerender()
@@ -111,8 +116,12 @@ export function pasteMultilineText(text: string) {
 
   // ターゲットを更新する
   const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-  if (belowItemPath !== undefined) {
-    CurrentState.setTargetItemPath(belowItemPath)
+  assertNonUndefined(belowItemPath)
+  CurrentState.setTargetItemPath(belowItemPath)
+
+  // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+  if (CurrentState.isEmptyTextItem(targetItemId)) {
+    CurrentState.deleteItem(targetItemId)
   }
 
   Rerenderer.instance.rerender()
