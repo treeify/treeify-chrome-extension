@@ -1,9 +1,9 @@
-import {integer} from 'src/Common/integer'
+import {Coordinate} from 'src/Common/integer'
 import {External} from 'src/TreeifyTab/External/External'
 import {itemDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 
 export type DragImageProps = {
-  mousePosition: {x: integer; y: integer}
+  mousePosition: Coordinate
   itemDragData: ItemDragData
 }
 

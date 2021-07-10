@@ -4,3 +4,5 @@
  * （そう仮定して問題ないように注意深くコーディングする）
  */
 export type integer = number
+
+export type Coordinate = {x: integer; y: integer}
