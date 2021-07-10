@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import md5 from 'md5'
-import {integer} from 'src/Common/integer'
+import {Coordinate, integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {DataFolder} from 'src/TreeifyTab/External/DataFolder'
 import {TabItemCorrespondence} from 'src/TreeifyTab/External/TabItemCorrespondence'
@@ -29,7 +29,7 @@ export class External {
    * 独自コンテキストメニューを表示する座標を決定するために使う。
    * event.clientXおよびclientYが代入される。
    */
-  mousePosition: {x: integer; y: integer} | undefined
+  mousePosition: Coordinate | undefined
 
   /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
