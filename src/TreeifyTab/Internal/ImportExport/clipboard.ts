@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
@@ -81,6 +82,7 @@ export function onPaste(event: ClipboardEvent) {
 
     event.preventDefault()
     const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemId = ItemPath.getItemId(targetItemPath)
 
     const text = event.clipboardData.getData('text/plain')
 
@@ -101,8 +103,12 @@ export function onPaste(event: ClipboardEvent) {
 
         // ターゲットを更新する
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-        if (belowItemPath !== undefined) {
-          CurrentState.setTargetItemPath(belowItemPath)
+        assertNonUndefined(belowItemPath)
+        CurrentState.setTargetItemPath(belowItemPath)
+
+        // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+        if (CurrentState.isEmptyTextItem(targetItemId)) {
+          CurrentState.deleteItem(targetItemId)
         }
 
         Rerenderer.instance.rerender()
@@ -121,8 +127,12 @@ export function onPaste(event: ClipboardEvent) {
 
       // ターゲットを更新する
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      if (belowItemPath !== undefined) {
-        CurrentState.setTargetItemPath(belowItemPath)
+      assertNonUndefined(belowItemPath)
+      CurrentState.setTargetItemPath(belowItemPath)
+
+      // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+      if (CurrentState.isEmptyTextItem(targetItemId)) {
+        CurrentState.deleteItem(targetItemId)
       }
 
       Rerenderer.instance.rerender()
@@ -140,12 +150,14 @@ export function onPaste(event: ClipboardEvent) {
         const newItemId = CurrentState.createImageItem()
         // TODO: Gyazoの画像はpngとは限らない
         CurrentState.setImageItemUrl(newItemId, text + '.png')
-        CurrentState.insertBelowItem(targetItemPath, newItemId)
+        const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
         // ターゲットを更新する
-        const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-        if (belowItemPath !== undefined) {
-          CurrentState.setTargetItemPath(belowItemPath)
+        CurrentState.setTargetItemPath(belowItemPath)
+
+        // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+        if (CurrentState.isEmptyTextItem(targetItemId)) {
+          CurrentState.deleteItem(targetItemId)
         }
 
         Rerenderer.instance.rerender()
@@ -154,12 +166,14 @@ export function onPaste(event: ClipboardEvent) {
       } else {
         const newItemId = CurrentState.createTextItem()
         CurrentState.setTextItemDomishObjects(newItemId, List.of({type: 'text', textContent: text}))
-        CurrentState.insertBelowItem(targetItemPath, newItemId)
+        const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
         // ターゲットを更新する
-        const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-        if (belowItemPath !== undefined) {
-          CurrentState.setTargetItemPath(belowItemPath)
+        CurrentState.setTargetItemPath(belowItemPath)
+
+        // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+        if (CurrentState.isEmptyTextItem(targetItemId)) {
+          CurrentState.deleteItem(targetItemId)
         }
 
         Rerenderer.instance.rerender()
