@@ -195,10 +195,7 @@ export function moveItemDownward() {
   }
 }
 
-/**
- * 兄弟リスト内でアイテムを上に移動するコマンド。
- * 兄が居ない場合はmoveItemUpwardコマンドと等価。
- */
+/** 兄弟指向でアイテムを上に移動するコマンド */
 export function moveItemToPrevSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
@@ -222,14 +219,47 @@ export function moveItemToPrevSibling() {
     // キャレット位置、テキスト選択範囲を維持する
     Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
+    // 次のようなツリーの中でDを上に動かす際、Aの弟ではなくBの弟にする。
+    // A
+    //   B
+    // C
+    //   D
+    const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+    if (aboveItemPath !== undefined) {
+      const knightItemPath = CurrentState.findPrevSiblingItemPath(aboveItemPath)
+      if (knightItemPath !== undefined) {
+        if (!CurrentState.getDisplayingChildItemIds(knightItemPath).isEmpty()) {
+          const oldParentItemId = ItemPath.getItemId(aboveItemPath)
+          const newParentItemId = ItemPath.getItemId(knightItemPath)
+
+          for (const selectedItemPath of selectedItemPaths) {
+            const selectedItemId = ItemPath.getItemId(selectedItemPath)
+            // 既存の親子関係を削除
+            const edge = CurrentState.removeItemGraphEdge(oldParentItemId, selectedItemId)
+            // 兄の上に配置
+            CurrentState.insertLastChildItem(newParentItemId, selectedItemId, edge)
+
+            CurrentState.updateItemTimestamp(selectedItemId)
+          }
+
+          // focusItemPathとanchorItemPathを更新
+          const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+          CurrentState.setTargetItemPathOnly(knightItemPath.push(targetItemId))
+          const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
+          CurrentState.setAnchorItemPath(knightItemPath.push(anchorItemId))
+
+          // キャレット位置、テキスト選択範囲を維持する
+          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+          return
+        }
+      }
+    }
+
     moveItemUpward()
   }
 }
 
-/**
- * 兄弟リスト内でアイテムを下に移動するコマンド。
- * 弟が居ない場合はmoveItemDownwardコマンドと等価。
- */
+/** 兄弟指向でアイテムを下に移動するコマンド */
 export function moveItemToNextSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(selectedItemPaths.last())
