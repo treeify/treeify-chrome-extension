@@ -6,7 +6,7 @@ import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import {ItemId, TabId} from 'src/TreeifyTab/basicType'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -56,7 +56,8 @@ export function onCreated(tab: Tab) {
       const targetItemPath = CurrentState.getTargetItemPath()
       const targetItemId = ItemPath.getItemId(targetItemPath)
 
-      if (url === 'chrome://newtab/' || tab.openerTabId === undefined) {
+      const openerItemId = getOpenerItemId(url, tab.openerTabId)
+      if (openerItemId === undefined) {
         const newItemPath = CurrentState.insertBelowItem(targetItemPath, newWebPageItemId)
         if (tab.active) {
           CurrentState.setTargetItemPath(newItemPath)
@@ -67,9 +68,6 @@ export function onCreated(tab: Tab) {
           }
         }
       } else {
-        const openerItemId = External.instance.tabItemCorrespondence.getItemIdBy(tab.openerTabId)
-        assertNonUndefined(openerItemId)
-
         // openerの最後の子として追加する
         CurrentState.insertLastChildItem(openerItemId, newWebPageItemId)
 
@@ -99,6 +97,15 @@ export function onCreated(tab: Tab) {
 
     Rerenderer.instance.rerender()
   })
+}
+
+// どのウェブページアイテムから開かれたタブかを返す
+function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | undefined {
+  if (url === 'chrome://newtab/' || openerTabId === undefined) {
+    return undefined
+  } else {
+    return External.instance.tabItemCorrespondence.getItemIdBy(openerTabId)
+  }
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
