@@ -133,6 +133,7 @@
   /* ウェブページアイテムのタイトル */
   .main-area-web-page-content_title {
     cursor: default;
+    user-select: none;
 
     overflow-x: hidden;
     white-space: nowrap;
