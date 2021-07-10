@@ -1,6 +1,6 @@
 <script lang="ts">
   import {MainAreaBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
-  
+
   export let props: MainAreaSpoolProps
 
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
@@ -32,15 +32,14 @@
 
 <style>
   :root {
-    /* バレットの外側の円の直径は{@link MainAreaSpoolProps.ts}で動的に設定している */
     /* バレットの外側の円の色 */
     --main-area-bullet-outer-circle-color: hsl(0, 0%, 85%);
     /* バレットの外側の円のマウスホバー時の色 */
     --main-area-bullet-outer-circle-hover-color: hsl(0, 0%, 75%);
     /* バレットの内側の円の直径 */
-    --main-area-bullet-inner-circle-diameter: 0.4em;
+    --main-area-bullet-inner-circle-diameter: 0.36em;
     /* バレットの内側の円の色 */
-    --main-area-bullet-inner-circle-color: hsl(0, 0%, 45%);
+    --main-area-bullet-inner-circle-color: hsl(0, 0%, 50%);
     /* バレットの内側の円のマウスホバー時の色 */
     --main-area-bullet-inner-circle-hover-color: hsl(0, 0%, 0%);
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
