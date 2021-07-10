@@ -81,6 +81,7 @@ export function extractPlainText(itemPath: ItemPath): string {
 
 /** 複数行のテキストをできるだけ良い形でTreeifyに取り込む */
 export function pasteMultilineText(text: string) {
+  const targetItemPath = CurrentState.getTargetItemPath()
   const lines = removeRedundantIndent(text).split(/\r?\n/)
 
   for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
@@ -89,8 +90,15 @@ export function pasteMultilineText(text: string) {
       // インデント形式のテキストとして認識できた場合
       const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
       for (const rootItemId of rootItemIds.reverse()) {
-        CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), rootItemId)
+        CurrentState.insertBelowItem(targetItemPath, rootItemId)
       }
+
+      // ターゲットを更新する
+      const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+      if (belowItemPath !== undefined) {
+        CurrentState.setTargetItemPath(belowItemPath)
+      }
+
       Rerenderer.instance.rerender()
       return
     }
@@ -98,8 +106,15 @@ export function pasteMultilineText(text: string) {
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
   for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
-    CurrentState.insertBelowItem(CurrentState.getTargetItemPath(), itemId)
+    CurrentState.insertBelowItem(targetItemPath, itemId)
   }
+
+  // ターゲットを更新する
+  const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+  if (belowItemPath !== undefined) {
+    CurrentState.setTargetItemPath(belowItemPath)
+  }
+
   Rerenderer.instance.rerender()
 }
 

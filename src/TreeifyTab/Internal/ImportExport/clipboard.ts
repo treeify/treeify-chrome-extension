@@ -97,6 +97,12 @@ export function onPaste(event: ClipboardEvent) {
           }
         }
 
+        // ターゲットを更新する
+        const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+        if (belowItemPath !== undefined) {
+          CurrentState.setTargetItemPath(belowItemPath)
+        }
+
         Rerenderer.instance.rerender()
         return
       } else {
@@ -110,6 +116,13 @@ export function onPaste(event: ClipboardEvent) {
       for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
         CurrentState.insertBelowItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
       }
+
+      // ターゲットを更新する
+      const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+      if (belowItemPath !== undefined) {
+        CurrentState.setTargetItemPath(belowItemPath)
+      }
+
       Rerenderer.instance.rerender()
       return
     }
@@ -126,6 +139,13 @@ export function onPaste(event: ClipboardEvent) {
         // TODO: Gyazoの画像はpngとは限らない
         CurrentState.setImageItemUrl(newItemId, text + '.png')
         CurrentState.insertBelowItem(targetItemPath, newItemId)
+
+        // ターゲットを更新する
+        const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+        if (belowItemPath !== undefined) {
+          CurrentState.setTargetItemPath(belowItemPath)
+        }
+
         Rerenderer.instance.rerender()
       } else {
         document.execCommand('insertText', false, text)
