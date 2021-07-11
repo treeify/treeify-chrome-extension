@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {
@@ -5,7 +6,11 @@ import {
   setDomSelection,
   TextItemSelection,
 } from 'src/TreeifyTab/External/domTextSelection'
+import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {Database} from 'src/TreeifyTab/Internal/Database'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import {tick} from 'svelte'
 import {Readable, writable} from 'svelte/store'
@@ -30,6 +35,8 @@ export class Rerenderer {
   // 値の内容に意味はないが、プリミティブ値だと更新イベントが起きないので{}にした。
   readonly #rerenderingPulse = writable({})
 
+  readonly mutatedPropertyPaths = new Set<PropertyPath>()
+
   // 次の描画が完了した際に設定すべきテキスト選択範囲
   private pendingTextItemSelection: TextItemSelection | undefined
 
@@ -47,6 +54,14 @@ export class Rerenderer {
     document.title = CurrentState.deriveTreeifyTabTitle()
 
     this.#rerenderingPulse.set({})
+
+    // IndexedDBを更新
+    const chunks = List(this.mutatedPropertyPaths)
+      .map((propertyPath) => Chunk.convertToChunkId(propertyPath))
+      .toSet()
+      .map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
+    Database.writeChunks(chunks.toList())
+    this.mutatedPropertyPaths.clear()
 
     // DOM更新完了後に実行される
     tick().then(() => {
@@ -109,5 +124,9 @@ export class Rerenderer {
   /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
   requestSetCaretDistanceAfterRendering(distance: integer) {
     this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
+  }
+
+  onMutateState(propertyPath: PropertyPath) {
+    this.mutatedPropertyPaths.add(propertyPath)
   }
 }

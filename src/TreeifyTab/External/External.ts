@@ -5,8 +5,6 @@ import {ItemId} from 'src/TreeifyTab/basicType'
 import {DataFolder} from 'src/TreeifyTab/External/DataFolder'
 import {TabItemCorrespondence} from 'src/TreeifyTab/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
-import {Database} from 'src/TreeifyTab/Internal/Database'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -64,14 +62,9 @@ export class External {
   }
 
   onMutateState(propertyPath: PropertyPath) {
-    const chunkId = Chunk.convertToChunkId(propertyPath)
-
-    // IndexedDBに随時書き込む
-    Database.writeChunk(Chunk.create(Internal.instance.state, chunkId))
-
     if (this.dataFolder !== undefined) {
       // データフォルダへの差分書き込みの対象箇所を伝える
-      this.pendingMutatedChunkIds.add(chunkId)
+      this.pendingMutatedChunkIds.add(Chunk.convertToChunkId(propertyPath))
     }
   }
 

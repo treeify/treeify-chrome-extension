@@ -106,6 +106,7 @@ export async function restart(state: State) {
 
 function onMutateState(propertyPath: PropertyPath) {
   External.instance.onMutateState(propertyPath)
+  Rerenderer.instance.onMutateState(propertyPath)
 }
 
 function onClickContextMenu(info: OnClickData) {
