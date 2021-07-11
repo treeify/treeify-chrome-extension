@@ -1,17 +1,26 @@
+import {integer} from 'src/Common/integer'
+import {ItemId} from 'src/TreeifyTab/basicType'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type ItemDragData = {
+  type: 'ItemDragData'
   itemPath: ItemPath
 }
 
-export let itemDragData: ItemDragData | undefined
+type ImageBottomDragData = {
+  type: 'ImageBottomDragData'
+  itemId: ItemId
+  imageRectTop: integer
+}
+
+export let currentDragData: ItemDragData | ImageBottomDragData | undefined
 
 /**
  * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
  * TODO:標準のドラッグアンドドロップを用いない理由を説明する
  */
-export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
+export function dragItem(element: HTMLElement, itemPath: ItemPath) {
   let isAfterMouseDown = false
 
   function onMouseDown(event: MouseEvent) {
@@ -21,7 +30,7 @@ export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
   }
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && isAfterMouseDown) {
-      itemDragData = {itemPath}
+      currentDragData = {type: 'ItemDragData', itemPath}
       Rerenderer.instance.rerender()
     }
     isAfterMouseDown = false
@@ -43,12 +52,12 @@ export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
  */
 export function onItemDrop(
   element: HTMLElement,
-  onDrop: (event: MouseEvent, data: ItemDragData) => void
+  onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 ) {
   function onMouseUp(event: MouseEvent) {
-    if (itemDragData !== undefined) {
-      onDrop(event, itemDragData)
-      itemDragData = undefined
+    if (currentDragData?.type === 'ItemDragData') {
+      onDrop(event, currentDragData.itemPath)
+      currentDragData = undefined
       Rerenderer.instance.rerender()
     }
   }
@@ -61,6 +70,55 @@ export function onItemDrop(
   }
 }
 
+export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
+  let isAfterMouseDown = false
+
+  function onMouseDown(event: MouseEvent) {
+    if (event.buttons === 1) {
+      isAfterMouseDown = true
+    }
+  }
+  function onMouseMove(event: MouseEvent) {
+    if (event.buttons === 1 && isAfterMouseDown) {
+      // ドラッグ開始
+      currentDragData = {
+        type: 'ImageBottomDragData',
+        itemId,
+        imageRectTop: element.getBoundingClientRect().top,
+      }
+      Rerenderer.instance.rerender()
+    }
+    isAfterMouseDown = false
+  }
+
+  element.addEventListener('mousedown', onMouseDown)
+  element.addEventListener('mousemove', onMouseMove)
+  return {
+    destroy() {
+      element.removeEventListener('mousedown', onMouseDown)
+      element.removeEventListener('mousemove', onMouseMove)
+    },
+  }
+}
+
+export function onDragImageBottom(
+  element: HTMLElement,
+  onDrag: (event: MouseEvent, itemId: ItemId, imageRectTop: integer) => void
+) {
+  function onMouseMove(event: MouseEvent) {
+    if (event.buttons === 1 && currentDragData?.type === 'ImageBottomDragData') {
+      onDrag(event, currentDragData.itemId, currentDragData.imageRectTop)
+    }
+  }
+
+  element.addEventListener('mousemove', onMouseMove)
+  return {
+    destroy() {
+      element.removeEventListener('mousemove', onMouseMove)
+    },
+  }
+}
+
 /**
  * ドラッグアンドドロップの状態を正確に追跡するためには、
  * ドラッグやドロップの対象外となる要素の上でもマウスイベントを取得する必要がある。
@@ -68,14 +126,14 @@ export function onItemDrop(
  */
 export function dragStateResetter(element: HTMLElement) {
   function onMouseUp(event: MouseEvent) {
-    if (itemDragData !== undefined) {
-      itemDragData = undefined
+    if (currentDragData !== undefined) {
+      currentDragData = undefined
       Rerenderer.instance.rerender()
     }
   }
   function onMouseMove(event: MouseEvent) {
-    if (!(event.buttons & 1) && itemDragData !== undefined) {
-      itemDragData = undefined
+    if (!(event.buttons & 1) && currentDragData !== undefined) {
+      currentDragData = undefined
       Rerenderer.instance.rerender()
     }
   }

@@ -2,7 +2,7 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import {onItemDragStart} from '../dragAndDrop'
+  import {dragItem} from '../dragAndDrop'
   import MainAreaContent from './MainAreaContent.svelte'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaNodeProps} from './MainAreaNodeProps'
@@ -45,7 +45,7 @@
     <div
       class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
-      use:onItemDragStart={props.itemPath}
+      use:dragItem={props.itemPath}
     >
       <MainAreaSpool props={props.spoolProps} />
     </div>

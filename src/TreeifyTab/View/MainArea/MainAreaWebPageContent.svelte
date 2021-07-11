@@ -1,6 +1,6 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
-  import {onItemDragStart} from '../dragAndDrop'
+  import {dragItem} from '../dragAndDrop'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
 
@@ -40,7 +40,7 @@
       class:unread={props.isUnread}
       title={props.title}
       on:click={props.onClickTitle}
-      use:onItemDragStart={props.itemPath}
+      use:dragItem={props.itemPath}
     >
       {props.title}
     </div>

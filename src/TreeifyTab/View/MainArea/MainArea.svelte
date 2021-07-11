@@ -1,5 +1,6 @@
 <script lang="ts">
   import {onCopy, onCut, onPaste} from '../../Internal/ImportExport/clipboard'
+  import {onDragImageBottom} from '../dragAndDrop'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaProps} from './MainAreaProps'
 
@@ -13,6 +14,7 @@
   on:copy={onCopy}
   on:cut={onCut}
   on:paste={onPaste}
+  use:onDragImageBottom={props.onDragImageBottom}
 >
   {#key props.rootNodeProps.itemPath.toString()}
     <MainAreaNode props={props.rootNodeProps} />
