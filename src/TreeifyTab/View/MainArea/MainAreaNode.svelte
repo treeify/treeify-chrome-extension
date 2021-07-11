@@ -33,7 +33,11 @@
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
 </script>
 
-<div class="main-area-node" class:multi-selected={props.selected === 'multi'}>
+<div
+  class="main-area-node"
+  class:multi-selected={props.selected === 'multi'}
+  id={JSON.stringify(props.itemPath)}
+>
   {#if props.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
