@@ -11,15 +11,14 @@ import {itemDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 export type DragImageProps = {
   mousePosition: Coordinate
   itemDragData: ItemDragData
-  onDrop: (event: MouseEvent, data: ItemDragData) => void
+  onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
 export function createDragImageProps(): DragImageProps | undefined {
   if (itemDragData === undefined || External.instance.mousePosition === undefined) return undefined
 
-  function onDrop(event: MouseEvent, data: ItemDragData) {
+  function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
     doWithErrorCapture(() => {
-      const draggedItemPath = data.itemPath
       // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
       const parentItemId = ItemPath.getParentItemId(draggedItemPath)
       if (parentItemId === undefined) return
@@ -37,7 +36,6 @@ export function createDragImageProps(): DragImageProps | undefined {
         const spoolDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
 
         const spoolDroppedItemId = ItemPath.getItemId(spoolDroppedItemPath)
-        const draggedItemPath = data.itemPath
         const draggedItemId = ItemPath.getItemId(draggedItemPath)
         const isDisplayingChildItemIds =
           !CurrentState.getDisplayingChildItemIds(spoolDroppedItemPath).isEmpty()

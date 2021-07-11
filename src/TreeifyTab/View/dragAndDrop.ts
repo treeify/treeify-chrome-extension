@@ -43,11 +43,11 @@ export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
  */
 export function onItemDrop(
   element: HTMLElement,
-  onDrop: (event: MouseEvent, data: ItemDragData) => void
+  onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 ) {
   function onMouseUp(event: MouseEvent) {
     if (itemDragData !== undefined) {
-      onDrop(event, itemDragData)
+      onDrop(event, itemDragData.itemPath)
       itemDragData = undefined
       Rerenderer.instance.rerender()
     }
