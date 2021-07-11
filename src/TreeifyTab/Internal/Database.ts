@@ -124,7 +124,10 @@ export namespace Database {
   }
 
   export async function writeChunks(chunks: List<Chunk>, givenObjectStore?: IDBObjectStore) {
-    await Promise.all(chunks.map((chunk) => writeChunk(chunk, givenObjectStore)))
+    const objectStore =
+      givenObjectStore ??
+      getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+    await Promise.all(chunks.map((chunk) => writeChunk(chunk, objectStore)))
   }
 
   // IndexedDBではImmutable.jsのList型をそのまま保存できないので一旦配列に変換する
