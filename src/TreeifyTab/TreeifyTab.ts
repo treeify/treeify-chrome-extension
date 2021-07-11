@@ -1,4 +1,4 @@
-import {TabId} from 'src/TreeifyTab/basicType'
+import Tab = chrome.tabs.Tab
 
 export namespace TreeifyTab {
   /**
@@ -6,12 +6,12 @@ export namespace TreeifyTab {
    * すでに開かれている場合はTreeifyタブを最前面化する。
    */
   export async function open() {
-    const treeifyTabId = await findTabId()
-    if (treeifyTabId !== undefined) {
+    const treeifyTab = await findTab()
+    if (treeifyTab?.id !== undefined) {
       // すでに開かれている場合、Treeifyタブを最前面にする
-      await chrome.tabs.update(treeifyTabId, {active: true})
-      // TODO: Treeifyタブが所属するウィンドウをフォーカスする
-      // await chrome.windows.update(treeifyWindowId, {focused: true})
+      await chrome.tabs.update(treeifyTab.id, {active: true})
+      // Treeifyタブが所属するウィンドウをフォーカスする
+      await chrome.windows.update(treeifyTab.windowId, {focused: true})
     } else {
       // Treeifyタブを開く
       await chrome.tabs.create({
@@ -20,14 +20,9 @@ export namespace TreeifyTab {
     }
   }
 
-  export async function findTabId(): Promise<TabId | undefined> {
+  async function findTab(): Promise<Tab | undefined> {
     const windows = await chrome.windows.getAll({populate: true})
     const tabs = windows.flatMap((window) => window.tabs ?? [])
-    for (const tab of tabs) {
-      if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) {
-        return tab.id
-      }
-    }
-    return undefined
+    return tabs.find((tab) => tab.url === chrome.runtime.getURL('TreeifyTab/index.html'))
   }
 }
