@@ -2,10 +2,13 @@
   import Cite from '../Cite.svelte'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaImageContentProps} from './MainAreaImageContentProps'
-  
+
   export let props: MainAreaImageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
+  $: style = `
+    height: ${props.height};
+  `
 </script>
 
 <div
@@ -16,7 +19,7 @@
   on:mousedown={props.onClick}
 >
   <div class="main-area-image-content_image-and-caption">
-    <img class="main-area-image-content_image" src={props.url} />
+    <img class="main-area-image-content_image" {style} src={props.url} />
     <div class="main-area-image-content_caption">{props.caption}</div>
   </div>
   {#if props.citeProps !== undefined}
@@ -41,9 +44,8 @@
   }
 
   .main-area-image-content_image {
-    /* 画像が表示領域の横幅をはみ出さないよう設定 */
-    max-width: 100%;
-    height: auto;
+    width: auto;
+    /* heightはstyle属性で指定する */
 
     /* Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策 */
     border: 1px solid hsl(0, 0%, 90%);
