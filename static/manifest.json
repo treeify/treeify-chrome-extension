@@ -8,7 +8,7 @@
   },
   "action": {
     "default_icon": {
-      "19": "app-icon/19px.png"
+      "16": "app-icon/16px.png"
     },
     "default_title": "Treeify",
     "default_popup": "BrowserAction/index.html"
