@@ -1,5 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
+import {Device} from 'src/TreeifyTab/Device'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
@@ -15,6 +16,8 @@ export function createImageItem(): ItemId {
 
   const newItem: Item = {
     itemType: ItemType.IMAGE,
+    device: Device.getId(),
+    disn: Device.generateDisn(),
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),

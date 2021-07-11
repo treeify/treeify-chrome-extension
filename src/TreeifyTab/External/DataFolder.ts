@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import md5 from 'md5'
 import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
-import {DeviceId} from 'src/TreeifyTab/DeviceId'
+import {Device, DeviceId} from 'src/TreeifyTab/Device'
 import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -59,16 +59,16 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   private static devicesFolderPath = List.of('Devices')
-  private static getDeviceFolderPath(deviceId = DeviceId.get()): FilePath {
+  private static getDeviceFolderPath(deviceId = Device.getId()): FilePath {
     return this.devicesFolderPath.push(deviceId)
   }
-  private static getChunkPacksFolderPath(deviceId = DeviceId.get()): FilePath {
+  private static getChunkPacksFolderPath(deviceId = Device.getId()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
   }
-  private static getChunkPackFilePath(fileName: string, deviceId = DeviceId.get()): FilePath {
+  private static getChunkPackFilePath(fileName: string, deviceId = Device.getId()): FilePath {
     return this.getChunkPacksFolderPath(deviceId).push(fileName)
   }
-  private static getMetadataFilePath(deviceId = DeviceId.get()): FilePath {
+  private static getMetadataFilePath(deviceId = Device.getId()): FilePath {
     return this.getDeviceFolderPath(deviceId).push('metadata.json')
   }
 
@@ -97,7 +97,7 @@ export class DataFolder {
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
   async readAllChunks(): Promise<List<Chunk>> {
-    const fileNames = await this.getChunkFileNames(DeviceId.get())
+    const fileNames = await this.getChunkFileNames(Device.getId())
 
     // 全チャンクパックファイルを読み込み
     const chunkPackPromises = fileNames.map((fileName) => this.readChunkPackFile(fileName))
@@ -212,8 +212,8 @@ export class DataFolder {
   async copyFrom(deviceId: DeviceId) {
     // 自デバイスフォルダをクリア（全ファイルとフォルダを削除）
     const devicesFolder = await this.getFolderHandle(DataFolder.devicesFolderPath)
-    await devicesFolder.removeEntry(DeviceId.get(), {recursive: true})
-    await devicesFolder.getDirectoryHandle(DeviceId.get(), {create: true})
+    await devicesFolder.removeEntry(Device.getId(), {recursive: true})
+    await devicesFolder.getDirectoryHandle(Device.getId(), {create: true})
 
     // 各ファイルを自デバイスフォルダにコピーする準備
     const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
@@ -260,7 +260,7 @@ export class DataFolder {
   // 全ての他デバイスフォルダのフォルダ名もといデバイスIDを返す
   private async getAllOtherDeviceIds(): Promise<List<DeviceId>> {
     const deviceIds = await this.getAllExistingDeviceIds()
-    return deviceIds.filter((deviceId) => deviceId !== DeviceId.get())
+    return deviceIds.filter((deviceId) => deviceId !== Device.getId())
   }
 
   private async getAllOtherDeviceTimestamps(): Promise<{[K in DeviceId]: Timestamp}> {
@@ -310,7 +310,7 @@ export class DataFolder {
   }
 
   // 全チャンクファイルのファイル名のリストを返す
-  private async getChunkFileNames(deviceId = DeviceId.get()): Promise<List<string>> {
+  private async getChunkFileNames(deviceId = Device.getId()): Promise<List<string>> {
     const chunksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
     const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
     const fileNames = []
@@ -364,12 +364,12 @@ export class DataFolder {
 
   // メタデータファイルの内容を返す。
   // ファイルが存在しない場合はundefinedを返す。
-  private async readMetadataFile(deviceId = DeviceId.get()): Promise<Metadata | undefined> {
+  private async readMetadataFile(deviceId = Device.getId()): Promise<Metadata | undefined> {
     const metadataFilePath = DataFolder.getMetadataFilePath(deviceId)
     const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
       const fileContent = await this.readTextFile(metadataFilePath)
-      if (deviceId === DeviceId.get()) {
+      if (deviceId === Device.getId()) {
         this.setCacheEntry(metadataFilePath, fileContent)
       }
 

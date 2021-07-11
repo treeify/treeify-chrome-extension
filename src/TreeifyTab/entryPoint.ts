@@ -1,4 +1,4 @@
-import {DeviceId} from 'src/TreeifyTab/DeviceId'
+import {Device} from 'src/TreeifyTab/Device'
 import {doAsyncWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {registerLanguages} from 'src/TreeifyTab/highlightJs'
 import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
@@ -6,7 +6,7 @@ import {Database} from 'src/TreeifyTab/Internal/Database'
 import {startup} from 'src/TreeifyTab/startup'
 
 doAsyncWithErrorCapture(async () => {
-  console.log('デバイスID = ' + DeviceId.get())
+  console.log('デバイスID = ' + Device.getId())
 
   chrome.contextMenus.create({
     id: 'selection',
