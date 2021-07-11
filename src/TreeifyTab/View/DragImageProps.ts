@@ -1,4 +1,5 @@
 import {is, List} from 'immutable'
+import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Coordinate, integer} from 'src/Common/integer'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
@@ -26,14 +27,62 @@ export function createDragImageProps(): DragImageProps | undefined {
       const itemElement = searchElementByYCoordinate(event.clientY)
       if (itemElement === undefined) return
 
+      const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
+
       const rect = itemElement.getBoundingClientRect()
       if (event.clientX < rect.x) {
         // Spoolへのドロップの場合
-        // TODO: Spoolへのドロップ処理を実装する
+
+        // どのアイテムのSpoolにドロップしたかを探索する
+        const spoolDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+
+        const spoolDroppedItemId = ItemPath.getItemId(spoolDroppedItemPath)
+        const draggedItemPath = data.itemPath
+        const draggedItemId = ItemPath.getItemId(draggedItemPath)
+        const isDisplayingChildItemIds =
+          !CurrentState.getDisplayingChildItemIds(spoolDroppedItemPath).isEmpty()
+
+        if (is(spoolDroppedItemPath.take(draggedItemPath.size), draggedItemPath)) {
+          // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
+          // 下記の2パターンが該当する。
+          // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
+          // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
+          return
+        }
+
+        // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
+        const parentItemId = ItemPath.getParentItemId(draggedItemPath)
+        if (parentItemId === undefined) return
+
+        if (event.altKey) {
+          if (!CurrentState.isSibling(spoolDroppedItemPath, draggedItemPath)) {
+            // エッジを追加する（トランスクルード）
+            if (isDisplayingChildItemIds) {
+              CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId)
+            } else {
+              CurrentState.insertFirstChildItem(spoolDroppedItemId, draggedItemId)
+            }
+          }
+        } else {
+          // targetItemPathが実在しなくなるので退避
+          const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
+          assertNonUndefined(aboveItemPath)
+          CurrentState.setTargetItemPath(aboveItemPath)
+
+          // エッジを付け替える
+          const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+          if (isDisplayingChildItemIds) {
+            CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId, edge)
+          } else {
+            CurrentState.insertFirstChildItem(spoolDroppedItemId, draggedItemId, edge)
+          }
+        }
+
+        CurrentState.updateItemTimestamp(draggedItemId)
+        Rerenderer.instance.rerender()
       } else {
         // Spool以外の場所へのドロップの場合
 
-        const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
         if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
           // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
           // 下記の2パターンが該当する。
@@ -94,6 +143,7 @@ export function createDragImageProps(): DragImageProps | undefined {
   }
 }
 
+// 指定されたY座標に表示されているアイテムのコンテンツエリアのDOM要素を返す
 function searchElementByYCoordinate(y: integer): HTMLElement | undefined {
   // メインエリア内の全アイテムをリスト化し、Y座標でソート
   const elements = document.getElementsByClassName('main-area-node_content-area')
@@ -108,4 +158,17 @@ function searchElementByYCoordinate(y: integer): HTMLElement | undefined {
     }
   }
   return undefined
+}
+
+// ItemPathの親を辿り、指定されたX座標にSpoolを表示しているItemPathを探索する
+function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath {
+  console.assert(!itemPath.isEmpty())
+
+  const element = document.getElementById(JSON.stringify(itemPath))
+  assertNonNull(element)
+  if (element.getBoundingClientRect().x < x) {
+    return itemPath
+  }
+
+  return searchElementByXCoordinate(itemPath.pop(), x)
 }
