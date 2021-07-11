@@ -9,7 +9,6 @@ import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
-import {ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
@@ -25,7 +24,6 @@ export type MainAreaWebPageContentProps = {
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
-  onDragStart: () => ItemDragData
 }
 
 export function createMainAreaWebPageContentProps(
@@ -146,11 +144,6 @@ export function createMainAreaWebPageContentProps(
             Rerenderer.instance.rerender()
             break
         }
-      })
-    },
-    onDragStart: () => {
-      return doWithErrorCapture(() => {
-        return {itemPath}
       })
     },
   }

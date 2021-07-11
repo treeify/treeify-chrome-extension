@@ -10,13 +10,9 @@ export let itemDragData: ItemDragData | undefined
 
 /**
  * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
- * ドラッグが開始されたときのコールバックをパラメータとして指定する必要がある。
  * TODO:標準のドラッグアンドドロップを用いない理由を説明する
  */
-export function onItemDragStart(
-  element: HTMLElement,
-  onDragStart: (event: MouseEvent) => ItemDragData
-) {
+export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
   let mouseDownPosition: Coordinate | undefined
 
   function onMouseDown(event: MouseEvent) {
@@ -29,7 +25,7 @@ export function onItemDragStart(
       const distance = calculateDistance(mouseDownPosition, {x: event.clientX, y: event.clientY})
       if (distance > 5) {
         mouseDownPosition = undefined
-        itemDragData = onDragStart(event)
+        itemDragData = {itemPath}
         Rerenderer.instance.rerender()
       }
     }

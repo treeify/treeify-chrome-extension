@@ -41,7 +41,7 @@
     <div
       class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
-      use:onItemDragStart={props.onDragStart}
+      use:onItemDragStart={props.itemPath}
     >
       <MainAreaSpool props={props.spoolProps} />
     </div>
