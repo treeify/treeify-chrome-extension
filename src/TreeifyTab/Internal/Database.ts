@@ -124,7 +124,10 @@ export namespace Database {
   }
 
   export async function writeChunks(chunks: List<Chunk>, givenObjectStore?: IDBObjectStore) {
-    await Promise.all(chunks.map((chunk) => writeChunk(chunk, givenObjectStore)))
+    const objectStore =
+      givenObjectStore ??
+      getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+    await Promise.all(chunks.map((chunk) => writeChunk(chunk, objectStore)))
   }
 
   // IndexedDBではImmutable.jsのList型をそのまま保存できないので一旦配列に変換する
@@ -147,7 +150,7 @@ export namespace Database {
   // 与えられたJSONライクオブジェクトに含まれる配列をImmutable.jsのList型に変換する
   function convertArrayToList(value: any): any {
     if (value instanceof Array) {
-      return List(value)
+      return List(value.map(convertArrayToList))
     }
 
     if (value === null) return value
