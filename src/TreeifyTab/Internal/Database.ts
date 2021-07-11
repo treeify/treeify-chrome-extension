@@ -147,7 +147,7 @@ export namespace Database {
   // 与えられたJSONライクオブジェクトに含まれる配列をImmutable.jsのList型に変換する
   function convertArrayToList(value: any): any {
     if (value instanceof Array) {
-      return List(value)
+      return List(value.map(convertArrayToList))
     }
 
     if (value === null) return value
