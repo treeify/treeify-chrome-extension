@@ -31,7 +31,7 @@ export function createMainAreaImageContentProps(
     itemType: ItemType.IMAGE,
     url: imageItem.url,
     caption: imageItem.caption,
-    height: imageItem.heightPx !== null ? `${imageItem.heightPx}px` : 'auto',
+    height: imageItem.heightPx !== null ? `${Math.max(20, imageItem.heightPx)}px` : 'auto',
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {
