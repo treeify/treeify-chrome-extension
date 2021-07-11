@@ -40,7 +40,7 @@
       class:unread={props.isUnread}
       title={props.title}
       on:click={props.onClickTitle}
-      use:onItemDragStart={props.onDragStart}
+      use:onItemDragStart={props.itemPath}
     >
       {props.title}
     </div>

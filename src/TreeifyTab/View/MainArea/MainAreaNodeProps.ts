@@ -12,7 +12,6 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 import {
   createMainAreaContentProps,
   MainAreaContentProps,
@@ -45,7 +44,6 @@ export type MainAreaNodeProps = {
   onMouseDownContentArea: (event: MouseEvent) => void
   onContextMenu: (event: Event) => void
   onClickDeleteButton: (event: MouseEvent) => void
-  onDragStart: () => ItemDragData
   onClickHiddenTabsCount: (event: MouseEvent) => void
 }
 
@@ -127,11 +125,6 @@ export function createMainAreaNodeProps(
           }
         }
         Rerenderer.instance.rerender()
-      })
-    },
-    onDragStart: () => {
-      return doWithErrorCapture(() => {
-        return {itemPath}
       })
     },
     onClickHiddenTabsCount: (event: MouseEvent) => {
