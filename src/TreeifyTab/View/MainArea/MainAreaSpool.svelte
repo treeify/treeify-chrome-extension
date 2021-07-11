@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {onItemDrop} from '../dragAndDrop'
   import {MainAreaBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
 
   export let props: MainAreaSpoolProps
@@ -12,7 +13,7 @@
   `
 </script>
 
-<div class="main-area-spool" on:click={props.onClick}>
+<div class="main-area-spool" on:click={props.onClick} use:onItemDrop={props.onItemDrop}>
   {#if props.bulletState === MainAreaBulletState.EXPANDED}
     <div class="main-area-spool_indent-area">
       <div class="main-area-spool_indent-line" />
