@@ -1,4 +1,3 @@
-import {Coordinate, integer} from 'src/Common/integer'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
@@ -13,22 +12,19 @@ export let itemDragData: ItemDragData | undefined
  * TODO:標準のドラッグアンドドロップを用いない理由を説明する
  */
 export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
-  let mouseDownPosition: Coordinate | undefined
+  let isAfterMouseDown = false
 
   function onMouseDown(event: MouseEvent) {
     if (event.buttons === 1) {
-      mouseDownPosition = {x: event.clientX, y: event.clientY}
+      isAfterMouseDown = true
     }
   }
   function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && mouseDownPosition !== undefined) {
-      const distance = calculateDistance(mouseDownPosition, {x: event.clientX, y: event.clientY})
-      if (distance > 5) {
-        mouseDownPosition = undefined
-        itemDragData = {itemPath}
-        Rerenderer.instance.rerender()
-      }
+    if (event.buttons === 1 && isAfterMouseDown) {
+      itemDragData = {itemPath}
+      Rerenderer.instance.rerender()
     }
+    isAfterMouseDown = false
   }
 
   element.addEventListener('mousedown', onMouseDown)
@@ -39,10 +35,6 @@ export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
       element.removeEventListener('mousemove', onMouseMove)
     },
   }
-}
-
-function calculateDistance(lhs: Coordinate, rhs: Coordinate): integer {
-  return Math.sqrt((lhs.x - rhs.x) ** 2 + (lhs.y - rhs.y) ** 2)
 }
 
 /**
