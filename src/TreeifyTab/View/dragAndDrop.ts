@@ -1,3 +1,5 @@
+import {integer} from 'src/Common/integer'
+import {ItemId} from 'src/TreeifyTab/basicType'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
@@ -6,7 +8,13 @@ export type ItemDragData = {
   itemPath: ItemPath
 }
 
-export let currentDragData: ItemDragData | undefined
+type ImageBottomDragData = {
+  type: 'ImageBottomDragData'
+  itemId: ItemId
+  imageRectTop: integer
+}
+
+export let currentDragData: ItemDragData | ImageBottomDragData | undefined
 
 /**
  * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
@@ -47,7 +55,7 @@ export function onItemDrop(
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 ) {
   function onMouseUp(event: MouseEvent) {
-    if (currentDragData !== undefined) {
+    if (currentDragData?.type === 'ItemDragData') {
       onDrop(event, currentDragData.itemPath)
       currentDragData = undefined
       Rerenderer.instance.rerender()
@@ -58,6 +66,55 @@ export function onItemDrop(
   return {
     destroy() {
       element.removeEventListener('mouseup', onMouseUp)
+    },
+  }
+}
+
+export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
+  let isAfterMouseDown = false
+
+  function onMouseDown(event: MouseEvent) {
+    if (event.buttons === 1) {
+      isAfterMouseDown = true
+    }
+  }
+  function onMouseMove(event: MouseEvent) {
+    if (event.buttons === 1 && isAfterMouseDown) {
+      // ドラッグ開始
+      currentDragData = {
+        type: 'ImageBottomDragData',
+        itemId,
+        imageRectTop: element.getBoundingClientRect().top,
+      }
+      Rerenderer.instance.rerender()
+    }
+    isAfterMouseDown = false
+  }
+
+  element.addEventListener('mousedown', onMouseDown)
+  element.addEventListener('mousemove', onMouseMove)
+  return {
+    destroy() {
+      element.removeEventListener('mousedown', onMouseDown)
+      element.removeEventListener('mousemove', onMouseMove)
+    },
+  }
+}
+
+export function onDragImageBottom(
+  element: HTMLElement,
+  onDrag: (event: MouseEvent, itemId: ItemId, imageRectTop: integer) => void
+) {
+  function onMouseMove(event: MouseEvent) {
+    if (event.buttons === 1 && currentDragData?.type === 'ImageBottomDragData') {
+      onDrag(event, currentDragData.itemId, currentDragData.imageRectTop)
+    }
+  }
+
+  element.addEventListener('mousemove', onMouseMove)
+  return {
+    destroy() {
+      element.removeEventListener('mousemove', onMouseMove)
     },
   }
 }

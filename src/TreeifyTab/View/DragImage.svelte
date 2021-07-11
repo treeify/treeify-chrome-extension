@@ -12,7 +12,7 @@
     top: ${props.mousePosition.y}px;
   `
 
-  $: itemId = ItemPath.getItemId(props.currentDragData.itemPath)
+  $: itemId = ItemPath.getItemId(props.itemPath)
 </script>
 
 <div class="drag-image" use:onItemDrop={props.onDrop}>

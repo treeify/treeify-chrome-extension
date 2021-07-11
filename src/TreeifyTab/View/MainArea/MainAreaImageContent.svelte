@@ -1,5 +1,7 @@
 <script lang="ts">
+  import {ItemPath} from '../../Internal/ItemPath'
   import Cite from '../Cite.svelte'
+  import {dragImageBottom} from '../dragAndDrop'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaImageContentProps} from './MainAreaImageContentProps'
 
@@ -19,7 +21,13 @@
   on:mousedown={props.onClick}
 >
   <div class="main-area-image-content_image-and-caption">
-    <img class="main-area-image-content_image" {style} src={props.url} />
+    <img
+      class="main-area-image-content_image"
+      {style}
+      src={props.url}
+      draggable="false"
+      use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
+    />
     <div class="main-area-image-content_caption">{props.caption}</div>
   </div>
   {#if props.citeProps !== undefined}

@@ -10,12 +10,12 @@ import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 
 export type DragImageProps = {
   mousePosition: Coordinate
-  currentDragData: ItemDragData
+  itemPath: ItemPath
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
 export function createDragImageProps(): DragImageProps | undefined {
-  if (currentDragData === undefined) return undefined
+  if (currentDragData?.type !== 'ItemDragData') return undefined
   if (External.instance.mousePosition === undefined) return undefined
 
   function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
@@ -137,7 +137,7 @@ export function createDragImageProps(): DragImageProps | undefined {
 
   return {
     mousePosition: External.instance.mousePosition,
-    currentDragData,
+    itemPath: currentDragData.itemPath,
     onDrop,
   }
 }

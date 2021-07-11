@@ -17,6 +17,7 @@ import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
+import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
@@ -28,6 +29,7 @@ import {
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps
   onKeyDown: (event: KeyboardEvent) => void
+  onDragImageBottom: (event: MouseEvent, itemId: ItemId, imageRectTop: integer) => void
 }
 
 export function createMainAreaProps(state: State): MainAreaProps {
@@ -52,6 +54,7 @@ export function createMainAreaProps(state: State): MainAreaProps {
   return {
     rootNodeProps: createMainAreaNodeProps(state, footprintRankMap, footprintCount, rootItemPath),
     onKeyDown,
+    onDragImageBottom,
   }
 }
 
@@ -692,4 +695,9 @@ async function undo() {
 
     Rerenderer.instance.rerender()
   }
+}
+
+function onDragImageBottom(event: MouseEvent, itemId: ItemId, imageRectTop: integer) {
+  const heightPx = Math.max(0, event.clientY - imageRectTop)
+  Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
 }
