@@ -20,7 +20,7 @@ export let currentDragData: ItemDragData | ImageBottomDragData | undefined
  * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
  * TODO:標準のドラッグアンドドロップを用いない理由を説明する
  */
-export function onItemDragStart(element: HTMLElement, itemPath: ItemPath) {
+export function dragItem(element: HTMLElement, itemPath: ItemPath) {
   let isAfterMouseDown = false
 
   function onMouseDown(event: MouseEvent) {
