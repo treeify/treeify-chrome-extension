@@ -26,6 +26,7 @@ export function createImageItem(): ItemId {
   const imageItem: ImageItem = {
     url: '',
     caption: '',
+    heightPx: null,
   }
   Internal.instance.mutate(imageItem, PropertyPath.of('imageItems', newItemId))
 

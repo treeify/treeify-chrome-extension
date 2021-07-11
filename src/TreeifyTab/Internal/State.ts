@@ -1,5 +1,6 @@
 import {is, List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
+import {integer} from 'src/Common/integer'
 import {ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
@@ -105,6 +106,8 @@ export type WebPageItem = {
 export type ImageItem = {
   url: string
   caption: string
+  /** 画像の表示領域の高さ指定 */
+  heightPx: integer | null
 }
 
 /** コードブロックアイテムが固有で持つデータの型 */
