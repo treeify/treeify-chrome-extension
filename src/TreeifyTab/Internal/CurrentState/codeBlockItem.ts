@@ -53,3 +53,7 @@ export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
     Internal.instance.mutate(language, PropertyPath.of('codeBlockItems', itemId, 'language'))
   })
 }
+
+export function isEmptyCodeBlockItem(itemId: ItemId): boolean {
+  return Internal.instance.state.codeBlockItems[itemId].code.trim() === ''
+}
