@@ -1,4 +1,4 @@
-import {integer} from 'src/Common/integer'
+import {Coordinate, integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
@@ -16,24 +16,30 @@ type ImageBottomDragData = {
 
 export let currentDragData: ItemDragData | ImageBottomDragData | undefined
 
+// クリックしているつもりなのにドラッグ扱いされてしまう問題に対処するため導入した変数。
+// ドラッグ開始の判断が早すぎるのが原因なので、ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない。
+let mouseDownPosition: Coordinate | undefined
+
 /**
  * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
  * TODO:標準のドラッグアンドドロップを用いない理由を説明する
  */
 export function dragItem(element: HTMLElement, itemPath: ItemPath) {
-  let isAfterMouseDown = false
-
   function onMouseDown(event: MouseEvent) {
     if (event.buttons === 1) {
-      isAfterMouseDown = true
+      mouseDownPosition = {x: event.clientX, y: event.clientY}
     }
   }
   function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && isAfterMouseDown) {
-      currentDragData = {type: 'ItemDragData', itemPath}
-      Rerenderer.instance.rerender()
+    if (event.buttons === 1 && mouseDownPosition !== undefined) {
+      // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
+      const distance = calculateDistance(mouseDownPosition, {x: event.clientX, y: event.clientY})
+      if (distance > 5) {
+        mouseDownPosition = undefined
+        currentDragData = {type: 'ItemDragData', itemPath}
+        Rerenderer.instance.rerender()
+      }
     }
-    isAfterMouseDown = false
   }
 
   element.addEventListener('mousedown', onMouseDown)
@@ -44,6 +50,10 @@ export function dragItem(element: HTMLElement, itemPath: ItemPath) {
       element.removeEventListener('mousemove', onMouseMove)
     },
   }
+}
+
+function calculateDistance(lhs: Coordinate, rhs: Coordinate): integer {
+  return Math.sqrt((lhs.x - rhs.x) ** 2 + (lhs.y - rhs.y) ** 2)
 }
 
 /**
