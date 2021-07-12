@@ -11,6 +11,7 @@ export type TexEditDialogProps = {
   code: string
   onClickFinishButton: () => void
   onClickCancelButton: () => void
+  onCloseDialog: () => void
   onKeyDown: (event: KeyboardEvent) => void
 }
 
@@ -48,8 +49,10 @@ export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogPr
     onClickCancelButton: () => {
       // ダイアログを閉じる
       CurrentState.setDialog(null)
+      onCloseDialog()
       Rerenderer.instance.rerender()
     },
+    onCloseDialog,
     onKeyDown: (event) => {
       switch (InputId.fromKeyboardEvent(event)) {
         case '1000Enter':
@@ -57,5 +60,11 @@ export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogPr
           break
       }
     },
+  }
+}
+
+function onCloseDialog() {
+  if (CurrentState.isEmptyTexItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+    NullaryCommand.deleteItem()
   }
 }

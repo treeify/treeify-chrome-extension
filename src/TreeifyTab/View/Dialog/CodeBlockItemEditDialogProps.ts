@@ -10,6 +10,7 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
   onClickFinishButton: () => void
   onClickCancelButton: () => void
+  onCloseDialog: () => void
   onKeyDown: (event: KeyboardEvent) => void
 }
 
@@ -51,8 +52,10 @@ export function createCodeBlockItemEditDialogProps(
     onClickCancelButton: () => {
       // ダイアログを閉じる
       CurrentState.setDialog(null)
+      onCloseDialog()
       Rerenderer.instance.rerender()
     },
+    onCloseDialog,
     onKeyDown: (event) => {
       switch (InputId.fromKeyboardEvent(event)) {
         case '1000Enter':
@@ -60,5 +63,11 @@ export function createCodeBlockItemEditDialogProps(
           break
       }
     },
+  }
+}
+
+function onCloseDialog() {
+  if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+    NullaryCommand.deleteItem()
   }
 }

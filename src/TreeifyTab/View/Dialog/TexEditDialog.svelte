@@ -15,7 +15,7 @@
   }
 </script>
 
-<CommonDialog title="TeX編集">
+<CommonDialog title="TeX編集" onClose={props.onCloseDialog}>
   <div class="tex-edit-dialog_content" on:keydown={props.onKeyDown}>
     <div
       class="tex-edit-dialog_code"
