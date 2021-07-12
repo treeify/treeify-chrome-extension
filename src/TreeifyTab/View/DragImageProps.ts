@@ -34,7 +34,9 @@ function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
 
       onDropIntoMainArea(event, draggedItemPath)
     } else {
-      // TODO: 左サイドバーにドロップされた場合
+      // 左サイドバーにドロップされた場合
+
+      onDropIntoLeftSidebar(event, draggedItemPath)
     }
   })
 }
@@ -44,7 +46,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   const parentItemId = ItemPath.getParentItemId(draggedItemPath)
   if (parentItemId === undefined) return
 
-  const itemElement = searchElementByYCoordinate(event.clientY)
+  const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
   if (itemElement === undefined) return
 
   const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
@@ -154,8 +156,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   }
 }
 
-// 指定されたY座標に表示されているアイテムのコンテンツエリアのDOM要素を返す
-function searchElementByYCoordinate(y: integer): HTMLElement | undefined {
+// メインエリア内で指定されたY座標に表示されているアイテムのコンテンツエリアのDOM要素を返す
+function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined {
   // メインエリア内の全アイテムをリスト化し、Y座標でソート
   const elements = document.getElementsByClassName('main-area-node_content-area')
   const sortedElements = List(elements).sortBy((element) => {
@@ -182,4 +184,56 @@ function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath {
   }
 
   return searchElementByXCoordinate(itemPath.pop(), x)
+}
+
+function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
+  const element = searchLeftSidebarElementByYCoordinate(event.clientY)
+  if (element === undefined) return
+
+  assertNonUndefined(element.dataset.itemId)
+  const itemId = parseInt(element.dataset.itemId)
+
+  const draggedItemId = ItemPath.getItemId(draggedItemPath)
+
+  // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
+  // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
+  if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
+
+  if (event.altKey) {
+    // エッジを追加する（トランスクルード）
+    // TODO: エッジを追加していいかどうか整合性チェック
+    CurrentState.insertFirstChildItem(itemId, draggedItemId)
+  } else {
+    // targetItemPathが実在しなくなるので退避
+    const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
+    assertNonUndefined(aboveItemPath)
+    CurrentState.setTargetItemPath(aboveItemPath)
+
+    // エッジを付け替える
+    const edge = CurrentState.removeItemGraphEdge(
+      ItemPath.getParentItemId(draggedItemPath)!,
+      draggedItemId
+    )
+    CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
+  }
+
+  CurrentState.updateItemTimestamp(draggedItemId)
+  Rerenderer.instance.rerender()
+}
+
+// 左サイドバー内で指定されたY座標に表示されているアイテムのコンテンツエリアのDOM要素を返す
+function searchLeftSidebarElementByYCoordinate(y: integer): HTMLElement | undefined {
+  // メインエリア内の全アイテムをリスト化し、Y座標でソート
+  const elements = document.getElementsByClassName('page-tree-node_content-area')
+  const sortedElements = List(elements).sortBy((element) => {
+    return element.getBoundingClientRect().bottom
+  }) as List<HTMLElement>
+
+  for (const element of sortedElements) {
+    const rect = element.getBoundingClientRect()
+    if (rect.top <= y && y <= rect.bottom) {
+      return element
+    }
+  }
+  return undefined
 }

@@ -46,6 +46,7 @@
         <div
           class="page-tree-node_content-area"
           class:active-page={props.isActivePage}
+          data-item-id={props.itemId}
           on:mousedown={props.onClickContentArea}
           use:onItemDrop={props.onDrop}
         >
