@@ -53,7 +53,10 @@ export function onCut(event: ClipboardEvent) {
     External.instance.treeifyClipboard = undefined
 
     if (getSelection()?.isCollapsed === false) {
-      // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
+      // テキストが範囲選択されている場合
+
+      Internal.instance.saveCurrentStateToUndoStack()
+      // あとはブラウザのデフォルトの動作に任せる
     } else {
       // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
       event.preventDefault()
@@ -162,6 +165,7 @@ export function onPaste(event: ClipboardEvent) {
 
         Rerenderer.instance.rerender()
       } else if (getTextItemSelectionFromDom() !== undefined) {
+        Internal.instance.saveCurrentStateToUndoStack()
         document.execCommand('insertText', false, text)
       } else {
         const newItemId = CurrentState.createTextItem()
