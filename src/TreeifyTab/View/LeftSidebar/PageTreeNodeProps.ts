@@ -115,8 +115,6 @@ export function createPageTreeNodeProps(
     onClickContentArea: () => {
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
-        // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
-        External.instance.shouldFloatingLeftSidebarShown = false
         Rerenderer.instance.rerender()
       })
     },

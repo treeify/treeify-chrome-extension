@@ -9,7 +9,7 @@ import {createMainAreaProps, MainAreaProps} from 'src/TreeifyTab/View/MainArea/M
 import {createToolbarProps, ToolbarProps} from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
 
 export type RootProps = {
-  leftSidebarProps: LeftSidebarProps | undefined
+  leftSidebarProps: LeftSidebarProps
   mainAreaProps: MainAreaProps
   toolbarProps: ToolbarProps
   dialogLayerProps: DialogLayerProps
