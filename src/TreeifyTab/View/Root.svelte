@@ -20,11 +20,7 @@
   <div class="toolbar-and-sidebar-layout">
     <Toolbar props={props.toolbarProps} />
     <div class="sidebar-layout">
-      {#if props.leftSidebarProps !== undefined}
-        <LeftSidebar props={props.leftSidebarProps} />
-      {:else}
-        <div class="grid-empty-cell" />
-      {/if}
+      <LeftSidebar props={props.leftSidebarProps} />
       <MainArea props={props.mainAreaProps} />
     </div>
   </div>
@@ -43,7 +39,6 @@
 
   /*
   ツールバーとその他の領域を縦に並べるためのレイアウト。
-  「その他の領域」と言ってもダイアログなどの浮いた存在は含めない（フローティングサイドバーは浮いているがここに含む）。
   */
   .toolbar-and-sidebar-layout {
     /* スクロールされてもツールバーを常に画面上部に表示し続けるための設定 */

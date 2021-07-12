@@ -19,6 +19,7 @@ import {
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
 
 export type PageTreeNodeProps = {
+  itemId: ItemId
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: ItemContentProps
   childNodePropses: List<PageTreeNodeProps>
@@ -101,6 +102,7 @@ export function createPageTreeNodeProps(
   const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
 
   return {
+    itemId,
     bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren, itemPath),
     contentProps: createItemContentProps(itemId),
     childNodePropses: displayingChildPagePaths.map((childPagePath) =>
@@ -115,8 +117,6 @@ export function createPageTreeNodeProps(
     onClickContentArea: () => {
       doWithErrorCapture(() => {
         CurrentState.switchActivePage(itemId)
-        // ページ切り替え後はフローティングサイドバーが邪魔になるので非表示にする
-        External.instance.shouldFloatingLeftSidebarShown = false
         Rerenderer.instance.rerender()
       })
     },

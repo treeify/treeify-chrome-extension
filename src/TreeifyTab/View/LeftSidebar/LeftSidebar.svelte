@@ -5,7 +5,7 @@
   export let props: LeftSidebarProps
 </script>
 
-<aside class="left-sidebar" class:floating={props.isFloating}>
+<aside class="left-sidebar">
   <PageTree props={props.pageTreeProps} />
 </aside>
 
@@ -27,11 +27,5 @@
     background: var(--left-sidebar-background-color);
     /* Dynalistを参考にしながら調整した影 */
     box-shadow: 1.5px 0 3px hsl(0, 0%, 85%);
-  }
-
-  /* フローティング型の左サイドバー */
-  .left-sidebar.floating {
-    position: fixed;
-    z-index: 10;
   }
 </style>

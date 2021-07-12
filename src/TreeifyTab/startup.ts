@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
+import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -49,15 +49,11 @@ export async function startup(initialState: State) {
   chrome.commands.onCommand.addListener(onCommand)
 
   document.addEventListener('mousemove', onMouseMove)
-
-  window.addEventListener('resize', onResize)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
-
-  window.removeEventListener('resize', onResize)
 
   document.removeEventListener('mousemove', onMouseMove)
 
@@ -155,39 +151,6 @@ async function onCommand(commandName: string) {
 function onMouseMove(event: MouseEvent) {
   doWithErrorCapture(() => {
     External.instance.mousePosition = {x: event.clientX, y: event.clientY}
-
-    // マウスの位置と動きに応じて左サイドバーを開閉する
-    if (!External.instance.shouldFloatingLeftSidebarShown) {
-      const gap = event.screenX - event.clientX
-      if (gap > 0) {
-        // Treeifyタブ左端と画面左端の間に隙間がある場合
-
-        if (event.screenX + event.movementX <= 0 && event.movementX < 0) {
-          External.instance.shouldFloatingLeftSidebarShown = true
-        }
-      } else {
-        // Treeifyタブ左端と画面左端の間に隙間がない場合
-
-        if (event.screenX === 0 && event.movementX === 0) {
-          External.instance.shouldFloatingLeftSidebarShown = true
-        }
-      }
-    } else {
-      const leftSidebar = document.querySelector('.left-sidebar')
-      if (leftSidebar !== null && event.x > leftSidebar.getBoundingClientRect().right) {
-        // mouseleaveイベントを使わない理由は、Treeifyタブが画面左端にぴったりくっついていない状況で、
-        // マウスを画面左端に動かしたときに左サイドバーが閉じられてしまうことを防ぐため。
-        External.instance.shouldFloatingLeftSidebarShown = false
-      }
-    }
-
-    Rerenderer.instance.rerender()
-  })
-}
-
-function onResize() {
-  doAsyncWithErrorCapture(async () => {
-    // 左サイドバーの表示形態を変更する必要がある場合のために再描画する
     Rerenderer.instance.rerender()
   })
 }

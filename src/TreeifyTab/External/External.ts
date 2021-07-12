@@ -20,9 +20,6 @@ export class External {
   /** Undo用 */
   prevPendingMutatedChunkIds: Set<ChunkId> | undefined
 
-  /** フローティング型の左サイドバーを表示するべきかどうか */
-  shouldFloatingLeftSidebarShown: boolean = false
-
   /**
    * 独自コンテキストメニューを表示する座標を決定するために使う。
    * event.clientXおよびclientYが代入される。
