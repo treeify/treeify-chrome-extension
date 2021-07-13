@@ -5,8 +5,6 @@
   import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import ContextMenuDialog from './ContextMenuDialog.svelte'
   import {createContextMenuDialogProps} from './ContextMenuDialogProps'
-  import DefaultWindowModeSettingDialog from './DefaultWindowModeSettingDialog.svelte'
-  import {createDefaultWindowModeSettingDialogProps} from './DefaultWindowModeSettingDialogProps'
   import {DialogLayerProps} from './DialogLayer'
   import OtherParentsDialog from './OtherParentsDialog.svelte'
   import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
@@ -18,7 +16,7 @@
   import {createWebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
   import WorkspaceDialog from './WorkspaceDialog.svelte'
   import {createWorkspaceDialogProps} from './WorkspaceDialogProps'
-  
+
   export let props: DialogLayerProps
 </script>
 
@@ -30,9 +28,6 @@
 {/if}
 {#if props.dialog?.type === 'ContextMenuDialog'}
   <ContextMenuDialog props={createContextMenuDialogProps(props.dialog)} />
-{/if}
-{#if props.dialog?.type === 'DefaultWindowModeSettingDialog'}
-  <DefaultWindowModeSettingDialog props={createDefaultWindowModeSettingDialogProps(props.dialog)} />
 {/if}
 {#if props.dialog?.type === 'OtherParentsDialog'}
   <OtherParentsDialog props={createOtherParentsDialogProps(props.dialog)} />

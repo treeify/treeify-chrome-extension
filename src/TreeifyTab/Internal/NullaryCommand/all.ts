@@ -5,7 +5,6 @@ import {
 import {
   edit,
   showCitationSettingDialog,
-  showDefaultWindowModeSettingDialog,
   showOtherParentsDialog,
   showSearchDialog,
   showWorkspaceDialog,
@@ -116,7 +115,6 @@ export const functions: {[name: string]: () => void} = {
   createEmptyTexItem,
   createEmptyTextItem,
   edit,
-  showDefaultWindowModeSettingDialog,
   showWorkspaceDialog,
   showOtherParentsDialog,
   showSearchDialog,

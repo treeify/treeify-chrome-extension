@@ -4,7 +4,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {DefaultWindowMode, Page} from 'src/TreeifyTab/Internal/State'
+import {Page} from 'src/TreeifyTab/Internal/State'
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
@@ -63,7 +63,6 @@ export function turnIntoPage(itemId: ItemId) {
   const page: Page = {
     targetItemPath: List.of(itemId),
     anchorItemPath: List.of(itemId),
-    defaultWindowMode: 'inherit',
   }
   Internal.instance.mutate(page, PropertyPath.of('pages', itemId))
 }
@@ -76,10 +75,6 @@ export function turnIntoNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
   Internal.instance.delete(PropertyPath.of('pages', itemId))
-}
-
-export function setDefaultWindowMode(itemId: ItemId, value: DefaultWindowMode) {
-  Internal.instance.mutate(value, PropertyPath.of('pages', itemId, 'defaultWindowMode'))
 }
 
 /** Treeifyタブのタイトルとして表示する文字列を返す */

@@ -150,7 +150,6 @@ export class Internal {
         0: {
           targetItemPath: List.of(0),
           anchorItemPath: List.of(0),
-          defaultWindowMode: 'keep',
         },
       },
       workspaces: {
