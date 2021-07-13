@@ -32,7 +32,7 @@
       const itemPathGroups: List<List<ItemPath>> = allItemPaths
         .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
         .toList()
-        .map((group) => group.toList())
+        .map((group) => CurrentState.sortByDocumentOrder(group.toList()))
 
       // ヒットしたアイテム数によってページの並びをソートする
       searchResult = itemPathGroups.sortBy((itemPaths) => -itemPaths.size)
