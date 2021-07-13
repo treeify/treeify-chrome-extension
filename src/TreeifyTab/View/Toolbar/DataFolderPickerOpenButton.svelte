@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {List} from 'immutable'
   import {assert} from '../../../Common/Debug/assert'
   import {doAsyncWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
@@ -11,7 +12,7 @@
 
   function onClick() {
     doAsyncWithErrorCapture(async () => {
-      assert(External.instance.urlToItemIdsForTabCreation.size === 0)
+      assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
       assert(External.instance.hardUnloadedTabIds.size === 0)
 
       await NullaryCommand.saveToDataFolder()
