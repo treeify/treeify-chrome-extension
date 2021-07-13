@@ -164,9 +164,9 @@ function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined
     return element.getBoundingClientRect().bottom
   }) as List<HTMLElement>
 
-  for (const element of sortedElements) {
+  for (const element of sortedElements.reverse()) {
     const rect = element.getBoundingClientRect()
-    if (rect.top <= y && y <= rect.bottom) {
+    if (rect.top <= y) {
       return element
     }
   }
@@ -231,7 +231,7 @@ function searchLeftSidebarElementByYCoordinate(y: integer): HTMLElement | undefi
 
   for (const element of sortedElements) {
     const rect = element.getBoundingClientRect()
-    if (rect.top <= y && y <= rect.bottom) {
+    if (y <= rect.bottom) {
       return element
     }
   }
