@@ -122,14 +122,16 @@ export function createMainAreaNodeProps(
       // テキスト選択中はブラウザ標準のコンテキストメニューを表示する
       if (getSelection()?.isCollapsed === false) return
 
-      // 独自コンテキストメニューを表示
-      event.preventDefault()
       if (event instanceof MouseEvent) {
+        // 独自コンテキストメニューを表示
+        event.preventDefault()
+
         if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
+
+        CurrentState.setTargetItemPath(itemPath)
+        NullaryCommand.showContextMenuDialog({x: event.clientX, y: event.clientY})
+        Rerenderer.instance.rerender()
       }
-      CurrentState.setTargetItemPath(itemPath)
-      NullaryCommand.showContextMenuDialog()
-      Rerenderer.instance.rerender()
     },
     onClickDeleteButton: (event) => {
       doWithErrorCapture(() => {

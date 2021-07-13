@@ -1,3 +1,4 @@
+import {Coordinate} from 'src/Common/integer'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -60,6 +61,6 @@ export function showCitationSettingDialog() {
 }
 
 /** 独自コンテキストメニューを表示する */
-export function showContextMenuDialog() {
-  CurrentState.setDialog({type: 'ContextMenuDialog'})
+export function showContextMenuDialog(mousePosition: Coordinate) {
+  CurrentState.setDialog({type: 'ContextMenuDialog', mousePosition})
 }
