@@ -74,6 +74,16 @@ export class SearchEngine {
     }
   }
 
+  /**
+   * 指定されたアイテムに関するデータを検索インデックスから削除する。
+   * アイテムを削除する直前に呼び出す想定。
+   */
+  deleteSearchIndex(itemId: ItemId) {
+    for (const unigram of SearchEngine.appearingUnigrams(itemId, Internal.instance.state)) {
+      this.unigramSearchIndex.removeItemId(unigram, itemId)
+    }
+  }
+
   /** 指定されたアイテムが持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
   static getTextTracks(itemId: ItemId, state: State): List<string> {
     const itemType = state.items[itemId].itemType

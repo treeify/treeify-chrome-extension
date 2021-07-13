@@ -18,6 +18,8 @@ import {Timestamp} from 'src/TreeifyTab/Timestamp'
 export function deleteItem(itemId: ItemId) {
   assert(itemId !== TOP_ITEM_ID)
 
+  Internal.instance.searchEngine.deleteSearchIndex(itemId)
+
   const item = Internal.instance.state.items[itemId]
   for (const childItemId of item.childItemIds) {
     if (CurrentState.countParents(childItemId) === 1) {
@@ -77,6 +79,8 @@ export function deleteItem(itemId: ItemId) {
  */
 export function deleteItemItself(itemId: ItemId) {
   assert(itemId !== TOP_ITEM_ID)
+
+  Internal.instance.searchEngine.deleteSearchIndex(itemId)
 
   const item = Internal.instance.state.items[itemId]
   const childItemIds = item.childItemIds
