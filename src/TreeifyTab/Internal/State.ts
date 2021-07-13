@@ -133,8 +133,6 @@ export type Page = {
    * テキスト選択におけるanchorと同じ意味合い。
    */
   anchorItemPath: ItemPath
-  /** このページのデフォルトのウィンドウモード */
-  defaultWindowMode: DefaultWindowMode
 }
 
 export type Workspace = {
@@ -147,12 +145,6 @@ export type Workspace = {
   name: string
 }
 
-/**
- * 'keep'の場合、ウィンドウモードの自動変更は行わない。
- * 'inherit'の場合、親ページのデフォルトウィンドウモードを再帰的に参照する。
- */
-export type DefaultWindowMode = 'dual' | 'full' | 'floating' | 'keep' | 'inherit'
-
 export type CitationSettingDialog = {type: 'CitationSettingDialog'}
 
 /** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
@@ -163,9 +155,6 @@ export type CodeBlockItemEditDialog = {
 }
 
 export type ContextMenuDialog = {type: 'ContextMenuDialog'}
-
-/** デフォルトウィンドウモード設定ダイアログが持つ内部状態の型 */
-export type DefaultWindowModeSettingDialog = {type: 'DefaultWindowModeSettingDialog'}
 
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
@@ -186,7 +175,6 @@ export type Dialog =
   | CitationSettingDialog
   | CodeBlockItemEditDialog
   | ContextMenuDialog
-  | DefaultWindowModeSettingDialog
   | OtherParentsDialog
   | SearchDialog
   | TexEditDialog
@@ -293,8 +281,6 @@ export namespace State {
         )
         // TODO: targetItemPath, anchorItemPathがvalidなItemPathであることのチェック
         page.targetItemPath
-
-        // TODO: page.defaultWindowModeの型チェック
       }
 
       assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)

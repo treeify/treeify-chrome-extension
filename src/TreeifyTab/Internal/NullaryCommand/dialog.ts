@@ -39,11 +39,6 @@ export function edit() {
   }
 }
 
-/** デフォルトウィンドウモード設定ダイアログを表示する */
-export function showDefaultWindowModeSettingDialog() {
-  CurrentState.setDialog({type: 'DefaultWindowModeSettingDialog'})
-}
-
 /** ワークスペースダイアログを表示する */
 export function showWorkspaceDialog() {
   CurrentState.setDialog({type: 'WorkspaceDialog'})
