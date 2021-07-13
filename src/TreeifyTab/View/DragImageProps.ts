@@ -60,8 +60,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     const spoolDroppedItemId = ItemPath.getItemId(spoolDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
-    const isDisplayingChildItemIds =
-      !CurrentState.getDisplayingChildItemIds(spoolDroppedItemPath).isEmpty()
+    const isPageOrCollapsed =
+      CurrentState.isPage(spoolDroppedItemId) || CurrentState.getIsCollapsed(spoolDroppedItemPath)
 
     if (is(spoolDroppedItemPath.take(draggedItemPath.size), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
@@ -78,24 +78,21 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     if (event.altKey) {
       if (!CurrentState.isSibling(spoolDroppedItemPath, draggedItemPath)) {
         // エッジを追加する（トランスクルード）
-        if (isDisplayingChildItemIds) {
-          CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId)
-        } else {
+        if (isPageOrCollapsed) {
           CurrentState.insertFirstChildItem(spoolDroppedItemId, draggedItemId)
+        } else {
+          CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId)
         }
       }
     } else {
-      // targetItemPathが実在しなくなるので退避
-      const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
-      assertNonUndefined(aboveItemPath)
-      CurrentState.setTargetItemPath(aboveItemPath)
-
       // エッジを付け替える
       const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-      if (isDisplayingChildItemIds) {
-        CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId, edge)
-      } else {
+      if (isPageOrCollapsed) {
         CurrentState.insertFirstChildItem(spoolDroppedItemId, draggedItemId, edge)
+        CurrentState.setTargetItemPath(spoolDroppedItemPath)
+      } else {
+        CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId, edge)
+        CurrentState.setTargetItemPath(spoolDroppedItemPath.push(draggedItemId))
       }
     }
 
