@@ -1,6 +1,5 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {doWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
@@ -37,17 +36,6 @@
       // ヒットしたアイテム数によってページの並びをソートする
       searchResult = itemPathGroups.sortBy((itemPaths) => -itemPaths.size)
     }
-  }
-
-  const onKeyDown = (event: KeyboardEvent) => {
-    doWithErrorCapture(() => {
-      if (event.isComposing) return
-
-      // Enterキー押下時
-      if (InputId.fromKeyboardEvent(event) === '0000Enter') {
-        // TODO: 検索結果の一番上の項目にジャンプするのが有力
-      }
-    })
   }
 </script>
 
