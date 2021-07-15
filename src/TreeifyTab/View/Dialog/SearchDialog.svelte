@@ -11,7 +11,7 @@
 
   export let props: SearchDialogProps
 
-  let searchResult: List<List<ItemPath>> = List.of()
+  let searchResult: List<List<ItemPath>> | undefined
 
   function onKeyDownSearchQuery(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -46,9 +46,13 @@
       on:keydown={onKeyDownSearchQuery}
     />
     <div class="search-dialog_result">
-      {#each searchResult.toArray() as itemPaths}
-        <SearchResultPage props={createSearchResultPageProps(itemPaths)} />
-      {/each}
+      {#if searchResult !== undefined}
+        {#each searchResult.toArray() as itemPaths}
+          <SearchResultPage props={createSearchResultPageProps(itemPaths)} />
+        {:else}
+          <div>検索結果はありません</div>
+        {/each}
+      {/if}
     </div>
   </div>
 </CommonDialog>
