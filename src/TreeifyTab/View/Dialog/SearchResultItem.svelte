@@ -54,7 +54,9 @@
 </script>
 
 <div class="search-result-item" on:click={onClick}>
-  <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+  <div class="search-result-item_content-area" tabindex="0">
+    <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+  </div>
   <div class="search-result-item_indent-and-children-area">
     <div class="search-result-item_indent-area" />
     <div class="search-result-item_children-area">
@@ -75,6 +77,10 @@
   }
 
   .search-result-item_indent-area {
-    width: 1.1em;
+    flex: 0 0 1.1em;
+  }
+
+  .search-result-item_children-area {
+    flex: 1 0;
   }
 </style>
