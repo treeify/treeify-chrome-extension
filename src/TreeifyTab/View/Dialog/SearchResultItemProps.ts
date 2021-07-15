@@ -1,10 +1,20 @@
 import {is, List} from 'immutable'
+import {assertNonNull} from 'src/Common/Debug/assert'
+import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {InputId} from 'src/TreeifyTab/Internal/InputId'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
+import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import {tick} from 'svelte'
 
 export type SearchResultItemProps = {
   itemPath: ItemPath
   children: List<SearchResultItemProps>
+  onClick: () => void
+  onKeyDown: (event: KeyboardEvent) => void
 }
 
 export function createSearchResultItemPropses(
@@ -45,10 +55,60 @@ function createSearchResultItemProps(
 ): SearchResultItemProps {
   const key = JSON.stringify(itemPath.toArray())
   const childItemPaths = map.get(key) ?? List.of()
+
+  function onClick() {
+    doWithErrorCapture(() => {
+      const containerPageId = ItemPath.getRootItemId(itemPath)
+
+      // ジャンプ先のページのtargetItemPathを更新する
+      Internal.instance.mutate(
+        itemPath,
+        PropertyPath.of('pages', containerPageId, 'targetItemPath')
+      )
+      Internal.instance.mutate(
+        itemPath,
+        PropertyPath.of('pages', containerPageId, 'anchorItemPath')
+      )
+
+      CurrentState.moses(itemPath)
+
+      // ページを切り替える
+      CurrentState.switchActivePage(containerPageId)
+
+      // 再描画完了後に対象アイテムに自動スクロールする
+      tick().then(() => {
+        const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
+        const focusableElement = document.getElementById(targetElementId)
+        assertNonNull(focusableElement)
+        focusableElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'center',
+          inline: 'center',
+        })
+      })
+
+      // 検索ダイアログを閉じる
+      CurrentState.setDialog(null)
+      Rerenderer.instance.rerender()
+    })
+  }
+
+  function onKeyDown(event: KeyboardEvent) {
+    switch (InputId.fromKeyboardEvent(event)) {
+      case '0000Enter':
+      case '0000Space':
+        event.preventDefault()
+        onClick()
+        break
+    }
+  }
+
   return {
     itemPath,
     children: childItemPaths.map((childItemPath) =>
       createSearchResultItemProps(childItemPath, map)
     ),
+    onClick,
+    onKeyDown,
   }
 }
