@@ -4,15 +4,14 @@
   import {InputId} from '../../Internal/InputId'
   import {Internal} from '../../Internal/Internal'
   import {ItemPath} from '../../Internal/ItemPath'
-  import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import CommonDialog from './CommonDialog.svelte'
   import {SearchDialogProps} from './SearchDialogProps'
   import SearchResultRow from './SearchResultRow.svelte'
+  import {createSearchResultRowPropses, SearchResultRowProps} from './SearchResultRowProps'
 
   export let props: SearchDialogProps
 
-  let searchResult: List<List<ItemPath>> = List.of()
+  let searchResult: List<List<SearchResultRowProps>> = List.of()
 
   function onKeyDownSearchQuery(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -28,13 +27,14 @@
       const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
 
       // ItemPathをページIDでグループ化する
-      const itemPathGroups: List<List<ItemPath>> = allItemPaths
+      const itemPathGroups = allItemPaths
         .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
         .toList()
-        .map((group) => CurrentState.sortByDocumentOrder(group.toList()))
+        .map((itemPaths) => itemPaths.toList())
+        // ヒットしたアイテム数によってページの並びをソートする
+        .sortBy((itemPaths) => -itemPaths.size)
 
-      // ヒットしたアイテム数によってページの並びをソートする
-      searchResult = itemPathGroups.sortBy((itemPaths) => -itemPaths.size)
+      searchResult = itemPathGroups.map(createSearchResultRowPropses)
     }
   }
 </script>
@@ -48,13 +48,10 @@
       on:keydown={onKeyDownSearchQuery}
     />
     <div class="search-dialog_result">
-      {#each searchResult.toArray() as itemPathGroup (ItemPath.getRootItemId(itemPathGroup.first()))}
-        <ItemContent
-          props={createItemContentProps(ItemPath.getRootItemId(itemPathGroup.first()))}
-        />
+      {#each searchResult.toArray() as searchResultRowPropses}
         <div class="search-dialog_result-items-for-each-page">
-          {#each itemPathGroup.toArray() as itemPath (itemPath.toString())}
-            <SearchResultRow {itemPath} />
+          {#each searchResultRowPropses.toArray() as searchResultRowProps (searchResultRowProps.toString())}
+            <SearchResultRow props={searchResultRowProps} />
           {/each}
         </div>
       {/each}

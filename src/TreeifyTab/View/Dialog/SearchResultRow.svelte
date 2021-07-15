@@ -10,31 +10,33 @@
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import {MainAreaContentView} from '../MainArea/MainAreaContentProps'
+  import SearchResultRow from './SearchResultRow.svelte'
+  import {SearchResultRowProps} from './SearchResultRowProps'
 
-  export let itemPath: ItemPath
+  export let props: SearchResultRowProps
 
   function onClick(event: MouseEvent) {
     doWithErrorCapture(() => {
-      const containerPageId = ItemPath.getRootItemId(itemPath)
+      const containerPageId = ItemPath.getRootItemId(props.itemPath)
 
       // ジャンプ先のページのtargetItemPathを更新する
       Internal.instance.mutate(
-        itemPath,
+        props.itemPath,
         PropertyPath.of('pages', containerPageId, 'targetItemPath')
       )
       Internal.instance.mutate(
-        itemPath,
+        props.itemPath,
         PropertyPath.of('pages', containerPageId, 'anchorItemPath')
       )
 
-      CurrentState.moses(itemPath)
+      CurrentState.moses(props.itemPath)
 
       // ページを切り替える
       CurrentState.switchActivePage(containerPageId)
 
       // 再描画完了後に対象アイテムに自動スクロールする
       tick().then(() => {
-        const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
+        const targetElementId = MainAreaContentView.focusableDomElementId(props.itemPath)
         const focusableElement = document.getElementById(targetElementId)
         assertNonNull(focusableElement)
         focusableElement.scrollIntoView({
@@ -52,11 +54,27 @@
 </script>
 
 <div class="search-result-row" on:click={onClick}>
-  <ItemContent props={createItemContentProps(ItemPath.getItemId(itemPath))} />
+  <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+  <div class="search-result-row_indent-and-children-area">
+    <div class="search-result-row_indent-area" />
+    <div class="search-result-row_children-area">
+      {#each props.children.toArray() as child (child.itemPath.toString())}
+        <SearchResultRow props={child} />
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
   .search-result-row {
     cursor: pointer;
+  }
+
+  .search-result-row_indent-and-children-area {
+    display: flex;
+  }
+
+  .search-result-row_indent-area {
+    width: 1.1em;
   }
 </style>
