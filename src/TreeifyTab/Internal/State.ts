@@ -215,7 +215,11 @@ export namespace State {
       for (const itemId of itemIds) {
         const item = state.items[itemId]
 
-        // TODO: 子リストに重複がないことのチェック
+        // 子リストに重複がないことのチェック
+        assert(
+          item.childItemIds.size === item.childItemIds.toSet().size,
+          `items[${itemId}]のchildItemIdsに重複がある`
+        )
 
         // 親子関係の対応チェック（エッジの存在チェック）
         // 子アイテムの親マップに自身が含まれていることのチェック
