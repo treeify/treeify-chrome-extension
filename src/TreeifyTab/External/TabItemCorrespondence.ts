@@ -60,6 +60,10 @@ export class TabItemCorrespondence {
     return tabId === undefined || this.getTab(tabId)?.discarded === true
   }
 
+  getAllItemIds(): List<ItemId> {
+    return List(this.tabIdToItemId.values())
+  }
+
   /** 全てのaudibleなタブのIDを返す */
   getAllAudibleTabIds(): List<TabId> {
     const audibleTabs = List(this.tabIdToTab.values()).filter((tab) => tab.audible === true)
