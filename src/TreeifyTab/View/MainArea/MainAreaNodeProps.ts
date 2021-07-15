@@ -119,6 +119,9 @@ export function createMainAreaNodeProps(
       })
     },
     onContextMenu: (event: Event) => {
+      // テキスト選択中はブラウザ標準のコンテキストメニューを表示する
+      if (getSelection()?.isCollapsed === false) return
+
       // 独自コンテキストメニューを表示
       event.preventDefault()
       if (event instanceof MouseEvent) {
