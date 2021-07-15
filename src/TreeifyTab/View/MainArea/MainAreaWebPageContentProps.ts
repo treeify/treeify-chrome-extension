@@ -1,4 +1,3 @@
-import {is} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
@@ -65,35 +64,18 @@ export function createMainAreaWebPageContentProps(
             NullaryCommand.browseTab()
             Rerenderer.instance.rerender()
             break
-          case '1000MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            Rerenderer.instance.rerender()
-            break
-          case '0100MouseButton0':
-            event.preventDefault()
-            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
-              CurrentState.setTargetItemPathOnly(itemPath)
-              Rerenderer.instance.rerender()
-            }
-            break
-          case '0010MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.browseTab()
-            Rerenderer.instance.rerender()
-            break
         }
       })
     },
     onClickFavicon: (event) => {
       doWithErrorCapture(() => {
+        event.stopPropagation()
+        event.preventDefault()
+
         CurrentState.setTargetItemPath(itemPath)
 
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
-            event.preventDefault()
-
             if (tab === undefined) {
               // ハードアンロード状態の場合
               NullaryCommand.loadSubtree()
@@ -105,8 +87,6 @@ export function createMainAreaWebPageContentProps(
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
-            event.preventDefault()
-
             if (tab === undefined) {
               // ハードアンロード状態の場合
               NullaryCommand.loadItem()
@@ -118,8 +98,6 @@ export function createMainAreaWebPageContentProps(
             Rerenderer.instance.rerender()
             break
           case '0100MouseButton0':
-            event.preventDefault()
-
             if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadSubtree()
@@ -131,8 +109,6 @@ export function createMainAreaWebPageContentProps(
             Rerenderer.instance.rerender()
             break
           case '1100MouseButton0':
-            event.preventDefault()
-
             if (isUnloaded) {
               // アンロード状態の場合
               NullaryCommand.loadItem()

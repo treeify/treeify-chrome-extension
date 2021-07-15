@@ -46,4 +46,17 @@ export namespace ItemPath {
 
     return itemPath.set(-1, siblingItemId)
   }
+
+  /**
+   * 例えば[0, 1, 3, 5]と[0, 1, 2, 4]が与えられたら[0, 1]を返す。
+   * 空リストを返す可能性もあるので注意。
+   */
+  export function getCommonPrefix(lhs: ItemPath, rhs: ItemPath): ItemPath {
+    const first1 = lhs.first(undefined)
+    const first2 = rhs.first(undefined)
+    if (first1 === undefined || first2 === undefined) return List.of()
+    if (first1 !== first2) return List.of()
+
+    return getCommonPrefix(lhs.shift(), rhs.shift()).unshift(first1)
+  }
 }

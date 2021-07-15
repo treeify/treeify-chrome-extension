@@ -3,19 +3,13 @@
   import Cite from '../Cite.svelte'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaTexContentProps} from './MainAreaTexContentProps'
-  
+
   export let props: MainAreaTexContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
-<div
-  class="main-area-tex-content"
-  {id}
-  tabindex="0"
-  on:focus={props.onFocus}
-  on:mousedown={props.onClick}
->
+<div class="main-area-tex-content" {id} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-tex-content_rendered-tex">
     {@html katex.renderToString(props.code, {throwOnError: false})}
   </div>

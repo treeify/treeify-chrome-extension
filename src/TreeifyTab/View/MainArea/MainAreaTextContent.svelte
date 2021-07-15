@@ -3,7 +3,7 @@
   import Cite from '../Cite.svelte'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaTextContentProps} from './MainAreaTextContentProps'
-  
+
   export let props: MainAreaTextContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -16,7 +16,6 @@
     contenteditable="true"
     on:input={props.onInput}
     on:compositionend={props.onCompositionEnd}
-    on:mousedown={props.onClick}
   >
     {@html DomishObject.toHtml(props.domishObjects)}
   </div>

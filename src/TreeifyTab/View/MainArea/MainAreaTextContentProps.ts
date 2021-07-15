@@ -1,10 +1,9 @@
-import {is, List} from 'immutable'
+import {List} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -18,7 +17,6 @@ export type MainAreaTextContentProps = {
   citeProps: CiteProps | undefined
   onInput: (event: Event) => void
   onCompositionEnd: (event: CompositionEvent) => void
-  onClick: (event: MouseEvent) => void
 }
 
 export function createMainAreaTextContentProps(
@@ -58,23 +56,6 @@ export function createMainAreaTextContentProps(
           Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
           CurrentState.updateItemTimestamp(itemId)
           Rerenderer.instance.rerender()
-        }
-      })
-    },
-    onClick: (event) => {
-      doWithErrorCapture(() => {
-        switch (InputId.fromMouseEvent(event)) {
-          case '0100MouseButton0':
-            event.preventDefault()
-            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
-              CurrentState.setTargetItemPathOnly(itemPath)
-              Rerenderer.instance.rerender()
-            }
-            break
-          default:
-            CurrentState.setTargetItemPath(itemPath)
-            Rerenderer.instance.rerender()
-            break
         }
       })
     },

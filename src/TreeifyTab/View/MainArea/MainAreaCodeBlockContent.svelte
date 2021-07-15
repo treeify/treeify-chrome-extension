@@ -3,19 +3,13 @@
   import Cite from '../Cite.svelte'
   import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
   import {MainAreaContentView} from './MainAreaContentProps'
-  
+
   export let props: MainAreaCodeBlockContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
-<div
-  class="main-area-code-block-content"
-  {id}
-  tabindex="0"
-  on:focus={props.onFocus}
-  on:mousedown={props.onClick}
->
+<div class="main-area-code-block-content" {id} tabindex="0" on:focus={props.onFocus}>
   <pre><code>{@html getHighlightedHtml(props.code, props.language)}</code></pre>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />

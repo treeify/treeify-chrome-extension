@@ -78,25 +78,43 @@ export function createMainAreaNodeProps(
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
       doWithErrorCapture(() => {
-        const inputId = InputId.fromMouseEvent(event)
-        if (inputId === '0000MouseButton1') {
-          event.preventDefault()
-          Internal.instance.saveCurrentStateToUndoStack()
-          CurrentState.setTargetItemPath(itemPath)
-          NullaryCommand.removeEdge()
-          Rerenderer.instance.rerender()
-        } else if (inputId === '1000MouseButton1') {
-          event.preventDefault()
-          Internal.instance.saveCurrentStateToUndoStack()
-          CurrentState.setTargetItemPath(itemPath)
-          NullaryCommand.deleteItemItself()
-          Rerenderer.instance.rerender()
-        } else if (inputId === '1000MouseButton2') {
-          event.preventDefault()
-          Internal.instance.saveCurrentStateToUndoStack()
-          CurrentState.setTargetItemPath(itemPath)
-          NullaryCommand.removeEdge()
-          Rerenderer.instance.rerender()
+        switch (InputId.fromMouseEvent(event)) {
+          case '0100MouseButton0':
+            const targetItemPath = CurrentState.getTargetItemPath()
+            // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
+            if (is(itemPath, targetItemPath)) break
+
+            event.preventDefault()
+
+            // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
+            const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
+            const targetCandidate = itemPath.take(commonPrefix.size + 1)
+            const anchorCandidate = targetItemPath.take(commonPrefix.size + 1)
+            if (targetCandidate.size === anchorCandidate.size) {
+              CurrentState.setTargetItemPathOnly(targetCandidate)
+              CurrentState.setAnchorItemPath(anchorCandidate)
+              Rerenderer.instance.rerender()
+            }
+            break
+          case '0000MouseButton1':
+          case '1000MouseButton2':
+            event.preventDefault()
+            Internal.instance.saveCurrentStateToUndoStack()
+            CurrentState.setTargetItemPath(itemPath)
+            NullaryCommand.removeEdge()
+            Rerenderer.instance.rerender()
+            break
+          case '1000MouseButton1':
+            event.preventDefault()
+            Internal.instance.saveCurrentStateToUndoStack()
+            CurrentState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItemItself()
+            Rerenderer.instance.rerender()
+            break
+          default:
+            CurrentState.setTargetItemPath(itemPath)
+            Rerenderer.instance.rerender()
+            break
         }
       })
     },

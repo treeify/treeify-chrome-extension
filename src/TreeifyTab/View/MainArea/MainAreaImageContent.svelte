@@ -13,13 +13,7 @@
   `
 </script>
 
-<div
-  class="main-area-image-content"
-  {id}
-  tabindex="0"
-  on:focus={props.onFocus}
-  on:mousedown={props.onClick}
->
+<div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-image-content_image-and-caption">
     <img
       class="main-area-image-content_image"
