@@ -38,7 +38,7 @@
 </script>
 
 <CommonDialog title="検索">
-  <div class="search-dialog_content">
+  <div class="search-dialog_content" on:keydown={props.onKeyDown}>
     <input
       type="text"
       class="search-dialog_search-query"

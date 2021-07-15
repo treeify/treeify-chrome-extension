@@ -2,7 +2,6 @@ import {is, List} from 'immutable'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
@@ -14,7 +13,6 @@ export type SearchResultItemProps = {
   itemPath: ItemPath
   children: List<SearchResultItemProps>
   onClick: () => void
-  onKeyDown: (event: KeyboardEvent) => void
 }
 
 export function createSearchResultItemPropses(
@@ -93,45 +91,11 @@ function createSearchResultItemProps(
     })
   }
 
-  function onKeyDown(event: KeyboardEvent) {
-    const inputId = InputId.fromKeyboardEvent(event)
-    switch (inputId) {
-      case '0000ArrowDown':
-      case '0000ArrowUp':
-        event.preventDefault()
-
-        const focusableElements = List(
-          document.querySelectorAll(
-            '.search-dialog_content input, .search-dialog_content [tabindex]'
-          )
-        ) as List<HTMLElement>
-        const index = focusableElements.findIndex((element) => document.activeElement === element)
-        if (index === -1) return
-
-        if (inputId === '0000ArrowDown') {
-          // フォーカスを次の要素に移す
-          const nextIndex = (index + 1) % focusableElements.size
-          focusableElements.get(nextIndex)!.focus()
-        } else {
-          // フォーカスを前の要素に移す
-          const prevIndex = (index - 1) % focusableElements.size
-          focusableElements.get(prevIndex)!.focus()
-        }
-        break
-      case '0000Enter':
-      case '0000Space':
-        event.preventDefault()
-        onClick()
-        break
-    }
-  }
-
   return {
     itemPath,
     children: childItemPaths.map((childItemPath) =>
       createSearchResultItemProps(childItemPath, map)
     ),
     onClick,
-    onKeyDown,
   }
 }
