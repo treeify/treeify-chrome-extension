@@ -10,10 +10,10 @@
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps'
   import {MainAreaContentView} from '../MainArea/MainAreaContentProps'
-  import SearchResultRow from './SearchResultRow.svelte'
-  import {SearchResultRowProps} from './SearchResultRowProps'
+  import SearchResultItem from './SearchResultItem.svelte'
+  import {SearchResultItemProps} from './SearchResultItemProps'
 
-  export let props: SearchResultRowProps
+  export let props: SearchResultItemProps
 
   function onClick(event: MouseEvent) {
     doWithErrorCapture(() => {
@@ -59,7 +59,7 @@
     <div class="search-result-row_indent-area" />
     <div class="search-result-row_children-area">
       {#each props.children.toArray() as child (child.itemPath.toString())}
-        <SearchResultRow props={child} />
+        <SearchResultItem props={child} />
       {/each}
     </div>
   </div>

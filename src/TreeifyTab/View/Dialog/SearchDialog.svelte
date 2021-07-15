@@ -6,12 +6,12 @@
   import {ItemPath} from '../../Internal/ItemPath'
   import CommonDialog from './CommonDialog.svelte'
   import {SearchDialogProps} from './SearchDialogProps'
-  import SearchResultRow from './SearchResultRow.svelte'
-  import {createSearchResultRowPropses, SearchResultRowProps} from './SearchResultRowProps'
+  import SearchResultItem from './SearchResultItem.svelte'
+  import {createSearchResultItemPropses, SearchResultItemProps} from './SearchResultItemProps'
 
   export let props: SearchDialogProps
 
-  let searchResult: List<List<SearchResultRowProps>> = List.of()
+  let searchResult: List<List<SearchResultItemProps>> = List.of()
 
   function onKeyDownSearchQuery(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -34,7 +34,7 @@
         // ヒットしたアイテム数によってページの並びをソートする
         .sortBy((itemPaths) => -itemPaths.size)
 
-      searchResult = itemPathGroups.map(createSearchResultRowPropses)
+      searchResult = itemPathGroups.map(createSearchResultItemPropses)
     }
   }
 </script>
@@ -48,10 +48,10 @@
       on:keydown={onKeyDownSearchQuery}
     />
     <div class="search-dialog_result">
-      {#each searchResult.toArray() as searchResultRowPropses}
+      {#each searchResult.toArray() as SearchResultItemPropses}
         <div class="search-dialog_result-items-for-each-page">
-          {#each searchResultRowPropses.toArray() as searchResultRowProps (searchResultRowProps.toString())}
-            <SearchResultRow props={searchResultRowProps} />
+          {#each SearchResultItemPropses.toArray() as SearchResultItemProps (SearchResultItemProps.toString())}
+            <SearchResultItem props={SearchResultItemProps} />
           {/each}
         </div>
       {/each}

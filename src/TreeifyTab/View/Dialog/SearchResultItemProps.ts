@@ -2,14 +2,14 @@ import {is, List} from 'immutable'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
-export type SearchResultRowProps = {
+export type SearchResultItemProps = {
   itemPath: ItemPath
-  children: List<SearchResultRowProps>
+  children: List<SearchResultItemProps>
 }
 
-export function createSearchResultRowPropses(
+export function createSearchResultItemPropses(
   itemPaths: List<ItemPath>
-): List<SearchResultRowProps> {
+): List<SearchResultItemProps> {
   const sortedItemPaths = CurrentState.sortByDocumentOrder(itemPaths)
 
   const topItemPath = sortedItemPaths.first(undefined)
@@ -36,17 +36,19 @@ export function createSearchResultRowPropses(
     }
   }
 
-  return List(rootItemPaths).map((rootItemPath) => createSearchResultRowProps(rootItemPath, map))
+  return List(rootItemPaths).map((rootItemPath) => createSearchResultItemProps(rootItemPath, map))
 }
 
-function createSearchResultRowProps(
+function createSearchResultItemProps(
   itemPath: ItemPath,
   map: Map<string, List<ItemPath>>
-): SearchResultRowProps {
+): SearchResultItemProps {
   const key = JSON.stringify(itemPath.toArray())
   const childItemPaths = map.get(key) ?? List.of()
   return {
     itemPath,
-    children: childItemPaths.map((childItemPath) => createSearchResultRowProps(childItemPath, map)),
+    children: childItemPaths.map((childItemPath) =>
+      createSearchResultItemProps(childItemPath, map)
+    ),
   }
 }
