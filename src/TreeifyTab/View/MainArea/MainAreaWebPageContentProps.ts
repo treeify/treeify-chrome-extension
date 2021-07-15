@@ -1,4 +1,3 @@
-import {is} from 'immutable'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
@@ -64,18 +63,6 @@ export function createMainAreaWebPageContentProps(
             CurrentState.setTargetItemPath(itemPath)
             NullaryCommand.browseTab()
             Rerenderer.instance.rerender()
-            break
-          case '1000MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            Rerenderer.instance.rerender()
-            break
-          case '0100MouseButton0':
-            event.preventDefault()
-            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
-              CurrentState.setTargetItemPathOnly(itemPath)
-              Rerenderer.instance.rerender()
-            }
             break
         }
       })
