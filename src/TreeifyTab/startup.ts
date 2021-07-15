@@ -1,6 +1,7 @@
 import {List} from 'immutable'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
+import {ItemId} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
@@ -86,6 +87,8 @@ export async function cleanup() {
  */
 export async function restart(state: State) {
   if (State.isValid(state)) {
+    migrateTabs(state)
+
     const dataFolder = External.instance.dataFolder
     await cleanup()
     // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
@@ -97,6 +100,37 @@ export async function restart(state: State) {
     Database.writeChunks(Chunk.createAllChunks(state))
 
     await startup(state)
+  }
+}
+
+// タブの状態を新しいStateに合わせる。
+// 具体的には、新しいStateで対応アイテムが削除されていた場合はタブを閉じる。
+// また、新しいStateでURLが変わっていたらタブのURLを更新する。
+function migrateTabs(newState: State) {
+  // newStateにおけるグローバルアイテムIDからアイテムIDへのMapを作る
+  const globalItemIdMap = new Map<string, ItemId>()
+  for (const itemsKey in newState.items) {
+    const item = newState.items[itemsKey]
+    const globalItemId = `${item.device}:${item.disn}`
+    globalItemIdMap.set(globalItemId, parseInt(itemsKey))
+  }
+
+  for (const itemId of External.instance.tabItemCorrespondence.getAllItemIds()) {
+    const item = Internal.instance.state.items[itemId]
+    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
+    assertNonUndefined(tabId)
+    const globalItemId = `${item.device}:${item.disn}`
+    const newItemId = globalItemIdMap.get(globalItemId)
+    if (newItemId === undefined) {
+      // newStateで対応アイテムが削除されていた場合
+      chrome.tabs.remove(tabId)
+    } else {
+      const newUrl = newState.webPageItems[newItemId].url
+      if (newUrl !== Internal.instance.state.webPageItems[itemId].url) {
+        // newStateでURLが変わっていた場合
+        chrome.tabs.update(tabId, {url: newUrl})
+      }
+    }
   }
 }
 
