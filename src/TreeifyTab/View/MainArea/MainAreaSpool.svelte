@@ -37,11 +37,15 @@
     /* バレットの外側の円のマウスホバー時の色 */
     --main-area-bullet-outer-circle-hover-color: hsl(0, 0%, 75%);
     /* バレットの内側の円の直径 */
-    --main-area-bullet-inner-circle-diameter: 0.36em;
+    --main-area-bullet-inner-circle-diameter: 0.38em;
     /* バレットの内側の円の色 */
-    --main-area-bullet-inner-circle-color: hsl(0, 0%, 50%);
+    --main-area-bullet-inner-circle-color: hsl(0, 0%, 60%);
     /* バレットの内側の円のマウスホバー時の色 */
-    --main-area-bullet-inner-circle-hover-color: hsl(0, 0%, 0%);
+    --main-area-bullet-inner-circle-hover-color: hsl(0, 0%, 40%);
+    /* バレットとして表示されるページアイコンの色 */
+    --main-area-bullet-page-icon-color: hsl(0, 0%, 40%);
+    /* バレットとして表示されるページアイコンのマウスホバー時の色 */
+    --main-area-bullet-page-icon-hover-color: hsl(0, 0%, 20%);
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
     --bullet-page-icon-size: 1em;
 
@@ -148,7 +152,7 @@
     height: var(--bullet-page-icon-size);
 
     /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: var(--main-area-bullet-inner-circle-color);
+    background: var(--main-area-bullet-page-icon-color);
     -webkit-mask-image: url('./page-icon.svg');
 
     /* 中央寄せ */
@@ -158,7 +162,7 @@
     transform: translate(-50%, -50%);
   }
   .main-area-spool:hover .main-area-spool_page-icon {
-    background: var(--main-area-bullet-inner-circle-hover-color);
+    background: var(--main-area-bullet-page-icon-hover-color);
   }
 
   /* インデント領域 */
