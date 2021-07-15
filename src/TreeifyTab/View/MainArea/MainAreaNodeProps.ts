@@ -78,25 +78,22 @@ export function createMainAreaNodeProps(
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
       doWithErrorCapture(() => {
-        const inputId = InputId.fromMouseEvent(event)
-        if (inputId === '0000MouseButton1') {
-          event.preventDefault()
-          Internal.instance.saveCurrentStateToUndoStack()
-          CurrentState.setTargetItemPath(itemPath)
-          NullaryCommand.removeEdge()
-          Rerenderer.instance.rerender()
-        } else if (inputId === '1000MouseButton1') {
-          event.preventDefault()
-          Internal.instance.saveCurrentStateToUndoStack()
-          CurrentState.setTargetItemPath(itemPath)
-          NullaryCommand.deleteItemItself()
-          Rerenderer.instance.rerender()
-        } else if (inputId === '1000MouseButton2') {
-          event.preventDefault()
-          Internal.instance.saveCurrentStateToUndoStack()
-          CurrentState.setTargetItemPath(itemPath)
-          NullaryCommand.removeEdge()
-          Rerenderer.instance.rerender()
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton1':
+          case '1000MouseButton2':
+            event.preventDefault()
+            Internal.instance.saveCurrentStateToUndoStack()
+            CurrentState.setTargetItemPath(itemPath)
+            NullaryCommand.removeEdge()
+            Rerenderer.instance.rerender()
+            break
+          case '1000MouseButton1':
+            event.preventDefault()
+            Internal.instance.saveCurrentStateToUndoStack()
+            CurrentState.setTargetItemPath(itemPath)
+            NullaryCommand.deleteItemItself()
+            Rerenderer.instance.rerender()
+            break
         }
       })
     },
