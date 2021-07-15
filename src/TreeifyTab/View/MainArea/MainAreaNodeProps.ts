@@ -80,8 +80,12 @@ export function createMainAreaNodeProps(
       doWithErrorCapture(() => {
         switch (InputId.fromMouseEvent(event)) {
           case '0100MouseButton0':
-            event.preventDefault()
             const targetItemPath = CurrentState.getTargetItemPath()
+            // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
+            if (is(itemPath, targetItemPath)) break
+
+            event.preventDefault()
+
             // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
             const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
             const targetCandidate = itemPath.take(commonPrefix.size + 1)
