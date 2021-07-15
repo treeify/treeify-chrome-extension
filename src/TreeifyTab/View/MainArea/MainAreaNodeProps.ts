@@ -81,8 +81,14 @@ export function createMainAreaNodeProps(
         switch (InputId.fromMouseEvent(event)) {
           case '0100MouseButton0':
             event.preventDefault()
-            if (is(itemPath.pop(), CurrentState.getTargetItemPath().pop())) {
-              CurrentState.setTargetItemPathOnly(itemPath)
+            const targetItemPath = CurrentState.getTargetItemPath()
+            // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
+            const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
+            const targetCandidate = itemPath.take(commonPrefix.size + 1)
+            const anchorCandidate = targetItemPath.take(commonPrefix.size + 1)
+            if (targetCandidate.size === anchorCandidate.size) {
+              CurrentState.setTargetItemPathOnly(targetCandidate)
+              CurrentState.setAnchorItemPath(anchorCandidate)
               Rerenderer.instance.rerender()
             }
             break
