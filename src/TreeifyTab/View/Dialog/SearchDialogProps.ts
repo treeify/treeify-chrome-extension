@@ -35,12 +35,5 @@ function onKeyDown(event: KeyboardEvent) {
         focusableElements.get(prevIndex)!.focus()
       }
       break
-    case '0000Enter':
-    case '0000Space':
-      event.preventDefault()
-      if (document.activeElement instanceof HTMLElement) {
-        document.activeElement.click()
-      }
-      break
   }
 }

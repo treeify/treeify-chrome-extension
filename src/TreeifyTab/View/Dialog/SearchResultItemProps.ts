@@ -2,6 +2,7 @@ import {is, List} from 'immutable'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
@@ -13,6 +14,7 @@ export type SearchResultItemProps = {
   itemPath: ItemPath
   children: List<SearchResultItemProps>
   onClick: () => void
+  onKeyDown: (event: KeyboardEvent) => void
 }
 
 export function createSearchResultItemPropses(
@@ -91,11 +93,22 @@ function createSearchResultItemProps(
     })
   }
 
+  function onKeyDown(event: KeyboardEvent) {
+    switch (InputId.fromKeyboardEvent(event)) {
+      case '0000Enter':
+      case '0000Space':
+        event.preventDefault()
+        onClick()
+        break
+    }
+  }
+
   return {
     itemPath,
     children: childItemPaths.map((childItemPath) =>
       createSearchResultItemProps(childItemPath, map)
     ),
     onClick,
+    onKeyDown,
   }
 }

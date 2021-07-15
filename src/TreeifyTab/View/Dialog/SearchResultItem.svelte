@@ -9,7 +9,12 @@
 </script>
 
 <div class="search-result-item">
-  <div class="search-result-item_content-area" tabindex="0" on:click={props.onClick}>
+  <div
+    class="search-result-item_content-area"
+    tabindex="0"
+    on:mousedown={props.onClick}
+    on:keydown={props.onKeyDown}
+  >
     <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
   </div>
   <div class="search-result-item_indent-and-children-area">
