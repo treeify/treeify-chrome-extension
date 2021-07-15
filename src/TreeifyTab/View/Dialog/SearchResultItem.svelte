@@ -32,6 +32,14 @@
     cursor: pointer;
   }
 
+  .search-result-item_content-area:focus {
+    outline: transparent;
+    background: hsl(240, 100%, 96.8%);
+  }
+  .search-result-item_content-area:hover {
+    background: hsl(240, 100%, 98.8%);
+  }
+
   .search-result-item_indent-and-children-area {
     display: flex;
   }
