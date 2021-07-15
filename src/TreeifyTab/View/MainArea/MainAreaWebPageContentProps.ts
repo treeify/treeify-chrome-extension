@@ -77,12 +77,6 @@ export function createMainAreaWebPageContentProps(
               Rerenderer.instance.rerender()
             }
             break
-          case '0010MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.browseTab()
-            Rerenderer.instance.rerender()
-            break
         }
       })
     },
