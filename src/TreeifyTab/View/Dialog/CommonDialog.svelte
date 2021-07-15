@@ -6,7 +6,7 @@
   import {Rerenderer} from '../../Rerenderer'
   
   export let title: string
-  export let onClose: (() => void) | undefined
+  export let onClose = () => {}
 
   function setupFocusTrap(domElement: HTMLElement) {
     return doWithErrorCapture(() => {
@@ -34,7 +34,7 @@
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
         CurrentState.setDialog(null)
-        onClose?.()
+        onClose()
         Rerenderer.instance.rerender()
       }
     })
@@ -49,7 +49,7 @@
 
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
         CurrentState.setDialog(null)
-        onClose?.()
+        onClose()
         Rerenderer.instance.rerender()
       }
     })
