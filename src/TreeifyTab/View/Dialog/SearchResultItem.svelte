@@ -53,11 +53,11 @@
   }
 </script>
 
-<div class="search-result-row" on:click={onClick}>
+<div class="search-result-item" on:click={onClick}>
   <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
-  <div class="search-result-row_indent-and-children-area">
-    <div class="search-result-row_indent-area" />
-    <div class="search-result-row_children-area">
+  <div class="search-result-item_indent-and-children-area">
+    <div class="search-result-item_indent-area" />
+    <div class="search-result-item_children-area">
       {#each props.children.toArray() as child (child.itemPath.toString())}
         <SearchResultItem props={child} />
       {/each}
@@ -66,15 +66,15 @@
 </div>
 
 <style>
-  .search-result-row {
+  .search-result-item {
     cursor: pointer;
   }
 
-  .search-result-row_indent-and-children-area {
+  .search-result-item_indent-and-children-area {
     display: flex;
   }
 
-  .search-result-row_indent-area {
+  .search-result-item_indent-area {
     width: 1.1em;
   }
 </style>
