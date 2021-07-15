@@ -118,6 +118,11 @@ function createSearchResultItemProps(
           focusableElements.get(prevIndex)!.focus()
         }
         break
+      case '0000Enter':
+      case '0000Space':
+        event.preventDefault()
+        onClick()
+        break
     }
   }
 
