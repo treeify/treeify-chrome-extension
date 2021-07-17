@@ -16,7 +16,7 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
 export const onMessage = (message: any, sender: MessageSender) => {
-  doWithErrorCapture(() => {
+  doAsyncWithErrorCapture(async () => {
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
         // Treeifyタブを最前面化する
@@ -24,7 +24,7 @@ export const onMessage = (message: any, sender: MessageSender) => {
         TreeifyTab.open()
         break
       case 'OnMouseMoveToRightEnd':
-        TreeifyTab.open()
+        await TreeifyTab.open()
         if (sender.tab?.id !== undefined) {
           chrome.tabs.remove(sender.tab.id)
         }
