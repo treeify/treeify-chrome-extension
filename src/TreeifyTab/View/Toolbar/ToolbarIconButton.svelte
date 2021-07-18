@@ -9,8 +9,8 @@
   :root {
     /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
     --toolbar-icon-button-size: 32px;
-    /* ツールバーのボタンのマウスホバー時の背景 */
-    --toolbar-icon-button-hover-background: hsl(0, 0%, 90%);
+    /* ツールバーのボタンのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当 */
+    --toolbar-icon-button-hover-background: #e2e2e2;
   }
 
   /* ツールバーのアイコンボタンの共通クラス */
@@ -44,7 +44,8 @@
 
     border-radius: 50%;
 
-    background: hsl(0, 0%, 50%);
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    background: #777777;
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
   .toolbar-icon-button:active::after {

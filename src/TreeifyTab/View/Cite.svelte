@@ -19,7 +19,8 @@
 <style>
   .main-area-image-content_cite {
     font-size: 50%;
-    color: hsl(0, 0%, 60%);
+    /* lch(60.0%, 0.0, 0.0)相当 */
+    color: #919191;
 
     /* 右寄せ */
     margin-left: auto;

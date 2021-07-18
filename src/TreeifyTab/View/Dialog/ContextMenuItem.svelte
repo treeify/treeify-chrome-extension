@@ -68,10 +68,12 @@
   }
 
   .context-menu-item:focus {
-    background: hsl(240, 100%, 96%);
+    /* lch(93.0%, 7.8, 280.4)相当 */
+    background: #e7ebfa;
   }
 
   .context-menu-item:hover {
-    background: hsl(240, 100%, 96%);
+    /* lch(95.5%, 3.6, 280.4)相当 */
+    background: #f0f2f9;
   }
 </style>

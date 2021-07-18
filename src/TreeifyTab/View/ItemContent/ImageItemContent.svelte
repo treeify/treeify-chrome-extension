@@ -12,7 +12,10 @@
     max-width: 100%;
     height: auto;
 
-    /* Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策 */
-    border: 1px solid hsl(0, 0%, 90%);
+    /*
+    Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
+    lch(90.0%, 0.0, 0.0)相当。
+    */
+    border: 1px solid #e2e2e2;
   }
 </style>

@@ -15,7 +15,8 @@
   }
 
   .code-block-item-content pre {
-    border: 1px solid hsl(0, 0%, 80%);
+    /* lch(80.0%, 0.0, 0.0)相当 */
+    border: 1px solid #c6c6c6;
     margin: 0;
     padding: var(--code-block-padding);
     /* これを指定しないとoverflowしたコードがborderからはみ出る */

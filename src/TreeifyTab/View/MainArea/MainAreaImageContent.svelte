@@ -49,8 +49,11 @@
     width: auto;
     /* heightはstyle属性で指定する */
 
-    /* Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策 */
-    border: 1px solid hsl(0, 0%, 90%);
+    /*
+    Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
+    lch(90.0%, 0.0, 0.0)
+    */
+    border: 1px solid #e2e2e2;
   }
 
   /* グレーアウト状態の画像 */
@@ -60,6 +63,7 @@
 
   /* グレーアウト状態のキャプション */
   :global(.grayed-out) .main-area-image-content_caption {
-    color: hsl(0, 0%, 50%);
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    color: #777777;
   }
 </style>

@@ -2,7 +2,7 @@
   import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
   import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
-  
+
   export let props: CodeBlockItemEditDialogProps
 
   function onPaste(event: ClipboardEvent) {
@@ -52,7 +52,8 @@
     min-height: 5em;
     padding: 0.5em;
 
-    outline: 1px solid hsl(0, 0%, 60%);
+    /* lch(60.0%, 0.0, 0.0)相当 */
+    outline: 1px solid #919191;
   }
 
   .code-block-edit-dialog_button-area {

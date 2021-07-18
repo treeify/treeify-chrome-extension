@@ -29,10 +29,10 @@
   :root {
     /* データフォルダを開くボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --data-folder-picker-open-button-icon-size: 22px;
-    /* データフォルダを開くボタンのアイコンの色 */
-    --data-folder-picker-open-button-icon-color: hsl(0, 0%, 40%);
-    /* データフォルダを開くボタンのアイコンのグレーアウト状態の色 */
-    --data-folder-picker-open-button-icon-grayed-out-color: hsl(0, 0%, 70%);
+    /* データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
+    --data-folder-picker-open-button-icon-color: #5e5e5e;
+    /* データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当 */
+    --data-folder-picker-open-button-icon-grayed-out-color: #ababab;
   }
 
   /* データフォルダアイコン */
@@ -46,7 +46,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
     background: var(--data-folder-picker-open-button-icon-color);
     -webkit-mask-image: url('folder-icon.svg');
   }

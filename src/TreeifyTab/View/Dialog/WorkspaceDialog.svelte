@@ -45,7 +45,8 @@
 
     margin: 3px auto;
 
-    background: hsl(0, 0%, 35%);
+    /* lch(35.0%, 0.0, 0.0)相当 */
+    background: #525252;
     -webkit-mask: url('./plus-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
 

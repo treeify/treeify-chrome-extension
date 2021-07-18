@@ -68,7 +68,8 @@
     width: var(--workspace-dialog-delete-button-size);
     height: var(--workspace-dialog-delete-button-size);
 
-    background: hsl(0, 0%, 40%);
+    /* lch(40.0%, 0.0, 0.0)相当 */
+    background: #5e5e5e;
     -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
 
