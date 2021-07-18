@@ -135,30 +135,43 @@ function onMutateState(propertyPath: PropertyPath) {
 }
 
 function onClickContextMenu(info: OnClickData) {
-  if (info.menuItemId === 'selection' && info.selectionText !== undefined) {
-    // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
-    const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(info.pageUrl)
-    const tab = tabs.first(undefined)
-    assertNonUndefined(tab)
+  if (info.menuItemId !== 'treeify') return
 
-    const itemId =
-      tab.id !== undefined ? External.instance.tabItemCorrespondence.getItemIdBy(tab.id) : undefined
-    if (itemId !== undefined) {
-      const newItemId = CurrentState.createTextItem()
-      CurrentState.setTextItemDomishObjects(
-        newItemId,
-        List.of({
-          type: 'text',
-          textContent: info.selectionText,
-        })
-      )
+  // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
+  const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(info.pageUrl)
+  const tab = tabs.first(undefined)
+  if (tab === undefined) return
 
-      // 出典を設定
-      CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+  const itemId =
+    tab.id !== undefined ? External.instance.tabItemCorrespondence.getItemIdBy(tab.id) : undefined
+  if (itemId === undefined) return
 
-      CurrentState.insertLastChildItem(itemId, newItemId)
-      Rerenderer.instance.rerender()
-    }
+  if (info.mediaType === 'image' && info.srcUrl !== undefined) {
+    // 画像アイテムとして取り込む
+    const newItemId = CurrentState.createImageItem()
+    CurrentState.setImageItemUrl(newItemId, info.srcUrl)
+
+    // 出典を設定
+    CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+
+    CurrentState.insertLastChildItem(itemId, newItemId)
+    Rerenderer.instance.rerender()
+  } else if (info.selectionText !== undefined) {
+    // テキストアイテムとして取り込む
+    const newItemId = CurrentState.createTextItem()
+    CurrentState.setTextItemDomishObjects(
+      newItemId,
+      List.of({
+        type: 'text',
+        textContent: info.selectionText,
+      })
+    )
+
+    // 出典を設定
+    CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+
+    CurrentState.insertLastChildItem(itemId, newItemId)
+    Rerenderer.instance.rerender()
   }
 }
 
