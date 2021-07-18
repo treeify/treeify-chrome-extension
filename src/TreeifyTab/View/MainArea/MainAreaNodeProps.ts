@@ -62,7 +62,7 @@ export function createMainAreaNodeProps(
     isActivePage: !ItemPath.hasParent(itemPath),
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
-    cssClasses: item.cssClasses,
+    cssClasses: item.cite === null ? item.cssClasses : item.cssClasses.push('citation'),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
