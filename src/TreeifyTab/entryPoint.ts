@@ -9,9 +9,9 @@ doAsyncWithErrorCapture(async () => {
   console.log('デバイスID = ' + Device.getId())
 
   chrome.contextMenus.create({
-    id: 'selection',
+    id: 'treeify',
     title: 'Treeifyの項目として取り込み',
-    contexts: ['selection'],
+    contexts: ['selection', 'image'],
     type: 'normal',
   })
   window.addEventListener('unload', () => {
