@@ -22,10 +22,10 @@
   :root {
     /* インデントラインの太さ */
     --page-tree-indent-line-width: 1px;
-    /* インデントラインの色 */
-    --page-tree-indent-line-color: hsl(0, 0%, 80%);
-    /* インデントラインの色（ホバー時） */
-    --page-tree-indent-line-hover-color: hsl(0, 0%, 60%);
+    /* インデントラインの色。lch(80.0%, 0.0, 0.0)相当 */
+    --page-tree-indent-line-color: #c6c6c6;
+    /* インデントラインの色（ホバー時）。lch(60.0%, 0.0, 0.0)相当 */
+    --page-tree-indent-line-hover-color: #919191;
 
     /* バレット領域のサイズ（正方形の一辺の長さ） */
     --page-tree-bullet-area-size: 0.7em;
@@ -38,10 +38,10 @@
     /* 子を持つノードのバレット（二等辺三角形▼）の高さ */
     --page-tree-bullet-triangle-height: 0.3em;
 
-    /* バレットの色 */
-    --page-tree-bullet-color: hsl(0, 0%, 50%);
-    /* バレットの色（ホバー時） */
-    --page-tree-bullet-hover-color: hsl(0, 0%, 30%);
+    /* バレットの色。lch(50.0%, 0.0, 0.0)相当 */
+    --page-tree-bullet-color: #777777;
+    /* バレットの色（ホバー時）。lch(30.0%, 0.0, 0.0)相当 */
+    --page-tree-bullet-hover-color: #474747;
   }
 
   .page-tree-bullet-and-indent {

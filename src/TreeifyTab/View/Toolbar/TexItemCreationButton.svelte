@@ -3,7 +3,7 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-  
+
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyTexItem()
@@ -33,8 +33,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 40%);
+    /* lch(40.0%, 0.0, 0.0)相当 */
+    background: #5e5e5e;
     -webkit-mask: url('math-formula-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
   }

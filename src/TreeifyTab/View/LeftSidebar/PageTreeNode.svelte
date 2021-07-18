@@ -133,7 +133,8 @@
     width: var(--page-tree-audible-icon-size);
     height: var(--page-tree-audible-icon-size);
 
-    background: hsl(0, 0%, 35%);
+    /* lch(35.0%, 0.0, 0.0)相当 */
+    background: #525252;
     -webkit-mask: url('./audible-icon.svg');
     -webkit-mask-size: contain;
   }
@@ -148,7 +149,8 @@
     cursor: pointer;
   }
   .page-tree-node_tabs-count-button:hover {
-    background: hsl(0, 0%, 90%);
+    /* lch(90.0%, 0.0, 0.0)相当 */
+    background: #e2e2e2;
   }
   /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
   .page-tree-node_tabs-count-button::after {
@@ -167,7 +169,8 @@
 
     border-radius: 50%;
 
-    background: hsl(0, 0%, 50%);
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    background: #777777;
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
   .page-tree-node_tabs-count-button:active::after {
@@ -184,15 +187,16 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    color: hsl(0, 0%, 40%);
+    /* lch(40.0%, 0.0, 0.0)相当 */
+    color: #5e5e5e;
   }
 
   .page-tree-node_close-button {
     width: var(--page-tree-close-button-size);
     height: var(--page-tree-close-button-size);
 
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 20%);
+    /* lch(20.0%, 0.0, 0.0)相当 */
+    background: #303030;
     -webkit-mask-image: url('close-icon2.svg');
 
     /* マウスホバー時にのみ表示 */

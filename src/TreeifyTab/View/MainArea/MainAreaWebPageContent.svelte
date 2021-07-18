@@ -65,8 +65,8 @@
 
     /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
     --main-area-audible-icon-size: 1em;
-    /* ウェブページアイテムの音がなっていることを示すアイコンの色 */
-    --main-area-audible-icon-color: hsl(0, 0%, 35%);
+    /* ウェブページアイテムの音がなっていることを示すアイコンの色。lch(35.0%, 0.0, 0.0)相当 */
+    --main-area-audible-icon-color: #525252;
 
     /* アンロード済みウェブページアイテムのopacity */
     --soft-unloaded-web-page-item-opacity: 75%;
@@ -104,10 +104,12 @@
   /* ローディングインジケータ */
   .loading-indicator {
     border-radius: 50%;
-    border-top: 4px solid hsl(0, 0%, 30%);
-    border-right: 4px solid hsl(0, 0%, 70%);
-    border-bottom: 4px solid hsl(0, 0%, 70%);
-    border-left: 4px solid hsl(0, 0%, 70%);
+    /* lch(30.0%, 0.0, 0.0)相当 */
+    border-top: 4px solid #474747;
+    /* lch(70.0%, 0.0, 0.0)相当 */
+    border-right: 4px solid #ababab;
+    border-bottom: 4px solid #ababab;
+    border-left: 4px solid #ababab;
     box-sizing: border-box;
     animation: rotation 0.8s infinite linear;
   }

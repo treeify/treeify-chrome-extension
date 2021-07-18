@@ -25,7 +25,7 @@
     overflow-y: auto;
 
     background: var(--left-sidebar-background-color);
-    /* Dynalistを参考にしながら調整した影 */
-    box-shadow: 1.5px 0 3px hsl(0, 0%, 85%);
+    /* Dynalistを参考にしながら調整した影。lch(85.0%, 0.0, 0.0)相当 */
+    box-shadow: 1.5px 0 3px #d4d4d4;
   }
 </style>

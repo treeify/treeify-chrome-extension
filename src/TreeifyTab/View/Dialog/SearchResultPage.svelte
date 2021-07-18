@@ -17,7 +17,8 @@
 
 <style>
   .search-result-page_tree {
-    border: solid 1px hsl(0, 0%, 70%);
+    /* lch(70.0%, 0.0, 0.0)相当 */
+    border: solid 1px #ababab;
     border-radius: 0.7em;
     padding: 0.5em 0.5em 0.5em 1em;
   }

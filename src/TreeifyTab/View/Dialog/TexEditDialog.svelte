@@ -2,7 +2,7 @@
   import katex from 'katex'
   import CommonDialog from './CommonDialog.svelte'
   import {TexEditDialogProps} from './TexEditDialogProps'
-  
+
   export let props: TexEditDialogProps
 
   // リアルタイムプレビュー用の変数
@@ -44,7 +44,8 @@
   .tex-edit-dialog_code {
     padding: 0.5em;
 
-    outline: 1px solid hsl(0, 0%, 60%);
+    /* lch(60.0%, 0.0, 0.0)相当 */
+    outline: 1px solid #919191;
   }
 
   .tex-edit-dialog_rendered-tex {

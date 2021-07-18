@@ -105,13 +105,13 @@
     /* 最も古い足跡の色（線形補間の一端） */
     --main-area-weakest-footprint-color: #ffffff;
 
-    /* グレーアウト状態のアイテムの標準的なテキスト色 */
-    --grayed-out-item-text-color: hsl(0, 0%, 75%);
+    /* グレーアウト状態のアイテムの標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当 */
+    --grayed-out-item-text-color: #b9b9b9;
 
     /* 削除ボタンのサイズ（正方形の一辺の長さ） */
     --main-area-delete-button-size: 0.8em;
-    /* 削除ボタンなどのマウスホバー時の背景 */
-    --main-area-node-button-background-hover-color: hsl(0, 0%, 90%);
+    /* 削除ボタンなどのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当 */
+    --main-area-node-button-background-hover-color: #e2e2e2;
   }
 
   .main-area-node {
@@ -147,7 +147,8 @@
 
   /* ダウトフル状態のアイテム */
   :global(.doubtful) .main-area-node_content-area {
-    text-decoration: underline dotted hsl(0, 100%, 70%);
+    /* lch(50.0%, 134.0, 40.4)相当 */
+    text-decoration: underline dotted #ee0b00;
     text-decoration-thickness: 2px;
     text-underline-offset: 0.03em;
   }
@@ -163,7 +164,8 @@
     border-radius: 50%;
     cursor: pointer;
 
-    color: hsl(0, 0%, 40%);
+    /* lch(40.0%, 0.0, 0.0)相当 */
+    color: #5e5e5e;
   }
   .main-area-node_hidden-tabs-count:hover {
     background: var(--main-area-node-button-background-hover-color);
@@ -185,7 +187,8 @@
 
     border-radius: 50%;
 
-    background: hsl(0, 0%, 50%);
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    background: #777777;
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
   .main-area-node_hidden-tabs-count:active::after {
@@ -229,8 +232,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
-    background: hsl(0, 0%, 30%);
+    /* lch(30.0%, 0.0, 0.0)相当 */
+    background: #474747;
     -webkit-mask-image: url('close-icon.svg');
   }
 

@@ -61,10 +61,10 @@
 
     /* インデントラインの太さ */
     --main-area-indent-line-width: 1px;
-    /* インデントラインの色 */
-    --main-area-indent-line-color: hsl(0, 0%, 88%);
-    /* インデントラインの色（ホバー時） */
-    --main-area-indent-line-hover-color: hsl(0, 0%, 70%);
+    /* インデントラインの色。lch(88.0%, 0.0, 0.0)相当 */
+    --main-area-indent-line-color: #dddddd;
+    /* インデントラインの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
+    --main-area-indent-line-hover-color: #ababab;
   }
 
   /* トランスクルードされたアイテムの強調表示 */
@@ -151,7 +151,6 @@
     width: var(--bullet-page-icon-size);
     height: var(--bullet-page-icon-size);
 
-    /* アイコンを単なるマスク画像として扱い、任意の色で塗るテクニック */
     background: var(--main-area-bullet-page-icon-color);
     -webkit-mask-image: url('./page-icon.svg');
 

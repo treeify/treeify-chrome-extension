@@ -97,11 +97,13 @@
     /* lch(98.0%, 0.0, 0.0)相当 */
     background: #f9f9f9;
 
-    border: hsl(0, 0%, 80%) 1px solid;
+    /* lch(80.0%, 0.0, 0.0)相当 */
+    border: #c6c6c6 1px solid;
     border-radius: 3px;
     /* 子要素を角丸からはみ出させない */
     overflow: hidden;
 
-    box-shadow: 2px 2px 4px hsl(0, 0%, 85%);
+    /* lch(85.0%, 0.0, 0.0)相当 */
+    box-shadow: 2px 2px 4px #d4d4d4;
   }
 </style>

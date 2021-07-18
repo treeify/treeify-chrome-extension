@@ -4,7 +4,7 @@
   import {CurrentState} from '../../Internal/CurrentState'
   import {InputId} from '../../Internal/InputId'
   import {Rerenderer} from '../../Rerenderer'
-  
+
   export let title: string
   export let onClose = () => {}
 
@@ -69,7 +69,8 @@
   :root {
     --common-dialog-border-radius: 5px;
 
-    --common-dialog-title-bar-background: hsl(0, 0%, 25%);
+    /* lch(25.0%, 0.0, 0.0)相当 */
+    --common-dialog-title-bar-background: #3b3b3b;
     --common-dialog-title-bar-height: 2.2em;
   }
 
@@ -97,8 +98,9 @@
     /* 子要素を角丸からはみ出させない */
     overflow: hidden;
 
-    background: hsl(0, 0%, 100%);
-    box-shadow: 0 1.5px 8px hsl(0, 0%, 50%);
+    background: #ffffff;
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    box-shadow: 0 1.5px 8px #777777;
   }
 
   .common-dialog_title-bar {
