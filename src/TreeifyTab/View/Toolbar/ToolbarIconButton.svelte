@@ -1,7 +1,8 @@
 <script lang="ts">
+  export let title = ""
 </script>
 
-<div class="toolbar-icon-button" on:click>
+<div class="toolbar-icon-button" {title} on:click>
   <slot />
 </div>
 
@@ -46,6 +47,8 @@
 
     /* lch(50.0%, 0.0, 0.0)相当 */
     background: #777777;
+    
+    pointer-events: none;
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
   .toolbar-icon-button:active::after {
