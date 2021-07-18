@@ -161,6 +161,8 @@ export type ContextMenuDialog = {
 
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
+export type PreferenceDialog = {type: 'PreferenceDialog'}
+
 export type SearchDialog = {type: 'SearchDialog'}
 
 export type TexEditDialog = {type: 'TexEditDialog'}
@@ -179,6 +181,7 @@ export type Dialog =
   | CodeBlockItemEditDialog
   | ContextMenuDialog
   | OtherParentsDialog
+  | PreferenceDialog
   | SearchDialog
   | TexEditDialog
   | WebPageItemTitleSettingDialog
