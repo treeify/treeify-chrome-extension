@@ -90,12 +90,12 @@
     height: 100%;
   }
 
-  /* ウェブページアイテムのタイトル設定ダイアログ */
   .context-menu-dialog_frame {
     /* topとleftはstyle属性で動的に設定する */
     position: absolute;
 
-    background: hsl(0, 0%, 96%);
+    /* lch(98.0%, 0.0, 0.0)相当 */
+    background: #f9f9f9;
 
     border: hsl(0, 0%, 80%) 1px solid;
     border-radius: 3px;

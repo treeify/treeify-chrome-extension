@@ -34,10 +34,10 @@
 
   .search-result-item_content-area:focus {
     outline: transparent;
-    background: hsl(240, 100%, 96.8%);
+    background: var(--main-area-focused-item-background-color);
   }
   .search-result-item_content-area:hover {
-    background: hsl(240, 100%, 98.8%);
+    background: var(--main-area-mouse-hover-item-background-color);
   }
 
   .search-result-item_indent-and-children-area {

@@ -92,18 +92,18 @@
     /* ボディ領域の上下パディング */
     --main-area-body-area-vertical-padding: 0.5px;
 
-    /* フォーカスアイテムの背景色 */
-    --main-area-focused-item-background-color: hsl(240, 100%, 96.8%);
-    /* マウスホバーアイテムの背景色 */
-    --main-area-mouse-hover-item-background-color: hsl(240, 100%, 98.8%);
+    /* フォーカスアイテムの背景色。lch(95.0%, 7.8, 280.4)相当 */
+    --main-area-focused-item-background-color: #ecf0ff;
+    /* マウスホバーアイテムの背景色。lch(97.5%, 3.6, 280.4)相当 */
+    --main-area-mouse-hover-item-background-color: #f6f8ff;
 
-    /* 複数選択されたアイテムの背景色 */
-    --main-area-selected-item-background-color: hsl(216, 89%, 85%);
+    /* 複数選択されたアイテムの背景色。lch(93.0%, 134.0, 280.4)相当 */
+    --main-area-selected-item-background-color: #e5ebff;
 
-    /* 最も新しい足跡の色（線形補間の一端） */
-    --main-area-strongest-footprint-color: hsl(0, 100%, 97.3%);
+    /* 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 3.5, 40.4)相当 */
+    --main-area-strongest-footprint-color: #fff6f3;
     /* 最も古い足跡の色（線形補間の一端） */
-    --main-area-weakest-footprint-color: hsl(60, 100%, 97.3%);
+    --main-area-weakest-footprint-color: #ffffff;
 
     /* グレーアウト状態のアイテムの標準的なテキスト色 */
     --grayed-out-item-text-color: hsl(0, 0%, 75%);

@@ -32,32 +32,32 @@
 
 <style>
   :root {
-    /* バレットの外側の円の色 */
-    --main-area-bullet-outer-circle-color: hsl(0, 0%, 85%);
-    /* バレットの外側の円のマウスホバー時の色 */
-    --main-area-bullet-outer-circle-hover-color: hsl(0, 0%, 75%);
+    /* バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当 */
+    --main-area-bullet-outer-circle-color: #e2e2e2;
+    /* バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当 */
+    --main-area-bullet-outer-circle-hover-color: #c6c6c6;
     /* バレットの内側の円の直径 */
     --main-area-bullet-inner-circle-diameter: 0.38em;
-    /* バレットの内側の円の色 */
-    --main-area-bullet-inner-circle-color: hsl(0, 0%, 60%);
-    /* バレットの内側の円のマウスホバー時の色 */
-    --main-area-bullet-inner-circle-hover-color: hsl(0, 0%, 40%);
-    /* バレットとして表示されるページアイコンの色 */
-    --main-area-bullet-page-icon-color: hsl(0, 0%, 40%);
-    /* バレットとして表示されるページアイコンのマウスホバー時の色 */
-    --main-area-bullet-page-icon-hover-color: hsl(0, 0%, 20%);
+    /* バレットの内側の円の色。lch(60.0%, 0.0, 0.0)相当 */
+    --main-area-bullet-inner-circle-color: #919191;
+    /* バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当 */
+    --main-area-bullet-inner-circle-hover-color: #5e5e5e;
+    /* バレットとして表示されるページアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
+    --main-area-bullet-page-icon-color: #5e5e5e;
+    /* バレットとして表示されるページアイコンのマウスホバー時の色。lch(20.0%, 0.0, 0.0)相当 */
+    --main-area-bullet-page-icon-hover-color: #303030;
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
     --bullet-page-icon-size: 1em;
 
-    /* トランスクルードされたアイテムのバレットの色 */
-    --transcluded-item-bullet-color: hsl(120, 50%, 40%);
-    /* トランスクルードされたアイテムのバレットのマウスホバー時の色 */
-    --transcluded-item-bullet-hover-color: hsl(120, 50%, 35%);
+    /* トランスクルードされたアイテムのバレットの色。lch(60.0%, 40.0, 160.4)相当 */
+    --transcluded-item-bullet-color: #44a178;
+    /* トランスクルードされたアイテムのバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当 */
+    --transcluded-item-bullet-hover-color: #006c48;
 
-    /* ハイライト状態のアイテムのバレットの色 */
-    --highlighted-item-bullet-color: hsl(0, 100%, 45%);
-    /* ハイライト状態のアイテムのバレットのマウスホバー時の色 */
-    --highlighted-item-bullet-hover-color: hsl(0, 100%, 40%);
+    /* ハイライト状態のアイテムのバレットの色。lch(50.0%, 134.0, 40.4)相当 */
+    --highlighted-item-bullet-color: #ee0b00;
+    /* ハイライト状態のアイテムのバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
+    --highlighted-item-bullet-hover-color: #bf0600;
 
     /* インデントラインの太さ */
     --main-area-indent-line-width: 1px;

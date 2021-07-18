@@ -60,8 +60,8 @@
     /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
     --main-area-favicon-size: 1em;
 
-    /* 未読ウェブページアイテムのタイトルの色 */
-    --main-area-unread-web-page-item-title-color: hsl(240, 50%, 45%);
+    /* 未読ウェブページアイテムのタイトルの色。lch(35.0%, 134.0, 160.4)相当 */
+    --main-area-unread-web-page-item-title-color: #005f3e;
 
     /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
     --main-area-audible-icon-size: 1em;
@@ -104,10 +104,10 @@
   /* ローディングインジケータ */
   .loading-indicator {
     border-radius: 50%;
-    border-top: 4px solid hsl(200, 0%, 30%);
-    border-right: 4px solid hsl(200, 0%, 70%);
-    border-bottom: 4px solid hsl(200, 0%, 70%);
-    border-left: 4px solid hsl(200, 0%, 70%);
+    border-top: 4px solid hsl(0, 0%, 30%);
+    border-right: 4px solid hsl(0, 0%, 70%);
+    border-bottom: 4px solid hsl(0, 0%, 70%);
+    border-left: 4px solid hsl(0, 0%, 70%);
     box-sizing: border-box;
     animation: rotation 0.8s infinite linear;
   }

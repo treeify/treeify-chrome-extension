@@ -76,16 +76,21 @@
 
 <style>
   :root {
-    /* ページツリーの項目のマウスホバー時の背景色 */
-    --page-tree-hover-item-background-color: hsl(0, 0%, 95%);
+    /* ページツリーの項目のマウスホバー時の背景色。lch(95.5%, 3.6, 280.4)相当 */
+    --page-tree-hover-item-background-color: #f0f2f9;
 
-    /* ページツリーのアクティブページの背景色 */
-    --page-tree-active-page-background-color: hsl(0, 0%, 90%);
+    /* ページツリーのアクティブページの背景色。lch(93.0%, 7.8, 280.4)相当 */
+    --page-tree-active-page-background-color: #e7ebfa;
 
-    /* 最も新しい足跡の色（線形補間の一端） */
-    --page-tree-strongest-footprint-color: hsl(0, 90%, 96%);
-    /* 最も古い足跡の色（線形補間の一端） */
-    --page-tree-weakest-footprint-color: hsl(60, 90%, 96%);
+    /*
+    最も新しい足跡の色（線形補間の一端）。
+    lch(95.5%, 5.0, 40.4)相当。
+    lch(95.5%, 134.0, 40.4)では彩度の高さのせいでメインエリアの足跡より目立ってしまうため、
+    彩度3.5~6.3の間で目立ち度合いが適切だと感じた5.5を採用した。
+    */
+    --page-tree-strongest-footprint-color: #fdefeb;
+    /* 最も古い足跡の色（線形補間の一端）。lch(98.0%, 0.0, 0.0)相当 */
+    --page-tree-weakest-footprint-color: #f9f9f9;
 
     /* audibleタブを含むことを示すアイコンのサイズ（正方形の一辺の長さ） */
     --page-tree-audible-icon-size: 1em;

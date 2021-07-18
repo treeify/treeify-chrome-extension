@@ -12,7 +12,7 @@
 <style>
   :root {
     /* 左サイドバーの背景色 */
-    --left-sidebar-background-color: hsl(0, 0%, 98%);
+    --left-sidebar-background-color: #f9f9f9;
 
     /* 左サイドバーの幅 */
     --left-sidebar-width: 200px;
