@@ -7,13 +7,23 @@
 
   export let props: DragImageProps
 
+  let mouseX = props.initialMousePosition.x
+  let mouseY = props.initialMousePosition.y
+
   $: style = `
-    left: ${props.mousePosition.x}px;
-    top: ${props.mousePosition.y}px;
+    left: ${mouseX}px;
+    top: ${mouseY}px;
   `
 
   $: itemId = ItemPath.getItemId(props.itemPath)
+
+  function onMouseMove(event: MouseEvent) {
+    $: mouseX = event.clientX
+    $: mouseY = event.clientY
+  }
 </script>
+
+<svelte:body on:mousemove={onMouseMove} />
 
 <div class="drag-image" use:onItemDrop={props.onDrop}>
   <div class="drag-image_item-image" {style}>

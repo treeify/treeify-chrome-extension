@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -48,15 +47,11 @@ export async function startup(initialState: State) {
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
 
   chrome.commands.onCommand.addListener(onCommand)
-
-  document.addEventListener('mousemove', onMouseMove)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
-
-  document.removeEventListener('mousemove', onMouseMove)
 
   chrome.commands.onCommand.removeListener(onCommand)
 
@@ -180,13 +175,6 @@ async function onCommand(commandName: string) {
       }
       break
   }
-}
-
-function onMouseMove(event: MouseEvent) {
-  doWithErrorCapture(() => {
-    External.instance.mousePosition = {x: event.clientX, y: event.clientY}
-    Rerenderer.instance.rerender()
-  })
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {

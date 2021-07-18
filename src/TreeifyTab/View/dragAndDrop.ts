@@ -6,6 +6,7 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 export type ItemDragData = {
   type: 'ItemDragData'
   itemPath: ItemPath
+  initialMousePosition: Coordinate
 }
 
 type ImageBottomDragData = {
@@ -33,10 +34,15 @@ export function dragItem(element: HTMLElement, itemPath: ItemPath) {
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && mouseDownPosition !== undefined) {
       // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
-      const distance = calculateDistance(mouseDownPosition, {x: event.clientX, y: event.clientY})
+      const currentMousePosition = {x: event.clientX, y: event.clientY}
+      const distance = calculateDistance(mouseDownPosition, currentMousePosition)
       if (distance > 5) {
         mouseDownPosition = undefined
-        currentDragData = {type: 'ItemDragData', itemPath}
+        currentDragData = {
+          type: 'ItemDragData',
+          itemPath,
+          initialMousePosition: currentMousePosition,
+        }
         Rerenderer.instance.rerender()
       }
     }
