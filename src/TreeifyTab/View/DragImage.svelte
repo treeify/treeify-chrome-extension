@@ -11,7 +11,7 @@
   let mouseY = props.initialMousePosition.y
 
   $: style = `
-    left: ${mouseX}px;
+    left: ${mouseX + 8}px;
     top: ${mouseY}px;
   `
 
@@ -48,5 +48,9 @@
     /* left, topはstyle属性で指定する */
 
     pointer-events: none;
+
+    background: #ffffff;
+    /* lch(90.0%, 0.0, 0.0)相当 */
+    border: 1px solid #e2e2e2;
   }
 </style>
