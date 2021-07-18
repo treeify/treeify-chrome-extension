@@ -61,6 +61,12 @@ export function getSelectedItemPaths(): List<ItemPath> {
   return sliced.map((itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!)
 }
 
+export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {
+  const prefix = itemPath.take(CurrentState.getTargetItemPath().size)
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  return selectedItemPaths.some((selectedItemPath) => is(prefix, selectedItemPath))
+}
+
 /**
  * ドキュメント順で1つ上のアイテムのアイテムパスを返す。
  * 例えば

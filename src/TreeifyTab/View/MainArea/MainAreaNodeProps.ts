@@ -111,6 +111,16 @@ export function createMainAreaNodeProps(
             NullaryCommand.deleteItemItself()
             Rerenderer.instance.rerender()
             break
+          case '0000MouseButton2':
+            // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
+            // その複数選択されたアイテムをコンテキストメニューの操作対象にする。
+            if (
+              CurrentState.getSelectedItemPaths().size === 1 ||
+              !CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)
+            ) {
+              CurrentState.setTargetItemPath(itemPath)
+            }
+            break
           default:
             CurrentState.setTargetItemPath(itemPath)
             Rerenderer.instance.rerender()
@@ -128,7 +138,6 @@ export function createMainAreaNodeProps(
 
         if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
 
-        CurrentState.setTargetItemPath(itemPath)
         NullaryCommand.showContextMenuDialog({x: event.clientX, y: event.clientY})
         Rerenderer.instance.rerender()
       }
