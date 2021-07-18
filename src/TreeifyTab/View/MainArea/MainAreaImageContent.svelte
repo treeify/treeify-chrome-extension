@@ -22,7 +22,7 @@
       draggable="false"
       use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
     />
-    <div class="main-area-image-content_caption">{props.caption}</div>
+    <div class="main-area-image-content_caption" />
   </div>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
@@ -59,11 +59,5 @@
   /* グレーアウト状態の画像 */
   :global(.grayed-out) .main-area-image-content_image {
     filter: opacity(50%);
-  }
-
-  /* グレーアウト状態のキャプション */
-  :global(.grayed-out) .main-area-image-content_caption {
-    /* lch(50.0%, 0.0, 0.0)相当 */
-    color: #777777;
   }
 </style>

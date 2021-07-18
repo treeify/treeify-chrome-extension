@@ -108,7 +108,6 @@ export type WebPageItem = {
 /** 画像アイテムが固有で持つデータの型 */
 export type ImageItem = {
   url: string
-  caption: string
   /** 画像の表示領域の高さ指定 */
   heightPx: integer | null
 }

@@ -94,7 +94,7 @@ export class SearchEngine {
         const webPageItem = state.webPageItems[itemId]
         return List.of(webPageItem.tabTitle, webPageItem.title ?? '')
       case ItemType.IMAGE:
-        return List.of(state.imageItems[itemId].caption)
+        return List.of()
       case ItemType.CODE_BLOCK:
         const codeBlockItem = state.codeBlockItems[itemId]
         return List.of(codeBlockItem.code)
