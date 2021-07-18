@@ -17,7 +17,6 @@ import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
@@ -699,5 +698,5 @@ async function undo() {
 
 function onDragImageBottom(event: MouseEvent, itemId: ItemId, imageRectTop: integer) {
   const heightPx = Math.max(0, event.clientY - imageRectTop)
-  Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
+  CurrentState.setImageItemHeightPx(itemId, heightPx)
 }
