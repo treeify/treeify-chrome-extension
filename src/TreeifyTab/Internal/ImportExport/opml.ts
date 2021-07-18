@@ -70,7 +70,7 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
       baseAttributes.type = 'image'
-      baseAttributes.text = imageItem.caption
+      baseAttributes.text = imageItem.url
       baseAttributes.url = imageItem.url
       if (imageItem.heightPx !== null) {
         baseAttributes.heightPx = imageItem.heightPx.toString()
@@ -242,7 +242,6 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
       return webPageItemId
     case 'image':
       const imageItemId = CurrentState.createImageItem()
-      CurrentState.setImageItemCaption(imageItemId, attrText)
       if (attrUrl !== null) {
         CurrentState.setImageItemUrl(imageItemId, attrUrl)
       }
