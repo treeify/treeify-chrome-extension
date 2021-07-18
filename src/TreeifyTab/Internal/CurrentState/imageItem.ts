@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {Device} from 'src/TreeifyTab/Device'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -51,4 +52,9 @@ export function setImageItemCaption(itemId: ItemId, caption: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
     Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
   })
+}
+
+/** 画像アイテムのheightPxを設定する */
+export function setImageItemHeightPx(itemId: ItemId, heightPx: integer) {
+  Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
 }
