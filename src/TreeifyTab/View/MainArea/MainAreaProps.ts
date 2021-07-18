@@ -699,4 +699,5 @@ async function undo() {
 function onDragImageBottom(event: MouseEvent, itemId: ItemId, imageRectTop: integer) {
   const heightPx = Math.max(0, event.clientY - imageRectTop)
   CurrentState.setImageItemHeightPx(itemId, heightPx)
+  Rerenderer.instance.rerender()
 }
