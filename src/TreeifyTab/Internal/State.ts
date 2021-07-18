@@ -1,6 +1,6 @@
 import {is, List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
+import {Coordinate, integer} from 'src/Common/integer'
 import {ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
 import {DeviceId, Disn} from 'src/TreeifyTab/Device'
 import {Command} from 'src/TreeifyTab/Internal/Command'
@@ -154,7 +154,10 @@ export type CodeBlockItemEditDialog = {
   language: string
 }
 
-export type ContextMenuDialog = {type: 'ContextMenuDialog'}
+export type ContextMenuDialog = {
+  type: 'ContextMenuDialog'
+  mousePosition: Coordinate
+}
 
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 

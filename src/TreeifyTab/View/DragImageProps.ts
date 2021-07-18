@@ -2,24 +2,22 @@ import {is, List} from 'immutable'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Coordinate, integer} from 'src/Common/integer'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 
 export type DragImageProps = {
-  mousePosition: Coordinate
+  initialMousePosition: Coordinate
   itemPath: ItemPath
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
 export function createDragImageProps(): DragImageProps | undefined {
   if (currentDragData?.type !== 'ItemDragData') return undefined
-  if (External.instance.mousePosition === undefined) return undefined
 
   return {
-    mousePosition: External.instance.mousePosition,
+    initialMousePosition: currentDragData.initialMousePosition,
     itemPath: currentDragData.itemPath,
     onDrop,
   }
