@@ -10,6 +10,7 @@ export type ContextMenuItemProps = {
 }
 
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
+  const isSingleSelect = CurrentState.getSelectedItemPaths().size === 1
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const item = Internal.instance.state.items[targetItemId]
@@ -30,7 +31,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (CurrentState.countParents(targetItemId) >= 2) {
+  if (CurrentState.countParents(targetItemId) >= 2 && isSingleSelect) {
     result.push({
       title: '他のトランスクルード元を表示…',
       onClick: () => NullaryCommand.showOtherParentsDialog(),
@@ -47,27 +48,31 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     onClick: () => NullaryCommand.copyAsMarkdownText(),
   })
 
-  result.push({
-    title: '出典を設定…',
-    onClick: () => NullaryCommand.showCitationSettingDialog(),
-  })
-  if (item.cite?.title === '' && item.cite.url === '') {
+  if (isSingleSelect) {
     result.push({
-      title: '出典を削除',
-      onClick: () => NullaryCommand.toggleCitation(),
+      title: '出典を設定…',
+      onClick: () => NullaryCommand.showCitationSettingDialog(),
     })
+    if (item.cite?.title === '' && item.cite.url === '') {
+      result.push({
+        title: '出典を削除',
+        onClick: () => NullaryCommand.toggleCitation(),
+      })
+    }
   }
 
-  if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
-    result.push({
-      title: '現在のワークスペースからの除外を解除',
-      onClick: () => NullaryCommand.toggleExcluded(),
-    })
-  } else {
-    result.push({
-      title: '現在のワークスペースのページツリーや検索結果から除外',
-      onClick: () => NullaryCommand.toggleExcluded(),
-    })
+  if (isSingleSelect) {
+    if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
+      result.push({
+        title: '現在のワークスペースからの除外を解除',
+        onClick: () => NullaryCommand.toggleExcluded(),
+      })
+    } else {
+      result.push({
+        title: '現在のワークスペースのページツリーや検索結果から除外',
+        onClick: () => NullaryCommand.toggleExcluded(),
+      })
+    }
   }
 
   return List(result)
