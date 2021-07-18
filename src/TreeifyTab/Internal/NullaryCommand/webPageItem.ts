@@ -48,6 +48,7 @@ export function hardUnloadItem() {
 
 /** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブを閉じる */
 export function hardUnloadSubtree() {
+  // TODO: 複数選択中の一括操作に対応する
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
