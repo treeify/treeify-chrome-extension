@@ -11,27 +11,20 @@
 
 <div class="main-area-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-web-page-content_body">
-    {#if props.isLoading}
-      <div
-        class="main-area-web-page-content_favicon loading-indicator"
-        on:mousedown={props.onClickFavicon}
-      />
-    {:else if props.faviconUrl.length > 0}
-      <img
-        class="main-area-web-page-content_favicon"
-        class:soft-unloaded-item={props.isSoftUnloaded}
-        class:hard-unloaded-item={props.isHardUnloaded}
-        src={props.faviconUrl}
-        on:mousedown={props.onClickFavicon}
-      />
-    {:else}
-      <div
-        class="main-area-web-page-content_favicon default-favicon"
-        class:soft-unloaded-item={props.isSoftUnloaded}
-        class:hard-unloaded-item={props.isHardUnloaded}
-        on:mousedown={props.onClickFavicon}
-      />
-    {/if}
+    <div
+      class="main-area-web-page-content_favicon"
+      class:soft-unloaded-item={props.isSoftUnloaded}
+      class:hard-unloaded-item={props.isHardUnloaded}
+      on:mousedown={props.onClickFavicon}
+    >
+      {#if props.isLoading}
+        <div class="loading-indicator" />
+      {:else if props.faviconUrl.length > 0}
+        <img src={props.faviconUrl} />
+      {:else}
+        <div class="default-favicon" />
+      {/if}
+    </div>
 
     <div
       class="main-area-web-page-content_title"
@@ -99,6 +92,10 @@
 
     /* クリックして操作できることを示す */
     cursor: pointer;
+  }
+  .main-area-web-page-content_favicon > * {
+    width: var(--main-area-favicon-size);
+    height: var(--main-area-favicon-size);
   }
 
   /* ローディングインジケータ */
