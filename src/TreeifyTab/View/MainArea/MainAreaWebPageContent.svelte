@@ -90,12 +90,41 @@
     width: var(--main-area-favicon-size);
     height: var(--main-area-favicon-size);
 
+    position: relative;
+
     /* クリックして操作できることを示す */
     cursor: pointer;
   }
   .main-area-web-page-content_favicon > * {
     width: var(--main-area-favicon-size);
     height: var(--main-area-favicon-size);
+  }
+  /* 疑似リップルエフェクトの終了状態 */
+  .main-area-web-page-content_favicon::after {
+    content: '';
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+    border-radius: 50%;
+
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    background: #777777;
+  }
+  /* 疑似リップルエフェクトの開始状態 */
+  .main-area-web-page-content_favicon:active::after {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+    transition: opacity 0s, width 0s, height 0s;
   }
 
   /* ローディングインジケータ */
