@@ -60,10 +60,13 @@ export function createPageTreeNodeProps(
       ? List.of<ItemPath>()
       : childPagePaths
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
+  const activePageId = CurrentState.getActivePageId()
 
   // TODO: パラメータをカスタマイズ可能にする
-  const footprintCount = Math.floor(filteredPageIds.size ** 0.7)
-  const rank = filteredPageIds.size - filteredPageIds.indexOf(itemId) - 1
+  const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
+  const footprintCount = Math.floor(nonActivePageIds.size ** 0.7)
+  const index = nonActivePageIds.indexOf(itemId)
+  const rank = index !== -1 ? nonActivePageIds.size - index - 1 : 0
 
   return {
     itemId,
@@ -72,10 +75,10 @@ export function createPageTreeNodeProps(
     childNodePropses: displayingChildPagePaths.map((childPagePath) =>
       createPageTreeNodeProps(state, childPagePath, pageTreeEdges, filteredPageIds)
     ),
-    isActivePage: CurrentState.getActivePageId() === itemId,
+    isActivePage: activePageId === itemId,
     isRoot: itemId === TOP_ITEM_ID,
     isAudible: getAudiblePageIds().contains(itemId),
-    footprintRank: rank <= footprintCount ? rank : undefined,
+    footprintRank: rank < footprintCount ? rank : undefined,
     footprintCount,
     tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
     onClickContentArea: () => {
@@ -92,7 +95,7 @@ export function createPageTreeNodeProps(
         CurrentState.unmountPage(itemId)
 
         // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
-        if (itemId === CurrentState.getActivePageId()) {
+        if (itemId === activePageId) {
           const hottestPageId = Internal.instance.state.mountedPageIds
             .map((pageId) => {
               return {
