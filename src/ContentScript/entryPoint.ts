@@ -1,4 +1,8 @@
 window.addEventListener('mousemove', (event) => {
+  const height = document.body.clientHeight
+  // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
+  if (event.clientY < height * 0.1 || height * 0.9 < event.clientY) return
+
   // マウスカーソルが画面左端に到達したとき。
   // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
   if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
