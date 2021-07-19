@@ -196,6 +196,7 @@ export class Internal {
         '1100KeyF': List.of({commandName: 'showSearchDialog'}),
         '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
         '0010KeyE': List.of({commandName: 'toggleExcluded'}),
+        '1100Period': List.of({commandName: 'toggleCitation'}),
         '0000F2': List.of({commandName: 'edit'}),
         '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
         '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
