@@ -45,7 +45,7 @@
     font-size: var(--main-area-base-font-size);
     line-height: var(--main-area-line-height);
 
-    padding: 15px 300px 150px 15px;
+    padding: 15px 300px 40% 15px;
 
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;

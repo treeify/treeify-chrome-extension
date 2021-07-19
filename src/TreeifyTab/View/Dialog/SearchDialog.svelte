@@ -42,7 +42,7 @@
     <input
       type="text"
       class="search-dialog_search-query"
-      placeholder="検索ワード"
+      placeholder="検索ワード -除外ワード"
       on:keydown={onKeyDownSearchQuery}
     />
     <div class="search-dialog_result">
