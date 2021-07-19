@@ -4,8 +4,8 @@
   export let props: MainAreaSpoolProps
 
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
-  $: limitedHiddenItemsCount = Math.min(props.hiddenItemsCount, 10)
-  $: outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.025
+  $: limitedHiddenItemsCount = Math.min(props.hiddenItemsCount, 20)
+  $: outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.0125
   $: outerCircleStyle = `
     width: ${outerCircleRadiusEm}em;
     height: ${outerCircleRadiusEm}em;
