@@ -3,7 +3,7 @@
   import {dragItem} from '../dragAndDrop'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
-
+  
   export let props: MainAreaWebPageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -181,10 +181,10 @@
   }
 
   /* アンロード済みウェブページアイテムのファビコンのグレーアウト */
-  .main-area-web-page-content_favicon.soft-unloaded-item {
+  .main-area-web-page-content_favicon.soft-unloaded-item > * {
     filter: opacity(var(--soft-unloaded-web-page-item-opacity));
   }
-  .main-area-web-page-content_favicon.hard-unloaded-item {
+  .main-area-web-page-content_favicon.hard-unloaded-item > * {
     filter: opacity(var(--hard-unloaded-web-page-item-opacity));
   }
 </style>
