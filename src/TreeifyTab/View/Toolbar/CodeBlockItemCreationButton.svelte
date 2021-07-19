@@ -3,7 +3,7 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-
+  
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyCodeBlockItem()
@@ -12,7 +12,7 @@
   }
 </script>
 
-<ToolbarIconButton on:click={onClick}>
+<ToolbarIconButton title="コードブロックアイテム作成" on:click={onClick}>
   <div class="code-block-creation-button_icon" />
 </ToolbarIconButton>
 

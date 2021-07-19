@@ -3,7 +3,7 @@
   import {CurrentState} from '../../Internal/CurrentState'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-
+  
   function onClick() {
     doWithErrorCapture(() => {
       CurrentState.setDialog({type: 'PreferenceDialog'})
@@ -12,7 +12,7 @@
   }
 </script>
 
-<ToolbarIconButton on:click={onClick}>
+<ToolbarIconButton title="環境設定" on:click={onClick}>
   <div class="preference-button_icon" />
 </ToolbarIconButton>
 

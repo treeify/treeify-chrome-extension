@@ -3,7 +3,7 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-
+  
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyTexItem()
@@ -12,7 +12,7 @@
   }
 </script>
 
-<ToolbarIconButton on:click={onClick}>
+<ToolbarIconButton title="TeXアイテム作成" on:click={onClick}>
   <div class="tex-item-creation-button_icon" />
 </ToolbarIconButton>
 
