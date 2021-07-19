@@ -152,7 +152,7 @@
     /* lch(90.0%, 0.0, 0.0)相当 */
     background: #e2e2e2;
   }
-  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+  /* 疑似リップルエフェクトの終了状態 */
   .page-tree-node_tabs-count-button::after {
     content: '';
 
@@ -172,7 +172,7 @@
     /* lch(50.0%, 0.0, 0.0)相当 */
     background: #777777;
   }
-  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+  /* 疑似リップルエフェクトの開始状態 */
   .page-tree-node_tabs-count-button:active::after {
     width: 0;
     height: 0;
