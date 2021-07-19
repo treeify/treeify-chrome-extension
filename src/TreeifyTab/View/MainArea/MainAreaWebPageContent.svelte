@@ -58,8 +58,8 @@
 
     /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
     --main-area-audible-icon-size: 1em;
-    /* ウェブページアイテムの音がなっていることを示すアイコンの色。lch(35.0%, 0.0, 0.0)相当 */
-    --main-area-audible-icon-color: #525252;
+    /* ウェブページアイテムの音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
+    --main-area-audible-icon-color: #6a6a6a;
 
     /* アンロード済みウェブページアイテムのopacity */
     --soft-unloaded-web-page-item-opacity: 75%;
