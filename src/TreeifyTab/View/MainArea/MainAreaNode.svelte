@@ -170,7 +170,7 @@
   .main-area-node_hidden-tabs-count:hover {
     background: var(--main-area-node-button-background-hover-color);
   }
-  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+  /* 疑似リップルエフェクトの終了状態 */
   .main-area-node_hidden-tabs-count::after {
     content: '';
 
@@ -190,7 +190,7 @@
     /* lch(50.0%, 0.0, 0.0)相当 */
     background: #777777;
   }
-  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+  /* 疑似リップルエフェクトの開始状態 */
   .main-area-node_hidden-tabs-count:active::after {
     width: 0;
     height: 0;
