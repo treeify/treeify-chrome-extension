@@ -1,4 +1,6 @@
-import {Dialog, State} from 'src/TreeifyTab/Internal/State'
+import {Dialog} from 'src/TreeifyTab/External/DialogState'
+import {External} from 'src/TreeifyTab/External/External'
+import {State} from 'src/TreeifyTab/Internal/State'
 
 export type DialogLayerProps = {
   dialog: Dialog | undefined
@@ -6,6 +8,6 @@ export type DialogLayerProps = {
 
 export function createDialogLayerProps(state: State): DialogLayerProps {
   return {
-    dialog: state.dialog ?? undefined,
+    dialog: External.instance.dialogState ?? undefined,
   }
 }

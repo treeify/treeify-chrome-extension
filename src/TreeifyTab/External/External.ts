@@ -3,6 +3,7 @@ import md5 from 'md5'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {DataFolder} from 'src/TreeifyTab/External/DataFolder'
+import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {TabItemCorrespondence} from 'src/TreeifyTab/External/TabItemCorrespondence'
 import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -12,6 +13,8 @@ import {State} from 'src/TreeifyTab/Internal/State'
 /** TODO: コメント */
 export class External {
   private static _instance: External | undefined
+
+  dialogState: Dialog | undefined
 
   /** データフォルダ */
   dataFolder: DataFolder | undefined

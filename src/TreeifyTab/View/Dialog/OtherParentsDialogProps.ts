@@ -1,7 +1,7 @@
 import {List} from 'immutable'
+import {OtherParentsDialog} from 'src/TreeifyTab/External/DialogState'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {OtherParentsDialog} from 'src/TreeifyTab/Internal/State'
 import {
   createItemContentProps,
   ItemContentProps,

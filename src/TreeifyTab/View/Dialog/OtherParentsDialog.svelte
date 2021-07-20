@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {External} from '../../External/External'
   import {Rerenderer} from '../../Rerenderer'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import CommonDialog from './CommonDialog.svelte'
@@ -9,7 +9,7 @@
 
   const closeDialog = () => {
     // ダイアログを閉じる
-    CurrentState.setDialog(null)
+    External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
 </script>

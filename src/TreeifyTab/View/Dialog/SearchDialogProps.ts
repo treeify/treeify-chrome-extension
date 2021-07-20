@@ -1,6 +1,6 @@
 import {List} from 'immutable'
+import {SearchDialog} from 'src/TreeifyTab/External/DialogState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {SearchDialog} from 'src/TreeifyTab/Internal/State'
 
 export type SearchDialogProps = {
   onKeyDown: (event: KeyboardEvent) => void

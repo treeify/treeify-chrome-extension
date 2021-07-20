@@ -1,12 +1,12 @@
 <script lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {External} from '../../External/External'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-  
+
   function onClick() {
     doWithErrorCapture(() => {
-      CurrentState.setDialog({type: 'PreferenceDialog'})
+      External.instance.dialogState = {type: 'PreferenceDialog'}
       Rerenderer.instance.rerender()
     })
   }

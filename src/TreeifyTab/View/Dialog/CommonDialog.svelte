@@ -1,7 +1,7 @@
 <script lang="ts">
   import {createFocusTrap} from 'focus-trap'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {External} from '../../External/External'
   import {InputId} from '../../Internal/InputId'
   import {Rerenderer} from '../../Rerenderer'
 
@@ -33,7 +33,7 @@
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
-        CurrentState.setDialog(null)
+        External.instance.dialogState = undefined
         onClose()
         Rerenderer.instance.rerender()
       }
@@ -48,7 +48,7 @@
       if (event.isComposing) return
 
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        CurrentState.setDialog(null)
+        External.instance.dialogState = undefined
         onClose()
         Rerenderer.instance.rerender()
       }

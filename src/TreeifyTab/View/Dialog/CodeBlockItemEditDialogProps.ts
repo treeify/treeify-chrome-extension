@@ -1,11 +1,12 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {CodeBlockItemEditDialog} from 'src/TreeifyTab/External/DialogState'
+import {External} from 'src/TreeifyTab/External/External'
 import {detectLanguage} from 'src/TreeifyTab/highlightJs'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
-import {CodeBlockItemEditDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type CodeBlockItemEditDialogProps = {
@@ -46,7 +47,7 @@ export function createCodeBlockItemEditDialogProps(
     }
 
     // ダイアログを閉じる
-    CurrentState.setDialog(null)
+    External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
 
@@ -56,7 +57,7 @@ export function createCodeBlockItemEditDialogProps(
     onClickFinishButton,
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setDialog(null)
+      External.instance.dialogState = undefined
       onCloseDialog()
       Rerenderer.instance.rerender()
     },

@@ -1,3 +1,4 @@
+import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
@@ -15,7 +16,7 @@ export function createEmptyCodeBlockItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  CurrentState.setDialog({type: 'CodeBlockItemEditDialog'})
+  External.instance.dialogState = {type: 'CodeBlockItemEditDialog'}
 }
 
 /** 空のTeXアイテムを作る */
@@ -32,5 +33,5 @@ export function createEmptyTexItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  CurrentState.setDialog({type: 'TexEditDialog'})
+  External.instance.dialogState = {type: 'TexEditDialog'}
 }
