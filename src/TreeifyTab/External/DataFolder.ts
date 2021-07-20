@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import md5 from 'md5'
 import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
-import {Device, DeviceId} from 'src/TreeifyTab/Device'
+import {Instance, InstanceId} from 'src/TreeifyTab/Instance'
 import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -21,16 +21,16 @@ type Metadata = {
   timestamp: Timestamp
   // Keyはファイル名、Valueはハッシュ値
   hashes: {[K in string]: string}
-  // 「このデバイスフォルダは他デバイスの更新をどの範囲まで把握しているか？」を表すためのデータ。
-  // Keyは存在を把握している他デバイスID、Valueは把握している最新の更新タイムスタンプ。
-  known: {[K in DeviceId]: Timestamp}
+  // 「このインスタンスフォルダは他インスタンスの更新をどの範囲まで把握しているか？」を表すためのデータ。
+  // Keyは存在を把握している他インスタンスID、Valueは把握している最新の更新タイムスタンプ。
+  known: {[K in InstanceId]: Timestamp}
 }
 
 /**
  * Treeifyのデータを格納する専用フォルダ（「データフォルダ」と呼ぶ）を管理するクラス。
  * 普通のアプリなら単一ファイルで書き出すところを、Treeifyではフォルダ内の複数ファイルに書き出す（理由は後述）。
- * さらに特殊なことに、デバイスIDごとの専用フォルダの下に書き出す（理由は後述その2）。
- * そのため複数デバイスで同じデータフォルダに書き込むと、その分だけサブフォルダが増えてデータ量が倍増する。
+ * さらに特殊なことに、インスタンスIDごとの専用フォルダの下に書き出す（理由は後述その2）。
+ * そのため複数インスタンスで同じデータフォルダに書き込むと、その分だけサブフォルダが増えてデータ量が倍増する。
  *
  * 【なぜファイルではなくフォルダか】
  * 1つのファイルに全データを詰め込む形式では（APIの仕様上）差分書き込みができないのでフォルダ形式にした。
@@ -38,14 +38,14 @@ type Metadata = {
  * もし差分書き込みを怠ると、自動保存機能によって1日あたり合計10GB以上ものデータが書き込まれる可能性があり、
  * SSDの寿命を縮めたりPCの動作を遅くしてしまう恐れがある。
  *
- * 【なぜデバイスごとのフォルダに保存するのか】
+ * 【なぜインスタンスごとのフォルダに保存するのか】
  * データフォルダはGoogleドライブなどのオンラインストレージでリアルタイム同期されることを想定している。
  * オンラインストレージはファイル単位で同期するので、場合によっては全体としての整合性が壊れる可能性がある。
- * そこで、自デバイス用のフォルダには他デバイスが絶対に書き込まないことで整合性を保証する。
- * そうするとデバイス間でデータが共有されないので無意味なわけだが、他デバイスフォルダから必要に応じて自デバイスフォルダに
- * データを取り込むことでデータ共有を実現する（他デバイスフォルダは自デバイス視点ではreadonly）。
+ * そこで、自インスタンス用のフォルダには他インスタンスが絶対に書き込まないことで整合性を保証する。
+ * そうするとインスタンス間でデータが共有されないので無意味なわけだが、他インスタンスフォルダから必要に応じて自インスタンスフォルダに
+ * データを取り込むことでデータ共有を実現する（他インスタンスフォルダは自インスタンス視点ではreadonly）。
  * この方式では保存データ量が倍増するが、Treeifyのデータ量は元々少ないので数倍になった程度では誤差でしかない。
- * （超ヘビーユーザーでも1デバイス分のデータ量が10MBを超えることはほぼないという試算結果が出ている）
+ * （超ヘビーユーザーでも1インスタンス分のデータ量が10MBを超えることはほぼありえないという試算結果が出ている）
  *
  * 【ファイル分割方針】
  * TreeifyではStateの差分書き込みのためにStateの各部分オブジェクトをChunkという単位に区切って扱う。
@@ -58,18 +58,18 @@ type Metadata = {
 export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
-  private static devicesFolderPath = List.of('Devices')
-  private static getDeviceFolderPath(deviceId = Device.getId()): FilePath {
-    return this.devicesFolderPath.push(deviceId)
+  private static instancesFolderPath = List.of('Instances')
+  private static getInstanceFolderPath(instanceId = Instance.getId()): FilePath {
+    return this.instancesFolderPath.push(instanceId)
   }
-  private static getChunkPacksFolderPath(deviceId = Device.getId()): FilePath {
-    return this.getDeviceFolderPath(deviceId).push('ChunkPacks')
+  private static getChunkPacksFolderPath(instanceId = Instance.getId()): FilePath {
+    return this.getInstanceFolderPath(instanceId).push('ChunkPacks')
   }
-  private static getChunkPackFilePath(fileName: string, deviceId = Device.getId()): FilePath {
-    return this.getChunkPacksFolderPath(deviceId).push(fileName)
+  private static getChunkPackFilePath(fileName: string, instanceId = Instance.getId()): FilePath {
+    return this.getChunkPacksFolderPath(instanceId).push(fileName)
   }
-  private static getMetadataFilePath(deviceId = Device.getId()): FilePath {
-    return this.getDeviceFolderPath(deviceId).push('metadata.json')
+  private static getMetadataFilePath(instanceId = Instance.getId()): FilePath {
+    return this.getInstanceFolderPath(instanceId).push('metadata.json')
   }
 
   /**
@@ -77,9 +77,9 @@ export class DataFolder {
    * KeyはFilePathをjoin('/')した文字列。
    * Valueはファイルの内容（テキストファイルしか扱っていないのでstring型）。
    *
-   * 自デバイスフォルダ内のファイル内容しかキャッシュしない想定。
-   * というのも他デバイスのファイルは常に書き換えられる可能性があるので、キャッシュが不整合を起こすから。
-   * （またそもそも他デバイスのファイルを読み込む機会はかなり限られているので恩恵が少なすぎる）。
+   * 自インスタンスフォルダ内のファイル内容しかキャッシュしない想定。
+   * というのも他インスタンスのファイルは常に書き換えられる可能性があるので、キャッシュが不整合を起こすから。
+   * （またそもそも他インスタンスのファイルを読み込む機会はかなり限られているので恩恵が少なすぎる）。
    *
    * このキャッシュを導入した目的は、しっかりawaitしているにも関わらず「書き込み直後に読み込むと
    * 書き込み内容が反映されていないデータが返ってくる場合がある」という問題の対策。
@@ -97,7 +97,7 @@ export class DataFolder {
 
   /** 選択されたフォルダ内の全ファイルを読み込んでチャンク化する */
   async readAllChunks(): Promise<List<Chunk>> {
-    const fileNames = await this.getChunkFileNames(Device.getId())
+    const fileNames = await this.getChunkFileNames(Instance.getId())
 
     // 全チャンクパックファイルを読み込み
     const chunkPackPromises = fileNames.map((fileName) => this.readChunkPackFile(fileName))
@@ -206,24 +206,24 @@ export class DataFolder {
   }
 
   /**
-   * 他デバイスフォルダのデータを自デバイスフォルダに取り込む。
-   * 単純に全ファイルをコピーするだけでなく、メタデータファイルを自デバイス視点で更新する。
+   * 他インスタンスフォルダのデータを自インスタンスフォルダに取り込む。
+   * 単純に全ファイルをコピーするだけでなく、メタデータファイルを自インスタンス視点で更新する。
    */
-  async copyFrom(deviceId: DeviceId) {
-    // 自デバイスフォルダをクリア（全ファイルとフォルダを削除）
-    const devicesFolder = await this.getFolderHandle(DataFolder.devicesFolderPath)
-    await devicesFolder.removeEntry(Device.getId(), {recursive: true})
-    await devicesFolder.getDirectoryHandle(Device.getId(), {create: true})
+  async copyFrom(instanceId: InstanceId) {
+    // 自インスタンスフォルダをクリア（全ファイルとフォルダを削除）
+    const instancesFolder = await this.getFolderHandle(DataFolder.instancesFolderPath)
+    await instancesFolder.removeEntry(Instance.getId(), {recursive: true})
+    await instancesFolder.getDirectoryHandle(Instance.getId(), {create: true})
 
-    // 各ファイルを自デバイスフォルダにコピーする準備
-    const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
-    const targetChunkFileNames = await this.getChunkFileNames(deviceId)
+    // 各ファイルを自インスタンスフォルダにコピーする準備
+    const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(instanceId)
+    const targetChunkFileNames = await this.getChunkFileNames(instanceId)
     const chunkPackFileTextPromises = targetChunkFileNames.map(async (fileName) => {
       return {fileName, text: await this.readTextFile(targetChunkPacksFolderPath.push(fileName))}
     })
     const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
 
-    // チャンクパックファイル群を自デバイスフォルダに書き込み
+    // チャンクパックファイル群を自インスタンスフォルダに書き込み
     const chunkPackFileWritingPromises = chunkPackFileTexts.map(async ({fileName, text}) => {
       const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
       this.setCacheEntry(chunkPackFilePath, text)
@@ -231,12 +231,12 @@ export class DataFolder {
     })
 
     // メタデータファイルを更新しつつ取り込み
-    const metadata = await this.readMetadataFile(deviceId)
+    const metadata = await this.readMetadataFile(instanceId)
     assertNonUndefined(metadata)
-    metadata.known = await this.getAllOtherDeviceTimestamps()
-    // TODO: ハッシュ値の一致チェック（本来は↑の自デバイスフォルダのクリア前にやるのが正解）
+    metadata.known = await this.getAllOtherInstanceTimestamps()
+    // TODO: ハッシュ値の一致チェック（本来は↑の自インスタンスフォルダのクリア前にやるのが正解）
 
-    // メタデータファイルを自デバイスフォルダに書き込み
+    // メタデータファイルを自インスタンスフォルダに書き込み
     const newMetadataText = JSON.stringify(metadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
@@ -245,73 +245,75 @@ export class DataFolder {
     await Promise.all([metadataFileWritingPromise, ...chunkPackFileWritingPromises])
   }
 
-  // データフォルダ内に存在する各デバイスフォルダのフォルダ名もといデバイスIDを返す
-  private async getAllExistingDeviceIds(): Promise<List<DeviceId>> {
-    const devicesFolder = await this.getFolderHandle(DataFolder.devicesFolderPath)
-    const deviceIds = []
-    for await (const deviceFolder of devicesFolder.values()) {
-      if (deviceFolder.kind === 'directory') {
-        deviceIds.push(deviceFolder.name)
+  // データフォルダ内に存在する各インスタンスフォルダのフォルダ名もといインスタンスIDを返す
+  private async getAllExistingInstanceIds(): Promise<List<InstanceId>> {
+    const instancesFolder = await this.getFolderHandle(DataFolder.instancesFolderPath)
+    const instanceIds = []
+    for await (const instanceFolder of instancesFolder.values()) {
+      if (instanceFolder.kind === 'directory') {
+        instanceIds.push(instanceFolder.name)
       }
     }
-    return List(deviceIds)
+    return List(instanceIds)
   }
 
-  // 全ての他デバイスフォルダのフォルダ名もといデバイスIDを返す
-  private async getAllOtherDeviceIds(): Promise<List<DeviceId>> {
-    const deviceIds = await this.getAllExistingDeviceIds()
-    return deviceIds.filter((deviceId) => deviceId !== Device.getId())
+  // 全ての他インスタンスフォルダのフォルダ名もといインスタンスIDを返す
+  private async getAllOtherInstanceIds(): Promise<List<InstanceId>> {
+    const instanceIds = await this.getAllExistingInstanceIds()
+    return instanceIds.filter((instanceId) => instanceId !== Instance.getId())
   }
 
-  private async getAllOtherDeviceTimestamps(): Promise<{[K in DeviceId]: Timestamp}> {
-    const deviceIds = await this.getAllOtherDeviceIds()
-    const timestampPromises = deviceIds.map(async (deviceId) => {
-      const metadata = await this.readMetadataFile(deviceId)
-      // デバイスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
+  private async getAllOtherInstanceTimestamps(): Promise<{[K in InstanceId]: Timestamp}> {
+    const instanceIds = await this.getAllOtherInstanceIds()
+    const timestampPromises = instanceIds.map(async (instanceId) => {
+      const metadata = await this.readMetadataFile(instanceId)
+      // インスタンスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
       assertNonUndefined(metadata)
-      return [deviceId, metadata.timestamp]
+      return [instanceId, metadata.timestamp]
     })
     const entries = await Promise.all(timestampPromises)
     return Object.fromEntries(entries)
   }
 
   /**
-   * 自デバイスが存在を把握していないデバイスフォルダ、または把握していない更新の行われたデバイスフォルダのデバイスIDを返す。
-   * 複数デバイスが該当する場合は、タイムスタンプが最も新しいものを返す。
-   * 自デバイスフォルダに何も書き込まれていない場合、タイムスタンプが最も新しいデバイスのIDを返す。
+   * 自インスタンスが存在を把握していないインスタンスフォルダ、または把握していない更新の行われたインスタンスフォルダのインスタンスIDを返す。
+   * 複数インスタンスが該当する場合は、タイムスタンプが最も新しいものを返す。
+   * 自インスタンスフォルダに何も書き込まれていない場合、タイムスタンプが最も新しいインスタンスのIDを返す。
    */
-  async findUnknownUpdatedDevice(): Promise<DeviceId | undefined> {
+  async findUnknownUpdatedInstance(): Promise<InstanceId | undefined> {
     const metadata = await this.readMetadataFile()
     if (metadata === undefined) {
-      // 自デバイスフォルダに何も書き込まれていない場合、タイムスタンプが最も新しいデバイスのIDを返す
-      const otherDeviceTimestamps = List(Object.entries(await this.getAllOtherDeviceTimestamps()))
-      const latestUpdated = otherDeviceTimestamps.maxBy(([deviceId, timestamp]) => timestamp)
+      // 自インスタンスフォルダに何も書き込まれていない場合、タイムスタンプが最も新しいインスタンスのIDを返す
+      const otherInstanceTimestamps = List(
+        Object.entries(await this.getAllOtherInstanceTimestamps())
+      )
+      const latestUpdated = otherInstanceTimestamps.maxBy(([instanceId, timestamp]) => timestamp)
       return latestUpdated?.[0]
     }
 
-    const otherDeviceIds = await this.getAllOtherDeviceIds()
-    const timestampPromises = otherDeviceIds.map(async (deviceId) => {
-      const metadata = await this.readMetadataFile(deviceId)
-      // デバイスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
+    const otherInstanceIds = await this.getAllOtherInstanceIds()
+    const timestampPromises = otherInstanceIds.map(async (instanceId) => {
+      const metadata = await this.readMetadataFile(instanceId)
+      // インスタンスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
       assertNonUndefined(metadata)
-      return {deviceId, timestamp: metadata.timestamp}
+      return {instanceId, timestamp: metadata.timestamp}
     })
 
     const timestamps = await Promise.all(timestampPromises)
-    const unknownUpdatedDeviceIds = timestamps.filter(({deviceId, timestamp}) => {
-      const knownUpdateTimestamp = metadata.known[deviceId]
+    const unknownUpdatedInstanceIds = timestamps.filter(({instanceId, timestamp}) => {
+      const knownUpdateTimestamp = metadata.known[instanceId]
       if (knownUpdateTimestamp === undefined) {
         return true
       }
       return knownUpdateTimestamp !== timestamp
     })
 
-    return List(unknownUpdatedDeviceIds).maxBy(({deviceId, timestamp}) => timestamp)?.deviceId
+    return List(unknownUpdatedInstanceIds).maxBy(({instanceId, timestamp}) => timestamp)?.instanceId
   }
 
   // 全チャンクファイルのファイル名のリストを返す
-  private async getChunkFileNames(deviceId = Device.getId()): Promise<List<string>> {
-    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(deviceId)
+  private async getChunkFileNames(instanceId = Instance.getId()): Promise<List<string>> {
+    const chunksFolderPath = DataFolder.getChunkPacksFolderPath(instanceId)
     const chunksFolderHandle = await this.getFolderHandle(chunksFolderPath)
     const fileNames = []
     for await (const fileName of chunksFolderHandle.keys()) {
@@ -364,12 +366,12 @@ export class DataFolder {
 
   // メタデータファイルの内容を返す。
   // ファイルが存在しない場合はundefinedを返す。
-  private async readMetadataFile(deviceId = Device.getId()): Promise<Metadata | undefined> {
-    const metadataFilePath = DataFolder.getMetadataFilePath(deviceId)
+  private async readMetadataFile(instanceId = Instance.getId()): Promise<Metadata | undefined> {
+    const metadataFilePath = DataFolder.getMetadataFilePath(instanceId)
     const cachedContent = this.fetchCache(metadataFilePath)
     if (cachedContent === undefined) {
       const fileContent = await this.readTextFile(metadataFilePath)
-      if (deviceId === Device.getId()) {
+      if (instanceId === Instance.getId()) {
         this.setCacheEntry(metadataFilePath, fileContent)
       }
 
@@ -421,7 +423,7 @@ export class DataFolder {
          *
          * 【オンラインストレージでの同期にかかる時間の観点】
          * ファイル数が多すぎるとオンラインストレージでの同期に異常な時間がかかる。
-         * （変更されたファイル数が少なければ同期はすぐ終わる。なので主に新しいデバイスでの初回同期の時間が対象）
+         * （変更されたファイル数が少なければ同期はすぐ終わる。なので主に新しいインスタンスでの初回同期の時間が対象）
          *
          * ヘビーユーザーのアイテム数は（個人差が大きいが）1万個が1つの目安である。
          * 100アイテムを1ファイルにパッキングしたらファイル数は100個になる。

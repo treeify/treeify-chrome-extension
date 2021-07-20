@@ -24,34 +24,34 @@ export async function saveToDataFolder() {
     const folderHandle = await showDirectoryPicker()
     await folderHandle.requestPermission({mode: 'readwrite'})
     External.instance.dataFolder = new DataFolder(folderHandle)
-    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
-    if (unknownUpdatedDeviceId === undefined) {
-      // もし自身の知らない他デバイスの更新がなければ
+    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
+    if (unknownUpdatedInstanceId === undefined) {
+      // もし自身の知らない他インスタンスの更新がなければ
 
       const chunks = await External.instance.dataFolder.readAllChunks()
       if (chunks.isEmpty()) {
-        // 自デバイスフォルダが無い場合
+        // 自インスタンスフォルダが無い場合
 
-        // メモリ上のStateを自デバイスフォルダに書き込む
+        // メモリ上のStateを自インスタンスフォルダに書き込む
         const allChunks = Chunk.createAllChunks(Internal.instance.state)
         await External.instance.dataFolder.writeChunks(allChunks)
       } else {
-        // 自デバイスフォルダの内容からStateを読み込んで事実上の再起動を行う
+        // 自インスタンスフォルダの内容からStateを読み込んで事実上の再起動を行う
         const state = Chunk.inflateStateFromChunks(chunks)
         await restart(state)
       }
     } else {
-      // もし自身の知らない他デバイスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+      // もし自身の知らない他インスタンスの更新があれば
+      await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
       const chunks = await External.instance.dataFolder.readAllChunks()
       const state = Chunk.inflateStateFromChunks(chunks)
       await restart(state)
     }
   } else {
-    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
-    if (unknownUpdatedDeviceId === undefined) {
-      // もし自身の知らない他デバイスの更新がなければ（つまり最も単純な自デバイスフォルダ上書き更新のケース）
+    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
+    if (unknownUpdatedInstanceId === undefined) {
+      // もし自身の知らない他インスタンスの更新がなければ（つまり最も単純な自インスタンスフォルダ上書き更新のケース）
 
       // 変化のあったチャンクをデータベースに書き込む
       const chunks = []
@@ -63,8 +63,8 @@ export async function saveToDataFolder() {
       await External.instance.dataFolder.writeChunks(List(chunks))
       Rerenderer.instance.rerender()
     } else {
-      // もし自身の知らない他デバイスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+      // もし自身の知らない他インスタンスの更新があれば
+      await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
       const chunks = await External.instance.dataFolder.readAllChunks()
       const state = Chunk.inflateStateFromChunks(chunks)

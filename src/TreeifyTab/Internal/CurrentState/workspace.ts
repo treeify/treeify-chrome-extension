@@ -8,7 +8,7 @@ import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 
-/** このデバイスにおける現在のワークスペースのIDを返す */
+/** このインスタンスにおける現在のワークスペースのIDを返す */
 export function getCurrentWorkspaceId(): Timestamp {
   const savedCurrentWorkspaceId = localStorage.getItem(CURRENT_WORKSPACE_ID_KEY)
   if (savedCurrentWorkspaceId !== null) {
@@ -26,7 +26,7 @@ export function getCurrentWorkspaceId(): Timestamp {
   return currentWorkspaceId
 }
 
-/** このデバイスにおける現在のワークスペースのIDを設定する */
+/** このインスタンスにおける現在のワークスペースのIDを設定する */
 export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
 }
