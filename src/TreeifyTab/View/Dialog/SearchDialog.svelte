@@ -37,7 +37,7 @@
   }
 </script>
 
-<CommonDialog title="検索">
+<CommonDialog title="検索" showCloseButton>
   <div class="search-dialog_content" on:keydown={props.onKeyDown}>
     <input
       type="text"
