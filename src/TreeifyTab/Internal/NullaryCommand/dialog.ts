@@ -28,11 +28,7 @@ export function edit() {
       break
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[targetItemId]
-      CurrentState.setDialog({
-        type: 'CodeBlockItemEditDialog',
-        code: codeBlockItem.code,
-        language: codeBlockItem.language,
-      })
+      CurrentState.setDialog({type: 'CodeBlockItemEditDialog'})
       break
     case ItemType.TEX:
       CurrentState.setDialog({type: 'TexEditDialog'})

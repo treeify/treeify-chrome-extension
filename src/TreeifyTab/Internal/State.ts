@@ -146,12 +146,7 @@ export type Workspace = {
 
 export type CitationSettingDialog = {type: 'CitationSettingDialog'}
 
-/** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
-export type CodeBlockItemEditDialog = {
-  type: 'CodeBlockItemEditDialog'
-  code: string
-  language: string
-}
+export type CodeBlockItemEditDialog = {type: 'CodeBlockItemEditDialog'}
 
 export type ContextMenuDialog = {
   type: 'ContextMenuDialog'

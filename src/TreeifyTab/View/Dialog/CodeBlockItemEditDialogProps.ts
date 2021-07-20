@@ -2,13 +2,15 @@ import {assertNonNull} from 'src/Common/Debug/assert'
 import {detectLanguage} from 'src/TreeifyTab/highlightJs'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {CodeBlockItemEditDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
-export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
+export type CodeBlockItemEditDialogProps = {
   dialogTitle: string
+  code: string
   onClickFinishButton: () => void
   onClickCancelButton: () => void
   onCloseDialog: () => void
@@ -49,8 +51,8 @@ export function createCodeBlockItemEditDialogProps(
   }
 
   return {
-    ...dialog,
     dialogTitle: isEmptyCodeBlockItem ? 'コードブロックアイテム作成' : 'コードブロック編集',
+    code: Internal.instance.state.codeBlockItems[ItemPath.getItemId(targetItemPath)].code,
     onClickFinishButton,
     onClickCancelButton: () => {
       // ダイアログを閉じる

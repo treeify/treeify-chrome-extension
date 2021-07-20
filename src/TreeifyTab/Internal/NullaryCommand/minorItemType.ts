@@ -15,11 +15,7 @@ export function createEmptyCodeBlockItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  CurrentState.setDialog({
-    type: 'CodeBlockItemEditDialog',
-    code: '',
-    language: '',
-  })
+  CurrentState.setDialog({type: 'CodeBlockItemEditDialog'})
 }
 
 /** 空のTeXアイテムを作る */
