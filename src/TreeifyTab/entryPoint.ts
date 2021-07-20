@@ -6,7 +6,7 @@ import {Database} from 'src/TreeifyTab/Internal/Database'
 import {startup} from 'src/TreeifyTab/startup'
 
 doAsyncWithErrorCapture(async () => {
-  console.log('デバイスID = ' + Instance.getId())
+  console.log('インスタンスID = ' + Instance.getId())
 
   chrome.contextMenus.create({
     id: 'treeify',

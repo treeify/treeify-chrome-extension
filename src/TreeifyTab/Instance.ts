@@ -1,19 +1,19 @@
 import {nanoid} from 'nanoid'
 import {integer} from 'src/Common/integer'
 
-/** ユーザーが複数のデバイスでTreeifyを使うことを想定した、デバイスを一意に識別するための値 */
+/** ユーザーが複数のインスタンスでTreeifyを使うことを想定した、インスタンスを一意に識別するための値 */
 export type InstanceId = string
 
 /**
  * Instance Internal Serial Numberの略。
- * このデバイスで生成されたアイテムの通し番号。
+ * このインスタンスで生成されたアイテムの通し番号。
  * InstanceIdとIisnのペアをグローバルアイテムIDと呼ぶ。
  */
 export type Iisn = integer
 
 export namespace Instance {
   // Treeifyの設計ではInternalにもExternalにも属さないこのようなグローバル変数は存在してはいけないのだが、
-  // デバイスIDは絶対に変更されない値なのでむしろこうしちゃった方が素直に扱える。
+  // インスタンスIDは絶対に変更されない値なのでむしろこうしちゃった方が素直に扱える。
   let instanceId: InstanceId | undefined
   let maxIisn: Iisn | undefined
 
@@ -21,7 +21,7 @@ export namespace Instance {
   const MAX_IISN_KEY = 'MAX_IISN_KEY'
 
   /**
-   * このプログラムが実行されているデバイスのデバイスIDを返す。
+   * このプログラムが実行されているインスタンスのインスタンスIDを返す。
    * 未生成の場合は生成する。
    */
   export function getId(): InstanceId {
@@ -30,7 +30,7 @@ export namespace Instance {
       if (instanceId === undefined) {
         // 7桁のNano IDを生成する。
         // データ容量にそれなりの影響を及ぼすので安全な範囲で桁数を絞ってある。
-        // 仮に10億ユーザーが全員2デバイス間で同期したとしても衝突が起こらないよう桁数を選んだ。
+        // 仮に10億ユーザーが全員2インスタンス間で同期したとしても衝突が起こらないよう桁数を選んだ。
         // 10億ユーザーが誰も衝突に遭遇せずに済む確率は、7桁なら99.9772%、6桁なら98.5553%となる。
         // 計算式：(1 - 1 / 64^7)^1000000000
         instanceId = nanoid(7)
