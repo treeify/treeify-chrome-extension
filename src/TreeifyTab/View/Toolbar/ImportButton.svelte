@@ -1,14 +1,68 @@
+<script lang="ts" context="module">
+  import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode
+</script>
+
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
+  import {ItemId} from '../../basicType'
+  import {doAsyncWithErrorCapture} from '../../errorCapture'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {DomishObject} from '../../Internal/DomishObject'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   function onClick() {
-    doWithErrorCapture(() => {
-      // TODO: 実装
+    doAsyncWithErrorCapture(async () => {
+      const bookmarkTreeNodes = await chrome.bookmarks.getTree()
+      const rootItemIds = bookmarkTreeNodes.flatMap(flattenRedundantRootNode).map(toItem)
+
+      const activePageId = CurrentState.getActivePageId()
+      for (const rootItemId of rootItemIds.reverse()) {
+        CurrentState.insertFirstChildItem(activePageId, rootItemId)
+      }
 
       Rerenderer.instance.rerender()
     })
+  }
+
+  // chrome.bookmarks.getTree()が冗長な空のルートノードを返してくるのでその対策
+  function flattenRedundantRootNode(bookmarkTreeNode: BookmarkTreeNode): BookmarkTreeNode[] {
+    if (bookmarkTreeNode.children === undefined) return [bookmarkTreeNode]
+
+    if (bookmarkTreeNode.title !== '') return [bookmarkTreeNode]
+    if (bookmarkTreeNode.url !== undefined) return [bookmarkTreeNode]
+
+    return bookmarkTreeNode.children
+  }
+
+  function toItem(bookmarkTreeNode: BookmarkTreeNode): ItemId {
+    if (bookmarkTreeNode.url === undefined) {
+      const itemId = CurrentState.createTextItem()
+      const domishObjects = DomishObject.fromPlainText(bookmarkTreeNode.title)
+      CurrentState.setTextItemDomishObjects(itemId, domishObjects)
+
+      if (bookmarkTreeNode.children !== undefined) {
+        for (const childItemId of bookmarkTreeNode.children.map(toItem)) {
+          CurrentState.insertLastChildItem(itemId, childItemId)
+        }
+      }
+
+      return itemId
+    } else {
+      const itemId = CurrentState.createWebPageItem()
+      CurrentState.setWebPageItemUrl(itemId, bookmarkTreeNode.url)
+      CurrentState.setWebPageItemTitle(itemId, bookmarkTreeNode.title)
+      const url = new URL(bookmarkTreeNode.url)
+      const faviconUrl = `https://www.google.com/s2/favicons?domain=${url.hostname}`
+      CurrentState.setWebPageItemFaviconUrl(itemId, faviconUrl)
+
+      if (bookmarkTreeNode.children !== undefined) {
+        for (const childItemId of bookmarkTreeNode.children.map(toItem)) {
+          CurrentState.insertLastChildItem(itemId, childItemId)
+        }
+      }
+
+      return itemId
+    }
   }
 </script>
 
