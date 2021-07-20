@@ -29,7 +29,7 @@
     メインエリアのテキスト全般に適用されるline-height。
     階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
     */
-    --main-area-line-height: 1.45;
+    --main-area-line-height: 1.3;
     /* メインエリア内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
     --main-area-font-size-multiplicator: 99.5%;
 

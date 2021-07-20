@@ -90,7 +90,7 @@
 <style>
   :root {
     /* ボディ領域の上下パディング */
-    --main-area-body-area-vertical-padding: 0.5px;
+    --main-area-body-area-vertical-padding: 0.08em;
 
     /* フォーカスアイテムの背景色。lch(95.0%, 7.8, 280.4)相当 */
     --main-area-focused-item-background-color: #ecf0ff;
