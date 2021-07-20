@@ -1,8 +1,8 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
-import {Device} from 'src/TreeifyTab/Device'
 import {External} from 'src/TreeifyTab/External/External'
+import {Instance} from 'src/TreeifyTab/Instance'
 import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {showCitationSettingDialog} from 'src/TreeifyTab/Internal/NullaryCommand/dialog'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
@@ -128,8 +128,8 @@ export class Internal {
       items: {
         0: {
           itemType: ItemType.TEXT,
-          device: Device.getId(),
-          disn: Device.generateDisn(),
+          instance: Instance.getId(),
+          iisn: Instance.generateIisn(),
           childItemIds: List.of(),
           parents: {},
           timestamp: Timestamp.now(),

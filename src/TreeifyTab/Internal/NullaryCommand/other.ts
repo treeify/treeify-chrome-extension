@@ -24,8 +24,8 @@ export async function saveToDataFolder() {
     const folderHandle = await showDirectoryPicker()
     await folderHandle.requestPermission({mode: 'readwrite'})
     External.instance.dataFolder = new DataFolder(folderHandle)
-    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
-    if (unknownUpdatedDeviceId === undefined) {
+    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
+    if (unknownUpdatedInstanceId === undefined) {
       // もし自身の知らない他デバイスの更新がなければ
 
       const chunks = await External.instance.dataFolder.readAllChunks()
@@ -42,15 +42,15 @@ export async function saveToDataFolder() {
       }
     } else {
       // もし自身の知らない他デバイスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+      await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
       const chunks = await External.instance.dataFolder.readAllChunks()
       const state = Chunk.inflateStateFromChunks(chunks)
       await restart(state)
     }
   } else {
-    const unknownUpdatedDeviceId = await External.instance.dataFolder.findUnknownUpdatedDevice()
-    if (unknownUpdatedDeviceId === undefined) {
+    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
+    if (unknownUpdatedInstanceId === undefined) {
       // もし自身の知らない他デバイスの更新がなければ（つまり最も単純な自デバイスフォルダ上書き更新のケース）
 
       // 変化のあったチャンクをデータベースに書き込む
@@ -64,7 +64,7 @@ export async function saveToDataFolder() {
       Rerenderer.instance.rerender()
     } else {
       // もし自身の知らない他デバイスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedDeviceId)
+      await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
       const chunks = await External.instance.dataFolder.readAllChunks()
       const state = Chunk.inflateStateFromChunks(chunks)
