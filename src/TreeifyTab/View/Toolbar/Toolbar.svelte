@@ -26,7 +26,10 @@
   }
 
   .toolbar {
-    /* ボタンなどを横に並べる */
+    height: var(--toolbar-height);
+    padding-inline: 2em;
+
+    /* ボタンなどを横に並べる（右寄せ） */
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -34,8 +37,6 @@
     /* 左サイドバーにも影が落ちるように左サイドバーより高くする */
     position: relative;
     z-index: 20;
-
-    height: var(--toolbar-height);
 
     background: var(--toolbar-background);
     /* Dynalistを参考にして作った影。lch(85.0%, 0.0, 0.0)相当 */
