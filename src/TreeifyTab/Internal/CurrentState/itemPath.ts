@@ -1,5 +1,6 @@
 import {is, List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -34,7 +35,7 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
 
   // ダイアログを開いた状態でターゲットアイテムが変わった際に起こる問題への対策。
   // 例えばダイアログを開いた状態でブラウザウィンドウでタブを閉じるとターゲットアイテムが変わりうる。
-  CurrentState.setDialog(null)
+  External.instance.dialogState = undefined
 }
 
 /**

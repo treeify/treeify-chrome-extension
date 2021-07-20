@@ -205,7 +205,6 @@ export class Internal {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
         '1000MouseButton0': List.of({commandName: 'deleteItemItself'}),
       },
-      dialog: null,
     }
   }
 }

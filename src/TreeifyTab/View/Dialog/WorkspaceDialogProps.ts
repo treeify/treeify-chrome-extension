@@ -1,8 +1,9 @@
 import {List} from 'immutable'
 import {WorkspaceId} from 'src/TreeifyTab/basicType'
+import {WorkspaceDialog} from 'src/TreeifyTab/External/DialogState'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {Workspace, WorkspaceDialog} from 'src/TreeifyTab/Internal/State'
+import {Workspace} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type WorkspaceRecord = {id: WorkspaceId} & Workspace

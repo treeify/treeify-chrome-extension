@@ -1,9 +1,10 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
+import {CitationSettingDialog} from 'src/TreeifyTab/External/DialogState'
+import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {CitationSettingDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type CitationSettingDialogProps = {
@@ -40,7 +41,7 @@ export function createCitationSettingDialogProps(
     CurrentState.updateItemTimestamp(targetItemId)
 
     // ダイアログを閉じる
-    CurrentState.setDialog(null)
+    External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
 
@@ -59,7 +60,7 @@ export function createCitationSettingDialogProps(
     onClickFinishButton,
     onClickCancelButton: () => {
       // ダイアログを閉じる
-      CurrentState.setDialog(null)
+      External.instance.dialogState = undefined
       Rerenderer.instance.rerender()
     },
   }

@@ -1,8 +1,9 @@
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
+import {WebPageItemTitleSettingDialog} from 'src/TreeifyTab/External/DialogState'
+import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {WebPageItemTitleSettingDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type WebPageItemTitleSettingDialogProps = {
@@ -33,12 +34,12 @@ export function createWebPageItemTitleSettingDialogProps(
             CurrentState.setWebPageItemTitle(targetItemId, event.target.value)
           }
           // タイトル設定ダイアログを閉じる
-          CurrentState.setDialog(null)
+          External.instance.dialogState = undefined
           Rerenderer.instance.rerender()
         }
 
         if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-          CurrentState.setDialog(null)
+          External.instance.dialogState = undefined
           Rerenderer.instance.rerender()
         }
       })

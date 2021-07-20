@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {External} from '../../External/External'
   import {Rerenderer} from '../../Rerenderer'
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
-        CurrentState.setDialog(null)
+        External.instance.dialogState = undefined
         Rerenderer.instance.rerender()
       }
     })
@@ -48,14 +48,14 @@
 
     // 本来なら現在のマウス位置にコンテキストメニューを出し直したいところだが、
     // 仕様と実装が難しいのでコンテキストメニューを閉じるに留める。
-    CurrentState.setDialog(null)
+    External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        CurrentState.setDialog(null)
+        External.instance.dialogState = undefined
         Rerenderer.instance.rerender()
       }
     })

@@ -1,6 +1,6 @@
 import {is, List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
-import {Coordinate, integer} from 'src/Common/integer'
+import {integer} from 'src/Common/integer'
 import {ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
 import {Iisn, InstanceId} from 'src/TreeifyTab/Instance'
 import {Command} from 'src/TreeifyTab/Internal/Command'
@@ -31,8 +31,6 @@ export type State = {
   mainAreaKeyboardBinding: {[K in InputId]: List<Command>}
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
   mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
-  /** ダイアログの状態 */
-  dialog: Dialog | null
 }
 
 /**
@@ -143,48 +141,6 @@ export type Workspace = {
   excludedItemIds: List<ItemId>
   name: string
 }
-
-export type CitationSettingDialog = {type: 'CitationSettingDialog'}
-
-/** コードブロックアイテム編集ダイアログが持つ内部状態の型 */
-export type CodeBlockItemEditDialog = {
-  type: 'CodeBlockItemEditDialog'
-  code: string
-  language: string
-}
-
-export type ContextMenuDialog = {
-  type: 'ContextMenuDialog'
-  mousePosition: Coordinate
-}
-
-export type OtherParentsDialog = {type: 'OtherParentsDialog'}
-
-export type PreferenceDialog = {type: 'PreferenceDialog'}
-
-export type SearchDialog = {type: 'SearchDialog'}
-
-export type TexEditDialog = {type: 'TexEditDialog'}
-
-/** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
-export type WebPageItemTitleSettingDialog = {
-  type: 'WebPageItemTitleSettingDialog'
-  /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
-  targetItemRect: DOMRect
-}
-
-export type WorkspaceDialog = {type: 'WorkspaceDialog'}
-
-export type Dialog =
-  | CitationSettingDialog
-  | CodeBlockItemEditDialog
-  | ContextMenuDialog
-  | OtherParentsDialog
-  | PreferenceDialog
-  | SearchDialog
-  | TexEditDialog
-  | WebPageItemTitleSettingDialog
-  | WorkspaceDialog
 
 export namespace State {
   /** Stateに対してJSON.stringifyする際に用いるreplacer */

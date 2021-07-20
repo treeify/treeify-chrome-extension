@@ -1,4 +1,4 @@
-import {PreferenceDialog} from 'src/TreeifyTab/Internal/State'
+import {PreferenceDialog} from 'src/TreeifyTab/External/DialogState'
 
 export type PreferenceDialogProps = {}
 

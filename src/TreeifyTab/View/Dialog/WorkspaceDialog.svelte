@@ -1,6 +1,6 @@
 <script lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {External} from '../../External/External'
   import {Rerenderer} from '../../Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import {WorkspaceDialogProps} from './WorkspaceDialogProps'
@@ -10,7 +10,7 @@
 
   const closeDialog = () => {
     doWithErrorCapture(() => {
-      CurrentState.setDialog(null)
+      External.instance.dialogState = undefined
       Rerenderer.instance.rerender()
     })
   }

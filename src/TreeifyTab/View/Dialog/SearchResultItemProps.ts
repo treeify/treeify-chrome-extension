@@ -1,6 +1,7 @@
 import {is, List} from 'immutable'
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
+import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -88,7 +89,7 @@ function createSearchResultItemProps(
       })
 
       // 検索ダイアログを閉じる
-      CurrentState.setDialog(null)
+      External.instance.dialogState = undefined
       Rerenderer.instance.rerender()
     })
   }

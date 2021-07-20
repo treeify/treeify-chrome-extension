@@ -1,7 +1,7 @@
 <script lang="ts">
   import {List} from 'immutable'
   import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
+  import {External} from '../../External/External'
   import {InputId} from '../../Internal/InputId'
   import {Rerenderer} from '../../Rerenderer'
   import {ContextMenuItemProps} from './ContextMenuItemProps'
@@ -13,7 +13,7 @@
       // props.onClick()より先にダイアログを閉じる必要がある。
       // なぜならprops.onClick()内でダイアログを表示する場合があり、
       // その後にダイアログを閉じると何も起こらなくなってしまうから。
-      CurrentState.setDialog(null)
+      External.instance.dialogState = undefined
       props.onClick()
 
       Rerenderer.instance.rerender()
