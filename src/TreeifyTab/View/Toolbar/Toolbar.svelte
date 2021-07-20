@@ -1,6 +1,7 @@
 <script lang="ts">
   import CodeBlockItemCreationButton from './CodeBlockItemCreationButton.svelte'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
+  import ImportButton from './ImportButton.svelte'
   import PreferenceButton from './PreferenceButton.svelte'
   import TexItemCreationButton from './TexItemCreationButton.svelte'
   import {ToolbarProps} from './ToolbarProps'
@@ -12,6 +13,7 @@
   <CodeBlockItemCreationButton />
   <TexItemCreationButton />
   <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
+  <ImportButton />
   <PreferenceButton />
 </div>
 

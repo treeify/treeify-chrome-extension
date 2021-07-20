@@ -53,6 +53,7 @@
   "permissions": [
     "tabs",
     "scripting",
-    "contextMenus"
+    "contextMenus",
+    "bookmarks"
   ]
 }
