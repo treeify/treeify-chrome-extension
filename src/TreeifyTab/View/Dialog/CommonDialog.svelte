@@ -7,6 +7,7 @@
 
   export let title: string
   export let onClose = () => {}
+  export let showCloseButton: boolean = false
 
   function setupFocusTrap(domElement: HTMLElement) {
     return doWithErrorCapture(() => {
@@ -29,13 +30,17 @@
     })
   }
 
+  function closeDialog() {
+    External.instance.dialogState = undefined
+    onClose()
+    Rerenderer.instance.rerender()
+  }
+
   const onClickBackdrop = (event: MouseEvent) => {
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
-        External.instance.dialogState = undefined
-        onClose()
-        Rerenderer.instance.rerender()
+        closeDialog()
       }
     })
   }
@@ -48,9 +53,7 @@
       if (event.isComposing) return
 
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        External.instance.dialogState = undefined
-        onClose()
-        Rerenderer.instance.rerender()
+        closeDialog()
       }
     })
   }
@@ -58,7 +61,12 @@
 
 <div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap>
   <div class="common-dialog_frame">
-    <div class="common-dialog_title-bar">{title}</div>
+    <div class="common-dialog_title-bar">
+      <div class="common-dialog_title">{title}</div>
+      {#if showCloseButton}
+        <div class="common-dialog_close-button" on:mousedown={closeDialog} />
+      {/if}
+    </div>
     <div class="common-dialog_content-area">
       <slot />
     </div>
@@ -72,6 +80,9 @@
     /* lch(25.0%, 0.0, 0.0)相当 */
     --common-dialog-title-bar-background: #3b3b3b;
     --common-dialog-title-bar-height: 2.2em;
+
+    /* 閉じるボタン（正方形）の一辺の長さ */
+    --common-dialog-close-button-size: 1em;
   }
 
   .common-dialog {
@@ -104,12 +115,31 @@
   }
 
   .common-dialog_title-bar {
+    display: flex;
+    align-items: center;
+
+    padding-inline: 0.5em;
     font-size: 15px;
-    line-height: var(--common-dialog-title-bar-height);
-    padding-left: 0.5em;
 
     background: var(--common-dialog-title-bar-background);
+  }
+
+  .common-dialog_title {
+    line-height: var(--common-dialog-title-bar-height);
     color: white;
+  }
+
+  .common-dialog_close-button {
+    width: var(--common-dialog-close-button-size);
+    height: var(--common-dialog-close-button-size);
+
+    margin-left: auto;
+
+    cursor: pointer;
+
+    /* lch(80.0%, 0.0, 0.0)相当 */
+    background: #c6c6c6;
+    -webkit-mask-image: url('close-icon.svg');
   }
 
   .common-dialog_content-area {
