@@ -25,7 +25,7 @@
   }
 </script>
 
-<CommonDialog title="コードブロック編集" onClose={props.onCloseDialog}>
+<CommonDialog title={props.dialogTitle} onClose={props.onCloseDialog}>
   <div class="code-block-edit-dialog_content" on:keydown={props.onKeyDown}>
     <div
       class="code-block-edit-dialog_code"

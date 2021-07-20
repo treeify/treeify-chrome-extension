@@ -8,6 +8,7 @@ import {TexEditDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type TexEditDialogProps = {
+  dialogTitle: string
   code: string
   onClickFinishButton: () => void
   onClickCancelButton: () => void
@@ -17,6 +18,7 @@ export type TexEditDialogProps = {
 
 export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
+  const isEmptyTexItem = CurrentState.isEmptyTexItem(ItemPath.getItemId(targetItemPath))
   const onClickFinishButton = () => {
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -44,6 +46,7 @@ export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogPr
   }
 
   return {
+    dialogTitle: isEmptyTexItem ? 'TeXアイテム作成' : 'TeX編集',
     code: Internal.instance.state.texItems[ItemPath.getItemId(targetItemPath)].code,
     onClickFinishButton,
     onClickCancelButton: () => {

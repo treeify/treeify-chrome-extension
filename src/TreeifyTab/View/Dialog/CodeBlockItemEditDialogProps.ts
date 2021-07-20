@@ -8,6 +8,7 @@ import {CodeBlockItemEditDialog} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type CodeBlockItemEditDialogProps = CodeBlockItemEditDialog & {
+  dialogTitle: string
   onClickFinishButton: () => void
   onClickCancelButton: () => void
   onCloseDialog: () => void
@@ -18,6 +19,7 @@ export function createCodeBlockItemEditDialogProps(
   dialog: CodeBlockItemEditDialog
 ): CodeBlockItemEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
+  const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(targetItemPath))
   const onClickFinishButton = () => {
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -48,6 +50,7 @@ export function createCodeBlockItemEditDialogProps(
 
   return {
     ...dialog,
+    dialogTitle: isEmptyCodeBlockItem ? 'コードブロックアイテム作成' : 'コードブロック編集',
     onClickFinishButton,
     onClickCancelButton: () => {
       // ダイアログを閉じる
