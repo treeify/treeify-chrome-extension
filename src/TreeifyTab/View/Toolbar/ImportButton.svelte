@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+  import {List} from 'immutable'
   import {ItemId} from '../../basicType'
   import {doAsyncWithErrorCapture} from '../../errorCapture'
   import {CurrentState} from '../../Internal/CurrentState'
@@ -13,12 +14,18 @@
   function onClick() {
     doAsyncWithErrorCapture(async () => {
       const bookmarkTreeNodes = await chrome.bookmarks.getTree()
-      const rootItemIds = bookmarkTreeNodes.flatMap(flattenRedundantRootNode).map(toItem)
+      const bookmarkRootItemIds = bookmarkTreeNodes.flatMap(flattenRedundantRootNode).map(toItem)
 
-      const activePageId = CurrentState.getActivePageId()
-      for (const rootItemId of rootItemIds.reverse()) {
-        CurrentState.insertFirstChildItem(activePageId, rootItemId)
+      const bookmarkContainerItemId = CurrentState.createTextItem()
+      const domishObjects = DomishObject.fromPlainText('ブックマーク')
+      CurrentState.setTextItemDomishObjects(bookmarkContainerItemId, domishObjects)
+      CurrentState.insertFirstChildItem(CurrentState.getActivePageId(), bookmarkContainerItemId)
+      for (const bookmarkRootItemId of bookmarkRootItemIds) {
+        CurrentState.insertLastChildItem(bookmarkContainerItemId, bookmarkRootItemId)
       }
+
+      const targetItemPath = List.of(CurrentState.getActivePageId(), bookmarkContainerItemId)
+      CurrentState.setTargetItemPath(targetItemPath)
 
       Rerenderer.instance.rerender()
     })
