@@ -1,8 +1,11 @@
 import {List} from 'immutable'
+import {assert} from 'src/Common/Debug/assert'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
+import {State} from 'src/TreeifyTab/Internal/State'
 
 export type ContextMenuItemProps = {
   title: string
@@ -46,6 +49,21 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   result.push({
     title: 'Markdown形式でコピー',
     onClick: () => NullaryCommand.copyAsMarkdownText(),
+  })
+
+  result.push({
+    title: 'OPML形式でエクスポート',
+    onClick: () => {
+      const fileName = 'treeify.opml'
+
+      const content = toOpmlString(CurrentState.getSelectedItemPaths())
+      const aElement = document.createElement('a')
+      aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
+      aElement.download = fileName
+      aElement.click()
+
+      assert(State.isValid(Internal.instance.state))
+    },
   })
 
   if (isSingleSelect) {
