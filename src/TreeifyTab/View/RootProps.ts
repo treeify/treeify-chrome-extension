@@ -21,7 +21,7 @@ export function createRootProps(state: State): RootProps {
     leftSidebarProps: createLeftSidebarProps(state),
     mainAreaProps: createMainAreaProps(state),
     toolbarProps: createToolbarProps(),
-    dialogLayerProps: createDialogLayerProps(state),
+    dialogLayerProps: createDialogLayerProps(),
     dragImageProps: createDragImageProps(),
   }
 }

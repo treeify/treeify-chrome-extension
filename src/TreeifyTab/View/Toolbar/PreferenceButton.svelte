@@ -6,7 +6,7 @@
 
   function onClick() {
     doWithErrorCapture(() => {
-      External.instance.dialogState = {type: 'PreferenceDialog'}
+      External.instance.dialogState = {type: 'PreferenceDropdownMenuDialog'}
       Rerenderer.instance.rerender()
     })
   }

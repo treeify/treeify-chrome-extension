@@ -11,7 +11,7 @@ export type ContextMenuDialog = {
 
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
-export type PreferenceDialog = {type: 'PreferenceDialog'}
+export type PreferenceDropdownMenuDialog = {type: 'PreferenceDropdownMenuDialog'}
 
 export type SearchDialog = {type: 'SearchDialog'}
 
@@ -31,7 +31,7 @@ export type Dialog =
   | CodeBlockItemEditDialog
   | ContextMenuDialog
   | OtherParentsDialog
-  | PreferenceDialog
+  | PreferenceDropdownMenuDialog
   | SearchDialog
   | TexEditDialog
   | WebPageItemTitleSettingDialog

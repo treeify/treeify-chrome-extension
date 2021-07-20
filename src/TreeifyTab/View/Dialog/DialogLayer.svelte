@@ -8,8 +8,8 @@
   import {DialogLayerProps} from './DialogLayer'
   import OtherParentsDialog from './OtherParentsDialog.svelte'
   import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
-  import PreferenceDialog from './PreferenceDialog.svelte'
-  import {createPreferenceDialogProps} from './PreferenceDialogProps'
+  import PreferenceDropdownMenuDialog from './PreferenceDropdownMenuDialog.svelte'
+  import {createPreferenceDropdownMenuDialogProps} from './PreferenceDropdownMenuDialogProps'
   import SearchDialog from './SearchDialog.svelte'
   import {createSearchDialogProps} from './SearchDialogProps'
   import TexEditDialog from './TexEditDialog.svelte'
@@ -31,8 +31,8 @@
 {#if props.dialog?.type === 'ContextMenuDialog'}
   <ContextMenuDialog props={createContextMenuDialogProps(props.dialog)} />
 {/if}
-{#if props.dialog?.type === 'PreferenceDialog'}
-  <PreferenceDialog props={createPreferenceDialogProps(props.dialog)} />
+{#if props.dialog?.type === 'PreferenceDropdownMenuDialog'}
+  <PreferenceDropdownMenuDialog props={createPreferenceDropdownMenuDialogProps()} />
 {/if}
 {#if props.dialog?.type === 'OtherParentsDialog'}
   <OtherParentsDialog props={createOtherParentsDialogProps(props.dialog)} />
