@@ -4,7 +4,6 @@ import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
 import {Instance} from 'src/TreeifyTab/Instance'
 import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
-import {showCitationSettingDialog} from 'src/TreeifyTab/Internal/NullaryCommand/dialog'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -194,12 +193,8 @@ export class Internal {
         '0010KeyC': List.of({commandName: 'copyForTransclusion'}),
         '1100KeyV': List.of({commandName: 'pasteAsPlainText'}),
         '1100KeyF': List.of({commandName: 'showSearchDialog'}),
-        '0110KeyW': List.of({commandName: 'showWorkspaceDialog'}),
-        '0010KeyE': List.of({commandName: 'toggleExcluded'}),
         '1100Period': List.of({commandName: 'toggleCitation'}),
         '0000F2': List.of({commandName: 'edit'}),
-        '0000F3': List.of({commandName: 'showOtherParentsDialog'}),
-        '0000F4': List.of({commandName: 'showCitationSettingDialog'}),
       },
       mainAreaDeleteButtonMouseBinding: {
         '0000MouseButton0': List.of({commandName: 'removeEdge'}),
