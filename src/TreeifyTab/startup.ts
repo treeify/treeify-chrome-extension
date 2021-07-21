@@ -1,4 +1,3 @@
-import {List} from 'immutable'
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
@@ -15,6 +14,7 @@ import {External} from 'src/TreeifyTab/External/External'
 import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Database} from 'src/TreeifyTab/Internal/Database'
+import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -159,13 +159,7 @@ function onClickContextMenu(info: OnClickData) {
   } else if (info.selectionText !== undefined) {
     // テキストアイテムとして取り込む
     const newItemId = CurrentState.createTextItem()
-    CurrentState.setTextItemDomishObjects(
-      newItemId,
-      List.of({
-        type: 'text',
-        textContent: info.selectionText,
-      })
-    )
+    CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
     // 出典を設定
     CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})

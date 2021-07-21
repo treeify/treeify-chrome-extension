@@ -203,12 +203,6 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
 function createItemFromSingleLineText(line: string): ItemId {
   // テキストアイテムを作る
   const itemId = CurrentState.createTextItem()
-  CurrentState.setTextItemDomishObjects(
-    itemId,
-    List.of({
-      type: 'text',
-      textContent: line,
-    })
-  )
+  CurrentState.setTextItemDomishObjects(itemId, DomishObject.fromPlainText(line))
   return itemId
 }

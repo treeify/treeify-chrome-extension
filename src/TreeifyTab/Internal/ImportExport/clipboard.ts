@@ -1,9 +1,9 @@
-import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {
   exportAsIndentedText,
   pasteMultilineText,
@@ -169,7 +169,7 @@ export function onPaste(event: ClipboardEvent) {
         document.execCommand('insertText', false, text)
       } else {
         const newItemId = CurrentState.createTextItem()
-        CurrentState.setTextItemDomishObjects(newItemId, List.of({type: 'text', textContent: text}))
+        CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(text))
         const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
         // ターゲットを更新する
