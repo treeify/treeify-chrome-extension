@@ -1,5 +1,6 @@
 import {List} from 'immutable'
-import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
+import {assert, assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
+import {dump} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
@@ -13,6 +14,7 @@ import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
+import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -680,8 +682,33 @@ function onSpace(event: KeyboardEvent) {
 }
 
 async function undo() {
-  if (External.instance.hardUnloadedTabIds.size > 0) return
-  if (External.instance.urlToItemIdsForTabCreation.size > 0) return
+  if (External.instance.hardUnloadedTabIds.size > 0) {
+    console.log('=============================================')
+    console.log('External.instance.hardUnloadedTabIds.size > 0')
+    for (const tabId of External.instance.hardUnloadedTabIds.values()) {
+      const tab = External.instance.tabItemCorrespondence.getTab(tabId)
+      dump(tab)
+      const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+      dump(itemId)
+      if (itemId !== undefined) {
+        for (let itemPath of CurrentState.yieldItemPaths(itemId)) {
+          dump(extractPlainText(itemPath))
+        }
+      }
+    }
+    console.log('=============================================')
+    assert(External.instance.hardUnloadedTabIds.size > 0)
+    return
+  }
+  if (External.instance.urlToItemIdsForTabCreation.size > 0) {
+    console.log('=============================================')
+    for (const entry of External.instance.urlToItemIdsForTabCreation) {
+      dump(entry)
+    }
+    console.log('=============================================')
+    assert(External.instance.urlToItemIdsForTabCreation.size > 0)
+    return
+  }
 
   if (Internal.instance.prevState !== undefined) {
     assertNonUndefined(External.instance.prevPendingMutatedChunkIds)
