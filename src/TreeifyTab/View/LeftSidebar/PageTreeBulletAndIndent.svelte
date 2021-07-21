@@ -18,7 +18,7 @@
   />
 </div>
 
-<style>
+<style global>
   :root {
     /* インデントラインの太さ */
     --page-tree-indent-line-width: 1px;

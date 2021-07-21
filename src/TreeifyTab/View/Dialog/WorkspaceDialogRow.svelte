@@ -41,7 +41,7 @@
   <div class="workspace-dialog_delete-button" on:click={onClickDeleteButton} />
 </div>
 
-<style>
+<style global>
   :root {
     /* 削除ボタンのサイズ（正方形の一辺の長さ） */
     --workspace-dialog-delete-button-size: 19px;

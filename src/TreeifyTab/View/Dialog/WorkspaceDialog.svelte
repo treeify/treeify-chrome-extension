@@ -26,7 +26,7 @@
   </div>
 </CommonDialog>
 
-<style>
+<style global>
   :root {
     /* 作成ボタンのサイズ（正方形の一辺の長さ） */
     --workspace-dialog-add-button-size: 22px;

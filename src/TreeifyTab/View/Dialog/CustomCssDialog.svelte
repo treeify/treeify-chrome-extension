@@ -22,7 +22,7 @@
   </div>
 </CommonDialog>
 
-<style>
+<style global>
   .custom-css-dialog_content {
     padding: 1em;
   }

@@ -74,7 +74,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   :root {
     /* ページツリーの項目のマウスホバー時の背景色。lch(95.5%, 3.6, 280.4)相当 */
     --page-tree-hover-item-background-color: #f0f2f9;

@@ -3,7 +3,7 @@
   import {dragItem} from '../dragAndDrop'
   import {MainAreaContentView} from './MainAreaContentProps'
   import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
-  
+
   export let props: MainAreaWebPageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
@@ -48,7 +48,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   :root {
     /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
     --main-area-favicon-size: 1em;

@@ -9,7 +9,7 @@
   <PageTree props={props.pageTreeProps} />
 </aside>
 
-<style>
+<style global>
   :root {
     /* 左サイドバーの背景色。lch(98.0%, 0.0, 0.0)相当 */
     --left-sidebar-background-color: #f9f9f9;

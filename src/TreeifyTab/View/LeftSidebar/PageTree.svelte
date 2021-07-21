@@ -9,7 +9,7 @@
   <PageTreeNode props={props.pageTreeRootNodeProps} />
 </div>
 
-<style>
+<style global>
   :root {
     /* ページツリーのテキスト全般に適用されるline-height */
     --page-tree-line-height: 1.65;

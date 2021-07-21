@@ -3,7 +3,7 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-  
+
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyTexItem()
@@ -16,7 +16,7 @@
   <div class="tex-item-creation-button_icon" />
 </ToolbarIconButton>
 
-<style>
+<style global>
   :root {
     /* TeXアイテム作成ボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --tex-item-creation-button-icon-size: 18px;

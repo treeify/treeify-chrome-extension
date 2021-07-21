@@ -35,7 +35,7 @@
   </div>
 </CommonDialog>
 
-<style>
+<style global>
   .tex-edit-dialog_content {
     min-width: 20em;
     padding: 1em;

@@ -24,7 +24,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   :global(.citation) .main-area-text-content {
     /* lch(80.0%, 0.0, 0.0)相当 */
     border-left: 0.25em solid #c6c6c6;

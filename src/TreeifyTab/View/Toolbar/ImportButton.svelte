@@ -77,7 +77,7 @@
   <div class="import-button_icon" />
 </ToolbarIconButton>
 
-<style>
+<style global>
   :root {
     /* インポートボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --import-button-icon-size: 22px;

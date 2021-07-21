@@ -1,12 +1,12 @@
 <script lang="ts">
-  export let title = ""
+  export let title = ''
 </script>
 
 <div class="toolbar-icon-button" {title} on:click>
   <slot />
 </div>
 
-<style>
+<style global>
   :root {
     /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
     --toolbar-icon-button-size: 32px;
@@ -47,7 +47,7 @@
 
     /* lch(50.0%, 0.0, 0.0)相当 */
     background: #777777;
-    
+
     pointer-events: none;
   }
   /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */

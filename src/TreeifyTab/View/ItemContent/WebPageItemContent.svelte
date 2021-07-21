@@ -13,7 +13,7 @@
   <span class="web-page-item-content_title">{props.title}</span>
 </div>
 
-<style>
+<style global>
   :root {
     /* ファビコン表示領域（正方形）の一辺の長さ */
     --web-page-item-content-favicon-size: 1em;

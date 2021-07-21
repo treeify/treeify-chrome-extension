@@ -18,7 +18,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   /* コードブロックアイテムのコンテンツ領域のルート */
   .main-area-tex-content {
     /* フォーカス時の枠線を非表示 */

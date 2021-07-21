@@ -21,7 +21,7 @@
   {/key}
 </main>
 
-<style>
+<style global>
   :root {
     --main-area-base-font-size: 15px;
 

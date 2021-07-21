@@ -29,7 +29,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   /* 画像アイテムのコンテンツ領域のルート */
   .main-area-image-content {
     /* フォーカス時の枠線を非表示 */

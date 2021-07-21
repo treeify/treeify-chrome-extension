@@ -51,7 +51,7 @@
   {props.title}
 </div>
 
-<style>
+<style global>
   .preference-dropdown-menu-item {
     outline: 0 solid transparent;
 

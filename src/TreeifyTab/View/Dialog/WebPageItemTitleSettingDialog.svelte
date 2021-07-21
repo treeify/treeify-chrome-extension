@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   .web-page-item-title-setting-dialog {
     position: fixed;
     top: 0;
