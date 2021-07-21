@@ -80,8 +80,8 @@
   }
 
   /* グレーアウト状態のウェブページアイテムのタイトル */
-  :global(.grayed-out) .main-area-web-page-content_title,
-  :global(.grayed-out-children) .main-area-web-page-content_title {
+  .grayed-out .main-area-web-page-content_title,
+  .grayed-out-children .main-area-web-page-content_title {
     color: var(--grayed-out-item-text-color);
   }
 

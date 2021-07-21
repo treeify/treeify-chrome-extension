@@ -28,7 +28,7 @@
   }
 
   /* グレーアウト状態のコードブロックアイテム */
-  :global(.grayed-out) .main-area-tex-content {
+  .grayed-out .main-area-tex-content {
     filter: opacity(50%);
   }
 </style>

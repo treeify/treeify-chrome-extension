@@ -68,30 +68,30 @@
   }
 
   /* トランスクルードされたアイテムの強調表示 */
-  :global(.transcluded) .main-area-spool_inner-circle {
+  .transcluded .main-area-spool_inner-circle {
     background: var(--transcluded-item-bullet-color);
   }
-  :global(.transcluded) .main-area-spool:hover .main-area-spool_inner-circle {
+  .transcluded .main-area-spool:hover .main-area-spool_inner-circle {
     background: var(--transcluded-item-bullet-hover-color);
   }
-  :global(.transcluded) .main-area-spool_page-icon {
+  .transcluded .main-area-spool_page-icon {
     background: var(--transcluded-item-bullet-color);
   }
-  :global(.transcluded) .main-area-spool:hover .main-area-spool_page-icon {
+  .transcluded .main-area-spool:hover .main-area-spool_page-icon {
     background: var(--transcluded-item-bullet-hover-color);
   }
 
   /* ハイライト状態のアイテムの強調表示 */
-  :global(.highlighted) .main-area-spool_inner-circle {
+  .highlighted .main-area-spool_inner-circle {
     background: var(--highlighted-item-bullet-color);
   }
-  :global(.highlighted) .main-area-spool:hover .main-area-spool_inner-circle {
+  .highlighted .main-area-spool:hover .main-area-spool_inner-circle {
     background: var(--highlighted-item-bullet-hover-color);
   }
-  :global(.highlighted) .main-area-spool_page-icon {
+  .highlighted .main-area-spool_page-icon {
     background: var(--highlighted-item-bullet-color);
   }
-  :global(.highlighted) .main-area-spool:hover .main-area-spool_page-icon {
+  .highlighted .main-area-spool:hover .main-area-spool_page-icon {
     background: var(--highlighted-item-bullet-hover-color);
   }
 
