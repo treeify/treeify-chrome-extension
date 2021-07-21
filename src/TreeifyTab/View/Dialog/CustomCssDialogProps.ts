@@ -6,6 +6,7 @@ import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type CustomCssDialogProps = {
+  code: string
   onClickFinishButton: () => void
   onClickCancelButton: () => void
   onKeyDown: (event: KeyboardEvent) => void
@@ -24,6 +25,7 @@ export function createCustomCssDialogProps(): CustomCssDialogProps {
   }
 
   return {
+    code: Internal.instance.state.customCss,
     onClickFinishButton,
     onClickCancelButton: () => {
       // ダイアログを閉じる

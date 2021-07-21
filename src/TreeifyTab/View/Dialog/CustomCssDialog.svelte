@@ -10,8 +10,11 @@
     <div
       class="custom-css-dialog_code"
       contenteditable="plaintext-only"
+      tabindex="0"
       on:keydown={props.onKeyDown}
-    />
+    >
+      {props.code}
+    </div>
     <div class="custom-css-dialog_button-area">
       <button on:click={props.onClickFinishButton}>完了</button>
       <button on:click={props.onClickCancelButton}>キャンセル</button>
