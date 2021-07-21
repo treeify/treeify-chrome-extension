@@ -16,7 +16,7 @@
   <div class="preference-button_icon" />
 </ToolbarIconButton>
 
-<style>
+<style global>
   :root {
     /* 環境設定ボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --preference-button-icon-size: 18px;

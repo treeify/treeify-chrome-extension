@@ -20,7 +20,7 @@
   </div>
 </CommonDialog>
 
-<style>
+<style global>
   .citation-setting-dialog_content {
     width: 90vw;
     max-width: 40em;

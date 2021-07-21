@@ -7,5 +7,5 @@
 
 <div>{@html DomishObject.toHtml(props.domishObjects)}</div>
 
-<style>
+<style global>
 </style>

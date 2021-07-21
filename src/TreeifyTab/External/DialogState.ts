@@ -9,6 +9,8 @@ export type ContextMenuDialog = {
   mousePosition: Coordinate
 }
 
+export type CustomCssDialog = {type: 'CustomCssDialog'}
+
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
 export type PreferenceDropdownMenuDialog = {type: 'PreferenceDropdownMenuDialog'}
@@ -30,6 +32,7 @@ export type Dialog =
   | CitationSettingDialog
   | CodeBlockItemEditDialog
   | ContextMenuDialog
+  | CustomCssDialog
   | OtherParentsDialog
   | PreferenceDropdownMenuDialog
   | SearchDialog

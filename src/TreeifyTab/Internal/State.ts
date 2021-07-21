@@ -31,6 +31,7 @@ export type State = {
   mainAreaKeyboardBinding: {[K in InputId]: List<Command>}
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
   mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
+  customCss: string
 }
 
 /**

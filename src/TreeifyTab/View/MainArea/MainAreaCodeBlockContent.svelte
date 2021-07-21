@@ -16,7 +16,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   :root {
     --code-block-padding: 0.2em;
   }
@@ -43,7 +43,7 @@
   }
 
   /* グレーアウト状態のコードブロックアイテム */
-  :global(.grayed-out) .main-area-code-block-content {
+  .grayed-out .main-area-code-block-content {
     filter: opacity(50%);
   }
 </style>

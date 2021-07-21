@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   .search-result-page_tree {
     /* lch(70.0%, 0.0, 0.0)相当 */
     border: solid 1px #ababab;

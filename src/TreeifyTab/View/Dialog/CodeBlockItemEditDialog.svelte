@@ -42,7 +42,7 @@
   </div>
 </CommonDialog>
 
-<style>
+<style global>
   .code-block-edit-dialog_content {
     min-width: 30em;
     padding: 1em;

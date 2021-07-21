@@ -18,7 +18,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   /* コードブロックアイテムのコンテンツ領域のルート */
   .main-area-tex-content {
     /* フォーカス時の枠線を非表示 */
@@ -28,7 +28,7 @@
   }
 
   /* グレーアウト状態のコードブロックアイテム */
-  :global(.grayed-out) .main-area-tex-content {
+  .grayed-out .main-area-tex-content {
     filter: opacity(50%);
   }
 </style>

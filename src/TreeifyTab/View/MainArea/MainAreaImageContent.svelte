@@ -29,7 +29,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   /* 画像アイテムのコンテンツ領域のルート */
   .main-area-image-content {
     /* フォーカス時の枠線を非表示 */
@@ -57,7 +57,7 @@
   }
 
   /* グレーアウト状態の画像 */
-  :global(.grayed-out) .main-area-image-content_image {
+  .grayed-out .main-area-image-content_image {
     filter: opacity(50%);
   }
 </style>

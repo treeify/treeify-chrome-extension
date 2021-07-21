@@ -22,5 +22,5 @@
   <MainAreaTexContent {props} />
 {/if}
 
-<style>
+<style global>
 </style>

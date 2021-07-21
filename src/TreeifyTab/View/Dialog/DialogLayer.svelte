@@ -5,6 +5,8 @@
   import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
   import ContextMenuDialog from './ContextMenuDialog.svelte'
   import {createContextMenuDialogProps} from './ContextMenuDialogProps'
+  import CustomCssDialog from './CustomCssDialog.svelte'
+  import {createCustomCssDialogProps} from './CustomCssDialogProps'
   import {DialogLayerProps} from './DialogLayer'
   import OtherParentsDialog from './OtherParentsDialog.svelte'
   import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
@@ -30,6 +32,9 @@
 {/if}
 {#if props.dialog?.type === 'ContextMenuDialog'}
   <ContextMenuDialog props={createContextMenuDialogProps(props.dialog)} />
+{/if}
+{#if props.dialog?.type === 'CustomCssDialog'}
+  <CustomCssDialog props={createCustomCssDialogProps()} />
 {/if}
 {#if props.dialog?.type === 'PreferenceDropdownMenuDialog'}
   <PreferenceDropdownMenuDialog props={createPreferenceDropdownMenuDialogProps()} />

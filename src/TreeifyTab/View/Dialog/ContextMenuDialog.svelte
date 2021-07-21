@@ -81,7 +81,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   .context-menu-dialog {
     position: fixed;
     top: 0;

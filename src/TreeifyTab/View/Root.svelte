@@ -17,6 +17,13 @@
 </script>
 
 <div class="root" use:dragStateResetter>
+  <!--
+  カスタムCSSを埋め込む。
+  Svelteは動的にstyle要素をhead要素の子リスト末尾に追加するので、尋常な方法ではCSSの優先度で負けてしまう。
+  body要素の下にstyle要素を入れることで優先度の問題を解決した。
+  またSvelteでは<style>{css}</style>のように書いても動的にCSSを設定できないので、innerHTMLの形で強引に埋め込む。
+  -->
+  {@html props.customCssHtml}
   <div class="toolbar-and-sidebar-layout">
     <Toolbar props={props.toolbarProps} />
     <div class="sidebar-layout">
@@ -30,7 +37,7 @@
   {/if}
 </div>
 
-<style>
+<style global>
   .root {
     height: 100%;
     /* ダイアログなどを他の表示物に重ねて表示するための設定 */

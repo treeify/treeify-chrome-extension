@@ -66,7 +66,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   .preference-dropdown-menu-dialog {
     position: fixed;
     top: 0;

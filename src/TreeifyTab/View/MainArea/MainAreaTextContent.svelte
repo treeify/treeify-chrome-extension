@@ -24,8 +24,8 @@
   {/if}
 </div>
 
-<style>
-  :global(.citation) .main-area-text-content {
+<style global>
+  .citation .main-area-text-content {
     /* lch(80.0%, 0.0, 0.0)相当 */
     border-left: 0.25em solid #c6c6c6;
     padding-left: 0.2em;
@@ -38,8 +38,8 @@
   }
 
   /* グレーアウト状態のテキストアイテム */
-  :global(.grayed-out) .main-area-text-content_content-editable,
-  :global(.grayed-out-children) .main-area-text-content_content-editable {
+  .grayed-out .main-area-text-content_content-editable,
+  .grayed-out-children .main-area-text-content_content-editable {
     color: var(--grayed-out-item-text-color);
   }
 </style>

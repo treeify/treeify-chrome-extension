@@ -73,7 +73,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   :root {
     --common-dialog-border-radius: 5px;
 

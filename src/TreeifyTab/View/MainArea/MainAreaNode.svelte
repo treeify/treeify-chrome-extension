@@ -87,7 +87,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   :root {
     /* ボディ領域の上下パディング */
     --main-area-body-area-vertical-padding: 0.08em;
@@ -146,7 +146,7 @@
   }
 
   /* ダウトフル状態のアイテム */
-  :global(.doubtful) .main-area-node_content-area {
+  .doubtful .main-area-node_content-area {
     /* lch(60.0%, 134.0, 160.4)相当 */
     text-decoration: underline dotted #00a570;
     text-decoration-thickness: 2px;

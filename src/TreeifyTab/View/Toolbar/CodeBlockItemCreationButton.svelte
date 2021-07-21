@@ -3,7 +3,7 @@
   import {NullaryCommand} from '../../Internal/NullaryCommand'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
-  
+
   function onClick() {
     doWithErrorCapture(() => {
       NullaryCommand.createEmptyCodeBlockItem()
@@ -16,7 +16,7 @@
   <div class="code-block-creation-button_icon" />
 </ToolbarIconButton>
 
-<style>
+<style global>
   :root {
     /* コードブロックアイテム作成ボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --code-block-creation-button-icon-size: 18px;

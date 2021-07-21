@@ -25,7 +25,7 @@
   <div class="data-folder-picker-open-button_icon" class:grayed-out={props.isGrayedOut} />
 </ToolbarIconButton>
 
-<style>
+<style global>
   :root {
     /* データフォルダを開くボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --data-folder-picker-open-button-icon-size: 22px;

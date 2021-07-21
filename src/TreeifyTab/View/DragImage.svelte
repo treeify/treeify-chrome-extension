@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<style>
+<style global>
   .drag-image {
     position: fixed;
     top: 0;
