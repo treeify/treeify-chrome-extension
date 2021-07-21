@@ -11,6 +11,8 @@ export type ContextMenuDialog = {
 
 export type CustomCssDialog = {type: 'CustomCssDialog'}
 
+export type KeyBindingDialog = {type: 'KeyBindingDialog'}
+
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
 export type PreferenceDropdownMenuDialog = {type: 'PreferenceDropdownMenuDialog'}
@@ -33,6 +35,7 @@ export type Dialog =
   | CodeBlockItemEditDialog
   | ContextMenuDialog
   | CustomCssDialog
+  | KeyBindingDialog
   | OtherParentsDialog
   | PreferenceDropdownMenuDialog
   | SearchDialog

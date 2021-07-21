@@ -149,7 +149,7 @@ export function createMainAreaNodeProps(
 
         const inputId = InputId.fromMouseEvent(event)
         const commandIds: List<CommandId> | undefined =
-          state.mainAreaDeleteButtonMouseBinding[inputId]
+          state.mainAreaDeleteButtonMouseBindings[inputId]
         if (commandIds !== undefined) {
           event.preventDefault()
           for (const commandId of commandIds) {

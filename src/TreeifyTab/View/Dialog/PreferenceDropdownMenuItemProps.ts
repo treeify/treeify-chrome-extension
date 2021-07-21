@@ -14,6 +14,12 @@ export function createPreferenceDropdownMenuItemPropses(): List<PreferenceDropdo
       onClick: () => Command.showWorkspaceDialog(),
     },
     {
+      title: 'キーボード操作設定',
+      onClick: () => {
+        External.instance.dialogState = {type: 'KeyBindingDialog'}
+      },
+    },
+    {
       title: 'カスタムCSS',
       onClick: () => {
         External.instance.dialogState = {type: 'CustomCssDialog'}

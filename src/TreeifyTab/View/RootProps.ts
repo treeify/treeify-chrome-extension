@@ -1,5 +1,5 @@
 import {State} from 'src/TreeifyTab/Internal/State'
-import {createDialogLayerProps, DialogLayerProps} from 'src/TreeifyTab/View/Dialog/DialogLayer'
+import {createDialogLayerProps, DialogLayerProps} from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
 import {createDragImageProps, DragImageProps} from 'src/TreeifyTab/View/DragImageProps'
 import {
   createLeftSidebarProps,

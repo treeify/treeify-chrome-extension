@@ -105,7 +105,7 @@ function onKeyDown(event: KeyboardEvent) {
     }
 
     const commandIds: List<CommandId> | undefined =
-      Internal.instance.state.mainAreaKeyboardBinding[inputId]
+      Internal.instance.state.mainAreaKeyBindings[inputId]
     if (commandIds !== undefined) {
       event.preventDefault()
 
