@@ -9,6 +9,7 @@ import {createMainAreaProps, MainAreaProps} from 'src/TreeifyTab/View/MainArea/M
 import {createToolbarProps, ToolbarProps} from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
 
 export type RootProps = {
+  customCssHtml: string
   leftSidebarProps: LeftSidebarProps
   mainAreaProps: MainAreaProps
   toolbarProps: ToolbarProps
@@ -18,6 +19,7 @@ export type RootProps = {
 
 export function createRootProps(state: State): RootProps {
   return {
+    customCssHtml: `<style>${state.customCss}</style>`,
     leftSidebarProps: createLeftSidebarProps(state),
     mainAreaProps: createMainAreaProps(state),
     toolbarProps: createToolbarProps(),
