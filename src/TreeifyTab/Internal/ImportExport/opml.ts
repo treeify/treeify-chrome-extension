@@ -66,6 +66,9 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
       if (webPageItem.title !== null) {
         baseAttributes.title = webPageItem.tabTitle
       }
+      if (webPageItem.isUnread) {
+        baseAttributes.isUnread = 'true'
+      }
       break
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
@@ -238,6 +241,10 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
         CurrentState.setWebPageItemTitle(webPageItemId, attrText)
       } else {
         CurrentState.setWebPageItemTabTitle(webPageItemId, attrText)
+      }
+      const attrIsUnread = outlineElement.getAttribute('isUnread')
+      if (attrIsUnread === 'true') {
+        CurrentState.setIsUnreadFlag(webPageItemId, true)
       }
       return webPageItemId
     case 'image':
