@@ -19,7 +19,7 @@ export let currentDragData: ItemDragData | ImageBottomDragData | undefined
 
 // クリックしているつもりなのにドラッグ扱いされてしまう問題に対処するため導入した変数。
 // ドラッグ開始の判断が早すぎるのが原因なので、ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない。
-let mouseDownPosition: Coordinate | undefined
+let itemMouseDown: {position: Coordinate; itemPath: ItemPath} | undefined
 
 /**
  * 項目のドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
@@ -28,32 +28,14 @@ let mouseDownPosition: Coordinate | undefined
 export function dragItem(element: HTMLElement, itemPath: ItemPath) {
   function onMouseDown(event: MouseEvent) {
     if (event.buttons === 1) {
-      mouseDownPosition = {x: event.clientX, y: event.clientY}
-    }
-  }
-  function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && mouseDownPosition !== undefined) {
-      // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
-      const currentMousePosition = {x: event.clientX, y: event.clientY}
-      const distance = calculateDistance(mouseDownPosition, currentMousePosition)
-      if (distance > 5) {
-        mouseDownPosition = undefined
-        currentDragData = {
-          type: 'ItemDragData',
-          itemPath,
-          initialMousePosition: currentMousePosition,
-        }
-        Rerenderer.instance.rerender()
-      }
+      itemMouseDown = {position: {x: event.clientX, y: event.clientY}, itemPath}
     }
   }
 
   element.addEventListener('mousedown', onMouseDown)
-  element.addEventListener('mousemove', onMouseMove)
   return {
     destroy() {
       element.removeEventListener('mousedown', onMouseDown)
-      element.removeEventListener('mousemove', onMouseMove)
     },
   }
 }
@@ -148,7 +130,22 @@ export function dragStateResetter(element: HTMLElement) {
     }
   }
   function onMouseMove(event: MouseEvent) {
-    if (!(event.buttons & 1) && currentDragData !== undefined) {
+    if (event.buttons === 1 && itemMouseDown !== undefined) {
+      // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
+      const currentMousePosition = {x: event.clientX, y: event.clientY}
+      const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
+      if (distance > 5) {
+        currentDragData = {
+          type: 'ItemDragData',
+          itemPath: itemMouseDown.itemPath,
+          initialMousePosition: currentMousePosition,
+        }
+        itemMouseDown = undefined
+        Rerenderer.instance.rerender()
+      }
+    }
+
+    if ((event.buttons & 1) === 0 && currentDragData !== undefined) {
       currentDragData = undefined
       Rerenderer.instance.rerender()
     }
