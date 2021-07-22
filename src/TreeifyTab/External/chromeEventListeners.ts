@@ -12,6 +12,7 @@ import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
@@ -154,8 +155,11 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
       External.instance.hardUnloadedTabIds.delete(tabId)
     } else if (CurrentState.isItem(itemId)) {
       // 対応するウェブページ項目を削除する
-      CurrentState.deleteItemItself(itemId)
-      // TODO: targetItemPathがダングリングポインタになる不具合がある
+      if (itemId === ItemPath.getItemId(CurrentState.getTargetItemPath())) {
+        NullaryCommand.deleteItemItself()
+      } else {
+        CurrentState.deleteItemItself(itemId)
+      }
     }
 
     Rerenderer.instance.rerender()
