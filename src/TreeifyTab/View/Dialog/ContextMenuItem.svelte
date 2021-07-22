@@ -51,9 +51,21 @@
       }
     })
   }
+
+  function onMouseEnter(event: MouseEvent) {
+    if (event.target instanceof HTMLElement) {
+      event.target.focus()
+    }
+  }
 </script>
 
-<div class="context-menu-item" tabindex="0" on:click={onClick} on:keydown={onKeyDown}>
+<div
+  class="context-menu-item"
+  tabindex="0"
+  on:click={onClick}
+  on:mouseenter={onMouseEnter}
+  on:keydown={onKeyDown}
+>
   {props.title}
 </div>
 
@@ -70,10 +82,5 @@
   .context-menu-item:focus {
     /* lch(93.0%, 7.8, 280.4)相当 */
     background: #e7ebfa;
-  }
-
-  .context-menu-item:hover {
-    /* lch(95.5%, 3.6, 280.4)相当 */
-    background: #f0f2f9;
   }
 </style>
