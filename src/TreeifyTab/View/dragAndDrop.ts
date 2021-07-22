@@ -31,29 +31,11 @@ export function dragItem(element: HTMLElement, itemPath: ItemPath) {
       itemMouseDown = {position: {x: event.clientX, y: event.clientY}, itemPath}
     }
   }
-  function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && itemMouseDown !== undefined) {
-      // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
-      const currentMousePosition = {x: event.clientX, y: event.clientY}
-      const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
-      if (distance > 5) {
-        currentDragData = {
-          type: 'ItemDragData',
-          itemPath: itemMouseDown.itemPath,
-          initialMousePosition: currentMousePosition,
-        }
-        itemMouseDown = undefined
-        Rerenderer.instance.rerender()
-      }
-    }
-  }
 
   element.addEventListener('mousedown', onMouseDown)
-  element.addEventListener('mousemove', onMouseMove)
   return {
     destroy() {
       element.removeEventListener('mousedown', onMouseDown)
-      element.removeEventListener('mousemove', onMouseMove)
     },
   }
 }
@@ -148,7 +130,22 @@ export function dragStateResetter(element: HTMLElement) {
     }
   }
   function onMouseMove(event: MouseEvent) {
-    if (!(event.buttons & 1) && currentDragData !== undefined) {
+    if (event.buttons === 1 && itemMouseDown !== undefined) {
+      // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
+      const currentMousePosition = {x: event.clientX, y: event.clientY}
+      const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
+      if (distance > 5) {
+        currentDragData = {
+          type: 'ItemDragData',
+          itemPath: itemMouseDown.itemPath,
+          initialMousePosition: currentMousePosition,
+        }
+        itemMouseDown = undefined
+        Rerenderer.instance.rerender()
+      }
+    }
+
+    if ((event.buttons & 1) === 0 && currentDragData !== undefined) {
       currentDragData = undefined
       Rerenderer.instance.rerender()
     }
