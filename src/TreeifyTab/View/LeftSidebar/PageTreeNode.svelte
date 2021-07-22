@@ -103,6 +103,8 @@
     /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
+    
+    user-select: none;
   }
 
   /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
