@@ -12,17 +12,17 @@
   }
 </script>
 
-<ToolbarIconButton title="コードブロックアイテム作成" on:click={onClick}>
+<ToolbarIconButton title="コードブロック項目作成" on:click={onClick}>
   <div class="code-block-creation-button_icon" />
 </ToolbarIconButton>
 
 <style global>
   :root {
-    /* コードブロックアイテム作成ボタンのアイコンのサイズ（正方形の一辺の長さ） */
+    /* コードブロック項目作成ボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --code-block-creation-button-icon-size: 18px;
   }
 
-  /* コードブロックアイテム作成ボタンのアイコン */
+  /* コードブロック項目作成ボタンのアイコン */
   .code-block-creation-button_icon {
     width: var(--code-block-creation-button-icon-size);
     height: var(--code-block-creation-button-icon-size);

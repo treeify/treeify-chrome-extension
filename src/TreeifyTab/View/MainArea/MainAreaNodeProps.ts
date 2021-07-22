@@ -27,9 +27,9 @@ export type MainAreaNodeProps = {
   itemPath: ItemPath
   isActivePage: boolean
   /**
-   * このアイテムが選択されているかどうかを示す値。
-   * 複数選択されたアイテムのうちの1つならmulti。
-   * 単一選択されたアイテムならsingle。
+   * この項目が選択されているかどうかを示す値。
+   * 複数選択された項目のうちの1つならmulti。
+   * 単一選択された項目ならsingle。
    * 選択されていないならnon。
    */
   selected: 'single' | 'multi' | 'non'
@@ -113,7 +113,7 @@ export function createMainAreaNodeProps(
             break
           case '0000MouseButton2':
             // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
-            // その複数選択されたアイテムをコンテキストメニューの操作対象にする。
+            // その複数選択された項目をコンテキストメニューの操作対象にする。
             if (
               CurrentState.getSelectedItemPaths().size === 1 ||
               !CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)
@@ -182,7 +182,7 @@ function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
   }
 }
 
-// 指定されたアイテムの子孫アイテムに対応するロード状態のタブを数える。
+// 指定された項目の子孫項目に対応するロード状態のタブを数える。
 // 自分自身に対応するタブはカウントしない。
 // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
 function countLoadedTabsInDescendants(state: State, itemId: ItemId): integer {
@@ -203,7 +203,7 @@ function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 
   }
 
   if (!is(itemPath.pop(), targetItemPath.pop())) {
-    // 選択されたアイテムパス群がこのアイテムパスと異なる子リスト上に存在する場合
+    // 選択されたItemPath群がこのItemPathと異なる子リスト上に存在する場合
     return 'non'
   }
 

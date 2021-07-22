@@ -2,7 +2,7 @@ import {integer} from 'src/Common/integer'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
- * アイテムIDの型エイリアス。
+ * 項目IDの型エイリアス。
  * 将来的にstring型に変わる可能性が0ではないし、
  * そうでなくとも可読性のために型エイリアスを使う。
  * 先頭文字が大文字になっている理由はitemIdという変数名を使いたいから。
@@ -10,8 +10,8 @@ import {Timestamp} from 'src/TreeifyTab/Timestamp'
 export type ItemId = integer
 
 /**
- * トップページのアイテムID。
- * このアイテムは下記の特徴を持つ。
+ * トップページの項目ID。
+ * この項目は下記の特徴を持つ。
  * ・インストール時に自動生成される
  * ・削除されない
  * ・常に親を持たない

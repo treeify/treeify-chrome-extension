@@ -50,12 +50,12 @@ export function unmountPage(itemId: ItemId) {
   }
 }
 
-/** 与えられたアイテムがページかどうかを返す */
+/** 与えられた項目がページかどうかを返す */
 export function isPage(itemId: ItemId) {
   return Internal.instance.state.pages[itemId] !== undefined
 }
 
-/** 与えられたアイテムをページ化する */
+/** 与えられた項目をページ化する */
 export function turnIntoPage(itemId: ItemId) {
   // 既にページだった場合は何もしない
   if (isPage(itemId)) return
@@ -68,7 +68,7 @@ export function turnIntoPage(itemId: ItemId) {
 }
 
 /**
- * 与えられたアイテムを非ページ化する。
+ * 与えられた項目を非ページ化する。
  * 既に非ページだった場合は何もしない。
  */
 export function turnIntoNonPage(itemId: ItemId) {

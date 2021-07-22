@@ -6,7 +6,7 @@ import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
-/** 対象アイテムをMarkdown形式に変換し、クリップボードに入れる（text/plain） */
+/** 対象項目をMarkdown形式に変換し、クリップボードに入れる（text/plain） */
 export function copyAsMarkdownText() {
   // TODO: 複数選択時はそれらをまとめてMarkdown化する
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -41,7 +41,7 @@ export async function pasteAsPlainText() {
 
   const textItemSelection = getTextItemSelectionFromDom()
   if (textItemSelection !== undefined) {
-    // テキストアイテムがフォーカスを持っている場合
+    // テキスト項目がフォーカスを持っている場合
 
     // 改行付きテキストをそのままinsertTextするとdiv要素やp要素が出現してしまうので、強制的にbr要素にする
     const lines = text.split(/\r?\n/)
@@ -52,7 +52,7 @@ export async function pasteAsPlainText() {
       }
     }
   } else {
-    // テキストアイテムがフォーカスを持っていない場合
+    // テキスト項目がフォーカスを持っていない場合
 
     const newTextItem = CurrentState.createTextItem()
     CurrentState.setTextItemDomishObjects(newTextItem, DomishObject.fromPlainText(text))

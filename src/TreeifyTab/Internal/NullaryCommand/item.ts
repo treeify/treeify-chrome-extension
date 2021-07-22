@@ -9,7 +9,7 @@ import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {Cite} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
-/** 選択されたアイテムを折りたたむコマンド */
+/** 選択された項目を折りたたむコマンド */
 export function collapseItem() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     CurrentState.setIsCollapsed(selectedItemPath, true)
@@ -17,7 +17,7 @@ export function collapseItem() {
   }
 }
 
-/** ターゲットアイテムのisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
+/** ターゲット項目のisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -34,7 +34,7 @@ export function enterKeyDefault() {
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
-    // ターゲットアイテムがテキストアイテムの場合
+    // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
     const selection = getSelection()
@@ -46,7 +46,7 @@ export function enterKeyDefault() {
     const textItemSelection = getTextItemSelectionFromDom()
     assertNonUndefined(textItemSelection)
 
-    // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないのでキャレット位置によらず子として追加する
+    // ターゲット項目がアクティブページだった場合は兄弟として追加できないのでキャレット位置によらず子として追加する
     if (!ItemPath.hasParent(targetItemPath)) {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
@@ -57,7 +57,7 @@ export function enterKeyDefault() {
         DomishObject.fromChildren(document.activeElement)
       )
 
-      // 新規アイテムを最初の子として追加する
+      // 新規項目を最初の子として追加する
       const newItemId = CurrentState.createTextItem()
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
@@ -68,9 +68,9 @@ export function enterKeyDefault() {
     }
 
     if (characterCount === 0) {
-      // 空のテキストアイテムなら
+      // 空のテキスト項目なら
 
-      // 新規アイテムを下に追加する
+      // 新規項目を下に追加する
       const newItemId = CurrentState.createTextItem()
       const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
@@ -88,12 +88,12 @@ export function enterKeyDefault() {
         DomishObject.fromChildren(document.activeElement)
       )
 
-      // 新規アイテムを兄として追加する
+      // 新規項目を兄として追加する
       const newItemId = CurrentState.createTextItem()
       const newItemPath = CurrentState.insertPrevSiblingItem(targetItemPath, newItemId)
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
-      // キャレットが先頭にある場合のみ新規アイテムをフォーカスする。
+      // キャレットが先頭にある場合のみ新規項目をフォーカスする。
       // WorkFlowyと同じ挙動。
       if (textItemSelection.focusDistance === 0) {
         CurrentState.setTargetItemPath(newItemPath)
@@ -110,7 +110,7 @@ export function enterKeyDefault() {
         DomishObject.fromChildren(document.activeElement)
       )
 
-      // 新規アイテムを下に配置する
+      // 新規項目を下に配置する
       const newItemId = CurrentState.createTextItem()
       const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
@@ -119,11 +119,11 @@ export function enterKeyDefault() {
       CurrentState.setTargetItemPath(newItemPath)
     }
   } else {
-    // ターゲットアイテムがテキストアイテム以外の場合
+    // ターゲット項目がテキスト項目以外の場合
 
-    // ターゲットアイテムがアクティブページだった場合は兄弟として追加できないので子として追加する
+    // ターゲット項目がアクティブページだった場合は兄弟として追加できないので子として追加する
     if (!ItemPath.hasParent(targetItemPath)) {
-      // 新規アイテムを最初の子として追加する
+      // 新規項目を最初の子として追加する
       const newItemId = CurrentState.createTextItem()
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
@@ -132,7 +132,7 @@ export function enterKeyDefault() {
       return
     }
 
-    // 新規アイテムを下に配置する
+    // 新規項目を下に配置する
     const newItemId = CurrentState.createTextItem()
     const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
@@ -142,9 +142,9 @@ export function enterKeyDefault() {
 }
 
 /**
- * アイテムを削除するコマンド。
- * ターゲットアイテムがアクティブページの場合は何もしない。
- * トランスクルードされたアイテムの場合はエッジのみ削除する。
+ * 項目を削除するコマンド。
+ * ターゲット項目がアクティブページの場合は何もしない。
+ * トランスクルードされた項目の場合はエッジのみ削除する。
  */
 export function removeEdge() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
@@ -157,7 +157,7 @@ export function removeEdge() {
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
-  // 上のアイテムがテキストアイテムの場合、キャレットを末尾に移動する
+  // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
   if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
@@ -176,8 +176,8 @@ export function removeEdge() {
 }
 
 /**
- * アイテムを削除するコマンド。
- * ターゲットアイテムがアクティブページの場合は何もしない。
+ * 項目を削除するコマンド。
+ * ターゲット項目がアクティブページの場合は何もしない。
  */
 export function deleteItem() {
   // アクティブページを削除しようとしている場合、何もしない
@@ -185,12 +185,12 @@ export function deleteItem() {
 
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
-  // 削除されるアイテムの上のアイテムをフォーカス
+  // 削除される項目の上の項目をフォーカス
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
-  // 上のアイテムがテキストアイテムの場合、キャレットを末尾に移動する
+  // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
   if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
@@ -198,16 +198,16 @@ export function deleteItem() {
     Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
   }
 
-  // 対象アイテムを削除
+  // 対象項目を削除
   for (const selectedItemPath of selectedItemPaths) {
     CurrentState.deleteItem(ItemPath.getItemId(selectedItemPath))
   }
 }
 
 /**
- * アイテム単体を削除するコマンド。
- * 子アイテムは（アンインデントと同じように）親側に繰り上げられる。
- * ターゲットアイテムがアクティブページの場合は何もしない。
+ * 項目単体を削除するコマンド。
+ * 子項目は（アンインデントと同じように）親側に繰り上げられる。
+ * ターゲット項目がアクティブページの場合は何もしない。
  */
 export function deleteItemItself() {
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -218,7 +218,7 @@ export function deleteItemItself() {
 
   const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.isEmpty()) {
-    // 上のアイテムをフォーカス
+    // 上の項目をフォーカス
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
     CurrentState.setTargetItemPath(aboveItemPath)
@@ -233,7 +233,7 @@ export function deleteItemItself() {
 }
 
 /**
- * 対象アイテムをグレーアウトする。
+ * 対象項目をグレーアウトする。
  * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
  */
 export function toggleGrayedOut() {
@@ -248,7 +248,7 @@ export function toggleGrayedOut() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  // フォーカスを下のアイテムに移動する
+  // フォーカスを下の項目に移動する
   // TODO: コマンドを分離する
   const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
   if (firstFollowingItemPath !== undefined) {
@@ -257,7 +257,7 @@ export function toggleGrayedOut() {
 }
 
 /**
- * 対象アイテムをハイライトする。
+ * 対象項目をハイライトする。
  * もし既にハイライト状態なら非ハイライト状態に戻す。
  */
 export function toggleHighlighted() {
@@ -273,7 +273,7 @@ export function toggleHighlighted() {
 }
 
 /**
- * 対象アイテムにダウトフル状態にする。
+ * 対象項目にダウトフル状態にする。
  * もし既にダウトフル状態なら非ダウトフル状態に戻す。
  */
 export function toggleDoubtful() {
@@ -289,7 +289,7 @@ export function toggleDoubtful() {
 }
 
 /**
- * 対象アイテムが出典付きなら出典情報を削除する。
+ * 対象項目が出典付きなら出典情報を削除する。
  * 出典がない場合はタイトル、URLともに空文字列の出典情報を付ける。
  */
 export function toggleCitation() {

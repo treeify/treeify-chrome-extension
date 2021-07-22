@@ -8,8 +8,8 @@ import {Item, TexItem} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
- * 新しい空のTeXアイテムを作成し、CurrentStateに登録する。
- * ただしアイテムの配置（親子関係の設定）は行わない。
+ * 新しい空のTeX項目を作成し、CurrentStateに登録する。
+ * ただし項目の配置（親子関係の設定）は行わない。
  */
 export function createTexItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
@@ -32,12 +32,12 @@ export function createTexItem(): ItemId {
   return newItemId
 }
 
-/** StateのtexItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+/** StateのtexItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteTexItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('texItems', itemId))
 }
 
-/** TeXアイテムのコードを設定する */
+/** TeX項目のコードを設定する */
 export function setTexItemCode(itemId: ItemId, code: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
     Internal.instance.mutate(code, PropertyPath.of('texItems', itemId, 'code'))

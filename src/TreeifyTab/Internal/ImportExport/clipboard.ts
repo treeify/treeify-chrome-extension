@@ -28,7 +28,7 @@ export function onCopy(event: ClipboardEvent) {
     if (getSelection()?.isCollapsed === false) {
       // テキストが範囲選択されていればブラウザのデフォルトの動作に任せる
     } else {
-      // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+      // テキストが範囲選択されていなければターゲット項目のコピーを行う
       event.preventDefault()
 
       // インデント形式のテキストをクリップボードに入れる
@@ -58,7 +58,7 @@ export function onCut(event: ClipboardEvent) {
       Internal.instance.saveCurrentStateToUndoStack()
       // あとはブラウザのデフォルトの動作に任せる
     } else {
-      // テキストが範囲選択されていなければターゲットアイテムのコピーを行う
+      // テキストが範囲選択されていなければターゲット項目のコピーを行う
       event.preventDefault()
 
       // インデント形式のテキストをクリップボードに入れる
@@ -93,9 +93,9 @@ export function onPaste(event: ClipboardEvent) {
     if (External.instance.treeifyClipboard !== undefined) {
       // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
       if (text === External.instance.getTreeifyClipboardHash()) {
-        // TODO: selectedItemPathsは削除や移動されたアイテムを指している可能性がある
+        // TODO: selectedItemPathsは削除や移動された項目を指している可能性がある
         for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
-          // 兄弟リスト内に同一アイテムを入れてしまわないようガード
+          // 兄弟リスト内に同一項目を入れてしまわないようガード
           if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
             // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
@@ -109,7 +109,7 @@ export function onPaste(event: ClipboardEvent) {
         assertNonUndefined(belowItemPath)
         CurrentState.setTargetItemPath(belowItemPath)
 
-        // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+        // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
           CurrentState.deleteItem(targetItemId)
         }
@@ -133,7 +133,7 @@ export function onPaste(event: ClipboardEvent) {
       assertNonUndefined(belowItemPath)
       CurrentState.setTargetItemPath(belowItemPath)
 
-      // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+      // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
       if (CurrentState.isEmptyTextItem(targetItemId)) {
         CurrentState.deleteItem(targetItemId)
       }
@@ -149,7 +149,7 @@ export function onPaste(event: ClipboardEvent) {
       // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
       const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
       if (gyazoUrlPattern.test(text)) {
-        // GyazoのスクリーンショットのURLなら画像アイテムを作る
+        // GyazoのスクリーンショットのURLなら画像項目を作る
         const newItemId = CurrentState.createImageItem()
         // TODO: Gyazoの画像はpngとは限らない
         CurrentState.setImageItemUrl(newItemId, text + '.png')
@@ -158,7 +158,7 @@ export function onPaste(event: ClipboardEvent) {
         // ターゲットを更新する
         CurrentState.setTargetItemPath(belowItemPath)
 
-        // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+        // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
           CurrentState.deleteItem(targetItemId)
         }
@@ -175,7 +175,7 @@ export function onPaste(event: ClipboardEvent) {
         // ターゲットを更新する
         CurrentState.setTargetItemPath(belowItemPath)
 
-        // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+        // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
           CurrentState.deleteItem(targetItemId)
         }

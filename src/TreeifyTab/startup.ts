@@ -28,7 +28,7 @@ export async function startup(initialState: State) {
   Internal.initialize(initialState)
   Internal.instance.addOnMutateListener(onMutateState)
 
-  // Treeifyタブ起動時点で既に存在するタブをウェブページアイテムと紐付ける
+  // Treeifyタブ起動時点で既に存在するタブをウェブページ項目と紐付ける
   await matchTabsAndWebPageItems()
 
   Rerenderer.instance.renderForFirstTime()
@@ -99,10 +99,10 @@ export async function restart(state: State) {
 }
 
 // タブの状態を新しいStateに合わせる。
-// 具体的には、新しいStateで対応アイテムが削除されていた場合はタブを閉じる。
+// 具体的には、新しいStateで対応項目が削除されていた場合はタブを閉じる。
 // また、新しいStateでURLが変わっていたらタブのURLを更新する。
 function migrateTabs(newState: State) {
-  // newStateにおけるグローバルアイテムIDからアイテムIDへのMapを作る
+  // newStateにおけるグローバル項目IDから項目IDへのMapを作る
   const globalItemIdMap = new Map<string, ItemId>()
   for (const itemsKey in newState.items) {
     const item = newState.items[itemsKey]
@@ -117,7 +117,7 @@ function migrateTabs(newState: State) {
     const globalItemId = `${item.instance}:${item.iisn}`
     const newItemId = globalItemIdMap.get(globalItemId)
     if (newItemId === undefined) {
-      // newStateで対応アイテムが削除されていた場合
+      // newStateで対応項目が削除されていた場合
       chrome.tabs.remove(tabId)
     } else {
       const newUrl = newState.webPageItems[newItemId].url
@@ -147,7 +147,7 @@ function onClickContextMenu(info: OnClickData) {
   if (itemId === undefined) return
 
   if (info.mediaType === 'image' && info.srcUrl !== undefined) {
-    // 画像アイテムとして取り込む
+    // 画像項目として取り込む
     const newItemId = CurrentState.createImageItem()
     CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
@@ -157,7 +157,7 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.insertLastChildItem(itemId, newItemId)
     Rerenderer.instance.rerender()
   } else if (info.selectionText !== undefined) {
-    // テキストアイテムとして取り込む
+    // テキスト項目として取り込む
     const newItemId = CurrentState.createTextItem()
     CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 

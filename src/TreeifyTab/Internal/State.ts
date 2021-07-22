@@ -20,11 +20,11 @@ export type State = {
   pages: {[K in ItemId]: Page}
   workspaces: {[K in WorkspaceId]: Workspace}
   /**
-   * マウントされているページたちのアイテムID。
+   * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
   mountedPageIds: List<ItemId>
-  /** 削除され再利用されるアイテムID群 */
+  /** 削除され再利用される項目ID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** メインエリア領域におけるキーボード入力とコマンドの対応付け */
@@ -35,8 +35,8 @@ export type State = {
 }
 
 /**
- * 全てのアイテムが共通で持つデータの型。
- * つまり、ItemTypeによらず各アイテムが必ず持っているデータ。
+ * 全ての項目が共通で持つデータの型。
+ * つまり、ItemTypeによらず各項目が必ず持っているデータ。
  */
 export type Item = {
   itemType: ItemType
@@ -47,8 +47,8 @@ export type Item = {
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
   /**
-   * このアイテムにアドホックに付与されるCSSクラスのリスト。
-   * 付与されたアイテム本体とその子孫に別々のスタイルを適用できるよう、
+   * この項目にアドホックに付与されるCSSクラスのリスト。
+   * 付与された項目本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
   cssClasses: List<string>
@@ -60,7 +60,7 @@ export type Edge = {
    * 折りたたみ状態か展開状態かのフラグ。
    *
    * 【ItemではなくEdgeで持つ理由】
-   * トランスクルードされたアイテムのisCollapsedを変更しても、他の視座に影響を与えずに済む。
+   * トランスクルードされた項目のisCollapsedを変更しても、他の視座に影響を与えずに済む。
    * アクティブページを表示する際に、そのページがisCollapsedかどうかを気にせず済む。
    * 正直、具体的なメリットはこれくらいしか思いつかない。
    * リスクはあるが直感的に面白そうなこちらに賭けてみた。
@@ -76,12 +76,12 @@ export type Cite = {
   url: string
 }
 
-/** テキストアイテムが固有で持つデータの型 */
+/** テキスト項目が固有で持つデータの型 */
 export type TextItem = {
   domishObjects: List<DomishObject>
 }
 
-/** ウェブページアイテムが固有で持つデータの型 */
+/** ウェブページ項目が固有で持つデータの型 */
 export type WebPageItem = {
   url: string
   /**
@@ -97,37 +97,37 @@ export type WebPageItem = {
   tabTitle: string
   /**
    * タブのタイトルを上書き表示するためのタイトル。
-   * nullの場合はtabTitleがこのウェブページアイテムのタイトルとして扱われる。
+   * nullの場合はtabTitleがこのウェブページ項目のタイトルとして扱われる。
    */
   title: string | null
   /** 未読フラグ */
   isUnread: boolean
 }
 
-/** 画像アイテムが固有で持つデータの型 */
+/** 画像項目が固有で持つデータの型 */
 export type ImageItem = {
   url: string
   /** 画像の表示領域の高さ指定 */
   heightPx: integer | null
 }
 
-/** コードブロックアイテムが固有で持つデータの型 */
+/** コードブロック項目が固有で持つデータの型 */
 export type CodeBlockItem = {
   code: string
   language: string
 }
 
-/** TeXアイテムが固有で持つデータの型 */
+/** TeX項目が固有で持つデータの型 */
 export type TexItem = {
   code: string
 }
 
 /** 各ページが持つデータの型 */
 export type Page = {
-  /** メインエリア内で操作対象となるアイテム */
+  /** メインエリア内で操作対象となる項目 */
   targetItemPath: ItemPath
   /**
-   * アイテム複数選択時の範囲の一端。
+   * 項目複数選択時の範囲の一端。
    * テキスト選択におけるanchorと同じ意味合い。
    */
   anchorItemPath: ItemPath
@@ -136,8 +136,8 @@ export type Page = {
 export type Workspace = {
   activePageId: ItemId
   /**
-   * このワークスペースでページツリーや検索結果から除外したいアイテム群。
-   * これに含まれるアイテムまたはその子孫アイテムはページツリーや検索結果から除外される。
+   * このワークスペースでページツリーや検索結果から除外したい項目群。
+   * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
   excludedItemIds: List<ItemId>
   name: string
@@ -184,14 +184,14 @@ export namespace State {
         )
 
         // 親子関係の対応チェック（エッジの存在チェック）
-        // 子アイテムの親マップに自身が含まれていることのチェック
+        // 子項目の親マップに自身が含まれていることのチェック
         for (const childItemId of item.childItemIds) {
           assertNonUndefined(
             state.items[childItemId]?.parents?.[itemId],
             `items[${childItemId}]のparentsに${itemId}が無い`
           )
         }
-        // 親アイテムの子リストに自身が含まれていることのチェック
+        // 親項目の子リストに自身が含まれていることのチェック
         for (const parentsKey in item.parents) {
           const parentItemId = parseInt(parentsKey)
           assert(
@@ -234,7 +234,7 @@ export namespace State {
 
       for (const pagesKey in state.pages) {
         const pageId = parseInt(pagesKey)
-        // ページIDに対応するアイテムIDの存在チェック
+        // ページIDに対応する項目IDの存在チェック
         assertNonUndefined(
           state.items[pageId],
           `${pageId}がpagesに含まれているのにitemsには含まれていない`

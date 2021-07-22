@@ -8,7 +8,7 @@ export function createEmptyTextItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const newItemId = CurrentState.createTextItem()
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
-  // 作ったアイテムをフォーカスする
+  // 作った項目をフォーカスする
   CurrentState.setTargetItemPath(newItemPath)
 }
 
@@ -35,7 +35,7 @@ export function toggleStrikethrough() {
 // テキスト選択範囲に太字や打ち消し線などのテキスト修飾を行う
 function execTextEditCommand(commandName: string) {
   const textItemSelection = getTextItemSelectionFromDom()
-  // キャレット自体が無い場合（非テキストアイテムがフォーカスされている場合など）は何もしない
+  // キャレット自体が無い場合（非テキスト項目がフォーカスされている場合など）は何もしない
   if (textItemSelection === undefined) return
 
   if (textItemSelection.anchorDistance === textItemSelection.focusDistance) {
@@ -56,8 +56,8 @@ export function insertLineBreak() {
 }
 
 /**
- * 選択したアイテムをグルーピングする。
- * 具体的には新しい空のテキストアイテムを作り、選択されたアイテムをその子リストに移動する。
+ * 選択した項目をグルーピングする。
+ * 具体的には新しい空のテキスト項目を作り、選択された項目をその子リストに移動する。
  */
 export function groupingItems() {
   if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) {
@@ -65,12 +65,12 @@ export function groupingItems() {
     return
   }
 
-  // 空のテキストアイテムを作って配置する
+  // 空のテキスト項目を作って配置する
   const newItemId = CurrentState.createTextItem()
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const newItemPath = CurrentState.insertPrevSiblingItem(selectedItemPaths.first(), newItemId)
 
-  // 選択されたアイテムを移動する
+  // 選択された項目を移動する
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     const parentItemId = ItemPath.getParentItemId(selectedItemPath)

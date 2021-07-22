@@ -37,7 +37,7 @@ export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogPr
     } else {
       // コードが空の場合
 
-      // TeXアイテムを削除
+      // TeX項目を削除
       NullaryCommand.removeEdge()
     }
 
@@ -47,7 +47,7 @@ export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogPr
   }
 
   return {
-    dialogTitle: isEmptyTexItem ? 'TeXアイテム作成' : 'TeX編集',
+    dialogTitle: isEmptyTexItem ? 'TeX項目作成' : 'TeX編集',
     code: Internal.instance.state.texItems[ItemPath.getItemId(targetItemPath)].code,
     onClickFinishButton,
     onClickCancelButton: () => {

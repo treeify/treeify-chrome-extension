@@ -19,10 +19,10 @@ export type SearchDialog = {type: 'SearchDialog'}
 
 export type TexEditDialog = {type: 'TexEditDialog'}
 
-/** ウェブページアイテムのタイトル設定ダイアログが固有で持つ状態の型 */
+/** ウェブページ項目のタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {
   type: 'WebPageItemTitleSettingDialog'
-  /** 対象となるアイテムのDOM要素のgetBoundingClientRect()の結果 */
+  /** 対象となる項目のDOM要素のgetBoundingClientRect()の結果 */
   targetItemRect: DOMRect
 }
 

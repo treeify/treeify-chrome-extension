@@ -9,8 +9,8 @@ import {ImageItem, Item} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
- * 新しい空の画像アイテムを作成し、CurrentStateに登録する。
- * ただしアイテムの配置（親子関係の設定）は行わない。
+ * 新しい空の画像項目を作成し、CurrentStateに登録する。
+ * ただし項目の配置（親子関係の設定）は行わない。
  */
 export function createImageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
@@ -36,17 +36,17 @@ export function createImageItem(): ItemId {
   return newItemId
 }
 
-/** StateのimageItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+/** StateのimageItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteImageItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('imageItems', itemId))
 }
 
-/** 画像アイテムのURLを設定する */
+/** 画像項目のURLを設定する */
 export function setImageItemUrl(itemId: ItemId, url: string) {
   Internal.instance.mutate(url, PropertyPath.of('imageItems', itemId, 'url'))
 }
 
-/** 画像アイテムのheightPxを設定する */
+/** 画像項目のheightPxを設定する */
 export function setImageItemHeightPx(itemId: ItemId, heightPx: integer) {
   Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
 }

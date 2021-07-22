@@ -3,11 +3,11 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TabId} from 'src/TreeifyTab/basicType'
 import Tab = chrome.tabs.Tab
 
-/** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのクラス */
+/** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのクラス */
 export class TabItemCorrespondence {
-  // タブIDからアイテムIDへのMap
+  // タブIDから項目IDへのMap
   private readonly tabIdToItemId = new Map<TabId, ItemId>()
-  // アイテムIDからタブIDへのMap
+  // 項目IDからタブIDへのMap
   private readonly itemIdToTabId = new Map<ItemId, TabId>()
   // タブIDからTabオブジェクトへのMap
   private readonly tabIdToTab = new Map<TabId, Tab>()
@@ -17,9 +17,9 @@ export class TabItemCorrespondence {
   }
 
   /**
-   * タブに対応するアイテムIDを返す。
-   * 「ウェブページアイテムを削除→対応するタブを閉じる」という処理が行われる際、
-   * アイテム削除からchrome.tabs.onRemovedイベント発生までにタイムラグがあるので、
+   * タブに対応する項目IDを返す。
+   * 「ウェブページ項目を削除→対応するタブを閉じる」という処理が行われる際、
+   * 項目削除からchrome.tabs.onRemovedイベント発生までにタイムラグがあるので、
    * その間はこの関数の戻り値がundefinedになることに要注意。
    */
   getItemIdBy(tabId: TabId): ItemId | undefined {
@@ -40,13 +40,13 @@ export class TabItemCorrespondence {
     this.tabIdToTab.delete(tabId)
   }
 
-  /** タブIDとアイテムIDを結びつける */
+  /** タブIDと項目IDを結びつける */
   tieTabAndItem(tabId: TabId, itemId: ItemId) {
     this.tabIdToItemId.set(tabId, itemId)
     this.itemIdToTabId.set(itemId, tabId)
   }
 
-  /** タブIDとアイテムIDの結びつけを解除する */
+  /** タブIDと項目IDの結びつけを解除する */
   untieTabAndItemByTabId(tabId: TabId) {
     const itemId = this.tabIdToItemId.get(tabId)
     assertNonUndefined(itemId)
@@ -54,7 +54,7 @@ export class TabItemCorrespondence {
     this.tabIdToItemId.delete(tabId)
   }
 
-  /** 指定されたウェブページアイテムがアンロード状態かどうかを判定する */
+  /** 指定されたウェブページ項目がアンロード状態かどうかを判定する */
   isUnloaded(itemId: ItemId): boolean {
     const tabId = this.getTabIdBy(itemId)
     return tabId === undefined || this.getTab(tabId)?.discarded === true

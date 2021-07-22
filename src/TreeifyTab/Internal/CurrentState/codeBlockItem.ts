@@ -8,8 +8,8 @@ import {CodeBlockItem, Item} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
- * 新しい空のコードブロックアイテムを作成し、CurrentStateに登録する。
- * ただしアイテムの配置（親子関係の設定）は行わない。
+ * 新しい空のコードブロック項目を作成し、CurrentStateに登録する。
+ * ただし項目の配置（親子関係の設定）は行わない。
  */
 export function createCodeBlockItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
@@ -35,19 +35,19 @@ export function createCodeBlockItem(): ItemId {
   return newItemId
 }
 
-/** StateのcodeBlockItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+/** StateのcodeBlockItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteCodeBlockItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('codeBlockItems', itemId))
 }
 
-/** コードブロックアイテムのコードを設定する */
+/** コードブロック項目のコードを設定する */
 export function setCodeBlockItemCode(itemId: ItemId, code: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
     Internal.instance.mutate(code, PropertyPath.of('codeBlockItems', itemId, 'code'))
   })
 }
 
-/** コードブロックアイテムの言語を設定する */
+/** コードブロック項目の言語を設定する */
 export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
     Internal.instance.mutate(language, PropertyPath.of('codeBlockItems', itemId, 'language'))

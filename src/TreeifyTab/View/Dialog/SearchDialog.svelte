@@ -23,7 +23,7 @@
 
       const itemIds = Internal.instance.searchEngine.search(event.target.value)
 
-      // ヒットしたアイテムの所属ページを探索し、その経路をItemPathとして収集する
+      // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
       const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
 
       searchResult = allItemPaths
@@ -31,7 +31,7 @@
         .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
         .toList()
         .map((itemPaths) => itemPaths.toList())
-        // ヒットしたアイテム数によってページの並びをソートする
+        // ヒットした項目数によってページの並びをソートする
         .sortBy((itemPaths) => -itemPaths.size)
     }
   }

@@ -1,6 +1,6 @@
 import {integer} from 'src/Common/integer'
 
-/** テキストアイテムのcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
+/** テキスト項目のcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
 export type TextItemSelection = {
   /**
    * getSelectionで取得できるfocusNode&focusOffsetの位置を表す値。
@@ -133,7 +133,7 @@ function getCharacterCount(node: Node): integer {
 
 /**
  * メインエリア自体をフォーカスする。
- * これはメインエリア内のいずれのアイテムもフォーカスせず、
+ * これはメインエリア内のいずれの項目もフォーカスせず、
  * それでいてメインエリアに対するキーボード操作を可能とするために用いられる。
  * 具体的には複数選択時にこの関数が用いられる。
  */

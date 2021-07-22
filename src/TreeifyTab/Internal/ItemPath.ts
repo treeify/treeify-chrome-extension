@@ -10,13 +10,13 @@ export namespace ItemPath {
     return itemPath.first()
   }
 
-  /** パスの終点アイテムのIDを返す */
+  /** パスの終点項目のIDを返す */
   export function getItemId(itemPath: ItemPath): ItemId {
     assert(!itemPath.isEmpty())
     return itemPath.last()
   }
 
-  /** パスの終点より1つ前のアイテムのIDを返す */
+  /** パスの終点より1つ前の項目のIDを返す */
   export function getParentItemId(itemPath: ItemPath): ItemId | undefined {
     return itemPath.get(-2)
   }

@@ -53,7 +53,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   if (event.clientX < rect.x) {
     // Spoolへのドロップの場合
 
-    // どのアイテムのSpoolにドロップしたかを探索する
+    // どの項目のSpoolにドロップしたかを探索する
     const spoolDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
 
     const spoolDroppedItemId = ItemPath.getItemId(spoolDroppedItemPath)
@@ -151,9 +151,9 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   }
 }
 
-// メインエリア内で指定されたY座標に表示されているアイテムのコンテンツエリアのDOM要素を返す
+// メインエリア内で指定されたY座標に表示されている項目のコンテンツエリアのDOM要素を返す
 function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined {
-  // メインエリア内の全アイテムをリスト化し、Y座標でソート
+  // メインエリア内の全項目をリスト化し、Y座標でソート
   const elements = document.getElementsByClassName('main-area-node_content-area')
   const sortedElements = List(elements).sortBy((element) => {
     return element.getBoundingClientRect().bottom
@@ -216,9 +216,9 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   Rerenderer.instance.rerender()
 }
 
-// 左サイドバー内で指定されたY座標に表示されているアイテムのコンテンツエリアのDOM要素を返す
+// 左サイドバー内で指定されたY座標に表示されている項目のコンテンツエリアのDOM要素を返す
 function searchLeftSidebarElementByYCoordinate(y: integer): HTMLElement | undefined {
-  // メインエリア内の全アイテムをリスト化し、Y座標でソート
+  // メインエリア内の全項目をリスト化し、Y座標でソート
   const elements = document.getElementsByClassName('page-tree-node_content-area')
   const sortedElements = List(elements).sortBy((element) => {
     return element.getBoundingClientRect().bottom

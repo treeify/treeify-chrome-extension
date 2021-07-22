@@ -49,14 +49,14 @@
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
     --bullet-page-icon-size: 1em;
 
-    /* トランスクルードされたアイテムのバレットの色。lch(60.0%, 40.0, 160.4)相当 */
+    /* トランスクルードされた項目のバレットの色。lch(60.0%, 40.0, 160.4)相当 */
     --transcluded-item-bullet-color: #44a178;
-    /* トランスクルードされたアイテムのバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当 */
+    /* トランスクルードされた項目のバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当 */
     --transcluded-item-bullet-hover-color: #006c48;
 
-    /* ハイライト状態のアイテムのバレットの色。lch(50.0%, 134.0, 40.4)相当 */
+    /* ハイライト状態の項目のバレットの色。lch(50.0%, 134.0, 40.4)相当 */
     --highlighted-item-bullet-color: #ee0b00;
-    /* ハイライト状態のアイテムのバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
+    /* ハイライト状態の項目のバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
     --highlighted-item-bullet-hover-color: #bf0600;
 
     /* インデントラインの太さ */
@@ -67,7 +67,7 @@
     --main-area-indent-line-hover-color: #ababab;
   }
 
-  /* トランスクルードされたアイテムの強調表示 */
+  /* トランスクルードされた項目の強調表示 */
   .transcluded .main-area-spool_inner-circle {
     background: var(--transcluded-item-bullet-color);
   }
@@ -81,7 +81,7 @@
     background: var(--transcluded-item-bullet-hover-color);
   }
 
-  /* ハイライト状態のアイテムの強調表示 */
+  /* ハイライト状態の項目の強調表示 */
   .highlighted .main-area-spool_inner-circle {
     background: var(--highlighted-item-bullet-color);
   }

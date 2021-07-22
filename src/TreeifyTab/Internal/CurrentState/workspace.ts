@@ -36,12 +36,12 @@ export function getWorkspaceIds(): List<WorkspaceId> {
   return List(Object.keys(Internal.instance.state.workspaces)).map((key) => parseInt(key))
 }
 
-/** 現在のワークスペースの除外アイテムリストを返す */
+/** 現在のワークスペースの除外項目リストを返す */
 export function getExcludedItemIds(): List<ItemId> {
   return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
 }
 
-/** 現在のワークスペースの除外アイテムリストを設定する */
+/** 現在のワークスペースの除外項目リストを設定する */
 export function setExcludedItemIds(itemIds: List<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.mutate(
@@ -71,7 +71,7 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
   Internal.instance.delete(PropertyPath.of('workspaces', workspaceId))
 }
 
-/** mountedPageIdsを除外アイテムでフィルタリングした結果を返す */
+/** mountedPageIdsを除外項目でフィルタリングした結果を返す */
 export function getFilteredMountedPageIds(): List<ItemId> {
   return Internal.instance.state.mountedPageIds.filterNot((pageId) => {
     return shouldBeHidden(pageId)
@@ -79,15 +79,15 @@ export function getFilteredMountedPageIds(): List<ItemId> {
 }
 
 /**
- * 除外アイテムでのフィルタリング用関数。
- * 与えられたアイテムが除外アイテムそのものであるか、先祖アイテムに除外アイテムが含まれる場合はtrueを返す。
+ * 除外項目でのフィルタリング用関数。
+ * 与えられた項目が除外項目そのものであるか、先祖項目に除外項目が含まれる場合はtrueを返す。
  */
 export function shouldBeHidden(itemId: ItemId) {
   const excludedItemIds = CurrentState.getExcludedItemIds()
 
-  // 与えられたアイテムが除外アイテムそのものの場合
+  // 与えられた項目が除外項目そのものの場合
   if (excludedItemIds.contains(itemId)) return true
 
-  // 与えられたアイテムの先祖アイテムに除外アイテムが含まれているかどうか
+  // 与えられた項目の先祖項目に除外項目が含まれているかどうか
   return !Set(CurrentState.yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()
 }

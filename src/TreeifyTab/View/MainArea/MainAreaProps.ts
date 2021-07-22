@@ -41,12 +41,12 @@ export function createMainAreaProps(state: State): MainAreaProps {
   // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
   const footprintCount = Math.floor(allDisplayingItemIds.length ** 0.5)
 
-  // TODO: 同時に複数のアイテムが操作された場合でも足跡をきちんと表示できるように修正する
+  // TODO: 同時に複数の項目が操作された場合でも足跡をきちんと表示できるように修正する
   const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
     return state.items[b].timestamp - state.items[a].timestamp
   })
 
-  // 各アイテムに足跡順位を対応付け
+  // 各項目に足跡順位を対応付け
   const footprintRankMap = new Map<ItemId, integer>()
   for (let i = 0; i < footprintCount; i++) {
     footprintRankMap.set(sorted[i], i)
@@ -123,7 +123,7 @@ function onArrowLeft(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
 
   const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
-  // 上のアイテムが存在しない場合はブラウザの挙動に任せる
+  // 上の項目が存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
@@ -135,7 +135,7 @@ function onArrowLeft(event: KeyboardEvent) {
 
     const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
     if (aboveItemType === ItemType.TEXT) {
-      // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
+      // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
       Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
@@ -153,7 +153,7 @@ function onArrowLeft(event: KeyboardEvent) {
 
     const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
     if (aboveItemType === ItemType.TEXT) {
-      // 上のアイテムがテキストアイテムの場合、キャレットをその末尾に移動する
+      // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
       Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
@@ -170,7 +170,7 @@ function onArrowLeft(event: KeyboardEvent) {
 function onArrowRight(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-  // 下のアイテムが存在しない場合はブラウザの挙動に任せる
+  // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
   const belowItemId = ItemPath.getItemId(belowItemPath)
@@ -195,12 +195,12 @@ function onArrowRight(event: KeyboardEvent) {
 
     const belowItemType = Internal.instance.state.items[belowItemId].itemType
     if (belowItemType === ItemType.TEXT) {
-      // 下のアイテムがテキストアイテムの場合、キャレットをその先頭に移動する
+      // 下の項目がテキスト項目の場合、キャレットをその先頭に移動する
       event.preventDefault()
       CurrentState.setTargetItemPath(belowItemPath)
       Rerenderer.instance.rerender()
     } else {
-      // 下のアイテムがテキストアイテム以外の場合、それをフォーカスする
+      // 下の項目がテキスト項目以外の場合、それをフォーカスする
       event.preventDefault()
       CurrentState.setTargetItemPath(belowItemPath)
       Rerenderer.instance.rerender()
@@ -215,10 +215,10 @@ function onArrowRight(event: KeyboardEvent) {
 function onArrowUp(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
-  // 上のアイテムが存在しない場合はブラウザの挙動に任せる
+  // 上の項目が存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
-  // 複数選択などの場合、上のアイテムをフォーカスするだけで終了
+  // 複数選択などの場合、上の項目をフォーカスするだけで終了
   const targetItemPath = CurrentState.getTargetItemPath()
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
@@ -229,7 +229,7 @@ function onArrowUp(event: KeyboardEvent) {
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
-    // ターゲットアイテムがテキストアイテムの場合
+    // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
     const activeElementRect = document.activeElement?.getBoundingClientRect()
@@ -250,18 +250,18 @@ function onArrowUp(event: KeyboardEvent) {
 function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
   if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
-    // 上のアイテムがテキストアイテムの場合、X座標をできるだけ保つようなキャレット移動を行う
+    // 上の項目がテキスト項目の場合、X座標をできるだけ保つようなキャレット移動を行う
 
     // 現在のX座標を取得
     const originalXCoordinate = getCaretXCoordinate()
     assertNonUndefined(originalXCoordinate)
 
-    // 上のアイテムの最後の行の文字数を取得
+    // 上の項目の最後の行の文字数を取得
     const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const lines = DomishObject.toPlainText(aboveItemDomishObjects).split(/\r?\n/)
     const lastLine = lines[lines.length - 1]
 
-    // 上のアイテムに一旦フォーカスする
+    // 上の項目に一旦フォーカスする
     const aboveItemDomElementId = MainAreaContentView.focusableDomElementId(aboveItemPath)
     const aboveItemDomElement = document.getElementById(aboveItemDomElementId)
     assertNonNull(aboveItemDomElement)
@@ -316,10 +316,10 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
 function onArrowDown(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
-  // 下のアイテムが存在しない場合はブラウザの挙動に任せる
+  // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  // 複数選択などの場合、下のアイテムをフォーカスするだけで終了
+  // 複数選択などの場合、下の項目をフォーカスするだけで終了
   const targetItemPath = CurrentState.getTargetItemPath()
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
@@ -330,7 +330,7 @@ function onArrowDown(event: KeyboardEvent) {
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
   if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
-    // ターゲットアイテムがテキストアイテムの場合
+    // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
     const activeElementRect = document.activeElement?.getBoundingClientRect()
@@ -361,17 +361,17 @@ function onArrowDown(event: KeyboardEvent) {
 function moveFocusToBelowItem(belowItemPath: ItemPath) {
   const belowItemId = ItemPath.getItemId(belowItemPath)
   if (Internal.instance.state.items[belowItemId].itemType === ItemType.TEXT) {
-    // 下のアイテムがテキストアイテムの場合、X座標をできるだけ保つようなキャレット移動を行う
+    // 下の項目がテキスト項目の場合、X座標をできるだけ保つようなキャレット移動を行う
 
     // 現在のX座標を取得
     const originalXCoordinate = getCaretXCoordinate()
     assertNonUndefined(originalXCoordinate)
 
-    // 下のアイテムの最初の行の文字数を取得
+    // 下の項目の最初の行の文字数を取得
     const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
     const firstLine = DomishObject.toPlainText(belowItemDomishObjects).split(/\r?\n/)[0]
 
-    // 下のアイテムに一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
+    // 下の項目に一旦フォーカスする（キャレット位置を左端からスタートし、右にずらしていく）
     // TODO: 最適化の余地あり。二分探索が可能では？
     const belowItemDomElementId = MainAreaContentView.focusableDomElementId(belowItemPath)
     const belowItemDomElement = document.getElementById(belowItemDomElementId)
@@ -424,19 +424,19 @@ function getCaretXCoordinate(): integer | undefined {
 }
 
 /**
- * Shift+↑キー押下時の処理。アイテムの複数選択を行うためのもの。
+ * Shift+↑キー押下時の処理。項目の複数選択を行うためのもの。
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onShiftArrowUp(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(targetItemPath)
-  // 兄アイテムが存在しない場合はブラウザの挙動に任せる
+  // 兄項目が存在しない場合はブラウザの挙動に任せる
   if (prevSiblingItemPath === undefined) return
 
   if (CurrentState.getSelectedItemPaths().size === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
-      // ターゲットアイテムがテキストアイテムの場合
+      // ターゲット項目がテキスト項目の場合
 
       const textItemSelection = getTextItemSelectionFromDom()
       if (textItemSelection !== undefined && textItemSelection.focusDistance > 0) {
@@ -453,19 +453,19 @@ function onShiftArrowUp(event: KeyboardEvent) {
 }
 
 /**
- * Shift+↓キー押下時の処理。アイテムの複数選択を行うためのもの。
+ * Shift+↓キー押下時の処理。項目の複数選択を行うためのもの。
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onShiftArrowDown(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(targetItemPath)
-  // 弟アイテムが存在しない場合はブラウザの挙動に任せる
+  // 弟項目が存在しない場合はブラウザの挙動に任せる
   if (nextSiblingItemPath === undefined) return
 
   if (CurrentState.getSelectedItemPaths().size === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
-      // ターゲットアイテムがテキストアイテムの場合
+      // ターゲット項目がテキスト項目の場合
 
       const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
       const charactersCount = DomishObject.countCharacters(domishObjects)
@@ -485,7 +485,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
 
 /** メインエリア上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
-  // 複数選択中は選択されたアイテムを削除して終了
+  // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
     NullaryCommand.deleteItem()
@@ -497,7 +497,7 @@ function onBackspace(event: KeyboardEvent) {
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItem = Internal.instance.state.items[targetItemId]
   if (targetItem.itemType === ItemType.TEXT) {
-    // ターゲットアイテムがテキストアイテムの場合
+    // ターゲット項目がテキスト項目の場合
 
     const selection = getTextItemSelectionFromDom()
     assertNonUndefined(selection)
@@ -505,34 +505,34 @@ function onBackspace(event: KeyboardEvent) {
       // キャレットが先頭にあるなら
 
       const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
-      // アクティブアイテムなら何もしない
+      // アクティブ項目なら何もしない
       if (aboveItemPath === undefined) return
 
       const aboveItemId = ItemPath.getItemId(aboveItemPath)
 
       const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-      // 空の子なしアイテムなら
+      // 空の子なし項目なら
       if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
         event.preventDefault()
 
-        // 上のアイテムがテキストアイテムならキャレットを末尾に移す
+        // 上の項目がテキスト項目ならキャレットを末尾に移す
         if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
           const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
           const characterCount = DomishObject.countCharacters(domishObjects)
           Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
         }
 
-        // ターゲットアイテムを削除して終了
+        // ターゲット項目を削除して終了
         NullaryCommand.deleteItem()
         Rerenderer.instance.rerender()
         return
       }
 
       if (Internal.instance.state.items[aboveItemId].itemType !== ItemType.TEXT) {
-        // 上のアイテムがテキストアイテム以外の場合
-        // TODO: アイテム削除コマンドを実行するのがいいと思う
+        // 上の項目がテキスト項目以外の場合
+        // TODO: 項目削除コマンドを実行するのがいいと思う
       } else {
-        // ターゲットアイテムも上のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
+        // ターゲット項目も上の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
         // テキストを連結
         const focusedItemDomishObjects =
@@ -553,7 +553,7 @@ function onBackspace(event: KeyboardEvent) {
         // ↑の元のエッジごと削除
         CurrentState.deleteItem(targetItemId)
 
-        // 上のアイテムの元の末尾にキャレットを移動する
+        // 上の項目の元の末尾にキャレットを移動する
         CurrentState.setTargetItemPath(aboveItemPath)
         Rerenderer.instance.requestSetCaretDistanceAfterRendering(
           DomishObject.countCharacters(aboveItemDomishObjects)
@@ -564,10 +564,10 @@ function onBackspace(event: KeyboardEvent) {
       }
     }
   } else {
-    // ターゲットアイテムがテキストアイテム以外の場合
+    // ターゲット項目がテキスト項目以外の場合
 
     event.preventDefault()
-    // ターゲットアイテムを削除する
+    // ターゲット項目を削除する
     NullaryCommand.deleteItem()
     Rerenderer.instance.rerender()
   }
@@ -575,11 +575,11 @@ function onBackspace(event: KeyboardEvent) {
 
 /** メインエリア上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
-  // 複数選択中は選択されたアイテムを削除して終了
+  // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
     NullaryCommand.deleteItem()
-    // 下のアイテムをフォーカスする
+    // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
       CurrentState.setTargetItemPath(belowItemPath)
@@ -592,15 +592,15 @@ function onDelete(event: KeyboardEvent) {
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItem = Internal.instance.state.items[targetItemId]
   if (targetItem.itemType === ItemType.TEXT) {
-    // ターゲットアイテムがテキストアイテムの場合
+    // ターゲット項目がテキスト項目の場合
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-    // 空の子なしアイテムなら
+    // 空の子なし項目なら
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
-      // ターゲットアイテムを削除して終了
+      // ターゲット項目を削除して終了
       NullaryCommand.deleteItem()
-      // 下のアイテムをフォーカスする
+      // 下の項目をフォーカスする
       const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
       if (belowItemPath !== undefined) {
         CurrentState.setTargetItemPath(belowItemPath)
@@ -618,16 +618,16 @@ function onDelete(event: KeyboardEvent) {
       // キャレットが末尾にあるなら
 
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      // 一番下のアイテムなら何もしない
+      // 一番下の項目なら何もしない
       if (belowItemPath === undefined) return
 
       const belowItemId = ItemPath.getItemId(belowItemPath)
       const belowItem = Internal.instance.state.items[belowItemId]
       if (belowItem.itemType !== ItemType.TEXT) {
-        // 下のアイテムがテキストアイテム以外の場合
-        // TODO: アイテム削除コマンドを実行するのがいいと思う
+        // 下の項目がテキスト項目以外の場合
+        // TODO: 項目削除コマンドを実行するのがいいと思う
       } else {
-        // ターゲットアイテムも下のアイテムもテキストアイテムの場合、テキストアイテム同士のマージを行う
+        // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
         // テキストを連結
         const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
@@ -637,7 +637,7 @@ function onDelete(event: KeyboardEvent) {
           focusedItemDomishObjects.concat(belowItemDomishObjects)
         )
 
-        // 子リストを連結するため、下のアイテムの子を全てその弟としてエッジ追加。
+        // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
         // アンインデントに似ているが元のエッジを削除しない点が異なる。
         for (const childItemId of belowItem.childItemIds) {
           CurrentState.insertLastChildItem(targetItemId, childItemId)
@@ -656,12 +656,12 @@ function onDelete(event: KeyboardEvent) {
       }
     }
   } else {
-    // ターゲットアイテムがテキストアイテム以外の場合
+    // ターゲット項目がテキスト項目以外の場合
 
     event.preventDefault()
-    // ターゲットアイテムを削除する
+    // ターゲット項目を削除する
     NullaryCommand.deleteItem()
-    // 下のアイテムをフォーカスする
+    // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
       CurrentState.setTargetItemPath(belowItemPath)

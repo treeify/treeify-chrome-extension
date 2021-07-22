@@ -8,7 +8,7 @@ import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {Item, TextItem} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
-/** 指定されたテキストアイテムのdomishObjectsを更新する */
+/** 指定されたテキスト項目のdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
   Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
     Internal.instance.mutate(
@@ -19,8 +19,8 @@ export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List
 }
 
 /**
- * 新しい空のテキストアイテムを作成し、CurrentStateに登録する。
- * ただしアイテムの配置（親子関係の設定）は行わない。
+ * 新しい空のテキスト項目を作成し、CurrentStateに登録する。
+ * ただし項目の配置（親子関係の設定）は行わない。
  */
 export function createTextItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
@@ -43,14 +43,14 @@ export function createTextItem(): ItemId {
   return newItemId
 }
 
-/** StateのtextItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+/** StateのtextItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteTextItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('textItems', itemId))
 }
 
 /**
- * 与えられたアイテムが下記の条件をすべて満たすかどうかを判定する。
- * ・空のテキストアイテムである
+ * 与えられた項目が下記の条件をすべて満たすかどうかを判定する。
+ * ・空のテキスト項目である
  * ・子を持たない
  * ・親を複数持たない
  */

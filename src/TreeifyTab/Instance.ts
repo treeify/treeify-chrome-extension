@@ -9,8 +9,8 @@ export type InstanceId = string
 
 /**
  * Instance Internal Serial Numberの略。
- * このインスタンスで生成されたアイテムの通し番号。
- * InstanceIdとIisnのペアをグローバルアイテムIDと呼ぶ。
+ * このインスタンスで生成された項目の通し番号。
+ * InstanceIdとIisnのペアをグローバル項目IDと呼ぶ。
  */
 export type Iisn = integer
 

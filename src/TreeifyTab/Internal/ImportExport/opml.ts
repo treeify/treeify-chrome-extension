@@ -95,8 +95,8 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
 }
 
 /**
- * 指定されたアイテムとその子孫をOPML 2.0形式に変換する。
- * ページや折りたたまれたアイテムの子孫も含める。
+ * 指定された項目とその子孫をOPML 2.0形式に変換する。
+ * ページや折りたたまれた項目の子孫も含める。
  */
 export function toOpmlString(itemPaths: List<ItemPath>): string {
   const xmlDocument = document.implementation.createDocument(null, 'opml')
@@ -164,8 +164,8 @@ function isValidOutlineElement(possiblyOutlineElement: Element): boolean {
 }
 
 type ItemAndEdge = {itemId: ItemId; edge: Edge}
-// トランスクルージョンを復元するために、OPML内に出現したアイテムIDを記録しておくオブジェクト。
-// KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応するアイテムID。
+// トランスクルージョンを復元するために、OPML内に出現した項目IDを記録しておくオブジェクト。
+// KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応する項目ID。
 type ItemIdMap = {[K in string | number]: ItemId}
 
 export function createItemsBasedOnOpml(outlineElements: List<Element>): List<ItemAndEdge> {
@@ -173,7 +173,7 @@ export function createItemsBasedOnOpml(outlineElements: List<Element>): List<Ite
   return outlineElements.map((element) => createItemBasedOnOpml(element, itemIdMap))
 }
 
-/** パースされたOPMLのoutline要素を元にアイテムを作る */
+/** パースされたOPMLのoutline要素を元に項目を作る */
 function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): ItemAndEdge {
   const attrItemId = outlineElement.getAttribute('itemId')
   const isCollapsed = outlineElement.getAttribute('isCollapsed') === 'true'

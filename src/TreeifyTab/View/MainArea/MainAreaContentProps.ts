@@ -32,7 +32,7 @@ export function createMainAreaContentProps(
   itemPath: ItemPath,
   itemType: ItemType
 ): MainAreaContentProps {
-  // アイテムタイプごとの固有部分を追加して返す
+  // 項目タイプごとの固有部分を追加して返す
   switch (itemType) {
     case ItemType.TEXT:
       return createMainAreaTextContentProps(state, itemPath)
