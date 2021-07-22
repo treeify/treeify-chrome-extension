@@ -40,12 +40,8 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
   }
 
   if (item.cite !== null) {
-    if (item.cite.title !== '') {
-      baseAttributes.citeTitle = item.cite.title
-    }
-    if (item.cite.url !== '') {
-      baseAttributes.citeUrl = item.cite.url
-    }
+    baseAttributes.citeTitle = item.cite.title
+    baseAttributes.citeUrl = item.cite.url
   }
 
   switch (item.itemType) {
