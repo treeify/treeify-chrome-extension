@@ -82,7 +82,7 @@ export async function cleanup() {
  */
 export async function restart(state: State) {
   if (State.isValid(state)) {
-    migrateTabs(state)
+    await migrateTabs(state)
 
     const dataFolder = External.instance.dataFolder
     await cleanup()
@@ -101,7 +101,7 @@ export async function restart(state: State) {
 // タブの状態を新しいStateに合わせる。
 // 具体的には、新しいStateで対応項目が削除されていた場合はタブを閉じる。
 // また、新しいStateでURLが変わっていたらタブのURLを更新する。
-function migrateTabs(newState: State) {
+async function migrateTabs(newState: State) {
   // newStateにおけるグローバル項目IDから項目IDへのMapを作る
   const globalItemIdMap = new Map<string, ItemId>()
   for (const itemsKey in newState.items) {
@@ -110,7 +110,8 @@ function migrateTabs(newState: State) {
     globalItemIdMap.set(globalItemId, parseInt(itemsKey))
   }
 
-  for (const itemId of External.instance.tabItemCorrespondence.getAllItemIds()) {
+  const allItemIds = External.instance.tabItemCorrespondence.getAllItemIds()
+  const promises = allItemIds.map(async (itemId) => {
     const item = Internal.instance.state.items[itemId]
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
     assertNonUndefined(tabId)
@@ -118,15 +119,16 @@ function migrateTabs(newState: State) {
     const newItemId = globalItemIdMap.get(globalItemId)
     if (newItemId === undefined) {
       // newStateで対応項目が削除されていた場合
-      chrome.tabs.remove(tabId)
+      await chrome.tabs.remove(tabId)
     } else {
       const newUrl = newState.webPageItems[newItemId].url
       if (newUrl !== Internal.instance.state.webPageItems[itemId].url) {
         // newStateでURLが変わっていた場合
-        chrome.tabs.update(tabId, {url: newUrl})
+        await chrome.tabs.update(tabId, {url: newUrl})
       }
     }
-  }
+  })
+  await Promise.all(promises)
 }
 
 function onMutateState(propertyPath: PropertyPath) {
