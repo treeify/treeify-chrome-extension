@@ -10,9 +10,9 @@
 </script>
 
 <div class="toolbar">
+  <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
   <CodeBlockItemCreationButton />
   <TexItemCreationButton />
-  <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
   <ImportButton />
   <PreferenceButton />
 </div>
