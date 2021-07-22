@@ -29,7 +29,7 @@ export type PageTreeNodeProps = {
   footprintRank: integer | undefined
   footprintCount: integer
   tabsCount: integer
-  onClickContentArea: () => void
+  onClickContentArea: (event: MouseEvent) => void
   onClickCloseButton: () => void
   onClickTabsCount: () => void
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
@@ -81,8 +81,9 @@ export function createPageTreeNodeProps(
     footprintRank: rank < footprintCount ? rank : undefined,
     footprintCount,
     tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
-    onClickContentArea: () => {
+    onClickContentArea: (event: MouseEvent) => {
       doWithErrorCapture(() => {
+        event.preventDefault()
         CurrentState.switchActivePage(itemId)
         Rerenderer.instance.rerender()
       })
