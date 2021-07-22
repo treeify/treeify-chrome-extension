@@ -697,16 +697,16 @@ async function undo() {
       }
     }
     console.log('=============================================')
-    assert(External.instance.hardUnloadedTabIds.size > 0)
+    assert(External.instance.hardUnloadedTabIds.size === 0)
     return
   }
-  if (External.instance.urlToItemIdsForTabCreation.size > 0) {
+  if (!List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty()) {
     console.log('=============================================')
     for (const entry of External.instance.urlToItemIdsForTabCreation) {
       dump(entry)
     }
     console.log('=============================================')
-    assert(External.instance.urlToItemIdsForTabCreation.size > 0)
+    assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
     return
   }
 
