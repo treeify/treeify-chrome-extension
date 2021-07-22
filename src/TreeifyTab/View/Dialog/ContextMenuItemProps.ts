@@ -1,7 +1,5 @@
 import {List} from 'immutable'
 import {assert} from 'src/Common/Debug/assert'
-import {dump} from 'src/Common/Debug/logger'
-import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -94,27 +92,6 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
       })
     }
   }
-
-  result.push({
-    title: 'ファビコン無限ローディング不具合調査用',
-    onClick: async () => {
-      const itemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-      const webPageItem = Internal.instance.state.webPageItems[itemId]
-      dump(webPageItem)
-      const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
-      const targetTab =
-        tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
-      dump(targetTab)
-
-      const windows = await chrome.windows.getAll({populate: true})
-      const tabs = windows.flatMap((window) => window.tabs ?? [])
-      for (const tab of tabs) {
-        if (tab.id === tabId) {
-          dump(tab)
-        }
-      }
-    },
-  })
 
   return List(result)
 }
