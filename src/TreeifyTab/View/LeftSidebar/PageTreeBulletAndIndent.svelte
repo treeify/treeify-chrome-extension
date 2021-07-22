@@ -28,13 +28,13 @@
     --page-tree-indent-guide-hover-color: #a6a6a6;
 
     /* バレット領域のサイズ（正方形の一辺の長さ） */
-    --page-tree-bullet-area-size: 0.7em;
+    --page-tree-bullet-area-size: 0.8em;
 
     /* 子を持たないノードのバレット（円形）の直径 */
     --page-tree-bullet-dot-diameter: 0.25em;
 
     /* 子を持つノードのバレット（二等辺三角形▼）の幅 */
-    --page-tree-bullet-triangle-width: 0.5em;
+    --page-tree-bullet-triangle-width: 0.45em;
     /* 子を持つノードのバレット（二等辺三角形▼）の高さ */
     --page-tree-bullet-triangle-height: 0.3em;
 
