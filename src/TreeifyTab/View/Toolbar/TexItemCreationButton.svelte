@@ -12,17 +12,17 @@
   }
 </script>
 
-<ToolbarIconButton title="TeXアイテム作成" on:click={onClick}>
+<ToolbarIconButton title="TeX項目作成" on:click={onClick}>
   <div class="tex-item-creation-button_icon" />
 </ToolbarIconButton>
 
 <style global>
   :root {
-    /* TeXアイテム作成ボタンのアイコンのサイズ（正方形の一辺の長さ） */
+    /* TeX項目作成ボタンのアイコンのサイズ（正方形の一辺の長さ） */
     --tex-item-creation-button-icon-size: 18px;
   }
 
-  /* TeXアイテム作成ボタンのアイコン */
+  /* TeX項目作成ボタンのアイコン */
   .tex-item-creation-button_icon {
     width: var(--tex-item-creation-button-icon-size);
     height: var(--tex-item-creation-button-icon-size);

@@ -15,7 +15,7 @@
 <div class="main-area-spool" on:click={props.onClick}>
   {#if props.bulletState === MainAreaBulletState.EXPANDED}
     <div class="main-area-spool_indent-area">
-      <div class="main-area-spool_indent-line" />
+      <div class="main-area-spool_indent-guide" />
     </div>
   {/if}
   <div class="main-area-spool_bullet-area">
@@ -49,25 +49,25 @@
     /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
     --bullet-page-icon-size: 1em;
 
-    /* トランスクルードされたアイテムのバレットの色。lch(60.0%, 40.0, 160.4)相当 */
+    /* トランスクルードされた項目のバレットの色。lch(60.0%, 40.0, 160.4)相当 */
     --transcluded-item-bullet-color: #44a178;
-    /* トランスクルードされたアイテムのバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当 */
+    /* トランスクルードされた項目のバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当 */
     --transcluded-item-bullet-hover-color: #006c48;
 
-    /* ハイライト状態のアイテムのバレットの色。lch(50.0%, 134.0, 40.4)相当 */
+    /* ハイライト状態の項目のバレットの色。lch(50.0%, 134.0, 40.4)相当 */
     --highlighted-item-bullet-color: #ee0b00;
-    /* ハイライト状態のアイテムのバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
+    /* ハイライト状態の項目のバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
     --highlighted-item-bullet-hover-color: #bf0600;
 
-    /* インデントラインの太さ */
-    --main-area-indent-line-width: 1px;
-    /* インデントラインの色。lch(88.0%, 0.0, 0.0)相当 */
-    --main-area-indent-line-color: #dddddd;
-    /* インデントラインの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
-    --main-area-indent-line-hover-color: #ababab;
+    /* インデントガイドの太さ */
+    --main-area-indent-guide-width: 1px;
+    /* インデントガイドの色。lch(88.0%, 0.0, 0.0)相当 */
+    --main-area-indent-guide-color: #dddddd;
+    /* インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
+    --main-area-indent-guide-hover-color: #ababab;
   }
 
-  /* トランスクルードされたアイテムの強調表示 */
+  /* トランスクルードされた項目の強調表示 */
   .transcluded .main-area-spool_inner-circle {
     background: var(--transcluded-item-bullet-color);
   }
@@ -81,7 +81,7 @@
     background: var(--transcluded-item-bullet-hover-color);
   }
 
-  /* ハイライト状態のアイテムの強調表示 */
+  /* ハイライト状態の項目の強調表示 */
   .highlighted .main-area-spool_inner-circle {
     background: var(--highlighted-item-bullet-color);
   }
@@ -99,7 +99,7 @@
   .main-area-spool {
     width: var(--main-area-calculated-line-height);
     height: 100%;
-    /* インデントラインをバレットの裏まで描画するための設定 */
+    /* インデントガイドをバレットの裏まで描画するための設定 */
     position: relative;
 
     cursor: pointer;
@@ -173,16 +173,16 @@
     width: 100%;
   }
 
-  /* インデントライン */
-  .main-area-spool_indent-line {
-    background: var(--main-area-indent-line-color);
-    width: var(--main-area-indent-line-width);
+  /* インデントガイド */
+  .main-area-spool_indent-guide {
+    background: var(--main-area-indent-guide-color);
+    width: var(--main-area-indent-guide-width);
     height: 100%;
     margin: 0 auto;
   }
 
-  /* バレットとインデントの領域のホバー時のインデントライン */
-  .main-area-spool:hover .main-area-spool_indent-line {
-    background: var(--main-area-indent-line-hover-color);
+  /* バレットとインデントの領域のホバー時のインデントガイド */
+  .main-area-spool:hover .main-area-spool_indent-guide {
+    background: var(--main-area-indent-guide-hover-color);
   }
 </style>

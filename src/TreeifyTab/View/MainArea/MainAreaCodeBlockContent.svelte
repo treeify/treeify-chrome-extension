@@ -21,7 +21,7 @@
     --code-block-padding: 0.2em;
   }
 
-  /* コードブロックアイテムのコンテンツ領域のルート */
+  /* コードブロック項目のコンテンツ領域のルート */
   .main-area-code-block-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
@@ -42,7 +42,7 @@
     font-size: 90%;
   }
 
-  /* グレーアウト状態のコードブロックアイテム */
+  /* グレーアウト状態のコードブロック項目 */
   .grayed-out .main-area-code-block-content {
     filter: opacity(50%);
   }

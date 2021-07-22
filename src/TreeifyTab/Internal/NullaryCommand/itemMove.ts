@@ -27,14 +27,14 @@ export function indentItem() {
 
     // 既存の親子関係を削除
     const edge = CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
-    // 兄の最後の子になるようターゲットアイテムを配置
+    // 兄の最後の子になるようターゲット項目を配置
     CurrentState.insertLastChildItem(prevSiblingItemId, selectedItemId, edge)
 
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
   if (selectedItemPaths.size === 1) {
-    // ターゲットアイテムを移動先に更新する
+    // ターゲット項目を移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
 
@@ -73,7 +73,7 @@ export function unindentItem() {
   }
 
   if (selectedItemPaths.size === 1) {
-    // ターゲットアイテムを移動先に更新する
+    // ターゲット項目を移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
     CurrentState.setTargetItemPath(siblingItemPath)
@@ -92,7 +92,7 @@ export function unindentItem() {
 }
 
 /**
- * アイテムをドキュメント順で1つ上に移動するコマンド。
+ * 項目をドキュメント順で1つ上に移動するコマンド。
  * 親が居ない場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemUpward() {
@@ -101,30 +101,30 @@ export function moveItemUpward() {
 
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
-  // 1つ上のアイテムが存在しない場合は何もしない
+  // 1つ上の項目が存在しない場合は何もしない
   if (aboveItemPath === undefined) return
 
   const aboveItemParentItemId = ItemPath.getParentItemId(aboveItemPath)
-  // 1つ上のアイテムがアクティブページである場合も何もしない
+  // 1つ上の項目がアクティブページである場合も何もしない
   if (aboveItemParentItemId === undefined) return
 
-  // 1つ上のアイテムの上にアイテムを移動する
+  // 1つ上の項目の上に項目を移動する
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     // 既存の親子関係を削除
     const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
-    // 1つ上のアイテムの兄になるようターゲットアイテムを配置
+    // 1つ上の項目の兄になるようターゲット項目を配置
     CurrentState.insertPrevSiblingItem(aboveItemPath, selectedItemId, edge)
 
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  // ターゲットアイテムパスを更新
+  // ターゲットItemPathを更新
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const newTargetItemPath = ItemPath.createSiblingItemPath(aboveItemPath, targetItemId)
   assertNonUndefined(newTargetItemPath)
   CurrentState.setTargetItemPathOnly(newTargetItemPath)
-  // アンカーアイテムパスを更新
+  // アンカーItemPathを更新
   const newAnchorItemPath = ItemPath.createSiblingItemPath(
     aboveItemPath,
     ItemPath.getItemId(CurrentState.getAnchorItemPath())
@@ -137,7 +137,7 @@ export function moveItemUpward() {
 }
 
 /**
- * ドキュメント順でアイテムを1つ下に移動するコマンド。
+ * ドキュメント順で項目を1つ下に移動するコマンド。
  * すでに下端の場合など、そのような移動ができない場合は何もしない。
  */
 export function moveItemDownward() {
@@ -147,17 +147,17 @@ export function moveItemDownward() {
 
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
-  // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを探索する
+  // 「弟、または親の弟、または親の親の弟、または…」に該当する項目を探索する
   const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
-  // 該当アイテムがない場合（メインエリアの下端の場合）は何もしない
+  // 該当項目がない場合（メインエリアの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
-  // 1つ下のアイテムの下にアイテムを移動する
+  // 1つ下の項目の下に項目を移動する
   for (const selectedItemPath of selectedItemPaths.reverse()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     // 既存の親子関係を削除
     const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
-    // アイテムを再配置
+    // 項目を再配置
     CurrentState.insertBelowItem(firstFollowingItemPath, selectedItemId, edge)
 
     CurrentState.updateItemTimestamp(selectedItemId)
@@ -167,14 +167,14 @@ export function moveItemDownward() {
   Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
   if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
-    // 1つ下のアイテムが子を表示していない場合
+    // 1つ下の項目が子を表示していない場合
 
-    // ターゲットアイテムパスを更新
+    // ターゲットItemPathを更新
     const newTargetItemPath = ItemPath.createSiblingItemPath(firstFollowingItemPath, targetItemId)
     assertNonUndefined(newTargetItemPath)
     CurrentState.setTargetItemPathOnly(newTargetItemPath)
 
-    // アンカーアイテムパスを更新
+    // アンカーItemPathを更新
     const newAnchorItemPath = ItemPath.createSiblingItemPath(
       firstFollowingItemPath,
       ItemPath.getItemId(CurrentState.getAnchorItemPath())
@@ -182,12 +182,12 @@ export function moveItemDownward() {
     assertNonUndefined(newAnchorItemPath)
     CurrentState.setAnchorItemPath(newAnchorItemPath)
   } else {
-    // 1つ下のアイテムが子を表示している場合
+    // 1つ下の項目が子を表示している場合
 
-    // ターゲットアイテムパスを更新
+    // ターゲットItemPathを更新
     const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
     CurrentState.setTargetItemPathOnly(newTargetItemPath)
-    // アンカーアイテムパスを更新
+    // アンカーItemPathを更新
     const newAnchorItemPath = firstFollowingItemPath.push(
       ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
@@ -195,7 +195,7 @@ export function moveItemDownward() {
   }
 }
 
-/** 兄弟指向でアイテムを上に移動するコマンド */
+/** 兄弟指向で項目を上に移動するコマンド */
 export function moveItemToPrevSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
@@ -259,7 +259,7 @@ export function moveItemToPrevSibling() {
   }
 }
 
-/** 兄弟指向でアイテムを下に移動するコマンド */
+/** 兄弟指向で項目を下に移動するコマンド */
 export function moveItemToNextSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(selectedItemPaths.last())

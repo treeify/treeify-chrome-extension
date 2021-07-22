@@ -5,7 +5,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
-/** 対象ウェブページアイテムに対応するタブをdiscardする */
+/** 対象ウェブページ項目に対応するタブをdiscardする */
 export function softUnloadItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
@@ -18,7 +18,7 @@ export function softUnloadItem() {
   chrome.tabs.discard(tabId)
 }
 
-/** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブをdiscardする */
+/** 対象項目のサブツリーの各ウェブページ項目に対応するタブをdiscardする */
 export function softUnloadSubtree() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
@@ -30,7 +30,7 @@ export function softUnloadSubtree() {
   }
 }
 
-/** 対象ウェブページアイテムに対応するタブを閉じる */
+/** 対象ウェブページ項目に対応するタブを閉じる */
 export function hardUnloadItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
@@ -40,13 +40,13 @@ export function hardUnloadItem() {
   // 対応するタブがなければ何もしない
   if (tabId === undefined) return
 
-  // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
+  // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
   External.instance.hardUnloadedTabIds.add(tabId)
 
   chrome.tabs.remove(tabId)
 }
 
-/** 対象アイテムのサブツリーの各ウェブページアイテムに対応するタブを閉じる */
+/** 対象項目のサブツリーの各ウェブページ項目に対応するタブを閉じる */
 export function hardUnloadSubtree() {
   // TODO: 複数選択中の一括操作に対応する
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -54,7 +54,7 @@ export function hardUnloadSubtree() {
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
     if (tabId !== undefined) {
-      // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
+      // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
       External.instance.hardUnloadedTabIds.add(tabId)
 
       // 対応するタブを閉じる
@@ -63,7 +63,7 @@ export function hardUnloadSubtree() {
   }
 }
 
-/** ウェブページアイテムのロード操作 */
+/** ウェブページ項目のロード操作 */
 export function loadItem() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
@@ -77,7 +77,7 @@ export function loadItem() {
   chrome.tabs.create({url, active: false})
 }
 
-/** ウェブページアイテムのサブツリーロード操作 */
+/** ウェブページ項目のサブツリーロード操作 */
 export function loadSubtree() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
@@ -92,7 +92,7 @@ export function loadSubtree() {
 }
 
 /**
- * ウェブページアイテムに対応するタブを最前面化する。
+ * ウェブページ項目に対応するタブを最前面化する。
  * 存在しない場合はタブを開く。
  */
 export function browseTab() {
@@ -101,7 +101,7 @@ export function browseTab() {
 
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
   if (tabId !== undefined) {
-    // ウェブページアイテムに対応するタブを最前面化する
+    // ウェブページ項目に対応するタブを最前面化する
     assertNonUndefined(tabId)
     chrome.tabs.update(tabId, {active: true})
     const tab = External.instance.tabItemCorrespondence.getTab(tabId)

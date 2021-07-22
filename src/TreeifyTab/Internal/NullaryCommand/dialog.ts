@@ -6,7 +6,7 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
-/** アイテムの種類に応じた編集系ダイアログなどを出す */
+/** 項目の種類に応じた編集系ダイアログなどを出す */
 export function edit() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -14,7 +14,7 @@ export function edit() {
     case ItemType.TEXT:
       break
     case ItemType.WEB_PAGE:
-      // ウェブページアイテムのタイトル設定ダイアログを表示する
+      // ウェブページ項目のタイトル設定ダイアログを表示する
       const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
       const domElement = document
         .getElementById(domElementId)

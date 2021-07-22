@@ -128,7 +128,7 @@
     background: var(--page-tree-hover-item-background-color);
   }
 
-  /* ウェブページアイテムの音がなっていることを示すアイコン */
+  /* ウェブページ項目の音がなっていることを示すアイコン */
   .page-tree-node_audible-icon {
     width: var(--page-tree-audible-icon-size);
     height: var(--page-tree-audible-icon-size);

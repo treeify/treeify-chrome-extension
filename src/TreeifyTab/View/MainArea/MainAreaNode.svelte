@@ -41,7 +41,7 @@
   {#if props.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
-    <!-- バレットとインデントラインの領域 -->
+    <!-- バレットとインデントガイドの領域 -->
     <div
       class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
@@ -92,12 +92,12 @@
     /* ボディ領域の上下パディング */
     --main-area-body-area-vertical-padding: 0.08em;
 
-    /* フォーカスアイテムの背景色。lch(95.0%, 7.8, 280.4)相当 */
+    /* フォーカス項目の背景色。lch(95.0%, 7.8, 280.4)相当 */
     --main-area-focused-item-background-color: #ecf0ff;
-    /* マウスホバーアイテムの背景色。lch(97.5%, 3.6, 280.4)相当 */
+    /* マウスホバー項目の背景色。lch(97.5%, 3.6, 280.4)相当 */
     --main-area-mouse-hover-item-background-color: #f6f8ff;
 
-    /* 複数選択されたアイテムの背景色。lch(93.0%, 134.0, 280.4)相当 */
+    /* 複数選択された項目の背景色。lch(93.0%, 134.0, 280.4)相当 */
     --main-area-selected-item-background-color: #e5ebff;
 
     /* 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 3.5, 40.4)相当 */
@@ -105,7 +105,7 @@
     /* 最も古い足跡の色（線形補間の一端） */
     --main-area-weakest-footprint-color: #ffffff;
 
-    /* グレーアウト状態のアイテムの標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当 */
+    /* グレーアウト状態の項目の標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当 */
     --grayed-out-item-text-color: #b9b9b9;
 
     /* 削除ボタンのサイズ（正方形の一辺の長さ） */
@@ -137,15 +137,15 @@
   }
   /* マウスホバー時のコンテンツ領域 */
   .main-area-node_content-area:hover {
-    /* マウスホバーアイテムの強調表示 */
+    /* マウスホバー項目の強調表示 */
     background: var(--main-area-mouse-hover-item-background-color);
   }
-  /* 単一選択されたアイテムのコンテンツ領域 */
+  /* 単一選択された項目のコンテンツ領域 */
   .single-selected.main-area-node_content-area {
     background: var(--main-area-focused-item-background-color);
   }
 
-  /* ダウトフル状態のアイテム */
+  /* ダウトフル状態の項目 */
   .doubtful .main-area-node_content-area {
     /* lch(60.0%, 134.0, 160.4)相当 */
     text-decoration: underline dotted #00a570;
@@ -198,7 +198,7 @@
     transition: opacity 0s, width 0s, height 0s;
   }
 
-  /* 各アイテムの削除ボタン */
+  /* 各項目の削除ボタン */
   .main-area-node_delete-button {
     width: var(--main-area-calculated-line-height);
     height: var(--main-area-calculated-line-height);
@@ -243,7 +243,7 @@
   }
 
   /*
-  複数選択されたアイテムの背景色設定。
+  複数選択された項目の背景色設定。
   他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
   CSSの優先順位のためにファイルの下の方で定義する。
   */

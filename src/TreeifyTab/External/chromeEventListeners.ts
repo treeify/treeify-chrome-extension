@@ -41,9 +41,9 @@ export function onCreated(tab: Tab) {
     const url = tab.url || tab.pendingUrl || ''
     const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
     if (itemIdsForTabCreation.isEmpty()) {
-      // タブに対応するウェブページアイテムがない時
+      // タブに対応するウェブページ項目がない時
 
-      // ウェブページアイテムを作る
+      // ウェブページ項目を作る
       const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
@@ -62,7 +62,7 @@ export function onCreated(tab: Tab) {
         if (tab.active) {
           CurrentState.setTargetItemPath(newItemPath)
 
-          // 空のテキストアイテム上で新しいタブを開いた場合は空のテキストアイテムを削除する
+          // 空のテキスト項目上で新しいタブを開いた場合は空のテキスト項目を削除する
           if (CurrentState.isEmptyTextItem(targetItemId)) {
             CurrentState.deleteItem(targetItemId)
           }
@@ -71,7 +71,7 @@ export function onCreated(tab: Tab) {
         // openerの最後の子として追加する
         CurrentState.insertLastChildItem(openerItemId, newWebPageItemId)
 
-        // openerがターゲットアイテムなら
+        // openerがターゲット項目なら
         if (targetItemId === openerItemId) {
           // フォーカスを移す
           if (tab.active) {
@@ -81,7 +81,7 @@ export function onCreated(tab: Tab) {
         }
       }
     } else {
-      // 既存のウェブページアイテムに対応するタブが開かれた時
+      // 既存のウェブページ項目に対応するタブが開かれた時
 
       const itemId = itemIdsForTabCreation.first(undefined)
       assertNonUndefined(itemId)
@@ -99,7 +99,7 @@ export function onCreated(tab: Tab) {
   })
 }
 
-// どのウェブページアイテムから開かれたタブかを返す
+// どのウェブページ項目から開かれたタブかを返す
 function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | undefined {
   if (url === 'chrome://newtab/' || openerTabId === undefined) {
     return undefined
@@ -115,7 +115,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
     if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
 
     if (changeInfo.discarded) {
-      // discardされたらタブIDが変わるのでアイテムIDとの対応関係を修正する
+      // discardされたらタブIDが変わるので項目IDとの対応関係を修正する
       // TODO: ↓は手抜き実装。最適化の余地あり
       await matchTabsAndWebPageItems()
     }
@@ -128,7 +128,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
   })
 }
 
-// Tabの情報をウェブページアイテムに転写する
+// Tabの情報をウェブページ項目に転写する
 function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
     External.instance.tabItemCorrespondence.registerTab(tab.id, tab)
@@ -144,16 +144,16 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     External.instance.tabItemCorrespondence.unregisterTab(tabId)
 
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-    // アイテム削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
+    // 項目削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
     if (itemId === undefined) return
 
     External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
 
     if (External.instance.hardUnloadedTabIds.has(tabId)) {
-      // ハードアンロードによりタブが閉じられた場合、ウェブページアイテムは削除しない
+      // ハードアンロードによりタブが閉じられた場合、ウェブページ項目は削除しない
       External.instance.hardUnloadedTabIds.delete(tabId)
     } else if (CurrentState.isItem(itemId)) {
-      // 対応するウェブページアイテムを削除する
+      // 対応するウェブページ項目を削除する
       CurrentState.deleteItemItself(itemId)
       // TODO: targetItemPathがダングリングポインタになる不具合がある
     }
@@ -170,7 +170,7 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
     CurrentState.updateItemTimestamp(itemId)
     CurrentState.setIsUnreadFlag(itemId, false)
 
-    // もしタブに対応するアイテムがアクティブページに所属していれば、それをターゲットする
+    // もしタブに対応する項目がアクティブページに所属していれば、それをターゲットする
     const activePageId = CurrentState.getActivePageId()
     for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
       if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
@@ -183,11 +183,11 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
 }
 
 /**
- * 既存のタブとウェブページアイテムのマッチングを行う。
+ * 既存のタブとウェブページ項目のマッチングを行う。
  * URLが完全一致しているかどうかで判定する。
  */
 export async function matchTabsAndWebPageItems() {
-  // KeyはURL、ValueはそのURLを持つアイテムID
+  // KeyはURL、ValueはそのURLを持つ項目ID
   const urlToItemIds = new Map<string, List<ItemId>>()
 
   const webPageItems = Internal.instance.state.webPageItems
@@ -203,8 +203,8 @@ export async function matchTabsAndWebPageItems() {
     const url = tab.pendingUrl ?? tab.url ?? ''
     const webPageItemIds = urlToItemIds.get(url)
     if (webPageItemIds === undefined) {
-      // URLの一致するウェブページアイテムがない場合、
-      // ウェブページアイテムを作る
+      // URLの一致するウェブページ項目がない場合、
+      // ウェブページ項目を作る
       const newWebPageItemId = CurrentState.createWebPageItem()
       reflectInWebPageItem(newWebPageItemId, tab)
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
@@ -213,7 +213,7 @@ export async function matchTabsAndWebPageItems() {
       const activePageId = CurrentState.getActivePageId()
       CurrentState.insertFirstChildItem(activePageId, newWebPageItemId)
     } else {
-      // URLの一致するウェブページアイテムがある場合
+      // URLの一致するウェブページ項目がある場合
       const itemId: ItemId = webPageItemIds.last()
 
       if (webPageItemIds.size === 1) {

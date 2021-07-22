@@ -6,12 +6,12 @@ import {ItemId} from 'src/TreeifyTab/basicType'
  * 大文字・小文字は区別しない形で保存される。
  */
 export class UnigramSearchIndex {
-  // 文字を出現アイテムIDに対応付けるMap。
-  // 例えばitemIdが5のアイテムに'あ'という文字が含まれる場合、
+  // 文字を出現項目IDに対応付けるMap。
+  // 例えばitemIdが5の項目に'あ'という文字が含まれる場合、
   // map.get('あ')が返すSetオブジェクトには5が含まれている。
   private readonly map = new Map<string, Set<ItemId>>()
 
-  /** 与えられた文字が出現するアイテムIDの集合を返す */
+  /** 与えられた文字が出現する項目IDの集合を返す */
   getItemIds(unigram: string): Set<ItemId> {
     return this.map.get(unigram) ?? new Set<ItemId>()
   }
@@ -36,7 +36,7 @@ export class UnigramSearchIndex {
     }
   }
 
-  /** 与えられた文字列に含まれる全ての文字を含むアイテムの集合を返す */
+  /** 与えられた文字列に含まれる全ての文字を含む項目の集合を返す */
   search(text: string): Set<ItemId> {
     const unigrams = List(new Set(UnigramSearchIndex.normalize(text)))
     const sets = unigrams.map((unigram) => this.getItemIds(unigram))

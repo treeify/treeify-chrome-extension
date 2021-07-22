@@ -31,13 +31,13 @@
     padding-left: 0.2em;
   }
 
-  /* テキストアイテムのcontenteditableな要素 */
+  /* テキスト項目のcontenteditableな要素 */
   .main-area-text-content_content-editable {
     /* contenteditableな要素のフォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
   }
 
-  /* グレーアウト状態のテキストアイテム */
+  /* グレーアウト状態のテキスト項目 */
   .grayed-out .main-area-text-content_content-editable,
   .grayed-out-children .main-area-text-content_content-editable {
     color: var(--grayed-out-item-text-color);

@@ -74,8 +74,8 @@ export async function saveToDataFolder() {
 }
 
 /**
- * ターゲットテキストアイテムのテキストが全選択状態でなければテキストを全選択する。
- * それ以外の場合はターゲットアイテムの兄弟リストを全て選択する。
+ * ターゲットテキスト項目のテキストが全選択状態でなければテキストを全選択する。
+ * それ以外の場合はターゲット項目の兄弟リストを全て選択する。
  */
 export function selectAll() {
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -104,8 +104,8 @@ export function selectAll() {
 }
 
 /**
- * ターゲットアイテムパスの兄弟リストの中で、現在位置から下端までのアイテムを選択する。
- * 正確に言うと、ターゲットアイテムを兄弟リストの末尾に設定する。
+ * ターゲットItemPathの兄弟リストの中で、現在位置から下端までの項目を選択する。
+ * 正確に言うと、ターゲット項目を兄弟リストの末尾に設定する。
  */
 export function selectAllBelowItems() {
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -122,8 +122,8 @@ export function selectAllBelowItems() {
 }
 
 /**
- * ターゲットアイテムパスの兄弟リストの中で、現在位置から上端までのアイテムを選択する。
- * 正確に言うと、ターゲットアイテムを兄弟リストの先頭に設定する。
+ * ターゲットItemPathの兄弟リストの中で、現在位置から上端までの項目を選択する。
+ * 正確に言うと、ターゲット項目を兄弟リストの先頭に設定する。
  */
 export function selectAllAboveItems() {
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -140,7 +140,7 @@ export function selectAllAboveItems() {
 }
 
 /**
- * ターゲットアイテムをワークスペースの除外アイテムリストに入れる。
+ * ターゲット項目をワークスペースの除外項目リストに入れる。
  * もし既に除外されていれば除外を解除する。
  * ただしトップページは除外できない。
  */

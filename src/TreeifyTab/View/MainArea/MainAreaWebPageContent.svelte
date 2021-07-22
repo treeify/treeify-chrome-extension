@@ -50,23 +50,23 @@
 
 <style global>
   :root {
-    /* ウェブページアイテムのファビコン領域（正方形）の一辺の長さ */
+    /* ウェブページ項目のファビコン領域（正方形）の一辺の長さ */
     --main-area-favicon-size: 1em;
 
-    /* 未読ウェブページアイテムのタイトルの色。lch(35.0%, 134.0, 160.4)相当 */
+    /* 未読ウェブページ項目のタイトルの色。lch(35.0%, 134.0, 160.4)相当 */
     --main-area-unread-web-page-item-title-color: #005f3e;
 
-    /* ウェブページアイテムの音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
+    /* ウェブページ項目の音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
     --main-area-audible-icon-size: 1em;
-    /* ウェブページアイテムの音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
+    /* ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
     --main-area-audible-icon-color: #6a6a6a;
 
-    /* アンロード済みウェブページアイテムのopacity */
+    /* アンロード済みウェブページ項目のopacity */
     --soft-unloaded-web-page-item-opacity: 75%;
     --hard-unloaded-web-page-item-opacity: 55%;
   }
 
-  /* ウェブページアイテムのコンテンツ領域のルート */
+  /* ウェブページ項目のコンテンツ領域のルート */
   .main-area-web-page-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
@@ -79,13 +79,13 @@
     align-items: center;
   }
 
-  /* グレーアウト状態のウェブページアイテムのタイトル */
+  /* グレーアウト状態のウェブページ項目のタイトル */
   .grayed-out .main-area-web-page-content_title,
   .grayed-out-children .main-area-web-page-content_title {
     color: var(--grayed-out-item-text-color);
   }
 
-  /* ウェブページアイテムのファビコン */
+  /* ウェブページ項目のファビコン */
   .main-area-web-page-content_favicon {
     width: var(--main-area-favicon-size);
     height: var(--main-area-favicon-size);
@@ -148,7 +148,7 @@
     }
   }
 
-  /* ウェブページアイテムの音がなっていることを示すアイコン */
+  /* ウェブページ項目の音がなっていることを示すアイコン */
   .main-area-web-page-content_audible-icon {
     width: var(--main-area-audible-icon-size);
     height: var(--main-area-audible-icon-size);
@@ -158,7 +158,7 @@
     -webkit-mask-size: contain;
   }
 
-  /* ウェブページアイテムのタイトル */
+  /* ウェブページ項目のタイトル */
   .main-area-web-page-content_title {
     cursor: default;
     user-select: none;
@@ -167,12 +167,12 @@
     white-space: nowrap;
   }
 
-  /* 未読ウェブページアイテムのタイトルの強調表示 */
+  /* 未読ウェブページ項目のタイトルの強調表示 */
   .main-area-web-page-content_title.unread {
     color: var(--main-area-unread-web-page-item-title-color);
   }
 
-  /* アンロード済みウェブページアイテムのタイトルのグレーアウト */
+  /* アンロード済みウェブページ項目のタイトルのグレーアウト */
   .main-area-web-page-content_title.soft-unloaded-item {
     filter: opacity(var(--soft-unloaded-web-page-item-opacity));
   }
@@ -180,7 +180,7 @@
     filter: opacity(var(--hard-unloaded-web-page-item-opacity));
   }
 
-  /* アンロード済みウェブページアイテムのファビコンのグレーアウト */
+  /* アンロード済みウェブページ項目のファビコンのグレーアウト */
   .main-area-web-page-content_favicon.soft-unloaded-item > * {
     filter: opacity(var(--soft-unloaded-web-page-item-opacity));
   }

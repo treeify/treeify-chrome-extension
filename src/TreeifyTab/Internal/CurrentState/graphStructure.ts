@@ -9,8 +9,8 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 
 /**
- * 全ての子孫と自身のアイテムIDを返す。
- * ただし（折りたたみなどの理由で）表示されないアイテムはスキップする。
+ * 全ての子孫と自身の項目IDを返す。
+ * ただし（折りたたみなどの理由で）表示されない項目はスキップする。
  */
 export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
   yield ItemPath.getItemId(itemPath)
@@ -19,7 +19,7 @@ export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Gene
   }
 }
 
-/** 与えられたアイテムパスがメインエリア上で表示されるべきものかどうかを判定する */
+/** 与えられたItemPathがメインエリア上で表示されるべきものかどうかを判定する */
 export function isVisible(itemPath: ItemPath): boolean {
   for (let i = 1; i < itemPath.size - 1; i++) {
     const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath.take(i))
@@ -33,7 +33,7 @@ export function isVisible(itemPath: ItemPath): boolean {
 }
 
 /**
- * 指定されたアイテムが所属するページまでのItemPathを返す。
+ * 指定された項目が所属するページまでのItemPathを返す。
  * 自身がページの場合は自身のItemPathを返す。
  */
 export function yieldItemPaths(itemId: ItemId): Generator<ItemPath> {
@@ -53,7 +53,7 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
 }
 
 /**
- * 指定されたアイテムが所属するページIDの集合を返す。
+ * 指定された項目が所属するページIDの集合を返す。
  * 自身がページの場合は自身のみを返す。
  */
 export function getPageIdsBelongingTo(itemId: ItemId): Set<ItemId> {
@@ -68,7 +68,7 @@ export function getParentPageIds(pageId: ItemId): Set<ItemId> {
 }
 
 /**
- * 指定されたアイテムを起点とするサブツリーに含まれるアイテムIDを全て返す。
+ * 指定された項目を起点とするサブツリーに含まれる項目IDを全て返す。
  * ただしページは終端ノードとして扱い、その子孫は無視する。
  */
 export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
@@ -85,7 +85,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
 }
 
 /**
- * 全ての先祖アイテムを返す。
+ * 全ての先祖項目を返す。
  * トランスクルージョンによって枝分かれしていても、全ての枝をトップページまで辿る。
  * そのため重複することがある。
  */
@@ -97,7 +97,7 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
 }
 
 /**
- * 指定されたアイテムのサブツリーに対応するロード状態のタブを数える。
+ * 指定された項目のサブツリーに対応するロード状態のタブを数える。
  * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
  */
 export function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
@@ -107,7 +107,7 @@ export function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer 
 }
 
 /**
- * 指定されたアイテムのサブツリーに対応するタブを数える。
+ * 指定された項目のサブツリーに対応するタブを数える。
  * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
  */
 export function countTabsInSubtree(state: State, itemId: ItemId): integer {
@@ -118,7 +118,7 @@ export function countTabsInSubtree(state: State, itemId: ItemId): integer {
 
 /**
  * 与えられたItemPath群をドキュメント順でソートする。
- * 全てのItemPathのルートアイテムが同じでなければ正しく計算できない。
+ * 全てのItemPathのルート項目が同じでなければ正しく計算できない。
  */
 export function sortByDocumentOrder(itemPaths: List<ItemPath>): List<ItemPath> {
   return itemPaths.sortBy((itemPath) => {
@@ -126,7 +126,7 @@ export function sortByDocumentOrder(itemPaths: List<ItemPath>): List<ItemPath> {
   }, lexicographicalOrder)
 }
 
-// アイテムパスを兄弟順位リストに変換する
+// ItemPathを兄弟順位リストに変換する
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
   for (let i = 1; i < itemPath.size; i++) {

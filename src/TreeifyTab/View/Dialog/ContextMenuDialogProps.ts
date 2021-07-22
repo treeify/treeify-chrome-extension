@@ -13,7 +13,7 @@ export type ContextMenuDialogProps = {
 
 export function createContextMenuDialogProps(dialog: ContextMenuDialog): ContextMenuDialogProps {
   return {
-    // TODO: マウス座標がundefinedの場合はターゲットアイテムのDOMの座標を採用するといいと思う
+    // TODO: マウス座標がundefinedの場合はターゲット項目のDOMの座標を採用するといいと思う
     mousePosition: dialog.mousePosition,
     contextMenuItemPropses: createContextMenuItemPropses(),
   }

@@ -10,7 +10,7 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 export type MainAreaSpoolProps = {
   bulletState: MainAreaBulletState
   /**
-   * expand時に表示されるアイテム数。
+   * expand時に表示される項目数。
    * collapsed状態以外の場合は常に0。
    */
   hiddenItemsCount: integer

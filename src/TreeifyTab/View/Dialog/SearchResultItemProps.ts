@@ -76,7 +76,7 @@ function createSearchResultItemProps(
       // ページを切り替える
       CurrentState.switchActivePage(containerPageId)
 
-      // 再描画完了後に対象アイテムに自動スクロールする
+      // 再描画完了後に対象項目に自動スクロールする
       tick().then(() => {
         const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
         const focusableElement = document.getElementById(targetElementId)

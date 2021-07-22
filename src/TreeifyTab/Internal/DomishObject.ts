@@ -236,7 +236,7 @@ export namespace DomishObject {
 
   /**
    * Markdown形式のテキストを生成する。
-   * テキストアイテム内の改行は空白スペース2つ+改行に変換する。
+   * テキスト項目内の改行は空白スペース2つ+改行に変換する。
    */
   export function toMultiLineMarkdownText(value: DomishObject | List<DomishObject>): string {
     if (value instanceof List) {
@@ -265,7 +265,7 @@ export namespace DomishObject {
 
   /**
    * Markdown形式のテキストを生成する。
-   * テキストアイテム内の改行は半角スペース1つに置換する。
+   * テキスト項目内の改行は半角スペース1つに置換する。
    */
   export function toSingleLineMarkdownText(value: DomishObject | List<DomishObject>): string {
     if (value instanceof List) {

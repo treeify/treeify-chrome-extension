@@ -117,7 +117,7 @@ export function createPageTreeNodeProps(
         for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
           const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
           if (tabId !== undefined) {
-            // chrome.tabs.onRemovedイベントリスナー内でウェブページアイテムが削除されないよう根回しする
+            // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
             External.instance.hardUnloadedTabIds.add(tabId)
 
             // 対応するタブを閉じる

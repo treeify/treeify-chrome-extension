@@ -42,7 +42,7 @@ export function createCodeBlockItemEditDialogProps(
     } else {
       // コードが空の場合
 
-      // コードブロックアイテムを削除
+      // コードブロック項目を削除
       NullaryCommand.removeEdge()
     }
 
@@ -52,7 +52,7 @@ export function createCodeBlockItemEditDialogProps(
   }
 
   return {
-    dialogTitle: isEmptyCodeBlockItem ? 'コードブロックアイテム作成' : 'コードブロック編集',
+    dialogTitle: isEmptyCodeBlockItem ? 'コードブロック項目作成' : 'コードブロック編集',
     code: Internal.instance.state.codeBlockItems[ItemPath.getItemId(targetItemPath)].code,
     onClickFinishButton,
     onClickCancelButton: () => {

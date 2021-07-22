@@ -8,8 +8,8 @@ import {Item, WebPageItem} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
- * 新しい空のウェブページアイテムを作成し、CurrentStateに登録する。
- * ただしアイテムの配置（親子関係の設定）は行わない。
+ * 新しい空のウェブページ項目を作成し、CurrentStateに登録する。
+ * ただし項目の配置（親子関係の設定）は行わない。
  */
 export function createWebPageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
@@ -38,31 +38,31 @@ export function createWebPageItem(): ItemId {
   return newItemId
 }
 
-/** StateのwebPageItemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+/** StateのwebPageItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteWebPageItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('webPageItems', itemId))
 }
 
-/** ウェブページアイテムのタブタイトルを設定する */
+/** ウェブページ項目のタブタイトルを設定する */
 export function setWebPageItemTabTitle(itemId: ItemId, tabTitle: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
     Internal.instance.mutate(tabTitle, PropertyPath.of('webPageItems', itemId, 'tabTitle'))
   })
 }
 
-/** ウェブページアイテムのタイトルを設定する */
+/** ウェブページ項目のタイトルを設定する */
 export function setWebPageItemTitle(itemId: ItemId, title: string | null) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
     Internal.instance.mutate(title, PropertyPath.of('webPageItems', itemId, 'title'))
   })
 }
 
-/** ウェブページアイテムのURLを設定する */
+/** ウェブページ項目のURLを設定する */
 export function setWebPageItemUrl(itemId: ItemId, url: string) {
   Internal.instance.mutate(url, PropertyPath.of('webPageItems', itemId, 'url'))
 }
 
-/** ウェブページアイテムのファビコンURLを設定する */
+/** ウェブページ項目のファビコンURLを設定する */
 export function setWebPageItemFaviconUrl(itemId: ItemId, url: string) {
   Internal.instance.mutate(url, PropertyPath.of('webPageItems', itemId, 'faviconUrl'))
 }
@@ -73,7 +73,7 @@ export function deriveWebPageItemTitle(itemId: ItemId): string {
   return title !== '' ? title : webPageItem.url
 }
 
-/** ウェブページアイテムの未読フラグを上書き設定する */
+/** ウェブページ項目の未読フラグを上書き設定する */
 export function setIsUnreadFlag(itemId: ItemId, isUnread: boolean) {
   Internal.instance.mutate(isUnread, PropertyPath.of('webPageItems', itemId, 'isUnread'))
 }

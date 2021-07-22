@@ -67,16 +67,16 @@
     height: 100%;
   }
 
-  /* ウェブページアイテムのタイトル設定ダイアログ */
+  /* ウェブページ項目のタイトル設定ダイアログ */
   .web-page-item-title-setting-dialog_frame {
     /*
-    ウェブページアイテムの位置に合わせたフローティング。
+    ウェブページ項目の位置に合わせたフローティング。
     left, top, width, heightがJavaScriptで設定される。
     */
     position: absolute;
   }
 
-  /* ウェブページアイテムのタイトル設定ダイアログのテキスト入力欄 */
+  /* ウェブページ項目のタイトル設定ダイアログのテキスト入力欄 */
   .web-page-item-title-setting-dialog_text-box {
     width: 100%;
     height: 100%;

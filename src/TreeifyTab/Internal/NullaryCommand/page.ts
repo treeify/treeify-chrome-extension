@@ -2,8 +2,8 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
 /**
- * ターゲットアイテムがページなら非ページ化する。
- * ターゲットアイテムが非ページならページ化する。
+ * ターゲット項目がページなら非ページ化する。
+ * ターゲット項目が非ページならページ化する。
  */
 export function togglePaged() {
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -20,7 +20,7 @@ export function togglePaged() {
   }
 }
 
-/** 対象アイテムがページなら、そのページに切り替える */
+/** 対象項目がページなら、そのページに切り替える */
 export function showPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
@@ -29,7 +29,7 @@ export function showPage() {
   }
 }
 
-/** 対象アイテムをページ化し、そのページに切り替える */
+/** 対象項目をページ化し、そのページに切り替える */
 export function turnIntoAndShowPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 

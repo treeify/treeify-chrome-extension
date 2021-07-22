@@ -11,9 +11,9 @@ import {Cite, createDefaultEdge, Edge} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
- * 指定されたアイテムに関するデータを削除する。
- * 削除によって親の数が0になった子アイテムも再帰的に削除する。
- * キャレットの移動（ターゲットアイテムの変更）は行わない。
+ * 指定された項目に関するデータを削除する。
+ * 削除によって親の数が0になった子項目も再帰的に削除する。
+ * キャレットの移動（ターゲット項目の変更）は行わない。
  */
 export function deleteItem(itemId: ItemId) {
   assert(itemId !== TOP_ITEM_ID)
@@ -23,15 +23,15 @@ export function deleteItem(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
   for (const childItemId of item.childItemIds) {
     if (CurrentState.countParents(childItemId) === 1) {
-      // 親を1つしか持たない子アイテムは再帰的に削除する
+      // 親を1つしか持たない子項目は再帰的に削除する
       deleteItem(childItemId)
     } else {
-      // 親を2つ以上持つ子アイテムは整合性のために親リストを修正する
+      // 親を2つ以上持つ子項目は整合性のために親リストを修正する
       Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
     }
   }
 
-  // 削除されるアイテムを親アイテムの子リストから削除する
+  // 削除される項目を親項目の子リストから削除する
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
   }
@@ -43,7 +43,7 @@ export function deleteItem(itemId: ItemId) {
     chrome.tabs.remove(tabId)
   }
 
-  // アイテムタイプごとのデータを削除する
+  // 項目タイプごとのデータを削除する
   const itemType = item.itemType
   switch (itemType) {
     case ItemType.TEXT:
@@ -73,9 +73,9 @@ export function deleteItem(itemId: ItemId) {
 }
 
 /**
- * 指定されたアイテムに関するデータを削除する。
- * 子アイテムは親アイテムの子リストに移動する。
- * キャレットの移動（ターゲットアイテムの変更）は行わない。
+ * 指定された項目に関するデータを削除する。
+ * 子項目は親項目の子リストに移動する。
+ * キャレットの移動（ターゲット項目の変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
   assert(itemId !== TOP_ITEM_ID)
@@ -85,7 +85,7 @@ export function deleteItemItself(itemId: ItemId) {
   const item = Internal.instance.state.items[itemId]
   const childItemIds = item.childItemIds
 
-  // 全ての子アイテムの親リストから自身を削除し、代わりに自身の親リストを挿入する
+  // 全ての子項目の親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
     const parents = Internal.instance.state.items[childItemId].parents
     const parent = parents[itemId]
@@ -95,7 +95,7 @@ export function deleteItemItself(itemId: ItemId) {
     }
   }
 
-  // 全ての親アイテムの子リストから自身を削除し、代わりに自身の子リストを挿入する
+  // 全ての親項目の子リストから自身を削除し、代わりに自身の子リストを挿入する
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
     modifyChildItems(parentItemId, (itemIds) => {
       const index = itemIds.indexOf(itemId)
@@ -110,7 +110,7 @@ export function deleteItemItself(itemId: ItemId) {
     chrome.tabs.remove(tabId)
   }
 
-  // アイテムタイプごとのデータを削除する
+  // 項目タイプごとのデータを削除する
   const itemType = item.itemType
   switch (itemType) {
     case ItemType.TEXT:
@@ -139,17 +139,17 @@ export function deleteItemItself(itemId: ItemId) {
   CurrentState.recycleItemId(itemId)
 }
 
-/** Stateのitemsオブジェクトから指定されたアイテムIDのエントリーを削除する */
+/** Stateのitemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('items', itemId))
 }
 
-/** 指定されたIDのアイテムが存在するかどうかを調べる */
+/** 指定されたIDの項目が存在するかどうかを調べる */
 export function isItem(itemId: ItemId): boolean {
   return undefined !== Internal.instance.state.items[itemId]
 }
 
-/** 与えられたアイテムがメインエリア上で表示する子アイテムのリストを返す */
+/** 与えられた項目がメインエリア上で表示する子項目のリストを返す */
 export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
@@ -166,7 +166,7 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   }
 }
 
-/** 指定されたアイテムのisCollapsedフラグを設定する */
+/** 指定された項目のisCollapsedフラグを設定する */
 export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
@@ -178,8 +178,8 @@ export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
 }
 
 /**
- * 指定されたアイテムのisCollapsedフラグを返す。
- * 親アイテムに依存するのでItemIdではなくItemPathを取る。
+ * 指定された項目のisCollapsedフラグを返す。
+ * 親項目に依存するのでItemIdではなくItemPathを取る。
  */
 export function getIsCollapsed(itemPath: ItemPath): boolean {
   const itemId = ItemPath.getItemId(itemPath)
@@ -188,24 +188,24 @@ export function getIsCollapsed(itemPath: ItemPath): boolean {
   return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
 }
 
-/** 指定されたアイテムのタイムスタンプを現在時刻に更新する */
+/** 指定された項目のタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
   Internal.instance.mutate(Timestamp.now(), PropertyPath.of('items', itemId, 'timestamp'))
 }
 
-/** 指定されたアイテムの親アイテムIDのリストを返す */
+/** 指定された項目の親項目IDのリストを返す */
 export function getParentItemIds(itemId: ItemId): List<ItemId> {
   return List(Object.keys(Internal.instance.state.items[itemId].parents)).map((key) =>
     parseInt(key)
   )
 }
 
-/** 指定されたアイテムの親の数を返す */
+/** 指定された項目の親の数を返す */
 export function countParents(itemId: ItemId): integer {
   return Object.keys(Internal.instance.state.items[itemId].parents).length
 }
 
-/** 指定されたアイテムに親アイテムを追加する */
+/** 指定された項目に親項目を追加する */
 export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
   Internal.instance.mutate(
     edge ?? createDefaultEdge(),
@@ -214,9 +214,9 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
 }
 
 /**
- * 指定されたアイテムの子アイテムリストを修正する。
- * @param itemId このアイテムの子アイテムリストを修正する
- * @param f 子アイテムリストを受け取って新しい子アイテムリストを返す関数
+ * 指定された項目の子項目リストを修正する。
+ * @param itemId この項目の子項目リストを修正する
+ * @param f 子項目リストを受け取って新しい子項目リストを返す関数
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
@@ -224,10 +224,10 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
 }
 
 /**
- * あるアイテムの最初の子になるようアイテムを子リストに追加する。
- * 整合性が取れるように親アイテムリストも修正する。
- * @param itemId このアイテムの最初の子として追加する
- * @param newItemId 最初の子として追加されるアイテム
+ * ある項目の最初の子になるよう項目を子リストに追加する。
+ * 整合性が取れるように親項目リストも修正する。
+ * @param itemId この項目の最初の子として追加する
+ * @param newItemId 最初の子として追加される項目
  * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
 export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
@@ -239,10 +239,10 @@ export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: E
 }
 
 /**
- * あるアイテムの最後の子になるようアイテムを子リストに追加する。
- * 整合性が取れるように親アイテムリストも修正する。
- * @param itemId このアイテムの最後の子として追加する
- * @param newItemId 最後の子として追加されるアイテム
+ * ある項目の最後の子になるよう項目を子リストに追加する。
+ * 整合性が取れるように親項目リストも修正する。
+ * @param itemId この項目の最後の子として追加する
+ * @param newItemId 最後の子として追加される項目
  * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
 export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
@@ -254,11 +254,11 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Ed
 }
 
 /**
- * あるアイテムの兄になるようアイテムを子リストに追加する。
- * 整合性が取れるように親アイテムリストも修正する。
+ * ある項目の兄になるよう項目を子リストに追加する。
+ * 整合性が取れるように親項目リストも修正する。
  * 何らかの理由で兄として追加できない場合は何もしない。
- * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの弟になる
- * @param newItemId 兄として追加されるアイテム
+ * @param itemPath 項目追加の基準となるItemPath。この項目の弟になる
+ * @param newItemId 兄として追加される項目
  * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
 export function insertPrevSiblingItem(
@@ -286,10 +286,10 @@ export function insertPrevSiblingItem(
 }
 
 /**
- * あるアイテムの弟になるようアイテムを子リストに追加する。
- * 整合性が取れるように親アイテムリストも修正する。
- * @param itemPath アイテム追加の基準となるアイテムパス。このアイテムの弟になる
- * @param newItemId 弟として追加されるアイテム
+ * ある項目の弟になるよう項目を子リストに追加する。
+ * 整合性が取れるように親項目リストも修正する。
+ * @param itemPath 項目追加の基準となるItemPath。この項目の弟になる
+ * @param newItemId 弟として追加される項目
  * @param edge 設定するエッジデータ。指定無しならデフォルトのエッジデータが設定される
  */
 export function insertNextSiblingItem(
@@ -317,9 +317,9 @@ export function insertNextSiblingItem(
 }
 
 /**
- * 指定されたアイテムパスの（ドキュメント順で）下にアイテムを配置する。
+ * 指定されたItemPathの（ドキュメント順で）下に項目を配置する。
  * 基本的には弟になるよう配置するが、
- * 指定されたアイテムパスが子を表示している場合は最初の子になるよう配置する。
+ * 指定されたItemPathが子を表示している場合は最初の子になるよう配置する。
  */
 export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge): ItemPath {
   if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.size === 1) {
@@ -331,22 +331,22 @@ export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Ed
 }
 
 /**
- * アイテムの親子関係グラフにおけるエッジを削除する。
- * もし親の数が0になったとしてもそのアイテムの削除は行わない。
- * 引数のアイテムが親子関係になかった場合の動作は未定義。
+ * 項目の親子関係グラフにおけるエッジを削除する。
+ * もし親の数が0になったとしてもその項目の削除は行わない。
+ * 引数の項目が親子関係になかった場合の動作は未定義。
  * 戻り値は削除されたエッジオブジェクト。
  */
 export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge {
-  // 親アイテムの子アイテムリストからアイテムを削除する
+  // 親項目の子項目リストから項目を削除する
   modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
 
   const edge = Internal.instance.state.items[itemId].parents[parentItemId]
-  // アイテムの親リストから親アイテムを削除する
+  // 項目の親リストから親項目を削除する
   Internal.instance.delete(PropertyPath.of('items', itemId, 'parents', parentItemId))
   return edge
 }
 
-/** 新しい未使用のアイテムIDを取得・使用開始する */
+/** 新しい未使用の項目IDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds
   const last = availableItemIds.last(undefined)
@@ -360,13 +360,13 @@ export function obtainNewItemId(): ItemId {
   }
 }
 
-/** 使われなくなったアイテムIDを登録する */
+/** 使われなくなった項目IDを登録する */
 export function recycleItemId(itemId: ItemId) {
   const availableItemIds = Internal.instance.state.availableItemIds
   Internal.instance.mutate(availableItemIds.push(itemId), PropertyPath.of('availableItemIds'))
 }
 
-/** 指定されたアイテムのCSSクラスリストを上書き設定する */
+/** 指定された項目のCSSクラスリストを上書き設定する */
 export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
   Internal.instance.mutate(cssClasses, PropertyPath.of('items', itemId, 'cssClasses'))
 }

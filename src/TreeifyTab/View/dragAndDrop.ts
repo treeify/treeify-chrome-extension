@@ -22,7 +22,7 @@ export let currentDragData: ItemDragData | ImageBottomDragData | undefined
 let mouseDownPosition: Coordinate | undefined
 
 /**
- * アイテムのドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
+ * 項目のドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
  * TODO:標準のドラッグアンドドロップを用いない理由を説明する
  */
 export function dragItem(element: HTMLElement, itemPath: ItemPath) {
@@ -63,7 +63,7 @@ function calculateDistance(lhs: Coordinate, rhs: Coordinate): integer {
 }
 
 /**
- * アイテムのドロップ対象となるDOM要素に対して設定するuseディレクティブ用関数。
+ * 項目のドロップ対象となるDOM要素に対して設定するuseディレクティブ用関数。
  * ドロップされたときのコールバックをパラメータとして指定する必要がある。
  */
 export function onItemDrop(

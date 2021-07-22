@@ -32,7 +32,7 @@ export function removeRedundantIndent(indentedText: string): string {
   return lines.map((line) => line.substr(maxCount)).join('\n')
 }
 
-/** 指定されたアイテムを頂点とするインデント形式のプレーンテキストを作る */
+/** 指定された項目を頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemPath: ItemPath): string {
   return List(yieldIndentedLines(itemPath, '  ')).join('\n')
 }
@@ -53,7 +53,7 @@ function* yieldIndentedLines(
   }
 }
 
-/** 指定されたアイテム単体のプレーンテキスト表現を生成する */
+/** 指定された項目単体のプレーンテキスト表現を生成する */
 export function extractPlainText(itemPath: ItemPath): string {
   const itemId = ItemPath.getItemId(itemPath)
   const itemType = Internal.instance.state.items[itemId].itemType
@@ -83,7 +83,7 @@ export function pasteMultilineText(text: string) {
   const lines = removeRedundantIndent(text).split(/\r?\n/)
 
   for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
-    // TODO: 最適化の余地あり。パースの試行とパース成功確認後のアイテム生成の2回に分けてトラバースしている
+    // TODO: 最適化の余地あり。パースの試行とパース成功確認後の項目生成の2回に分けてトラバースしている
     if (canParseAsIndentedText(lines, indentUnit)) {
       // インデント形式のテキストとして認識できた場合
       const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
@@ -96,7 +96,7 @@ export function pasteMultilineText(text: string) {
       assertNonUndefined(belowItemPath)
       CurrentState.setTargetItemPath(belowItemPath)
 
-      // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+      // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
       if (CurrentState.isEmptyTextItem(targetItemId)) {
         CurrentState.deleteItem(targetItemId)
       }
@@ -116,7 +116,7 @@ export function pasteMultilineText(text: string) {
   assertNonUndefined(belowItemPath)
   CurrentState.setTargetItemPath(belowItemPath)
 
-  // 空のテキストアイテム上で実行した場合は空のテキストアイテムを削除する
+  // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
   if (CurrentState.isEmptyTextItem(targetItemId)) {
     CurrentState.deleteItem(targetItemId)
   }
@@ -151,7 +151,7 @@ function getIndentLevel(line: string, indentUnit: string): integer {
 }
 
 /*
-インデント形式のテキストから、新規アイテムのツリーを作成する。
+インデント形式のテキストから、新規項目のツリーを作成する。
 【動作イメージ】
 1
   3
@@ -160,10 +160,10 @@ function getIndentLevel(line: string, indentUnit: string): integer {
 9
 ↓
 [1]
-[1, 3]（自身の深さより1つ浅い1番アイテムの子リスト末尾に追加する）
-[1, 4]（深さ2のアイテムを4に上書き）
+[1, 3]（自身の深さより1つ浅い1番項目の子リスト末尾に追加する）
+[1, 4]（深さ2の項目を4に上書き）
 [1, 4, 8]
-[9]（自身より深いアイテムは全部削除する）
+[9]（自身より深い項目は全部削除する）
  */
 function createItemsFromIndentedText(lines: string[], indentUnit: string): List<ItemId> {
   const itemIds: ItemId[] = []
@@ -188,7 +188,7 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
       const newItemId = createItemFromSingleLineText(line)
 
       if (itemIds.length === 1) {
-        // 親の居ないアイテム
+        // 親の居ない項目
         itemIds[indentLevel] = newItemId
         rootItemIds.push(newItemId)
       } else {
@@ -201,7 +201,7 @@ function createItemsFromIndentedText(lines: string[], indentUnit: string): List<
 }
 
 function createItemFromSingleLineText(line: string): ItemId {
-  // テキストアイテムを作る
+  // テキスト項目を作る
   const itemId = CurrentState.createTextItem()
   CurrentState.setTextItemDomishObjects(itemId, DomishObject.fromPlainText(line))
   return itemId

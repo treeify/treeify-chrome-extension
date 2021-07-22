@@ -6,41 +6,41 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 
-/** ターゲットアイテムパスを返す */
+/** ターゲットItemPathを返す */
 export function getTargetItemPath(): ItemPath {
   return Internal.instance.state.pages[CurrentState.getActivePageId()].targetItemPath
 }
 
-/** ターゲットアイテムパスとアンカーアイテムパスをまとめて上書きする */
+/** ターゲットItemPathとアンカーItemPathをまとめて上書きする */
 export function setTargetItemPath(itemPath: ItemPath) {
   setTargetItemPathOnly(itemPath)
   setAnchorItemPath(itemPath)
 }
 
-/** ターゲットアイテムパスを返す */
+/** ターゲットItemPathを返す */
 export function getAnchorItemPath(): ItemPath {
   return Internal.instance.state.pages[CurrentState.getActivePageId()].anchorItemPath
 }
 
-/** アンカーアイテムパスを上書きする */
+/** アンカーItemPathを上書きする */
 export function setAnchorItemPath(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
   Internal.instance.mutate(itemPath, PropertyPath.of('pages', activePageId, 'anchorItemPath'))
 }
 
-/** ターゲットアイテムパスを上書きする（アンカーアイテムパスは放置） */
+/** ターゲットItemPathを上書きする（アンカーItemPathは放置） */
 export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
   Internal.instance.mutate(itemPath, PropertyPath.of('pages', activePageId, 'targetItemPath'))
 
-  // ダイアログを開いた状態でターゲットアイテムが変わった際に起こる問題への対策。
-  // 例えばダイアログを開いた状態でブラウザウィンドウでタブを閉じるとターゲットアイテムが変わりうる。
+  // ダイアログを開いた状態でターゲット項目が変わった際に起こる問題への対策。
+  // 例えばダイアログを開いた状態でブラウザウィンドウでタブを閉じるとターゲット項目が変わりうる。
   External.instance.dialogState = undefined
 }
 
 /**
- * 複数選択されているアイテムのリストを返す。
- * 複数選択されていなければターゲットアイテムパスだけの単一要素リストを返す。
+ * 複数選択されている項目のリストを返す。
+ * 複数選択されていなければターゲットItemPathだけの単一要素リストを返す。
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
 export function getSelectedItemPaths(): List<ItemPath> {
@@ -69,57 +69,57 @@ export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {
 }
 
 /**
- * ドキュメント順で1つ上のアイテムのアイテムパスを返す。
+ * ドキュメント順で1つ上の項目のItemPathを返す。
  * 例えば
  * A
  * | B
  * | | C
  * | D
- * というツリーにおいてDの上のアイテムはCであり、Cの上のアイテムはBである。
+ * というツリーにおいてDの上の項目はCであり、Cの上の項目はBである。
  *
- * アクティブページには1つ上のアイテムが存在しないのでundefinedを返す。
+ * アクティブページには1つ上の項目が存在しないのでundefinedを返す。
  */
 export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
   const parentItemPath = ItemPath.getParent(itemPath)
-  // 親が居ない場合（アクティブページの場合）は上のアイテムは存在しない
+  // 親が居ない場合（アクティブページの場合）は上の項目は存在しない
   if (parentItemPath === undefined) return undefined
 
   const prevSiblingItemPath = findPrevSiblingItemPath(itemPath)
   if (prevSiblingItemPath !== undefined) {
-    // 兄が居る場合、兄かその子孫のうち最も下に表示されるものが該当アイテムである
+    // 兄が居る場合、兄かその子孫のうち最も下に表示されるものが該当項目である
     return getLowerEndItemPath(prevSiblingItemPath)
   } else {
-    // 兄が居ない場合は親が該当アイテムである
+    // 兄が居ない場合は親が該当項目である
     return parentItemPath
   }
 }
 
 /**
- * ドキュメント順で1つ下のアイテムのアイテムパスを返す。
+ * ドキュメント順で1つ下の項目のItemPathを返す。
  * 例えば
  * A
  * | B
  * | | C
  * | D
- * というツリーにおいてBの下のアイテムはCであり、Cの下のアイテムはDである。
+ * というツリーにおいてBの下の項目はCであり、Cの下の項目はDである。
  *
- * 該当アイテムが存在しない場合はundefinedを返す。
+ * 該当項目が存在しない場合はundefinedを返す。
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemPath).first(undefined)
-  // 表示されているアイテムが存在するなら
+  // 表示されている項目が存在するなら
   if (firstChildItemId !== undefined) {
-    // 最初の子アイテムが該当アイテムである
+    // 最初の子項目が該当項目である
     return itemPath.push(firstChildItemId)
   }
 
-  // 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムを返す
+  // 「弟、または親の弟、または親の親の弟、または…」に該当する項目を返す
   return findFirstFollowingItemPath(itemPath)
 }
 
 /**
- * 「弟、または親の弟、または親の親の弟、または…」に該当するアイテムパスを探索する。
- * 言い換えると、XPathでいうところのfollowingノードのうち、最も上に表示されるアイテムパスを返す。
+ * 「弟、または親の弟、または親の親の弟、または…」に該当するItemPathを探索する。
+ * 言い換えると、XPathでいうところのfollowingノードのうち、最も上に表示されるItemPathを返す。
  */
 export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undefined {
   const nextSiblingItemPath = findNextSiblingItemPath(itemPath)
@@ -127,7 +127,7 @@ export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undef
   if (nextSiblingItemPath !== undefined) return nextSiblingItemPath
 
   const parentItemPath = ItemPath.getParent(itemPath)
-  // 親が居ない場合（アクティブページに到達した場合）はfollowingアイテムなしなのでundefinedを返す
+  // 親が居ない場合（アクティブページに到達した場合）はfollowing項目なしなのでundefinedを返す
   if (parentItemPath === undefined) return undefined
 
   // 子孫の弟を再帰的に探索する
@@ -135,7 +135,7 @@ export function findFirstFollowingItemPath(itemPath: ItemPath): ItemPath | undef
 }
 
 /**
- * 指定されたアイテムパスの兄のアイテムパスを返す。
+ * 指定されたItemPathの兄のItemPathを返す。
  * もし兄が存在しないときはundefinedを返す。
  */
 export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefined {
@@ -153,7 +153,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
 }
 
 /**
- * 指定されたアイテムパスの弟のアイテムパスを返す。
+ * 指定されたItemPathの弟のItemPathを返す。
  * もし弟が存在しないときはundefinedを返す。
  */
 export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefined {
@@ -171,7 +171,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
 }
 
 /**
- * 指定されたアイテムまたはその子孫アイテムのうち、最も下に表示されるアイテムのアイテムパスを返す。
+ * 指定された項目またはその子孫項目のうち、最も下に表示される項目のItemPathを返す。
  * 例えば
  * A
  * | B
@@ -181,13 +181,13 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   if (CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
-    // 子を表示していない場合、このアイテムこそが最も下のアイテムである
+    // 子を表示していない場合、この項目こそが最も下の項目である
     return itemPath
   }
 
   const itemId = ItemPath.getItemId(itemPath)
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
-  // 末尾の子アイテムに対して再帰呼び出しすることで、最も下に表示されるアイテムを探索する
+  // 末尾の子項目に対して再帰呼び出しすることで、最も下に表示される項目を探索する
   return getLowerEndItemPath(itemPath.push(childItemIds.last()))
 }
 

@@ -13,7 +13,7 @@ export class SearchEngine {
 
   constructor(state: State) {
     const unigramSearchIndex = new UnigramSearchIndex()
-    // 各アイテムに含まれるテキストを抽出・unigram化し、検索インデックスに登録する
+    // 各項目に含まれるテキストを抽出・unigram化し、検索インデックスに登録する
     for (let itemKey in state.items) {
       const itemId = parseInt(itemKey)
       for (const unigram of SearchEngine.appearingUnigrams(itemId, state)) {
@@ -30,12 +30,12 @@ export class SearchEngine {
 
     const normalizedNotSearchWords = notSearchWords.map(UnigramSearchIndex.normalize)
 
-    // 検索ワードごとに、ヒットするアイテムの全ItemPathの集合を生成する
+    // 検索ワードごとに、ヒットする項目の全ItemPathの集合を生成する
     const hitItemIdSets = andSearchWords.map((andSearchWord) => {
       const normalizedAndSearchWord = UnigramSearchIndex.normalize(andSearchWord)
 
       return Set(this.unigramSearchIndex.search(andSearchWord)).filter((itemId) => {
-        // 除外アイテムで検索結果をフィルタリングする
+        // 除外項目で検索結果をフィルタリングする
         if (CurrentState.shouldBeHidden(itemId)) return false
 
         const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
@@ -58,8 +58,8 @@ export class SearchEngine {
   }
 
   /**
-   * 指定されたアイテムのテキストトラックの変化に合わせて検索インデックスを更新する。
-   * アイテム内のテキストを更新する処理は全て第2引数の関数内で行うべし。
+   * 指定された項目のテキストトラックの変化に合わせて検索インデックスを更新する。
+   * 項目内のテキストを更新する処理は全て第2引数の関数内で行うべし。
    */
   updateSearchIndex(itemId: ItemId, f: () => void) {
     const oldUnigrams = SearchEngine.appearingUnigrams(itemId, Internal.instance.state)
@@ -75,8 +75,8 @@ export class SearchEngine {
   }
 
   /**
-   * 指定されたアイテムに関するデータを検索インデックスから削除する。
-   * アイテムを削除する直前に呼び出す想定。
+   * 指定された項目に関するデータを検索インデックスから削除する。
+   * 項目を削除する直前に呼び出す想定。
    */
   deleteSearchIndex(itemId: ItemId) {
     for (const unigram of SearchEngine.appearingUnigrams(itemId, Internal.instance.state)) {
@@ -84,7 +84,7 @@ export class SearchEngine {
     }
   }
 
-  /** 指定されたアイテムが持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
+  /** 指定された項目が持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
   static getTextTracks(itemId: ItemId, state: State): List<string> {
     const itemType = state.items[itemId].itemType
     switch (itemType) {
@@ -106,7 +106,7 @@ export class SearchEngine {
     }
   }
 
-  /** 指定されたアイテムのテキストトラックに含まれる文字の集合を返す */
+  /** 指定された項目のテキストトラックに含まれる文字の集合を返す */
   static appearingUnigrams(itemId: ItemId, state: State): Set<string> {
     return Set(this.getTextTracks(itemId, state).join(''))
   }
@@ -130,7 +130,7 @@ export class SearchEngine {
     }
   }
 
-  // 全アイテムが先祖-子孫関係にある場合にtrueを返す
+  // 全項目が先祖-子孫関係にある場合にtrueを返す
   static isInclusive(itemIds: List<ItemId>): boolean {
     const list = itemIds.map((itemId) => {
       return Set(CurrentState.yieldAncestorItemIds(itemId)).add(itemId)

@@ -23,12 +23,12 @@ export class External {
   /** Undo用 */
   prevPendingMutatedChunkIds: Set<ChunkId> | undefined
 
-  /** ブラウザのタブとTreeifyのウェブページアイテムを紐付けるためのオブジェクト */
+  /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 
   lastFocusedWindowId: integer = undefined as any
 
-  /** 既存のウェブページアイテムに対応するタブを開いた際、タブ作成イベントリスナーでアイテムIDと紐付けるためのMap */
+  /** 既存のウェブページ項目に対応するタブを開いた際、タブ作成イベントリスナーで項目IDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
 
   /** 独自クリップボード */
