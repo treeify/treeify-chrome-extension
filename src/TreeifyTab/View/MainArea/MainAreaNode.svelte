@@ -41,7 +41,7 @@
   {#if props.isActivePage}
     <div class="grid-empty-cell" />
   {:else}
-    <!-- バレットとインデントラインの領域 -->
+    <!-- バレットとインデントガイドの領域 -->
     <div
       class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}

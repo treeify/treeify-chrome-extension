@@ -7,7 +7,7 @@
 <div class="page-tree-bullet-and-indent" on:mousedown={props.onClick}>
   {#if props.bulletState === PageTreeBulletState.EXPANDED}
     <div class="page-tree-bullet-and-indent_indent-area">
-      <div class="page-tree-bullet-and-indent_indent-line" />
+      <div class="page-tree-bullet-and-indent_indent-guide" />
     </div>
   {/if}
   <div
@@ -20,12 +20,12 @@
 
 <style global>
   :root {
-    /* インデントラインの太さ */
-    --page-tree-indent-line-width: 1px;
-    /* インデントラインの色。lch(86.0%, 0.0, 0.0)相当 */
-    --page-tree-indent-line-color: #d7d7d7;
-    /* インデントラインの色（ホバー時）。lch(68.0%, 0.0, 0.0)相当 */
-    --page-tree-indent-line-hover-color: #a6a6a6;
+    /* インデントガイドの太さ */
+    --page-tree-indent-guide-width: 1px;
+    /* インデントガイドの色。lch(86.0%, 0.0, 0.0)相当 */
+    --page-tree-indent-guide-color: #d7d7d7;
+    /* インデントガイドの色（ホバー時）。lch(68.0%, 0.0, 0.0)相当 */
+    --page-tree-indent-guide-hover-color: #a6a6a6;
 
     /* バレット領域のサイズ（正方形の一辺の長さ） */
     --page-tree-bullet-area-size: 0.7em;
@@ -65,16 +65,16 @@
     width: 100%;
   }
 
-  /* インデントライン */
-  .page-tree-bullet-and-indent_indent-line {
-    background: var(--page-tree-indent-line-color);
-    width: var(--page-tree-indent-line-width);
+  /* インデントガイド */
+  .page-tree-bullet-and-indent_indent-guide {
+    background: var(--page-tree-indent-guide-color);
+    width: var(--page-tree-indent-guide-width);
     height: 100%;
     margin: 0 auto;
   }
-  /* ホバー時のインデントライン */
-  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_indent-line {
-    background: var(--page-tree-indent-line-hover-color);
+  /* ホバー時のインデントガイド */
+  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_indent-guide {
+    background: var(--page-tree-indent-guide-hover-color);
   }
 
   /* バレットの共通設定 */
