@@ -1,12 +1,12 @@
 <script lang="ts">
   import {doWithErrorCapture} from '../../errorCapture'
-  import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {Command} from '../../Internal/Command'
   import {Rerenderer} from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   function onClick() {
     doWithErrorCapture(() => {
-      NullaryCommand.createEmptyCodeBlockItem()
+      Command.createEmptyCodeBlockItem()
       Rerenderer.instance.rerender()
     })
   }

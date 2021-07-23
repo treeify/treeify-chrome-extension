@@ -1,10 +1,10 @@
 import {List} from 'immutable'
 import {assert} from 'src/Common/Debug/assert'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 
 export type ContextMenuItemProps = {
@@ -23,32 +23,32 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   if (ItemPath.hasParent(targetItemPath)) {
     result.push({
       title: '削除',
-      onClick: () => NullaryCommand.removeEdge(),
+      onClick: () => Command.removeEdge(),
     })
   }
 
   if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
     result.push({
       title: 'タブを閉じる',
-      onClick: () => NullaryCommand.hardUnloadSubtree(),
+      onClick: () => Command.hardUnloadSubtree(),
     })
   }
 
   if (CurrentState.countParents(targetItemId) >= 2 && isSingleSelect) {
     result.push({
       title: '他のトランスクルード元を表示…',
-      onClick: () => NullaryCommand.showOtherParentsDialog(),
+      onClick: () => Command.showOtherParentsDialog(),
     })
   }
 
   result.push({
     title: 'トランスクルード用コピー',
-    onClick: () => NullaryCommand.copyForTransclusion(),
+    onClick: () => Command.copyForTransclusion(),
   })
 
   result.push({
     title: 'Markdown形式でコピー',
-    onClick: () => NullaryCommand.copyAsMarkdownText(),
+    onClick: () => Command.copyAsMarkdownText(),
   })
 
   result.push({
@@ -69,12 +69,12 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   if (isSingleSelect) {
     result.push({
       title: '出典を設定…',
-      onClick: () => NullaryCommand.showCitationSettingDialog(),
+      onClick: () => Command.showCitationSettingDialog(),
     })
     if (item.cite?.title === '' && item.cite.url === '') {
       result.push({
         title: '出典を削除',
-        onClick: () => NullaryCommand.toggleCitation(),
+        onClick: () => Command.toggleCitation(),
       })
     }
   }
@@ -83,12 +83,12 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
       result.push({
         title: '現在のワークスペースからの除外を解除',
-        onClick: () => NullaryCommand.toggleExcluded(),
+        onClick: () => Command.toggleExcluded(),
       })
     } else {
       result.push({
         title: '現在のワークスペースのページツリーや検索結果から除外',
-        onClick: () => NullaryCommand.toggleExcluded(),
+        onClick: () => Command.toggleExcluded(),
       })
     }
   }

@@ -11,13 +11,13 @@ import {
   setDomSelection,
 } from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
@@ -108,7 +108,7 @@ function onKeyDown(event: KeyboardEvent) {
 
       for (const commandId of commandIds) {
         // @ts-ignore
-        NullaryCommand[commandId]?.()
+        Command[commandId]?.()
       }
       Rerenderer.instance.rerender()
     }
@@ -488,7 +488,7 @@ function onBackspace(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
-    NullaryCommand.deleteItem()
+    Command.deleteItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -523,7 +523,7 @@ function onBackspace(event: KeyboardEvent) {
         }
 
         // ターゲット項目を削除して終了
-        NullaryCommand.deleteItem()
+        Command.deleteItem()
         Rerenderer.instance.rerender()
         return
       }
@@ -568,7 +568,7 @@ function onBackspace(event: KeyboardEvent) {
 
     event.preventDefault()
     // ターゲット項目を削除する
-    NullaryCommand.deleteItem()
+    Command.deleteItem()
     Rerenderer.instance.rerender()
   }
 }
@@ -578,7 +578,7 @@ function onDelete(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
-    NullaryCommand.deleteItem()
+    Command.deleteItem()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
@@ -599,7 +599,7 @@ function onDelete(event: KeyboardEvent) {
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       // ターゲット項目を削除して終了
-      NullaryCommand.deleteItem()
+      Command.deleteItem()
       // 下の項目をフォーカスする
       const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
       if (belowItemPath !== undefined) {
@@ -660,7 +660,7 @@ function onDelete(event: KeyboardEvent) {
 
     event.preventDefault()
     // ターゲット項目を削除する
-    NullaryCommand.deleteItem()
+    Command.deleteItem()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
@@ -676,7 +676,7 @@ function onSpace(event: KeyboardEvent) {
   const targetItemType = Internal.instance.state.items[targetItemId].itemType
   if (targetItemType === ItemType.WEB_PAGE) {
     event.preventDefault()
-    NullaryCommand.browseTab()
+    Command.browseTab()
     Rerenderer.instance.rerender()
   }
 }

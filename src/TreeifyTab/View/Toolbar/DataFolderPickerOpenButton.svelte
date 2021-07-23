@@ -3,7 +3,7 @@
   import {assert} from '../../../Common/Debug/assert'
   import {doAsyncWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
-  import {NullaryCommand} from '../../Internal/NullaryCommand'
+  import {Command} from '../../Internal/Command'
   import {Rerenderer} from '../../Rerenderer'
   import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonProps'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
@@ -15,7 +15,7 @@
       assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
       assert(External.instance.hardUnloadedTabIds.size === 0)
 
-      await NullaryCommand.saveToDataFolder()
+      await Command.saveToDataFolder()
       Rerenderer.instance.rerender()
     })
   }

@@ -1,9 +1,9 @@
 import {integer} from 'src/Common/integer'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
@@ -36,37 +36,37 @@ export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): Main
         case MainAreaBulletState.NO_CHILDREN:
           switch (inputId) {
             case '1000MouseButton0':
-              NullaryCommand.turnIntoAndShowPage()
+              Command.turnIntoAndShowPage()
               break
           }
           break
         case MainAreaBulletState.EXPANDED:
           switch (inputId) {
             case '0000MouseButton0':
-              NullaryCommand.toggleCollapsed()
+              Command.toggleCollapsed()
               break
             case '1000MouseButton0':
-              NullaryCommand.turnIntoAndShowPage()
+              Command.turnIntoAndShowPage()
               break
           }
           break
         case MainAreaBulletState.COLLAPSED:
           switch (inputId) {
             case '0000MouseButton0':
-              NullaryCommand.toggleCollapsed()
+              Command.toggleCollapsed()
               break
             case '1000MouseButton0':
-              NullaryCommand.turnIntoAndShowPage()
+              Command.turnIntoAndShowPage()
               break
           }
           break
         case MainAreaBulletState.PAGE:
           switch (inputId) {
             case '0000MouseButton0':
-              NullaryCommand.showPage()
+              Command.showPage()
               break
             case '1000MouseButton0':
-              NullaryCommand.turnIntoNonPageAndExpand()
+              Command.turnIntoNonPageAndExpand()
               Rerenderer.instance.rerender()
           }
           break

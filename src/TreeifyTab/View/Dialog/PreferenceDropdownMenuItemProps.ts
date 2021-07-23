@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {External} from 'src/TreeifyTab/External/External'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 
 export type PreferenceDropdownMenuItemProps = {
   title: string
@@ -11,7 +11,7 @@ export function createPreferenceDropdownMenuItemPropses(): List<PreferenceDropdo
   return List.of(
     {
       title: 'ワークスペース',
-      onClick: () => NullaryCommand.showWorkspaceDialog(),
+      onClick: () => Command.showWorkspaceDialog(),
     },
     {
       title: 'カスタムCSS',
