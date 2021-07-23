@@ -161,7 +161,7 @@ export class Internal {
       mountedPageIds: List.of(0),
       availableItemIds: List.of(),
       maxItemId: 0,
-      mainAreaKeyboardBinding: {
+      mainAreaKeyBindings: {
         '0000Tab': List.of('indentItem'),
         '0100Tab': List.of('unindentItem'),
         '1000ArrowUp': List.of('moveItemToPrevSibling'),
@@ -192,7 +192,7 @@ export class Internal {
         '1100Period': List.of('toggleCitation'),
         '0000F2': List.of('edit'),
       },
-      mainAreaDeleteButtonMouseBinding: {
+      mainAreaDeleteButtonMouseBindings: {
         '0000MouseButton0': List.of('removeEdge'),
         '1000MouseButton0': List.of('deleteItemItself'),
       },

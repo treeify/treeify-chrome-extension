@@ -7,7 +7,9 @@
   import {createContextMenuDialogProps} from './ContextMenuDialogProps'
   import CustomCssDialog from './CustomCssDialog.svelte'
   import {createCustomCssDialogProps} from './CustomCssDialogProps'
-  import {DialogLayerProps} from './DialogLayer'
+  import {DialogLayerProps} from './DialogLayerProps'
+  import KeyBindingDialog from './KeyBindingDialog.svelte'
+  import {createKeyBindingDialogProps} from './KeyBindingDialogProps'
   import OtherParentsDialog from './OtherParentsDialog.svelte'
   import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
   import PreferenceDropdownMenuDialog from './PreferenceDropdownMenuDialog.svelte'
@@ -35,6 +37,9 @@
 {/if}
 {#if props.dialog?.type === 'CustomCssDialog'}
   <CustomCssDialog props={createCustomCssDialogProps()} />
+{/if}
+{#if props.dialog?.type === 'KeyBindingDialog'}
+  <KeyBindingDialog props={createKeyBindingDialogProps()} />
 {/if}
 {#if props.dialog?.type === 'PreferenceDropdownMenuDialog'}
   <PreferenceDropdownMenuDialog props={createPreferenceDropdownMenuDialogProps()} />

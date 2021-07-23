@@ -27,9 +27,9 @@ export type State = {
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** メインエリア領域におけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyboardBinding: {[K in InputId]: List<CommandId>}
+  mainAreaKeyBindings: {[K in InputId]: List<CommandId>}
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
-  mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<CommandId>}
+  mainAreaDeleteButtonMouseBindings: {[K in InputId]: List<CommandId>}
   customCss: string
 }
 
