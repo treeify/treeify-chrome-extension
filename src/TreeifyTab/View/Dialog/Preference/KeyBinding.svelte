@@ -3,6 +3,7 @@
   import {Command} from '../../../Internal/Command'
   import {Internal} from '../../../Internal/Internal'
   import {PropertyPath} from '../../../Internal/PropertyPath'
+  import {commandNames} from '../../commandNames'
   import {KeyBindingProps} from './KeyBindingProps'
 
   export let props: KeyBindingProps
@@ -26,7 +27,9 @@
     <div>
       <select data-index={index} on:change={onChange}>
         {#each Object.keys(Command) as commandId}
-          <option value={commandId} selected={selectedCommandId === commandId}>{commandId}</option>
+          <option value={commandId} selected={selectedCommandId === commandId}
+            >{commandNames[commandId]}</option
+          >
         {/each}
       </select>
     </div>
