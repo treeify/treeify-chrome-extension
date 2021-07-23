@@ -1,6 +1,7 @@
 <script lang="ts">
   import katex from 'katex'
   import CommonDialog from './CommonDialog.svelte'
+  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
   import {TexEditDialogProps} from './TexEditDialogProps'
 
   export let props: TexEditDialogProps
@@ -29,8 +30,10 @@
       {@html katex.renderToString(currentCode, {throwOnError: false})}
     </div>
     <div class="tex-edit-dialog_button-area">
-      <button on:click={props.onClickFinishButton}>完了</button>
-      <button on:click={props.onClickCancelButton}>キャンセル</button>
+      <FinishAndCancelButtons
+        onClickFinishButton={props.onClickFinishButton}
+        onClickCancelButton={props.onClickCancelButton}
+      />
     </div>
   </div>
 </CommonDialog>

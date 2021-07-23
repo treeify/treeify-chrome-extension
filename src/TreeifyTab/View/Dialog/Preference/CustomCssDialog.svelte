@@ -1,5 +1,6 @@
 <script lang="ts">
   import CommonDialog from '../CommonDialog.svelte'
+  import FinishAndCancelButtons from '../FinishAndCancelButtons.svelte'
   import {CustomCssDialogProps} from './CustomCssDialogProps'
 
   export let props: CustomCssDialogProps
@@ -16,8 +17,10 @@
       {props.code}
     </div>
     <div class="custom-css-dialog_button-area">
-      <button on:click={props.onClickFinishButton}>完了</button>
-      <button on:click={props.onClickCancelButton}>キャンセル</button>
+      <FinishAndCancelButtons
+        onClickFinishButton={props.onClickFinishButton}
+        onClickCancelButton={props.onClickCancelButton}
+      />
     </div>
   </div>
 </CommonDialog>
