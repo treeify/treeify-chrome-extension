@@ -1,20 +1,18 @@
 import {List} from 'immutable'
+import {CommandId} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {createKeyBindingProps, KeyBindingProps} from 'src/TreeifyTab/View/Dialog/KeyBindingProps'
 
-export type KeyBindingDialogProps = {
-  keyBindingPropses: List<KeyBindingProps>
+export type KeyBindingProps = {
+  inputId: string
+  commandIds: List<CommandId>
   onClickFinishButton: () => void
   onClickCancelButton: () => void
   onKeyDown: (event: KeyboardEvent) => void
 }
 
-export function createKeyBindingDialogProps(): KeyBindingDialogProps {
-  const bindings = Object.entries(Internal.instance.state.mainAreaKeyBindings)
-
+export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyBindingProps {
   const onClickFinishButton = () => {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
@@ -22,7 +20,8 @@ export function createKeyBindingDialogProps(): KeyBindingDialogProps {
   }
 
   return {
-    keyBindingPropses: List(bindings).map(createKeyBindingProps),
+    inputId: binding[0],
+    commandIds: binding[1],
     onClickFinishButton,
     onClickCancelButton: () => {
       // ダイアログを閉じる
