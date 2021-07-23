@@ -62,6 +62,17 @@ function createSearchResultItemProps(
       const inputId = InputId.fromMouseEvent(event)
       if (inputId === '0000MouseButton0') {
         jumpTo(itemPath)
+      } else if (inputId === '0010MouseButton0') {
+        const newItemPath = CurrentState.insertBelowItem(
+          CurrentState.getTargetItemPath(),
+          ItemPath.getItemId(itemPath),
+          {isCollapsed: true}
+        )
+        CurrentState.setTargetItemPath(newItemPath)
+
+        // 検索ダイアログを閉じる
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
       }
     })
   }
