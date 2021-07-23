@@ -3,20 +3,7 @@ import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelect
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-
-/** 対象項目をMarkdown形式に変換し、クリップボードに入れる（text/plain） */
-export function copyAsMarkdownText() {
-  // TODO: 複数選択時はそれらをまとめてMarkdown化する
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const blob = new Blob([toMarkdownText(targetItemPath)], {type: 'text/plain'})
-  navigator.clipboard.write([
-    new ClipboardItem({
-      [blob.type]: blob,
-    }),
-  ])
-}
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */
 export async function copyForTransclusion() {

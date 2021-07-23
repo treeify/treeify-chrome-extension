@@ -2,6 +2,7 @@ import {List} from 'immutable'
 import {assert} from 'src/Common/Debug/assert'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
 import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -48,7 +49,16 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
 
   result.push({
     title: 'Markdown形式でコピー',
-    onClick: () => Command.copyAsMarkdownText(),
+    onClick: () => {
+      // TODO: 複数選択時はそれらをまとめてMarkdown化する
+      const targetItemPath1 = CurrentState.getTargetItemPath()
+      const blob = new Blob([toMarkdownText(targetItemPath1)], {type: 'text/plain'})
+      navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob,
+        }),
+      ])
+    },
   })
 
   result.push({
