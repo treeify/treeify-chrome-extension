@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CommonDialog from './CommonDialog.svelte'
+  import CommonDialog from '../CommonDialog.svelte'
   import KeyBinding from './KeyBinding.svelte'
   import {KeyBindingDialogProps} from './KeyBindingDialogProps'
 

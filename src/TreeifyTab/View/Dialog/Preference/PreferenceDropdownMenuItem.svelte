@@ -1,9 +1,9 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {InputId} from '../../Internal/InputId'
-  import {Rerenderer} from '../../Rerenderer'
+  import {doWithErrorCapture} from '../../../errorCapture'
+  import {External} from '../../../External/External'
+  import {InputId} from '../../../Internal/InputId'
+  import {Rerenderer} from '../../../Rerenderer'
   import {PreferenceDropdownMenuItemProps} from './PreferenceDropdownMenuItemProps'
 
   export let props: PreferenceDropdownMenuItemProps

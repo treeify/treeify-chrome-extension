@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CommonDialog from './CommonDialog.svelte'
+  import CommonDialog from '../CommonDialog.svelte'
   import {CustomCssDialogProps} from './CustomCssDialogProps'
 
   export let props: CustomCssDialogProps

@@ -1,7 +1,8 @@
 <script lang="ts">
-  import {Command} from '../../Internal/Command'
-  import {Internal} from '../../Internal/Internal'
-  import {PropertyPath} from '../../Internal/PropertyPath'
+  import {assertNonUndefined} from '../../../../Common/Debug/assert'
+  import {Command} from '../../../Internal/Command'
+  import {Internal} from '../../../Internal/Internal'
+  import {PropertyPath} from '../../../Internal/PropertyPath'
   import {KeyBindingProps} from './KeyBindingProps'
 
   export let props: KeyBindingProps
