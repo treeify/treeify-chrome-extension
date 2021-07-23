@@ -29,16 +29,14 @@ export function showPage() {
   }
 }
 
-/** 対象項目をページ化し、そのページに切り替える */
-export function turnIntoAndShowPage() {
+/** 対象項目をページ化する */
+export function turnIntoPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-
   CurrentState.turnIntoPage(targetItemId)
-  CurrentState.switchActivePage(targetItemId)
 }
 
-/** 対象を非ページ化し、expandする */
-export function turnIntoNonPageAndExpand() {
+/** 対象を非ページ化する */
+export function turnIntoNonPage() {
   const targetItemPath = CurrentState.getTargetItemPath()
   // アクティブページに対しては何もしない
   if (targetItemPath.size === 1) return
@@ -47,7 +45,4 @@ export function turnIntoNonPageAndExpand() {
 
   CurrentState.unmountPage(targetItemId)
   CurrentState.turnIntoNonPage(targetItemId)
-
-  CurrentState.setIsCollapsed(targetItemPath, false)
-  CurrentState.updateItemTimestamp(targetItemId)
 }
