@@ -63,16 +63,7 @@ function createSearchResultItemProps(
       if (inputId === '0000MouseButton0') {
         jumpTo(itemPath)
       } else if (inputId === '0010MouseButton0') {
-        const newItemPath = CurrentState.insertBelowItem(
-          CurrentState.getTargetItemPath(),
-          ItemPath.getItemId(itemPath),
-          {isCollapsed: true}
-        )
-        CurrentState.setTargetItemPath(newItemPath)
-
-        // 検索ダイアログを閉じる
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
+        transclude(itemPath)
       }
     })
   }
@@ -83,6 +74,11 @@ function createSearchResultItemProps(
       case '0000Space':
         event.preventDefault()
         jumpTo(itemPath)
+        break
+      case '0010Enter':
+      case '0010Space':
+        event.preventDefault()
+        transclude(itemPath)
         break
     }
   }
@@ -120,6 +116,19 @@ function jumpTo(itemPath: ItemPath) {
       inline: 'center',
     })
   })
+
+  // 検索ダイアログを閉じる
+  External.instance.dialogState = undefined
+  Rerenderer.instance.rerender()
+}
+
+function transclude(itemPath: ItemPath) {
+  const newItemPath = CurrentState.insertBelowItem(
+    CurrentState.getTargetItemPath(),
+    ItemPath.getItemId(itemPath),
+    {isCollapsed: true}
+  )
+  CurrentState.setTargetItemPath(newItemPath)
 
   // 検索ダイアログを閉じる
   External.instance.dialogState = undefined
