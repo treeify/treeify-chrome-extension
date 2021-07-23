@@ -35,8 +35,8 @@ export function turnIntoPage() {
   CurrentState.turnIntoPage(targetItemId)
 }
 
-/** 対象を非ページ化し、expandする */
-export function turnIntoNonPageAndExpand() {
+/** 対象を非ページ化する */
+export function turnIntoNonPage() {
   const targetItemPath = CurrentState.getTargetItemPath()
   // アクティブページに対しては何もしない
   if (targetItemPath.size === 1) return
@@ -45,7 +45,4 @@ export function turnIntoNonPageAndExpand() {
 
   CurrentState.unmountPage(targetItemId)
   CurrentState.turnIntoNonPage(targetItemId)
-
-  CurrentState.setIsCollapsed(targetItemPath, false)
-  CurrentState.updateItemTimestamp(targetItemId)
 }

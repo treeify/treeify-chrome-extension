@@ -17,6 +17,14 @@ export function collapseItem() {
   }
 }
 
+/** 選択された項目を展開するコマンド */
+export function expandItem() {
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    CurrentState.setIsCollapsed(selectedItemPath, false)
+    CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+  }
+}
+
 /** ターゲット項目のisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleCollapsed() {
   const targetItemPath = CurrentState.getTargetItemPath()

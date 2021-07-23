@@ -69,8 +69,9 @@ export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): Main
               Command.showPage()
               break
             case '1000MouseButton0':
-              Command.turnIntoNonPageAndExpand()
-              Rerenderer.instance.rerender()
+              Command.turnIntoNonPage()
+              Command.expandItem()
+              break
           }
           break
       }
