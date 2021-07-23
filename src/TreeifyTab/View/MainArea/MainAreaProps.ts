@@ -488,7 +488,7 @@ function onBackspace(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
-    Command.deleteItem()
+    Command.removeEdge()
     Rerenderer.instance.rerender()
     return
   }
@@ -523,7 +523,7 @@ function onBackspace(event: KeyboardEvent) {
         }
 
         // ターゲット項目を削除して終了
-        Command.deleteItem()
+        Command.removeEdge()
         Rerenderer.instance.rerender()
         return
       }
@@ -568,7 +568,7 @@ function onBackspace(event: KeyboardEvent) {
 
     event.preventDefault()
     // ターゲット項目を削除する
-    Command.deleteItem()
+    Command.removeEdge()
     Rerenderer.instance.rerender()
   }
 }
@@ -578,7 +578,7 @@ function onDelete(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
-    Command.deleteItem()
+    Command.removeEdge()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
@@ -599,7 +599,7 @@ function onDelete(event: KeyboardEvent) {
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       // ターゲット項目を削除して終了
-      Command.deleteItem()
+      Command.removeEdge()
       // 下の項目をフォーカスする
       const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
       if (belowItemPath !== undefined) {
@@ -660,7 +660,7 @@ function onDelete(event: KeyboardEvent) {
 
     event.preventDefault()
     // ターゲット項目を削除する
-    Command.deleteItem()
+    Command.removeEdge()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {

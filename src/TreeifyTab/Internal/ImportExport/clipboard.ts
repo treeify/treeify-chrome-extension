@@ -71,7 +71,7 @@ export function onCut(event: ClipboardEvent) {
         toOpmlString(CurrentState.getSelectedItemPaths())
       )
 
-      Command.deleteItem()
+      Command.removeEdge()
       Rerenderer.instance.rerender()
     }
   })

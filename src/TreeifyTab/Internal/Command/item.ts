@@ -176,35 +176,6 @@ export function removeEdge() {
 }
 
 /**
- * 項目を削除するコマンド。
- * ターゲット項目がアクティブページの場合は何もしない。
- */
-export function deleteItem() {
-  // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) return
-
-  const selectedItemPaths = CurrentState.getSelectedItemPaths()
-
-  // 削除される項目の上の項目をフォーカス
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
-  assertNonUndefined(aboveItemPath)
-  CurrentState.setTargetItemPath(aboveItemPath)
-
-  // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
-  const aboveItemId = ItemPath.getItemId(aboveItemPath)
-  if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
-    const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-    const characterCount = DomishObject.countCharacters(domishObjects)
-    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
-  }
-
-  // 対象項目を削除
-  for (const selectedItemPath of selectedItemPaths) {
-    CurrentState.deleteItem(ItemPath.getItemId(selectedItemPath))
-  }
-}
-
-/**
  * 項目単体を削除するコマンド。
  * 子項目は（アンインデントと同じように）親側に繰り上げられる。
  * ターゲット項目がアクティブページの場合は何もしない。
