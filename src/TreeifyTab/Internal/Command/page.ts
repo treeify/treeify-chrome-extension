@@ -29,12 +29,10 @@ export function showPage() {
   }
 }
 
-/** 対象項目をページ化し、そのページに切り替える */
-export function turnIntoAndShowPage() {
+/** 対象項目をページ化する */
+export function turnIntoPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-
   CurrentState.turnIntoPage(targetItemId)
-  CurrentState.switchActivePage(targetItemId)
 }
 
 /** 対象を非ページ化し、expandする */
