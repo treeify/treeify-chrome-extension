@@ -93,6 +93,11 @@ function onKeyDown(event: KeyboardEvent) {
       case '0000Space':
         onSpace(event)
         return
+      case '1000KeyA':
+        event.preventDefault()
+        CurrentState.selectAll()
+        Rerenderer.instance.rerender()
+        return
       case '1000KeyZ':
         event.preventDefault()
         undo()
