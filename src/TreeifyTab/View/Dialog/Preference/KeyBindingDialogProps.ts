@@ -1,6 +1,9 @@
 import {List} from 'immutable'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {createKeyBindingProps, KeyBindingProps} from 'src/TreeifyTab/View/Dialog/KeyBindingProps'
+import {
+  createKeyBindingProps,
+  KeyBindingProps,
+} from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingProps'
 
 export type KeyBindingDialogProps = {
   keyBindingPropses: List<KeyBindingProps>

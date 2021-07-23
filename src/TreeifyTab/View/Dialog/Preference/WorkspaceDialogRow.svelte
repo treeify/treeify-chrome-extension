@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {Rerenderer} from '../../Rerenderer'
+  import {doWithErrorCapture} from '../../../errorCapture'
+  import {CurrentState} from '../../../Internal/CurrentState'
+  import {Rerenderer} from '../../../Rerenderer'
   import {WorkspaceRecord} from './WorkspaceDialogProps'
 
   export let workspace: WorkspaceRecord

@@ -4,7 +4,7 @@ import {integer} from 'src/Common/integer'
 import {
   createPreferenceDropdownMenuItemPropses,
   PreferenceDropdownMenuItemProps,
-} from 'src/TreeifyTab/View/Dialog/PreferenceDropdownMenuItemProps'
+} from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuItemProps'
 
 export type PreferenceDropdownMenuDialogProps = {
   top: integer

@@ -1,9 +1,9 @@
 <script lang="ts">
   import {createFocusTrap} from 'focus-trap'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {InputId} from '../../Internal/InputId'
-  import {Rerenderer} from '../../Rerenderer'
+  import {doWithErrorCapture} from '../../../errorCapture'
+  import {External} from '../../../External/External'
+  import {InputId} from '../../../Internal/InputId'
+  import {Rerenderer} from '../../../Rerenderer'
   import {PreferenceDropdownMenuDialogProps} from './PreferenceDropdownMenuDialogProps'
   import PreferenceDropdownMenuItem from './PreferenceDropdownMenuItem.svelte'
 

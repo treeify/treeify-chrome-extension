@@ -1,6 +1,7 @@
 <script lang="ts">
   import {CitationSettingDialogProps} from './CitationSettingDialogProps'
   import CommonDialog from './CommonDialog.svelte'
+  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
 
   export let props: CitationSettingDialogProps
 </script>
@@ -14,8 +15,10 @@
       <input type="url" class="citation-setting-dialog_cite-url" value={props.url} />
     </div>
     <div class="citation-setting-dialog_button-area">
-      <button on:click={props.onClickFinishButton}>完了</button>
-      <button on:click={props.onClickCancelButton}>キャンセル</button>
+      <FinishAndCancelButtons
+        onClickFinishButton={props.onClickFinishButton}
+        onClickCancelButton={props.onClickCancelButton}
+      />
     </div>
   </div>
 </CommonDialog>

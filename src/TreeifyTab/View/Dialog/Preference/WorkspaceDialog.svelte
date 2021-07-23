@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {Rerenderer} from '../../Rerenderer'
-  import CommonDialog from './CommonDialog.svelte'
+  import {doWithErrorCapture} from '../../../errorCapture'
+  import {External} from '../../../External/External'
+  import {Rerenderer} from '../../../Rerenderer'
+  import CommonDialog from '../CommonDialog.svelte'
   import {WorkspaceDialogProps} from './WorkspaceDialogProps'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
 
