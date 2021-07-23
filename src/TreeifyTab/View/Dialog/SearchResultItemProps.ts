@@ -14,7 +14,7 @@ import {tick} from 'svelte'
 export type SearchResultItemProps = {
   itemPath: ItemPath
   children: List<SearchResultItemProps>
-  onClick: () => void
+  onClick: (event: MouseEvent) => void
   onKeyDown: (event: KeyboardEvent) => void
 }
 
@@ -57,40 +57,12 @@ function createSearchResultItemProps(
   const key = JSON.stringify(itemPath.toArray())
   const childItemPaths = map.get(key) ?? List.of()
 
-  function onClick() {
+  function onClick(event: MouseEvent) {
     doWithErrorCapture(() => {
-      const containerPageId = ItemPath.getRootItemId(itemPath)
-
-      // ジャンプ先のページのtargetItemPathを更新する
-      Internal.instance.mutate(
-        itemPath,
-        PropertyPath.of('pages', containerPageId, 'targetItemPath')
-      )
-      Internal.instance.mutate(
-        itemPath,
-        PropertyPath.of('pages', containerPageId, 'anchorItemPath')
-      )
-
-      CurrentState.moses(itemPath)
-
-      // ページを切り替える
-      CurrentState.switchActivePage(containerPageId)
-
-      // 再描画完了後に対象項目に自動スクロールする
-      tick().then(() => {
-        const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
-        const focusableElement = document.getElementById(targetElementId)
-        assertNonNull(focusableElement)
-        focusableElement.scrollIntoView({
-          behavior: 'auto',
-          block: 'center',
-          inline: 'center',
-        })
-      })
-
-      // 検索ダイアログを閉じる
-      External.instance.dialogState = undefined
-      Rerenderer.instance.rerender()
+      const inputId = InputId.fromMouseEvent(event)
+      if (inputId === '0000MouseButton0') {
+        jumpTo(itemPath)
+      }
     })
   }
 
@@ -99,7 +71,7 @@ function createSearchResultItemProps(
       case '0000Enter':
       case '0000Space':
         event.preventDefault()
-        onClick()
+        jumpTo(itemPath)
         break
     }
   }
@@ -112,4 +84,33 @@ function createSearchResultItemProps(
     onClick,
     onKeyDown,
   }
+}
+
+function jumpTo(itemPath: ItemPath) {
+  const containerPageId = ItemPath.getRootItemId(itemPath)
+
+  // ジャンプ先のページのtargetItemPathを更新する
+  Internal.instance.mutate(itemPath, PropertyPath.of('pages', containerPageId, 'targetItemPath'))
+  Internal.instance.mutate(itemPath, PropertyPath.of('pages', containerPageId, 'anchorItemPath'))
+
+  CurrentState.moses(itemPath)
+
+  // ページを切り替える
+  CurrentState.switchActivePage(containerPageId)
+
+  // 再描画完了後に対象項目に自動スクロールする
+  tick().then(() => {
+    const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
+    const focusableElement = document.getElementById(targetElementId)
+    assertNonNull(focusableElement)
+    focusableElement.scrollIntoView({
+      behavior: 'auto',
+      block: 'center',
+      inline: 'center',
+    })
+  })
+
+  // 検索ダイアログを閉じる
+  External.instance.dialogState = undefined
+  Rerenderer.instance.rerender()
 }
