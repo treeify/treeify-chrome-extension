@@ -35,3 +35,5 @@ export enum ItemType {
 export type TabId = integer
 
 export type WorkspaceId = Timestamp
+
+export type CommandId = string

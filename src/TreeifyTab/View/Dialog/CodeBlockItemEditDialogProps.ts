@@ -2,11 +2,11 @@ import {assertNonNull} from 'src/Common/Debug/assert'
 import {CodeBlockItemEditDialog} from 'src/TreeifyTab/External/DialogState'
 import {External} from 'src/TreeifyTab/External/External'
 import {detectLanguage} from 'src/TreeifyTab/highlightJs'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type CodeBlockItemEditDialogProps = {
@@ -43,7 +43,7 @@ export function createCodeBlockItemEditDialogProps(
       // コードが空の場合
 
       // コードブロック項目を削除
-      NullaryCommand.removeEdge()
+      Command.removeEdge()
     }
 
     // ダイアログを閉じる
@@ -74,6 +74,6 @@ export function createCodeBlockItemEditDialogProps(
 
 function onCloseDialog() {
   if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
-    NullaryCommand.deleteItem()
+    Command.deleteItem()
   }
 }

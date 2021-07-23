@@ -4,7 +4,7 @@ import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
@@ -61,7 +61,7 @@ export function createMainAreaWebPageContentProps(
           case '0000MouseButton0':
             event.preventDefault()
             CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.browseTab()
+            Command.browseTab()
             Rerenderer.instance.rerender()
             break
         }
@@ -78,10 +78,10 @@ export function createMainAreaWebPageContentProps(
           case '0000MouseButton0':
             if (tab === undefined) {
               // ハードアンロード状態の場合
-              NullaryCommand.loadSubtree()
+              Command.loadSubtree()
             } else {
               // ソフトアンロード状態またはロード状態の場合
-              NullaryCommand.hardUnloadSubtree()
+              Command.hardUnloadSubtree()
             }
 
             Rerenderer.instance.rerender()
@@ -89,10 +89,10 @@ export function createMainAreaWebPageContentProps(
           case '1000MouseButton0':
             if (tab === undefined) {
               // ハードアンロード状態の場合
-              NullaryCommand.loadItem()
+              Command.loadItem()
             } else {
               // ソフトアンロード状態またはロード状態の場合
-              NullaryCommand.hardUnloadItem()
+              Command.hardUnloadItem()
             }
 
             Rerenderer.instance.rerender()
@@ -100,10 +100,10 @@ export function createMainAreaWebPageContentProps(
           case '0100MouseButton0':
             if (isUnloaded) {
               // アンロード状態の場合
-              NullaryCommand.loadSubtree()
+              Command.loadSubtree()
             } else {
               // ロード状態の場合
-              NullaryCommand.softUnloadSubtree()
+              Command.softUnloadSubtree()
             }
 
             Rerenderer.instance.rerender()
@@ -111,10 +111,10 @@ export function createMainAreaWebPageContentProps(
           case '1100MouseButton0':
             if (isUnloaded) {
               // アンロード状態の場合
-              NullaryCommand.loadItem()
+              Command.loadItem()
             } else {
               // ロード状態の場合
-              NullaryCommand.softUnloadItem()
+              Command.softUnloadItem()
             }
 
             Rerenderer.instance.rerender()

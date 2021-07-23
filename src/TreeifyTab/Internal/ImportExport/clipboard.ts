@@ -2,6 +2,7 @@ import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {
@@ -15,7 +16,6 @@ import {
 } from 'src/TreeifyTab/Internal/ImportExport/opml'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {Edge} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
@@ -71,7 +71,7 @@ export function onCut(event: ClipboardEvent) {
         toOpmlString(CurrentState.getSelectedItemPaths())
       )
 
-      NullaryCommand.deleteItem()
+      Command.deleteItem()
       Rerenderer.instance.rerender()
     }
   })

@@ -1,7 +1,7 @@
 import {is, List} from 'immutable'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import {CommandId, ItemId} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
@@ -9,7 +9,6 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {
@@ -101,14 +100,14 @@ export function createMainAreaNodeProps(
             event.preventDefault()
             Internal.instance.saveCurrentStateToUndoStack()
             CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.removeEdge()
+            Command.removeEdge()
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton1':
             event.preventDefault()
             Internal.instance.saveCurrentStateToUndoStack()
             CurrentState.setTargetItemPath(itemPath)
-            NullaryCommand.deleteItemItself()
+            Command.deleteItemItself()
             Rerenderer.instance.rerender()
             break
           case '0000MouseButton2':
@@ -138,7 +137,7 @@ export function createMainAreaNodeProps(
 
         if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
 
-        NullaryCommand.showContextMenuDialog({x: event.clientX, y: event.clientY})
+        Command.showContextMenuDialog({x: event.clientX, y: event.clientY})
         Rerenderer.instance.rerender()
       }
     },
@@ -149,11 +148,13 @@ export function createMainAreaNodeProps(
         CurrentState.setTargetItemPath(itemPath)
 
         const inputId = InputId.fromMouseEvent(event)
-        const commands: List<Command> | undefined = state.mainAreaDeleteButtonMouseBinding[inputId]
-        if (commands !== undefined) {
+        const commandIds: List<CommandId> | undefined =
+          state.mainAreaDeleteButtonMouseBinding[inputId]
+        if (commandIds !== undefined) {
           event.preventDefault()
-          for (const command of commands) {
-            Command.execute(command)
+          for (const commandId of commandIds) {
+            // @ts-ignore
+            Command[commandId]?.()
           }
         }
         Rerenderer.instance.rerender()
@@ -162,7 +163,7 @@ export function createMainAreaNodeProps(
     onClickHiddenTabsCount: (event: MouseEvent) => {
       Internal.instance.saveCurrentStateToUndoStack()
       CurrentState.setTargetItemPath(itemPath)
-      NullaryCommand.hardUnloadSubtree()
+      Command.hardUnloadSubtree()
       Rerenderer.instance.rerender()
     },
   }

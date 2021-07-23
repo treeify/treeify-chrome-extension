@@ -9,10 +9,10 @@ import {integer} from 'src/Common/integer'
 import {ItemId, TabId} from 'src/TreeifyTab/basicType'
 import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
+import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {NullaryCommand} from 'src/TreeifyTab/Internal/NullaryCommand'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
@@ -156,7 +156,7 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     } else if (CurrentState.isItem(itemId)) {
       // 対応するウェブページ項目を削除する
       if (itemId === ItemPath.getItemId(CurrentState.getTargetItemPath())) {
-        NullaryCommand.deleteItemItself()
+        Command.deleteItemItself()
       } else {
         CurrentState.deleteItemItself(itemId)
       }
