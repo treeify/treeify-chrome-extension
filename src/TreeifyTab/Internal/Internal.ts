@@ -190,7 +190,7 @@ export class Internal {
         '1100KeyV': List.of('pasteAsPlainText'),
         '1100KeyF': List.of('showSearchDialog'),
         '1100Period': List.of('toggleCitation'),
-        '0000F2': List.of('edit'),
+        '0000F2': List.of('showEditDialog'),
       },
       mainAreaDeleteButtonMouseBindings: {
         '0000MouseButton0': List.of('removeEdge'),

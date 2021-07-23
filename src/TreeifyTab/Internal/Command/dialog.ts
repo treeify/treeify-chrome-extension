@@ -7,7 +7,7 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
 /** 項目の種類に応じた編集系ダイアログなどを出す */
-export function edit() {
+export function showEditDialog() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   switch (Internal.instance.state.items[targetItemId].itemType) {
