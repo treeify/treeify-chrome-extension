@@ -10,6 +10,7 @@
   function onChange(event: Event) {
     if (event.target instanceof HTMLSelectElement) {
       // コマンドリストの何番目が変更されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
       const index = parseInt(event.target.dataset.index)
 
       const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
