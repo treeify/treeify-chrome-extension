@@ -2,7 +2,7 @@ import {List} from 'immutable'
 import {assert, assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {dump} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
+import {CommandId, ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {matchTabsAndWebPageItems} from 'src/TreeifyTab/External/chromeEventListeners'
 import {
@@ -11,7 +11,6 @@ import {
   setDomSelection,
 } from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -100,15 +99,16 @@ function onKeyDown(event: KeyboardEvent) {
         return
     }
 
-    const commands: List<Command> | undefined =
+    const commandIds: List<CommandId> | undefined =
       Internal.instance.state.mainAreaKeyboardBinding[inputId]
-    if (commands !== undefined) {
+    if (commandIds !== undefined) {
       event.preventDefault()
 
       Internal.instance.saveCurrentStateToUndoStack()
 
-      for (const command of commands) {
-        Command.execute(command)
+      for (const commandId of commandIds) {
+        // @ts-ignore
+        NullaryCommand[commandId]?.()
       }
       Rerenderer.instance.rerender()
     }

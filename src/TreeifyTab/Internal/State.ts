@@ -1,9 +1,8 @@
 import {is, List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
+import {CommandId, ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
 import {Iisn, InstanceId} from 'src/TreeifyTab/Instance'
-import {Command} from 'src/TreeifyTab/Internal/Command'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -28,9 +27,9 @@ export type State = {
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** メインエリア領域におけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyboardBinding: {[K in InputId]: List<Command>}
+  mainAreaKeyboardBinding: {[K in InputId]: List<CommandId>}
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
-  mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<Command>}
+  mainAreaDeleteButtonMouseBinding: {[K in InputId]: List<CommandId>}
   customCss: string
 }
 

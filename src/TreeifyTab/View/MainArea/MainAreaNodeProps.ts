@@ -1,10 +1,9 @@
 import {is, List} from 'immutable'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import {CommandId, ItemId} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -149,11 +148,13 @@ export function createMainAreaNodeProps(
         CurrentState.setTargetItemPath(itemPath)
 
         const inputId = InputId.fromMouseEvent(event)
-        const commands: List<Command> | undefined = state.mainAreaDeleteButtonMouseBinding[inputId]
-        if (commands !== undefined) {
+        const commandIds: List<CommandId> | undefined =
+          state.mainAreaDeleteButtonMouseBinding[inputId]
+        if (commandIds !== undefined) {
           event.preventDefault()
-          for (const command of commands) {
-            Command.execute(command)
+          for (const commandId of commandIds) {
+            // @ts-ignore
+            NullaryCommand[commandId]?.()
           }
         }
         Rerenderer.instance.rerender()
