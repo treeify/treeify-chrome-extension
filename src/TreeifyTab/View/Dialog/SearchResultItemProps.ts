@@ -123,6 +123,7 @@ function jumpTo(itemPath: ItemPath) {
 }
 
 function transclude(itemPath: ItemPath) {
+  // TODO: トランスクルード時の親子関係、エッジ不整合対策
   const newItemPath = CurrentState.insertBelowItem(
     CurrentState.getTargetItemPath(),
     ItemPath.getItemId(itemPath),
