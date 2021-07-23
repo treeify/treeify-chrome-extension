@@ -145,9 +145,13 @@ export function dragStateResetter(element: HTMLElement) {
       }
     }
 
-    if ((event.buttons & 1) === 0 && currentDragData !== undefined) {
-      currentDragData = undefined
-      Rerenderer.instance.rerender()
+    if ((event.buttons & 1) === 0) {
+      itemMouseDown = undefined
+
+      if (currentDragData !== undefined) {
+        currentDragData = undefined
+        Rerenderer.instance.rerender()
+      }
     }
   }
 
