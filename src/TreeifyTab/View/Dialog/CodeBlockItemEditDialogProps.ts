@@ -74,6 +74,6 @@ export function createCodeBlockItemEditDialogProps(
 
 function onCloseDialog() {
   if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
-    Command.deleteItem()
+    Command.removeEdge()
   }
 }

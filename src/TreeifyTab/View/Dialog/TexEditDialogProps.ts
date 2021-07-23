@@ -69,6 +69,6 @@ export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogPr
 
 function onCloseDialog() {
   if (CurrentState.isEmptyTexItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
-    Command.deleteItem()
+    Command.removeEdge()
   }
 }
