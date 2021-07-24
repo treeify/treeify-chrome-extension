@@ -128,6 +128,10 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
   }
+  
+  .main-area-node_body-area[data-depth="0"] {
+    font-size: 120%;
+  }
 
   .main-area-node_spool-area {
     user-select: none;
