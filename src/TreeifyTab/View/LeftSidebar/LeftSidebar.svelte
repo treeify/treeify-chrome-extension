@@ -15,7 +15,7 @@
     --left-sidebar-background-color: #f9f9f9;
 
     /* 左サイドバーの幅 */
-    --left-sidebar-width: 200px;
+    --left-sidebar-width: 260px;
   }
 
   .left-sidebar {
