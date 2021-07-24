@@ -31,6 +31,7 @@
   $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
   $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
+  $: depth = props.itemPath.size - 1
 </script>
 
 <div
@@ -52,7 +53,7 @@
   {/if}
   <div class="main-area-node_body-and-children-area">
     <!-- ボディ領域 -->
-    <div class={props.cssClasses.unshift('main-area-node_body-area').join(' ')}>
+    <div class={props.cssClasses.unshift('main-area-node_body-area').join(' ')} data-depth={depth}>
       <!-- 足跡表示用のレイヤー -->
       <div class="main-area-node_footprint-layer" style={footprintLayerStyle}>
         <!-- コンテンツ領域 -->
@@ -126,6 +127,10 @@
     /* コンテンツ領域とボタン類を横に並べる */
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
+  }
+  
+  .main-area-node_body-area[data-depth="0"] {
+    font-size: 120%;
   }
 
   .main-area-node_spool-area {
