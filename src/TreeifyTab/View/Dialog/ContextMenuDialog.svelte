@@ -62,8 +62,8 @@
   }
 
   const style = `
-    left: ${props.mousePosition.x}px;
-    top: ${props.mousePosition.y}px;
+    left: calc(${props.mousePosition.x}px - 0.5em);
+    top: calc(${props.mousePosition.y}px - 0.5em);
   `
 </script>
 
