@@ -1,8 +1,8 @@
 <script lang="ts">
   import {assertNonUndefined} from '../../../../Common/Debug/assert'
-  import {Command} from '../../../Internal/Command'
   import {Internal} from '../../../Internal/Internal'
   import {PropertyPath} from '../../../Internal/PropertyPath'
+  import {commandNames} from '../../commandNames'
   import {KeyBindingProps} from './KeyBindingProps'
 
   export let props: KeyBindingProps
@@ -25,8 +25,14 @@
   {#each props.commandIds.toArray() as selectedCommandId, index}
     <div>
       <select data-index={index} on:change={onChange}>
-        {#each Object.keys(Command) as commandId}
-          <option value={commandId} selected={selectedCommandId === commandId}>{commandId}</option>
+        {#each props.commandGroups.toArray() as commandGroup}
+          <optgroup label={commandGroup.name}>
+            {#each commandGroup.commandIds.toArray() as commandId}
+              <option value={commandId} selected={selectedCommandId === commandId}
+                >{commandNames[commandId]}</option
+              >
+            {/each}
+          </optgroup>
         {/each}
       </select>
     </div>
