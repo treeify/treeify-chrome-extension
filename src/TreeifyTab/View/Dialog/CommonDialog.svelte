@@ -1,5 +1,6 @@
 <script lang="ts">
   import {createFocusTrap} from 'focus-trap'
+  import {fade} from 'svelte/transition'
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {InputId} from '../../Internal/InputId'
@@ -59,7 +60,7 @@
   }
 </script>
 
-<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap>
+<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap transition:fade={{duration: 50}}>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>
