@@ -46,6 +46,8 @@
 
   .search-result-item_indent-area {
     flex: 0 0 1.1em;
+    /* lch(88.0%, 0.0, 0.0)相当 */
+    border-left: 1px solid #dddddd;
   }
 
   .search-result-item_children-area {
