@@ -1,11 +1,13 @@
 import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {External} from 'src/TreeifyTab/External/External'
+import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
 import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
 import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
 import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
 import ContextMenuDialog from './ContextMenuDialog.svelte'
 import {createContextMenuDialogProps} from './ContextMenuDialogProps'
+import ExportDialog from './ExportDialog.svelte'
 import OtherParentsDialog from './OtherParentsDialog.svelte'
 import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
 import CustomCssDialog from './Preference/CustomCssDialog.svelte'
@@ -60,6 +62,11 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
       return {
         component: CustomCssDialog,
         props: createCustomCssDialogProps(),
+      }
+    case 'ExportDialog':
+      return {
+        component: ExportDialog,
+        props: createExportDialogProps(),
       }
     case 'KeyBindingDialog':
       return {

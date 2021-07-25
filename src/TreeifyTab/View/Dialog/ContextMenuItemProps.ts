@@ -1,12 +1,9 @@
 import {List} from 'immutable'
-import {assert} from 'src/Common/Debug/assert'
+import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
-import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
 
 export type ContextMenuItemProps = {
   title: string
@@ -48,31 +45,9 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   })
 
   result.push({
-    title: 'Markdown形式でコピー',
+    title: 'エクスポート…',
     onClick: () => {
-      // TODO: 複数選択時はそれらをまとめてMarkdown化する
-      const targetItemPath1 = CurrentState.getTargetItemPath()
-      const blob = new Blob([toMarkdownText(targetItemPath1)], {type: 'text/plain'})
-      navigator.clipboard.write([
-        new ClipboardItem({
-          [blob.type]: blob,
-        }),
-      ])
-    },
-  })
-
-  result.push({
-    title: 'OPML形式でエクスポート',
-    onClick: () => {
-      const fileName = 'treeify.opml'
-
-      const content = toOpmlString(CurrentState.getSelectedItemPaths())
-      const aElement = document.createElement('a')
-      aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
-      aElement.download = fileName
-      aElement.click()
-
-      assert(State.isValid(Internal.instance.state))
+      External.instance.dialogState = {type: 'ExportDialog'}
     },
   })
 
