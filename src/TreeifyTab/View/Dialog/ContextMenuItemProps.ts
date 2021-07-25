@@ -1,5 +1,6 @@
 import {List} from 'immutable'
 import {assert} from 'src/Common/Debug/assert'
+import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
@@ -45,6 +46,13 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   result.push({
     title: 'トランスクルード用コピー',
     onClick: () => Command.copyForTransclusion(),
+  })
+
+  result.push({
+    title: 'エクスポート…',
+    onClick: () => {
+      External.instance.dialogState = {type: 'ExportDialog'}
+    },
   })
 
   result.push({
