@@ -26,7 +26,7 @@ export function createWorkspaceDialogProps(dialog: WorkspaceDialog): WorkspaceDi
   return {
     workspaces: List(workspaces),
     onClickAddButton: () => {
-      CurrentState.createWorkspace()
+      CurrentState.setCurrentWorkspaceId(CurrentState.createWorkspace())
       Rerenderer.instance.rerender()
     },
   }

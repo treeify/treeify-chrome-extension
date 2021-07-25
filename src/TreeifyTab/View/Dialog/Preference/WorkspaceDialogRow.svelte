@@ -38,13 +38,15 @@
     on:input={onClickRadioButton}
   />
   <input type="text" class="workspace-dialog_name" value={workspace.name} on:input={onInput} />
-  <div class="workspace-dialog_delete-button" on:click={onClickDeleteButton} />
+  <div class="workspace-dialog_delete-button icon-button" on:click={onClickDeleteButton} />
 </div>
 
 <style global>
   :root {
     /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-    --workspace-dialog-delete-button-size: 19px;
+    --workspace-dialog-delete-button-size: 1.5em;
+
+    --workspace-dialog-delete-icon-size: 1.2em;
   }
 
   .workspace-dialog_existing-workspace {
@@ -52,8 +54,6 @@
     align-items: center;
 
     margin-top: 3px;
-
-    font-size: 100%;
   }
 
   .workspace-dialog_existing-workspace:first-child {
@@ -67,12 +67,21 @@
   .workspace-dialog_delete-button {
     width: var(--workspace-dialog-delete-button-size);
     height: var(--workspace-dialog-delete-button-size);
+  }
+  .workspace-dialog_delete-button::before {
+    content: '';
+    width: var(--workspace-dialog-delete-icon-size);
+    height: var(--workspace-dialog-delete-icon-size);
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     /* lch(40.0%, 0.0, 0.0)相当 */
     background: #5e5e5e;
     -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
-
-    cursor: pointer;
   }
 </style>
