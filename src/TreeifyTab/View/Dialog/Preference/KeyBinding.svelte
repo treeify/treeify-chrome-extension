@@ -1,52 +1,15 @@
 <script lang="ts">
-  import {assertNonUndefined} from '../../../../Common/Debug/assert'
-  import {Internal} from '../../../Internal/Internal'
-  import {PropertyPath} from '../../../Internal/PropertyPath'
-  import {Rerenderer} from '../../../Rerenderer'
   import {commandNames} from '../../commandNames'
   import {KeyBindingProps} from './KeyBindingProps'
 
   export let props: KeyBindingProps
-
-  function onChange(event: Event) {
-    if (event.target instanceof HTMLSelectElement) {
-      // コマンドリストの何番目が変更されたかを取得する
-      assertNonUndefined(event.target.dataset.index)
-      const index = parseInt(event.target.dataset.index)
-
-      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
-      const newCommandIds = oldCommandIds.set(index, event.target.value)
-      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', props.inputId))
-    }
-  }
-
-  function onClickDeleteButton(event: Event) {
-    if (event.target instanceof HTMLElement) {
-      if (props.commandIds.size === 1) {
-        // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
-        Internal.instance.delete(PropertyPath.of('mainAreaKeyBindings', props.inputId))
-      } else {
-        // コマンドリストの何番目のボタンが押下されたかを取得する
-        assertNonUndefined(event.target.dataset.index)
-        const index = parseInt(event.target.dataset.index)
-
-        const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
-        const newCommandIds = oldCommandIds.remove(index)
-        Internal.instance.mutate(
-          newCommandIds,
-          PropertyPath.of('mainAreaKeyBindings', props.inputId)
-        )
-      }
-      Rerenderer.instance.rerender()
-    }
-  }
 </script>
 
 <div>{props.inputId}</div>
 <div>
   {#each props.commandIds.toArray() as selectedCommandId, index}
     <div class="key-binding_command-row">
-      <select data-index={index} on:change={onChange}>
+      <select data-index={index} on:change={props.onChange}>
         {#each props.commandGroups.toArray() as commandGroup}
           <optgroup label={commandGroup.name}>
             {#each commandGroup.commandIds.toArray() as commandId}
@@ -57,15 +20,25 @@
           </optgroup>
         {/each}
       </select>
-      <div class="delete-button icon-button" data-index={index} on:click={onClickDeleteButton} />
+      <div
+        class="delete-button icon-button"
+        data-index={index}
+        on:click={props.onClickDeleteButton}
+      />
+      <div
+        class="add-command-button icon-button"
+        data-index={index}
+        on:click={props.onClickAddCommandButton}
+      />
     </div>
   {/each}
 </div>
 
 <style global>
   :root {
-    --key-binding-dialog-delete-button-size: 1.5em;
-    --key-binding-dialog-delete-icon-size: 1.1em;
+    --key-binding-dialog-command-button-size: 1.5em;
+    --key-binding-dialog-delete-icon-size: 1.2em;
+    --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
   }
 
   .key-binding_command-row {
@@ -74,8 +47,8 @@
   }
 
   .delete-button {
-    width: var(--key-binding-dialog-delete-button-size);
-    height: var(--key-binding-dialog-delete-button-size);
+    width: var(--key-binding-dialog-command-button-size);
+    height: var(--key-binding-dialog-command-button-size);
 
     /* マウスホバー時にのみ表示 */
     visibility: hidden;
@@ -98,6 +71,34 @@
     -webkit-mask-size: contain;
   }
   .key-binding_command-row:hover .delete-button {
+    visibility: visible;
+  }
+
+  .add-command-button {
+    width: var(--key-binding-dialog-command-button-size);
+    height: var(--key-binding-dialog-command-button-size);
+
+    /* マウスホバー時にのみ表示 */
+    visibility: hidden;
+  }
+  .add-command-button::before {
+    content: '';
+
+    width: var(--key-binding-dialog-add-icon-size);
+    height: var(--key-binding-dialog-add-icon-size);
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* lch(40.0%, 0.0, 0.0)相当 */
+    background: #5e5e5e;
+    -webkit-mask: url('./plus-icon2.svg') no-repeat center;
+    -webkit-mask-size: contain;
+  }
+  .key-binding_command-row:hover .add-command-button {
     visibility: visible;
   }
 </style>

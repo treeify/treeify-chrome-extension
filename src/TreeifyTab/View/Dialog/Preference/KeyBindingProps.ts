@@ -1,42 +1,74 @@
 import {List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {CommandId} from 'src/TreeifyTab/basicType'
-import {External} from 'src/TreeifyTab/External/External'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type KeyBindingProps = {
   inputId: string
   commandIds: List<CommandId>
   commandGroups: List<CommandGroup>
-  onClickFinishButton: () => void
-  onClickCancelButton: () => void
-  onKeyDown: (event: KeyboardEvent) => void
+  onChange: (event: Event) => void
+  onClickDeleteButton: (event: Event) => void
+  onClickAddCommandButton: (event: Event) => void
 }
 
 export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyBindingProps {
-  const onClickFinishButton = () => {
-    // ダイアログを閉じる
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
+  const inputId = binding[0]
+  const commandIds = binding[1]
+
+  function onChange(event: Event) {
+    if (event.target instanceof HTMLSelectElement) {
+      // コマンドリストの何番目が変更されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
+
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+      const newCommandIds = oldCommandIds.set(index, event.target.value)
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+    }
+  }
+
+  function onClickDeleteButton(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      if (commandIds.size === 1) {
+        // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
+        Internal.instance.delete(PropertyPath.of('mainAreaKeyBindings', inputId))
+      } else {
+        // コマンドリストの何番目のボタンが押下されたかを取得する
+        assertNonUndefined(event.target.dataset.index)
+        const index = parseInt(event.target.dataset.index)
+
+        const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+        const newCommandIds = oldCommandIds.remove(index)
+        Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+      }
+      Rerenderer.instance.rerender()
+    }
+  }
+
+  function onClickAddCommandButton(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      // コマンドリストの何番目のボタンが押下されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
+
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+      const newCommandIds = oldCommandIds.insert(index + 1, 'doNothing')
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+      Rerenderer.instance.rerender()
+    }
   }
 
   return {
-    inputId: binding[0],
-    commandIds: binding[1],
+    inputId,
+    commandIds,
     commandGroups,
-    onClickFinishButton,
-    onClickCancelButton: () => {
-      // ダイアログを閉じる
-      External.instance.dialogState = undefined
-      Rerenderer.instance.rerender()
-    },
-    onKeyDown: (event) => {
-      switch (InputId.fromKeyboardEvent(event)) {
-        case '1000Enter':
-          onClickFinishButton()
-          break
-      }
-    },
+    onChange,
+    onClickDeleteButton,
+    onClickAddCommandButton,
   }
 }
 
@@ -109,5 +141,5 @@ const commandGroups: List<CommandGroup> = List.of(
       'showOtherParentsDialog'
     ),
   },
-  {name: 'その他', commandIds: List.of('saveToDataFolder', 'toggleExcluded')}
+  {name: 'その他', commandIds: List.of('doNothing', 'saveToDataFolder', 'toggleExcluded')}
 )
