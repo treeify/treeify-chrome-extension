@@ -60,7 +60,13 @@
   }
 </script>
 
-<div class="common-dialog" on:click={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap transition:fade={{duration: 50}}>
+<div
+  class="common-dialog"
+  on:mousedown={onClickBackdrop}
+  on:keydown={onKeyDown}
+  use:setupFocusTrap
+  transition:fade={{duration: 50}}
+>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>

@@ -55,7 +55,7 @@
 
 <div
   class="preference-dropdown-menu-dialog"
-  on:click={onClickBackdrop}
+  on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
   use:setupFocusTrap
 >

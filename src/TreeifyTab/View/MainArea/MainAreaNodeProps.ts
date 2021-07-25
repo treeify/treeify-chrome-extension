@@ -137,6 +137,7 @@ export function createMainAreaNodeProps(
 
         if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
 
+        CurrentState.setTargetItemPath(itemPath)
         Command.showContextMenuDialog({x: event.clientX, y: event.clientY})
         Rerenderer.instance.rerender()
       }

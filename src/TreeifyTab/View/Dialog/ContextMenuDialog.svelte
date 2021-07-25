@@ -41,17 +41,6 @@
     })
   }
 
-  function onContextMenu(event: Event) {
-    // コンテキストメニュー表示中に別の場所にコンテキストメニューを出そうとした場合、
-    // ブラウザ標準のコンテキストメニューが出ると混乱するので出さないようにする。
-    event.preventDefault()
-
-    // 本来なら現在のマウス位置にコンテキストメニューを出し直したいところだが、
-    // 仕様と実装が難しいのでコンテキストメニューを閉じるに留める。
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
-  }
-
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
@@ -69,8 +58,7 @@
 
 <div
   class="context-menu-dialog"
-  on:click={onClickBackdrop}
-  on:contextmenu={onContextMenu}
+  on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
   use:setupFocusTrap
 >

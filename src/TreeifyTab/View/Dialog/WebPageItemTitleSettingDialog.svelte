@@ -47,7 +47,7 @@
   `
 </script>
 
-<div class="web-page-item-title-setting-dialog" on:click={onClickBackdrop} use:setupFocusTrap>
+<div class="web-page-item-title-setting-dialog" on:mousedown={onClickBackdrop} use:setupFocusTrap>
   <div class="web-page-item-title-setting-dialog_frame" {style}>
     <input
       type="text"
