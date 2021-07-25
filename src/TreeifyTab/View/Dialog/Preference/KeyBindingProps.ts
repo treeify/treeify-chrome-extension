@@ -12,6 +12,7 @@ export type KeyBindingProps = {
   commandGroups: List<CommandGroup>
   onChange: (event: Event) => void
   onClickDeleteButton: (event: Event) => void
+  onClickAddCommandButton: (event: Event) => void
 }
 
 export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyBindingProps {
@@ -48,12 +49,26 @@ export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyB
     }
   }
 
+  function onClickAddCommandButton(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      // コマンドリストの何番目のボタンが押下されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
+
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+      const newCommandIds = oldCommandIds.insert(index + 1, 'doNothing')
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+      Rerenderer.instance.rerender()
+    }
+  }
+
   return {
     inputId,
     commandIds,
     commandGroups,
     onChange,
     onClickDeleteButton,
+    onClickAddCommandButton,
   }
 }
 
