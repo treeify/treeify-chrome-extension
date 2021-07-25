@@ -22,13 +22,21 @@
 
   function onClickDeleteButton(event: Event) {
     if (event.target instanceof HTMLElement) {
-      // コマンドリストの何番目のボタンが押下されたかを取得する
-      assertNonUndefined(event.target.dataset.index)
-      const index = parseInt(event.target.dataset.index)
+      if (props.commandIds.size === 1) {
+        // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
+        Internal.instance.delete(PropertyPath.of('mainAreaKeyBindings', props.inputId))
+      } else {
+        // コマンドリストの何番目のボタンが押下されたかを取得する
+        assertNonUndefined(event.target.dataset.index)
+        const index = parseInt(event.target.dataset.index)
 
-      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
-      const newCommandIds = oldCommandIds.remove(index)
-      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', props.inputId))
+        const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
+        const newCommandIds = oldCommandIds.remove(index)
+        Internal.instance.mutate(
+          newCommandIds,
+          PropertyPath.of('mainAreaKeyBindings', props.inputId)
+        )
+      }
       Rerenderer.instance.rerender()
     }
   }
