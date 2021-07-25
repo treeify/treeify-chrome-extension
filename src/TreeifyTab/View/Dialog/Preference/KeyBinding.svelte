@@ -23,11 +23,13 @@
       <div
         class="delete-button icon-button"
         data-index={index}
+        tabindex="-1"
         on:click={props.onClickDeleteButton}
       />
       <div
         class="add-command-button icon-button"
         data-index={index}
+        tabindex="-1"
         on:click={props.onClickAddCommandButton}
       />
     </div>
