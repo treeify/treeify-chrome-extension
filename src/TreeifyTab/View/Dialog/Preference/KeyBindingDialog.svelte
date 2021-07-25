@@ -22,6 +22,7 @@
     if (!isAddBindingMode) return
 
     event.preventDefault()
+    event.stopPropagation()
     if (List.of('Control', 'Shift', 'Alt', 'Meta').contains(event.key)) return
 
     const inputId = InputId.fromKeyboardEvent(event)
