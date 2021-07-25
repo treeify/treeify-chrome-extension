@@ -120,3 +120,5 @@ export function toggleExcluded() {
   const intersection = selectedItemIds.intersect(excludedItemIds)
   CurrentState.setExcludedItemIds(union.subtract(intersection).toList())
 }
+
+export function doNothing() {}

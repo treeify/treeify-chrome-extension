@@ -126,5 +126,5 @@ const commandGroups: List<CommandGroup> = List.of(
       'showOtherParentsDialog'
     ),
   },
-  {name: 'その他', commandIds: List.of('saveToDataFolder', 'toggleExcluded')}
+  {name: 'その他', commandIds: List.of('doNothing', 'saveToDataFolder', 'toggleExcluded')}
 )

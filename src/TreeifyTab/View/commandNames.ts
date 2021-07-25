@@ -45,6 +45,7 @@ export const commandNames: {[T in string]: string} = {
   showSearchDialog: '検索ダイアログを表示',
   showCitationSettingDialog: '出典設定ダイアログを表示',
   showContextMenuDialog: 'コンテキストメニューを表示',
+  doNothing: '何もしない',
   toggleExcluded: '除外トグル',
   saveToDataFolder: 'データフォルダ同期',
 }
