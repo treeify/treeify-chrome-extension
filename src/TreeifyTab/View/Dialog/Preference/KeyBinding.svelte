@@ -2,6 +2,7 @@
   import {assertNonUndefined} from '../../../../Common/Debug/assert'
   import {Internal} from '../../../Internal/Internal'
   import {PropertyPath} from '../../../Internal/PropertyPath'
+  import {Rerenderer} from '../../../Rerenderer'
   import {commandNames} from '../../commandNames'
   import {KeyBindingProps} from './KeyBindingProps'
 
@@ -16,6 +17,19 @@
       const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
       const newCommandIds = oldCommandIds.set(index, event.target.value)
       Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', props.inputId))
+    }
+  }
+
+  function onClickDeleteButton(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      // コマンドリストの何番目のボタンが押下されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
+
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[props.inputId]
+      const newCommandIds = oldCommandIds.remove(index)
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', props.inputId))
+      Rerenderer.instance.rerender()
     }
   }
 </script>
@@ -35,7 +49,7 @@
           </optgroup>
         {/each}
       </select>
-      <div class="delete-button icon-button" />
+      <div class="delete-button icon-button" data-index={index} on:click={onClickDeleteButton} />
     </div>
   {/each}
 </div>
