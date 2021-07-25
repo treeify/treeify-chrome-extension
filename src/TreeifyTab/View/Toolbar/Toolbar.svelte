@@ -1,4 +1,9 @@
 <script lang="ts">
+  import {assert} from '../../../Common/Debug/assert'
+  import {CurrentState} from '../../Internal/CurrentState'
+  import {toOpmlString} from '../../Internal/ImportExport/opml'
+  import {Internal} from '../../Internal/Internal'
+  import {State} from '../../Internal/State'
   import CodeBlockItemCreationButton from './CodeBlockItemCreationButton.svelte'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
   import ImportButton from './ImportButton.svelte'
@@ -7,9 +12,22 @@
   import {ToolbarProps} from './ToolbarProps'
 
   export let props: ToolbarProps
+
+  function onClick() {
+    const fileName = 'treeify.opml'
+
+    const content = toOpmlString(CurrentState.getSelectedItemPaths())
+    const aElement = document.createElement('a')
+    aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
+    aElement.download = fileName
+    aElement.click()
+
+    assert(State.isValid(Internal.instance.state))
+  }
 </script>
 
 <div class="toolbar">
+  <button on:click={onClick}>OPMLエクスポート</button>
   <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
   <CodeBlockItemCreationButton />
   <TexItemCreationButton />
