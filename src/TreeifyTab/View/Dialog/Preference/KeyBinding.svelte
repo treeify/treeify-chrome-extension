@@ -1,11 +1,14 @@
 <script lang="ts">
+  import {InputId} from '../../../Internal/InputId'
   import {commandNames} from '../../commandNames'
   import {KeyBindingProps} from './KeyBindingProps'
 
   export let props: KeyBindingProps
 </script>
 
-<div>{props.inputId}</div>
+<div>
+  {InputId.toReadableText(props.inputId)}
+</div>
 <div>
   {#each props.commandIds.toArray() as selectedCommandId, index}
     <div class="key-binding_command-row">

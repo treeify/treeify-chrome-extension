@@ -61,4 +61,38 @@ export namespace InputId {
       return event.ctrlKey
     }
   }
+
+  export function toReadableText(inputId: InputId): string {
+    const modifiers = []
+    if (inputId[0] === '1') modifiers.push(getFirstModifierName() + '+')
+    if (inputId[1] === '1') modifiers.push('Shift+')
+    if (inputId[2] === '1') modifiers.push(getThirdModifierName() + '+')
+    if (inputId[3] === '1') modifiers.push(getFourthModifierName() + '+')
+
+    return modifiers.join('') + inputId.substring(4)
+  }
+
+  function getFirstModifierName(): string {
+    if (new UAParser().getOS().name !== 'Mac OS') {
+      return 'Ctrl'
+    } else {
+      return 'Command'
+    }
+  }
+
+  function getThirdModifierName(): string {
+    if (new UAParser().getOS().name !== 'Mac OS') {
+      return 'Alt'
+    } else {
+      return 'Option'
+    }
+  }
+
+  function getFourthModifierName(): string {
+    if (new UAParser().getOS().name !== 'Mac OS') {
+      return 'Windows'
+    } else {
+      return 'Control'
+    }
+  }
 }
