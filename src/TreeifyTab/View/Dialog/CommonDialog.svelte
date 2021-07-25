@@ -71,7 +71,7 @@
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>
       {#if showCloseButton}
-        <div class="common-dialog_close-button" on:mousedown={closeDialog} />
+        <div class="common-dialog_close-button icon-button" on:mousedown={closeDialog} />
       {/if}
     </div>
     <div class="common-dialog_content-area">
@@ -89,7 +89,8 @@
     --common-dialog-title-bar-height: 2.2em;
 
     /* 閉じるボタン（正方形）の一辺の長さ */
-    --common-dialog-close-button-size: 1em;
+    --common-dialog-close-button-size: 1.4em;
+    --common-dialog-close-icon-size: 0.8em;
   }
 
   .common-dialog {
@@ -141,8 +142,21 @@
     height: var(--common-dialog-close-button-size);
 
     margin-left: auto;
+  }
+  .icon-button:hover {
+    /* lch(40.0%, 0.0, 0.0)相当 */
+    background: #5e5e5e;
+  }
+  .common-dialog_close-button::before {
+    content: '';
+    width: var(--common-dialog-close-icon-size);
+    height: var(--common-dialog-close-icon-size);
 
-    cursor: pointer;
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     /* lch(80.0%, 0.0, 0.0)相当 */
     background: #c6c6c6;
