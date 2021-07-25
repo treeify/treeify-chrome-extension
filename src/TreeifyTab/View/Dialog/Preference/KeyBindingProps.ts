@@ -1,18 +1,59 @@
 import {List} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {CommandId} from 'src/TreeifyTab/basicType'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
+import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type KeyBindingProps = {
   inputId: string
   commandIds: List<CommandId>
   commandGroups: List<CommandGroup>
+  onChange: (event: Event) => void
+  onClickDeleteButton: (event: Event) => void
 }
 
 export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyBindingProps {
+  const inputId = binding[0]
+  const commandIds = binding[1]
+
+  function onChange(event: Event) {
+    if (event.target instanceof HTMLSelectElement) {
+      // コマンドリストの何番目が変更されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
+
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+      const newCommandIds = oldCommandIds.set(index, event.target.value)
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+    }
+  }
+
+  function onClickDeleteButton(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      if (commandIds.size === 1) {
+        // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
+        Internal.instance.delete(PropertyPath.of('mainAreaKeyBindings', inputId))
+      } else {
+        // コマンドリストの何番目のボタンが押下されたかを取得する
+        assertNonUndefined(event.target.dataset.index)
+        const index = parseInt(event.target.dataset.index)
+
+        const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+        const newCommandIds = oldCommandIds.remove(index)
+        Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+      }
+      Rerenderer.instance.rerender()
+    }
+  }
+
   return {
-    inputId: binding[0],
-    commandIds: binding[1],
+    inputId,
+    commandIds,
     commandGroups,
+    onChange,
+    onClickDeleteButton,
   }
 }
 
