@@ -56,7 +56,7 @@ export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
 }
 
 /** 空のワークスペースを作成する */
-export function createWorkspace() {
+export function createWorkspace(): WorkspaceId {
   const workspaceId = Timestamp.now()
   const workspace: Workspace = {
     activePageId: CurrentState.getActivePageId(),
@@ -64,6 +64,7 @@ export function createWorkspace() {
     name: `ワークスペース${CurrentState.getWorkspaceIds().count() + 1}`,
   }
   Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
+  return workspaceId
 }
 
 /** 指定されたワークスペースを削除する */
