@@ -69,7 +69,26 @@ export namespace InputId {
     if (inputId[2] === '1') modifiers.push(getThirdModifierName() + '+')
     if (inputId[3] === '1') modifiers.push(getFourthModifierName() + '+')
 
-    return modifiers.join('') + inputId.substring(4)
+    return modifiers.join('') + simplify(inputId.substring(4))
+  }
+
+  function simplify(code: string): string {
+    const map: {[T in string]: string | undefined} = {
+      ArrowUp: '↑',
+      ArrowDown: '↓',
+      ArrowRight: '→',
+      ArrowLeft: '←',
+    }
+    const mapResult = map[code]
+    if (mapResult !== undefined) return mapResult
+
+    const key = /Key([A-Z])/.exec(code)
+    if (key !== null) return key[1]
+
+    const digit = /Digit([0-9])/.exec(code)
+    if (digit !== null) return digit[1]
+
+    return code
   }
 
   function getFirstModifierName(): string {
