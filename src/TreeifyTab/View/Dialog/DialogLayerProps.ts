@@ -1,6 +1,7 @@
 import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {External} from 'src/TreeifyTab/External/External'
 import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
+import {createImageItemEditDialogProps} from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
 import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
 import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
@@ -10,6 +11,7 @@ import ContextMenuDialog from './ContextMenuDialog.svelte'
 import {createContextMenuDialogProps} from './ContextMenuDialogProps'
 import DropdownMenuDialog from './DropdownMenuDialog.svelte'
 import ExportDialog from './ExportDialog.svelte'
+import ImageItemEditDialog from './ImageItemEditDialog.svelte'
 import OtherParentsDialog from './OtherParentsDialog.svelte'
 import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
 import CustomCssDialog from './Preference/CustomCssDialog.svelte'
@@ -68,6 +70,11 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
       return {
         component: ExportDialog,
         props: createExportDialogProps(),
+      }
+    case 'ImageItemEditDialog':
+      return {
+        component: ImageItemEditDialog,
+        props: createImageItemEditDialogProps(),
       }
     case 'ItemAdditionDropdownMenuDialog':
       return {
