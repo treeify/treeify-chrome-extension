@@ -1,3 +1,4 @@
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {Coordinate, integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -72,17 +73,20 @@ export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
   let isAfterMouseDown = false
 
   function onMouseDown(event: MouseEvent) {
+    event.preventDefault()
     if (event.buttons === 1) {
       isAfterMouseDown = true
     }
   }
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && isAfterMouseDown) {
+      assertNonNull(element.parentElement)
+
       // ドラッグ開始
       currentDragData = {
         type: 'ImageBottomDragData',
         itemId,
-        imageRectTop: element.getBoundingClientRect().top,
+        imageRectTop: element.parentElement.getBoundingClientRect().top,
       }
       Rerenderer.instance.rerender()
     }
