@@ -28,9 +28,6 @@
   <button on:click={onClick}>OPMLエクスポート</button>
   <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
   <AddButton />
-  <!--  <CodeBlockItemCreationButton />-->
-  <!--  <TexItemCreationButton />-->
-  <!--  <ImportButton />-->
   <PreferenceButton />
 </div>
 
