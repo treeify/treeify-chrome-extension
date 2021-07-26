@@ -100,7 +100,7 @@
 
     /* lch(40.0%, 0.0, 0.0)相当 */
     background: #5e5e5e;
-    -webkit-mask: url('./plus-icon2.svg') no-repeat center;
+    -webkit-mask: url('./plus-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
   }
   .key-binding_command-row:hover .add-command-button {
