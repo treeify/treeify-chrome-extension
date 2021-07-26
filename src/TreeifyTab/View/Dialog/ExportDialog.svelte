@@ -1,8 +1,10 @@
 <script lang="ts">
+  import {External} from 'src/TreeifyTab/External/External'
   import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
   import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
   import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
   import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
+  import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import {ExportDialogProps, Format} from './ExportDialogProps'
 
@@ -40,6 +42,8 @@
         [blob.type]: blob,
       }),
     ])
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
   }
 
   function onClickSaveButton() {
@@ -48,6 +52,8 @@
     aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'text/plain'}))
     aElement.download = deriveFileName()
     aElement.click()
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
   }
 </script>
 
