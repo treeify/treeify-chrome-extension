@@ -1,18 +1,10 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {
-  createPreferenceDropdownMenuItemPropses,
-  PreferenceDropdownMenuItemProps,
-} from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuItemProps'
+import {External} from 'src/TreeifyTab/External/External'
+import {Command} from 'src/TreeifyTab/Internal/Command'
+import {DropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
 
-export type PreferenceDropdownMenuDialogProps = {
-  top: integer
-  right: integer
-  itemPropses: List<PreferenceDropdownMenuItemProps>
-}
-
-export function createPreferenceDropdownMenuDialogProps(): PreferenceDropdownMenuDialogProps {
+export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogProps {
   const preferenceButton = document.querySelector('.preference-button_icon')?.parentElement
   const rect = preferenceButton?.getBoundingClientRect()
   assertNonUndefined(rect)
@@ -20,6 +12,23 @@ export function createPreferenceDropdownMenuDialogProps(): PreferenceDropdownMen
   return {
     top: rect.bottom,
     right: rect.right,
-    itemPropses: createPreferenceDropdownMenuItemPropses(),
+    itemPropses: List.of(
+      {
+        title: 'ワークスペース',
+        onClick: () => Command.showWorkspaceDialog(),
+      },
+      {
+        title: 'キーボード操作設定',
+        onClick: () => {
+          External.instance.dialogState = {type: 'KeyBindingDialog'}
+        },
+      },
+      {
+        title: 'カスタムCSS',
+        onClick: () => {
+          External.instance.dialogState = {type: 'CustomCssDialog'}
+        },
+      }
+    ),
   }
 }

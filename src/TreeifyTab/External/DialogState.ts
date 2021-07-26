@@ -13,6 +13,8 @@ export type CustomCssDialog = {type: 'CustomCssDialog'}
 
 export type ExportDialog = {type: 'ExportDialog'}
 
+export type ItemAdditionDropdownMenuDialog = {type: 'ItemAdditionDropdownMenuDialog'}
+
 export type KeyBindingDialog = {type: 'KeyBindingDialog'}
 
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
@@ -37,6 +39,7 @@ export type Dialog =
   | CodeBlockItemEditDialog
   | ContextMenuDialog
   | CustomCssDialog
+  | ItemAdditionDropdownMenuDialog
   | ExportDialog
   | KeyBindingDialog
   | OtherParentsDialog

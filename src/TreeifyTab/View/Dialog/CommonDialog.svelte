@@ -1,35 +1,14 @@
 <script lang="ts">
-  import {createFocusTrap} from 'focus-trap'
   import {fade} from 'svelte/transition'
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {InputId} from '../../Internal/InputId'
   import {Rerenderer} from '../../Rerenderer'
+  import {setupFocusTrap} from './focusTrap'
 
   export let title: string
   export let onClose = () => {}
   export let showCloseButton: boolean = false
-
-  function setupFocusTrap(domElement: HTMLElement) {
-    return doWithErrorCapture(() => {
-      // フォーカストラップを作る
-      const focusTrap = createFocusTrap(domElement, {
-        // フォーカスは自前で管理するのでfocusTrapに勝手に操作されると困る。
-        // 具体的には検索結果へのジャンプ機能で自動スクロールが動かなくなる。
-        returnFocusOnDeactivate: false,
-
-        escapeDeactivates: false,
-      })
-      focusTrap.activate()
-
-      return {
-        destroy: () => {
-          // フォーカストラップを消す
-          focusTrap.deactivate()
-        },
-      }
-    })
-  }
 
   function closeDialog() {
     External.instance.dialogState = undefined

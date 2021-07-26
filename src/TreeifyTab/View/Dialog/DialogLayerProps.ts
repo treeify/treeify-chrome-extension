@@ -1,12 +1,14 @@
 import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {External} from 'src/TreeifyTab/External/External'
 import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
+import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
 import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
 import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
 import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
 import ContextMenuDialog from './ContextMenuDialog.svelte'
 import {createContextMenuDialogProps} from './ContextMenuDialogProps'
+import DropdownMenuDialog from './DropdownMenuDialog.svelte'
 import ExportDialog from './ExportDialog.svelte'
 import OtherParentsDialog from './OtherParentsDialog.svelte'
 import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
@@ -14,7 +16,6 @@ import CustomCssDialog from './Preference/CustomCssDialog.svelte'
 import {createCustomCssDialogProps} from './Preference/CustomCssDialogProps'
 import KeyBindingDialog from './Preference/KeyBindingDialog.svelte'
 import {createKeyBindingDialogProps} from './Preference/KeyBindingDialogProps'
-import PreferenceDropdownMenuDialog from './Preference/PreferenceDropdownMenuDialog.svelte'
 import {createPreferenceDropdownMenuDialogProps} from './Preference/PreferenceDropdownMenuDialogProps'
 import WorkspaceDialog from './Preference/WorkspaceDialog.svelte'
 import {createWorkspaceDialogProps} from './Preference/WorkspaceDialogProps'
@@ -68,6 +69,11 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
         component: ExportDialog,
         props: createExportDialogProps(),
       }
+    case 'ItemAdditionDropdownMenuDialog':
+      return {
+        component: DropdownMenuDialog,
+        props: createItemAdditionDropdownMenuDialogProps(),
+      }
     case 'KeyBindingDialog':
       return {
         component: KeyBindingDialog,
@@ -75,7 +81,7 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
       }
     case 'PreferenceDropdownMenuDialog':
       return {
-        component: PreferenceDropdownMenuDialog,
+        component: DropdownMenuDialog,
         props: createPreferenceDropdownMenuDialogProps(),
       }
     case 'OtherParentsDialog':

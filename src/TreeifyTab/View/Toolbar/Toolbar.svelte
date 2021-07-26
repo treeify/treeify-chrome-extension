@@ -4,11 +4,9 @@
   import {toOpmlString} from '../../Internal/ImportExport/opml'
   import {Internal} from '../../Internal/Internal'
   import {State} from '../../Internal/State'
-  import CodeBlockItemCreationButton from './CodeBlockItemCreationButton.svelte'
   import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
-  import ImportButton from './ImportButton.svelte'
+  import AddButton from './ItemAdditionButton.svelte'
   import PreferenceButton from './PreferenceButton.svelte'
-  import TexItemCreationButton from './TexItemCreationButton.svelte'
   import {ToolbarProps} from './ToolbarProps'
 
   export let props: ToolbarProps
@@ -29,9 +27,7 @@
 <div class="toolbar">
   <button on:click={onClick}>OPMLエクスポート</button>
   <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
-  <CodeBlockItemCreationButton />
-  <TexItemCreationButton />
-  <ImportButton />
+  <AddButton />
   <PreferenceButton />
 </div>
 

@@ -1,13 +1,13 @@
 <script lang="ts">
-  import {createFocusTrap} from 'focus-trap'
-  import {doWithErrorCapture} from '../../../errorCapture'
-  import {External} from '../../../External/External'
-  import {InputId} from '../../../Internal/InputId'
-  import {Rerenderer} from '../../../Rerenderer'
-  import {PreferenceDropdownMenuDialogProps} from './PreferenceDropdownMenuDialogProps'
-  import PreferenceDropdownMenuItem from './PreferenceDropdownMenuItem.svelte'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {External} from '../../External/External'
+  import {InputId} from '../../Internal/InputId'
+  import {Rerenderer} from '../../Rerenderer'
+  import {DropdownMenuDialogProps} from './DropdownMenuDialogProps'
+  import DropdownMenuItem from './DropdownMenuItem.svelte'
+  import {setupFocusTrap} from './focusTrap'
 
-  export let props: PreferenceDropdownMenuDialogProps
+  export let props: DropdownMenuDialogProps
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
@@ -28,25 +28,6 @@
     })
   }
 
-  function setupFocusTrap(domElement: HTMLElement) {
-    return doWithErrorCapture(() => {
-      // フォーカストラップを作る
-      const focusTrap = createFocusTrap(domElement, {
-        returnFocusOnDeactivate: false,
-
-        escapeDeactivates: false,
-      })
-      focusTrap.activate()
-
-      return {
-        destroy: () => {
-          // フォーカストラップを消す
-          focusTrap.deactivate()
-        },
-      }
-    })
-  }
-
   const style = `
     top: ${props.top}px;
     right: ${screen.width - props.right}px;
@@ -54,20 +35,20 @@
 </script>
 
 <div
-  class="preference-dropdown-menu-dialog"
+  class="dropdown-menu-dialog"
   on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
   use:setupFocusTrap
 >
-  <div class="preference-dropdown-menu-dialog_frame" {style}>
+  <div class="dropdown-menu-dialog_frame" {style}>
     {#each props.itemPropses.toArray() as itemProps}
-      <PreferenceDropdownMenuItem props={itemProps} />
+      <DropdownMenuItem props={itemProps} />
     {/each}
   </div>
 </div>
 
 <style global>
-  .preference-dropdown-menu-dialog {
+  .dropdown-menu-dialog {
     position: fixed;
     top: 0;
     left: 0;
@@ -77,7 +58,7 @@
     z-index: 30;
   }
 
-  .preference-dropdown-menu-dialog_frame {
+  .dropdown-menu-dialog_frame {
     /* topとrightをstyle属性で動的に設定する */
     position: absolute;
 
