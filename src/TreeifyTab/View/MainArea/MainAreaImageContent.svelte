@@ -14,15 +14,12 @@
 </script>
 
 <div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <div class="main-area-image-content_image-and-caption">
-    <img
-      class="main-area-image-content_image"
-      {style}
-      src={props.url}
-      draggable="false"
+  <div class="main-area-image-content_image-with-resize-handle" {style}>
+    <img class="main-area-image-content_image" src={props.url} draggable="false" />
+    <div
+      class="main-area-image-content_resize-handle"
       use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
     />
-    <div class="main-area-image-content_caption" />
   </div>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
@@ -36,17 +33,11 @@
     outline: 0 solid transparent;
   }
 
-  /* 画像とキャプションを中央揃えにする */
-  .main-area-image-content_image-and-caption {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* これを指定しないとメインエリアの横幅に対する中央揃えになる。それはそれでありだがデフォルトは左寄せにする */
-    width: fit-content;
-  }
+  .main-area-image-content_image-with-resize-handle {
+    position: relative;
 
-  .main-area-image-content_image {
-    width: auto;
+    box-sizing: content-box;
+    width: max-content;
     /* heightはstyle属性で指定する */
 
     /*
@@ -56,8 +47,33 @@
     border: 1px solid #e2e2e2;
   }
 
+  .main-area-image-content_image {
+    width: auto;
+    height: 100%;
+  }
+
   /* グレーアウト状態の画像 */
   .grayed-out .main-area-image-content_image {
     filter: opacity(50%);
+  }
+
+  .main-area-image-content_resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+
+    --size: 20px;
+    width: var(--size);
+    height: var(--size);
+    --border: 3px solid #000000;
+    border-right: var(--border);
+    border-bottom: var(--border);
+
+    cursor: ns-resize;
+
+    visibility: hidden;
+  }
+  .main-area-image-content_image-with-resize-handle:hover .main-area-image-content_resize-handle {
+    visibility: visible;
   }
 </style>
