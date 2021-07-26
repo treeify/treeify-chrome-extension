@@ -65,7 +65,8 @@
     --size: 20px;
     width: var(--size);
     height: var(--size);
-    --border: 3px solid #000000;
+    /* lch(35.0%, 0.0, 0.0)相当 */
+    --border: 3px solid #525252;
     border-right: var(--border);
     border-bottom: var(--border);
 
