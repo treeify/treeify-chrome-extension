@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {createFocusTrap} from 'focus-trap'
   import {doWithErrorCapture} from '../../../errorCapture'
   import {External} from '../../../External/External'
   import {InputId} from '../../../Internal/InputId'
   import {Rerenderer} from '../../../Rerenderer'
+  import {setupFocusTrap} from '../focusTrap'
   import {PreferenceDropdownMenuDialogProps} from './PreferenceDropdownMenuDialogProps'
   import PreferenceDropdownMenuItem from './PreferenceDropdownMenuItem.svelte'
 
@@ -24,25 +24,6 @@
       if (InputId.fromKeyboardEvent(event) === '0000Escape') {
         External.instance.dialogState = undefined
         Rerenderer.instance.rerender()
-      }
-    })
-  }
-
-  function setupFocusTrap(domElement: HTMLElement) {
-    return doWithErrorCapture(() => {
-      // フォーカストラップを作る
-      const focusTrap = createFocusTrap(domElement, {
-        returnFocusOnDeactivate: false,
-
-        escapeDeactivates: false,
-      })
-      focusTrap.activate()
-
-      return {
-        destroy: () => {
-          // フォーカストラップを消す
-          focusTrap.deactivate()
-        },
       }
     })
   }

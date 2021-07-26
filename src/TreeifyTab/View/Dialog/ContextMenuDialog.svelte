@@ -17,29 +17,10 @@
 <script lang="ts">
   import {InputId} from '../../Internal/InputId'
   import ContextMenuItem from './ContextMenuItem.svelte'
-  import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {ContextMenuDialogProps} from './ContextMenuDialogProps'
+  import {setupFocusTrap} from './focusTrap'
 
   export let props: ContextMenuDialogProps
-
-  function setupFocusTrap(domElement: HTMLElement) {
-    return doWithErrorCapture(() => {
-      // フォーカストラップを作る
-      const focusTrap = createFocusTrap(domElement, {
-        returnFocusOnDeactivate: false,
-
-        escapeDeactivates: false,
-      })
-      focusTrap.activate()
-
-      return {
-        destroy: () => {
-          // フォーカストラップを消す
-          focusTrap.deactivate()
-        },
-      }
-    })
-  }
 
   function onKeyDown(event: KeyboardEvent) {
     doWithErrorCapture(() => {

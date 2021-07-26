@@ -15,29 +15,10 @@
 </script>
 
 <script lang="ts">
-  import {createFocusTrap, FocusTrap} from 'focus-trap'
   import {WebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
+  import {setupFocusTrap} from './focusTrap'
 
   export let props: WebPageItemTitleSettingDialogProps
-
-  function setupFocusTrap(domElement: HTMLElement) {
-    return doWithErrorCapture(() => {
-      // フォーカストラップを作る
-      const focusTrap = createFocusTrap(domElement, {
-        returnFocusOnDeactivate: false,
-
-        escapeDeactivates: false,
-      })
-      focusTrap.activate()
-
-      return {
-        destroy: () => {
-          // フォーカストラップを消す
-          focusTrap.deactivate()
-        },
-      }
-    })
-  }
 
   $: style = `
     left: ${props.webPageItemTitleSettingDialog.targetItemRect.left}px;
