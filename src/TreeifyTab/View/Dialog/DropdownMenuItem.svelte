@@ -1,12 +1,12 @@
 <script lang="ts">
   import {List} from 'immutable'
-  import {doWithErrorCapture} from '../../../errorCapture'
-  import {External} from '../../../External/External'
-  import {InputId} from '../../../Internal/InputId'
-  import {Rerenderer} from '../../../Rerenderer'
-  import {PreferenceDropdownMenuItemProps} from './PreferenceDropdownMenuItemProps'
+  import {doWithErrorCapture} from '../../errorCapture'
+  import {External} from '../../External/External'
+  import {InputId} from '../../Internal/InputId'
+  import {Rerenderer} from '../../Rerenderer'
+  import {DropdownMenuItemProps} from './DropdownMenuItemProps'
 
-  export let props: PreferenceDropdownMenuItemProps
+  export let props: DropdownMenuItemProps
 
   function onClick() {
     doWithErrorCapture(() => {
@@ -22,7 +22,7 @@
       if (inputId === '0000ArrowDown') {
         // フォーカスを次の要素に移す
         const focusableElements = List(
-          document.querySelectorAll('.preference-dropdown-menu-item')
+          document.querySelectorAll('.dropdown-menu-item')
         ) as List<HTMLElement>
         const index = focusableElements.findIndex((element) => document.activeElement === element)
         if (index === -1) return
@@ -32,7 +32,7 @@
       } else if (inputId === '0000ArrowUp') {
         // フォーカスを前の要素に移す
         const focusableElements = List(
-          document.querySelectorAll('.preference-dropdown-menu-item')
+          document.querySelectorAll('.dropdown-menu-item')
         ) as List<HTMLElement>
         const index = focusableElements.findIndex((element) => document.activeElement === element)
         if (index === -1) return
@@ -54,7 +54,7 @@
 </script>
 
 <div
-  class="preference-dropdown-menu-item"
+  class="dropdown-menu-item"
   tabindex="0"
   on:click={onClick}
   on:mouseenter={onMouseEnter}
@@ -64,7 +64,7 @@
 </div>
 
 <style global>
-  .preference-dropdown-menu-item {
+  .dropdown-menu-item {
     outline: 0 solid transparent;
 
     font-size: 13px;
@@ -73,7 +73,7 @@
     cursor: pointer;
   }
 
-  .preference-dropdown-menu-item:focus {
+  .dropdown-menu-item:focus {
     /* lch(93.0%, 7.8, 280.4)相当 */
     background: #e7ebfa;
   }
