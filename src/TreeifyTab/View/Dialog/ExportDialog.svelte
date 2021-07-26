@@ -4,30 +4,30 @@
   import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
   import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
   import CommonDialog from './CommonDialog.svelte'
-  import {ExportDialogProps} from './ExportDialogProps'
+  import {ExportDialogProps, Format} from './ExportDialogProps'
 
   export let props: ExportDialogProps
 
   // TODO: 前回選択した値をデフォルト値とする
-  let selectedFormat: 'Plain text' | 'Markdown' | 'OPML' = 'Plain text'
+  let selectedFormat: Format = Format.PLAIN_TEXT
 
   function generateOutputText(): string {
     switch (selectedFormat) {
-      case 'Plain text':
+      case Format.PLAIN_TEXT:
         return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
-      case 'Markdown':
+      case Format.MARKDOWN:
         // TODO: 複数選択時はそれらをまとめてMarkdown化する
         return toMarkdownText(CurrentState.getTargetItemPath())
-      case 'OPML':
+      case Format.OPML:
         return toOpmlString(CurrentState.getSelectedItemPaths())
     }
   }
 
   function deriveFileName(): string {
     const fileExtensions = {
-      'Plain text': '.txt',
-      Markdown: '.md',
-      OPML: '.opml',
+      [Format.PLAIN_TEXT]: '.txt',
+      [Format.MARKDOWN]: '.md',
+      [Format.OPML]: '.opml',
     }
     // TODO: ファイル名を内容依存にする。例えば先頭行テキストとか
     return 'export' + fileExtensions[selectedFormat]
@@ -54,17 +54,30 @@
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
     <label>
-      <input type="radio" name="format" bind:group={selectedFormat} value="Plain text" />
+      <input type="radio" name="format" bind:group={selectedFormat} value={Format.PLAIN_TEXT} />
       プレーンテキスト
     </label>
     <label>
-      <input type="radio" name="format" bind:group={selectedFormat} value="Markdown" />
+      <input type="radio" name="format" bind:group={selectedFormat} value={Format.MARKDOWN} />
       Markdown
     </label>
     <label>
-      <input type="radio" name="format" bind:group={selectedFormat} value="OPML" />
+      <input type="radio" name="format" bind:group={selectedFormat} value={Format.OPML} />
       OPML
     </label>
+    {#if selectedFormat === Format.PLAIN_TEXT}
+      <div>
+        <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
+      </div>
+    {:else if selectedFormat === Format.MARKDOWN}
+      <div>
+        <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
+      </div>
+    {:else if selectedFormat === Format.OPML}
+      <div>
+        <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
+      </div>
+    {/if}
     <div class="export-dialog_button-area">
       <button class="export-dialog_copy-button" on:click={onClickCopyButton}
         >クリップボードにコピー</button
