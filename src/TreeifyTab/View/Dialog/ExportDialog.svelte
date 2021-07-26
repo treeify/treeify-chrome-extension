@@ -59,28 +59,30 @@
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <label>
-      <input type="radio" name="format" bind:group={selectedFormat} value={Format.PLAIN_TEXT} />
-      プレーンテキスト
-    </label>
-    <label>
-      <input type="radio" name="format" bind:group={selectedFormat} value={Format.MARKDOWN} />
-      Markdown
-    </label>
-    <label>
-      <input type="radio" name="format" bind:group={selectedFormat} value={Format.OPML} />
-      OPML
-    </label>
+    <div class="export-dialog_format-select-button-area">
+      <label class="export-dialog_format-select-button">
+        <input type="radio" name="format" bind:group={selectedFormat} value={Format.PLAIN_TEXT} />
+        プレーンテキスト
+      </label>
+      <label class="export-dialog_format-select-button">
+        <input type="radio" name="format" bind:group={selectedFormat} value={Format.MARKDOWN} />
+        Markdown
+      </label>
+      <label class="export-dialog_format-select-button">
+        <input type="radio" name="format" bind:group={selectedFormat} value={Format.OPML} />
+        OPML
+      </label>
+    </div>
     {#if selectedFormat === Format.PLAIN_TEXT}
-      <div>
+      <div class="export-dialog_option-area">
         <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {:else if selectedFormat === Format.MARKDOWN}
-      <div>
+      <div class="export-dialog_option-area">
         <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {:else if selectedFormat === Format.OPML}
-      <div>
+      <div class="export-dialog_option-area">
         <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {/if}
@@ -97,12 +99,33 @@
 
 <style global lang="scss">
   .export-dialog_content {
+    min-width: 30em;
     padding: 1em;
 
     outline: 0 solid transparent;
   }
 
+  .export-dialog_format-select-button-area {
+    display: flex;
+  }
+
+  .export-dialog_format-select-button {
+    flex: 1 0;
+    text-align: center;
+  }
+
+  input[type='radio'][name='format'] {
+    display: none;
+  }
+
+  .export-dialog_option-area {
+    display: flex;
+    flex-direction: column;
+  }
+
   .export-dialog_button-area {
     margin-top: 1em;
+    margin-inline: auto;
+    width: max-content;
   }
 </style>
