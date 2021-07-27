@@ -6,38 +6,38 @@
   export let props: KeyBindingProps
 </script>
 
-<div>
-  {InputId.toReadableText(props.inputId)}
-</div>
-<div>
-  {#each props.commandIds.toArray() as selectedCommandId, index}
-    <div class="key-binding_command-row">
-      <select data-index={index} on:change={props.onChange}>
-        {#each props.commandGroups.toArray() as commandGroup}
-          <optgroup label={commandGroup.name}>
-            {#each commandGroup.commandIds.toArray() as commandId}
-              <option value={commandId} selected={selectedCommandId === commandId}
-                >{commandNames[commandId]}</option
-              >
-            {/each}
-          </optgroup>
-        {/each}
-      </select>
-      <div
-        class="delete-button icon-button"
-        data-index={index}
-        tabindex="-1"
-        on:click={props.onClickDeleteButton}
-      />
-      <div
-        class="add-command-button icon-button"
-        data-index={index}
-        tabindex="-1"
-        on:click={props.onClickAddCommandButton}
-      />
-    </div>
-  {/each}
-</div>
+<tr class="key-binding_binding-row">
+  <td class="key-binding_input-id">{InputId.toReadableText(props.inputId)}</td>
+  <td class="key-binding_commands">
+    {#each props.commandIds.toArray() as selectedCommandId, index}
+      <div class="key-binding_command-row">
+        <select data-index={index} on:change={props.onChange}>
+          {#each props.commandGroups.toArray() as commandGroup}
+            <optgroup label={commandGroup.name}>
+              {#each commandGroup.commandIds.toArray() as commandId}
+                <option value={commandId} selected={selectedCommandId === commandId}
+                  >{commandNames[commandId]}</option
+                >
+              {/each}
+            </optgroup>
+          {/each}
+        </select>
+        <div
+          class="delete-button icon-button"
+          data-index={index}
+          tabindex="-1"
+          on:click={props.onClickDeleteButton}
+        />
+        <div
+          class="add-command-button icon-button"
+          data-index={index}
+          tabindex="-1"
+          on:click={props.onClickAddCommandButton}
+        />
+      </div>
+    {/each}
+  </td>
+</tr>
 
 <style global>
   :root {
@@ -46,9 +46,20 @@
     --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
   }
 
+  .key-binding_input-id {
+    text-align: right;
+    padding-left: 3em;
+  }
+
+  .key-binding_commands {
+    padding-block: 0.3em;
+  }
+
   .key-binding_command-row {
     display: flex;
     align-items: center;
+
+    padding-left: 2em;
   }
 
   .delete-button {

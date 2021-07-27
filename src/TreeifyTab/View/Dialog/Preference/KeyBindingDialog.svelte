@@ -40,12 +40,19 @@
 
 <CommonDialog title="キーボード操作設定" showCloseButton>
   <div class="key-binding-dialog_content" on:keydown={onKeyDown}>
-    <div class="key-binding-dialog_table">
+    <table class="key-binding-dialog_table">
       {#each props.keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
         <KeyBinding props={keyBindingProps} />
       {/each}
-    </div>
-    <button class="key-binding-dialog_add-binding-button" on:click={onClick}>追加</button>
+      <tr class="key-binding-dialog_add-binding-button-row">
+        <td class="key-binding-dialog_add-binding-button-cell">
+          <button class="key-binding-dialog_add-binding-button" on:click={onClick}
+            >新しい割り当てを追加</button
+          >
+        </td>
+        <td />
+      </tr>
+    </table>
     <p class="key-binding-dialog_message-for-add-binding" {style}>
       コマンドを割り当てたいキーをそのまま入力してください。<br />
       （例：Shift+Alt+F）
@@ -59,8 +66,21 @@
   }
 
   .key-binding-dialog_table {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: 0.3em;
+    border-collapse: collapse;
+  }
+
+  .key-binding-dialog_table tr:nth-child(odd) {
+    /* lch(96.0%, 0.0, 0.0)相当 */
+    background: #f3f3f3;
+  }
+
+  .key-binding-dialog_add-binding-button {
+    margin-left: auto;
+    display: block;
+  }
+
+  .key-binding-dialog_message-for-add-binding {
+    margin-inline: auto;
+    width: max-content;
   }
 </style>
