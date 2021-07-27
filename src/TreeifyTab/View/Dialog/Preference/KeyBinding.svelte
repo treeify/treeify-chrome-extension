@@ -7,7 +7,7 @@
 </script>
 
 <tr>
-  <td>{InputId.toReadableText(props.inputId)}</td>
+  <td class="key-binding_input-id">{InputId.toReadableText(props.inputId)}</td>
   <td>
     {#each props.commandIds.toArray() as selectedCommandId, index}
       <div class="key-binding_command-row">
@@ -44,6 +44,10 @@
     --key-binding-dialog-command-button-size: 1.5em;
     --key-binding-dialog-delete-icon-size: 1.2em;
     --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
+  }
+
+  .key-binding_input-id {
+    text-align: right;
   }
 
   .key-binding_command-row {
