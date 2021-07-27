@@ -6,7 +6,7 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaCodeBlockContentProps = {
   itemPath: ItemPath
-  itemType: ItemType.CODE_BLOCK
+  type: ItemType.CODE_BLOCK
   code: string
   language: string
   citeProps: CiteProps | undefined
@@ -22,7 +22,7 @@ export function createMainAreaCodeBlockContentProps(
   const codeBlockItem = state.codeBlockItems[itemId]
   return {
     itemPath,
-    itemType: ItemType.CODE_BLOCK,
+    type: ItemType.CODE_BLOCK,
     code: codeBlockItem.code,
     language: codeBlockItem.language,
     citeProps: createCiteProps(itemPath),

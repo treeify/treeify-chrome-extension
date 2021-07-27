@@ -6,7 +6,7 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaTexContentProps = {
   itemPath: ItemPath
-  itemType: ItemType.TEX
+  type: ItemType.TEX
   code: string
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
@@ -21,7 +21,7 @@ export function createMainAreaTexContentProps(
   const texItem = state.texItems[itemId]
   return {
     itemPath,
-    itemType: ItemType.TEX,
+    type: ItemType.TEX,
     code: texItem.code,
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
