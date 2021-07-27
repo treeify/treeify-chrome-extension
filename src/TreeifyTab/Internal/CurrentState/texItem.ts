@@ -43,3 +43,7 @@ export function setTexItemCode(itemId: ItemId, code: string) {
     Internal.instance.mutate(code, PropertyPath.of('texItems', itemId, 'code'))
   })
 }
+
+export function isEmptyTexItem(itemId: ItemId): boolean {
+  return Internal.instance.state.texItems[itemId].code.trim() === ''
+}

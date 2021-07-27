@@ -65,7 +65,3 @@ export function isEmptyTextItem(itemId: ItemId): boolean {
   const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
   return DomishObject.countCharacters(domishObjects) === 0
 }
-
-export function isEmptyTexItem(itemId: ItemId): boolean {
-  return Internal.instance.state.texItems[itemId].code.trim() === ''
-}

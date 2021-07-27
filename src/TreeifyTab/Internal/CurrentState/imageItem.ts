@@ -50,3 +50,7 @@ export function setImageItemUrl(itemId: ItemId, url: string) {
 export function setImageItemHeightPx(itemId: ItemId, heightPx: integer) {
   Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
 }
+
+export function isEmptyImageItem(itemId: ItemId): boolean {
+  return Internal.instance.state.imageItems[itemId].url.trim() === ''
+}

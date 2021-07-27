@@ -18,6 +18,10 @@ export function createItemAdditionDropdownMenuDialogProps(): DropdownMenuDialogP
     right: rect.right,
     itemPropses: List.of(
       {
+        title: '画像項目を作成',
+        onClick: () => Command.createEmptyImageItem(),
+      },
+      {
         title: 'コードブロック項目を作成',
         onClick: () => Command.createEmptyCodeBlockItem(),
       },

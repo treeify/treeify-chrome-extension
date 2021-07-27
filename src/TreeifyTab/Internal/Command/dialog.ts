@@ -27,6 +27,9 @@ export function showEditDialog() {
       }
 
       break
+    case ItemType.IMAGE:
+      External.instance.dialogState = {type: 'ImageItemEditDialog'}
+      break
     case ItemType.CODE_BLOCK:
       External.instance.dialogState = {type: 'CodeBlockItemEditDialog'}
       break
