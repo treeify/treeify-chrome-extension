@@ -6,7 +6,7 @@ import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {Cite} from 'src/TreeifyTab/Internal/State'
+import {Cite, ListView, TableView} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /** 選択された項目を折りたたむコマンド */
@@ -285,5 +285,19 @@ export function toggleCitation() {
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(selectedItemId)
+  }
+}
+
+export function toggleTableView() {
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+
+    if (Internal.instance.state.items[selectedItemId].view.type !== 'table') {
+      const tableView: TableView = {type: 'table'}
+      Internal.instance.mutate(tableView, PropertyPath.of('items', selectedItemId, 'view'))
+    } else {
+      const listView: ListView = {type: 'list'}
+      Internal.instance.mutate(listView, PropertyPath.of('items', selectedItemId, 'view'))
+    }
   }
 }
