@@ -46,11 +46,6 @@
     --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
   }
 
-  .key-binding_binding-row:nth-child(odd) {
-    /* lch(96.0%, 0.0, 0.0)相当 */
-    background: #f3f3f3;
-  }
-
   .key-binding_input-id {
     text-align: right;
     padding-left: 3em;
