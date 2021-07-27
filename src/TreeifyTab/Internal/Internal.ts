@@ -134,6 +134,7 @@ export class Internal {
           timestamp: Timestamp.now(),
           cssClasses: List.of(),
           cite: null,
+          view: {type: 'list'},
         },
       },
       textItems: {

@@ -23,6 +23,7 @@ export function createCodeBlockItem(): ItemId {
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
     cite: null,
+    view: {type: 'list'},
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
