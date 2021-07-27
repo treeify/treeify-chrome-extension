@@ -88,10 +88,13 @@ export function deleteItemItself(itemId: ItemId) {
   // 全ての子項目の親リストから自身を削除し、代わりに自身の親リストを挿入する
   for (const childItemId of childItemIds) {
     const parents = Internal.instance.state.items[childItemId].parents
-    const parent = parents[itemId]
-    delete parents[itemId]
+    const edge = parents[itemId]
+    Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
     for (const parentsKey in item.parents) {
-      parents[parentsKey] = {...parent}
+      Internal.instance.mutate(
+        {...edge},
+        PropertyPath.of('items', childItemId, 'parents', parentsKey)
+      )
     }
   }
 
