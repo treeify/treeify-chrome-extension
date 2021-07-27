@@ -57,4 +57,8 @@
   .key-binding-dialog_content {
     padding: 1em;
   }
+
+  .key-binding-dialog_table {
+    border-collapse: collapse;
+  }
 </style>

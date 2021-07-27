@@ -6,9 +6,9 @@
   export let props: KeyBindingProps
 </script>
 
-<tr>
+<tr class="key-binding_binding-row">
   <td class="key-binding_input-id">{InputId.toReadableText(props.inputId)}</td>
-  <td>
+  <td class="key-binding_commands">
     {#each props.commandIds.toArray() as selectedCommandId, index}
       <div class="key-binding_command-row">
         <select data-index={index} on:change={props.onChange}>
@@ -46,13 +46,25 @@
     --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
   }
 
+  .key-binding_binding-row:nth-child(odd) {
+    /* lch(96.0%, 0.0, 0.0)相当 */
+    background: #f3f3f3;
+  }
+
   .key-binding_input-id {
     text-align: right;
+    padding-left: 3em;
+  }
+
+  .key-binding_commands {
+    padding-block: 0.3em;
   }
 
   .key-binding_command-row {
     display: flex;
     align-items: center;
+
+    padding-left: 2em;
   }
 
   .delete-button {
