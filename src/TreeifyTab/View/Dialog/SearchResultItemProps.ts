@@ -129,6 +129,7 @@ function transclude(itemPath: ItemPath) {
     ItemPath.getItemId(itemPath),
     {isCollapsed: true}
   )
+  CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)
 
   // 検索ダイアログを閉じる

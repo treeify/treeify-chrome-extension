@@ -51,19 +51,22 @@
           use:onItemDrop={props.onDrop}
         >
           <ItemContent props={props.contentProps} />
+          {#if props.isAudible}
+            <div class="page-tree-node_audible-icon" />
+          {:else}
+            <div class="grid-empty-cell" />
+          {/if}
         </div>
       </div>
-      {#if props.isAudible}
-        <div class="page-tree-node_audible-icon" />
-      {:else}
-        <div class="grid-empty-cell" />
-      {/if}
       {#if props.tabsCount > 0}
         <div class="page-tree-node_tabs-count-button" on:mousedown={props.onClickTabsCount}>
           <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
         </div>
       {:else}
-        <div class="page-tree-node_close-button" on:mousedown={props.onClickCloseButton} />
+        <div
+          class="page-tree-node_close-button icon-button"
+          on:mousedown={props.onClickCloseButton}
+        />
       {/if}
     </div>
     <div class="page-tree-node_children-area">
@@ -96,25 +99,29 @@
     --page-tree-audible-icon-size: 1em;
 
     /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
-    --page-tree-close-button-size: 1.1em;
+    --page-tree-close-button-size: 1.45em;
   }
 
   .page-tree-node {
     /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    
+
     user-select: none;
   }
 
   /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
   .page-tree-node_body-area {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
   }
 
   .page-tree-node_content-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+
     cursor: default;
 
     /* ページツリーではテキストは折り返さない */
@@ -197,15 +204,26 @@
     width: var(--page-tree-close-button-size);
     height: var(--page-tree-close-button-size);
 
-    /* lch(20.0%, 0.0, 0.0)相当 */
-    background: #303030;
-    -webkit-mask-image: url('close-icon2.svg');
-
     /* マウスホバー時にのみ表示 */
     visibility: hidden;
+  }
+  .page-tree-node_close-button::before {
+    content: '';
 
-    /* ボタンであることを示す */
-    cursor: pointer;
+    --icon-size: 1.1em;
+    width: var(--icon-size);
+    height: var(--icon-size);
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* lch(20.0%, 0.0, 0.0)相当 */
+    background: #303030;
+    -webkit-mask: url('close-icon2.svg') no-repeat center;
+    -webkit-mask-size: contain;
   }
   .page-tree-node_body-area:hover .page-tree-node_close-button {
     /* マウスホバー時にのみ表示 */

@@ -123,14 +123,17 @@
 
   /* ボディ領域 */
   .main-area-node_body-area {
-    padding: var(--main-area-body-area-vertical-padding) 0;
     /* コンテンツ領域とボタン類を横に並べる */
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
   }
-  
-  .main-area-node_body-area[data-depth="0"] {
+
+  .main-area-node_body-area[data-depth='0'] {
     font-size: 120%;
+  }
+
+  .main-area-node_footprint-layer {
+    padding: var(--main-area-body-area-vertical-padding) 0;
   }
 
   .main-area-node_spool-area {
