@@ -14,8 +14,8 @@
 </script>
 
 <div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <div class="main-area-image-content_image-with-resize-handle" {style}>
-    <img class="main-area-image-content_image" src={props.url} draggable="false" />
+  <div class="main-area-image-content_image-with-resize-handle">
+    <img class="main-area-image-content_image" src={props.url} draggable="false" {style} />
     <div
       class="main-area-image-content_resize-handle"
       use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
@@ -36,20 +36,18 @@
   .main-area-image-content_image-with-resize-handle {
     position: relative;
 
-    box-sizing: content-box;
     width: max-content;
-    /* heightはstyle属性で指定する */
 
     /*
     Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
     lch(90.0%, 0.0, 0.0)
     */
-    border: 1px solid #e2e2e2;
+    outline: 1px solid #e2e2e2;
   }
 
   .main-area-image-content_image {
     width: auto;
-    height: 100%;
+    /* heightはstyle属性で指定する */
   }
 
   /* グレーアウト状態の画像 */
