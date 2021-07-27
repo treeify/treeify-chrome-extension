@@ -63,7 +63,10 @@
           <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
         </div>
       {:else}
-        <div class="page-tree-node_close-button" on:mousedown={props.onClickCloseButton} />
+        <div
+          class="page-tree-node_close-button icon-button"
+          on:mousedown={props.onClickCloseButton}
+        />
       {/if}
     </div>
     <div class="page-tree-node_children-area">
@@ -96,7 +99,7 @@
     --page-tree-audible-icon-size: 1em;
 
     /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
-    --page-tree-close-button-size: 1.1em;
+    --page-tree-close-button-size: 1.45em;
   }
 
   .page-tree-node {
@@ -201,15 +204,26 @@
     width: var(--page-tree-close-button-size);
     height: var(--page-tree-close-button-size);
 
-    /* lch(20.0%, 0.0, 0.0)相当 */
-    background: #303030;
-    -webkit-mask-image: url('close-icon2.svg');
-
     /* マウスホバー時にのみ表示 */
     visibility: hidden;
+  }
+  .page-tree-node_close-button::before {
+    content: '';
 
-    /* ボタンであることを示す */
-    cursor: pointer;
+    --icon-size: 1.1em;
+    width: var(--icon-size);
+    height: var(--icon-size);
+
+    /* 中央寄せ */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    /* lch(20.0%, 0.0, 0.0)相当 */
+    background: #303030;
+    -webkit-mask: url('close-icon2.svg') no-repeat center;
+    -webkit-mask-size: contain;
   }
   .page-tree-node_body-area:hover .page-tree-node_close-button {
     /* マウスホバー時にのみ表示 */
