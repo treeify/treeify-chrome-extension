@@ -51,13 +51,13 @@
           use:onItemDrop={props.onDrop}
         >
           <ItemContent props={props.contentProps} />
+          {#if props.isAudible}
+            <div class="page-tree-node_audible-icon" />
+          {:else}
+            <div class="grid-empty-cell" />
+          {/if}
         </div>
       </div>
-      {#if props.isAudible}
-        <div class="page-tree-node_audible-icon" />
-      {:else}
-        <div class="grid-empty-cell" />
-      {/if}
       {#if props.tabsCount > 0}
         <div class="page-tree-node_tabs-count-button" on:mousedown={props.onClickTabsCount}>
           <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
@@ -103,18 +103,22 @@
     /* バレット&インデント領域とボディ&子リスト領域を横に並べる */
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    
+
     user-select: none;
   }
 
   /* ページツリーの各ノードのコンテンツ領域と右端のボタン類を並べた領域 */
   .page-tree-node_body-area {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
   }
 
   .page-tree-node_content-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+
     cursor: default;
 
     /* ページツリーではテキストは折り返さない */
