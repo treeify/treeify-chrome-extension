@@ -25,7 +25,7 @@
 
 <style global>
   .image-item-edit-dialog_content {
-    min-width: 25em;
+    min-width: 35em;
     padding: 1em;
   }
 
