@@ -122,7 +122,7 @@
 
     margin-left: auto;
   }
-  .icon-button:hover {
+  .common-dialog_close-button:hover {
     /* lch(40.0%, 0.0, 0.0)相当 */
     background: #5e5e5e;
   }
