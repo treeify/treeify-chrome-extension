@@ -126,8 +126,8 @@ export class Internal {
     return {
       items: {
         0: {
-          itemType: ItemType.TEXT,
-          instance: Instance.getId(),
+          type: ItemType.TEXT,
+          instanceId: Instance.getId(),
           iisn: Instance.generateIisn(),
           childItemIds: List.of(),
           parents: {},

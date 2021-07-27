@@ -15,8 +15,8 @@ export function createCodeBlockItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.CODE_BLOCK,
-    instance: Instance.getId(),
+    type: ItemType.CODE_BLOCK,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},

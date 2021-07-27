@@ -66,7 +66,7 @@ export function createMainAreaNodeProps(
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
     spoolProps: createMainAreaSpoolProps(state, itemPath),
-    contentProps: createMainAreaContentProps(state, itemPath, item.itemType),
+    contentProps: createMainAreaContentProps(state, itemPath, item.type),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
       return createMainAreaNodeProps(
         state,

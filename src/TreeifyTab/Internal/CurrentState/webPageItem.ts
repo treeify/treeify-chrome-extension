@@ -15,8 +15,8 @@ export function createWebPageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.WEB_PAGE,
-    instance: Instance.getId(),
+    type: ItemType.WEB_PAGE,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},

@@ -16,8 +16,8 @@ export function createImageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.IMAGE,
-    instance: Instance.getId(),
+    type: ItemType.IMAGE,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},

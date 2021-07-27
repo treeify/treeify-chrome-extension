@@ -10,7 +10,7 @@ import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentP
 export function showEditDialog() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  switch (Internal.instance.state.items[targetItemId].itemType) {
+  switch (Internal.instance.state.items[targetItemId].type) {
     case ItemType.TEXT:
       break
     case ItemType.WEB_PAGE:

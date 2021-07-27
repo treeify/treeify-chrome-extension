@@ -41,7 +41,7 @@ export function enterKeyDefault() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
@@ -167,7 +167,7 @@ export function removeEdge() {
 
   // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
-  if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const characterCount = DomishObject.countCharacters(domishObjects)
     Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)

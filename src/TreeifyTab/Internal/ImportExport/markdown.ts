@@ -37,7 +37,7 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
   const prefix = item.cite !== null ? '> ' : ''
   const postfix = item.cite !== null ? '\n' : ''
 
-  switch (item.itemType) {
+  switch (item.type) {
     case ItemType.TEXT:
       const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
       return prefix + DomishObject.toMultiLineMarkdownText(domishObjects) + postfix
@@ -56,13 +56,13 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
       const texItem = Internal.instance.state.texItems[itemId]
       return prefix + `$$ ${texItem.code} $$` + postfix
     default:
-      assertNeverType(item.itemType)
+      assertNeverType(item.type)
   }
 }
 
 function toSingleLineMarkdownContent(itemPath: ItemPath): string {
   const itemId = ItemPath.getItemId(itemPath)
-  const itemType = Internal.instance.state.items[itemId].itemType
+  const itemType = Internal.instance.state.items[itemId].type
   switch (itemType) {
     case ItemType.TEXT:
       const domishObjects = Internal.instance.state.textItems[itemId].domishObjects

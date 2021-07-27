@@ -86,7 +86,7 @@ export class SearchEngine {
 
   /** 指定された項目が持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
   static getTextTracks(itemId: ItemId, state: State): List<string> {
-    const itemType = state.items[itemId].itemType
+    const itemType = state.items[itemId].type
     switch (itemType) {
       case ItemType.TEXT:
         return List.of(DomishObject.toPlainText(state.textItems[itemId].domishObjects))

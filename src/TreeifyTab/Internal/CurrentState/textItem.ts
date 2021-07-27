@@ -26,8 +26,8 @@ export function createTextItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.TEXT,
-    instance: Instance.getId(),
+    type: ItemType.TEXT,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},
@@ -56,7 +56,7 @@ export function deleteTextItemEntry(itemId: ItemId) {
  */
 export function isEmptyTextItem(itemId: ItemId): boolean {
   const item = Internal.instance.state.items[itemId]
-  if (item.itemType !== ItemType.TEXT) return false
+  if (item.type !== ItemType.TEXT) return false
 
   if (!item.childItemIds.isEmpty()) return false
 
