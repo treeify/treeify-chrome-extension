@@ -40,11 +40,11 @@
 
 <CommonDialog title="キーボード操作設定" showCloseButton>
   <div class="key-binding-dialog_content" on:keydown={onKeyDown}>
-    <div class="key-binding-dialog_table">
+    <table class="key-binding-dialog_table">
       {#each props.keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
         <KeyBinding props={keyBindingProps} />
       {/each}
-    </div>
+    </table>
     <button class="key-binding-dialog_add-binding-button" on:click={onClick}>追加</button>
     <p class="key-binding-dialog_message-for-add-binding" {style}>
       コマンドを割り当てたいキーをそのまま入力してください。<br />
@@ -56,11 +56,5 @@
 <style global>
   .key-binding-dialog_content {
     padding: 1em;
-  }
-
-  .key-binding-dialog_table {
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-gap: 0.3em;
   }
 </style>

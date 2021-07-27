@@ -6,38 +6,38 @@
   export let props: KeyBindingProps
 </script>
 
-<div>
-  {InputId.toReadableText(props.inputId)}
-</div>
-<div>
-  {#each props.commandIds.toArray() as selectedCommandId, index}
-    <div class="key-binding_command-row">
-      <select data-index={index} on:change={props.onChange}>
-        {#each props.commandGroups.toArray() as commandGroup}
-          <optgroup label={commandGroup.name}>
-            {#each commandGroup.commandIds.toArray() as commandId}
-              <option value={commandId} selected={selectedCommandId === commandId}
-                >{commandNames[commandId]}</option
-              >
-            {/each}
-          </optgroup>
-        {/each}
-      </select>
-      <div
-        class="delete-button icon-button"
-        data-index={index}
-        tabindex="-1"
-        on:click={props.onClickDeleteButton}
-      />
-      <div
-        class="add-command-button icon-button"
-        data-index={index}
-        tabindex="-1"
-        on:click={props.onClickAddCommandButton}
-      />
-    </div>
-  {/each}
-</div>
+<tr>
+  <td>{InputId.toReadableText(props.inputId)}</td>
+  <td>
+    {#each props.commandIds.toArray() as selectedCommandId, index}
+      <div class="key-binding_command-row">
+        <select data-index={index} on:change={props.onChange}>
+          {#each props.commandGroups.toArray() as commandGroup}
+            <optgroup label={commandGroup.name}>
+              {#each commandGroup.commandIds.toArray() as commandId}
+                <option value={commandId} selected={selectedCommandId === commandId}
+                  >{commandNames[commandId]}</option
+                >
+              {/each}
+            </optgroup>
+          {/each}
+        </select>
+        <div
+          class="delete-button icon-button"
+          data-index={index}
+          tabindex="-1"
+          on:click={props.onClickDeleteButton}
+        />
+        <div
+          class="add-command-button icon-button"
+          data-index={index}
+          tabindex="-1"
+          on:click={props.onClickAddCommandButton}
+        />
+      </div>
+    {/each}
+  </td>
+</tr>
 
 <style global>
   :root {
