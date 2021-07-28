@@ -3,6 +3,7 @@
   import MainAreaCodeBlockContent from './MainAreaCodeBlockContent.svelte'
   import {MainAreaContentProps} from './MainAreaContentProps'
   import MainAreaImageContent from './MainAreaImageContent.svelte'
+  import MainAreaTableContent from './MainAreaTableContent.svelte'
   import MainAreaTexContent from './MainAreaTexContent.svelte'
   import MainAreaTextContent from './MainAreaTextContent.svelte'
   import MainAreaWebPageContent from './MainAreaWebPageContent.svelte'
@@ -20,6 +21,8 @@
   <MainAreaCodeBlockContent {props} />
 {:else if props.type === ItemType.TEX}
   <MainAreaTexContent {props} />
+{:else if props.type === 'table'}
+  <MainAreaTableContent {props} />
 {/if}
 
 <style global>
