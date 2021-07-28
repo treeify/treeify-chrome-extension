@@ -48,7 +48,7 @@
   {/if}
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ウェブページ項目のファビコン領域（正方形）の一辺の長さ */
     --main-area-favicon-size: 1em;

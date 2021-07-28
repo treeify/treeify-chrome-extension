@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   .drag-image {
     position: fixed;
     top: 0;

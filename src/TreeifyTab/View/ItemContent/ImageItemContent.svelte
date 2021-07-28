@@ -6,7 +6,7 @@
 
 <img class="image-item-content" src={props.url} />
 
-<style global>
+<style global lang="scss">
   .image-item-content {
     /* 画像が表示領域の横幅をはみ出さないよう設定 */
     max-width: 100%;

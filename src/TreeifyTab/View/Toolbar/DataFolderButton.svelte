@@ -29,7 +29,7 @@
   />
 </ToolbarIconButton>
 
-<style global>
+<style global lang="scss">
   :root {
     /* データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
     --data-folder-button-icon-color: #777777;

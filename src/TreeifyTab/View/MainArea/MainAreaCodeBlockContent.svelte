@@ -16,7 +16,7 @@
   {/if}
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     --code-block-padding: 0.2em;
   }

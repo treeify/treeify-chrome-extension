@@ -27,7 +27,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   .search-result-item {
     cursor: pointer;
   }

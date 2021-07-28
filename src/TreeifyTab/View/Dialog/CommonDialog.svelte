@@ -59,7 +59,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* lch(25.0%, 0.0, 0.0)相当 */
     --common-dialog-title-bar-background: #3b3b3b;

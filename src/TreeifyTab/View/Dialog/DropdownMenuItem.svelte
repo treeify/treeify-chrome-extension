@@ -63,7 +63,7 @@
   {props.title}
 </div>
 
-<style global>
+<style global lang="scss">
   .dropdown-menu-item {
     outline: 0 solid transparent;
 

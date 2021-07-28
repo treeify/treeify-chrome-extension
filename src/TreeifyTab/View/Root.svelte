@@ -37,7 +37,7 @@
   {/if}
 </div>
 
-<style global>
+<style global lang="scss">
   .root {
     height: 100%;
     /* ダイアログなどを他の表示物に重ねて表示するための設定 */

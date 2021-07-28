@@ -9,7 +9,7 @@
   <pre><code>{@html getHighlightedHtml(props.code, props.language)}</code></pre>
 </div>
 
-<style global>
+<style global lang="scss">
   .code-block-item-content {
     overflow-x: auto;
   }

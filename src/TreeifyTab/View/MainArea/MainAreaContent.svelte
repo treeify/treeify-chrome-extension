@@ -25,5 +25,5 @@
   <MainAreaTableContent {props} />
 {/if}
 
-<style global>
+<style global lang="scss">
 </style>

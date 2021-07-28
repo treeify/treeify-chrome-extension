@@ -9,5 +9,5 @@
   {@html katex.renderToString(props.code, {throwOnError: false})}
 </div>
 
-<style global>
+<style global lang="scss">
 </style>

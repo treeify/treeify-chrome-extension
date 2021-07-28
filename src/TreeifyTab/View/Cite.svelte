@@ -16,7 +16,7 @@
   >
 {/if}
 
-<style global>
+<style global lang="scss">
   .main-area-image-content_cite {
     font-size: 50%;
     /* lch(60.0%, 0.0, 0.0)相当 */

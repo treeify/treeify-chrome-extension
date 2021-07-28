@@ -50,7 +50,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   .context-menu-dialog {
     position: fixed;
     top: 0;

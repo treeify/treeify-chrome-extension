@@ -31,7 +31,7 @@
   <PreferenceButton />
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ツールバーの高さ */
     --toolbar-height: 36px;

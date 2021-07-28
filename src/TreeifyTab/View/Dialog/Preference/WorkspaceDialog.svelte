@@ -15,7 +15,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .workspace-dialog_content {
     padding: 1em;
 

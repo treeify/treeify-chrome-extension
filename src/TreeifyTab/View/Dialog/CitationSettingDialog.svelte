@@ -23,7 +23,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .citation-setting-dialog_content {
     width: 90vw;
     max-width: 40em;

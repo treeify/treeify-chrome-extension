@@ -57,7 +57,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .search-dialog_content {
     padding: 1em;
   }

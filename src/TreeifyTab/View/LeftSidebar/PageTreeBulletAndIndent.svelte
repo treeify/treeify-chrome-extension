@@ -18,7 +18,7 @@
   />
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* インデントガイドの色。lch(86.0%, 0.0, 0.0)相当 */
     --page-tree-indent-guide-color: #d7d7d7;

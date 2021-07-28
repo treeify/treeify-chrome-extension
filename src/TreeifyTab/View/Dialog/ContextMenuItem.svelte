@@ -69,7 +69,7 @@
   {props.title}
 </div>
 
-<style global>
+<style global lang="scss">
   .context-menu-item {
     outline: 0 solid transparent;
 

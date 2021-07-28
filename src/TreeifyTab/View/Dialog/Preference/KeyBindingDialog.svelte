@@ -60,7 +60,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .key-binding-dialog_content {
     padding: 1em;
   }

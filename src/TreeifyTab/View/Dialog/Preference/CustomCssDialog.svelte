@@ -25,7 +25,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .custom-css-dialog_content {
     padding: 1em;
   }

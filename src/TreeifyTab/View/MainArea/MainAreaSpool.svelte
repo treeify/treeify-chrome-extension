@@ -30,7 +30,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当 */
     --main-area-bullet-outer-circle-color: #e2e2e2;

@@ -36,6 +36,7 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-svelte": "^7.1.0",
+    "sass": "^1.36.0",
     "svelte": "^3.38.3",
     "svelte-check": "^2.2.0",
     "svelte-preprocess": "^4.7.3",

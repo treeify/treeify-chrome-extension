@@ -88,7 +88,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ボディ領域の上下パディング */
     --main-area-body-area-vertical-padding: 0.08em;

@@ -39,7 +39,7 @@
   </td>
 </tr>
 
-<style global>
+<style global lang="scss">
   :root {
     --key-binding-dialog-command-button-size: 1.5em;
     --key-binding-dialog-delete-icon-size: 1.2em;

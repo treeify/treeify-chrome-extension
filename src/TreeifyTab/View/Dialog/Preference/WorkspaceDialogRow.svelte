@@ -41,7 +41,7 @@
   <div class="workspace-dialog_delete-button icon-button" on:click={onClickDeleteButton} />
 </div>
 
-<style global>
+<style global lang="scss">
   .workspace-dialog_existing-workspace {
     display: flex;
     align-items: center;

@@ -6,7 +6,7 @@
   <slot />
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ツールバーのボタンのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当 */
     --toolbar-icon-button-hover-background: #e2e2e2;
