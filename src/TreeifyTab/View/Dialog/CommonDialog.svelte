@@ -100,7 +100,6 @@
     align-items: center;
 
     padding-inline: 0.5em;
-    font-size: 15px;
 
     background: var(--common-dialog-title-bar-background);
   }
@@ -142,6 +141,6 @@
     max-height: calc(90vh - var(--common-dialog-title-bar-height));
     overflow-y: auto;
 
-    font-size: 14px;
+    font-size: 0.95rem;
   }
 </style>

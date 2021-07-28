@@ -4,11 +4,13 @@
 
 html {
   height: 100%;
+  font-size: 15px;
 }
 
 body {
   height: 100%;
   margin: 0;
+  font-size: inherit;
 }
 
 img {
