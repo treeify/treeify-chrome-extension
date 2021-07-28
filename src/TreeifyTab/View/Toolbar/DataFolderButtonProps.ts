@@ -1,11 +1,11 @@
 import {External} from 'src/TreeifyTab/External/External'
 
-export type DataFolderPickerOpenButtonProps = {
+export type DataFolderButtonProps = {
   isAlreadyOpen: boolean
   isGrayedOut: boolean
 }
 
-export function createDataFolderPickerOpenButtonProps(): DataFolderPickerOpenButtonProps {
+export function createDataFolderButtonProps(): DataFolderButtonProps {
   return {
     isAlreadyOpen: External.instance.dataFolder !== undefined,
     isGrayedOut:

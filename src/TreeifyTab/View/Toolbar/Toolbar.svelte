@@ -4,7 +4,7 @@
   import {toOpmlString} from '../../Internal/ImportExport/opml'
   import {Internal} from '../../Internal/Internal'
   import {State} from '../../Internal/State'
-  import DataFolderPickerOpenButton from './DataFolderPickerOpenButton.svelte'
+  import DataFolderButton from './DataFolderButton.svelte'
   import AddButton from './ItemAdditionButton.svelte'
   import PreferenceButton from './PreferenceButton.svelte'
   import {ToolbarProps} from './ToolbarProps'
@@ -26,7 +26,7 @@
 
 <div class="toolbar">
   <button on:click={onClick}>OPMLエクスポート</button>
-  <DataFolderPickerOpenButton props={props.dataFolderPickerOpenButtonProps} />
+  <DataFolderButton props={props.dataFolderButtonProps} />
   <AddButton />
   <PreferenceButton />
 </div>
