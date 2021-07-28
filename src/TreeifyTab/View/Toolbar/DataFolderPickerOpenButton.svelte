@@ -22,7 +22,11 @@
 </script>
 
 <ToolbarIconButton on:click={onClick}>
-  <div class="data-folder-picker-open-button_icon" class:grayed-out={props.isGrayedOut} />
+  <div
+    class="data-folder-picker-open-button_icon"
+    class:already-open={props.isAlreadyOpen}
+    class:grayed-out={props.isGrayedOut}
+  />
 </ToolbarIconButton>
 
 <style global>
@@ -46,10 +50,14 @@
     transform: translate(-50%, -50%);
 
     background: var(--data-folder-picker-open-button-icon-color);
-    -webkit-mask-image: url('folder-icon.svg');
+    -webkit-mask: url('folder-open.svg') no-repeat center;
+    -webkit-mask-size: contain;
   }
   /* グレーアウト状態のデータフォルダアイコン */
   .data-folder-picker-open-button_icon.grayed-out {
     background: var(--data-folder-picker-open-button-icon-grayed-out-color);
+  }
+  .data-folder-picker-open-button_icon.already-open {
+    -webkit-mask: url('folder-sync.svg');
   }
 </style>
