@@ -11,6 +11,9 @@
 
 <div class="main-area-table-content" {id} tabindex="0" on:focus={props.onFocus}>
   <table class="main-area-table-content_table">
+    <caption class="main-area-table-content_caption">
+      <ItemContent props={props.caption} />
+    </caption>
     {#each props.rows.toArray() as row}
       <tr>
         {#each row.toArray() as itemContentProps}
