@@ -32,14 +32,14 @@
 <style global>
   :root {
     /* データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
-    --data-folder-picker-open-button-icon-color: #5e5e5e;
+    --data-folder-picker-open-button-icon-color: #777777;
     /* データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当 */
     --data-folder-picker-open-button-icon-grayed-out-color: #ababab;
   }
 
   /* データフォルダアイコン */
   .data-folder-picker-open-button_icon {
-    --icon-size: 22px;
+    --icon-size: 24px;
     width: var(--icon-size);
     height: var(--icon-size);
 
