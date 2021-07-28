@@ -5,6 +5,7 @@ import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
+import {tryParseAsTsvTable} from 'src/TreeifyTab/Internal/ImportExport/csv'
 import {
   exportAsIndentedText,
   pasteMultilineText,
@@ -131,6 +132,25 @@ export function onPaste(event: ClipboardEvent) {
       // ターゲットを更新する
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
       assertNonUndefined(belowItemPath)
+      CurrentState.setTargetItemPath(belowItemPath)
+
+      // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
+      if (CurrentState.isEmptyTextItem(targetItemId)) {
+        CurrentState.deleteItem(targetItemId)
+      }
+
+      Rerenderer.instance.rerender()
+      return
+    }
+
+    // タブ区切り形式（Tab Separated Values）のテキストはテーブルとして解釈する。
+    // 主にGoogleスプレッドシートからコピペのための機能。
+    // （スプレッドシートからコピーしてもクリップボードにCSV形式が含まれないのでこういう実装になった）
+    const tableItemId = tryParseAsTsvTable(text)
+    if (tableItemId !== undefined) {
+      const edge = {isCollapsed: true}
+      const belowItemPath = CurrentState.insertBelowItem(targetItemPath, tableItemId, edge)
+      // ターゲットを更新する
       CurrentState.setTargetItemPath(belowItemPath)
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
