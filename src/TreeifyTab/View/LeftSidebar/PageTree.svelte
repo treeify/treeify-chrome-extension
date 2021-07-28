@@ -19,7 +19,6 @@
   }
 
   .page-tree {
-    font-size: 15px;
     line-height: var(--page-tree-line-height);
 
     padding: 10px 5px 150px 10px;

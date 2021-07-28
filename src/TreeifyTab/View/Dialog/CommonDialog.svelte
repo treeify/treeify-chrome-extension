@@ -100,7 +100,6 @@
     align-items: center;
 
     padding-inline: 0.5em;
-    font-size: 15px;
 
     background: var(--common-dialog-title-bar-background);
   }

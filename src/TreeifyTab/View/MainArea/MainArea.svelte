@@ -38,7 +38,6 @@
   .main-area {
     overflow-y: auto;
 
-    font-size: 15px;
     line-height: var(--main-area-line-height);
 
     padding: 20px 300px 40% 50px;
