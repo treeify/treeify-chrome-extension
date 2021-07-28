@@ -141,6 +141,6 @@
     max-height: calc(90vh - var(--common-dialog-title-bar-height));
     overflow-y: auto;
 
-    font-size: 14px;
+    font-size: 0.95rem;
   }
 </style>

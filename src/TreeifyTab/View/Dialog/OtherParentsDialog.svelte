@@ -31,8 +31,6 @@
   .other-parents-dialog_content {
     width: 90vw;
     padding: 1em;
-
-    font-size: 17px;
   }
 
   .other-parents-dialog_row-wrapper {

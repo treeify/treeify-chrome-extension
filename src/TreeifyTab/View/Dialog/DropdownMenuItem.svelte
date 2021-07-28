@@ -67,7 +67,7 @@
   .dropdown-menu-item {
     outline: 0 solid transparent;
 
-    font-size: 13px;
+    font-size: 0.9rem;
     padding: 0.1em 0.5em;
 
     cursor: pointer;
