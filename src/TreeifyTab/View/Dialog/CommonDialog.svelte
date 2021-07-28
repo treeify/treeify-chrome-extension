@@ -61,15 +61,9 @@
 
 <style global>
   :root {
-    --common-dialog-border-radius: 5px;
-
     /* lch(25.0%, 0.0, 0.0)相当 */
     --common-dialog-title-bar-background: #3b3b3b;
     --common-dialog-title-bar-height: 2.2em;
-
-    /* 閉じるボタン（正方形）の一辺の長さ */
-    --common-dialog-close-button-size: 1.4em;
-    --common-dialog-close-icon-size: 0.8em;
   }
 
   .common-dialog {
@@ -92,7 +86,7 @@
   .common-dialog_frame {
     max-width: 90vw;
 
-    border-radius: var(--common-dialog-border-radius);
+    border-radius: 5px;
     /* 子要素を角丸からはみ出させない */
     overflow: hidden;
 
@@ -117,8 +111,9 @@
   }
 
   .common-dialog_close-button {
-    width: var(--common-dialog-close-button-size);
-    height: var(--common-dialog-close-button-size);
+    --button-size: 1.4em;
+    width: var(--button-size);
+    height: var(--button-size);
 
     margin-left: auto;
   }
@@ -128,8 +123,9 @@
   }
   .common-dialog_close-button::before {
     content: '';
-    width: var(--common-dialog-close-icon-size);
-    height: var(--common-dialog-close-icon-size);
+    --icon-size: 0.8em;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     /* 中央寄せ */
     position: absolute;

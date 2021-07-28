@@ -17,14 +17,10 @@
 </ToolbarIconButton>
 
 <style global>
-  :root {
-    /* 環境設定ボタンのアイコンのサイズ（正方形の一辺の長さ） */
-    --preference-button-icon-size: 18px;
-  }
-
   .preference-button_icon {
-    width: var(--preference-button-icon-size);
-    height: var(--preference-button-icon-size);
+    --icon-size: 18px;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     /* 中央寄せ */
     position: absolute;

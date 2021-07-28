@@ -95,9 +95,6 @@
     /* 最も古い足跡の色（線形補間の一端）。lch(98.0%, 0.0, 0.0)相当 */
     --page-tree-weakest-footprint-color: #f9f9f9;
 
-    /* audibleタブを含むことを示すアイコンのサイズ（正方形の一辺の長さ） */
-    --page-tree-audible-icon-size: 1em;
-
     /* 閉じるボタンのサイズ（正方形の一辺の長さ） */
     --page-tree-close-button-size: 1.45em;
   }
@@ -139,8 +136,9 @@
 
   /* ウェブページ項目の音がなっていることを示すアイコン */
   .page-tree-node_audible-icon {
-    width: var(--page-tree-audible-icon-size);
-    height: var(--page-tree-audible-icon-size);
+    --icon-size: 1em;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     /* lch(35.0%, 0.0, 0.0)相当 */
     background: #525252;

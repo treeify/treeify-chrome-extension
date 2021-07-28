@@ -17,14 +17,10 @@
 </ToolbarIconButton>
 
 <style global>
-  :root {
-    /* 項目追加設定ボタンのアイコンのサイズ（正方形の一辺の長さ） */
-    --item-addition-button-icon-size: 22px;
-  }
-
   .item-addition-button_icon {
-    width: var(--item-addition-button-icon-size);
-    height: var(--item-addition-button-icon-size);
+    --icon-size: 22px;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     /* 中央寄せ */
     position: absolute;

@@ -20,8 +20,6 @@
 
 <style global>
   :root {
-    /* インデントガイドの太さ */
-    --page-tree-indent-guide-width: 1px;
     /* インデントガイドの色。lch(86.0%, 0.0, 0.0)相当 */
     --page-tree-indent-guide-color: #d7d7d7;
     /* インデントガイドの色（ホバー時）。lch(68.0%, 0.0, 0.0)相当 */
@@ -29,9 +27,6 @@
 
     /* バレット領域のサイズ（正方形の一辺の長さ） */
     --page-tree-bullet-area-size: 0.8em;
-
-    /* 子を持たないノードのバレット（円形）の直径 */
-    --page-tree-bullet-dot-diameter: 0.25em;
 
     /* 子を持つノードのバレット（二等辺三角形▼）の幅 */
     --page-tree-bullet-triangle-width: 0.45em;
@@ -68,7 +63,7 @@
   /* インデントガイド */
   .page-tree-bullet-and-indent_indent-guide {
     background: var(--page-tree-indent-guide-color);
-    width: var(--page-tree-indent-guide-width);
+    width: 1px;
     height: 100%;
     margin: 0 auto;
   }
@@ -117,8 +112,9 @@
 
   /* 子を持たないノードのバレット */
   .page-tree-bullet-and-indent_bullet-area.no-children {
-    width: var(--page-tree-bullet-dot-diameter);
-    height: var(--page-tree-bullet-dot-diameter);
+    --diameter: 0.25em;
+    width: var(--diameter);
+    height: var(--diameter);
     border-radius: 50%;
     background: var(--page-tree-bullet-color);
   }

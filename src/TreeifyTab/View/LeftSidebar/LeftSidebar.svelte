@@ -13,13 +13,10 @@
   :root {
     /* 左サイドバーの背景色。lch(98.0%, 0.0, 0.0)相当 */
     --left-sidebar-background-color: #f9f9f9;
-
-    /* 左サイドバーの幅 */
-    --left-sidebar-width: 260px;
   }
 
   .left-sidebar {
-    width: var(--left-sidebar-width);
+    width: 260px;
     height: 100%;
 
     overflow-y: auto;

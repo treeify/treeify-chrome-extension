@@ -42,13 +42,6 @@
 </div>
 
 <style global>
-  :root {
-    /* 削除ボタンのサイズ（正方形の一辺の長さ） */
-    --workspace-dialog-delete-button-size: 1.5em;
-
-    --workspace-dialog-delete-icon-size: 1.2em;
-  }
-
   .workspace-dialog_existing-workspace {
     display: flex;
     align-items: center;
@@ -65,13 +58,15 @@
   }
 
   .workspace-dialog_delete-button {
-    width: var(--workspace-dialog-delete-button-size);
-    height: var(--workspace-dialog-delete-button-size);
+    --button-size: 1.5em;
+    width: var(--button-size);
+    height: var(--button-size);
   }
   .workspace-dialog_delete-button::before {
     content: '';
-    width: var(--workspace-dialog-delete-icon-size);
-    height: var(--workspace-dialog-delete-icon-size);
+    --icon-size: 1.2em;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     /* 中央寄せ */
     position: absolute;

@@ -23,15 +23,11 @@
 
 <style global>
   :root {
-    --main-area-base-font-size: 15px;
-
     /*
     メインエリアのテキスト全般に適用されるline-height。
     階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
     */
     --main-area-line-height: 1.3;
-    /* メインエリア内で階層が深くなるごとにフォントサイズなどが小さくなる仕組みに用いられる乗数 */
-    --main-area-font-size-multiplicator: 99.5%;
 
     /* フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する */
     --main-area-calculated-line-height: calc(
@@ -42,7 +38,7 @@
   .main-area {
     overflow-y: auto;
 
-    font-size: var(--main-area-base-font-size);
+    font-size: 15px;
     line-height: var(--main-area-line-height);
 
     padding: 20px 300px 40% 50px;
