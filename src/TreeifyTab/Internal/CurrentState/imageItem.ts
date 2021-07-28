@@ -30,6 +30,7 @@ export function createImageItem(): ItemId {
 
   const imageItem: ImageItem = {
     url: '',
+    caption: '',
     heightPx: null,
   }
   Internal.instance.mutate(imageItem, PropertyPath.of('imageItems', newItemId))
@@ -45,6 +46,13 @@ export function deleteImageItemEntry(itemId: ItemId) {
 /** 画像項目のURLを設定する */
 export function setImageItemUrl(itemId: ItemId, url: string) {
   Internal.instance.mutate(url, PropertyPath.of('imageItems', itemId, 'url'))
+}
+
+/** 画像アイテムのキャプションを設定する */
+export function setImageItemCaption(itemId: ItemId, caption: string) {
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
+  })
 }
 
 /** 画像項目のheightPxを設定する */

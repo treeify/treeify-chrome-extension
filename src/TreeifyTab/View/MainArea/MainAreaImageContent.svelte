@@ -14,12 +14,15 @@
 </script>
 
 <div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <div class="main-area-image-content_image-with-resize-handle">
-    <img class="main-area-image-content_image" src={props.url} draggable="false" {style} />
-    <div
-      class="main-area-image-content_resize-handle"
-      use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
-    />
+  <div class="main-area-image-content_caption-layout">
+    <div class="main-area-image-content_image-with-resize-handle">
+      <img class="main-area-image-content_image" src={props.url} draggable="false" {style} />
+      <div
+        class="main-area-image-content_resize-handle"
+        use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
+      />
+    </div>
+    <div class="main-area-image-content_caption">{props.caption}</div>
   </div>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
@@ -31,6 +34,15 @@
   .main-area-image-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
+  }
+
+  /* 画像とキャプションを中央揃えにする */
+  .main-area-image-content_caption-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: fit-content;
   }
 
   .main-area-image-content_image-with-resize-handle {
@@ -53,6 +65,12 @@
   /* グレーアウト状態の画像 */
   .grayed-out .main-area-image-content_image {
     filter: opacity(50%);
+  }
+
+  /* グレーアウト状態のキャプション */
+  .grayed-out .main-area-image-content_caption {
+    /* lch(50.0%, 0.0, 0.0)相当 */
+    color: #777777;
   }
 
   .main-area-image-content_resize-handle {

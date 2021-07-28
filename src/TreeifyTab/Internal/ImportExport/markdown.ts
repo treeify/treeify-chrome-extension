@@ -47,7 +47,7 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
       return prefix + `[${title}](${webPageItem.url})  `
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return prefix + `![](${imageItem.url})  ` + postfix
+      return prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 軽く確認したところコードブロックと引用は両立できないようなので無視する
@@ -73,7 +73,7 @@ function toSingleLineMarkdownContent(itemPath: ItemPath): string {
       return `[${title}](${webPageItem.url})  `
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return `![](${imageItem.url})  `
+      return `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  `
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       return '`' + codeBlockItem.code.replaceAll(/\r?\n/g, ' ') + '`'
