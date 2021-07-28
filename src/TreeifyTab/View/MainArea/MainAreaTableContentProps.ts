@@ -11,6 +11,7 @@ import {
 export type MainAreaTableContentProps = {
   itemPath: ItemPath
   type: TableView['type']
+  caption: ItemContentProps
   rows: List<List<ItemContentProps>>
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
@@ -25,6 +26,7 @@ export function createMainAreaTableContentProps(
   return {
     itemPath,
     type: 'table',
+    caption: createItemContentProps(itemId),
     rows: state.items[itemId].childItemIds.map((childItemId) => {
       return state.items[childItemId].childItemIds.map(createItemContentProps)
     }),
