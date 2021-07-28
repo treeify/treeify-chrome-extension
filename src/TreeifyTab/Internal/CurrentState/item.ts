@@ -403,3 +403,10 @@ export function setCite(itemId: ItemId, cite: Cite) {
 export function setView(itemId: ItemId, view: View) {
   Internal.instance.mutate(view, PropertyPath.of('items', itemId, 'view'))
 }
+
+export function shouldBeDisplayedAsTable(itemPath: ItemPath): boolean {
+  return (
+    Internal.instance.state.items[ItemPath.getItemId(itemPath)].view.type === 'table' &&
+    CurrentState.getDisplayingChildItemIds(itemPath).size === 0
+  )
+}

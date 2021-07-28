@@ -39,10 +39,7 @@ export function createMainAreaContentProps(
   itemType: ItemType
 ): MainAreaContentProps {
   // テーブル表示する条件判定
-  if (
-    state.items[ItemPath.getItemId(itemPath)].view.type === 'table' &&
-    CurrentState.getDisplayingChildItemIds(itemPath).size === 0
-  ) {
+  if (CurrentState.shouldBeDisplayedAsTable(itemPath)) {
     return createMainAreaTableContentProps(state, itemPath)
   }
 

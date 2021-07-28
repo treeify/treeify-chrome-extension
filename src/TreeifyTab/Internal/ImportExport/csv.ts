@@ -1,8 +1,10 @@
 import {List} from 'immutable'
-import {parse} from 'papaparse'
+import {parse, unparse} from 'papaparse'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
+import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
 
 /**
  * タブ区切り形式（Tab Separated Values）のテーブルを表すテキストかどうかを判定し、
@@ -38,4 +40,15 @@ export function tryParseAsTsvTable(possiblyTsv: string): ItemId | undefined {
   }
   CurrentState.setView(rootItemId, {type: 'table'})
   return rootItemId
+}
+
+export function toCsvText(itemId: ItemId, delimiter?: string): string {
+  const state = Internal.instance.state
+  const rows = state.items[itemId].childItemIds.toArray().map((childItemId) => {
+    const grandchildren = state.items[childItemId].childItemIds.toArray()
+    return grandchildren.map((grandchild) => {
+      return extractPlainText(List.of(grandchild))
+    })
+  })
+  return unparse(rows, {delimiter})
 }
