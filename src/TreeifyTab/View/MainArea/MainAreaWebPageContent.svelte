@@ -58,11 +58,11 @@
 
     /* ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
     --main-area-audible-icon-color: #6a6a6a;
-
-    /* アンロード済みウェブページ項目のopacity */
-    --soft-unloaded-web-page-item-opacity: 75%;
-    --hard-unloaded-web-page-item-opacity: 55%;
   }
+
+  /* アンロード済みウェブページ項目のopacity */
+  $soft-unloaded-web-page-item-opacity: 75%;
+  $hard-unloaded-web-page-item-opacity: 55%;
 
   /* ウェブページ項目のコンテンツ領域のルート */
   .main-area-web-page-content {
@@ -173,17 +173,17 @@
 
   /* アンロード済みウェブページ項目のタイトルのグレーアウト */
   .main-area-web-page-content_title.soft-unloaded-item {
-    filter: opacity(var(--soft-unloaded-web-page-item-opacity));
+    filter: opacity($soft-unloaded-web-page-item-opacity);
   }
   .main-area-web-page-content_title.hard-unloaded-item {
-    filter: opacity(var(--hard-unloaded-web-page-item-opacity));
+    filter: opacity($hard-unloaded-web-page-item-opacity);
   }
 
   /* アンロード済みウェブページ項目のファビコンのグレーアウト */
   .main-area-web-page-content_favicon.soft-unloaded-item > * {
-    filter: opacity(var(--soft-unloaded-web-page-item-opacity));
+    filter: opacity($soft-unloaded-web-page-item-opacity);
   }
   .main-area-web-page-content_favicon.hard-unloaded-item > * {
-    filter: opacity(var(--hard-unloaded-web-page-item-opacity));
+    filter: opacity($hard-unloaded-web-page-item-opacity);
   }
 </style>
