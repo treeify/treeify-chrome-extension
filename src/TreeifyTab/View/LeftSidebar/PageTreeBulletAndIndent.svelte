@@ -20,8 +20,6 @@
 
 <style global>
   :root {
-    /* インデントガイドの太さ */
-    --page-tree-indent-guide-width: 1px;
     /* インデントガイドの色。lch(86.0%, 0.0, 0.0)相当 */
     --page-tree-indent-guide-color: #d7d7d7;
     /* インデントガイドの色（ホバー時）。lch(68.0%, 0.0, 0.0)相当 */
@@ -65,7 +63,7 @@
   /* インデントガイド */
   .page-tree-bullet-and-indent_indent-guide {
     background: var(--page-tree-indent-guide-color);
-    width: var(--page-tree-indent-guide-width);
+    width: 1px;
     height: 100%;
     margin: 0 auto;
   }

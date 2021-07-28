@@ -246,8 +246,8 @@
   }
 
   .main-area-node_children-area {
-    /* 階層の深さに応じてフォントサイズを小さくする */
-    font-size: var(--main-area-font-size-multiplicator);
+    /* 階層が深くなるごとにフォントサイズを小さくする */
+    font-size: 99.5%;
   }
 
   /*

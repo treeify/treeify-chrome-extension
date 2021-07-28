@@ -61,8 +61,6 @@
 
 <style global>
   :root {
-    --common-dialog-border-radius: 5px;
-
     /* lch(25.0%, 0.0, 0.0)相当 */
     --common-dialog-title-bar-background: #3b3b3b;
     --common-dialog-title-bar-height: 2.2em;
@@ -88,7 +86,7 @@
   .common-dialog_frame {
     max-width: 90vw;
 
-    border-radius: var(--common-dialog-border-radius);
+    border-radius: 5px;
     /* 子要素を角丸からはみ出させない */
     overflow: hidden;
 

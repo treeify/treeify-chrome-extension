@@ -55,8 +55,6 @@
     /* ハイライト状態の項目のバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
     --highlighted-item-bullet-hover-color: #bf0600;
 
-    /* インデントガイドの太さ */
-    --main-area-indent-guide-width: 1px;
     /* インデントガイドの色。lch(88.0%, 0.0, 0.0)相当 */
     --main-area-indent-guide-color: #dddddd;
     /* インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
@@ -174,7 +172,7 @@
   /* インデントガイド */
   .main-area-spool_indent-guide {
     background: var(--main-area-indent-guide-color);
-    width: var(--main-area-indent-guide-width);
+    width: 1px;
     height: 100%;
     margin: 0 auto;
   }
