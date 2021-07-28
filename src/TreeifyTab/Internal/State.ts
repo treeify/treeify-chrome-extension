@@ -38,8 +38,8 @@ export type State = {
  * つまり、ItemTypeによらず各項目が必ず持っているデータ。
  */
 export type Item = {
-  itemType: ItemType
-  instance: InstanceId
+  type: ItemType
+  instanceId: InstanceId
   iisn: Iisn
   childItemIds: List<ItemId>
   parents: {[K in ItemId]: Edge}
@@ -52,6 +52,7 @@ export type Item = {
    */
   cssClasses: List<string>
   cite: Cite | null
+  view: View
 }
 
 export type Edge = {
@@ -73,6 +74,16 @@ export function createDefaultEdge(): Edge {
 export type Cite = {
   title: string
   url: string
+}
+
+export type View = ListView | TableView
+
+export type ListView = {
+  type: 'list'
+}
+
+export type TableView = {
+  type: 'table'
 }
 
 /** テキスト項目が固有で持つデータの型 */
@@ -202,7 +213,7 @@ export namespace State {
         }
 
         // itemTypeに対応するオブジェクトの存在チェック（ついでにitemTypeの型チェック）
-        switch (item.itemType) {
+        switch (item.type) {
           case ItemType.TEXT:
             assertNonUndefined(state.textItems[itemId], `textItems[${itemId}]が存在しない`)
             break
@@ -222,7 +233,7 @@ export namespace State {
             assertNonUndefined(state.texItems[itemId], `texItems[${itemId}]が存在しない`)
             break
           default:
-            assertNeverType(item.itemType, `items[${itemId}]の不明なitemType "${item.itemType}"`)
+            assertNeverType(item.type, `items[${itemId}]の不明なitemType "${item.type}"`)
         }
 
         // 残りのプロパティの型チェック（存在チェックを兼ねる）

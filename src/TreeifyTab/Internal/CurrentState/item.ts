@@ -44,7 +44,7 @@ export function deleteItem(itemId: ItemId) {
   }
 
   // 項目タイプごとのデータを削除する
-  const itemType = item.itemType
+  const itemType = item.type
   switch (itemType) {
     case ItemType.TEXT:
       CurrentState.deleteTextItemEntry(itemId)
@@ -114,7 +114,7 @@ export function deleteItemItself(itemId: ItemId) {
   }
 
   // 項目タイプごとのデータを削除する
-  const itemType = item.itemType
+  const itemType = item.type
   switch (itemType) {
     case ItemType.TEXT:
       CurrentState.deleteTextItemEntry(itemId)

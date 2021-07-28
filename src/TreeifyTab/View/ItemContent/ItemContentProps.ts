@@ -30,7 +30,7 @@ export type ItemContentProps =
   | TexItemContentProps
 
 export function createItemContentProps(itemId: ItemId) {
-  const itemType = Internal.instance.state.items[itemId].itemType
+  const itemType = Internal.instance.state.items[itemId].type
   switch (itemType) {
     case ItemType.TEXT:
       return createTextItemContentProps(itemId)

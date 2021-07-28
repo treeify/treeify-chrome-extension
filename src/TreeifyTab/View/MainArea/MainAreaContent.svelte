@@ -3,6 +3,7 @@
   import MainAreaCodeBlockContent from './MainAreaCodeBlockContent.svelte'
   import {MainAreaContentProps} from './MainAreaContentProps'
   import MainAreaImageContent from './MainAreaImageContent.svelte'
+  import MainAreaTableContent from './MainAreaTableContent.svelte'
   import MainAreaTexContent from './MainAreaTexContent.svelte'
   import MainAreaTextContent from './MainAreaTextContent.svelte'
   import MainAreaWebPageContent from './MainAreaWebPageContent.svelte'
@@ -10,16 +11,18 @@
   export let props: MainAreaContentProps
 </script>
 
-{#if props.itemType === ItemType.TEXT}
+{#if props.type === ItemType.TEXT}
   <MainAreaTextContent {props} />
-{:else if props.itemType === ItemType.WEB_PAGE}
+{:else if props.type === ItemType.WEB_PAGE}
   <MainAreaWebPageContent {props} />
-{:else if props.itemType === ItemType.IMAGE}
+{:else if props.type === ItemType.IMAGE}
   <MainAreaImageContent {props} />
-{:else if props.itemType === ItemType.CODE_BLOCK}
+{:else if props.type === ItemType.CODE_BLOCK}
   <MainAreaCodeBlockContent {props} />
-{:else if props.itemType === ItemType.TEX}
+{:else if props.type === ItemType.TEX}
   <MainAreaTexContent {props} />
+{:else if props.type === 'table'}
+  <MainAreaTableContent {props} />
 {/if}
 
 <style global>

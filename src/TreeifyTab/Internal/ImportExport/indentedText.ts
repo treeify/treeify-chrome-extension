@@ -56,7 +56,7 @@ function* yieldIndentedLines(
 /** 指定された項目単体のプレーンテキスト表現を生成する */
 export function extractPlainText(itemPath: ItemPath): string {
   const itemId = ItemPath.getItemId(itemPath)
-  const itemType = Internal.instance.state.items[itemId].itemType
+  const itemType = Internal.instance.state.items[itemId].type
   switch (itemType) {
     case ItemType.TEXT:
       const domishObjects = Internal.instance.state.textItems[itemId].domishObjects

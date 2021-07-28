@@ -15,14 +15,15 @@ export function createWebPageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.WEB_PAGE,
-    instance: Instance.getId(),
+    type: ItemType.WEB_PAGE,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
     cite: null,
+    view: {type: 'list'},
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 

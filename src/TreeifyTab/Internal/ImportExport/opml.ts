@@ -44,7 +44,7 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
     baseAttributes.citeUrl = item.cite.url
   }
 
-  switch (item.itemType) {
+  switch (item.type) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
       baseAttributes.type = 'text'
@@ -87,7 +87,7 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
       baseAttributes.text = texItem.code
       break
     default:
-      assertNeverType(item.itemType)
+      assertNeverType(item.type)
   }
 
   return baseAttributes

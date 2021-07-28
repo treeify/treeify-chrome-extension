@@ -106,7 +106,7 @@ async function migrateTabs(newState: State) {
   const globalItemIdMap = new Map<string, ItemId>()
   for (const itemsKey in newState.items) {
     const item = newState.items[itemsKey]
-    const globalItemId = `${item.instance}:${item.iisn}`
+    const globalItemId = `${item.instanceId}:${item.iisn}`
     globalItemIdMap.set(globalItemId, parseInt(itemsKey))
   }
 
@@ -115,7 +115,7 @@ async function migrateTabs(newState: State) {
     const item = Internal.instance.state.items[itemId]
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
     assertNonUndefined(tabId)
-    const globalItemId = `${item.instance}:${item.iisn}`
+    const globalItemId = `${item.instanceId}:${item.iisn}`
     const newItemId = globalItemIdMap.get(globalItemId)
     if (newItemId === undefined) {
       // newStateで対応項目が削除されていた場合

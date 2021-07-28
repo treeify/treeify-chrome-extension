@@ -16,14 +16,15 @@ export function createImageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.IMAGE,
-    instance: Instance.getId(),
+    type: ItemType.IMAGE,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
     cite: null,
+    view: {type: 'list'},
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 

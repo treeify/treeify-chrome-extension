@@ -6,7 +6,7 @@ import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaImageContentProps = {
   itemPath: ItemPath
-  itemType: ItemType.IMAGE
+  type: ItemType.IMAGE
   url: string
   height: string
   citeProps: CiteProps | undefined
@@ -22,7 +22,7 @@ export function createMainAreaImageContentProps(
 
   return {
     itemPath,
-    itemType: ItemType.IMAGE,
+    type: ItemType.IMAGE,
     url: imageItem.url,
     height: imageItem.heightPx !== null ? `${Math.max(20, imageItem.heightPx)}px` : 'auto',
     citeProps: createCiteProps(itemPath),

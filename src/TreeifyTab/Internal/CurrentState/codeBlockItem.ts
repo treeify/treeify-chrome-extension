@@ -15,14 +15,15 @@ export function createCodeBlockItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.CODE_BLOCK,
-    instance: Instance.getId(),
+    type: ItemType.CODE_BLOCK,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
     cite: null,
+    view: {type: 'list'},
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 

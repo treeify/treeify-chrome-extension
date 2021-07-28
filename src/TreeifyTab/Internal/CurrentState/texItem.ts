@@ -15,14 +15,15 @@ export function createTexItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
   const newItem: Item = {
-    itemType: ItemType.TEX,
-    instance: Instance.getId(),
+    type: ItemType.TEX,
+    instanceId: Instance.getId(),
     iisn: Instance.generateIisn(),
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
     cite: null,
+    view: {type: 'list'},
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 

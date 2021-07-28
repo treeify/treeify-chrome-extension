@@ -6,7 +6,7 @@ import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {Cite} from 'src/TreeifyTab/Internal/State'
+import {Cite, ListView, TableView} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /** 選択された項目を折りたたむコマンド */
@@ -41,7 +41,7 @@ export function enterKeyDefault() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
@@ -167,7 +167,7 @@ export function removeEdge() {
 
   // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
-  if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const characterCount = DomishObject.countCharacters(domishObjects)
     Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
@@ -285,5 +285,19 @@ export function toggleCitation() {
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(selectedItemId)
+  }
+}
+
+export function toggleTableView() {
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+
+    if (Internal.instance.state.items[selectedItemId].view.type !== 'table') {
+      const tableView: TableView = {type: 'table'}
+      Internal.instance.mutate(tableView, PropertyPath.of('items', selectedItemId, 'view'))
+    } else {
+      const listView: ListView = {type: 'list'}
+      Internal.instance.mutate(listView, PropertyPath.of('items', selectedItemId, 'view'))
+    }
   }
 }

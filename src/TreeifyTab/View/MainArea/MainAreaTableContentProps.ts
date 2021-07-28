@@ -1,30 +1,33 @@
-import {ItemType} from 'src/TreeifyTab/basicType'
+import {List} from 'immutable'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
+import {State, TableView} from 'src/TreeifyTab/Internal/State'
 import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
+import {
+  createItemContentProps,
+  ItemContentProps,
+} from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 
-export type MainAreaCodeBlockContentProps = {
+export type MainAreaTableContentProps = {
   itemPath: ItemPath
-  type: ItemType.CODE_BLOCK
-  code: string
-  language: string
+  type: TableView['type']
+  rows: List<List<ItemContentProps>>
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
 }
 
-export function createMainAreaCodeBlockContentProps(
+export function createMainAreaTableContentProps(
   state: State,
   itemPath: ItemPath
-): MainAreaCodeBlockContentProps {
+): MainAreaTableContentProps {
   const itemId = ItemPath.getItemId(itemPath)
 
-  const codeBlockItem = state.codeBlockItems[itemId]
   return {
     itemPath,
-    type: ItemType.CODE_BLOCK,
-    code: codeBlockItem.code,
-    language: codeBlockItem.language,
+    type: 'table',
+    rows: state.items[itemId].childItemIds.map((childItemId) => {
+      return state.items[childItemId].childItemIds.map(createItemContentProps)
+    }),
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {

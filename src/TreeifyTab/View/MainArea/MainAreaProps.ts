@@ -138,7 +138,7 @@ function onArrowLeft(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(aboveItemPath)
 
-    const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
+    const aboveItemType = Internal.instance.state.items[aboveItemId].type
     if (aboveItemType === ItemType.TEXT) {
       // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
@@ -156,7 +156,7 @@ function onArrowLeft(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(aboveItemPath)
 
-    const aboveItemType = Internal.instance.state.items[aboveItemId].itemType
+    const aboveItemType = Internal.instance.state.items[aboveItemId].type
     if (aboveItemType === ItemType.TEXT) {
       // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
@@ -198,7 +198,7 @@ function onArrowRight(event: KeyboardEvent) {
       return
     }
 
-    const belowItemType = Internal.instance.state.items[belowItemId].itemType
+    const belowItemType = Internal.instance.state.items[belowItemId].type
     if (belowItemType === ItemType.TEXT) {
       // 下の項目がテキスト項目の場合、キャレットをその先頭に移動する
       event.preventDefault()
@@ -233,7 +233,7 @@ function onArrowUp(event: KeyboardEvent) {
   }
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
@@ -254,7 +254,7 @@ function onArrowUp(event: KeyboardEvent) {
 
 function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
-  if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     // 上の項目がテキスト項目の場合、X座標をできるだけ保つようなキャレット移動を行う
 
     // 現在のX座標を取得
@@ -334,7 +334,7 @@ function onArrowDown(event: KeyboardEvent) {
   }
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
@@ -365,7 +365,7 @@ function onArrowDown(event: KeyboardEvent) {
 
 function moveFocusToBelowItem(belowItemPath: ItemPath) {
   const belowItemId = ItemPath.getItemId(belowItemPath)
-  if (Internal.instance.state.items[belowItemId].itemType === ItemType.TEXT) {
+  if (Internal.instance.state.items[belowItemId].type === ItemType.TEXT) {
     // 下の項目がテキスト項目の場合、X座標をできるだけ保つようなキャレット移動を行う
 
     // 現在のX座標を取得
@@ -440,7 +440,7 @@ function onShiftArrowUp(event: KeyboardEvent) {
 
   if (CurrentState.getSelectedItemPaths().size === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+    if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
       // ターゲット項目がテキスト項目の場合
 
       const textItemSelection = getTextItemSelectionFromDom()
@@ -469,7 +469,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
 
   if (CurrentState.getSelectedItemPaths().size === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
-    if (Internal.instance.state.items[targetItemId].itemType === ItemType.TEXT) {
+    if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
       // ターゲット項目がテキスト項目の場合
 
       const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
@@ -501,7 +501,7 @@ function onBackspace(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItem = Internal.instance.state.items[targetItemId]
-  if (targetItem.itemType === ItemType.TEXT) {
+  if (targetItem.type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
     const selection = getTextItemSelectionFromDom()
@@ -521,7 +521,7 @@ function onBackspace(event: KeyboardEvent) {
         event.preventDefault()
 
         // 上の項目がテキスト項目ならキャレットを末尾に移す
-        if (Internal.instance.state.items[aboveItemId].itemType === ItemType.TEXT) {
+        if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
           const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
           const characterCount = DomishObject.countCharacters(domishObjects)
           Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
@@ -533,7 +533,7 @@ function onBackspace(event: KeyboardEvent) {
         return
       }
 
-      if (Internal.instance.state.items[aboveItemId].itemType !== ItemType.TEXT) {
+      if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) {
         // 上の項目がテキスト項目以外の場合
         // TODO: 項目削除コマンドを実行するのがいいと思う
       } else {
@@ -596,7 +596,7 @@ function onDelete(event: KeyboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItem = Internal.instance.state.items[targetItemId]
-  if (targetItem.itemType === ItemType.TEXT) {
+  if (targetItem.type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
@@ -628,7 +628,7 @@ function onDelete(event: KeyboardEvent) {
 
       const belowItemId = ItemPath.getItemId(belowItemPath)
       const belowItem = Internal.instance.state.items[belowItemId]
-      if (belowItem.itemType !== ItemType.TEXT) {
+      if (belowItem.type !== ItemType.TEXT) {
         // 下の項目がテキスト項目以外の場合
         // TODO: 項目削除コマンドを実行するのがいいと思う
       } else {
@@ -678,7 +678,7 @@ function onDelete(event: KeyboardEvent) {
 /** メインエリア上でSpaceキーを押したときのデフォルトの挙動 */
 function onSpace(event: KeyboardEvent) {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  const targetItemType = Internal.instance.state.items[targetItemId].itemType
+  const targetItemType = Internal.instance.state.items[targetItemId].type
   if (targetItemType === ItemType.WEB_PAGE) {
     event.preventDefault()
     Command.browseTab()
