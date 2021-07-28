@@ -36,8 +36,6 @@
     --main-area-bullet-outer-circle-color: #e2e2e2;
     /* バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当 */
     --main-area-bullet-outer-circle-hover-color: #c6c6c6;
-    /* バレットの内側の円の直径 */
-    --main-area-bullet-inner-circle-diameter: 0.38em;
     /* バレットの内側の円の色。lch(60.0%, 0.0, 0.0)相当 */
     --main-area-bullet-inner-circle-color: #919191;
     /* バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当 */
@@ -46,8 +44,6 @@
     --main-area-bullet-page-icon-color: #5e5e5e;
     /* バレットとして表示されるページアイコンのマウスホバー時の色。lch(20.0%, 0.0, 0.0)相当 */
     --main-area-bullet-page-icon-hover-color: #303030;
-    /* バレットとして表示されるページアイコンのサイズ（正方形の一辺の長さ） */
-    --bullet-page-icon-size: 1em;
 
     /* トランスクルードされた項目のバレットの色。lch(60.0%, 40.0, 160.4)相当 */
     --transcluded-item-bullet-color: #44a178;
@@ -131,8 +127,9 @@
 
   /* メインエリアのバレットの内側の円 */
   .main-area-spool_inner-circle {
-    width: var(--main-area-bullet-inner-circle-diameter);
-    height: var(--main-area-bullet-inner-circle-diameter);
+    --diameter: 0.38em;
+    width: var(--diameter);
+    height: var(--diameter);
     border-radius: 50%;
     background: var(--main-area-bullet-inner-circle-color);
 
@@ -148,8 +145,9 @@
 
   /* ページのバレット */
   .main-area-spool_page-icon {
-    width: var(--bullet-page-icon-size);
-    height: var(--bullet-page-icon-size);
+    --icon-size: 1em;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     background: var(--main-area-bullet-page-icon-color);
     -webkit-mask-image: url('./page-icon.svg');

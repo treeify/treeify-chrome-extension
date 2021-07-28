@@ -14,18 +14,14 @@
 </div>
 
 <style global>
-  :root {
-    /* ファビコン表示領域（正方形）の一辺の長さ */
-    --web-page-item-content-favicon-size: 1em;
-  }
-
   .web-page-item-content {
     display: flex;
     align-items: center;
   }
 
   .web-page-item-content_favicon {
-    width: var(--web-page-item-content-favicon-size);
-    height: var(--web-page-item-content-favicon-size);
+    --size: 1em;
+    width: var(--size);
+    height: var(--size);
   }
 </style>

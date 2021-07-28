@@ -56,8 +56,6 @@
     /* 未読ウェブページ項目のタイトルの色。lch(35.0%, 134.0, 160.4)相当 */
     --main-area-unread-web-page-item-title-color: #005f3e;
 
-    /* ウェブページ項目の音がなっていることを示すアイコン領域（正方形）の一辺の長さ */
-    --main-area-audible-icon-size: 1em;
     /* ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
     --main-area-audible-icon-color: #6a6a6a;
 
@@ -150,8 +148,9 @@
 
   /* ウェブページ項目の音がなっていることを示すアイコン */
   .main-area-web-page-content_audible-icon {
-    width: var(--main-area-audible-icon-size);
-    height: var(--main-area-audible-icon-size);
+    --icon-size: 1em;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     background: var(--main-area-audible-icon-color);
     -webkit-mask: url('./audible-icon.svg');

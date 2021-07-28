@@ -8,16 +8,15 @@
 
 <style global>
   :root {
-    /* ツールバーのボタンのサイズ（正方形の一辺の長さ） */
-    --toolbar-icon-button-size: 32px;
     /* ツールバーのボタンのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当 */
     --toolbar-icon-button-hover-background: #e2e2e2;
   }
 
   /* ツールバーのアイコンボタンの共通クラス */
   .toolbar-icon-button {
-    width: var(--toolbar-icon-button-size);
-    height: var(--toolbar-icon-button-size);
+    --button-size: 32px;
+    width: var(--button-size);
+    height: var(--button-size);
     border-radius: 50%;
 
     cursor: pointer;

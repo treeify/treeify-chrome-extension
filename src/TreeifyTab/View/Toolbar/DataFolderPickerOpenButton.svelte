@@ -27,8 +27,6 @@
 
 <style global>
   :root {
-    /* データフォルダを開くボタンのアイコンのサイズ（正方形の一辺の長さ） */
-    --data-folder-picker-open-button-icon-size: 22px;
     /* データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
     --data-folder-picker-open-button-icon-color: #5e5e5e;
     /* データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当 */
@@ -37,8 +35,9 @@
 
   /* データフォルダアイコン */
   .data-folder-picker-open-button_icon {
-    width: var(--data-folder-picker-open-button-icon-size);
-    height: var(--data-folder-picker-open-button-icon-size);
+    --icon-size: 22px;
+    width: var(--icon-size);
+    height: var(--icon-size);
 
     /* 中央寄せ */
     position: absolute;
