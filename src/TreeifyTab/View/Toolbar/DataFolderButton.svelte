@@ -5,10 +5,10 @@
   import {External} from '../../External/External'
   import {Command} from '../../Internal/Command'
   import {Rerenderer} from '../../Rerenderer'
-  import {DataFolderPickerOpenButtonProps} from './DataFolderPickerOpenButtonProps'
+  import {DataFolderButtonProps} from './DataFolderButtonProps'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
-  export let props: DataFolderPickerOpenButtonProps
+  export let props: DataFolderButtonProps
 
   function onClick() {
     doAsyncWithErrorCapture(async () => {
@@ -22,20 +22,24 @@
 </script>
 
 <ToolbarIconButton on:click={onClick}>
-  <div class="data-folder-picker-open-button_icon" class:grayed-out={props.isGrayedOut} />
+  <div
+    class="data-folder-button_icon"
+    class:already-open={props.isAlreadyOpen}
+    class:grayed-out={props.isGrayedOut}
+  />
 </ToolbarIconButton>
 
 <style global>
   :root {
     /* データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
-    --data-folder-picker-open-button-icon-color: #5e5e5e;
+    --data-folder-button-icon-color: #777777;
     /* データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当 */
-    --data-folder-picker-open-button-icon-grayed-out-color: #ababab;
+    --data-folder-button-icon-grayed-out-color: #ababab;
   }
 
   /* データフォルダアイコン */
-  .data-folder-picker-open-button_icon {
-    --icon-size: 22px;
+  .data-folder-button_icon {
+    --icon-size: 24px;
     width: var(--icon-size);
     height: var(--icon-size);
 
@@ -45,11 +49,15 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    background: var(--data-folder-picker-open-button-icon-color);
-    -webkit-mask-image: url('folder-icon.svg');
+    background: var(--data-folder-button-icon-color);
+    -webkit-mask: url('folder-open.svg') no-repeat center;
+    -webkit-mask-size: contain;
   }
   /* グレーアウト状態のデータフォルダアイコン */
-  .data-folder-picker-open-button_icon.grayed-out {
-    background: var(--data-folder-picker-open-button-icon-grayed-out-color);
+  .data-folder-button_icon.grayed-out {
+    background: var(--data-folder-button-icon-grayed-out-color);
+  }
+  .data-folder-button_icon.already-open {
+    -webkit-mask: url('folder-sync.svg');
   }
 </style>

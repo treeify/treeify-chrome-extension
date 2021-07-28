@@ -1,14 +1,14 @@
 import {
-  createDataFolderPickerOpenButtonProps,
-  DataFolderPickerOpenButtonProps,
-} from 'src/TreeifyTab/View/Toolbar/DataFolderPickerOpenButtonProps'
+  createDataFolderButtonProps,
+  DataFolderButtonProps,
+} from 'src/TreeifyTab/View/Toolbar/DataFolderButtonProps'
 
 export type ToolbarProps = {
-  dataFolderPickerOpenButtonProps: DataFolderPickerOpenButtonProps
+  dataFolderButtonProps: DataFolderButtonProps
 }
 
 export function createToolbarProps(): ToolbarProps {
   return {
-    dataFolderPickerOpenButtonProps: createDataFolderPickerOpenButtonProps(),
+    dataFolderButtonProps: createDataFolderButtonProps(),
   }
 }

@@ -18,7 +18,7 @@
 
 <style global>
   .item-addition-button_icon {
-    --icon-size: 22px;
+    --icon-size: 24px;
     width: var(--icon-size);
     height: var(--icon-size);
 
@@ -29,7 +29,7 @@
     transform: translate(-50%, -50%);
 
     /* lch(40.0%, 0.0, 0.0)相当 */
-    background: #5e5e5e;
+    background: #777777;
     -webkit-mask: url('plus-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
   }
