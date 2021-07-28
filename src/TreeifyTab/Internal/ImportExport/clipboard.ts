@@ -5,7 +5,7 @@ import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {tryParseAsTsvTable} from 'src/TreeifyTab/Internal/ImportExport/csv'
+import {toCsvText, tryParseAsTsvTable} from 'src/TreeifyTab/Internal/ImportExport/csv'
 import {
   exportAsIndentedText,
   pasteMultilineText,
@@ -32,15 +32,22 @@ export function onCopy(event: ClipboardEvent) {
       // テキストが範囲選択されていなければターゲット項目のコピーを行う
       event.preventDefault()
 
-      // インデント形式のテキストをクリップボードに入れる
-      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
-      event.clipboardData.setData('text/plain', contentText)
+      const selectedItemPaths = CurrentState.getSelectedItemPaths()
+      if (
+        selectedItemPaths.size === 1 &&
+        CurrentState.shouldBeDisplayedAsTable(selectedItemPaths.first())
+      ) {
+        // テーブル表示されている項目をターゲットしている場合、タブ区切り形式でクリップボードに入れる
+        const tsvText = toCsvText(ItemPath.getItemId(selectedItemPaths.first()), '\t')
+        event.clipboardData.setData('text/plain', tsvText)
+      } else {
+        // インデント形式のテキストをクリップボードに入れる
+        const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
+        event.clipboardData.setData('text/plain', contentText)
+      }
 
       // OPML形式のテキストをクリップボードに入れる
-      event.clipboardData.setData(
-        'application/xml',
-        toOpmlString(CurrentState.getSelectedItemPaths())
-      )
+      event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
     }
   })
 }
@@ -62,15 +69,22 @@ export function onCut(event: ClipboardEvent) {
       // テキストが範囲選択されていなければターゲット項目のコピーを行う
       event.preventDefault()
 
-      // インデント形式のテキストをクリップボードに入れる
-      const contentText = CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
-      event.clipboardData.setData('text/plain', contentText)
+      const selectedItemPaths = CurrentState.getSelectedItemPaths()
+      if (
+        selectedItemPaths.size === 1 &&
+        CurrentState.shouldBeDisplayedAsTable(selectedItemPaths.first())
+      ) {
+        // テーブル表示されている項目をターゲットしている場合、タブ区切り形式でクリップボードに入れる
+        const tsvText = toCsvText(ItemPath.getItemId(selectedItemPaths.first()), '\t')
+        event.clipboardData.setData('text/plain', tsvText)
+      } else {
+        // インデント形式のテキストをクリップボードに入れる
+        const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
+        event.clipboardData.setData('text/plain', contentText)
+      }
 
       // OPML形式のテキストをクリップボードに入れる
-      event.clipboardData.setData(
-        'application/xml',
-        toOpmlString(CurrentState.getSelectedItemPaths())
-      )
+      event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
 
       Command.removeEdge()
       Rerenderer.instance.rerender()
