@@ -66,7 +66,12 @@ export function extractPlainText(itemPath: ItemPath): string {
       const title = CurrentState.deriveWebPageItemTitle(itemId)
       return `${title} ${webPageItem.url}`
     case ItemType.IMAGE:
-      return Internal.instance.state.imageItems[itemId].url
+      const imageItem = Internal.instance.state.imageItems[itemId]
+      if (imageItem.caption !== '') {
+        return `${imageItem.caption} ${imageItem.url}`
+      } else {
+        return imageItem.url
+      }
     case ItemType.CODE_BLOCK:
       return Internal.instance.state.codeBlockItems[itemId].code
     case ItemType.TEX:

@@ -8,6 +8,7 @@ export type MainAreaImageContentProps = {
   itemPath: ItemPath
   type: ItemType.IMAGE
   url: string
+  caption: string
   height: string
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
@@ -24,6 +25,7 @@ export function createMainAreaImageContentProps(
     itemPath,
     type: ItemType.IMAGE,
     url: imageItem.url,
+    caption: imageItem.caption,
     height: imageItem.heightPx !== null ? `${Math.max(20, imageItem.heightPx)}px` : 'auto',
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
