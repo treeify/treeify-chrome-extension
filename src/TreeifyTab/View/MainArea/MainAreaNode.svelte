@@ -93,15 +93,15 @@
     /* ボディ領域の上下パディング */
     --main-area-body-area-vertical-padding: 0.08em;
 
-    /* フォーカス項目の背景色。lch(95.0%, 7.8, 280.4)相当 */
+    /* フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当 */
     --main-area-focused-item-background-color: #ecf0ff;
-    /* マウスホバー項目の背景色。lch(97.5%, 3.6, 280.4)相当 */
+    /* マウスホバー項目の背景色。lch(97.5%, 134.0, 280.4)相当 */
     --main-area-mouse-hover-item-background-color: #f6f8ff;
 
     /* 複数選択された項目の背景色。lch(93.0%, 134.0, 280.4)相当 */
     --main-area-selected-item-background-color: #e5ebff;
 
-    /* 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 3.5, 40.4)相当 */
+    /* 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当 */
     --main-area-strongest-footprint-color: #fff6f3;
     /* 最も古い足跡の色（線形補間の一端） */
     --main-area-weakest-footprint-color: #ffffff;

@@ -33,8 +33,8 @@
 
 <style global lang="scss">
   :root {
-    /* ツールバーの背景。lch(96.0%, 0.0, 0.0)相当 */
-    --toolbar-background: #f3f3f3;
+    /* ツールバーの背景。lch(98.0%, 0.0, 0.0)相当 */
+    --toolbar-background: #f9f9f9;
   }
 
   .toolbar {
