@@ -88,7 +88,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ボディ領域の上下パディング */
     --main-area-body-area-vertical-padding: 0.08em;
@@ -142,15 +142,16 @@
 
   .main-area-node_content-area {
     height: 100%;
-  }
-  /* マウスホバー時のコンテンツ領域 */
-  .main-area-node_content-area:hover {
-    /* マウスホバー項目の強調表示 */
-    background: var(--main-area-mouse-hover-item-background-color);
-  }
-  /* 単一選択された項目のコンテンツ領域 */
-  .single-selected.main-area-node_content-area {
-    background: var(--main-area-focused-item-background-color);
+
+    /* マウスホバー時のコンテンツ領域 */
+    &:hover {
+      /* マウスホバー項目の強調表示 */
+      background: var(--main-area-mouse-hover-item-background-color);
+    }
+    /* 単一選択された項目のコンテンツ領域 */
+    &.single-selected {
+      background: var(--main-area-focused-item-background-color);
+    }
   }
 
   /* ダウトフル状態の項目 */
@@ -174,36 +175,39 @@
 
     /* lch(40.0%, 0.0, 0.0)相当 */
     color: #5e5e5e;
-  }
-  .main-area-node_hidden-tabs-count:hover {
-    background: var(--main-area-node-button-background-hover-color);
-  }
-  /* 疑似リップルエフェクトの終了状態 */
-  .main-area-node_hidden-tabs-count::after {
-    content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    &:hover {
+      background: var(--main-area-node-button-background-hover-color);
+    }
 
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s, width 0.5s, height 0.5s;
+    /* 疑似リップルエフェクトの終了状態 */
+    &::after {
+      content: '';
 
-    border-radius: 50%;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-    /* lch(50.0%, 0.0, 0.0)相当 */
-    background: #777777;
-  }
-  /* 疑似リップルエフェクトの開始状態 */
-  .main-area-node_hidden-tabs-count:active::after {
-    width: 0;
-    height: 0;
-    opacity: 0.5;
-    transition: opacity 0s, width 0s, height 0s;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+      border-radius: 50%;
+
+      /* lch(50.0%, 0.0, 0.0)相当 */
+      background: #777777;
+    }
+
+    /* 疑似リップルエフェクトの開始状態 */
+    &:active::after {
+      width: 0;
+      height: 0;
+      opacity: 0.5;
+      transition: opacity 0s, width 0s, height 0s;
+    }
   }
 
   /* 各項目の削除ボタン */
@@ -221,13 +225,15 @@
 
     /* ボタンであることを示す */
     cursor: pointer;
-  }
-  .main-area-node_body-area:hover .main-area-node_delete-button {
-    /* マウスホバー時にのみ表示 */
-    visibility: visible;
-  }
-  .main-area-node_delete-button:hover {
-    background: var(--main-area-node-button-background-hover-color);
+
+    .main-area-node_body-area:hover & {
+      /* マウスホバー時にのみ表示 */
+      visibility: visible;
+    }
+
+    &:hover {
+      background: var(--main-area-node-button-background-hover-color);
+    }
   }
 
   .main-area-node_delete-button-icon {

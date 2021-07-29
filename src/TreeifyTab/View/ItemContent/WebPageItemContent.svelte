@@ -13,7 +13,7 @@
   <span class="web-page-item-content_title">{props.title}</span>
 </div>
 
-<style global>
+<style global lang="scss">
   .web-page-item-content {
     display: flex;
     align-items: center;

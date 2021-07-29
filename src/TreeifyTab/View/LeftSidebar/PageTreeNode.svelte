@@ -77,7 +77,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ページツリーの項目のマウスホバー時の背景色。lch(95.5%, 3.6, 280.4)相当 */
     --page-tree-hover-item-background-color: #f0f2f9;
@@ -124,14 +124,15 @@
     /* ページツリーではテキストは折り返さない */
     overflow-x: hidden;
     white-space: nowrap;
-  }
-  .page-tree-node_content-area.active-page {
-    /* アクティブページの強調表示 */
-    background: var(--page-tree-active-page-background-color);
-  }
 
-  .page-tree-node_content-area:hover {
-    background: var(--page-tree-hover-item-background-color);
+    &.active-page {
+      /* アクティブページの強調表示 */
+      background: var(--page-tree-active-page-background-color);
+    }
+
+    &:hover {
+      background: var(--page-tree-hover-item-background-color);
+    }
   }
 
   /* ウェブページ項目の音がなっていることを示すアイコン */
@@ -154,37 +155,40 @@
 
     border-radius: 50%;
     cursor: pointer;
-  }
-  .page-tree-node_tabs-count-button:hover {
-    /* lch(90.0%, 0.0, 0.0)相当 */
-    background: #e2e2e2;
-  }
-  /* 疑似リップルエフェクトの終了状態 */
-  .page-tree-node_tabs-count-button::after {
-    content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    &:hover {
+      /* lch(90.0%, 0.0, 0.0)相当 */
+      background: #e2e2e2;
+    }
 
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s, width 0.5s, height 0.5s;
+    /* 疑似リップルエフェクトの終了状態 */
+    &::after {
+      content: '';
 
-    border-radius: 50%;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-    /* lch(50.0%, 0.0, 0.0)相当 */
-    background: #777777;
-  }
-  /* 疑似リップルエフェクトの開始状態 */
-  .page-tree-node_tabs-count-button:active::after {
-    width: 0;
-    height: 0;
-    opacity: 0.5;
-    transition: opacity 0s, width 0s, height 0s;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+      border-radius: 50%;
+
+      /* lch(50.0%, 0.0, 0.0)相当 */
+      background: #777777;
+    }
+
+    /* 疑似リップルエフェクトの開始状態 */
+    &:active::after {
+      width: 0;
+      height: 0;
+      opacity: 0.5;
+      transition: opacity 0s, width 0s, height 0s;
+    }
   }
 
   .page-tree-node_tabs-count {
@@ -204,27 +208,29 @@
 
     /* マウスホバー時にのみ表示 */
     visibility: hidden;
-  }
-  .page-tree-node_close-button::before {
-    content: '';
 
-    --icon-size: 1.1em;
-    width: var(--icon-size);
-    height: var(--icon-size);
+    &::before {
+      content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+      --icon-size: 1.1em;
+      width: var(--icon-size);
+      height: var(--icon-size);
 
-    /* lch(20.0%, 0.0, 0.0)相当 */
-    background: #303030;
-    -webkit-mask: url('close-icon2.svg') no-repeat center;
-    -webkit-mask-size: contain;
-  }
-  .page-tree-node_body-area:hover .page-tree-node_close-button {
-    /* マウスホバー時にのみ表示 */
-    visibility: visible;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      /* lch(20.0%, 0.0, 0.0)相当 */
+      background: #303030;
+      -webkit-mask: url('close-icon2.svg') no-repeat center;
+      -webkit-mask-size: contain;
+    }
+
+    .page-tree-node_body-area:hover & {
+      /* マウスホバー時にのみ表示 */
+      visibility: visible;
+    }
   }
 </style>

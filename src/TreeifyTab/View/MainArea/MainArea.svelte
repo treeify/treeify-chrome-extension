@@ -21,7 +21,7 @@
   {/key}
 </main>
 
-<style global>
+<style global lang="scss">
   :root {
     /*
     メインエリアのテキスト全般に適用されるline-height。

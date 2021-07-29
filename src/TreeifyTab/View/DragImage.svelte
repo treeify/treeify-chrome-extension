@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   .drag-image {
     position: fixed;
     top: 0;
@@ -43,6 +43,7 @@
 
     cursor: grabbing;
   }
+
   .drag-image_item-image {
     position: absolute;
     /* left, topはstyle属性で指定する */

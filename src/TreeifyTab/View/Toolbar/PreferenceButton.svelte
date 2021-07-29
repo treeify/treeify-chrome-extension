@@ -16,7 +16,7 @@
   <div class="preference-button_icon" />
 </ToolbarIconButton>
 
-<style global>
+<style global lang="scss">
   .preference-button_icon {
     --icon-size: 22px;
     width: var(--icon-size);

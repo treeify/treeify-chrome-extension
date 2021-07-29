@@ -41,16 +41,16 @@
   <div class="workspace-dialog_delete-button icon-button" on:click={onClickDeleteButton} />
 </div>
 
-<style global>
+<style global lang="scss">
   .workspace-dialog_existing-workspace {
     display: flex;
     align-items: center;
 
     margin-top: 3px;
-  }
 
-  .workspace-dialog_existing-workspace:first-child {
-    margin-top: 0;
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   input[type='radio'][name='currentWorkspaceId'] {
@@ -61,22 +61,23 @@
     --button-size: 1.5em;
     width: var(--button-size);
     height: var(--button-size);
-  }
-  .workspace-dialog_delete-button::before {
-    content: '';
-    --icon-size: 1.2em;
-    width: var(--icon-size);
-    height: var(--icon-size);
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    &::before {
+      content: '';
+      --icon-size: 1.2em;
+      width: var(--icon-size);
+      height: var(--icon-size);
 
-    /* lch(40.0%, 0.0, 0.0)相当 */
-    background: #5e5e5e;
-    -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      /* lch(40.0%, 0.0, 0.0)相当 */
+      background: #5e5e5e;
+      -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
+      -webkit-mask-size: contain;
+    }
   }
 </style>

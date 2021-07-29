@@ -39,7 +39,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   .web-page-item-title-setting-dialog {
     position: fixed;
     top: 0;

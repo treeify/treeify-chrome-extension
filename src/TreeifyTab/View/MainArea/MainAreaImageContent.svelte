@@ -29,7 +29,7 @@
   {/if}
 </div>
 
-<style global>
+<style global lang="scss">
   /* 画像項目のコンテンツ領域のルート */
   .main-area-image-content {
     /* フォーカス時の枠線を非表示 */
@@ -89,8 +89,9 @@
     cursor: ns-resize;
 
     visibility: hidden;
-  }
-  .main-area-image-content_image-with-resize-handle:hover .main-area-image-content_resize-handle {
-    visibility: visible;
+
+    .main-area-image-content_image-with-resize-handle:hover & {
+      visibility: visible;
+    }
   }
 </style>

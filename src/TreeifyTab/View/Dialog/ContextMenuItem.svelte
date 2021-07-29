@@ -69,7 +69,7 @@
   {props.title}
 </div>
 
-<style global>
+<style global lang="scss">
   .context-menu-item {
     outline: 0 solid transparent;
 
@@ -77,10 +77,10 @@
     padding: 0.1em 0.5em;
 
     cursor: pointer;
-  }
 
-  .context-menu-item:focus {
-    /* lch(93.0%, 7.8, 280.4)相当 */
-    background: #e7ebfa;
+    &:focus {
+      /* lch(93.0%, 7.8, 280.4)相当 */
+      background: #e7ebfa;
+    }
   }
 </style>

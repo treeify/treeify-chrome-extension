@@ -59,7 +59,7 @@
   </div>
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* lch(25.0%, 0.0, 0.0)相当 */
     --common-dialog-title-bar-background: #3b3b3b;
@@ -115,26 +115,28 @@
     height: var(--button-size);
 
     margin-left: auto;
-  }
-  .common-dialog_close-button:hover {
-    /* lch(40.0%, 0.0, 0.0)相当 */
-    background: #5e5e5e;
-  }
-  .common-dialog_close-button::before {
-    content: '';
-    --icon-size: 0.8em;
-    width: var(--icon-size);
-    height: var(--icon-size);
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    &:hover {
+      /* lch(40.0%, 0.0, 0.0)相当 */
+      background: #5e5e5e;
+    }
 
-    /* lch(80.0%, 0.0, 0.0)相当 */
-    background: #c6c6c6;
-    -webkit-mask-image: url('close-icon.svg');
+    &::before {
+      content: '';
+      --icon-size: 0.8em;
+      width: var(--icon-size);
+      height: var(--icon-size);
+
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      /* lch(80.0%, 0.0, 0.0)相当 */
+      background: #c6c6c6;
+      -webkit-mask-image: url('close-icon.svg');
+    }
   }
 
   .common-dialog_content-area {

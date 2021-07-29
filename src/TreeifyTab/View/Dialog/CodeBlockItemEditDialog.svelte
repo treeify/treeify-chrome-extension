@@ -45,7 +45,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .code-block-edit-dialog_content {
     min-width: 30em;
     padding: 1em;

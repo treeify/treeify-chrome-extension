@@ -27,7 +27,7 @@
   </div>
 </CommonDialog>
 
-<style global>
+<style global lang="scss">
   .other-parents-dialog_content {
     width: 90vw;
     padding: 1em;
@@ -38,9 +38,10 @@
     align-items: center;
 
     margin-top: 0.3em;
-  }
-  .other-parents-dialog_row-wrapper:first-child {
-    margin-top: 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   .other-parents-dialog_close-button {

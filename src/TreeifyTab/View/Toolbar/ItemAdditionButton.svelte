@@ -16,7 +16,7 @@
   <div class="item-addition-button_icon" />
 </ToolbarIconButton>
 
-<style global>
+<style global lang="scss">
   .item-addition-button_icon {
     --icon-size: 24px;
     width: var(--icon-size);

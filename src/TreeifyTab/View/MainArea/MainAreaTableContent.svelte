@@ -29,7 +29,7 @@
   {/if}
 </div>
 
-<style global>
+<style global lang="scss">
   .main-area-table-content {
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
@@ -37,12 +37,13 @@
 
   .main-area-table-content_table {
     border-collapse: collapse;
-  }
-  .main-area-table-content_table td {
-    /* lch(70.0%, 0.0, 0.0) */
-    border: 1px solid #ababab;
 
-    padding-inline: 0.5em;
-    padding-block: 0.2em;
+    td {
+      /* lch(70.0%, 0.0, 0.0) */
+      border: 1px solid #ababab;
+
+      padding-inline: 0.5em;
+      padding-block: 0.2em;
+    }
   }
 </style>

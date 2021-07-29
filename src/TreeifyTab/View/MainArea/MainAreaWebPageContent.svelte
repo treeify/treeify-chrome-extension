@@ -48,7 +48,7 @@
   {/if}
 </div>
 
-<style global>
+<style global lang="scss">
   :root {
     /* ウェブページ項目のファビコン領域（正方形）の一辺の長さ */
     --main-area-favicon-size: 1em;
@@ -58,11 +58,11 @@
 
     /* ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
     --main-area-audible-icon-color: #6a6a6a;
-
-    /* アンロード済みウェブページ項目のopacity */
-    --soft-unloaded-web-page-item-opacity: 75%;
-    --hard-unloaded-web-page-item-opacity: 55%;
   }
+
+  /* アンロード済みウェブページ項目のopacity */
+  $soft-unloaded-web-page-item-opacity: 75%;
+  $hard-unloaded-web-page-item-opacity: 55%;
 
   /* ウェブページ項目のコンテンツ領域のルート */
   .main-area-web-page-content {
@@ -92,37 +92,40 @@
 
     /* クリックして操作できることを示す */
     cursor: pointer;
-  }
-  .main-area-web-page-content_favicon > * {
-    width: var(--main-area-favicon-size);
-    height: var(--main-area-favicon-size);
-  }
-  /* 疑似リップルエフェクトの終了状態 */
-  .main-area-web-page-content_favicon::after {
-    content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    > * {
+      width: var(--main-area-favicon-size);
+      height: var(--main-area-favicon-size);
+    }
 
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s, width 0.5s, height 0.5s;
+    /* 疑似リップルエフェクトの終了状態 */
+    &::after {
+      content: '';
 
-    border-radius: 50%;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-    /* lch(50.0%, 0.0, 0.0)相当 */
-    background: #777777;
-  }
-  /* 疑似リップルエフェクトの開始状態 */
-  .main-area-web-page-content_favicon:active::after {
-    width: 0;
-    height: 0;
-    opacity: 0.5;
-    transition: opacity 0s, width 0s, height 0s;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s, width 0.5s, height 0.5s;
+
+      border-radius: 50%;
+
+      /* lch(50.0%, 0.0, 0.0)相当 */
+      background: #777777;
+    }
+
+    /* 疑似リップルエフェクトの開始状態 */
+    &:active::after {
+      width: 0;
+      height: 0;
+      opacity: 0.5;
+      transition: opacity 0s, width 0s, height 0s;
+    }
   }
 
   /* ローディングインジケータ */
@@ -164,26 +167,27 @@
 
     overflow-x: hidden;
     white-space: nowrap;
-  }
 
-  /* 未読ウェブページ項目のタイトルの強調表示 */
-  .main-area-web-page-content_title.unread {
-    color: var(--main-area-unread-web-page-item-title-color);
-  }
+    /* 未読ウェブページ項目のタイトルの強調表示 */
+    &.unread {
+      color: var(--main-area-unread-web-page-item-title-color);
+    }
 
-  /* アンロード済みウェブページ項目のタイトルのグレーアウト */
-  .main-area-web-page-content_title.soft-unloaded-item {
-    filter: opacity(var(--soft-unloaded-web-page-item-opacity));
-  }
-  .main-area-web-page-content_title.hard-unloaded-item {
-    filter: opacity(var(--hard-unloaded-web-page-item-opacity));
+    /* アンロード済みウェブページ項目のタイトルのグレーアウト */
+    &.soft-unloaded-item {
+      filter: opacity($soft-unloaded-web-page-item-opacity);
+    }
+
+    &.hard-unloaded-item {
+      filter: opacity($hard-unloaded-web-page-item-opacity);
+    }
   }
 
   /* アンロード済みウェブページ項目のファビコンのグレーアウト */
   .main-area-web-page-content_favicon.soft-unloaded-item > * {
-    filter: opacity(var(--soft-unloaded-web-page-item-opacity));
+    filter: opacity($soft-unloaded-web-page-item-opacity);
   }
   .main-area-web-page-content_favicon.hard-unloaded-item > * {
-    filter: opacity(var(--hard-unloaded-web-page-item-opacity));
+    filter: opacity($hard-unloaded-web-page-item-opacity);
   }
 </style>
