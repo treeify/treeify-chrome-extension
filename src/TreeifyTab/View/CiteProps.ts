@@ -1,12 +1,10 @@
-import {doAsyncWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
 export type CiteProps = {
   title: string
   url: string
-  onClick: (event: MouseEvent) => void
+  onMouseDown: (event: MouseEvent) => void
 }
 
 export function createCiteProps(itemPath: ItemPath): CiteProps | undefined {
@@ -17,14 +15,9 @@ export function createCiteProps(itemPath: ItemPath): CiteProps | undefined {
   return {
     title: cite.title,
     url: cite.url,
-    onClick: (event: MouseEvent) => {
-      doAsyncWithErrorCapture(async () => {
-        // TODO: 修飾キー+クリックでタブをバックグラウンドで開けるようにするのが有力
-
-        CurrentState.setTargetItemPath(itemPath)
-        // タブを開く
-        await chrome.tabs.create({url: cite.url})
-      })
+    onMouseDown: (event: MouseEvent) => {
+      // 中クリックで項目が削除されたりする問題への対策
+      event.stopPropagation()
     },
   }
 }
