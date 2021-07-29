@@ -16,9 +16,11 @@
   on:paste={onPaste}
   use:onDragImageBottom={props.onDragImageBottom}
 >
-  {#key props.rootNodeProps.itemPath.toString()}
-    <MainAreaNode props={props.rootNodeProps} />
-  {/key}
+  <div class="main-area_paper">
+    {#key props.rootNodeProps.itemPath.toString()}
+      <MainAreaNode props={props.rootNodeProps} />
+    {/key}
+  </div>
 </main>
 
 <style global lang="scss">
@@ -40,9 +42,22 @@
 
     line-height: var(--main-area-line-height);
 
-    padding: 20px 300px 40% 50px;
-
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
+
+    // lch(97.0%, 0.0, 0.0)相当
+    background: #f6f6f6;
+  }
+
+  .main-area_paper {
+    margin: 20px 270px 40vh 40px;
+    padding-block: 20px;
+    padding-inline: 30px;
+    border-radius: 10px;
+
+    /* lch(80.0%, 0.0, 0.0)相当 */
+    box-shadow: 0 1.5px 5px #c6c6c6;
+
+    background: #ffffff;
   }
 </style>
