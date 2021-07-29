@@ -33,14 +33,12 @@
 
 <style global lang="scss">
   :root {
-    /* ツールバーの高さ */
-    --toolbar-height: 36px;
     /* ツールバーの背景。lch(96.0%, 0.0, 0.0)相当 */
     --toolbar-background: #f3f3f3;
   }
 
   .toolbar {
-    height: var(--toolbar-height);
+    height: 36px;
     padding-inline: 2em;
 
     /* ボタンなどを横に並べる（右寄せ） */
