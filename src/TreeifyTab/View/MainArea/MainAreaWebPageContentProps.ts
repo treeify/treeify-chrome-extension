@@ -78,7 +78,7 @@ export function createMainAreaWebPageContentProps(
           case '0000MouseButton0':
             if (tab === undefined) {
               // ハードアンロード状態の場合
-              Command.loadSubtree()
+              Command.loadItem()
             } else {
               // ソフトアンロード状態またはロード状態の場合
               Command.hardUnloadSubtree()
@@ -89,7 +89,7 @@ export function createMainAreaWebPageContentProps(
           case '1000MouseButton0':
             if (tab === undefined) {
               // ハードアンロード状態の場合
-              Command.loadItem()
+              Command.loadSubtree()
             } else {
               // ソフトアンロード状態またはロード状態の場合
               Command.hardUnloadItem()
@@ -100,7 +100,7 @@ export function createMainAreaWebPageContentProps(
           case '0100MouseButton0':
             if (isUnloaded) {
               // アンロード状態の場合
-              Command.loadSubtree()
+              Command.loadItem()
             } else {
               // ロード状態の場合
               Command.softUnloadSubtree()
@@ -111,7 +111,7 @@ export function createMainAreaWebPageContentProps(
           case '1100MouseButton0':
             if (isUnloaded) {
               // アンロード状態の場合
-              Command.loadItem()
+              Command.loadSubtree()
             } else {
               // ロード状態の場合
               Command.softUnloadItem()
