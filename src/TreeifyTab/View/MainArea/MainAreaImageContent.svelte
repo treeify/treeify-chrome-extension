@@ -89,8 +89,9 @@
     cursor: ns-resize;
 
     visibility: hidden;
-  }
-  .main-area-image-content_image-with-resize-handle:hover .main-area-image-content_resize-handle {
-    visibility: visible;
+
+    .main-area-image-content_image-with-resize-handle:hover & {
+      visibility: visible;
+    }
   }
 </style>

@@ -43,6 +43,7 @@
 
     cursor: grabbing;
   }
+
   .drag-image_item-image {
     position: absolute;
     /* left, topはstyle属性で指定する */

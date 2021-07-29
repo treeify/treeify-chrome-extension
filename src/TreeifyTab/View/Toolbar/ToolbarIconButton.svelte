@@ -23,37 +23,40 @@
 
     /* アイコンと疑似リップルエフェクトを中央寄せにする */
     position: relative;
-  }
-  .toolbar-icon-button:hover {
-    background: var(--toolbar-icon-button-hover-background);
-  }
-  /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
-  .toolbar-icon-button::after {
-    content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    &:hover {
+      background: var(--toolbar-icon-button-hover-background);
+    }
 
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transition: opacity 0.5s, width 0.5s, height 0.5s;
+    /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+    &::after {
+      content: '';
 
-    border-radius: 50%;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
 
-    /* lch(50.0%, 0.0, 0.0)相当 */
-    background: #777777;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.5s, width 0.5s, height 0.5s;
 
-    pointer-events: none;
-  }
-  /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
-  .toolbar-icon-button:active::after {
-    width: 0;
-    height: 0;
-    opacity: 0.5;
-    transition: opacity 0s, width 0s, height 0s;
+      border-radius: 50%;
+
+      /* lch(50.0%, 0.0, 0.0)相当 */
+      background: #777777;
+
+      pointer-events: none;
+    }
+
+    /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+    &:active::after {
+      width: 0;
+      height: 0;
+      opacity: 0.5;
+      transition: opacity 0s, width 0s, height 0s;
+    }
   }
 </style>

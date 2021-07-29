@@ -68,26 +68,28 @@
 
     /* マウスホバー時にのみ表示 */
     visibility: hidden;
-  }
-  .delete-button::before {
-    content: '';
 
-    width: var(--key-binding-dialog-delete-icon-size);
-    height: var(--key-binding-dialog-delete-icon-size);
+    &::before {
+      content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+      width: var(--key-binding-dialog-delete-icon-size);
+      height: var(--key-binding-dialog-delete-icon-size);
 
-    /* lch(40.0%, 0.0, 0.0)相当 */
-    background: #5e5e5e;
-    -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
-  }
-  .key-binding_command-row:hover .delete-button {
-    visibility: visible;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      /* lch(40.0%, 0.0, 0.0)相当 */
+      background: #5e5e5e;
+      -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
+      -webkit-mask-size: contain;
+    }
+
+    .key-binding_command-row:hover & {
+      visibility: visible;
+    }
   }
 
   .add-command-button {
@@ -96,25 +98,27 @@
 
     /* マウスホバー時にのみ表示 */
     visibility: hidden;
-  }
-  .add-command-button::before {
-    content: '';
 
-    width: var(--key-binding-dialog-add-icon-size);
-    height: var(--key-binding-dialog-add-icon-size);
+    &::before {
+      content: '';
 
-    /* 中央寄せ */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+      width: var(--key-binding-dialog-add-icon-size);
+      height: var(--key-binding-dialog-add-icon-size);
 
-    /* lch(40.0%, 0.0, 0.0)相当 */
-    background: #5e5e5e;
-    -webkit-mask: url('./plus-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
-  }
-  .key-binding_command-row:hover .add-command-button {
-    visibility: visible;
+      /* 中央寄せ */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      /* lch(40.0%, 0.0, 0.0)相当 */
+      background: #5e5e5e;
+      -webkit-mask: url('./plus-icon.svg') no-repeat center;
+      -webkit-mask-size: contain;
+    }
+
+    .key-binding_command-row:hover & {
+      visibility: visible;
+    }
   }
 </style>

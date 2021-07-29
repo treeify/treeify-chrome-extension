@@ -52,12 +52,14 @@
     background: var(--data-folder-button-icon-color);
     -webkit-mask: url('folder-open.svg') no-repeat center;
     -webkit-mask-size: contain;
-  }
-  /* グレーアウト状態のデータフォルダアイコン */
-  .data-folder-button_icon.grayed-out {
-    background: var(--data-folder-button-icon-grayed-out-color);
-  }
-  .data-folder-button_icon.already-open {
-    -webkit-mask: url('folder-sync.svg');
+
+    /* グレーアウト状態のデータフォルダアイコン */
+    &.grayed-out {
+      background: var(--data-folder-button-icon-grayed-out-color);
+    }
+
+    &.already-open {
+      -webkit-mask: url('folder-sync.svg');
+    }
   }
 </style>

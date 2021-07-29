@@ -38,9 +38,10 @@
     align-items: center;
 
     margin-top: 0.3em;
-  }
-  .other-parents-dialog_row-wrapper:first-child {
-    margin-top: 0;
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   .other-parents-dialog_close-button {

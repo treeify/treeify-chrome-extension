@@ -27,23 +27,23 @@
     outline: 0 solid transparent;
 
     overflow-x: auto;
-  }
 
-  .main-area-code-block-content pre {
-    /* lch(80.0%, 0.0, 0.0)相当 */
-    border: 1px solid #c6c6c6;
-    margin: 0;
-    padding: var(--code-block-padding);
-    /* これを指定しないとoverflowしたコードがborderからはみ出る */
-    min-width: max-content;
-    /* コードが空文字列のときにぺしゃんこにならないよう設定 */
-    min-height: calc(var(--main-area-calculated-line-height) + 2 * var(--code-block-padding));
+    pre {
+      /* lch(80.0%, 0.0, 0.0)相当 */
+      border: 1px solid #c6c6c6;
+      margin: 0;
+      padding: var(--code-block-padding);
+      /* これを指定しないとoverflowしたコードがborderからはみ出る */
+      min-width: max-content;
+      /* コードが空文字列のときにぺしゃんこにならないよう設定 */
+      min-height: calc(var(--main-area-calculated-line-height) + 2 * var(--code-block-padding));
 
-    font-size: 90%;
-  }
+      font-size: 90%;
+    }
 
-  /* グレーアウト状態のコードブロック項目 */
-  .grayed-out .main-area-code-block-content {
-    filter: opacity(50%);
+    /* グレーアウト状態のコードブロック項目 */
+    .grayed-out & {
+      filter: opacity(50%);
+    }
   }
 </style>

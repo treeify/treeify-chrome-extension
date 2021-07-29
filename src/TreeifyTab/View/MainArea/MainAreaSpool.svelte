@@ -62,31 +62,35 @@
   }
 
   /* トランスクルードされた項目の強調表示 */
-  .transcluded .main-area-spool_inner-circle {
-    background: var(--transcluded-item-bullet-color);
-  }
-  .transcluded .main-area-spool:hover .main-area-spool_inner-circle {
-    background: var(--transcluded-item-bullet-hover-color);
-  }
-  .transcluded .main-area-spool_page-icon {
-    background: var(--transcluded-item-bullet-color);
-  }
-  .transcluded .main-area-spool:hover .main-area-spool_page-icon {
-    background: var(--transcluded-item-bullet-hover-color);
+  .transcluded {
+    .main-area-spool_inner-circle {
+      background: var(--transcluded-item-bullet-color);
+    }
+    .main-area-spool:hover .main-area-spool_inner-circle {
+      background: var(--transcluded-item-bullet-hover-color);
+    }
+    .main-area-spool_page-icon {
+      background: var(--transcluded-item-bullet-color);
+    }
+    .main-area-spool:hover .main-area-spool_page-icon {
+      background: var(--transcluded-item-bullet-hover-color);
+    }
   }
 
   /* ハイライト状態の項目の強調表示 */
-  .highlighted .main-area-spool_inner-circle {
-    background: var(--highlighted-item-bullet-color);
-  }
-  .highlighted .main-area-spool:hover .main-area-spool_inner-circle {
-    background: var(--highlighted-item-bullet-hover-color);
-  }
-  .highlighted .main-area-spool_page-icon {
-    background: var(--highlighted-item-bullet-color);
-  }
-  .highlighted .main-area-spool:hover .main-area-spool_page-icon {
-    background: var(--highlighted-item-bullet-hover-color);
+  .highlighted {
+    .main-area-spool_inner-circle {
+      background: var(--highlighted-item-bullet-color);
+    }
+    .main-area-spool:hover .main-area-spool_inner-circle {
+      background: var(--highlighted-item-bullet-hover-color);
+    }
+    .main-area-spool_page-icon {
+      background: var(--highlighted-item-bullet-color);
+    }
+    .main-area-spool:hover .main-area-spool_page-icon {
+      background: var(--highlighted-item-bullet-hover-color);
+    }
   }
 
   /* メインエリアのバレットとインデントのルート要素 */
@@ -118,9 +122,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-  .main-area-spool:hover .main-area-spool_outer-circle {
-    background: var(--main-area-bullet-outer-circle-hover-color);
+
+    .main-area-spool:hover & {
+      background: var(--main-area-bullet-outer-circle-hover-color);
+    }
   }
 
   /* メインエリアのバレットの内側の円 */
@@ -136,9 +141,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-  .main-area-spool:hover .main-area-spool_inner-circle {
-    background: var(--main-area-bullet-inner-circle-hover-color);
+
+    .main-area-spool:hover & {
+      background: var(--main-area-bullet-inner-circle-hover-color);
+    }
   }
 
   /* ページのバレット */
@@ -155,9 +161,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
-  .main-area-spool:hover .main-area-spool_page-icon {
-    background: var(--main-area-bullet-page-icon-hover-color);
+
+    .main-area-spool:hover & {
+      background: var(--main-area-bullet-page-icon-hover-color);
+    }
   }
 
   /* インデント領域 */
@@ -175,10 +182,10 @@
     width: 1px;
     height: 100%;
     margin: 0 auto;
-  }
 
-  /* バレットとインデントの領域のホバー時のインデントガイド */
-  .main-area-spool:hover .main-area-spool_indent-guide {
-    background: var(--main-area-indent-guide-hover-color);
+    /* バレットとインデントの領域のホバー時のインデントガイド */
+    .main-area-spool:hover & {
+      background: var(--main-area-indent-guide-hover-color);
+    }
   }
 </style>

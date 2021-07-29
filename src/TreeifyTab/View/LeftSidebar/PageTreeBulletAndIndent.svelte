@@ -66,10 +66,11 @@
     width: 1px;
     height: 100%;
     margin: 0 auto;
-  }
-  /* ホバー時のインデントガイド */
-  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_indent-guide {
-    background: var(--page-tree-indent-guide-hover-color);
+
+    /* ホバー時のインデントガイド */
+    .page-tree-bullet-and-indent:hover & {
+      background: var(--page-tree-indent-guide-hover-color);
+    }
   }
 
   /* バレットの共通設定 */
@@ -81,44 +82,47 @@
 
     width: var(--page-tree-bullet-area-size);
     height: var(--page-tree-bullet-area-size);
-  }
 
-  /* 展開済み状態のバレット */
-  .page-tree-bullet-and-indent_bullet-area.expanded {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: var(--page-tree-bullet-triangle-height)
-      calc(var(--page-tree-bullet-triangle-width) / 2) 0
-      calc(var(--page-tree-bullet-triangle-width) / 2);
-    border-color: var(--page-tree-bullet-color) transparent transparent transparent;
-  }
-  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_bullet-area.expanded {
-    border-color: var(--page-tree-bullet-hover-color) transparent transparent transparent;
-  }
+    /* 展開済み状態のバレット */
+    &.expanded {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: var(--page-tree-bullet-triangle-height)
+        calc(var(--page-tree-bullet-triangle-width) / 2) 0
+        calc(var(--page-tree-bullet-triangle-width) / 2);
+      border-color: var(--page-tree-bullet-color) transparent transparent transparent;
 
-  /* 折りたたみ済み状態のバレット */
-  .page-tree-bullet-and-indent_bullet-area.collapsed {
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: calc(var(--page-tree-bullet-triangle-width) / 2) 0
-      calc(var(--page-tree-bullet-triangle-width) / 2) var(--page-tree-bullet-triangle-height);
-    border-color: transparent transparent transparent var(--page-tree-bullet-color);
-  }
-  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_bullet-area.collapsed {
-    border-color: transparent transparent transparent var(--page-tree-bullet-hover-color);
-  }
+      .page-tree-bullet-and-indent:hover & {
+        border-color: var(--page-tree-bullet-hover-color) transparent transparent transparent;
+      }
+    }
 
-  /* 子を持たないノードのバレット */
-  .page-tree-bullet-and-indent_bullet-area.no-children {
-    --diameter: 0.25em;
-    width: var(--diameter);
-    height: var(--diameter);
-    border-radius: 50%;
-    background: var(--page-tree-bullet-color);
-  }
-  .page-tree-bullet-and-indent:hover .page-tree-bullet-and-indent_bullet-area.no-children {
-    background: var(--page-tree-bullet-hover-color);
+    /* 折りたたみ済み状態のバレット */
+    &.collapsed {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: calc(var(--page-tree-bullet-triangle-width) / 2) 0
+        calc(var(--page-tree-bullet-triangle-width) / 2) var(--page-tree-bullet-triangle-height);
+      border-color: transparent transparent transparent var(--page-tree-bullet-color);
+
+      .page-tree-bullet-and-indent:hover & {
+        border-color: transparent transparent transparent var(--page-tree-bullet-hover-color);
+      }
+    }
+
+    /* 子を持たないノードのバレット */
+    &.no-children {
+      --diameter: 0.25em;
+      width: var(--diameter);
+      height: var(--diameter);
+      border-radius: 50%;
+      background: var(--page-tree-bullet-color);
+
+      .page-tree-bullet-and-indent:hover & {
+        background: var(--page-tree-bullet-hover-color);
+      }
+    }
   }
 </style>

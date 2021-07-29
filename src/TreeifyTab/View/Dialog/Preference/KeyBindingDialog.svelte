@@ -67,11 +67,11 @@
 
   .key-binding-dialog_table {
     border-collapse: collapse;
-  }
 
-  .key-binding-dialog_table tr:nth-child(odd) {
-    /* lch(96.0%, 0.0, 0.0)相当 */
-    background: #f3f3f3;
+    tr:nth-child(odd) {
+      /* lch(96.0%, 0.0, 0.0)相当 */
+      background: #f3f3f3;
+    }
   }
 
   .key-binding-dialog_add-binding-button {

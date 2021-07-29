@@ -32,8 +32,9 @@
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-  .main-area-image-content_cite a {
-    color: inherit;
+
+    a {
+      color: inherit;
+    }
   }
 </style>
