@@ -20,10 +20,10 @@
 
 <style global lang="scss">
   :root {
-    /* インデントガイドの色。lch(86.0%, 0.0, 0.0)相当 */
-    --page-tree-indent-guide-color: #d7d7d7;
-    /* インデントガイドの色（ホバー時）。lch(68.0%, 0.0, 0.0)相当 */
-    --page-tree-indent-guide-hover-color: #a6a6a6;
+    /* インデントガイドの色。lch(88.0%, 0.0, 0.0)相当 */
+    --page-tree-indent-guide-color: #dddddd;
+    /* インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
+    --page-tree-indent-guide-hover-color: #ababab;
 
     /* バレット領域のサイズ（正方形の一辺の長さ） */
     --page-tree-bullet-area-size: 0.8em;
