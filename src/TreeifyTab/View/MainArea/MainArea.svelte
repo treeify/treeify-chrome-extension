@@ -48,9 +48,10 @@
   }
 
   .main-area_paper {
-    margin: 20px 270px 40vh 40px;
-    padding-block: 20px;
+    margin: 20px 270px 0 40px;
     padding-inline: 30px;
+    padding-top: 20px;
+    padding-bottom: 40vh;
     border-radius: 10px;
 
     // lch(80.0%, 0.0, 0.0)相当
