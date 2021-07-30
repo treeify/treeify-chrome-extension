@@ -217,21 +217,38 @@ export function deleteItemItself() {
  */
 export function toggleGrayedOut() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  for (const selectedItemPath of selectedItemPaths) {
-    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
-    CurrentState.toggleCssClass(selectedItemId, 'grayed-out')
+  const existsNonGrayedOutItem = selectedItemIds.some((itemId) => {
+    return !Internal.instance.state.items[itemId].cssClasses.contains('grayed-out')
+  })
+  if (existsNonGrayedOutItem) {
+    // 選択された項目の中に非グレーアウト状態のものが含まれる場合
 
-    // タイムスタンプを更新
-    // TODO: 設定で無効化できるようにする
-    CurrentState.updateItemTimestamp(selectedItemId)
-  }
+    for (const selectedItemId of selectedItemIds) {
+      CurrentState.addCssClass(selectedItemId, 'grayed-out')
 
-  // フォーカスを下の項目に移動する
-  // TODO: コマンドを分離する
-  const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
-  if (firstFollowingItemPath !== undefined) {
-    CurrentState.setTargetItemPath(firstFollowingItemPath)
+      // タイムスタンプを更新
+      // TODO: 設定で無効化できるようにする
+      CurrentState.updateItemTimestamp(selectedItemId)
+    }
+
+    // フォーカスを下の項目に移動する
+    // TODO: コマンドを分離する
+    const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
+    if (firstFollowingItemPath !== undefined) {
+      CurrentState.setTargetItemPath(firstFollowingItemPath)
+    }
+  } else {
+    // 選択された項目が全てグレーアウト状態の場合
+
+    for (const selectedItemId of selectedItemIds) {
+      CurrentState.toggleCssClass(selectedItemId, 'grayed-out')
+
+      // タイムスタンプを更新
+      // TODO: 設定で無効化できるようにする
+      CurrentState.updateItemTimestamp(selectedItemId)
+    }
   }
 }
 
