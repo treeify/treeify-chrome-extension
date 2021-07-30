@@ -29,7 +29,6 @@
 
 <style global lang="scss">
   .other-parents-dialog_content {
-    width: 90vw;
     padding: 1em;
   }
 
