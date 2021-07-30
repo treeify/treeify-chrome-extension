@@ -1,6 +1,7 @@
 import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
+import {Command} from 'src/TreeifyTab/Internal/Command/index'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -229,9 +230,12 @@ export function toggleGrayedOut() {
       CurrentState.addCssClass(selectedItemId, 'grayed-out')
 
       // タイムスタンプを更新
-      // TODO: 設定で無効化できるようにする
       CurrentState.updateItemTimestamp(selectedItemId)
     }
+
+    // ヒューリスティックな追加効果
+    Command.collapseItem()
+    Command.hardUnloadSubtree()
 
     // フォーカスを下の項目に移動する
     // TODO: コマンドを分離する
@@ -246,7 +250,7 @@ export function toggleGrayedOut() {
       CurrentState.toggleCssClass(selectedItemId, 'grayed-out')
 
       // タイムスタンプを更新
-      // TODO: 設定で無効化できるようにする
+      // TODO: 設定で無効化できるのが望ましい
       CurrentState.updateItemTimestamp(selectedItemId)
     }
   }
