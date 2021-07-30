@@ -97,10 +97,12 @@
     {/if}
     <div class="export-dialog_button-area">
       <button class="export-dialog_copy-button" on:click={onClickCopyButton}
-        >クリップボードにコピー</button
+        ><div class="export-dialog_copy-button-icon" />
+        クリップボードにコピー</button
       >
       <button class="export-dialog_save-button" on:click={onClickSaveButton}
-        >ファイルとして保存</button
+        ><div class="export-dialog_save-button-icon" />
+        ファイルとして保存</button
       >
     </div>
   </div>
@@ -155,5 +157,35 @@
     // 中央寄せ
     margin-inline: auto;
     width: max-content;
+  }
+
+  .export-dialog_copy-button {
+    display: inline-flex;
+    align-items: center;
+  }
+  .export-dialog_copy-button-icon {
+    --size: 1.5em;
+    width: var(--size);
+    height: var(--size);
+
+    // lch(45.0%, 0.0, 0.0)相当
+    background: #6a6a6a;
+    -webkit-mask: url('clipboard-icon.svg') no-repeat center;
+    -webkit-mask-size: contain;
+  }
+
+  .export-dialog_save-button {
+    display: inline-flex;
+    align-items: center;
+  }
+  .export-dialog_save-button-icon {
+    --size: 1.5em;
+    width: var(--size);
+    height: var(--size);
+
+    // lch(45.0%, 0.0, 0.0)相当
+    background: #6a6a6a;
+    -webkit-mask: url('file-download-icon.svg') no-repeat center;
+    -webkit-mask-size: contain;
   }
 </style>

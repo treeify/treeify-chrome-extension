@@ -28,8 +28,8 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    // lch(40.0%, 0.0, 0.0)相当
-    background: #777777;
+    // lch(45.0%, 0.0, 0.0)相当
+    background: #6a6a6a;
     -webkit-mask: url('gear-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
   }
