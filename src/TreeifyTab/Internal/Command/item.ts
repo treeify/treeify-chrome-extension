@@ -261,15 +261,7 @@ export function toggleGrayedOut() {
  * もし既にハイライト状態なら非ハイライト状態に戻す。
  */
 export function toggleHighlighted() {
-  const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  for (const selectedItemPath of selectedItemPaths) {
-    const selectedItemId = ItemPath.getItemId(selectedItemPath)
-
-    CurrentState.toggleCssClass(selectedItemId, 'highlighted')
-
-    // タイムスタンプを更新
-    CurrentState.updateItemTimestamp(selectedItemId)
-  }
+  toggleCssClass('highlighted')
 }
 
 /**
@@ -277,14 +269,35 @@ export function toggleHighlighted() {
  * もし既にダウトフル状態なら非ダウトフル状態に戻す。
  */
 export function toggleDoubtful() {
+  toggleCssClass('doubtful')
+}
+
+function toggleCssClass(cssClass: string) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  for (const selectedItemPath of selectedItemPaths) {
-    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
-    CurrentState.toggleCssClass(selectedItemId, 'doubtful')
+  const everyoneContainsTheCssClass = selectedItemIds.every((itemId) => {
+    return Internal.instance.state.items[itemId].cssClasses.contains(cssClass)
+  })
+  if (!everyoneContainsTheCssClass) {
+    // 選択された項目の中に非グレーアウト状態のものが含まれる場合
 
-    // タイムスタンプを更新
-    CurrentState.updateItemTimestamp(selectedItemId)
+    for (const selectedItemId of selectedItemIds) {
+      CurrentState.addCssClass(selectedItemId, cssClass)
+
+      // タイムスタンプを更新
+      CurrentState.updateItemTimestamp(selectedItemId)
+    }
+  } else {
+    // 選択された項目が全てグレーアウト状態の場合
+
+    for (const selectedItemId of selectedItemIds) {
+      CurrentState.toggleCssClass(selectedItemId, cssClass)
+
+      // タイムスタンプを更新
+      // TODO: 設定で無効化できるのが望ましい
+      CurrentState.updateItemTimestamp(selectedItemId)
+    }
   }
 }
 
