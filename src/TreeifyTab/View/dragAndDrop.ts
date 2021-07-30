@@ -1,6 +1,7 @@
 import {assertNonNull} from 'src/Common/Debug/assert'
 import {Coordinate, integer} from 'src/Common/integer'
 import {ItemId} from 'src/TreeifyTab/basicType'
+import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
@@ -144,6 +145,7 @@ export function dragStateResetter(element: HTMLElement) {
           itemPath: itemMouseDown.itemPath,
           initialMousePosition: currentMousePosition,
         }
+        CurrentState.setTargetItemPath(itemMouseDown.itemPath)
         itemMouseDown = undefined
         Rerenderer.instance.rerender()
       }
