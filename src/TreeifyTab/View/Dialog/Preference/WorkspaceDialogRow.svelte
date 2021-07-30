@@ -45,16 +45,14 @@
   .workspace-dialog_existing-workspace {
     display: flex;
     align-items: center;
-
-    margin-top: 3px;
-
-    &:first-child {
-      margin-top: 0;
-    }
   }
 
   input[type='radio'][name='currentWorkspaceId'] {
-    margin: 0 3px 0 0;
+    margin: 0;
+  }
+
+  .workspace-dialog_name {
+    margin-left: 0.2em;
   }
 
   .workspace-dialog_delete-button {

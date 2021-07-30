@@ -11,7 +11,10 @@
     {#each props.workspaces.toArray() as workspace}
       <WorkspaceDialogRow {workspace} />
     {/each}
-    <button class="workspace-dialog_add-button" on:click={props.onClickAddButton}>新規作成</button>
+    <div>
+      <button class="workspace-dialog_add-button" on:click={props.onClickAddButton}>新規作成</button
+      >
+    </div>
   </div>
 </CommonDialog>
 
@@ -21,9 +24,13 @@
 
     /* フォーカス時の枠線を非表示 */
     outline: 0 solid transparent;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.3em;
   }
 
   .workspace-dialog_add-button {
-    margin-top: 5px;
+    margin-top: 0.5em;
   }
 </style>
