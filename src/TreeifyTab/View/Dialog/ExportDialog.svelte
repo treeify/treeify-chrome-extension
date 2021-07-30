@@ -60,15 +60,24 @@
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
     <div class="export-dialog_format-select-button-area">
-      <label class="export-dialog_format-select-button">
+      <label
+        class="export-dialog_format-select-button"
+        class:selected={selectedFormat === Format.PLAIN_TEXT}
+      >
         <input type="radio" name="format" bind:group={selectedFormat} value={Format.PLAIN_TEXT} />
         プレーンテキスト
       </label>
-      <label class="export-dialog_format-select-button">
+      <label
+        class="export-dialog_format-select-button"
+        class:selected={selectedFormat === Format.MARKDOWN}
+      >
         <input type="radio" name="format" bind:group={selectedFormat} value={Format.MARKDOWN} />
         Markdown
       </label>
-      <label class="export-dialog_format-select-button">
+      <label
+        class="export-dialog_format-select-button"
+        class:selected={selectedFormat === Format.OPML}
+      >
         <input type="radio" name="format" bind:group={selectedFormat} value={Format.OPML} />
         OPML
       </label>
@@ -112,6 +121,18 @@
   .export-dialog_format-select-button {
     flex: 1 0;
     text-align: center;
+
+    // lch(96.0%, 0.0, 0.0)相当
+    background: #f3f3f3;
+
+    // lch(80.0%, 0.0, 0.0)相当
+    border: 1px solid #c6c6c6;
+
+    &.selected {
+      background: #ffffff;
+
+      border-bottom-style: none;
+    }
   }
 
   input[type='radio'][name='format'] {
@@ -121,10 +142,17 @@
   .export-dialog_option-area {
     display: flex;
     flex-direction: column;
+
+    padding: 1em;
+    // lch(80.0%, 0.0, 0.0)相当
+    border: 1px solid #c6c6c6;
+    border-top-style: none;
   }
 
   .export-dialog_button-area {
-    margin-top: 1em;
+    margin-top: 0.5em;
+
+    // 中央寄せ
     margin-inline: auto;
     width: max-content;
   }
