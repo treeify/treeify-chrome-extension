@@ -124,6 +124,11 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
     const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
     if (itemId === undefined) return
 
+    // TODO: 削除。これはファビコン無限ぐるぐる問題の調査用なので
+    if (tab.id === undefined) {
+      alert(`tab.id === undefined!\nitemId = ${itemId}, tab = ${tab}`)
+    }
+
     reflectInWebPageItem(itemId, tab)
     Rerenderer.instance.rerender()
   })
