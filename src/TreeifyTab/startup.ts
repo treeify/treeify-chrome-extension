@@ -105,18 +105,14 @@ async function migrateTabs(newState: State) {
   // newStateにおけるグローバル項目IDから項目IDへのMapを作る
   const globalItemIdMap = new Map<string, ItemId>()
   for (const itemsKey in newState.items) {
-    const item = newState.items[itemsKey]
-    const globalItemId = `${item.instanceId}:${item.iisn}`
-    globalItemIdMap.set(globalItemId, parseInt(itemsKey))
+    globalItemIdMap.set(newState.items[itemsKey].globalItemId, parseInt(itemsKey))
   }
 
   const allItemIds = External.instance.tabItemCorrespondence.getAllItemIds()
   const promises = allItemIds.map(async (itemId) => {
-    const item = Internal.instance.state.items[itemId]
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
     assertNonUndefined(tabId)
-    const globalItemId = `${item.instanceId}:${item.iisn}`
-    const newItemId = globalItemIdMap.get(globalItemId)
+    const newItemId = globalItemIdMap.get(Internal.instance.state.items[itemId].globalItemId)
     if (newItemId === undefined) {
       // newStateで対応項目が削除されていた場合
       await chrome.tabs.remove(tabId)
