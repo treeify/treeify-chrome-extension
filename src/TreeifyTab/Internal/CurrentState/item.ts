@@ -396,6 +396,20 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   }
 }
 
+/**
+ * CSSクラスを追加する。
+ * 既に追加済みなら何もしない。
+ */
+export function addCssClass(itemId: ItemId, cssClass: string) {
+  const cssClasses = Internal.instance.state.items[itemId].cssClasses
+  if (!cssClasses.contains(cssClass)) {
+    Internal.instance.mutate(
+      cssClasses.push(cssClass),
+      PropertyPath.of('items', itemId, 'cssClasses')
+    )
+  }
+}
+
 export function setCite(itemId: ItemId, cite: Cite) {
   Internal.instance.mutate(cite, PropertyPath.of('items', itemId, 'cite'))
 }

@@ -172,7 +172,7 @@ export class Internal {
         '0110ArrowUp': List.of('selectAllAboveItems'),
         '0000Enter': List.of('enterKeyDefault'),
         '0100Enter': List.of('insertLineBreak'),
-        '1000Enter': List.of('hardUnloadSubtree', 'collapseItem', 'toggleGrayedOut'),
+        '1000Enter': List.of('toggleGrayedOut'),
         '1100Enter': List.of('createEmptyTextItem'),
         '1100Backspace': List.of('removeEdge'),
         '1000KeyH': List.of('toggleHighlighted'),
