@@ -78,8 +78,6 @@ export function groupingItems() {
     const edge = CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
 
     CurrentState.insertLastChildItem(newItemId, selectedItemId, edge)
-
-    CurrentState.updateItemTimestamp(selectedItemId)
   }
 
   CurrentState.setTargetItemPath(newItemPath)
