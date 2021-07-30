@@ -90,8 +90,7 @@
 
 <style global lang="scss">
   :root {
-    // ボディ領域の上下パディング
-    --main-area-body-area-vertical-padding: 0.08em;
+    --main-area-content-area-vertical-padding: 0.08em;
 
     // フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当
     --main-area-focused-item-background-color: #ecf0ff;
@@ -132,16 +131,13 @@
     font-size: 120%;
   }
 
-  .main-area-node_footprint-layer {
-    padding: var(--main-area-body-area-vertical-padding) 0;
-  }
-
   .main-area-node_spool-area {
     user-select: none;
   }
 
   .main-area-node_content-area {
     height: 100%;
+    padding-block: var(--main-area-content-area-vertical-padding);
 
     // マウスホバー時のコンテンツ領域
     &:hover {
