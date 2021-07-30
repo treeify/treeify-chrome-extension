@@ -23,15 +23,15 @@
 <style global lang="scss">
   .main-area-image-content_cite {
     font-size: 50%;
-    /* lch(60.0%, 0.0, 0.0)相当 */
+    // lch(60.0%, 0.0, 0.0)相当
     color: #919191;
 
-    /* 右寄せ */
+    // 右寄せ
     margin-left: auto;
     display: block;
     width: max-content;
 
-    /* テキストが長すぎる場合への対策 */
+    // テキストが長すぎる場合への対策
     max-width: 80%;
     overflow-x: hidden;
     text-overflow: ellipsis;

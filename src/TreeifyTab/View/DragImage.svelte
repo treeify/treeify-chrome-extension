@@ -46,12 +46,12 @@
 
   .drag-image_item-image {
     position: absolute;
-    /* left, topはstyle属性で指定する */
+    // left, topはstyle属性で指定する
 
     pointer-events: none;
 
     background: #ffffff;
-    /* lch(90.0%, 0.0, 0.0)相当 */
+    // lch(90.0%, 0.0, 0.0)相当
     border: 1px solid #e2e2e2;
   }
 </style>

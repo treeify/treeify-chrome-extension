@@ -45,7 +45,7 @@
   }
 
   .other-parents-dialog_close-button {
-    /* 右寄せにする */
+    // 右寄せにする
     display: block;
     margin-left: auto;
 

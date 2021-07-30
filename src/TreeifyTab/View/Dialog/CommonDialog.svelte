@@ -61,7 +61,7 @@
 
 <style global lang="scss">
   :root {
-    /* lch(25.0%, 0.0, 0.0)相当 */
+    // lch(25.0%, 0.0, 0.0)相当
     --common-dialog-title-bar-background: #3b3b3b;
     --common-dialog-title-bar-height: 2.2em;
   }
@@ -74,10 +74,10 @@
     height: 100%;
     z-index: 30;
 
-    /* バックドロップ */
+    // バックドロップ
     background: hsla(0, 0%, 0%, 0.1);
 
-    /* ダイアログを画面中央に表示する */
+    // ダイアログを画面中央に表示する
     display: flex;
     align-items: center;
     justify-content: center;
@@ -87,11 +87,11 @@
     max-width: 90vw;
 
     border-radius: 5px;
-    /* 子要素を角丸からはみ出させない */
+    // 子要素を角丸からはみ出させない
     overflow: hidden;
 
     background: #ffffff;
-    /* lch(50.0%, 0.0, 0.0)相当 */
+    // lch(50.0%, 0.0, 0.0)相当
     box-shadow: 0 1.5px 8px #777777;
   }
 
@@ -117,7 +117,7 @@
     margin-left: auto;
 
     &:hover {
-      /* lch(40.0%, 0.0, 0.0)相当 */
+      // lch(40.0%, 0.0, 0.0)相当
       background: #5e5e5e;
     }
 
@@ -127,13 +127,13 @@
       width: var(--icon-size);
       height: var(--icon-size);
 
-      /* 中央寄せ */
+      // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
 
-      /* lch(80.0%, 0.0, 0.0)相当 */
+      // lch(80.0%, 0.0, 0.0)相当
       background: #c6c6c6;
       -webkit-mask-image: url('close-icon.svg');
     }

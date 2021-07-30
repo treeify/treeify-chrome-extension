@@ -63,29 +63,27 @@
 
   .root {
     height: 100%;
-    /* ダイアログなどを他の表示物に重ねて表示するための設定 */
+    // ダイアログなどを他の表示物に重ねて表示するための設定
     position: relative;
   }
 
-  /*
-  ツールバーとその他の領域を縦に並べるためのレイアウト。
-  */
+  // ツールバーとその他の領域を縦に並べるためのレイアウト
   .toolbar-and-sidebar-layout {
-    /* スクロールされてもツールバーを常に画面上部に表示し続けるための設定 */
+    // スクロールされてもツールバーを常に画面上部に表示し続けるための設定
     height: 100%;
 
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
   }
 
-  /* 左サイドバーとメインエリアを横に並べるレイアウト */
+  // 左サイドバーとメインエリアを横に並べるレイアウト
   .sidebar-layout {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
   }
 
   .default-favicon {
-    /* lch(40.0%, 0.0, 0.0)相当 */
+    // lch(40.0%, 0.0, 0.0)相当
     background: #5e5e5e;
     -webkit-mask-image: url('./default-favicon.svg');
   }
@@ -99,19 +97,19 @@
 
     cursor: pointer;
 
-    /* アイコンと疑似リップルエフェクトを中央寄せにする */
+    // アイコンと疑似リップルエフェクトを中央寄せにする
     position: relative;
 
     &:hover {
-      /* lch(90.0%, 0.0, 0.0)相当 */
+      // lch(90.0%, 0.0, 0.0)相当
       background: #e2e2e2;
     }
 
-    /* 疑似リップルエフェクトの終了状態 */
+    // 疑似リップルエフェクトの終了状態
     &::after {
       content: '';
 
-      /* 中央寄せ */
+      // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
@@ -124,13 +122,13 @@
 
       border-radius: 50%;
 
-      /* lch(50.0%, 0.0, 0.0)相当 */
+      // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
 
       pointer-events: none;
     }
 
-    /* 疑似リップルエフェクトの開始状態 */
+    // 疑似リップルエフェクトの開始状態
     &:active::after {
       width: 0;
       height: 0;

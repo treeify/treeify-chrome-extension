@@ -32,36 +32,36 @@
 
 <style global lang="scss">
   :root {
-    /* バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当 */
+    // バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当
     --main-area-bullet-outer-circle-color: #e2e2e2;
-    /* バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当 */
+    // バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当
     --main-area-bullet-outer-circle-hover-color: #c6c6c6;
-    /* バレットの内側の円の色。lch(60.0%, 0.0, 0.0)相当 */
+    // バレットの内側の円の色。lch(60.0%, 0.0, 0.0)相当
     --main-area-bullet-inner-circle-color: #919191;
-    /* バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当 */
+    // バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当
     --main-area-bullet-inner-circle-hover-color: #5e5e5e;
-    /* バレットとして表示されるページアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
+    // バレットとして表示されるページアイコンの色。lch(40.0%, 0.0, 0.0)相当
     --main-area-bullet-page-icon-color: #5e5e5e;
-    /* バレットとして表示されるページアイコンのマウスホバー時の色。lch(20.0%, 0.0, 0.0)相当 */
+    // バレットとして表示されるページアイコンのマウスホバー時の色。lch(20.0%, 0.0, 0.0)相当
     --main-area-bullet-page-icon-hover-color: #303030;
 
-    /* トランスクルードされた項目のバレットの色。lch(60.0%, 40.0, 160.4)相当 */
+    // トランスクルードされた項目のバレットの色。lch(60.0%, 40.0, 160.4)相当
     --transcluded-item-bullet-color: #44a178;
-    /* トランスクルードされた項目のバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当 */
+    // トランスクルードされた項目のバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当
     --transcluded-item-bullet-hover-color: #006c48;
 
-    /* ハイライト状態の項目のバレットの色。lch(50.0%, 134.0, 40.4)相当 */
+    // ハイライト状態の項目のバレットの色。lch(50.0%, 134.0, 40.4)相当
     --highlighted-item-bullet-color: #ee0b00;
-    /* ハイライト状態の項目のバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当 */
+    // ハイライト状態の項目のバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当
     --highlighted-item-bullet-hover-color: #bf0600;
 
-    /* インデントガイドの色。lch(88.0%, 0.0, 0.0)相当 */
+    // インデントガイドの色。lch(88.0%, 0.0, 0.0)相当
     --main-area-indent-guide-color: #dddddd;
-    /* インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
+    // インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当
     --main-area-indent-guide-hover-color: #ababab;
   }
 
-  /* トランスクルードされた項目の強調表示 */
+  // トランスクルードされた項目の強調表示
   .transcluded {
     .main-area-spool_inner-circle {
       background: var(--transcluded-item-bullet-color);
@@ -77,7 +77,7 @@
     }
   }
 
-  /* ハイライト状態の項目の強調表示 */
+  // ハイライト状態の項目の強調表示
   .highlighted {
     .main-area-spool_inner-circle {
       background: var(--highlighted-item-bullet-color);
@@ -93,11 +93,11 @@
     }
   }
 
-  /* メインエリアのバレットとインデントのルート要素 */
+  // メインエリアのバレットとインデントのルート要素
   .main-area-spool {
     width: var(--main-area-calculated-line-height);
     height: 100%;
-    /* インデントガイドをバレットの裏まで描画するための設定 */
+    // インデントガイドをバレットの裏まで描画するための設定
     position: relative;
 
     cursor: pointer;
@@ -106,18 +106,18 @@
   .main-area-spool_bullet-area {
     width: var(--main-area-calculated-line-height);
     height: var(--main-area-calculated-line-height);
-    /* 外側の円と内側の円を重ねて描画するための設定 */
+    // 外側の円と内側の円を重ねて描画するための設定
     position: relative;
   }
 
-  /* メインエリアのバレットの外側の円（展開状態用） */
+  // メインエリアのバレットの外側の円（展開状態用）
   .main-area-spool_outer-circle {
-    /* widthとheightがJavaScriptで設定される */
+    // widthとheightがJavaScriptで設定される
 
     border-radius: 50%;
     background: var(--main-area-bullet-outer-circle-color);
 
-    /* 中央寄せ */
+    // 中央寄せ
     position: absolute;
     top: 50%;
     left: 50%;
@@ -128,7 +128,7 @@
     }
   }
 
-  /* メインエリアのバレットの内側の円 */
+  // メインエリアのバレットの内側の円
   .main-area-spool_inner-circle {
     --diameter: 0.38em;
     width: var(--diameter);
@@ -136,7 +136,7 @@
     border-radius: 50%;
     background: var(--main-area-bullet-inner-circle-color);
 
-    /* 中央寄せ */
+    // 中央寄せ
     position: absolute;
     top: 50%;
     left: 50%;
@@ -147,7 +147,7 @@
     }
   }
 
-  /* ページのバレット */
+  // ページのバレット
   .main-area-spool_page-icon {
     --icon-size: 1em;
     width: var(--icon-size);
@@ -156,7 +156,7 @@
     background: var(--main-area-bullet-page-icon-color);
     -webkit-mask-image: url('./page-icon.svg');
 
-    /* 中央寄せ */
+    // 中央寄せ
     position: absolute;
     top: 50%;
     left: 50%;
@@ -167,23 +167,23 @@
     }
   }
 
-  /* インデント領域 */
+  // インデント領域
   .main-area-spool_indent-area {
     position: absolute;
-    /* バレットの中心のY座標から子リストの下端までの領域にする */
+    // バレットの中心のY座標から子リストの下端までの領域にする
     top: calc(var(--main-area-calculated-line-height) / 2);
     height: calc(100% - var(--main-area-calculated-line-height) / 2);
     width: 100%;
   }
 
-  /* インデントガイド */
+  // インデントガイド
   .main-area-spool_indent-guide {
     background: var(--main-area-indent-guide-color);
     width: 1px;
     height: 100%;
     margin: 0 auto;
 
-    /* バレットとインデントの領域のホバー時のインデントガイド */
+    // バレットとインデントの領域のホバー時のインデントガイド
     .main-area-spool:hover & {
       background: var(--main-area-indent-guide-hover-color);
     }

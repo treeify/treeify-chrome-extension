@@ -47,7 +47,7 @@
   .tex-edit-dialog_code {
     padding: 0.5em;
 
-    /* lch(60.0%, 0.0, 0.0)相当 */
+    // lch(60.0%, 0.0, 0.0)相当
     outline: 1px solid #919191;
   }
 
@@ -56,7 +56,7 @@
   }
 
   .tex-edit-dialog_button-area {
-    /* ボタン群を右寄せにする */
+    // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;
   }

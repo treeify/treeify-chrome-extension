@@ -50,47 +50,47 @@
 
 <style global lang="scss">
   :root {
-    /* ウェブページ項目のファビコン領域（正方形）の一辺の長さ */
+    // ウェブページ項目のファビコン領域（正方形）の一辺の長さ
     --main-area-favicon-size: 1em;
 
-    /* 未読ウェブページ項目のタイトルの色。lch(35.0%, 134.0, 160.4)相当 */
+    // 未読ウェブページ項目のタイトルの色。lch(35.0%, 134.0, 160.4)相当
     --main-area-unread-web-page-item-title-color: #005f3e;
 
-    /* ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当 */
+    // ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当
     --main-area-audible-icon-color: #6a6a6a;
   }
 
-  /* アンロード済みウェブページ項目のopacity */
+  // アンロード済みウェブページ項目のopacity
   $soft-unloaded-web-page-item-opacity: 75%;
   $hard-unloaded-web-page-item-opacity: 55%;
 
-  /* ウェブページ項目のコンテンツ領域のルート */
+  // ウェブページ項目のコンテンツ領域のルート
   .main-area-web-page-content {
-    /* フォーカス時の枠線を非表示 */
+    // フォーカス時の枠線を非表示
     outline: 0 solid transparent;
   }
 
   .main-area-web-page-content_body {
-    /* ファビコン、ラベル、タイトル、audibleアイコンを横並びにする */
+    // ファビコン、ラベル、タイトル、audibleアイコンを横並びにする
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
   }
 
-  /* グレーアウト状態のウェブページ項目のタイトル */
+  // グレーアウト状態のウェブページ項目のタイトル
   .grayed-out .main-area-web-page-content_title,
   .grayed-out-children .main-area-web-page-content_title {
     color: var(--grayed-out-item-text-color);
   }
 
-  /* ウェブページ項目のファビコン */
+  // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon {
     width: var(--main-area-favicon-size);
     height: var(--main-area-favicon-size);
 
     position: relative;
 
-    /* クリックして操作できることを示す */
+    // クリックして操作できることを示す
     cursor: pointer;
 
     > * {
@@ -98,11 +98,11 @@
       height: var(--main-area-favicon-size);
     }
 
-    /* 疑似リップルエフェクトの終了状態 */
+    // 疑似リップルエフェクトの終了状態
     &::after {
       content: '';
 
-      /* 中央寄せ */
+      // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
@@ -115,11 +115,11 @@
 
       border-radius: 50%;
 
-      /* lch(50.0%, 0.0, 0.0)相当 */
+      // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
     }
 
-    /* 疑似リップルエフェクトの開始状態 */
+    // 疑似リップルエフェクトの開始状態
     &:active::after {
       width: 0;
       height: 0;
@@ -128,12 +128,12 @@
     }
   }
 
-  /* ローディングインジケータ */
+  // ローディングインジケータ
   .loading-indicator {
     border-radius: 50%;
-    /* lch(30.0%, 0.0, 0.0)相当 */
+    // lch(30.0%, 0.0, 0.0)相当
     border-top: 4px solid #474747;
-    /* lch(70.0%, 0.0, 0.0)相当 */
+    // lch(70.0%, 0.0, 0.0)相当
     border-right: 4px solid #ababab;
     border-bottom: 4px solid #ababab;
     border-left: 4px solid #ababab;
@@ -149,7 +149,7 @@
     }
   }
 
-  /* ウェブページ項目の音がなっていることを示すアイコン */
+  // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
     --icon-size: 1em;
     width: var(--icon-size);
@@ -160,7 +160,7 @@
     -webkit-mask-size: contain;
   }
 
-  /* ウェブページ項目のタイトル */
+  // ウェブページ項目のタイトル
   .main-area-web-page-content_title {
     cursor: default;
     user-select: none;
@@ -168,12 +168,12 @@
     overflow-x: hidden;
     white-space: nowrap;
 
-    /* 未読ウェブページ項目のタイトルの強調表示 */
+    // 未読ウェブページ項目のタイトルの強調表示
     &.unread {
       color: var(--main-area-unread-web-page-item-title-color);
     }
 
-    /* アンロード済みウェブページ項目のタイトルのグレーアウト */
+    // アンロード済みウェブページ項目のタイトルのグレーアウト
     &.soft-unloaded-item {
       filter: opacity($soft-unloaded-web-page-item-opacity);
     }
@@ -183,7 +183,7 @@
     }
   }
 
-  /* アンロード済みウェブページ項目のファビコンのグレーアウト */
+  // アンロード済みウェブページ項目のファビコンのグレーアウト
   .main-area-web-page-content_favicon.soft-unloaded-item > * {
     filter: opacity($soft-unloaded-web-page-item-opacity);
   }

@@ -20,60 +20,58 @@
 
 <style global lang="scss">
   :root {
-    /* インデントガイドの色。lch(88.0%, 0.0, 0.0)相当 */
+    // インデントガイドの色。lch(88.0%, 0.0, 0.0)相当
     --page-tree-indent-guide-color: #dddddd;
-    /* インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当 */
+    // インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当
     --page-tree-indent-guide-hover-color: #ababab;
 
-    /* バレット領域のサイズ（正方形の一辺の長さ） */
+    // バレット領域のサイズ（正方形の一辺の長さ）
     --page-tree-bullet-area-size: 0.8em;
 
-    /* 子を持つノードのバレット（二等辺三角形▼）の幅 */
+    // 子を持つノードのバレット（二等辺三角形▼）の幅
     --page-tree-bullet-triangle-width: 0.45em;
-    /* 子を持つノードのバレット（二等辺三角形▼）の高さ */
+    // 子を持つノードのバレット（二等辺三角形▼）の高さ
     --page-tree-bullet-triangle-height: 0.3em;
 
-    /* バレットの色。lch(60.0%, 0.0, 0.0)相当 */
+    // バレットの色。lch(60.0%, 0.0, 0.0)相当
     --page-tree-bullet-color: #919191;
-    /* バレットの色（ホバー時）。lch(40.0%, 0.0, 0.0)相当 */
+    // バレットの色（ホバー時）。lch(40.0%, 0.0, 0.0)相当
     --page-tree-bullet-hover-color: #5e5e5e;
   }
 
   .page-tree-bullet-and-indent {
-    /* インデント領域の位置指定のため */
+    // インデント領域の位置指定のため
     position: relative;
 
-    /*
-    バレットが収まるギリギリまで幅を狭くする（メインエリアとの違いに注意）。
-    ページツリーは横幅がシビアなのでインデント領域の幅を切り詰めないと厳しい。
-    */
+    // バレットが収まるギリギリまで幅を狭くする（メインエリアとの違いに注意）。
+    // ページツリーは横幅がシビアなのでインデント領域の幅を切り詰めないと厳しい。
     width: var(--page-tree-bullet-area-size);
     height: 100%;
   }
 
-  /* インデント領域 */
+  // インデント領域
   .page-tree-bullet-and-indent_indent-area {
     position: absolute;
-    /* バレットの中心のY座標から子リストの下端までの領域にする */
+    // バレットの中心のY座標から子リストの下端までの領域にする
     top: calc(var(--page-tree-calculated-line-height) / 2);
     height: calc(100% - var(--page-tree-calculated-line-height) / 2);
     width: 100%;
   }
 
-  /* インデントガイド */
+  // インデントガイド
   .page-tree-bullet-and-indent_indent-guide {
     background: var(--page-tree-indent-guide-color);
     width: 1px;
     height: 100%;
     margin: 0 auto;
 
-    /* ホバー時のインデントガイド */
+    // ホバー時のインデントガイド
     .page-tree-bullet-and-indent:hover & {
       background: var(--page-tree-indent-guide-hover-color);
     }
   }
 
-  /* バレットの共通設定 */
+  // バレットの共通設定
   .page-tree-bullet-and-indent_bullet-area {
     position: absolute;
     top: calc(var(--page-tree-calculated-line-height) / 2);
@@ -83,7 +81,7 @@
     width: var(--page-tree-bullet-area-size);
     height: var(--page-tree-bullet-area-size);
 
-    /* 展開済み状態のバレット */
+    // 展開済み状態のバレット
     &.expanded {
       width: 0;
       height: 0;
@@ -98,7 +96,7 @@
       }
     }
 
-    /* 折りたたみ済み状態のバレット */
+    // 折りたたみ済み状態のバレット
     &.collapsed {
       width: 0;
       height: 0;
@@ -112,7 +110,7 @@
       }
     }
 
-    /* 子を持たないノードのバレット */
+    // 子を持たないノードのバレット
     &.no-children {
       --diameter: 0.25em;
       width: var(--diameter);

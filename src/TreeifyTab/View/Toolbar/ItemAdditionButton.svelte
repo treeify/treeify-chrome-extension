@@ -22,13 +22,13 @@
     width: var(--icon-size);
     height: var(--icon-size);
 
-    /* 中央寄せ */
+    // 中央寄せ
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 
-    /* lch(40.0%, 0.0, 0.0)相当 */
+    // lch(40.0%, 0.0, 0.0)相当
     background: #777777;
     -webkit-mask: url('plus-icon.svg') no-repeat center;
     -webkit-mask-size: contain;

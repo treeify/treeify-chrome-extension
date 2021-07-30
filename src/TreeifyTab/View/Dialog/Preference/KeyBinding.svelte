@@ -66,7 +66,7 @@
     width: var(--key-binding-dialog-command-button-size);
     height: var(--key-binding-dialog-command-button-size);
 
-    /* マウスホバー時にのみ表示 */
+    // マウスホバー時にのみ表示
     visibility: hidden;
 
     &::before {
@@ -75,13 +75,13 @@
       width: var(--key-binding-dialog-delete-icon-size);
       height: var(--key-binding-dialog-delete-icon-size);
 
-      /* 中央寄せ */
+      // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
 
-      /* lch(40.0%, 0.0, 0.0)相当 */
+      // lch(40.0%, 0.0, 0.0)相当
       background: #5e5e5e;
       -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
       -webkit-mask-size: contain;
@@ -96,7 +96,7 @@
     width: var(--key-binding-dialog-command-button-size);
     height: var(--key-binding-dialog-command-button-size);
 
-    /* マウスホバー時にのみ表示 */
+    // マウスホバー時にのみ表示
     visibility: hidden;
 
     &::before {
@@ -105,13 +105,13 @@
       width: var(--key-binding-dialog-add-icon-size);
       height: var(--key-binding-dialog-add-icon-size);
 
-      /* 中央寄せ */
+      // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
 
-      /* lch(40.0%, 0.0, 0.0)相当 */
+      // lch(40.0%, 0.0, 0.0)相当
       background: #5e5e5e;
       -webkit-mask: url('./plus-icon.svg') no-repeat center;
       -webkit-mask-size: contain;

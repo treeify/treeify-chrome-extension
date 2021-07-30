@@ -69,7 +69,7 @@
     border-collapse: collapse;
 
     tr:nth-child(odd) {
-      /* lch(96.0%, 0.0, 0.0)相当 */
+      // lch(96.0%, 0.0, 0.0)相当
       background: #f3f3f3;
     }
   }

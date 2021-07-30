@@ -26,18 +26,18 @@
 
 <style global lang="scss">
   .citation .main-area-text-content {
-    /* lch(80.0%, 0.0, 0.0)相当 */
+    // lch(80.0%, 0.0, 0.0)相当
     border-left: 0.25em solid #c6c6c6;
     padding-left: 0.2em;
   }
 
-  /* テキスト項目のcontenteditableな要素 */
+  // テキスト項目のcontenteditableな要素
   .main-area-text-content_content-editable {
-    /* contenteditableな要素のフォーカス時の枠線を非表示 */
+    // contenteditableな要素のフォーカス時の枠線を非表示
     outline: 0 solid transparent;
   }
 
-  /* グレーアウト状態のテキスト項目 */
+  // グレーアウト状態のテキスト項目
   .grayed-out .main-area-text-content_content-editable,
   .grayed-out-children .main-area-text-content_content-editable {
     color: var(--grayed-out-item-text-color);

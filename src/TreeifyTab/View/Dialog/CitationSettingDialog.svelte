@@ -37,7 +37,7 @@
   }
 
   .citation-setting-dialog_button-area {
-    /* ボタン群を右寄せにする */
+    // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;
   }

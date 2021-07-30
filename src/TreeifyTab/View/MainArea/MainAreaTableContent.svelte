@@ -31,7 +31,7 @@
 
 <style global lang="scss">
   .main-area-table-content {
-    /* フォーカス時の枠線を非表示 */
+    // フォーカス時の枠線を非表示
     outline: 0 solid transparent;
   }
 
@@ -39,7 +39,7 @@
     border-collapse: collapse;
 
     td {
-      /* lch(70.0%, 0.0, 0.0) */
+      // lch(70.0%, 0.0, 0.0)
       border: 1px solid #ababab;
 
       padding-inline: 0.5em;

@@ -8,11 +8,11 @@
 
 <style global lang="scss">
   :root {
-    /* ツールバーのボタンのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当 */
+    // ツールバーのボタンのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当
     --toolbar-icon-button-hover-background: #e2e2e2;
   }
 
-  /* ツールバーのアイコンボタンの共通クラス */
+  // ツールバーのアイコンボタンの共通クラス
   .toolbar-icon-button {
     --button-size: 32px;
     width: var(--button-size);
@@ -21,18 +21,18 @@
 
     cursor: pointer;
 
-    /* アイコンと疑似リップルエフェクトを中央寄せにする */
+    // アイコンと疑似リップルエフェクトを中央寄せにする
     position: relative;
 
     &:hover {
       background: var(--toolbar-icon-button-hover-background);
     }
 
-    /* ツールバーのボタンの疑似リップルエフェクトの終了状態 */
+    // ツールバーのボタンの疑似リップルエフェクトの終了状態
     &::after {
       content: '';
 
-      /* 中央寄せ */
+      // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
@@ -45,13 +45,13 @@
 
       border-radius: 50%;
 
-      /* lch(50.0%, 0.0, 0.0)相当 */
+      // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
 
       pointer-events: none;
     }
 
-    /* ツールバーのボタンの疑似リップルエフェクトの開始状態 */
+    // ツールバーのボタンの疑似リップルエフェクトの開始状態
     &:active::after {
       width: 0;
       height: 0;

@@ -22,7 +22,7 @@
   .workspace-dialog_content {
     padding: 1em;
 
-    /* フォーカス時の枠線を非表示 */
+    // フォーカス時の枠線を非表示
     outline: 0 solid transparent;
 
     display: flex;

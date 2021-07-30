@@ -31,19 +31,19 @@
 
 <style global lang="scss">
   :root {
-    /* データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当 */
+    // データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当
     --data-folder-button-icon-color: #777777;
-    /* データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当 */
+    // データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当
     --data-folder-button-icon-grayed-out-color: #ababab;
   }
 
-  /* データフォルダアイコン */
+  // データフォルダアイコン
   .data-folder-button_icon {
     --icon-size: 24px;
     width: var(--icon-size);
     height: var(--icon-size);
 
-    /* 中央寄せ */
+    // 中央寄せ
     position: absolute;
     top: 50%;
     left: 50%;
@@ -53,7 +53,7 @@
     -webkit-mask: url('folder-open.svg') no-repeat center;
     -webkit-mask-size: contain;
 
-    /* グレーアウト状態のデータフォルダアイコン */
+    // グレーアウト状態のデータフォルダアイコン
     &.grayed-out {
       background: var(--data-folder-button-icon-grayed-out-color);
     }

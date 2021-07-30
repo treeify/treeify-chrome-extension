@@ -19,15 +19,15 @@
 </div>
 
 <style global lang="scss">
-  /* コードブロック項目のコンテンツ領域のルート */
+  // コードブロック項目のコンテンツ領域のルート
   .main-area-tex-content {
-    /* フォーカス時の枠線を非表示 */
+    // フォーカス時の枠線を非表示
     outline: 0 solid transparent;
 
     min-height: var(--main-area-calculated-line-height);
   }
 
-  /* グレーアウト状態のコードブロック項目 */
+  // グレーアウト状態のコードブロック項目
   .grayed-out .main-area-tex-content {
     filter: opacity(50%);
   }

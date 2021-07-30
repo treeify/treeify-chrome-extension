@@ -60,19 +60,19 @@
   }
 
   .context-menu-dialog_frame {
-    /* topとleftはstyle属性で動的に設定する */
+    // topとleftはstyle属性で動的に設定する
     position: absolute;
 
-    /* lch(98.0%, 0.0, 0.0)相当 */
+    // lch(98.0%, 0.0, 0.0)相当
     background: #f9f9f9;
 
-    /* lch(80.0%, 0.0, 0.0)相当 */
+    // lch(80.0%, 0.0, 0.0)相当
     border: #c6c6c6 1px solid;
     border-radius: 3px;
-    /* 子要素を角丸からはみ出させない */
+    // 子要素を角丸からはみ出させない
     overflow: hidden;
 
-    /* lch(85.0%, 0.0, 0.0)相当 */
+    // lch(85.0%, 0.0, 0.0)相当
     box-shadow: 2px 2px 4px #d4d4d4;
   }
 </style>
