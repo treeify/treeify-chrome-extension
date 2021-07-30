@@ -31,8 +31,8 @@
 
 <style global lang="scss">
   :root {
-    // データフォルダを開くボタンのアイコンの色。lch(40.0%, 0.0, 0.0)相当
-    --data-folder-button-icon-color: #777777;
+    // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
+    --data-folder-button-icon-color: #6a6a6a;
     // データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当
     --data-folder-button-icon-grayed-out-color: #ababab;
   }
