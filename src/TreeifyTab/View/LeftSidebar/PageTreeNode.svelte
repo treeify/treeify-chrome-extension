@@ -89,6 +89,10 @@
     --page-tree-strongest-footprint-color: #fff6f3;
     // 最も古い足跡の色（線形補間の一端）
     --page-tree-weakest-footprint-color: #ffffff;
+    // 足跡表示数のパラメータ。
+    // CSSではなくJSから参照する特殊なCSS変数。
+    // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
+    --page-tree-footprint-count-exponent: 0.7;
 
     // 閉じるボタンのサイズ（正方形の一辺の長さ）
     --page-tree-close-button-size: 1.45em;

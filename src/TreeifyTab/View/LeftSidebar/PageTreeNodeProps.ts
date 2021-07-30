@@ -2,6 +2,7 @@ import {Collection, List, Seq, Set} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
+import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -62,9 +63,9 @@ export function createPageTreeNodeProps(
   const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
   const activePageId = CurrentState.getActivePageId()
 
-  // TODO: パラメータをカスタマイズ可能にする
   const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
-  const footprintCount = Math.floor(nonActivePageIds.size ** 0.7)
+  const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.7
+  const footprintCount = Math.floor(nonActivePageIds.size ** exponent)
   const index = nonActivePageIds.indexOf(itemId)
   const rank = index !== -1 ? nonActivePageIds.size - index - 1 : 0
 

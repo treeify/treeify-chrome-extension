@@ -2,11 +2,23 @@ import Color from 'color'
 
 export namespace CssCustomProperty {
   /**
-   * CSSカスタムプロパティの色を返す。
+   * CSSカスタムプロパティとして定義された色を返す。
    * @param propertyName "--"も含むプロパティ名
    */
   export function getColor(propertyName: string): Color {
     return Color(getValue(propertyName).trim())
+  }
+
+  /**
+   * CSSカスタムプロパティとして定義された数値を返す。
+   * @param propertyName "--"も含むプロパティ名
+   */
+  export function getNumber(propertyName: string): number | undefined {
+    try {
+      return parseFloat(getValue(propertyName).trim())
+    } catch {
+      return undefined
+    }
   }
 
   /**

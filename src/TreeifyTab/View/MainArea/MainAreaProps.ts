@@ -3,6 +3,7 @@ import {assert, assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert
 import {dump} from 'src/Common/Debug/logger'
 import {integer} from 'src/Common/integer'
 import {CommandId, ItemId, ItemType} from 'src/TreeifyTab/basicType'
+import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {matchTabsAndWebPageItems} from 'src/TreeifyTab/External/chromeEventListeners'
 import {
@@ -37,8 +38,8 @@ export function createMainAreaProps(state: State): MainAreaProps {
 
   const allDisplayingItemIds = [...CurrentState.getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算
-  // TODO: パラメータをカスタマイズ可能にする。なおこれをCSS変数にしていいのかどうかは微妙な問題
-  const footprintCount = Math.floor(allDisplayingItemIds.length ** 0.5)
+  const exponent = CssCustomProperty.getNumber('--main-area-footprint-count-exponent') ?? 0.5
+  const footprintCount = Math.floor(allDisplayingItemIds.length ** exponent)
 
   // TODO: 同時に複数の項目が操作された場合でも足跡をきちんと表示できるように修正する
   const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
