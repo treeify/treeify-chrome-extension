@@ -132,16 +132,13 @@
     font-size: 120%;
   }
 
-  .main-area-node_footprint-layer {
-    padding: var(--main-area-body-area-vertical-padding) 0;
-  }
-
   .main-area-node_spool-area {
     user-select: none;
   }
 
   .main-area-node_content-area {
     height: 100%;
+    padding-block: var(--main-area-body-area-vertical-padding);
 
     // マウスホバー時のコンテンツ領域
     &:hover {
