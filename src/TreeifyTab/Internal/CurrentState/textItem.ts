@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {Instance} from 'src/TreeifyTab/Instance'
+import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -27,8 +27,7 @@ export function createTextItem(): ItemId {
 
   const newItem: Item = {
     type: ItemType.TEXT,
-    instanceId: Instance.getId(),
-    iisn: Instance.generateIisn(),
+    globalItemId: GlobalItemId.generate(),
     childItemIds: List.of(),
     parents: {},
     timestamp: Timestamp.now(),

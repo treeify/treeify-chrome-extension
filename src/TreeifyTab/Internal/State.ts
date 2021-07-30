@@ -2,7 +2,7 @@ import {is, List} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {CommandId, ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
-import {Iisn, InstanceId} from 'src/TreeifyTab/Instance'
+import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -39,8 +39,7 @@ export type State = {
  */
 export type Item = {
   type: ItemType
-  instanceId: InstanceId
-  iisn: Iisn
+  globalItemId: GlobalItemId
   childItemIds: List<ItemId>
   parents: {[K in ItemId]: Edge}
   /** 足跡表示機能で使われるタイムスタンプ */

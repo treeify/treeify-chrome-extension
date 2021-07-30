@@ -1,4 +1,5 @@
 import {nanoid} from 'nanoid'
+import PowerRadix from 'power-radix'
 import {integer} from 'src/Common/integer'
 
 /**
@@ -10,9 +11,25 @@ export type InstanceId = string
 /**
  * Instance Internal Serial Numberの略。
  * このインスタンスで生成された項目の通し番号。
- * InstanceIdとIisnのペアをグローバル項目IDと呼ぶ。
  */
 export type Iisn = integer
+
+/**
+ * 分散環境で発行しても衝突しないよう設計された特殊な項目ID。
+ * 該当項目を生成したインスタンスのIDと、そのインスタンスで生成された項目の通し番号(iisn)のペアからなる。
+ * 具体的には下記のフォーマットの文字列として表現される。
+ * `${instanceId}#${base62(iisn)}`
+ * base62は62進数への変換関数を表す。
+ * この62進数の文字の種類は[0-9][A-Z][a-z]であり数値、大文字、小文字の順に値が大きくなる。
+ */
+export type GlobalItemId = string
+
+export namespace GlobalItemId {
+  export function generate(): GlobalItemId {
+    const radix62 = new PowerRadix(Instance.generateIisn(), 10).toString(62)
+    return `${Instance.getId()}#${radix62}`
+  }
+}
 
 export namespace Instance {
   // Treeifyの設計ではInternalにもExternalにも属さないこのようなグローバル変数は基本的に存在すべきでないのだが、

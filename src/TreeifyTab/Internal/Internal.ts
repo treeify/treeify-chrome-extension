@@ -2,7 +2,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
-import {Instance} from 'src/TreeifyTab/Instance'
+import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
@@ -127,8 +127,7 @@ export class Internal {
       items: {
         0: {
           type: ItemType.TEXT,
-          instanceId: Instance.getId(),
-          iisn: Instance.generateIisn(),
+          globalItemId: GlobalItemId.generate(),
           childItemIds: List.of(),
           parents: {},
           timestamp: Timestamp.now(),
