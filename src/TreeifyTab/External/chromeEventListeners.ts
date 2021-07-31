@@ -18,13 +18,20 @@ import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
 
 export const onMessage = (message: any, sender: MessageSender) => {
   doAsyncWithErrorCapture(async () => {
+    const height = window.innerHeight
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
+        // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
+        if (message.clientY < height * 0.15 || height * 0.85 < message.clientY) break
+
         // Treeifyタブを最前面化する
         // TODO: 誤差だろうけれど最適化の余地が一応ある
         TreeifyTab.open()
         break
       case 'OnMouseMoveToRightEnd':
+        // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
+        if (message.clientY < height * 0.15 || height * 0.85 < message.clientY) break
+
         await TreeifyTab.open()
         if (sender.tab?.id !== undefined) {
           chrome.tabs.remove(sender.tab.id)

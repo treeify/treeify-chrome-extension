@@ -1,20 +1,29 @@
-window.addEventListener('mousemove', (event) => {
-  const height = window.innerHeight
-  // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
-  if (event.clientY < height * 0.15 || height * 0.85 < event.clientY) return
+window.addEventListener(
+  'mousemove',
+  (event) => {
+    // マウスカーソルが画面左端に到達したとき。
+    // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
+    if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
+      chrome.runtime.sendMessage({
+        type: 'OnMouseMoveToLeftEnd',
+        clientY: event.clientY,
+      })
+    }
 
-  // マウスカーソルが画面左端に到達したとき。
-  // この条件を満たすにはウィンドウが最大化状態であるか、ディスプレイの左端にぴったりくっついていないといけない。
-  if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
     chrome.runtime.sendMessage({
-      type: 'OnMouseMoveToLeftEnd',
+      type: 'dump',
+      clientY: event.clientY,
+      clientX: event.clientX,
+      screenX: event.screenX,
     })
-  }
 
-  const rightEnd = screen.width - 1
-  if (event.clientX === rightEnd && event.screenX === rightEnd && event.movementX > 0) {
-    chrome.runtime.sendMessage({
-      type: 'OnMouseMoveToRightEnd',
-    })
-  }
-})
+    const rightEnd = screen.width - 1
+    if (event.clientX === rightEnd && event.screenX === rightEnd && event.movementX > 0) {
+      chrome.runtime.sendMessage({
+        type: 'OnMouseMoveToRightEnd',
+        clientY: event.clientY,
+      })
+    }
+  },
+  true
+)
