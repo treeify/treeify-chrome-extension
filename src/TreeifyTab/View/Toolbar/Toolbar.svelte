@@ -1,6 +1,6 @@
 <script lang="ts">
+  import {List} from 'immutable'
   import {assert} from '../../../Common/Debug/assert'
-  import {CurrentState} from '../../Internal/CurrentState'
   import {toOpmlString} from '../../Internal/ImportExport/opml'
   import {Internal} from '../../Internal/Internal'
   import {State} from '../../Internal/State'
@@ -14,7 +14,7 @@
   function onClick() {
     const fileName = 'treeify.opml'
 
-    const content = toOpmlString(CurrentState.getSelectedItemPaths())
+    const content = toOpmlString(List.of(List.of(0)))
     const aElement = document.createElement('a')
     aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
     aElement.download = fileName
