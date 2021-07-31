@@ -59,12 +59,14 @@
     align-items: center;
 
     width: fit-content;
+    max-width: 100%;
   }
 
   .main-area-image-content_image-with-resize-handle {
     position: relative;
 
     width: max-content;
+    max-width: 100%;
 
     // Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
     // lch(90.0%, 0.0, 0.0)
@@ -72,8 +74,8 @@
   }
 
   .main-area-image-content_image {
-    // widthはstyle属性で指定する
-    height: auto;
+    // style属性でwidthが指定される
+    max-width: 100%;
   }
 
   // グレーアウト状態の画像
