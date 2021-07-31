@@ -1,12 +1,12 @@
-export type ExportDialogProps = {}
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {ExportFormat} from 'src/TreeifyTab/Internal/State'
 
-export function createExportDialogProps(): ExportDialogProps {
-  return {}
+export type ExportDialogProps = {
+  selectedFormat: ExportFormat
 }
 
-/** .svelte内で定義したらなぜかエラーが出たので.ts内で定義する */
-export enum Format {
-  PLAIN_TEXT,
-  MARKDOWN,
-  OPML,
+export function createExportDialogProps(): ExportDialogProps {
+  return {
+    selectedFormat: Internal.instance.state.exportSettings.selectedFormat,
+  }
 }
