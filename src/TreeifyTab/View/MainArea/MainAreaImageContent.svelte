@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {CurrentState} from '../../Internal/CurrentState'
   import {ItemPath} from '../../Internal/ItemPath'
   import Cite from '../Cite.svelte'
   import {dragImageBottom} from '../dragAndDrop'
@@ -9,14 +10,30 @@
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
   $: style = `
-    height: ${props.height};
+    width: ${props.width};
+    aspect-ratio: ${props.aspectRatio};
   `
+
+  function onLoad(event: Event) {
+    if (event.target instanceof HTMLImageElement) {
+      CurrentState.setImageItemOriginalSize(ItemPath.getItemId(props.itemPath), {
+        widthPx: event.target.naturalWidth,
+        heightPx: event.target.naturalHeight,
+      })
+    }
+  }
 </script>
 
 <div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-image-content_caption-layout">
     <div class="main-area-image-content_image-with-resize-handle">
-      <img class="main-area-image-content_image" src={props.url} draggable="false" {style} />
+      <img
+        class="main-area-image-content_image"
+        src={props.url}
+        draggable="false"
+        {style}
+        on:load={onLoad}
+      />
       <div
         class="main-area-image-content_resize-handle"
         use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
@@ -43,12 +60,14 @@
     align-items: center;
 
     width: fit-content;
+    max-width: 100%;
   }
 
   .main-area-image-content_image-with-resize-handle {
     position: relative;
 
     width: max-content;
+    max-width: 100%;
 
     // Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
     // lch(90.0%, 0.0, 0.0)
@@ -56,8 +75,8 @@
   }
 
   .main-area-image-content_image {
-    width: auto;
-    // heightはstyle属性で指定する
+    // style属性でwidthとaspect-ratioが指定される
+    max-width: 100%;
   }
 
   // グレーアウト状態の画像
@@ -84,7 +103,7 @@
     border-right: var(--border);
     border-bottom: var(--border);
 
-    cursor: ns-resize;
+    cursor: ew-resize;
 
     visibility: hidden;
 

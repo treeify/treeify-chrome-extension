@@ -79,8 +79,8 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
         baseAttributes.text = imageItem.url
       }
       baseAttributes.url = imageItem.url
-      if (imageItem.heightPx !== null) {
-        baseAttributes.heightPx = imageItem.heightPx.toString()
+      if (imageItem.widthPx !== null) {
+        baseAttributes.widthPx = imageItem.widthPx.toString()
       }
       break
     case ItemType.CODE_BLOCK:
@@ -266,10 +266,10 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
       if (attrUrl !== null) {
         CurrentState.setImageItemUrl(imageItemId, attrUrl)
       }
-      const attrHeightPx = outlineElement.getAttribute('heightPx')
-      if (attrHeightPx !== null) {
+      const attrWidthPx = outlineElement.getAttribute('widthPx')
+      if (attrWidthPx !== null) {
         try {
-          CurrentState.setImageItemHeightPx(imageItemId, parseInt(attrHeightPx))
+          CurrentState.setImageItemWidthPx(imageItemId, parseInt(attrWidthPx))
         } catch {}
       }
       return imageItemId

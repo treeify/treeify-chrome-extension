@@ -9,7 +9,8 @@ export type MainAreaImageContentProps = {
   type: ItemType.IMAGE
   url: string
   caption: string
-  height: string
+  width: string
+  aspectRatio: string
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
 }
@@ -20,13 +21,15 @@ export function createMainAreaImageContentProps(
 ): MainAreaImageContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const imageItem = state.imageItems[itemId]
+  const originalSize = imageItem.originalSize
 
   return {
     itemPath,
     type: ItemType.IMAGE,
     url: imageItem.url,
     caption: imageItem.caption,
-    height: imageItem.heightPx !== null ? `${Math.max(20, imageItem.heightPx)}px` : 'auto',
+    width: imageItem.widthPx !== null ? `${Math.max(20, imageItem.widthPx)}px` : 'auto',
+    aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {

@@ -14,7 +14,7 @@ export type ItemDragData = {
 type ImageBottomDragData = {
   type: 'ImageBottomDragData'
   itemId: ItemId
-  imageRectTop: integer
+  imageRectLeft: integer
 }
 
 export let currentDragData: ItemDragData | ImageBottomDragData | undefined
@@ -87,7 +87,7 @@ export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
       currentDragData = {
         type: 'ImageBottomDragData',
         itemId,
-        imageRectTop: element.parentElement.getBoundingClientRect().top,
+        imageRectLeft: element.parentElement.getBoundingClientRect().left,
       }
       Rerenderer.instance.rerender()
     }
@@ -104,13 +104,13 @@ export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
   }
 }
 
-export function onDragImageBottom(
+export function onResizeImage(
   element: HTMLElement,
-  onDrag: (event: MouseEvent, itemId: ItemId, imageRectTop: integer) => void
+  onDrag: (event: MouseEvent, itemId: ItemId, imageRectLeft: integer) => void
 ) {
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && currentDragData?.type === 'ImageBottomDragData') {
-      onDrag(event, currentDragData.itemId, currentDragData.imageRectTop)
+      onDrag(event, currentDragData.itemId, currentDragData.imageRectLeft)
     }
   }
 

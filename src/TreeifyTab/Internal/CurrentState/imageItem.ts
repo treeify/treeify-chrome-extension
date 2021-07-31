@@ -5,7 +5,7 @@ import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {ImageItem, Item} from 'src/TreeifyTab/Internal/State'
+import {ImageItem, Item, SizePx} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /**
@@ -30,7 +30,8 @@ export function createImageItem(): ItemId {
   const imageItem: ImageItem = {
     url: '',
     caption: '',
-    heightPx: null,
+    originalSize: null,
+    widthPx: null,
   }
   Internal.instance.mutate(imageItem, PropertyPath.of('imageItems', newItemId))
 
@@ -54,9 +55,12 @@ export function setImageItemCaption(itemId: ItemId, caption: string) {
   })
 }
 
-/** 画像項目のheightPxを設定する */
-export function setImageItemHeightPx(itemId: ItemId, heightPx: integer) {
-  Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
+export function setImageItemOriginalSize(itemId: ItemId, originalSize: SizePx | null) {
+  Internal.instance.mutate(originalSize, PropertyPath.of('imageItems', itemId, 'originalSize'))
+}
+
+export function setImageItemWidthPx(itemId: ItemId, widthPx: integer) {
+  Internal.instance.mutate(widthPx, PropertyPath.of('imageItems', itemId, 'widthPx'))
 }
 
 export function isEmptyImageItem(itemId: ItemId): boolean {

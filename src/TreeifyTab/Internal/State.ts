@@ -117,8 +117,14 @@ export type WebPageItem = {
 export type ImageItem = {
   url: string
   caption: string
-  /** 画像の表示領域の高さ指定 */
-  heightPx: integer | null
+  originalSize: SizePx | null
+  /** 画像の表示領域の幅指定 */
+  widthPx: integer | null
+}
+
+export type SizePx = {
+  widthPx: integer
+  heightPx: integer
 }
 
 /** コードブロック項目が固有で持つデータの型 */
