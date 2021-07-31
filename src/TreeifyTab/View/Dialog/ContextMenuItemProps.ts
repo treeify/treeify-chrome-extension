@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -36,6 +37,19 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     result.push({
       title: '他のトランスクルード元を表示…',
       onClick: () => Command.showOtherParentsDialog(),
+    })
+  }
+
+  // TODO: おそらくテーブル表示中は表示しないべき
+  if (
+    isSingleSelect &&
+    List.of(ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX).contains(item.type)
+  ) {
+    result.push({
+      title: 'キャプションを設定…',
+      onClick: () => {
+        External.instance.dialogState = {type: 'CaptionSettingDialog'}
+      },
     })
   }
 
