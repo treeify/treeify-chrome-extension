@@ -5,7 +5,7 @@
  */
 export class SourceFileReader {
   // シングルトンインスタンス
-  private static _instance: SourceFileReader
+  static #instance: SourceFileReader
 
   // ファイルパスからファイル内容（行の配列）へのMap形式のキャッシュ
   private textFileLinesCache = new Map<string, string[] | undefined>()
@@ -16,10 +16,10 @@ export class SourceFileReader {
    * シングルトンインスタンスを取得する。
    */
   static get instance(): SourceFileReader {
-    if (this._instance === undefined) {
-      this._instance = new SourceFileReader()
+    if (this.#instance === undefined) {
+      this.#instance = new SourceFileReader()
     }
-    return this._instance
+    return this.#instance
   }
 
   /**

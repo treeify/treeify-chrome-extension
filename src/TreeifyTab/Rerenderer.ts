@@ -21,13 +21,13 @@ import Root from './View/Root.svelte'
  * 実際のDOM書き換え処理はSvelteが行うので、あくまで制御だけ。
  */
 export class Rerenderer {
-  private static _instance: Rerenderer | undefined
+  static #instance: Rerenderer | undefined
 
   static get instance(): Rerenderer {
-    if (this._instance === undefined) {
-      this._instance = new Rerenderer()
+    if (this.#instance === undefined) {
+      this.#instance = new Rerenderer()
     }
-    return this._instance
+    return this.#instance
   }
 
   // 再描画制御変数。

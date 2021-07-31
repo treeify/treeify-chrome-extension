@@ -12,7 +12,7 @@ import {State} from 'src/TreeifyTab/Internal/State'
 
 /** TODO: コメント */
 export class External {
-  private static _instance: External | undefined
+  static #instance: External | undefined
 
   dialogState: Dialog | undefined
 
@@ -44,15 +44,15 @@ export class External {
 
   /** シングルトンインスタンスを取得する */
   static get instance(): External {
-    if (this._instance === undefined) {
-      this._instance = new External()
+    if (this.#instance === undefined) {
+      this.#instance = new External()
     }
-    return this._instance
+    return this.#instance
   }
 
   /** シングルトンインスタンスを破棄する */
   static cleanup() {
-    this._instance = undefined
+    this.#instance = undefined
   }
 
   onMutateState(propertyPath: PropertyPath) {

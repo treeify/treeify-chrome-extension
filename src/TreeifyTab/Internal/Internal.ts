@@ -11,7 +11,7 @@ import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /** TODO: コメント */
 export class Internal {
-  private static _instance: Internal | undefined
+  static #instance: Internal | undefined
 
   state: State
   /** Treeifyの項目の全文検索エンジン */
@@ -35,7 +35,7 @@ export class Internal {
    * 生成されたインスタンスは.instanceで取得できる。
    */
   static initialize(initialState: State) {
-    this._instance = new Internal(initialState)
+    this.#instance = new Internal(initialState)
   }
 
   /**
@@ -44,13 +44,13 @@ export class Internal {
    * インスタンス未生成の場合はエラー。
    */
   static get instance(): Internal {
-    assertNonUndefined(this._instance)
-    return this._instance
+    assertNonUndefined(this.#instance)
+    return this.#instance
   }
 
   /** シングルトンインスタンスを破棄する */
   static cleanup() {
-    this._instance = undefined
+    this.#instance = undefined
   }
 
   /** State内の指定されたプロパティを書き換える */
