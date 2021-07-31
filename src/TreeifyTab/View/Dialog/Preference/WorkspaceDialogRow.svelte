@@ -45,10 +45,10 @@
   .workspace-dialog_existing-workspace {
     display: flex;
     align-items: center;
-  }
 
-  input[type='radio'][name='currentWorkspaceId'] {
-    margin: 0;
+    input[type='radio'][name='currentWorkspaceId'] {
+      margin: 0;
+    }
   }
 
   .workspace-dialog_name {

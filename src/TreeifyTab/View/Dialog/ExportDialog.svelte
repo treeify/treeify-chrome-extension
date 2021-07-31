@@ -93,10 +93,10 @@
 
       border-bottom-style: none;
     }
-  }
 
-  input[type='radio'][name='format'] {
-    display: none;
+    input[type='radio'][name='format'] {
+      display: none;
+    }
   }
 
   .export-dialog_option-area {
