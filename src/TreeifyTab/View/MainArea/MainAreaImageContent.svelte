@@ -11,6 +11,7 @@
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
   $: style = `
     width: ${props.width};
+    aspect-ratio: ${props.aspectRatio};
   `
 
   function onLoad(event: Event) {
@@ -74,7 +75,7 @@
   }
 
   .main-area-image-content_image {
-    // style属性でwidthが指定される
+    // style属性でwidthとaspect-ratioが指定される
     max-width: 100%;
   }
 
