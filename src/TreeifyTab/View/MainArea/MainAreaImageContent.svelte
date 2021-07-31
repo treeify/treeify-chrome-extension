@@ -95,9 +95,9 @@
     right: 0;
     bottom: 0;
 
-    --size: 20px;
-    width: var(--size);
-    height: var(--size);
+    width: 20px;
+    aspect-ratio: 1;
+
     // lch(35.0%, 0.0, 0.0)相当
     --border: 3px solid #525252;
     border-right: var(--border);

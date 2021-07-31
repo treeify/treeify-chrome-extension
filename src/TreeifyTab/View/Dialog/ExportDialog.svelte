@@ -122,9 +122,8 @@
     align-items: center;
   }
   .export-dialog_copy-button-icon {
-    --size: 1.5em;
-    width: var(--size);
-    height: var(--size);
+    width: 1.5em;
+    aspect-ratio: 1;
 
     // lch(45.0%, 0.0, 0.0)相当
     background: #6a6a6a;
@@ -137,9 +136,8 @@
     align-items: center;
   }
   .export-dialog_save-button-icon {
-    --size: 1.5em;
-    width: var(--size);
-    height: var(--size);
+    width: 1.5em;
+    aspect-ratio: 1;
 
     // lch(45.0%, 0.0, 0.0)相当
     background: #6a6a6a;

@@ -20,8 +20,7 @@
   }
 
   .web-page-item-content_favicon {
-    --size: 1em;
-    width: var(--size);
-    height: var(--size);
+    width: 1em;
+    aspect-ratio: 1;
   }
 </style>

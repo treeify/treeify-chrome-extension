@@ -86,7 +86,7 @@
   // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon {
     width: var(--main-area-favicon-size);
-    height: var(--main-area-favicon-size);
+    aspect-ratio: 1;
 
     position: relative;
 
@@ -95,7 +95,7 @@
 
     > * {
       width: var(--main-area-favicon-size);
-      height: var(--main-area-favicon-size);
+      aspect-ratio: 1;
     }
 
     // 疑似リップルエフェクトの終了状態
@@ -151,9 +151,8 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
-    --icon-size: 1em;
-    width: var(--icon-size);
-    height: var(--icon-size);
+    width: 1em;
+    aspect-ratio: 1;
 
     background: var(--main-area-audible-icon-color);
     -webkit-mask: url('./audible-icon.svg');

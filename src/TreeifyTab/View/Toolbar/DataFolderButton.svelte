@@ -39,9 +39,8 @@
 
   // データフォルダアイコン
   .data-folder-button_icon {
-    --icon-size: 24px;
-    width: var(--icon-size);
-    height: var(--icon-size);
+    width: 24px;
+    aspect-ratio: 1;
 
     // 中央寄せ
     position: absolute;

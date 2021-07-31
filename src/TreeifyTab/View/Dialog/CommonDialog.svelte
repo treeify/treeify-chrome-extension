@@ -110,9 +110,8 @@
   }
 
   .common-dialog_close-button {
-    --button-size: 1.4em;
-    width: var(--button-size);
-    height: var(--button-size);
+    width: 1.4em;
+    aspect-ratio: 1;
 
     margin-left: auto;
 
@@ -123,9 +122,8 @@
 
     &::before {
       content: '';
-      --icon-size: 0.8em;
-      width: var(--icon-size);
-      height: var(--icon-size);
+      width: 0.8em;
+      aspect-ratio: 1;
 
       // 中央寄せ
       position: absolute;

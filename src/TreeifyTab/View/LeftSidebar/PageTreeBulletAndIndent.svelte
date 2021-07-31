@@ -79,7 +79,7 @@
     transform: translate(-50%, -50%);
 
     width: var(--page-tree-bullet-area-size);
-    height: var(--page-tree-bullet-area-size);
+    aspect-ratio: 1;
 
     // 展開済み状態のバレット
     &.expanded {
@@ -112,9 +112,9 @@
 
     // 子を持たないノードのバレット
     &.no-children {
-      --diameter: 0.25em;
-      width: var(--diameter);
-      height: var(--diameter);
+      width: 0.25em;
+      aspect-ratio: 1;
+
       border-radius: 50%;
       background: var(--page-tree-bullet-color);
 

@@ -56,15 +56,13 @@
   }
 
   .workspace-dialog_delete-button {
-    --button-size: 1.5em;
-    width: var(--button-size);
-    height: var(--button-size);
+    width: 1.5em;
+    aspect-ratio: 1;
 
     &::before {
       content: '';
-      --icon-size: 1.2em;
-      width: var(--icon-size);
-      height: var(--icon-size);
+      width: 1.2em;
+      aspect-ratio: 1;
 
       // 中央寄せ
       position: absolute;

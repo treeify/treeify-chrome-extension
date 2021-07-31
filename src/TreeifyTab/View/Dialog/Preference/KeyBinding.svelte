@@ -64,7 +64,7 @@
 
   .delete-button {
     width: var(--key-binding-dialog-command-button-size);
-    height: var(--key-binding-dialog-command-button-size);
+    aspect-ratio: 1;
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -73,7 +73,7 @@
       content: '';
 
       width: var(--key-binding-dialog-delete-icon-size);
-      height: var(--key-binding-dialog-delete-icon-size);
+      aspect-ratio: 1;
 
       // 中央寄せ
       position: absolute;
@@ -94,7 +94,7 @@
 
   .add-command-button {
     width: var(--key-binding-dialog-command-button-size);
-    height: var(--key-binding-dialog-command-button-size);
+    aspect-ratio: 1;
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -103,7 +103,7 @@
       content: '';
 
       width: var(--key-binding-dialog-add-icon-size);
-      height: var(--key-binding-dialog-add-icon-size);
+      aspect-ratio: 1;
 
       // 中央寄せ
       position: absolute;

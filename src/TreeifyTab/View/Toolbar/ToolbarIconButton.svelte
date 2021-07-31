@@ -14,9 +14,8 @@
 
   // ツールバーのアイコンボタンの共通クラス
   .toolbar-icon-button {
-    --button-size: 32px;
-    width: var(--button-size);
-    height: var(--button-size);
+    width: 32px;
+    aspect-ratio: 1;
     border-radius: 50%;
 
     cursor: pointer;

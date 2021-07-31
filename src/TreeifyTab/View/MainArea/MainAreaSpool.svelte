@@ -105,7 +105,7 @@
 
   .main-area-spool_bullet-area {
     width: var(--main-area-calculated-line-height);
-    height: var(--main-area-calculated-line-height);
+    aspect-ratio: 1;
     // 外側の円と内側の円を重ねて描画するための設定
     position: relative;
   }
@@ -130,9 +130,8 @@
 
   // メインエリアのバレットの内側の円
   .main-area-spool_inner-circle {
-    --diameter: 0.38em;
-    width: var(--diameter);
-    height: var(--diameter);
+    width: 0.38em;
+    aspect-ratio: 1;
     border-radius: 50%;
     background: var(--main-area-bullet-inner-circle-color);
 
@@ -149,9 +148,8 @@
 
   // ページのバレット
   .main-area-spool_page-icon {
-    --icon-size: 1em;
-    width: var(--icon-size);
-    height: var(--icon-size);
+    width: 1em;
+    aspect-ratio: 1;
 
     background: var(--main-area-bullet-page-icon-color);
     -webkit-mask-image: url('./page-icon.svg');

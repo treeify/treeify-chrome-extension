@@ -136,9 +136,8 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .page-tree-node_audible-icon {
-    --icon-size: 1em;
-    width: var(--icon-size);
-    height: var(--icon-size);
+    width: 1em;
+    aspect-ratio: 1;
 
     // lch(35.0%, 0.0, 0.0)相当
     background: #525252;
@@ -148,7 +147,7 @@
 
   .page-tree-node_tabs-count-button {
     width: var(--page-tree-close-button-size);
-    height: var(--page-tree-close-button-size);
+    aspect-ratio: 1;
 
     position: relative;
 
@@ -203,7 +202,7 @@
 
   .page-tree-node_close-button {
     width: var(--page-tree-close-button-size);
-    height: var(--page-tree-close-button-size);
+    aspect-ratio: 1;
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -211,9 +210,8 @@
     &::before {
       content: '';
 
-      --icon-size: 1.1em;
-      width: var(--icon-size);
-      height: var(--icon-size);
+      width: 1.1em;
+      aspect-ratio: 1;
 
       // 中央寄せ
       position: absolute;

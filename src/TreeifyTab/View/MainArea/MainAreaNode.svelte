@@ -165,7 +165,7 @@
   // 隠れているタブ数
   .main-area-node_hidden-tabs-count {
     width: var(--main-area-calculated-line-height);
-    height: var(--main-area-calculated-line-height);
+    aspect-ratio: 1;
 
     position: relative;
     text-align: center;
@@ -213,7 +213,7 @@
   // 各項目の削除ボタン
   .main-area-node_delete-button {
     width: var(--main-area-calculated-line-height);
-    height: var(--main-area-calculated-line-height);
+    aspect-ratio: 1;
 
     border-radius: 50%;
 
@@ -238,7 +238,7 @@
 
   .main-area-node_delete-button-icon {
     width: var(--main-area-delete-button-size);
-    height: var(--main-area-delete-button-size);
+    aspect-ratio: 1;
 
     // 中央寄せ
     position: absolute;
