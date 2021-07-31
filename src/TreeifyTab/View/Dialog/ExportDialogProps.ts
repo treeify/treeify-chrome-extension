@@ -70,13 +70,9 @@ export function createExportDialogProps(): ExportDialogProps {
 }
 
 function generateOutputText(format: ExportFormat): string {
-  const exportSettings = Internal.instance.state.exportSettings
   switch (format) {
     case ExportFormat.PLAIN_TEXT:
-      const indentUnit = exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression
-      return CurrentState.getSelectedItemPaths()
-        .map((itemPath) => exportAsIndentedText(itemPath, indentUnit))
-        .join('\n')
+      return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
     case ExportFormat.MARKDOWN:
       // TODO: 複数選択時はそれらをまとめてMarkdown化する
       return toMarkdownText(CurrentState.getTargetItemPath())

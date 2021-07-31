@@ -6,6 +6,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {ExportFormat} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /**
@@ -33,7 +34,9 @@ export function removeRedundantIndent(indentedText: string): string {
 }
 
 /** 指定された項目を頂点とするインデント形式のプレーンテキストを作る */
-export function exportAsIndentedText(itemPath: ItemPath, indentUnit: string = '  '): string {
+export function exportAsIndentedText(itemPath: ItemPath): string {
+  const exportSettings = Internal.instance.state.exportSettings
+  const indentUnit = exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression
   return List(yieldIndentedLines(itemPath, indentUnit)).join('\n')
 }
 

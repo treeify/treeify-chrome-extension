@@ -42,9 +42,7 @@ export function onCopy(event: ClipboardEvent) {
         event.clipboardData.setData('text/plain', tsvText)
       } else {
         // インデント形式のテキストをクリップボードに入れる
-        const contentText = selectedItemPaths
-          .map((itemPath) => exportAsIndentedText(itemPath))
-          .join('\n')
+        const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
         event.clipboardData.setData('text/plain', contentText)
       }
 
@@ -81,9 +79,7 @@ export function onCut(event: ClipboardEvent) {
         event.clipboardData.setData('text/plain', tsvText)
       } else {
         // インデント形式のテキストをクリップボードに入れる
-        const contentText = selectedItemPaths
-          .map((itemPath) => exportAsIndentedText(itemPath))
-          .join('\n')
+        const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
         event.clipboardData.setData('text/plain', contentText)
       }
 
