@@ -29,6 +29,7 @@ export function createCodeBlockItem(): ItemId {
   const codeBlockItem: CodeBlockItem = {
     code: '',
     language: '',
+    caption: '',
   }
   Internal.instance.mutate(codeBlockItem, PropertyPath.of('codeBlockItems', newItemId))
 

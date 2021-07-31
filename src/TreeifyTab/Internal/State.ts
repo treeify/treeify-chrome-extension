@@ -141,11 +141,13 @@ export type SizePx = {
 export type CodeBlockItem = {
   code: string
   language: string
+  caption: string
 }
 
 /** TeX項目が固有で持つデータの型 */
 export type TexItem = {
   code: string
+  caption: string
 }
 
 /** 各ページが持つデータの型 */

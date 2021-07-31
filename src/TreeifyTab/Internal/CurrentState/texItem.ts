@@ -26,7 +26,7 @@ export function createTexItem(): ItemId {
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
-  const texItem: TexItem = {code: ''}
+  const texItem: TexItem = {code: '', caption: ''}
   Internal.instance.mutate(texItem, PropertyPath.of('texItems', newItemId))
 
   return newItemId
