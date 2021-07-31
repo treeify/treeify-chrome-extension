@@ -1,78 +1,14 @@
 <script lang="ts">
-  import {assertNonNull} from 'src/Common/Debug/assert'
-  import {External} from 'src/TreeifyTab/External/External'
-  import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-  import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
-  import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
-  import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
-  import {Internal} from 'src/TreeifyTab/Internal/Internal'
-  import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
   import {ExportFormat} from 'src/TreeifyTab/Internal/State'
-  import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from './CommonDialog.svelte'
   import {ExportDialogProps} from './ExportDialogProps'
 
   export let props: ExportDialogProps
-
-  function generateOutputText(): string {
-    switch (props.selectedFormat) {
-      case ExportFormat.PLAIN_TEXT:
-        const input = document.querySelector<HTMLInputElement>('.export-dialog_indent-unit')
-        assertNonNull(input)
-        return CurrentState.getSelectedItemPaths()
-          .map((itemPath) => exportAsIndentedText(itemPath, input.value))
-          .join('\n')
-      case ExportFormat.MARKDOWN:
-        // TODO: 複数選択時はそれらをまとめてMarkdown化する
-        return toMarkdownText(CurrentState.getTargetItemPath())
-      case ExportFormat.OPML:
-        return toOpmlString(CurrentState.getSelectedItemPaths())
-    }
-  }
-
-  function deriveFileName(): string {
-    const fileExtensions = {
-      [ExportFormat.PLAIN_TEXT]: '.txt',
-      [ExportFormat.MARKDOWN]: '.md',
-      [ExportFormat.OPML]: '.opml',
-    }
-    // TODO: ファイル名を内容依存にする。例えば先頭行テキストとか
-    return 'export' + fileExtensions[props.selectedFormat]
-  }
-
-  function onClickCopyButton() {
-    const blob = new Blob([generateOutputText()], {type: 'text/plain'})
-    navigator.clipboard.write([
-      new ClipboardItem({
-        [blob.type]: blob,
-      }),
-    ])
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
-  }
-
-  function onClickSaveButton() {
-    const content = generateOutputText()
-    const aElement = document.createElement('a')
-    aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'text/plain'}))
-    aElement.download = deriveFileName()
-    aElement.click()
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
-  }
-
-  function onChange(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      const selectedFormat = event.target.value
-      Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
-      Rerenderer.instance.rerender()
-    }
-  }
 </script>
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <div class="export-dialog_format-select-button-area" on:change={onChange}>
+    <div class="export-dialog_format-select-button-area" on:change={props.onChange}>
       <label
         class="export-dialog_format-select-button"
         class:selected={props.selectedFormat === ExportFormat.PLAIN_TEXT}
@@ -117,11 +53,11 @@
       </div>
     {/if}
     <div class="export-dialog_button-area">
-      <button class="export-dialog_copy-button" on:click={onClickCopyButton}
+      <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}
         ><div class="export-dialog_copy-button-icon" />
         クリップボードにコピー</button
       >
-      <button class="export-dialog_save-button" on:click={onClickSaveButton}
+      <button class="export-dialog_save-button" on:click={props.onClickSaveButton}
         ><div class="export-dialog_save-button-icon" />
         ファイルとして保存</button
       >
