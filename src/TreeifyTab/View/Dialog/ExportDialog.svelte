@@ -1,106 +1,64 @@
 <script lang="ts">
-  import {External} from 'src/TreeifyTab/External/External'
-  import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-  import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
-  import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
-  import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
-  import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+  import {ExportFormat} from 'src/TreeifyTab/Internal/State'
   import CommonDialog from './CommonDialog.svelte'
-  import {ExportDialogProps, Format} from './ExportDialogProps'
+  import {ExportDialogProps} from './ExportDialogProps'
 
   export let props: ExportDialogProps
-
-  // TODO: 前回選択した値をデフォルト値とする
-  let selectedFormat: Format = Format.PLAIN_TEXT
-
-  function generateOutputText(): string {
-    switch (selectedFormat) {
-      case Format.PLAIN_TEXT:
-        return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
-      case Format.MARKDOWN:
-        // TODO: 複数選択時はそれらをまとめてMarkdown化する
-        return toMarkdownText(CurrentState.getTargetItemPath())
-      case Format.OPML:
-        return toOpmlString(CurrentState.getSelectedItemPaths())
-    }
-  }
-
-  function deriveFileName(): string {
-    const fileExtensions = {
-      [Format.PLAIN_TEXT]: '.txt',
-      [Format.MARKDOWN]: '.md',
-      [Format.OPML]: '.opml',
-    }
-    // TODO: ファイル名を内容依存にする。例えば先頭行テキストとか
-    return 'export' + fileExtensions[selectedFormat]
-  }
-
-  function onClickCopyButton() {
-    const blob = new Blob([generateOutputText()], {type: 'text/plain'})
-    navigator.clipboard.write([
-      new ClipboardItem({
-        [blob.type]: blob,
-      }),
-    ])
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
-  }
-
-  function onClickSaveButton() {
-    const content = generateOutputText()
-    const aElement = document.createElement('a')
-    aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'text/plain'}))
-    aElement.download = deriveFileName()
-    aElement.click()
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
-  }
 </script>
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <div class="export-dialog_format-select-button-area">
+    <div class="export-dialog_format-select-button-area" on:change={props.onChange}>
       <label
         class="export-dialog_format-select-button"
-        class:selected={selectedFormat === Format.PLAIN_TEXT}
+        class:selected={props.selectedFormat === ExportFormat.PLAIN_TEXT}
       >
-        <input type="radio" name="format" bind:group={selectedFormat} value={Format.PLAIN_TEXT} />
+        <input type="radio" name="format" value={ExportFormat.PLAIN_TEXT} />
         プレーンテキスト
       </label>
       <label
         class="export-dialog_format-select-button"
-        class:selected={selectedFormat === Format.MARKDOWN}
+        class:selected={props.selectedFormat === ExportFormat.MARKDOWN}
       >
-        <input type="radio" name="format" bind:group={selectedFormat} value={Format.MARKDOWN} />
+        <input type="radio" name="format" value={ExportFormat.MARKDOWN} />
         Markdown
       </label>
       <label
         class="export-dialog_format-select-button"
-        class:selected={selectedFormat === Format.OPML}
+        class:selected={props.selectedFormat === ExportFormat.OPML}
       >
-        <input type="radio" name="format" bind:group={selectedFormat} value={Format.OPML} />
+        <input type="radio" name="format" value={ExportFormat.OPML} />
         OPML
       </label>
     </div>
-    {#if selectedFormat === Format.PLAIN_TEXT}
+    {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
       <div class="export-dialog_option-area">
+        <label
+          >インデントの表現: <input
+            type="text"
+            class="export-dialog_indentation-expression"
+            value={props.indentationExpression}
+            size="4"
+            on:input={props.onInput}
+          /></label
+        >
         <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
       </div>
-    {:else if selectedFormat === Format.MARKDOWN}
+    {:else if props.selectedFormat === ExportFormat.MARKDOWN}
       <div class="export-dialog_option-area">
         <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
       </div>
-    {:else if selectedFormat === Format.OPML}
+    {:else if props.selectedFormat === ExportFormat.OPML}
       <div class="export-dialog_option-area">
         <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {/if}
     <div class="export-dialog_button-area">
-      <button class="export-dialog_copy-button" on:click={onClickCopyButton}
+      <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}
         ><div class="export-dialog_copy-button-icon" />
         クリップボードにコピー</button
       >
-      <button class="export-dialog_save-button" on:click={onClickSaveButton}
+      <button class="export-dialog_save-button" on:click={props.onClickSaveButton}
         ><div class="export-dialog_save-button-icon" />
         ファイルとして保存</button
       >

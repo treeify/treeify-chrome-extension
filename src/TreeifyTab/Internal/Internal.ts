@@ -6,7 +6,7 @@ import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
-import {State} from 'src/TreeifyTab/Internal/State'
+import {ExportFormat, State} from 'src/TreeifyTab/Internal/State'
 import {Timestamp} from 'src/TreeifyTab/Timestamp'
 
 /** TODO: コメント */
@@ -197,6 +197,16 @@ export class Internal {
         '1000MouseButton0': List.of('deleteItemItself'),
       },
       customCss: '',
+      exportSettings: {
+        selectedFormat: ExportFormat.PLAIN_TEXT,
+        options: {
+          [ExportFormat.PLAIN_TEXT]: {
+            indentationExpression: '  ',
+          },
+          [ExportFormat.MARKDOWN]: {},
+          [ExportFormat.OPML]: {},
+        },
+      },
     }
   }
 }

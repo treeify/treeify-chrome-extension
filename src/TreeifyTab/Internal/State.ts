@@ -31,6 +31,16 @@ export type State = {
   /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
   mainAreaDeleteButtonMouseBindings: {[K in InputId]: List<CommandId>}
   customCss: string
+  exportSettings: {
+    selectedFormat: ExportFormat
+    options: {
+      [ExportFormat.PLAIN_TEXT]: {
+        indentationExpression: string
+      }
+      [ExportFormat.MARKDOWN]: {}
+      [ExportFormat.OPML]: {}
+    }
+  }
 }
 
 /**
@@ -313,4 +323,11 @@ export namespace State {
       return false
     }
   }
+}
+
+/** エクスポートダイアログで選べるフォーマットの一覧 */
+export enum ExportFormat {
+  PLAIN_TEXT = 'Plain text',
+  MARKDOWN = 'Markdown',
+  OPML = 'OPML',
 }
