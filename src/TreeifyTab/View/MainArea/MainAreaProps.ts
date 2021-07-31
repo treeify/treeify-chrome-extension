@@ -30,7 +30,7 @@ import {
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps
   onKeyDown: (event: KeyboardEvent) => void
-  onDragImageBottom: (event: MouseEvent, itemId: ItemId, imageRectTop: integer) => void
+  onResizeImage: (event: MouseEvent, itemId: ItemId, imageRectRight: integer) => void
 }
 
 export function createMainAreaProps(state: State): MainAreaProps {
@@ -55,7 +55,7 @@ export function createMainAreaProps(state: State): MainAreaProps {
   return {
     rootNodeProps: createMainAreaNodeProps(state, footprintRankMap, footprintCount, rootItemPath),
     onKeyDown,
-    onDragImageBottom,
+    onResizeImage,
   }
 }
 
@@ -729,8 +729,8 @@ async function undo() {
   }
 }
 
-function onDragImageBottom(event: MouseEvent, itemId: ItemId, imageRectTop: integer) {
-  const heightPx = Math.max(0, event.clientY - imageRectTop)
-  CurrentState.setImageItemHeightPx(itemId, heightPx)
+function onResizeImage(event: MouseEvent, itemId: ItemId, imageRectLeft: integer) {
+  const widthPx = Math.max(0, event.clientX - imageRectLeft)
+  CurrentState.setImageItemWidthPx(itemId, widthPx)
   Rerenderer.instance.rerender()
 }

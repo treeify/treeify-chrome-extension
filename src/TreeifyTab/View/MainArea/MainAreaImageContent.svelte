@@ -10,7 +10,7 @@
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
   $: style = `
-    height: ${props.height};
+    width: ${props.width};
   `
 
   function onLoad(event: Event) {
@@ -72,8 +72,8 @@
   }
 
   .main-area-image-content_image {
-    width: auto;
-    // heightはstyle属性で指定する
+    // widthはstyle属性で指定する
+    height: auto;
   }
 
   // グレーアウト状態の画像
@@ -100,7 +100,7 @@
     border-right: var(--border);
     border-bottom: var(--border);
 
-    cursor: ns-resize;
+    cursor: ew-resize;
 
     visibility: hidden;
 

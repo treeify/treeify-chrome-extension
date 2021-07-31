@@ -118,8 +118,8 @@ export type ImageItem = {
   url: string
   caption: string
   originalSize: SizePx | null
-  /** 画像の表示領域の高さ指定 */
-  heightPx: integer | null
+  /** 画像の表示領域の幅指定 */
+  widthPx: integer | null
 }
 
 export type SizePx = {

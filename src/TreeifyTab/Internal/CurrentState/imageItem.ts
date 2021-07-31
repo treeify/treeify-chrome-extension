@@ -31,7 +31,7 @@ export function createImageItem(): ItemId {
     url: '',
     caption: '',
     originalSize: null,
-    heightPx: null,
+    widthPx: null,
   }
   Internal.instance.mutate(imageItem, PropertyPath.of('imageItems', newItemId))
 
@@ -59,9 +59,8 @@ export function setImageItemOriginalSize(itemId: ItemId, originalSize: SizePx | 
   Internal.instance.mutate(originalSize, PropertyPath.of('imageItems', itemId, 'originalSize'))
 }
 
-/** 画像項目のheightPxを設定する */
-export function setImageItemHeightPx(itemId: ItemId, heightPx: integer) {
-  Internal.instance.mutate(heightPx, PropertyPath.of('imageItems', itemId, 'heightPx'))
+export function setImageItemWidthPx(itemId: ItemId, widthPx: integer) {
+  Internal.instance.mutate(widthPx, PropertyPath.of('imageItems', itemId, 'widthPx'))
 }
 
 export function isEmptyImageItem(itemId: ItemId): boolean {
