@@ -199,6 +199,13 @@ export class Internal {
       customCss: '',
       exportSettings: {
         selectedFormat: ExportFormat.PLAIN_TEXT,
+        options: {
+          [ExportFormat.PLAIN_TEXT]: {
+            indentationExpression: '  ',
+          },
+          [ExportFormat.MARKDOWN]: {},
+          [ExportFormat.OPML]: {},
+        },
       },
     }
   }

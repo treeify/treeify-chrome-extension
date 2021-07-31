@@ -1,4 +1,3 @@
-import {assertNonNull} from 'src/Common/Debug/assert'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -11,16 +10,20 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type ExportDialogProps = {
   selectedFormat: ExportFormat
+  indentationExpression: string
   onClickCopyButton: () => void
   onClickSaveButton: () => void
   onChange: (event: Event) => void
+  onInput: (event: Event) => void
 }
 
 export function createExportDialogProps(): ExportDialogProps {
-  const selectedFormat = Internal.instance.state.exportSettings.selectedFormat
+  const exportSettings = Internal.instance.state.exportSettings
+  const selectedFormat = exportSettings.selectedFormat
 
   return {
     selectedFormat,
+    indentationExpression: exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression,
     onClickCopyButton: () => {
       const blob = new Blob([generateOutputText(selectedFormat)], {type: 'text/plain'})
       navigator.clipboard.write([
@@ -50,16 +53,29 @@ export function createExportDialogProps(): ExportDialogProps {
         Rerenderer.instance.rerender()
       }
     },
+    onInput(event: Event) {
+      if (event.target instanceof HTMLInputElement) {
+        Internal.instance.mutate(
+          event.target.value,
+          PropertyPath.of(
+            'exportSettings',
+            'options',
+            ExportFormat.PLAIN_TEXT,
+            'indentationExpression'
+          )
+        )
+      }
+    },
   }
 }
 
 function generateOutputText(format: ExportFormat): string {
+  const exportSettings = Internal.instance.state.exportSettings
   switch (format) {
     case ExportFormat.PLAIN_TEXT:
-      const input = document.querySelector<HTMLInputElement>('.export-dialog_indent-unit')
-      assertNonNull(input)
+      const indentUnit = exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression
       return CurrentState.getSelectedItemPaths()
-        .map((itemPath) => exportAsIndentedText(itemPath, input.value))
+        .map((itemPath) => exportAsIndentedText(itemPath, indentUnit))
         .join('\n')
     case ExportFormat.MARKDOWN:
       // TODO: 複数選択時はそれらをまとめてMarkdown化する

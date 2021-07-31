@@ -33,6 +33,13 @@ export type State = {
   customCss: string
   exportSettings: {
     selectedFormat: ExportFormat
+    options: {
+      [ExportFormat.PLAIN_TEXT]: {
+        indentationExpression: string
+      }
+      [ExportFormat.MARKDOWN]: {}
+      [ExportFormat.OPML]: {}
+    }
   }
 }
 

@@ -36,9 +36,10 @@
         <label
           >インデントの表現: <input
             type="text"
-            class="export-dialog_indent-unit"
-            value="  "
+            class="export-dialog_indentation-expression"
+            value={props.indentationExpression}
             size="4"
+            on:input={props.onInput}
           /></label
         >
         <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
