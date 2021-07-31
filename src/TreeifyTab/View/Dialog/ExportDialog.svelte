@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {assertNonNull} from 'src/Common/Debug/assert'
   import {External} from 'src/TreeifyTab/External/External'
   import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
   import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -16,7 +17,11 @@
   function generateOutputText(): string {
     switch (props.selectedFormat) {
       case ExportFormat.PLAIN_TEXT:
-        return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
+        const input = document.querySelector<HTMLInputElement>('.export-dialog_indent-unit')
+        assertNonNull(input)
+        return CurrentState.getSelectedItemPaths()
+          .map((itemPath) => exportAsIndentedText(itemPath, input.value))
+          .join('\n')
       case ExportFormat.MARKDOWN:
         // TODO: 複数選択時はそれらをまとめてMarkdown化する
         return toMarkdownText(CurrentState.getTargetItemPath())
@@ -92,6 +97,14 @@
     </div>
     {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
       <div class="export-dialog_option-area">
+        <label
+          >インデントの表現: <input
+            type="text"
+            class="export-dialog_indent-unit"
+            value="  "
+            size="4"
+          /></label
+        >
         <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {:else if props.selectedFormat === ExportFormat.MARKDOWN}
