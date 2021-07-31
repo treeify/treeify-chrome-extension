@@ -45,14 +45,17 @@
 
     // lch(97.0%, 0.0, 0.0)相当
     background: #f6f6f6;
+
+    padding: 20px 270px 0 40px;
   }
 
   .main-area_paper {
-    margin: 20px 270px 0 40px;
     padding-inline: 30px;
     padding-top: 20px;
     padding-bottom: 40vh;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
+
+    min-height: 100%;
 
     // lch(80.0%, 0.0, 0.0)相当
     box-shadow: 0 1.5px 5px #c6c6c6;
