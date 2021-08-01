@@ -8,6 +8,7 @@ export type MainAreaTexContentProps = {
   itemPath: ItemPath
   type: ItemType.TEX
   code: string
+  caption: string
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
 }
@@ -23,6 +24,7 @@ export function createMainAreaTexContentProps(
     itemPath,
     type: ItemType.TEX,
     code: texItem.code,
+    caption: texItem.caption,
     citeProps: createCiteProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
