@@ -1,8 +1,10 @@
 import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {External} from 'src/TreeifyTab/External/External'
+import {createCaptionSettingDialogProps} from 'src/TreeifyTab/View/Dialog/CaptionSettingDialogProps'
 import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
 import {createImageItemEditDialogProps} from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
 import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
+import CaptionSettingDialog from './CaptionSettingDialog.svelte'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
 import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
 import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
@@ -46,6 +48,11 @@ export function createDialogLayerProps(): DialogLayerProps {
 
 function createDialogMaterials(dialogState: Dialog): {component: any; props: any} {
   switch (dialogState.type) {
+    case 'CaptionSettingDialog':
+      return {
+        component: CaptionSettingDialog,
+        props: createCaptionSettingDialogProps(),
+      }
     case 'CitationSettingDialog':
       return {
         component: CitationSettingDialog,

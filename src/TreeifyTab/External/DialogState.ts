@@ -1,5 +1,7 @@
 import {Coordinate} from 'src/Common/integer'
 
+export type CaptionSettingDialog = {type: 'CaptionSettingDialog'}
+
 export type CitationSettingDialog = {type: 'CitationSettingDialog'}
 
 export type CodeBlockItemEditDialog = {type: 'CodeBlockItemEditDialog'}
@@ -37,6 +39,7 @@ export type WebPageItemTitleSettingDialog = {
 export type WorkspaceDialog = {type: 'WorkspaceDialog'}
 
 export type Dialog =
+  | CaptionSettingDialog
   | CitationSettingDialog
   | CodeBlockItemEditDialog
   | ContextMenuDialog

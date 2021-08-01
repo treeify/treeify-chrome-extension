@@ -1,27 +1,39 @@
 <script lang="ts">
   import {getHighlightedHtml} from '../../highlightJs'
+  import Cite from '../Cite.svelte'
   import {CodeBlockItemContentProps} from './CodeBlocktemContentProps'
 
   export let props: CodeBlockItemContentProps
 </script>
 
 <div class="code-block-item-content">
-  <pre><code>{@html getHighlightedHtml(props.code, props.language)}</code></pre>
+  <pre
+    class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
+  <div class="code-block-item-content_caption">{props.caption}</div>
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps} />
+  {/if}
 </div>
 
 <style global lang="scss">
   .code-block-item-content {
     overflow-x: auto;
+  }
 
-    pre {
-      // lch(80.0%, 0.0, 0.0)相当
-      border: 1px solid #c6c6c6;
-      margin: 0;
-      padding: var(--code-block-padding);
-      // これを指定しないとoverflowしたコードがborderからはみ出る
-      min-width: max-content;
+  .code-block-item-content_code {
+    // lch(80.0%, 0.0, 0.0)相当
+    border: 1px solid #c6c6c6;
+    margin: 0;
+    padding: 0.2em;
+    // これを指定しないとoverflowしたコードがborderからはみ出る
+    min-width: max-content;
 
-      font-size: 90%;
-    }
+    font-size: 90%;
+  }
+
+  .code-block-item-content_caption {
+    font-size: 85%;
+    // lch(50.0%, 0.0, 0.0)相当
+    color: #777777;
   }
 </style>

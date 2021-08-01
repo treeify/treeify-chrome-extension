@@ -1,5 +1,5 @@
+import {ItemId} from 'src/TreeifyTab/basicType'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
 export type CiteProps = {
   title: string
@@ -7,8 +7,7 @@ export type CiteProps = {
   onMouseDown: (event: MouseEvent) => void
 }
 
-export function createCiteProps(itemPath: ItemPath): CiteProps | undefined {
-  const itemId = ItemPath.getItemId(itemPath)
+export function createCiteProps(itemId: ItemId): CiteProps | undefined {
   const cite = Internal.instance.state.items[itemId].cite
   if (cite === null) return undefined
 

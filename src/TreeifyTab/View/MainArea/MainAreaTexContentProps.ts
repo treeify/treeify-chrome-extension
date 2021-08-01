@@ -23,7 +23,7 @@ export function createMainAreaTexContentProps(
     itemPath,
     type: ItemType.TEX,
     code: texItem.code,
-    citeProps: createCiteProps(itemPath),
+    citeProps: createCiteProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

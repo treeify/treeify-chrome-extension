@@ -30,7 +30,7 @@ export function createMainAreaImageContentProps(
     caption: imageItem.caption,
     width: imageItem.widthPx !== null ? `${Math.max(20, imageItem.widthPx)}px` : 'auto',
     aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
-    citeProps: createCiteProps(itemPath),
+    citeProps: createCiteProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

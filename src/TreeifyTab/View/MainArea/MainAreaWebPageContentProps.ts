@@ -46,7 +46,7 @@ export function createMainAreaWebPageContentProps(
     isHardUnloaded: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
-    citeProps: createCiteProps(itemPath),
+    citeProps: createCiteProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
