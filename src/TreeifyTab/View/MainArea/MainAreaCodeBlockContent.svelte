@@ -1,6 +1,5 @@
 <script lang="ts">
-  import {getHighlightedHtml} from '../../highlightJs'
-  import Cite from '../Cite.svelte'
+  import CodeBlockItemContent from '../ItemContent/CodeBlockItemContent.svelte'
   import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
   import {MainAreaContentView} from './MainAreaContentProps'
 
@@ -10,12 +9,7 @@
 </script>
 
 <div class="main-area-code-block-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <pre
-    class="main-area-code-block-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
-  <div class="main-area-code-block-content_caption">{props.caption}</div>
-  {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps} />
-  {/if}
+  <CodeBlockItemContent props={props.contentProps} />
 </div>
 
 <style global lang="scss">
@@ -24,28 +18,9 @@
     // フォーカス時の枠線を非表示
     outline: 0 solid transparent;
 
-    overflow-x: auto;
-
     // グレーアウト状態のコードブロック項目
     .grayed-out & {
       filter: opacity(50%);
     }
-  }
-
-  .main-area-code-block-content_code {
-    // lch(80.0%, 0.0, 0.0)相当
-    border: 1px solid #c6c6c6;
-    margin: 0;
-    padding: 0.2em;
-    // これを指定しないとoverflowしたコードがborderからはみ出る
-    min-width: max-content;
-
-    font-size: 90%;
-  }
-
-  .main-area-code-block-content_caption {
-    font-size: 85%;
-    // lch(50.0%, 0.0, 0.0)相当
-    color: #777777;
   }
 </style>
