@@ -9,6 +9,7 @@ export type MainAreaCodeBlockContentProps = {
   type: ItemType.CODE_BLOCK
   code: string
   language: string
+  caption: string
   citeProps: CiteProps | undefined
   onFocus: (event: FocusEvent) => void
 }
@@ -25,6 +26,7 @@ export function createMainAreaCodeBlockContentProps(
     type: ItemType.CODE_BLOCK,
     code: codeBlockItem.code,
     language: codeBlockItem.language,
+    caption: codeBlockItem.caption,
     citeProps: createCiteProps(itemPath),
     onFocus: (event) => {
       doWithErrorCapture(() => {

@@ -12,6 +12,7 @@
 <div class="main-area-code-block-content" {id} tabindex="0" on:focus={props.onFocus}>
   <pre
     class="main-area-code-block-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
+  <div class="main-area-code-block-content_caption">{props.caption}</div>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
   {/if}
@@ -46,5 +47,11 @@
     min-height: calc(var(--main-area-calculated-line-height) + 2 * var(--code-block-padding));
 
     font-size: 90%;
+  }
+
+  .main-area-code-block-content_caption {
+    font-size: 85%;
+    // lch(50.0%, 0.0, 0.0)相当
+    color: #777777;
   }
 </style>
