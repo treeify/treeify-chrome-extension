@@ -30,7 +30,7 @@ export function createMainAreaTableContentProps(
     rows: state.items[itemId].childItemIds.map((childItemId) => {
       return state.items[childItemId].childItemIds.map(createItemContentProps)
     }),
-    citeProps: createCiteProps(itemPath),
+    citeProps: createCiteProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない

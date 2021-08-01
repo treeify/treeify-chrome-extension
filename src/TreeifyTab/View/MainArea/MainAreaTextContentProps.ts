@@ -28,7 +28,7 @@ export function createMainAreaTextContentProps(
     itemPath,
     type: ItemType.TEXT,
     domishObjects: state.textItems[itemId].domishObjects,
-    citeProps: createCiteProps(itemPath),
+    citeProps: createCiteProps(itemId),
     onInput: (event: Event) => {
       doWithErrorCapture(() => {
         if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {

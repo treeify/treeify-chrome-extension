@@ -1,5 +1,6 @@
 <script lang="ts">
   import {getHighlightedHtml} from '../../highlightJs'
+  import Cite from '../Cite.svelte'
   import {CodeBlockItemContentProps} from './CodeBlocktemContentProps'
 
   export let props: CodeBlockItemContentProps
@@ -8,6 +9,10 @@
 <div class="code-block-item-content">
   <pre
     class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
+  <div class="code-block-item-content_caption">{props.caption}</div>
+  {#if props.citeProps !== undefined}
+    <Cite props={props.citeProps} />
+  {/if}
 </div>
 
 <style global lang="scss">
@@ -24,5 +29,11 @@
     min-width: max-content;
 
     font-size: 90%;
+  }
+
+  .code-block-item-content_caption {
+    font-size: 85%;
+    // lch(50.0%, 0.0, 0.0)相当
+    color: #777777;
   }
 </style>

@@ -27,7 +27,7 @@ export function createMainAreaCodeBlockContentProps(
     code: codeBlockItem.code,
     language: codeBlockItem.language,
     caption: codeBlockItem.caption,
-    citeProps: createCiteProps(itemPath),
+    citeProps: createCiteProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
