@@ -69,13 +69,19 @@ function getCaption(itemId: ItemId): string | undefined {
 function setCaption(itemId: ItemId, caption: string) {
   switch (Internal.instance.state.items[itemId].type) {
     case ItemType.IMAGE:
-      Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
+      Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+        Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
+      })
       break
     case ItemType.CODE_BLOCK:
-      Internal.instance.mutate(caption, PropertyPath.of('codeBlockItems', itemId, 'caption'))
+      Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+        Internal.instance.mutate(caption, PropertyPath.of('codeBlockItems', itemId, 'caption'))
+      })
       break
     case ItemType.TEX:
-      Internal.instance.mutate(caption, PropertyPath.of('texItems', itemId, 'caption'))
+      Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+        Internal.instance.mutate(caption, PropertyPath.of('texItems', itemId, 'caption'))
+      })
       break
   }
 }
