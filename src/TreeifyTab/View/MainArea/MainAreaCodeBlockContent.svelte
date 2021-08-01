@@ -17,10 +17,5 @@
   .main-area-code-block-content {
     // フォーカス時の枠線を非表示
     outline: 0 solid transparent;
-
-    // グレーアウト状態のコードブロック項目
-    .grayed-out & {
-      filter: opacity(50%);
-    }
   }
 </style>

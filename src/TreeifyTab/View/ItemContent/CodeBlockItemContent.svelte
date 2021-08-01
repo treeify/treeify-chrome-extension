@@ -18,6 +18,11 @@
 <style global lang="scss">
   .code-block-item-content {
     overflow-x: auto;
+
+    // グレーアウト状態のコードブロック項目
+    .grayed-out & {
+      filter: opacity(50%);
+    }
   }
 
   .code-block-item-content_code {
