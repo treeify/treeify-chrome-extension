@@ -19,10 +19,6 @@
 </div>
 
 <style global lang="scss">
-  :root {
-    --code-block-padding: 0.2em;
-  }
-
   // コードブロック項目のコンテンツ領域のルート
   .main-area-code-block-content {
     // フォーカス時の枠線を非表示
@@ -40,11 +36,9 @@
     // lch(80.0%, 0.0, 0.0)相当
     border: 1px solid #c6c6c6;
     margin: 0;
-    padding: var(--code-block-padding);
+    padding: 0.2em;
     // これを指定しないとoverflowしたコードがborderからはみ出る
     min-width: max-content;
-    // コードが空文字列のときにぺしゃんこにならないよう設定
-    min-height: calc(var(--main-area-calculated-line-height) + 2 * var(--code-block-padding));
 
     font-size: 90%;
   }
