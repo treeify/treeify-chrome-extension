@@ -2,14 +2,15 @@ import {ItemType} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
-import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
+import {
+  createTexItemContentProps,
+  TexItemContentProps,
+} from 'src/TreeifyTab/View/ItemContent/TexItemContentProps'
 
 export type MainAreaTexContentProps = {
   itemPath: ItemPath
   type: ItemType.TEX
-  code: string
-  caption: string
-  citeProps: CiteProps | undefined
+  contentProps: TexItemContentProps
   onFocus: (event: FocusEvent) => void
 }
 
@@ -23,9 +24,7 @@ export function createMainAreaTexContentProps(
   return {
     itemPath,
     type: ItemType.TEX,
-    code: texItem.code,
-    caption: texItem.caption,
-    citeProps: createCiteProps(itemId),
+    contentProps: createTexItemContentProps(itemId),
     onFocus: (event) => {
       doWithErrorCapture(() => {
         // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
