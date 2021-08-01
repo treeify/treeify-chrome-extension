@@ -97,10 +97,10 @@ export class SearchEngine {
         return List.of(state.imageItems[itemId].caption)
       case ItemType.CODE_BLOCK:
         const codeBlockItem = state.codeBlockItems[itemId]
-        return List.of(codeBlockItem.code)
+        return List.of(codeBlockItem.code, codeBlockItem.caption)
       case ItemType.TEX:
         const texItem = state.texItems[itemId]
-        return List.of(texItem.code)
+        return List.of(texItem.code, texItem.caption)
       default:
         assertNeverType(itemType)
     }
