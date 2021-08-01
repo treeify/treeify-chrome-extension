@@ -98,6 +98,7 @@
   .common-dialog_title-bar {
     display: flex;
     align-items: center;
+    column-gap: 1em;
 
     padding-inline: 0.5em;
 
