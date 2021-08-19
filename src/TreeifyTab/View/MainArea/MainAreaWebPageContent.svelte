@@ -60,10 +60,6 @@
     --main-area-audible-icon-color: #6a6a6a;
   }
 
-  // アンロード済みウェブページ項目のopacity
-  $soft-unloaded-web-page-item-opacity: 75%;
-  $hard-unloaded-web-page-item-opacity: 55%;
-
   // ウェブページ項目のコンテンツ領域のルート
   .main-area-web-page-content {
     // フォーカス時の枠線を非表示
@@ -75,12 +71,6 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-  }
-
-  // グレーアウト状態のウェブページ項目のタイトル
-  .grayed-out .main-area-web-page-content_title,
-  .grayed-out-children .main-area-web-page-content_title {
-    color: var(--grayed-out-item-text-color);
   }
 
   // ウェブページ項目のファビコン
@@ -172,21 +162,28 @@
       color: var(--main-area-unread-web-page-item-title-color);
     }
 
-    // アンロード済みウェブページ項目のタイトルのグレーアウト
     &.soft-unloaded-item {
-      filter: opacity($soft-unloaded-web-page-item-opacity);
+      // lch(35.0%, 0.0, 0.0)相当
+      color: #525252;
     }
 
     &.hard-unloaded-item {
-      filter: opacity($hard-unloaded-web-page-item-opacity);
+      // lch(60.0%, 0.0, 0.0)相当
+      color: #919191;
+    }
+
+    // グレーアウト状態のウェブページ項目のタイトル
+    .grayed-out &,
+    .grayed-out-children & {
+      color: var(--grayed-out-item-text-color);
     }
   }
 
   // アンロード済みウェブページ項目のファビコンのグレーアウト
   .main-area-web-page-content_favicon.soft-unloaded-item > * {
-    filter: opacity($soft-unloaded-web-page-item-opacity);
+    filter: opacity(75%);
   }
   .main-area-web-page-content_favicon.hard-unloaded-item > * {
-    filter: opacity($hard-unloaded-web-page-item-opacity);
+    filter: opacity(55%);
   }
 </style>
