@@ -10,13 +10,6 @@ window.addEventListener(
       })
     }
 
-    chrome.runtime.sendMessage({
-      type: 'dump',
-      clientY: event.clientY,
-      clientX: event.clientX,
-      screenX: event.screenX,
-    })
-
     const rightEnd = screen.width - 1
     if (event.clientX === rightEnd && event.screenX === rightEnd && event.movementX > 0) {
       chrome.runtime.sendMessage({
