@@ -41,7 +41,7 @@
     line-height: var(--main-area-line-height);
 
     // フォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
 
     // lch(97.0%, 0.0, 0.0)相当
     background: #f6f6f6;

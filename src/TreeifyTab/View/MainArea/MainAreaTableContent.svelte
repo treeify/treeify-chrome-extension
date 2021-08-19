@@ -32,7 +32,7 @@
 <style global lang="scss">
   .main-area-table-content {
     // フォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
   }
 
   .main-area-table-content_table {

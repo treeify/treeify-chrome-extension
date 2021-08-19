@@ -50,7 +50,7 @@
   // 画像項目のコンテンツ領域のルート
   .main-area-image-content {
     // フォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
   }
 
   // 画像とキャプションを中央揃えにする

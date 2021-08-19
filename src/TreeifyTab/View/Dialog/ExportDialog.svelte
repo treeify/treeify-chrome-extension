@@ -71,7 +71,7 @@
     min-width: 30em;
     padding: 1em;
 
-    outline: 0 solid transparent;
+    outline: none;
   }
 
   .export-dialog_format-select-button-area {

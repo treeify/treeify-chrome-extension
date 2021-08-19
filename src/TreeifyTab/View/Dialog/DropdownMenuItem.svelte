@@ -65,7 +65,7 @@
 
 <style global lang="scss">
   .dropdown-menu-item {
-    outline: 0 solid transparent;
+    outline: none;
 
     font-size: 0.9rem;
     padding: 0.1em 0.5em;

@@ -34,7 +34,7 @@
   // テキスト項目のcontenteditableな要素
   .main-area-text-content_content-editable {
     // contenteditableな要素のフォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
   }
 
   // グレーアウト状態のテキスト項目

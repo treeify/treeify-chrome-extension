@@ -23,7 +23,7 @@
     padding: 1em;
 
     // フォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
 
     display: flex;
     flex-direction: column;

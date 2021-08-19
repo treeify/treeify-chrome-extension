@@ -16,6 +16,6 @@
   // コードブロック項目のコンテンツ領域のルート
   .main-area-tex-content {
     // フォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
   }
 </style>

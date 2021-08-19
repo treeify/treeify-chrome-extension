@@ -63,7 +63,7 @@
   // ウェブページ項目のコンテンツ領域のルート
   .main-area-web-page-content {
     // フォーカス時の枠線を非表示
-    outline: 0 solid transparent;
+    outline: none;
   }
 
   .main-area-web-page-content_body {
