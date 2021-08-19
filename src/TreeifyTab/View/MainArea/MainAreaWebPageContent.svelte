@@ -76,7 +76,7 @@
   // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon {
     width: var(--main-area-favicon-size);
-    aspect-ratio: 1;
+    height: var(--main-area-favicon-size);
 
     position: relative;
 
