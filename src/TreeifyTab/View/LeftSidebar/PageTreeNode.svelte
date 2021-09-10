@@ -210,7 +210,7 @@
     &::before {
       content: '';
 
-      width: 1.1em;
+      width: 1.3em;
       aspect-ratio: 1;
 
       // 中央寄せ
@@ -219,8 +219,8 @@
       left: 50%;
       transform: translate(-50%, -50%);
 
-      // lch(20.0%, 0.0, 0.0)相当
-      background: #303030;
+      // lch(50.0%, 0.0, 0.0)相当
+      background: #777777;
       -webkit-mask: url('close-icon2.svg') no-repeat center;
       -webkit-mask-size: contain;
     }
