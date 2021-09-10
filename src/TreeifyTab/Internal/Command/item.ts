@@ -41,19 +41,17 @@ export function enterKeyDefault() {
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
+  const textItemSelection = getTextItemSelectionFromDom()
 
-  if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
+  if (
+    Internal.instance.state.items[targetItemId].type === ItemType.TEXT &&
+    textItemSelection !== undefined
+  ) {
     // ターゲット項目がテキスト項目の場合
 
     assertNonNull(document.activeElement)
     const selection = getSelection()
     assertNonNull(selection)
-
-    const characterCount = DomishObject.countCharacters(
-      Internal.instance.state.textItems[targetItemId].domishObjects
-    )
-    const textItemSelection = getTextItemSelectionFromDom()
-    assertNonUndefined(textItemSelection)
 
     // ターゲット項目がアクティブページだった場合は兄弟として追加できないのでキャレット位置によらず子として追加する
     if (!ItemPath.hasParent(targetItemPath)) {
@@ -75,6 +73,10 @@ export function enterKeyDefault() {
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
       return
     }
+
+    const characterCount = DomishObject.countCharacters(
+      Internal.instance.state.textItems[targetItemId].domishObjects
+    )
 
     if (characterCount === 0) {
       // 空のテキスト項目なら
