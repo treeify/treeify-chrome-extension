@@ -1,6 +1,4 @@
 <script lang="ts">
-  import {Command} from '../../Internal/Command'
-  import {Rerenderer} from '../../Rerenderer'
   import {MainAreaBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
 
   export let props: MainAreaSpoolProps
@@ -12,15 +10,9 @@
     width: ${outerCircleRadiusEm}em;
     height: ${outerCircleRadiusEm}em;
   `
-
-  function onContextMenu(event: Event) {
-    event.preventDefault()
-    Command.showOtherParentsDialog()
-    Rerenderer.instance.rerender()
-  }
 </script>
 
-<div class="main-area-spool" on:click={props.onClick} on:contextmenu={onContextMenu}>
+<div class="main-area-spool" on:click={props.onClick} on:contextmenu={props.onContextMenu}>
   {#if props.bulletState === MainAreaBulletState.EXPANDED}
     <div class="main-area-spool_indent-area">
       <div class="main-area-spool_indent-guide" />

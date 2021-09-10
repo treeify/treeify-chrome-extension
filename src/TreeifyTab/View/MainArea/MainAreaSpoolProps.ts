@@ -15,6 +15,7 @@ export type MainAreaSpoolProps = {
    */
   hiddenItemsCount: integer
   onClick: (event: MouseEvent) => void
+  onContextMenu: (event: Event) => void
 }
 
 export enum MainAreaBulletState {
@@ -25,61 +26,67 @@ export enum MainAreaBulletState {
 }
 
 export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): MainAreaSpoolProps {
-  const bulletState = deriveBulletState(state, itemPath)
+  return {
+    bulletState: deriveBulletState(state, itemPath),
+    hiddenItemsCount: countHiddenItems(state, itemPath),
+    onClick: (event: MouseEvent) => {
+      doWithErrorCapture(() => {
+        CurrentState.setTargetItemPath(itemPath)
 
-  const onClick = (event: MouseEvent) => {
-    doWithErrorCapture(() => {
+        const inputId = InputId.fromMouseEvent(event)
+        switch (deriveBulletState(state, itemPath)) {
+          case MainAreaBulletState.NO_CHILDREN:
+            switch (inputId) {
+              case '1000MouseButton0':
+                Command.turnIntoPage()
+                Command.showPage()
+                break
+            }
+            break
+          case MainAreaBulletState.EXPANDED:
+            switch (inputId) {
+              case '0000MouseButton0':
+                Command.toggleCollapsed()
+                break
+              case '1000MouseButton0':
+                Command.turnIntoPage()
+                Command.showPage()
+                break
+            }
+            break
+          case MainAreaBulletState.COLLAPSED:
+            switch (inputId) {
+              case '0000MouseButton0':
+                Command.toggleCollapsed()
+                break
+              case '1000MouseButton0':
+                Command.turnIntoPage()
+                Command.showPage()
+                break
+            }
+            break
+          case MainAreaBulletState.PAGE:
+            switch (inputId) {
+              case '0000MouseButton0':
+                Command.showPage()
+                break
+              case '1000MouseButton0':
+                Command.turnIntoNonPage()
+                Command.expandItem()
+                break
+            }
+            break
+        }
+        Rerenderer.instance.rerender()
+      })
+    },
+    onContextMenu: (event: Event) => {
+      event.preventDefault()
       CurrentState.setTargetItemPath(itemPath)
-
-      const inputId = InputId.fromMouseEvent(event)
-      switch (bulletState) {
-        case MainAreaBulletState.NO_CHILDREN:
-          switch (inputId) {
-            case '1000MouseButton0':
-              Command.turnIntoPage()
-              Command.showPage()
-              break
-          }
-          break
-        case MainAreaBulletState.EXPANDED:
-          switch (inputId) {
-            case '0000MouseButton0':
-              Command.toggleCollapsed()
-              break
-            case '1000MouseButton0':
-              Command.turnIntoPage()
-              Command.showPage()
-              break
-          }
-          break
-        case MainAreaBulletState.COLLAPSED:
-          switch (inputId) {
-            case '0000MouseButton0':
-              Command.toggleCollapsed()
-              break
-            case '1000MouseButton0':
-              Command.turnIntoPage()
-              Command.showPage()
-              break
-          }
-          break
-        case MainAreaBulletState.PAGE:
-          switch (inputId) {
-            case '0000MouseButton0':
-              Command.showPage()
-              break
-            case '1000MouseButton0':
-              Command.turnIntoNonPage()
-              Command.expandItem()
-              break
-          }
-          break
-      }
+      Command.showOtherParentsDialog()
       Rerenderer.instance.rerender()
-    })
+    },
   }
-
-  return {bulletState, hiddenItemsCount: countHiddenItems(state, itemPath), onClick}
 }
 
 function countHiddenItems(state: State, itemPath: ItemPath): integer {
