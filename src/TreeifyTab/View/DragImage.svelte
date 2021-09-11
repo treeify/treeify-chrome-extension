@@ -53,5 +53,8 @@
     background: #ffffff;
     // lch(90.0%, 0.0, 0.0)相当
     border: 1px solid #e2e2e2;
+
+    // lch(85.0%, 0.0, 0.0)相当
+    box-shadow: 2px 2px 4px #d4d4d4;
   }
 </style>
