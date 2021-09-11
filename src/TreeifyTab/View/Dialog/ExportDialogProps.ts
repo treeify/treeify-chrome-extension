@@ -74,8 +74,10 @@ function generateOutputText(format: ExportFormat): string {
     case ExportFormat.PLAIN_TEXT:
       return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
     case ExportFormat.MARKDOWN:
+      const exportSettings = Internal.instance.state.exportSettings
+      const minimumHeaderLevel = exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel
       // TODO: 複数選択時はそれらをまとめてMarkdown化する
-      return toMarkdownText(CurrentState.getTargetItemPath())
+      return toMarkdownText(CurrentState.getTargetItemPath(), minimumHeaderLevel)
     case ExportFormat.OPML:
       return toOpmlString(CurrentState.getSelectedItemPaths())
   }

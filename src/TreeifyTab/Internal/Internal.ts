@@ -203,7 +203,9 @@ export class Internal {
           [ExportFormat.PLAIN_TEXT]: {
             indentationExpression: '  ',
           },
-          [ExportFormat.MARKDOWN]: {},
+          [ExportFormat.MARKDOWN]: {
+            minimumHeaderLevel: 1,
+          },
           [ExportFormat.OPML]: {},
         },
       },

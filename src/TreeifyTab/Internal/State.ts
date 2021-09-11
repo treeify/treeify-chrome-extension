@@ -37,7 +37,9 @@ export type State = {
       [ExportFormat.PLAIN_TEXT]: {
         indentationExpression: string
       }
-      [ExportFormat.MARKDOWN]: {}
+      [ExportFormat.MARKDOWN]: {
+        minimumHeaderLevel: integer
+      }
       [ExportFormat.OPML]: {}
     }
   }
