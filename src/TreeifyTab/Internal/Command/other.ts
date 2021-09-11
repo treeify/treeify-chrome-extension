@@ -16,56 +16,65 @@ import {restart} from 'src/TreeifyTab/startup'
  * もしデータフォルダがまだ開かれていない場合はデータフォルダを開くプロセスを開始する。
  */
 export async function saveToDataFolder() {
-  if (External.instance.dataFolder === undefined) {
-    const folderHandle = await showDirectoryPicker()
-    await folderHandle.requestPermission({mode: 'readwrite'})
-    External.instance.dataFolder = new DataFolder(folderHandle)
-    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
-    if (unknownUpdatedInstanceId === undefined) {
-      // もし自身の知らない他インスタンスの更新がなければ
+  try {
+    if (External.instance.dataFolder === undefined) {
+      const folderHandle = await showDirectoryPicker()
+      await folderHandle.requestPermission({mode: 'readwrite'})
+      External.instance.dataFolder = new DataFolder(folderHandle)
+      const unknownUpdatedInstanceId =
+        await External.instance.dataFolder.findUnknownUpdatedInstance()
+      if (unknownUpdatedInstanceId === undefined) {
+        // もし自身の知らない他インスタンスの更新がなければ
 
-      const chunks = await External.instance.dataFolder.readAllChunks()
-      if (chunks.isEmpty()) {
-        // 自インスタンスフォルダが無い場合
+        const chunks = await External.instance.dataFolder.readAllChunks()
+        if (chunks.isEmpty()) {
+          // 自インスタンスフォルダが無い場合
 
-        // メモリ上のStateを自インスタンスフォルダに書き込む
-        const allChunks = Chunk.createAllChunks(Internal.instance.state)
-        await External.instance.dataFolder.writeChunks(allChunks)
+          // メモリ上のStateを自インスタンスフォルダに書き込む
+          const allChunks = Chunk.createAllChunks(Internal.instance.state)
+          await External.instance.dataFolder.writeChunks(allChunks)
+        } else {
+          // 自インスタンスフォルダの内容からStateを読み込んで事実上の再起動を行う
+          const state = Chunk.inflateStateFromChunks(chunks)
+          await restart(state)
+        }
       } else {
-        // 自インスタンスフォルダの内容からStateを読み込んで事実上の再起動を行う
+        // もし自身の知らない他インスタンスの更新があれば
+        await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
+
+        const chunks = await External.instance.dataFolder.readAllChunks()
         const state = Chunk.inflateStateFromChunks(chunks)
         await restart(state)
       }
     } else {
-      // もし自身の知らない他インスタンスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
+      const unknownUpdatedInstanceId =
+        await External.instance.dataFolder.findUnknownUpdatedInstance()
+      if (unknownUpdatedInstanceId === undefined) {
+        // もし自身の知らない他インスタンスの更新がなければ（つまり最も単純な自インスタンスフォルダ上書き更新のケース）
 
-      const chunks = await External.instance.dataFolder.readAllChunks()
-      const state = Chunk.inflateStateFromChunks(chunks)
-      await restart(state)
-    }
-  } else {
-    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
-    if (unknownUpdatedInstanceId === undefined) {
-      // もし自身の知らない他インスタンスの更新がなければ（つまり最も単純な自インスタンスフォルダ上書き更新のケース）
+        // 変化のあったチャンクをデータベースに書き込む
+        const chunks = []
+        for (const chunkId of External.instance.pendingMutatedChunkIds) {
+          const chunk = Chunk.create(Internal.instance.state, chunkId)
+          chunks.push(chunk)
+        }
+        External.instance.pendingMutatedChunkIds.clear()
+        await External.instance.dataFolder.writeChunks(List(chunks))
+        Rerenderer.instance.rerender()
+      } else {
+        // もし自身の知らない他インスタンスの更新があれば
+        await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
-      // 変化のあったチャンクをデータベースに書き込む
-      const chunks = []
-      for (const chunkId of External.instance.pendingMutatedChunkIds) {
-        const chunk = Chunk.create(Internal.instance.state, chunkId)
-        chunks.push(chunk)
+        const chunks = await External.instance.dataFolder.readAllChunks()
+        const state = Chunk.inflateStateFromChunks(chunks)
+        await restart(state)
       }
-      External.instance.pendingMutatedChunkIds.clear()
-      await External.instance.dataFolder.writeChunks(List(chunks))
-      Rerenderer.instance.rerender()
-    } else {
-      // もし自身の知らない他インスタンスの更新があれば
-      await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
-
-      const chunks = await External.instance.dataFolder.readAllChunks()
-      const state = Chunk.inflateStateFromChunks(chunks)
-      await restart(state)
     }
+  } catch (e) {
+    // 何も選ばずピッカーを閉じた際、エラーアラートを出さないようにする
+    if (e.name === 'AbortError') return
+
+    throw e
   }
 }
 
