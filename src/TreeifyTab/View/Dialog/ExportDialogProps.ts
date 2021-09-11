@@ -1,3 +1,4 @@
+import {integer} from 'src/Common/integer'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -11,10 +12,12 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 export type ExportDialogProps = {
   selectedFormat: ExportFormat
   indentationExpression: string
+  minimumHeaderLevel: integer
   onClickCopyButton: () => void
   onClickSaveButton: () => void
   onChange: (event: Event) => void
-  onInput: (event: Event) => void
+  onInputIndentationExpression: (event: Event) => void
+  onInputMinimumHeaderLevel: (event: Event) => void
 }
 
 export function createExportDialogProps(): ExportDialogProps {
@@ -24,6 +27,7 @@ export function createExportDialogProps(): ExportDialogProps {
   return {
     selectedFormat,
     indentationExpression: exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression,
+    minimumHeaderLevel: exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel,
     onClickCopyButton: () => {
       const blob = new Blob([generateOutputText(selectedFormat)], {type: 'text/plain'})
       navigator.clipboard.write([
@@ -53,7 +57,7 @@ export function createExportDialogProps(): ExportDialogProps {
         Rerenderer.instance.rerender()
       }
     },
-    onInput(event: Event) {
+    onInputIndentationExpression(event: Event) {
       if (event.target instanceof HTMLInputElement) {
         Internal.instance.mutate(
           event.target.value,
@@ -66,6 +70,14 @@ export function createExportDialogProps(): ExportDialogProps {
         )
       }
     },
+    onInputMinimumHeaderLevel(event: Event) {
+      if (event.target instanceof HTMLInputElement) {
+        Internal.instance.mutate(
+          parseInt(event.target.value),
+          PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
+        )
+      }
+    },
   }
 }
 
@@ -74,8 +86,10 @@ function generateOutputText(format: ExportFormat): string {
     case ExportFormat.PLAIN_TEXT:
       return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
     case ExportFormat.MARKDOWN:
+      const exportSettings = Internal.instance.state.exportSettings
+      const minimumHeaderLevel = exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel
       // TODO: 複数選択時はそれらをまとめてMarkdown化する
-      return toMarkdownText(CurrentState.getTargetItemPath())
+      return toMarkdownText(CurrentState.getTargetItemPath(), minimumHeaderLevel)
     case ExportFormat.OPML:
       return toOpmlString(CurrentState.getSelectedItemPaths())
   }
