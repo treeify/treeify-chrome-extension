@@ -26,6 +26,7 @@
     class="data-folder-button_icon"
     class:already-open={props.isAlreadyOpen}
     class:grayed-out={props.isGrayedOut}
+    title={props.isAlreadyOpen ? 'データフォルダと同期する' : 'データフォルダを開く'}
   />
 </ToolbarIconButton>
 
