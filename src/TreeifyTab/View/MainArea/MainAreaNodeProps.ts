@@ -33,6 +33,7 @@ export type MainAreaNodeProps = {
    */
   selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
+  isExcluded: boolean
   cssClasses: List<string>
   footprintRank: integer | undefined
   footprintCount: integer
@@ -61,6 +62,7 @@ export function createMainAreaNodeProps(
     isActivePage: !ItemPath.hasParent(itemPath),
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
+    isExcluded: CurrentState.getExcludedItemIds().contains(itemId),
     cssClasses: item.cite === null ? item.cssClasses : item.cssClasses.push('citation'),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,

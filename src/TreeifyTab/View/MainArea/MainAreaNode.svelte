@@ -53,7 +53,11 @@
   {/if}
   <div class="main-area-node_body-and-children-area">
     <!-- ボディ領域 -->
-    <div class={props.cssClasses.unshift('main-area-node_body-area').join(' ')} data-depth={depth}>
+    <div
+      class={props.cssClasses.unshift('main-area-node_body-area').join(' ')}
+      class:excluded={props.isExcluded}
+      data-depth={depth}
+    >
       <!-- 足跡表示用のレイヤー -->
       <div class="main-area-node_footprint-layer" style={footprintLayerStyle}>
         <!-- コンテンツ領域 -->
@@ -129,10 +133,14 @@
     // コンテンツ領域とボタン類を横に並べる
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-  }
 
-  .main-area-node_body-area[data-depth='0'] {
-    font-size: 120%;
+    &[data-depth='0'] {
+      font-size: 120%;
+    }
+
+    &.excluded {
+      filter: blur(1px);
+    }
   }
 
   .main-area-node_spool-area {
