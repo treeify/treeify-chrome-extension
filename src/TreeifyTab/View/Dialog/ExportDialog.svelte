@@ -39,13 +39,23 @@
             class="export-dialog_indentation-expression"
             value={props.indentationExpression}
             size="4"
-            on:input={props.onInput}
+            on:input={props.onInputIndentationExpression}
           /></label
         >
         <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {:else if props.selectedFormat === ExportFormat.MARKDOWN}
       <div class="export-dialog_option-area">
+        <label
+          >見出しレベル: <input
+            type="number"
+            class="export-dialog_minimum-header-level"
+            value={props.minimumHeaderLevel}
+            min="1"
+            max="6"
+            on:input={props.onInputMinimumHeaderLevel}
+          /></label
+        >
         <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
       </div>
     {:else if props.selectedFormat === ExportFormat.OPML}
