@@ -110,6 +110,7 @@ export function deleteItemItself(itemId: ItemId) {
   // 対応するタブがあれば閉じる
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
   if (tabId !== undefined) {
+    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
     chrome.tabs.remove(tabId)
   }
 
