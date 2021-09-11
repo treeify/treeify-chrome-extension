@@ -80,12 +80,14 @@
   }
 
   // グレーアウト状態の画像
-  .grayed-out .main-area-image-content_image {
+  .grayed-out .main-area-image-content_image,
+  .grayed-out-children .main-area-image-content_image {
     filter: opacity(50%);
   }
 
   // グレーアウト状態のキャプション
-  .grayed-out .main-area-image-content_caption {
+  .grayed-out .main-area-image-content_caption,
+  .grayed-out-children .main-area-image-content_caption {
     // lch(50.0%, 0.0, 0.0)相当
     color: #777777;
   }

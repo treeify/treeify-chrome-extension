@@ -20,7 +20,8 @@
     overflow-x: auto;
 
     // グレーアウト状態のコードブロック項目
-    .grayed-out & {
+    .grayed-out &,
+    .grayed-out-children & {
       filter: opacity(50%);
     }
   }
