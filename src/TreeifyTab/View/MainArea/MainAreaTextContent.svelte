@@ -35,11 +35,11 @@
   .main-area-text-content_content-editable {
     // contenteditableな要素のフォーカス時の枠線を非表示
     outline: none;
-  }
 
-  // グレーアウト状態のテキスト項目
-  .grayed-out .main-area-text-content_content-editable,
-  .grayed-out-children .main-area-text-content_content-editable {
-    color: var(--grayed-out-item-text-color);
+    // グレーアウト状態のテキスト項目
+    .grayed-out &,
+    .grayed-out-children & {
+      color: var(--grayed-out-item-text-color);
+    }
   }
 </style>
