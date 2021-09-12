@@ -16,7 +16,7 @@ export type ExportDialogProps = {
   minimumHeaderLevel: integer
   onClickCopyButton: () => void
   onClickSaveButton: () => void
-  onChange: (event: Event) => void
+  onChangeTabsRadioButton: (event: Event) => void
   onChangePlainTextIgnoreInvisibleItems: (event: Event) => void
   onInputIndentationExpression: (event: Event) => void
   onInputMinimumHeaderLevel: (event: Event) => void
@@ -51,7 +51,7 @@ export function createExportDialogProps(): ExportDialogProps {
       External.instance.dialogState = undefined
       Rerenderer.instance.rerender()
     },
-    onChange: (event: Event) => {
+    onChangeTabsRadioButton: (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
         const selectedFormat = event.target.value
         Internal.instance.mutate(

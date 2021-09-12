@@ -8,7 +8,7 @@
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <div class="export-dialog_format-select-button-area" on:change={props.onChange}>
+    <div class="export-dialog_format-select-button-area" on:change={props.onChangeTabsRadioButton}>
       <label
         class="export-dialog_format-select-button"
         class:selected={props.selectedFormat === ExportFormat.PLAIN_TEXT}
