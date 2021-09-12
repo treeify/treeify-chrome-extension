@@ -11,11 +11,13 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type ExportDialogProps = {
   selectedFormat: ExportFormat
+  plainTextIgnoreInvisibleItems: boolean
   indentationExpression: string
   minimumHeaderLevel: integer
   onClickCopyButton: () => void
   onClickSaveButton: () => void
   onChange: (event: Event) => void
+  onChangePlainTextIgnoreInvisibleItems: (event: Event) => void
   onInputIndentationExpression: (event: Event) => void
   onInputMinimumHeaderLevel: (event: Event) => void
 }
@@ -26,6 +28,8 @@ export function createExportDialogProps(): ExportDialogProps {
 
   return {
     selectedFormat,
+    plainTextIgnoreInvisibleItems:
+      exportSettings.options[ExportFormat.PLAIN_TEXT].ignoreInvisibleItems,
     indentationExpression: exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression,
     minimumHeaderLevel: exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel,
     onClickCopyButton: () => {
@@ -55,6 +59,19 @@ export function createExportDialogProps(): ExportDialogProps {
           PropertyPath.of('exportSettings', 'selectedFormat')
         )
         Rerenderer.instance.rerender()
+      }
+    },
+    onChangePlainTextIgnoreInvisibleItems(event: Event) {
+      if (event.target instanceof HTMLInputElement) {
+        Internal.instance.mutate(
+          event.target.checked,
+          PropertyPath.of(
+            'exportSettings',
+            'options',
+            ExportFormat.PLAIN_TEXT,
+            'ignoreInvisibleItems'
+          )
+        )
       }
     },
     onInputIndentationExpression(event: Event) {

@@ -35,6 +35,7 @@ export type State = {
     selectedFormat: ExportFormat
     options: {
       [ExportFormat.PLAIN_TEXT]: {
+        ignoreInvisibleItems: boolean
         indentationExpression: string
       }
       [ExportFormat.MARKDOWN]: {

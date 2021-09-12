@@ -42,7 +42,13 @@
             on:input={props.onInputIndentationExpression}
           /></label
         >
-        <label><input type="checkbox" checked disabled />不可視の項目を無視する</label>
+        <label
+          ><input
+            type="checkbox"
+            checked={props.plainTextIgnoreInvisibleItems}
+            on:change={props.onChangePlainTextIgnoreInvisibleItems}
+          />不可視の項目を無視する</label
+        >
       </div>
     {:else if props.selectedFormat === ExportFormat.MARKDOWN}
       <div class="export-dialog_option-area">
