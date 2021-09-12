@@ -8,7 +8,7 @@
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <div class="export-dialog_format-select-button-area" on:change={props.onChange}>
+    <div class="export-dialog_format-select-button-area" on:change={props.onChangeTabsRadioButton}>
       <label
         class="export-dialog_format-select-button"
         class:selected={props.selectedFormat === ExportFormat.PLAIN_TEXT}
@@ -42,7 +42,13 @@
             on:input={props.onInputIndentationExpression}
           /></label
         >
-        <label><input type="checkbox" disabled />折りたたみ状態の項目内を含める</label>
+        <label
+          ><input
+            type="checkbox"
+            checked={props.plainTextIgnoreInvisibleItems}
+            on:change={props.onChangePlainTextIgnoreInvisibleItems}
+          />不可視の項目を無視する</label
+        >
       </div>
     {:else if props.selectedFormat === ExportFormat.MARKDOWN}
       <div class="export-dialog_option-area">
@@ -56,11 +62,11 @@
             on:input={props.onInputMinimumHeaderLevel}
           /></label
         >
-        <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
+        <label><input type="checkbox" disabled />不可視の項目を無視する</label>
       </div>
     {:else if props.selectedFormat === ExportFormat.OPML}
       <div class="export-dialog_option-area">
-        <label><input type="checkbox" checked disabled />折りたたみ状態の項目内を含める</label>
+        <label><input type="checkbox" disabled />不可視の項目を無視する</label>
       </div>
     {/if}
     <div class="export-dialog_button-area">

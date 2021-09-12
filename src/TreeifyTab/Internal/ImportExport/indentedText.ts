@@ -50,7 +50,11 @@ function* yieldIndentedLines(
     yield indent + contentLine
   }
 
-  for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
+  const state = Internal.instance.state
+  const childItemIds = state.exportSettings.options[ExportFormat.PLAIN_TEXT].ignoreInvisibleItems
+    ? CurrentState.getDisplayingChildItemIds(itemPath)
+    : state.items[ItemPath.getItemId(itemPath)].childItemIds
+  for (const childItemId of childItemIds) {
     const childItemPath = itemPath.push(childItemId)
     yield* yieldIndentedLines(childItemPath, indentUnit, depth + 1)
   }
