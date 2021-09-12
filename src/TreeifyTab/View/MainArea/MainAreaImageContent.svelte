@@ -9,9 +9,12 @@
   export let props: MainAreaImageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
-  $: style = `
+  $: imageStyle = `
     width: ${props.width};
     aspect-ratio: ${props.aspectRatio};
+  `
+  $: captionStyle = `
+    max-width: ${props.width};
   `
 
   function onLoad(event: Event) {
@@ -31,7 +34,7 @@
         class="main-area-image-content_image"
         src={props.url}
         draggable="false"
-        {style}
+        style={imageStyle}
         on:load={onLoad}
       />
       <div
@@ -39,7 +42,7 @@
         use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
       />
     </div>
-    <div class="main-area-image-content_caption">{props.caption}</div>
+    <div class="main-area-image-content_caption" style={captionStyle}>{props.caption}</div>
   </div>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
@@ -77,19 +80,12 @@
   .main-area-image-content_image {
     // style属性でwidthとaspect-ratioが指定される
     max-width: 100%;
-  }
 
-  // グレーアウト状態の画像
-  .grayed-out .main-area-image-content_image,
-  .grayed-out-children .main-area-image-content_image {
-    filter: opacity(50%);
-  }
-
-  // グレーアウト状態のキャプション
-  .grayed-out .main-area-image-content_caption,
-  .grayed-out-children .main-area-image-content_caption {
-    // lch(50.0%, 0.0, 0.0)相当
-    color: #777777;
+    // グレーアウト状態の画像
+    .grayed-out &,
+    .grayed-out-children & {
+      filter: opacity(50%);
+    }
   }
 
   .main-area-image-content_resize-handle {
@@ -111,6 +107,17 @@
 
     .main-area-image-content_image-with-resize-handle:hover & {
       visibility: visible;
+    }
+  }
+
+  .main-area-image-content_caption {
+    overflow-wrap: break-word;
+
+    // グレーアウト状態のキャプション
+    .grayed-out &,
+    .grayed-out-children & {
+      // lch(50.0%, 0.0, 0.0)相当
+      color: #777777;
     }
   }
 </style>
