@@ -49,6 +49,8 @@ export function createCitationSettingDialogProps(
     title: item.cite?.title ?? '',
     url: item.cite?.url ?? '',
     onKeyDown: (event) => {
+      if (event.isComposing) return
+
       switch (InputId.fromKeyboardEvent(event)) {
         case '0000Enter':
         case '1000Enter':
