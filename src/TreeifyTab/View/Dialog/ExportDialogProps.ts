@@ -121,8 +121,9 @@ function generateOutputText(format: ExportFormat): string {
     case ExportFormat.MARKDOWN:
       const exportSettings = Internal.instance.state.exportSettings
       const minimumHeaderLevel = exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel
-      // TODO: 複数選択時はそれらをまとめてMarkdown化する
-      return toMarkdownText(CurrentState.getTargetItemPath(), minimumHeaderLevel)
+      return CurrentState.getSelectedItemPaths()
+        .map((selectedItemPath) => toMarkdownText(selectedItemPath, minimumHeaderLevel))
+        .join('')
     case ExportFormat.OPML:
       return toOpmlString(CurrentState.getSelectedItemPaths())
   }
