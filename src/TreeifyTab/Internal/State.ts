@@ -39,6 +39,7 @@ export type State = {
         indentationExpression: string
       }
       [ExportFormat.MARKDOWN]: {
+        ignoreInvisibleItems: boolean
         minimumHeaderLevel: integer
       }
       [ExportFormat.OPML]: {}

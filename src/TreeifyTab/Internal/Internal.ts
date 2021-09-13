@@ -205,6 +205,7 @@ export class Internal {
             indentationExpression: '  ',
           },
           [ExportFormat.MARKDOWN]: {
+            ignoreInvisibleItems: false,
             minimumHeaderLevel: 1,
           },
           [ExportFormat.OPML]: {},

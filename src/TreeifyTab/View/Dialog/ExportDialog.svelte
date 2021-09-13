@@ -62,7 +62,13 @@
             on:input={props.onInputMinimumHeaderLevel}
           /></label
         >
-        <label><input type="checkbox" disabled />不可視の項目を無視する</label>
+        <label
+          ><input
+            type="checkbox"
+            checked={props.markdownIgnoreInvisibleItems}
+            on:change={props.onChangeMarkdownIgnoreInvisibleItems}
+          />不可視の項目を無視する</label
+        >
       </div>
     {:else if props.selectedFormat === ExportFormat.OPML}
       <div class="export-dialog_option-area">
