@@ -7,7 +7,10 @@
 </script>
 
 <div class="search-result-page">
-  <ItemContent props={props.pageContent} />
+  <div class="search-result-page_page">
+    <div class="search-result-page_page-icon" />
+    <ItemContent props={props.pageContent} />
+  </div>
   <div class="search-result-page_tree">
     {#each props.searchResultItemPropses.toArray() as searchResultItemProps (searchResultItemProps.itemPath.toString())}
       <SearchResultItem props={searchResultItemProps} />
@@ -16,6 +19,21 @@
 </div>
 
 <style global lang="scss">
+  .search-result-page_page {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-result-page_page-icon {
+    width: 1.1em;
+    aspect-ratio: 1;
+
+    // lch(40.0%, 0.0, 0.0)相当
+    background: #5e5e5e;
+    -webkit-mask: url('page-icon.svg') no-repeat center;
+    -webkit-mask-size: contain;
+  }
+
   .search-result-page_tree {
     // lch(70.0%, 0.0, 0.0)相当
     border: solid 1px #ababab;

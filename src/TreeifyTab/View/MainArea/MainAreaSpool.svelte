@@ -152,7 +152,8 @@
     aspect-ratio: 1;
 
     background: var(--main-area-bullet-page-icon-color);
-    -webkit-mask-image: url('./page-icon.svg');
+    -webkit-mask: url('page-icon.svg') no-repeat center;
+    -webkit-mask-size: contain;
 
     // 中央寄せ
     position: absolute;
