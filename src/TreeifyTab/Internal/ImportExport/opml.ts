@@ -5,7 +5,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Edge} from 'src/TreeifyTab/Internal/State'
+import {Edge, ExportFormat} from 'src/TreeifyTab/Internal/State'
 
 function toOpmlOutlineElement(itemPath: ItemPath, xmlDocument: XMLDocument): Element {
   const outlineElement = xmlDocument.createElement('outline')
@@ -15,7 +15,10 @@ function toOpmlOutlineElement(itemPath: ItemPath, xmlDocument: XMLDocument): Ele
     outlineElement.setAttribute(attrName, attributes[attrName])
   }
 
-  const childItemIds = Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
+  const state = Internal.instance.state
+  const childItemIds = state.exportSettings.options[ExportFormat.OPML].ignoreInvisibleItems
+    ? CurrentState.getDisplayingChildItemIds(itemPath)
+    : state.items[ItemPath.getItemId(itemPath)].childItemIds
   const children = childItemIds.map((childItemId) =>
     toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument)
   )

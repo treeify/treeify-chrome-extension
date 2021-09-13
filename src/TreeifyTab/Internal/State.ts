@@ -42,7 +42,9 @@ export type State = {
         ignoreInvisibleItems: boolean
         minimumHeaderLevel: integer
       }
-      [ExportFormat.OPML]: {}
+      [ExportFormat.OPML]: {
+        ignoreInvisibleItems: boolean
+      }
     }
   }
 }
