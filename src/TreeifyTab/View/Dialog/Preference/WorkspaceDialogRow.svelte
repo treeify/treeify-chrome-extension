@@ -1,6 +1,7 @@
 <script lang="ts">
   import {doWithErrorCapture} from '../../../errorCapture'
   import {CurrentState} from '../../../Internal/CurrentState'
+  import {Internal} from '../../../Internal/Internal'
   import {Rerenderer} from '../../../Rerenderer'
   import {WorkspaceRecord} from './WorkspaceDialogProps'
 
@@ -23,8 +24,12 @@
 
   const onClickDeleteButton = () => {
     doWithErrorCapture(() => {
-      CurrentState.deleteWorkspace(workspace.id)
-      Rerenderer.instance.rerender()
+      if (Object.keys(Internal.instance.state.workspaces).length === 1) {
+        alert('ワークスペースを0個にはできません')
+      } else {
+        CurrentState.deleteWorkspace(workspace.id)
+        Rerenderer.instance.rerender()
+      }
     })
   }
 </script>
