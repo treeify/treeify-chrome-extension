@@ -262,7 +262,9 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
       return webPageItemId
     case 'image':
       const imageItemId = CurrentState.createImageItem()
-      CurrentState.setImageItemCaption(imageItemId, attrText)
+      if (attrText !== attrUrl) {
+        CurrentState.setImageItemCaption(imageItemId, attrText)
+      }
       if (attrUrl !== null) {
         CurrentState.setImageItemUrl(imageItemId, attrUrl)
       }
