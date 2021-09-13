@@ -15,6 +15,7 @@ export type ExportDialogProps = {
   indentationExpression: string
   markdownIgnoreInvisibleItems: boolean
   minimumHeaderLevel: integer
+  opmlIgnoreInvisibleItems: boolean
   onClickCopyButton: () => void
   onClickSaveButton: () => void
   onChangeTabsRadioButton: (event: Event) => void
@@ -22,12 +23,14 @@ export type ExportDialogProps = {
   onInputIndentationExpression: (event: Event) => void
   onInputMinimumHeaderLevel: (event: Event) => void
   onChangeMarkdownIgnoreInvisibleItems: (event: Event) => void
+  onChangeOpmlIgnoreInvisibleItems: (event: Event) => void
 }
 
 export function createExportDialogProps(): ExportDialogProps {
   const selectedFormat = Internal.instance.state.exportSettings.selectedFormat
   const plainTextOptions = Internal.instance.state.exportSettings.options[ExportFormat.PLAIN_TEXT]
   const markdownOptions = Internal.instance.state.exportSettings.options[ExportFormat.MARKDOWN]
+  const opmlOptions = Internal.instance.state.exportSettings.options[ExportFormat.OPML]
 
   return {
     selectedFormat,
@@ -35,6 +38,7 @@ export function createExportDialogProps(): ExportDialogProps {
     indentationExpression: plainTextOptions.indentationExpression,
     minimumHeaderLevel: markdownOptions.minimumHeaderLevel,
     markdownIgnoreInvisibleItems: markdownOptions.ignoreInvisibleItems,
+    opmlIgnoreInvisibleItems: opmlOptions.ignoreInvisibleItems,
     onClickCopyButton: () => {
       const blob = new Blob([generateOutputText(selectedFormat)], {type: 'text/plain'})
       navigator.clipboard.write([
@@ -108,6 +112,14 @@ export function createExportDialogProps(): ExportDialogProps {
             ExportFormat.MARKDOWN,
             'ignoreInvisibleItems'
           )
+        )
+      }
+    },
+    onChangeOpmlIgnoreInvisibleItems(event: Event) {
+      if (event.target instanceof HTMLInputElement) {
+        Internal.instance.mutate(
+          event.target.checked,
+          PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
         )
       }
     },

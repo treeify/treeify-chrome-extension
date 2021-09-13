@@ -208,7 +208,9 @@ export class Internal {
             ignoreInvisibleItems: false,
             minimumHeaderLevel: 1,
           },
-          [ExportFormat.OPML]: {},
+          [ExportFormat.OPML]: {
+            ignoreInvisibleItems: false,
+          },
         },
       },
     }

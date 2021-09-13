@@ -72,7 +72,13 @@
       </div>
     {:else if props.selectedFormat === ExportFormat.OPML}
       <div class="export-dialog_option-area">
-        <label><input type="checkbox" disabled />不可視の項目を無視する</label>
+        <label
+          ><input
+            type="checkbox"
+            checked={props.opmlIgnoreInvisibleItems}
+            on:change={props.onChangeOpmlIgnoreInvisibleItems}
+          />不可視の項目を無視する</label
+        >
       </div>
     {/if}
     <div class="export-dialog_button-area">
