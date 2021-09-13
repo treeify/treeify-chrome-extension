@@ -13,6 +13,7 @@ export type ExportDialogProps = {
   selectedFormat: ExportFormat
   plainTextIgnoreInvisibleItems: boolean
   indentationExpression: string
+  markdownIgnoreInvisibleItems: boolean
   minimumHeaderLevel: integer
   onClickCopyButton: () => void
   onClickSaveButton: () => void
@@ -20,18 +21,20 @@ export type ExportDialogProps = {
   onChangePlainTextIgnoreInvisibleItems: (event: Event) => void
   onInputIndentationExpression: (event: Event) => void
   onInputMinimumHeaderLevel: (event: Event) => void
+  onChangeMarkdownIgnoreInvisibleItems: (event: Event) => void
 }
 
 export function createExportDialogProps(): ExportDialogProps {
-  const exportSettings = Internal.instance.state.exportSettings
-  const selectedFormat = exportSettings.selectedFormat
+  const selectedFormat = Internal.instance.state.exportSettings.selectedFormat
+  const plainTextOptions = Internal.instance.state.exportSettings.options[ExportFormat.PLAIN_TEXT]
+  const markdownOptions = Internal.instance.state.exportSettings.options[ExportFormat.MARKDOWN]
 
   return {
     selectedFormat,
-    plainTextIgnoreInvisibleItems:
-      exportSettings.options[ExportFormat.PLAIN_TEXT].ignoreInvisibleItems,
-    indentationExpression: exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression,
-    minimumHeaderLevel: exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel,
+    plainTextIgnoreInvisibleItems: plainTextOptions.ignoreInvisibleItems,
+    indentationExpression: plainTextOptions.indentationExpression,
+    minimumHeaderLevel: markdownOptions.minimumHeaderLevel,
+    markdownIgnoreInvisibleItems: markdownOptions.ignoreInvisibleItems,
     onClickCopyButton: () => {
       const blob = new Blob([generateOutputText(selectedFormat)], {type: 'text/plain'})
       navigator.clipboard.write([
@@ -92,6 +95,19 @@ export function createExportDialogProps(): ExportDialogProps {
         Internal.instance.mutate(
           parseInt(event.target.value),
           PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
+        )
+      }
+    },
+    onChangeMarkdownIgnoreInvisibleItems(event: Event) {
+      if (event.target instanceof HTMLInputElement) {
+        Internal.instance.mutate(
+          event.target.checked,
+          PropertyPath.of(
+            'exportSettings',
+            'options',
+            ExportFormat.MARKDOWN,
+            'ignoreInvisibleItems'
+          )
         )
       }
     },

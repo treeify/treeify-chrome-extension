@@ -8,6 +8,7 @@ import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {ExportFormat} from 'src/TreeifyTab/Internal/State'
 
 export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
   if (CurrentState.shouldBeDisplayedAsTable(itemPath)) {
@@ -26,7 +27,10 @@ export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
   } else {
     // TODO: 循環参照があると無限ループになる
 
-    const childItemIds = Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
+    const state = Internal.instance.state
+    const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].ignoreInvisibleItems
+      ? CurrentState.getDisplayingChildItemIds(itemPath)
+      : state.items[ItemPath.getItemId(itemPath)].childItemIds
     if (childItemIds.isEmpty()) {
       return toMultiLineMarkdownContent(itemPath) + '  \n'
     } else {
