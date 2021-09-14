@@ -31,8 +31,8 @@
         OPML
       </label>
     </div>
-    {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
-      <div class="export-dialog_option-area">
+    <div class="export-dialog_option-area">
+      {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
         <label
           >インデントの表現: <input
             type="text"
@@ -42,16 +42,14 @@
             on:input={props.onInputIndentationExpression}
           /></label
         >
-        <label
+        <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             checked={props.plainTextIgnoreInvisibleItems}
             on:change={props.onChangePlainTextIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      </div>
-    {:else if props.selectedFormat === ExportFormat.MARKDOWN}
-      <div class="export-dialog_option-area">
+      {:else if props.selectedFormat === ExportFormat.MARKDOWN}
         <label
           >見出しレベル: <input
             type="number"
@@ -62,25 +60,23 @@
             on:input={props.onInputMinimumHeaderLevel}
           /></label
         >
-        <label
+        <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             checked={props.markdownIgnoreInvisibleItems}
             on:change={props.onChangeMarkdownIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      </div>
-    {:else if props.selectedFormat === ExportFormat.OPML}
-      <div class="export-dialog_option-area">
-        <label
+      {:else if props.selectedFormat === ExportFormat.OPML}
+        <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             checked={props.opmlIgnoreInvisibleItems}
             on:change={props.onChangeOpmlIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      </div>
-    {/if}
+      {/if}
+    </div>
     <div class="export-dialog_button-area">
       <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}
         ><div class="export-dialog_copy-button-icon" />
@@ -128,13 +124,19 @@
   }
 
   .export-dialog_option-area {
-    display: flex;
-    flex-direction: column;
-
     padding: 1em;
     // lch(80.0%, 0.0, 0.0)相当
     border: 1px solid #c6c6c6;
     border-top-style: none;
+
+    > * {
+      display: block;
+      width: fit-content;
+    }
+  }
+
+  .export-dialog_checkbox-label {
+    cursor: pointer;
   }
 
   .export-dialog_button-area {
