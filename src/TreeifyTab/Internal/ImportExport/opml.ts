@@ -5,9 +5,13 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Edge, ExportFormat} from 'src/TreeifyTab/Internal/State'
+import {Edge} from 'src/TreeifyTab/Internal/State'
 
-function toOpmlOutlineElement(itemPath: ItemPath, xmlDocument: XMLDocument): Element {
+function toOpmlOutlineElement(
+  itemPath: ItemPath,
+  xmlDocument: XMLDocument,
+  ignoreInvisibleItems: boolean
+): Element {
   const outlineElement = xmlDocument.createElement('outline')
 
   const attributes = toOpmlAttributes(itemPath)
@@ -15,12 +19,11 @@ function toOpmlOutlineElement(itemPath: ItemPath, xmlDocument: XMLDocument): Ele
     outlineElement.setAttribute(attrName, attributes[attrName])
   }
 
-  const state = Internal.instance.state
-  const childItemIds = state.exportSettings.options[ExportFormat.OPML].ignoreInvisibleItems
+  const childItemIds = ignoreInvisibleItems
     ? CurrentState.getDisplayingChildItemIds(itemPath)
-    : state.items[ItemPath.getItemId(itemPath)].childItemIds
+    : Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
   const children = childItemIds.map((childItemId) =>
-    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument)
+    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument, ignoreInvisibleItems)
   )
   outlineElement.append(...children)
 
@@ -104,11 +107,11 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
   return baseAttributes
 }
 
-/**
- * 指定された項目とその子孫をOPML 2.0形式に変換する。
- * ページや折りたたまれた項目の子孫も含める。
- */
-export function toOpmlString(itemPaths: List<ItemPath>): string {
+/** 指定された項目とその子孫をOPML 2.0形式に変換する */
+export function toOpmlString(
+  itemPaths: List<ItemPath>,
+  ignoreInvisibleItems: boolean = false
+): string {
   const xmlDocument = document.implementation.createDocument(null, 'opml')
   const opmlElement = xmlDocument.documentElement
   opmlElement.setAttribute('version', '2.0')
@@ -117,7 +120,11 @@ export function toOpmlString(itemPaths: List<ItemPath>): string {
   opmlElement.append(headElement)
 
   const bodyElement = xmlDocument.createElement('body')
-  bodyElement.append(...itemPaths.map((itemPath) => toOpmlOutlineElement(itemPath, xmlDocument)))
+  bodyElement.append(
+    ...itemPaths.map((itemPath) =>
+      toOpmlOutlineElement(itemPath, xmlDocument, ignoreInvisibleItems)
+    )
+  )
   opmlElement.append(bodyElement)
 
   const xmlString = new XMLSerializer().serializeToString(xmlDocument)

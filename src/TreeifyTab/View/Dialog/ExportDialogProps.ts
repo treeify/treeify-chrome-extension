@@ -127,17 +127,18 @@ export function createExportDialogProps(): ExportDialogProps {
 }
 
 function generateOutputText(format: ExportFormat): string {
+  const exportSettings = Internal.instance.state.exportSettings
   switch (format) {
     case ExportFormat.PLAIN_TEXT:
       return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
     case ExportFormat.MARKDOWN:
-      const exportSettings = Internal.instance.state.exportSettings
       const minimumHeaderLevel = exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel
       return CurrentState.getSelectedItemPaths()
         .map((selectedItemPath) => toMarkdownText(selectedItemPath, minimumHeaderLevel))
         .join('')
     case ExportFormat.OPML:
-      return toOpmlString(CurrentState.getSelectedItemPaths())
+      const ignoreInvisibleItems = exportSettings.options[ExportFormat.OPML].ignoreInvisibleItems
+      return toOpmlString(CurrentState.getSelectedItemPaths(), ignoreInvisibleItems)
   }
 }
 
