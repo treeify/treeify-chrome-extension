@@ -31,8 +31,8 @@
         OPML
       </label>
     </div>
-    {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
-      <div class="export-dialog_option-area">
+    <div class="export-dialog_option-area">
+      {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
         <label
           >インデントの表現: <input
             type="text"
@@ -49,9 +49,7 @@
             on:change={props.onChangePlainTextIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      </div>
-    {:else if props.selectedFormat === ExportFormat.MARKDOWN}
-      <div class="export-dialog_option-area">
+      {:else if props.selectedFormat === ExportFormat.MARKDOWN}
         <label
           >見出しレベル: <input
             type="number"
@@ -69,9 +67,7 @@
             on:change={props.onChangeMarkdownIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      </div>
-    {:else if props.selectedFormat === ExportFormat.OPML}
-      <div class="export-dialog_option-area">
+      {:else if props.selectedFormat === ExportFormat.OPML}
         <label
           ><input
             type="checkbox"
@@ -79,8 +75,8 @@
             on:change={props.onChangeOpmlIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      </div>
-    {/if}
+      {/if}
+    </div>
     <div class="export-dialog_button-area">
       <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}
         ><div class="export-dialog_copy-button-icon" />
