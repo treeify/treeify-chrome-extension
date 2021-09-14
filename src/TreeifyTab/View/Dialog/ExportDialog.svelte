@@ -42,7 +42,7 @@
             on:input={props.onInputIndentationExpression}
           /></label
         >
-        <label
+        <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             checked={props.plainTextIgnoreInvisibleItems}
@@ -60,7 +60,7 @@
             on:input={props.onInputMinimumHeaderLevel}
           /></label
         >
-        <label
+        <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             checked={props.markdownIgnoreInvisibleItems}
@@ -68,7 +68,7 @@
           />不可視の項目を無視する</label
         >
       {:else if props.selectedFormat === ExportFormat.OPML}
-        <label
+        <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             checked={props.opmlIgnoreInvisibleItems}
@@ -133,6 +133,10 @@
       display: block;
       width: fit-content;
     }
+  }
+
+  .export-dialog_checkbox-label {
+    cursor: pointer;
   }
 
   .export-dialog_button-area {
