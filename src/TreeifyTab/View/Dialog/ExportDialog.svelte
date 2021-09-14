@@ -128,13 +128,15 @@
   }
 
   .export-dialog_option-area {
-    display: flex;
-    flex-direction: column;
-
     padding: 1em;
     // lch(80.0%, 0.0, 0.0)相当
     border: 1px solid #c6c6c6;
     border-top-style: none;
+
+    > * {
+      display: block;
+      width: fit-content;
+    }
   }
 
   .export-dialog_button-area {
