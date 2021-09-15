@@ -210,10 +210,9 @@ export class DataFolder {
    * 単純に全ファイルをコピーするだけでなく、メタデータファイルを自インスタンス視点で更新する。
    */
   async copyFrom(instanceId: InstanceId) {
-    // 自インスタンスフォルダをクリア（全ファイルとフォルダを削除）
-    const instancesFolder = await this.getFolderHandle(DataFolder.instancesFolderPath)
-    await instancesFolder.removeEntry(Instance.getId(), {recursive: true})
-    await instancesFolder.getDirectoryHandle(Instance.getId(), {create: true})
+    // 自インスタンスフォルダをクリア（チャンクパックファイルを全削除）
+    const chunkPacksFolder = await this.getFolderHandle(DataFolder.getChunkPacksFolderPath())
+    await chunkPacksFolder.removeEntry(Instance.getId(), {recursive: true})
 
     // 各ファイルを自インスタンスフォルダにコピーする準備
     const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(instanceId)
