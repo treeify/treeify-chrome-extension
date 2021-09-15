@@ -139,8 +139,8 @@
     width: 1em;
     aspect-ratio: 1;
 
-    // lch(35.0%, 0.0, 0.0)相当
-    background: #525252;
+    // lch(60.0%, 0.0, 0.0)相当
+    background: #919191;
     -webkit-mask: url('./audible-icon.svg');
     -webkit-mask-size: contain;
   }
