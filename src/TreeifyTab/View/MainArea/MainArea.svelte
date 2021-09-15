@@ -27,7 +27,7 @@
   :root {
     // メインエリアのテキスト全般に適用されるline-height。
     // 階層が深くなるごとにフォントサイズなどが小さくなる仕組みを実現するために比率で指定しなければならない。
-    --main-area-line-height: 1.3;
+    --main-area-line-height: 1.45;
 
     // フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する
     --main-area-calculated-line-height: calc(
