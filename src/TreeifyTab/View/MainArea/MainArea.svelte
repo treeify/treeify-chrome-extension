@@ -46,7 +46,7 @@
     // lch(97.0%, 0.0, 0.0)相当
     background: #f6f6f6;
 
-    padding: 20px 270px 0 40px;
+    padding: 20px 400px 0 40px;
   }
 
   .main-area_paper {
