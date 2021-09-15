@@ -56,7 +56,10 @@ export function createImageItemEditDialogProps(): ImageItemEditDialogProps {
     },
     onCloseDialog,
     onKeyDown: (event) => {
+      if (event.isComposing) return
+
       switch (InputId.fromKeyboardEvent(event)) {
+        case '0000Enter':
         case '1000Enter':
           onClickFinishButton()
           break
