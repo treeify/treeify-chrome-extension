@@ -168,6 +168,8 @@ export class Internal {
         '1000ArrowDown': List.of('moveItemToNextSibling'),
         '1100ArrowUp': List.of('moveItemUpward'),
         '1100ArrowDown': List.of('moveItemDownward'),
+        '0010ArrowUp': List.of('collapseItem'),
+        '0010ArrowDown': List.of('expandItem'),
         '0110ArrowDown': List.of('selectAllBelowItems'),
         '0110ArrowUp': List.of('selectAllAboveItems'),
         '0000Enter': List.of('enterKeyDefault'),
