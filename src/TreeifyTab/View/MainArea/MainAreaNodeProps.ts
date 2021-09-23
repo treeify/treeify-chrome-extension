@@ -168,9 +168,13 @@ export function createMainAreaNodeProps(
       })
     },
     onClickHiddenTabsCount: (event: MouseEvent) => {
-      CurrentState.setTargetItemPath(itemPath)
-      Command.hardUnloadSubtree()
-      Rerenderer.instance.rerender()
+      switch (InputId.fromMouseEvent(event)) {
+        case '0000MouseButton0':
+          CurrentState.setTargetItemPath(itemPath)
+          Command.hardUnloadSubtree()
+          Rerenderer.instance.rerender()
+          break
+      }
     },
   }
 }
