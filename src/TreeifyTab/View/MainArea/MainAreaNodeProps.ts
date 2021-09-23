@@ -168,7 +168,6 @@ export function createMainAreaNodeProps(
       })
     },
     onClickHiddenTabsCount: (event: MouseEvent) => {
-      Internal.instance.saveCurrentStateToUndoStack()
       CurrentState.setTargetItemPath(itemPath)
       Command.hardUnloadSubtree()
       Rerenderer.instance.rerender()

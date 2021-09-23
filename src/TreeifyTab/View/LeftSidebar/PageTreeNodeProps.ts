@@ -114,7 +114,6 @@ export function createPageTreeNodeProps(
     },
     onClickTabsCount: () => {
       doWithErrorCapture(() => {
-        Internal.instance.saveCurrentStateToUndoStack()
         // ページ全体をハードアンロードする
         for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
           const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
