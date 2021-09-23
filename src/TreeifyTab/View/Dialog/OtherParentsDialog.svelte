@@ -6,7 +6,7 @@
   export let props: OtherParentsDialogProps
 </script>
 
-<CommonDialog title="他のトランスクルード元" showCloseButton="true">
+<CommonDialog title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
     <div class="other-parents-dialog_item-content-list">
       {#each props.itemContentPropses.toArray() as itemContentProps}
