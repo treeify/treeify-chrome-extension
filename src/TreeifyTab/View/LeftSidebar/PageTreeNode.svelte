@@ -59,7 +59,11 @@
         </div>
       </div>
       {#if props.tabsCount > 0}
-        <div class="page-tree-node_tabs-count-button" on:mousedown={props.onClickTabsCount}>
+        <div
+          class="page-tree-node_tabs-count-button"
+          on:mousedown={props.onClickTabsCount}
+          on:contextmenu={props.onTabsCountContextMenu}
+        >
           <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
         </div>
       {:else}

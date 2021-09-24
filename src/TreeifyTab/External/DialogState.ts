@@ -1,4 +1,5 @@
 import {Coordinate} from 'src/Common/integer'
+import {ItemId} from 'src/TreeifyTab/basicType'
 
 export type CaptionSettingDialog = {type: 'CaptionSettingDialog'}
 
@@ -27,6 +28,11 @@ export type PreferenceDropdownMenuDialog = {type: 'PreferenceDropdownMenuDialog'
 
 export type SearchDialog = {type: 'SearchDialog'}
 
+export type TabsDialog = {
+  type: 'TabsDialog'
+  targetItemId: ItemId
+}
+
 export type TexEditDialog = {type: 'TexEditDialog'}
 
 /** ウェブページ項目のタイトル設定ダイアログが固有で持つ状態の型 */
@@ -51,6 +57,7 @@ export type Dialog =
   | OtherParentsDialog
   | PreferenceDropdownMenuDialog
   | SearchDialog
+  | TabsDialog
   | TexEditDialog
   | WebPageItemTitleSettingDialog
   | WorkspaceDialog

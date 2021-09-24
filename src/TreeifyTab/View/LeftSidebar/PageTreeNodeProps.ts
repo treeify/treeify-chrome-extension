@@ -34,6 +34,7 @@ export type PageTreeNodeProps = {
   onClickContentArea: (event: MouseEvent) => void
   onClickCloseButton: () => void
   onClickTabsCount: (event: MouseEvent) => void
+  onTabsCountContextMenu: (event: Event) => void
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
@@ -131,6 +132,12 @@ export function createPageTreeNodeProps(
             break
         }
       })
+    },
+    onTabsCountContextMenu: (event: Event) => {
+      event.preventDefault()
+
+      External.instance.dialogState = {type: 'TabsDialog', targetItemId: itemId}
+      Rerenderer.instance.rerender()
     },
     onDrop: (event: MouseEvent, draggedItemPath: ItemPath) => {
       doWithErrorCapture(() => {
