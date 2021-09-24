@@ -20,12 +20,13 @@ export function softUnloadItem() {
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブをdiscardする */
 export function softUnloadSubtree() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-
-  for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-    if (tabId !== undefined) {
-      chrome.tabs.discard(tabId)
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
+      const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+      if (tabId !== undefined) {
+        chrome.tabs.discard(tabId)
+      }
     }
   }
 }
