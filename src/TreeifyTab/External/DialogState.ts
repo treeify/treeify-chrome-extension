@@ -30,6 +30,9 @@ export type SearchDialog = {type: 'SearchDialog'}
 
 export type TabsDialog = {
   type: 'TabsDialog'
+  // このダイアログは他と異なり、専用のターゲット項目IDを持つので整合性に要注意。
+  // 例えばこのダイアログを開いた状態でブラウザのタブを閉じて該当項目が削除された場合、
+  // このプロパティは削除済みの項目を指すことになる。
   targetItemId: ItemId
 }
 
