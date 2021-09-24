@@ -48,17 +48,17 @@ export function hardUnloadItem() {
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブを閉じる */
 export function hardUnloadSubtree() {
-  // TODO: 複数選択中の一括操作に対応する
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
+      const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+      if (tabId !== undefined) {
+        // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+        External.instance.hardUnloadedTabIds.add(tabId)
 
-  for (const subtreeItemId of CurrentState.getSubtreeItemIds(targetItemId)) {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-    if (tabId !== undefined) {
-      // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-      External.instance.hardUnloadedTabIds.add(tabId)
-
-      // 対応するタブを閉じる
-      chrome.tabs.remove(tabId)
+        // 対応するタブを閉じる
+        chrome.tabs.remove(tabId)
+      }
     }
   }
 }
