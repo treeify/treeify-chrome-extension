@@ -1,9 +1,22 @@
-import {ItemId} from 'src/TreeifyTab/basicType'
+import {External} from 'src/TreeifyTab/External/External'
+import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type TabsDialogItemProps = {
-  itemId: ItemId
+  itemPath: ItemPath
+  onClick: () => void
 }
 
-export function createTabsDialogItemProps(itemId: ItemId): TabsDialogItemProps {
-  return {itemId}
+export function createTabsDialogItemProps(itemPath: ItemPath): TabsDialogItemProps {
+  return {
+    itemPath,
+    onClick() {
+      CurrentState.jumpTo(itemPath)
+
+      // ダイアログを閉じる
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    },
+  }
 }

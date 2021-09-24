@@ -23,8 +23,9 @@ export function createTabsDialogProps(dialog: TabsDialog): TabsDialogProps {
   const webPageItemIds = Set(CurrentState.getSubtreeItemIds(dialog.targetItemId)).filter(
     (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
   )
+  const webPageItemPaths = webPageItemIds.flatMap(CurrentState.yieldItemPaths)
   // TODO: 検索結果と同じようにツリー化する
   return {
-    items: webPageItemIds.toList().map(createTabsDialogItemProps),
+    items: webPageItemPaths.toList().map(createTabsDialogItemProps),
   }
 }
