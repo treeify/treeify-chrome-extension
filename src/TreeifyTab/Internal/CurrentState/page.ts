@@ -1,10 +1,14 @@
 import {List} from 'immutable'
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {Page} from 'src/TreeifyTab/Internal/State'
+import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import {tick} from 'svelte'
 
 /** アクティブページを切り替える */
 export async function switchActivePage(itemId: ItemId) {
@@ -87,4 +91,29 @@ export function deriveTreeifyTabTitle(): string {
   } else {
     return extractPlainText(List.of(activePageId))
   }
+}
+
+export function jumpTo(itemPath: ItemPath) {
+  const containerPageId = ItemPath.getRootItemId(itemPath)
+
+  // ジャンプ先のページのtargetItemPathを更新する
+  Internal.instance.mutate(itemPath, PropertyPath.of('pages', containerPageId, 'targetItemPath'))
+  Internal.instance.mutate(itemPath, PropertyPath.of('pages', containerPageId, 'anchorItemPath'))
+
+  CurrentState.moses(itemPath)
+
+  // ページを切り替える
+  CurrentState.switchActivePage(containerPageId)
+
+  // 再描画完了後に対象項目に自動スクロールする
+  tick().then(() => {
+    const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
+    const focusableElement = document.getElementById(targetElementId)
+    assertNonNull(focusableElement)
+    focusableElement.scrollIntoView({
+      behavior: 'auto',
+      block: 'center',
+      inline: 'center',
+    })
+  })
 }

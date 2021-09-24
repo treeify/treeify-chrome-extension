@@ -6,6 +6,7 @@ import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
@@ -32,7 +33,8 @@ export type PageTreeNodeProps = {
   tabsCount: integer
   onClickContentArea: (event: MouseEvent) => void
   onClickCloseButton: () => void
-  onClickTabsCount: () => void
+  onClickTabsCount: (event: MouseEvent) => void
+  onTabsCountContextMenu: (event: Event) => void
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
@@ -112,21 +114,30 @@ export function createPageTreeNodeProps(
         Rerenderer.instance.rerender()
       })
     },
-    onClickTabsCount: () => {
+    onClickTabsCount: (event) => {
       doWithErrorCapture(() => {
-        Internal.instance.saveCurrentStateToUndoStack()
-        // ページ全体をハードアンロードする
-        for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
-          const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-          if (tabId !== undefined) {
-            // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-            External.instance.hardUnloadedTabIds.add(tabId)
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            // ページ全体をハードアンロードする
+            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+              if (tabId !== undefined) {
+                // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+                External.instance.hardUnloadedTabIds.add(tabId)
 
-            // 対応するタブを閉じる
-            chrome.tabs.remove(tabId)
-          }
+                // 対応するタブを閉じる
+                chrome.tabs.remove(tabId)
+              }
+            }
+            break
         }
       })
+    },
+    onTabsCountContextMenu: (event: Event) => {
+      event.preventDefault()
+
+      External.instance.dialogState = {type: 'TabsDialog', targetItemId: itemId}
+      Rerenderer.instance.rerender()
     },
     onDrop: (event: MouseEvent, draggedItemPath: ItemPath) => {
       doWithErrorCapture(() => {

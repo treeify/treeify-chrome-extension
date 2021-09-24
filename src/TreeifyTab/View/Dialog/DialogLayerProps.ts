@@ -4,6 +4,7 @@ import {createCaptionSettingDialogProps} from 'src/TreeifyTab/View/Dialog/Captio
 import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
 import {createImageItemEditDialogProps} from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
 import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
+import {createTabsDialogProps} from 'src/TreeifyTab/View/Dialog/TabsDialogProps'
 import CaptionSettingDialog from './CaptionSettingDialog.svelte'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
 import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
@@ -25,6 +26,7 @@ import WorkspaceDialog from './Preference/WorkspaceDialog.svelte'
 import {createWorkspaceDialogProps} from './Preference/WorkspaceDialogProps'
 import SearchDialog from './SearchDialog.svelte'
 import {createSearchDialogProps} from './SearchDialogProps'
+import TabsDialog from './TabsDialog.svelte'
 import TexEditDialog from './TexEditDialog.svelte'
 import {createTexEditDialogProps} from './TexEditDialogProps'
 import WebPageItemTitleSettingDialog from './WebPageItemTitleSettingDialog.svelte'
@@ -107,6 +109,11 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
       return {
         component: SearchDialog,
         props: createSearchDialogProps(dialogState),
+      }
+    case 'TabsDialog':
+      return {
+        component: TabsDialog,
+        props: createTabsDialogProps(dialogState),
       }
     case 'TexEditDialog':
       return {
