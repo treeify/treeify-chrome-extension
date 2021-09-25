@@ -11,7 +11,7 @@ import {Cite, ListView, TableView} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /** 選択された項目を折りたたむコマンド */
-export function collapseItem() {
+export function collapse() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     CurrentState.setIsCollapsed(selectedItemPath, true)
     CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
@@ -19,7 +19,7 @@ export function collapseItem() {
 }
 
 /** 選択された項目を展開するコマンド */
-export function expandItem() {
+export function expand() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     CurrentState.setIsCollapsed(selectedItemPath, false)
     CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
@@ -236,7 +236,7 @@ export function toggleGrayedOut() {
     }
 
     // ヒューリスティックな追加効果
-    Command.collapseItem()
+    Command.collapse()
     Command.hardUnloadSubtree()
 
     // フォーカスを下の項目に移動する

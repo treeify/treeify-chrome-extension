@@ -38,7 +38,7 @@ export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): Main
           case MainAreaBulletState.NO_CHILDREN:
             switch (inputId) {
               case '1000MouseButton0':
-                Command.expandItem()
+                Command.expand()
                 Command.turnIntoPage()
                 Command.showPage()
                 break
@@ -50,7 +50,7 @@ export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): Main
                 Command.toggleCollapsed()
                 break
               case '1000MouseButton0':
-                Command.expandItem()
+                Command.expand()
                 Command.turnIntoPage()
                 Command.showPage()
                 break
@@ -62,7 +62,7 @@ export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): Main
                 Command.toggleCollapsed()
                 break
               case '1000MouseButton0':
-                Command.expandItem()
+                Command.expand()
                 Command.turnIntoPage()
                 Command.showPage()
                 break
@@ -75,7 +75,7 @@ export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): Main
                 break
               case '1000MouseButton0':
                 Command.turnIntoNonPage()
-                Command.expandItem()
+                Command.expand()
                 break
             }
             break

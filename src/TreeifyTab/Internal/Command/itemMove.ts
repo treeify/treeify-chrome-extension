@@ -5,7 +5,7 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
-export function indentItem() {
+export function indent() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
@@ -50,7 +50,7 @@ export function indentItem() {
 }
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
-export function unindentItem() {
+export function unindent() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const parentItemPath = ItemPath.getParent(selectedItemPaths.first())
 
