@@ -157,11 +157,6 @@
     overflow-x: hidden;
     white-space: nowrap;
 
-    // 未読ウェブページ項目のタイトルの強調表示
-    &.unread {
-      color: var(--main-area-unread-web-page-item-title-color);
-    }
-
     &.soft-unloaded-item {
       // lch(35.0%, 0.0, 0.0)相当
       color: #525252;
@@ -170,6 +165,21 @@
     &.hard-unloaded-item {
       // lch(60.0%, 0.0, 0.0)相当
       color: #919191;
+    }
+
+    // 未読ウェブページ項目のタイトルの強調表示
+    &.unread {
+      color: var(--main-area-unread-web-page-item-title-color);
+
+      &.soft-unloaded-item {
+        // lch(35.0%, 30.0, 160.4)相当
+        color: #1a5d41;
+      }
+
+      &.hard-unloaded-item {
+        // lch(60.0%, 30.0, 160.4)相当
+        color: #5d9e7e;
+      }
     }
 
     // グレーアウト状態のウェブページ項目のタイトル
