@@ -79,23 +79,23 @@ const commandGroups: List<CommandGroup> = List.of(
   {
     name: '基本操作',
     commandIds: List.of(
-      'indentItem',
-      'unindentItem',
+      'enterKeyDefault',
+      'removeEdge',
+      'deleteItemItself',
       'moveItemUpward',
       'moveItemDownward',
       'moveItemToPrevSibling',
       'moveItemToNextSibling',
+      'indentItem',
+      'unindentItem',
+      'groupingItems',
       'collapseItem',
       'expandItem',
-      'toggleCollapsed',
-      'enterKeyDefault',
-      'removeEdge',
-      'deleteItemItself',
-      'groupingItems'
+      'toggleCollapsed'
     ),
   },
   {
-    name: 'テキスト編集',
+    name: 'テキスト項目操作',
     commandIds: List.of(
       'insertLineBreak',
       'toggleBold',
@@ -108,12 +108,12 @@ const commandGroups: List<CommandGroup> = List.of(
     name: 'ウェブページ項目操作',
     commandIds: List.of(
       'browseTab',
-      'hardUnloadItem',
       'hardUnloadSubtree',
-      'softUnloadItem',
+      'hardUnloadItem',
       'softUnloadSubtree',
-      'loadItem',
-      'loadSubtree'
+      'softUnloadItem',
+      'loadSubtree',
+      'loadItem'
     ),
   },
   {
@@ -128,7 +128,6 @@ const commandGroups: List<CommandGroup> = List.of(
     name: '空の項目作成',
     commandIds: List.of('createEmptyCodeBlockItem', 'createEmptyTexItem', 'createEmptyTextItem'),
   },
-  {name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems')},
   {name: 'クリップボード', commandIds: List.of('copyForTransclusion', 'pasteAsPlainText')},
   {
     name: 'ダイアログ表示',
@@ -141,5 +140,6 @@ const commandGroups: List<CommandGroup> = List.of(
       'showOtherParentsDialog'
     ),
   },
+  {name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems')},
   {name: 'その他', commandIds: List.of('doNothing', 'saveToDataFolder', 'toggleExcluded')}
 )
