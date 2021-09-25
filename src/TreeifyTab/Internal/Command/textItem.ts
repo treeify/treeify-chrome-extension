@@ -59,7 +59,7 @@ export function insertLineBreak() {
  * 選択した項目をグルーピングする。
  * 具体的には新しい空のテキスト項目を作り、選択された項目をその子リストに移動する。
  */
-export function groupingItems() {
+export function grouping() {
   if (!ItemPath.hasParent(CurrentState.getTargetItemPath())) {
     // アクティブページの親を作るわけにはいかないので何もしない
     return
