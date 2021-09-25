@@ -141,6 +141,7 @@
   .common-dialog_content-area {
     max-height: calc(90vh - var(--common-dialog-title-bar-height));
     overflow-y: auto;
+    overflow-x: hidden;
 
     font-size: 0.95rem;
   }
