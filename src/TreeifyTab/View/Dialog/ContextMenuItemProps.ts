@@ -28,7 +28,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
 
   if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
     result.push({
-      title: 'タブを閉じる',
+      title: 'このツリーのタブを閉じる',
       onClick: () => Command.hardUnloadSubtree(),
     })
   }
