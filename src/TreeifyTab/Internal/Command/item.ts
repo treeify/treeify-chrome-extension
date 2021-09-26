@@ -238,9 +238,7 @@ export function toggleFinished() {
     // ヒューリスティックな追加効果
     Command.collapse()
     Command.hardUnloadSubtree()
-
     // フォーカスを下の項目に移動する
-    // TODO: コマンドを分離する
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
     if (firstFollowingItemPath !== undefined) {
       CurrentState.setTargetItemPath(firstFollowingItemPath)
@@ -252,7 +250,6 @@ export function toggleFinished() {
       CurrentState.toggleCssClass(selectedItemId, 'finished')
 
       // タイムスタンプを更新
-      // TODO: 設定で無効化できるのが望ましい
       CurrentState.updateItemTimestamp(selectedItemId)
     }
   }
@@ -282,22 +279,19 @@ function toggleCssClass(cssClass: string) {
     return Internal.instance.state.items[itemId].cssClasses.contains(cssClass)
   })
   if (!everyoneContainsTheCssClass) {
-    // 選択された項目の中に非完了状態のものが含まれる場合
+    // 選択された項目の中に該当状態ではない項目が含まれる場合
 
     for (const selectedItemId of selectedItemIds) {
       CurrentState.addCssClass(selectedItemId, cssClass)
 
-      // タイムスタンプを更新
       CurrentState.updateItemTimestamp(selectedItemId)
     }
   } else {
-    // 選択された項目が全て完了状態の場合
+    // 選択された項目が全て該当状態の場合
 
     for (const selectedItemId of selectedItemIds) {
       CurrentState.toggleCssClass(selectedItemId, cssClass)
 
-      // タイムスタンプを更新
-      // TODO: 設定で無効化できるのが望ましい
       CurrentState.updateItemTimestamp(selectedItemId)
     }
   }
