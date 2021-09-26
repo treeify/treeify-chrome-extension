@@ -19,8 +19,8 @@
 </div>
 
 <style global lang="scss">
-  .grayed-out .tex-item-content,
-  .grayed-out-children .tex-item-content {
+  .finished .tex-item-content,
+  .finished-children .tex-item-content {
     filter: opacity(50%);
   }
 

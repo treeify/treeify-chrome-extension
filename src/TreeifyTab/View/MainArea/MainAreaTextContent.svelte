@@ -36,10 +36,10 @@
       padding-left: 0.2em;
     }
 
-    // グレーアウト状態のテキスト項目
-    .grayed-out &,
-    .grayed-out-children & {
-      color: var(--grayed-out-item-text-color);
+    // 完了状態のテキスト項目
+    .finished &,
+    .finished-children & {
+      color: var(--finished-item-text-color);
     }
   }
 </style>

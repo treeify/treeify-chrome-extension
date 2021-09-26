@@ -113,8 +113,8 @@
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
     --main-area-footprint-count-exponent: 0.5;
 
-    // グレーアウト状態の項目の標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当
-    --grayed-out-item-text-color: #b9b9b9;
+    // 完了状態の項目の標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当
+    --finished-item-text-color: #b9b9b9;
 
     // 削除ボタンのサイズ（正方形の一辺の長さ）
     --main-area-delete-button-size: 0.8em;

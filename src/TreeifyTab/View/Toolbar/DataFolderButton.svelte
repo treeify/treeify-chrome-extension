@@ -25,7 +25,7 @@
   <div
     class="data-folder-button_icon"
     class:already-open={props.isAlreadyOpen}
-    class:grayed-out={props.isGrayedOut}
+    class:finished={props.isFinished}
     title={props.isAlreadyOpen ? 'データフォルダと同期する' : 'データフォルダを開く'}
   />
 </ToolbarIconButton>
@@ -34,8 +34,8 @@
   :root {
     // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
     --data-folder-button-icon-color: #6a6a6a;
-    // データフォルダを開くボタンのアイコンのグレーアウト状態の色。lch(70.0%, 0.0, 0.0)相当
-    --data-folder-button-icon-grayed-out-color: #ababab;
+    // データフォルダを開くボタンのアイコンの完了状態の色。lch(70.0%, 0.0, 0.0)相当
+    --data-folder-button-icon-finished-color: #ababab;
   }
 
   // データフォルダアイコン
@@ -53,9 +53,9 @@
     -webkit-mask: url('folder-open.svg') no-repeat center;
     -webkit-mask-size: contain;
 
-    // グレーアウト状態のデータフォルダアイコン
-    &.grayed-out {
-      background: var(--data-folder-button-icon-grayed-out-color);
+    // 完了状態のデータフォルダアイコン
+    &.finished {
+      background: var(--data-folder-button-icon-finished-color);
     }
 
     &.already-open {

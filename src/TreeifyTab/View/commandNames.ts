@@ -16,7 +16,7 @@ export const commandNames: {[T in string]: string} = {
   turnIntoNonPage: '非ページ化',
   togglePaged: 'ページ化トグル',
   showPage: 'ページ切り替え',
-  toggleGrayedOut: 'グレーアウト状態トグル',
+  toggleFinished: '完了状態トグル',
   toggleHighlighted: 'ハイライト状態トグル',
   toggleDoubtful: 'ダウトフル状態トグル',
   toggleCitation: '出典トグル',

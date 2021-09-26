@@ -215,21 +215,21 @@ export function deleteItemItself() {
 }
 
 /**
- * 対象項目をグレーアウトする。
- * もし既にグレーアウト状態なら非グレーアウト状態に戻す。
+ * 対象項目を完了状態にする。
+ * もし既に完了状態なら非完了状態に戻す。
  */
-export function toggleGrayedOut() {
+export function toggleFinished() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
-  const existsNonGrayedOutItem = selectedItemIds.some((itemId) => {
-    return !Internal.instance.state.items[itemId].cssClasses.contains('grayed-out')
+  const existsNonFinishedItem = selectedItemIds.some((itemId) => {
+    return !Internal.instance.state.items[itemId].cssClasses.contains('finished')
   })
-  if (existsNonGrayedOutItem) {
-    // 選択された項目の中に非グレーアウト状態のものが含まれる場合
+  if (existsNonFinishedItem) {
+    // 選択された項目の中に非完了状態のものが含まれる場合
 
     for (const selectedItemId of selectedItemIds) {
-      CurrentState.addCssClass(selectedItemId, 'grayed-out')
+      CurrentState.addCssClass(selectedItemId, 'finished')
 
       // タイムスタンプを更新
       CurrentState.updateItemTimestamp(selectedItemId)
@@ -246,10 +246,10 @@ export function toggleGrayedOut() {
       CurrentState.setTargetItemPath(firstFollowingItemPath)
     }
   } else {
-    // 選択された項目が全てグレーアウト状態の場合
+    // 選択された項目が全て完了状態の場合
 
     for (const selectedItemId of selectedItemIds) {
-      CurrentState.toggleCssClass(selectedItemId, 'grayed-out')
+      CurrentState.toggleCssClass(selectedItemId, 'finished')
 
       // タイムスタンプを更新
       // TODO: 設定で無効化できるのが望ましい
@@ -282,7 +282,7 @@ function toggleCssClass(cssClass: string) {
     return Internal.instance.state.items[itemId].cssClasses.contains(cssClass)
   })
   if (!everyoneContainsTheCssClass) {
-    // 選択された項目の中に非グレーアウト状態のものが含まれる場合
+    // 選択された項目の中に非完了状態のものが含まれる場合
 
     for (const selectedItemId of selectedItemIds) {
       CurrentState.addCssClass(selectedItemId, cssClass)
@@ -291,7 +291,7 @@ function toggleCssClass(cssClass: string) {
       CurrentState.updateItemTimestamp(selectedItemId)
     }
   } else {
-    // 選択された項目が全てグレーアウト状態の場合
+    // 選択された項目が全て完了状態の場合
 
     for (const selectedItemId of selectedItemIds) {
       CurrentState.toggleCssClass(selectedItemId, cssClass)
