@@ -25,7 +25,7 @@
 
 <style global lang="scss">
   .image-item-edit-dialog_content {
-    min-width: 35em;
+    min-width: 60em;
     padding: 1em;
   }
 
