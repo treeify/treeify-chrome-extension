@@ -1,6 +1,6 @@
 import {List} from 'immutable'
 import {assertNonNull} from 'src/Common/Debug/assert'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -79,6 +79,16 @@ export function turnIntoNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
   Internal.instance.delete(PropertyPath.of('pages', itemId))
+
+  // 他のワークスペースのアクティブページが不正にならないよう退避する
+  for (const workspacesKey in Internal.instance.state.workspaces) {
+    if (Internal.instance.state.workspaces[workspacesKey].activePageId === itemId) {
+      Internal.instance.mutate(
+        TOP_ITEM_ID,
+        PropertyPath.of('workspaces', workspacesKey, 'activePageId')
+      )
+    }
+  }
 }
 
 /** Treeifyタブのタイトルとして表示する文字列を返す */
