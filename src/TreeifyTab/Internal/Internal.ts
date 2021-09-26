@@ -182,7 +182,7 @@ export class Internal {
         '1000KeyU': List.of('toggleUnderline'),
         '1000KeyI': List.of('toggleItalic'),
         '1000KeyK': List.of('toggleStrikethrough'),
-        '1000Enter': List.of('toggleGrayedOut'),
+        '1000Enter': List.of('toggleFinished'),
         '1000KeyH': List.of('toggleHighlighted'),
         '1100KeyU': List.of('toggleDoubtful'),
         '0010KeyC': List.of('copyForTransclusion'),

@@ -182,14 +182,13 @@
       }
     }
 
-    // グレーアウト状態のウェブページ項目のタイトル
-    .grayed-out &,
-    .grayed-out-children & {
-      color: var(--grayed-out-item-text-color);
+    // 完了状態のウェブページ項目のタイトル
+    .finished &,
+    .finished-children & {
+      color: var(--finished-item-text-color);
     }
   }
 
-  // アンロード済みウェブページ項目のファビコンのグレーアウト
   .main-area-web-page-content_favicon.soft-unloaded-item > * {
     filter: opacity(75%);
   }

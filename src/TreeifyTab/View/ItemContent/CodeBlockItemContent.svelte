@@ -19,9 +19,9 @@
   .code-block-item-content {
     overflow-x: auto;
 
-    // グレーアウト状態のコードブロック項目
-    .grayed-out &,
-    .grayed-out-children & {
+    // 完了状態のコードブロック項目
+    .finished &,
+    .finished-children & {
       filter: opacity(50%);
     }
   }

@@ -81,9 +81,9 @@
     // style属性でwidthとaspect-ratioが指定される
     max-width: 100%;
 
-    // グレーアウト状態の画像
-    .grayed-out &,
-    .grayed-out-children & {
+    // 完了状態の画像
+    .finished &,
+    .finished-children & {
       filter: opacity(50%);
     }
   }
@@ -113,9 +113,9 @@
   .main-area-image-content_caption {
     overflow-wrap: break-word;
 
-    // グレーアウト状態のキャプション
-    .grayed-out &,
-    .grayed-out-children & {
+    // 完了状態のキャプション
+    .finished &,
+    .finished-children & {
       // lch(50.0%, 0.0, 0.0)相当
       color: #777777;
     }

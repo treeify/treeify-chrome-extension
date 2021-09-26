@@ -122,7 +122,7 @@ const commandGroups: List<CommandGroup> = List.of(
   },
   {
     name: '項目装飾',
-    commandIds: List.of('toggleGrayedOut', 'toggleHighlighted', 'toggleDoubtful', 'toggleCitation'),
+    commandIds: List.of('toggleFinished', 'toggleHighlighted', 'toggleDoubtful', 'toggleCitation'),
   },
   {
     name: '空の項目作成',
