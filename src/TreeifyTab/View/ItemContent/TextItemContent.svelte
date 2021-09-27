@@ -5,7 +5,7 @@
   export let props: TextItemContentProps
 </script>
 
-<div>{@html DomishObject.toHtml(props.domishObjects)}</div>
+<div class="text-item-content">{@html DomishObject.toHtml(props.domishObjects)}</div>
 
 <style global lang="scss">
 </style>
