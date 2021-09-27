@@ -3,12 +3,12 @@ import {OtherParentsDialog} from 'src/TreeifyTab/External/DialogState'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {
-  createItemContentProps,
-  ItemContentProps,
-} from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
+  createOtherParentsDialogItemProps,
+  OtherParentsDialogItemProps,
+} from 'src/TreeifyTab/View/Dialog/OtherParentsDialogItemProps'
 
 export type OtherParentsDialogProps = {
-  itemContentPropses: List<ItemContentProps>
+  itemPropses: List<OtherParentsDialogItemProps>
 }
 
 export function createOtherParentsDialogProps(dialog: OtherParentsDialog): OtherParentsDialogProps {
@@ -17,6 +17,6 @@ export function createOtherParentsDialogProps(dialog: OtherParentsDialog): Other
   const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
   const itemContentPropses = parentItemIds
     .filter((itemId) => targetParentItemId !== itemId)
-    .map(createItemContentProps)
-  return {itemContentPropses}
+    .map(createOtherParentsDialogItemProps)
+  return {itemPropses: itemContentPropses}
 }

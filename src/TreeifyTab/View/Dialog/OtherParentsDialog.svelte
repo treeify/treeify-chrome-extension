@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ItemContent from '../ItemContent/ItemContent.svelte'
   import CommonDialog from './CommonDialog.svelte'
+  import OtherParentsDialogItem from './OtherParentsDialogItem.svelte'
   import {OtherParentsDialogProps} from './OtherParentsDialogProps'
 
   export let props: OtherParentsDialogProps
@@ -8,13 +8,9 @@
 
 <CommonDialog title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
-    <div class="other-parents-dialog_item-content-list">
-      {#each props.itemContentPropses.toArray() as itemContentProps}
-        <div class="other-parents-dialog_row-wrapper">
-          <ItemContent props={itemContentProps} />
-        </div>
-      {/each}
-    </div>
+    {#each props.itemPropses.toArray() as itemProps}
+      <OtherParentsDialogItem props={itemProps} />
+    {/each}
   </div>
 </CommonDialog>
 
@@ -23,17 +19,10 @@
     min-width: 15em;
     padding: 1em;
 
-    outline: none;
-  }
-
-  .other-parents-dialog_row-wrapper {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    row-gap: 0.3em;
 
-    margin-top: 0.3em;
-
-    &:first-child {
-      margin-top: 0;
-    }
+    outline: none;
   }
 </style>
