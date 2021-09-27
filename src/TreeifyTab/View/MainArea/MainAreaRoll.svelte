@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {MainAreaBulletState, MainAreaSpoolProps} from './MainAreaSpoolProps'
+  import {MainAreaBulletState, MainAreaRollProps} from './MainAreaRollProps'
 
-  export let props: MainAreaSpoolProps
+  export let props: MainAreaRollProps
 
   // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
   $: limitedHiddenItemsCount = Math.min(props.hiddenItemsCount, 20)
@@ -12,20 +12,20 @@
   `
 </script>
 
-<div class="main-area-spool" on:click={props.onClick} on:contextmenu={props.onContextMenu}>
+<div class="main-area-roll" on:click={props.onClick} on:contextmenu={props.onContextMenu}>
   {#if props.bulletState === MainAreaBulletState.EXPANDED}
-    <div class="main-area-spool_indent-area">
-      <div class="main-area-spool_indent-guide" />
+    <div class="main-area-roll_indent-area">
+      <div class="main-area-roll_indent-guide" />
     </div>
   {/if}
-  <div class="main-area-spool_bullet-area">
+  <div class="main-area-roll_bullet-area">
     {#if props.bulletState === MainAreaBulletState.PAGE}
-      <div class="main-area-spool_page-icon" />
+      <div class="main-area-roll_page-icon" />
     {:else}
       {#if props.bulletState === MainAreaBulletState.COLLAPSED}
-        <div class="main-area-spool_outer-circle" style={outerCircleStyle} />
+        <div class="main-area-roll_outer-circle" style={outerCircleStyle} />
       {/if}
-      <div class="main-area-spool_inner-circle" />
+      <div class="main-area-roll_inner-circle" />
     {/if}
   </div>
 </div>
@@ -63,38 +63,38 @@
 
   // トランスクルードされた項目の強調表示
   .transcluded {
-    .main-area-spool_inner-circle {
+    .main-area-roll_inner-circle {
       background: var(--transcluded-item-bullet-color);
     }
-    .main-area-spool:hover .main-area-spool_inner-circle {
+    .main-area-roll:hover .main-area-roll_inner-circle {
       background: var(--transcluded-item-bullet-hover-color);
     }
-    .main-area-spool_page-icon {
+    .main-area-roll_page-icon {
       background: var(--transcluded-item-bullet-color);
     }
-    .main-area-spool:hover .main-area-spool_page-icon {
+    .main-area-roll:hover .main-area-roll_page-icon {
       background: var(--transcluded-item-bullet-hover-color);
     }
   }
 
   // ハイライト状態の項目の強調表示
   .highlighted {
-    .main-area-spool_inner-circle {
+    .main-area-roll_inner-circle {
       background: var(--highlighted-item-bullet-color);
     }
-    .main-area-spool:hover .main-area-spool_inner-circle {
+    .main-area-roll:hover .main-area-roll_inner-circle {
       background: var(--highlighted-item-bullet-hover-color);
     }
-    .main-area-spool_page-icon {
+    .main-area-roll_page-icon {
       background: var(--highlighted-item-bullet-color);
     }
-    .main-area-spool:hover .main-area-spool_page-icon {
+    .main-area-roll:hover .main-area-roll_page-icon {
       background: var(--highlighted-item-bullet-hover-color);
     }
   }
 
   // メインエリアのバレットとインデントのルート要素
-  .main-area-spool {
+  .main-area-roll {
     width: var(--main-area-calculated-line-height);
     height: 100%;
     // インデントガイドをバレットの裏まで描画するための設定
@@ -103,7 +103,7 @@
     cursor: pointer;
   }
 
-  .main-area-spool_bullet-area {
+  .main-area-roll_bullet-area {
     width: var(--main-area-calculated-line-height);
     aspect-ratio: 1;
     // 外側の円と内側の円を重ねて描画するための設定
@@ -111,7 +111,7 @@
   }
 
   // メインエリアのバレットの外側の円（展開状態用）
-  .main-area-spool_outer-circle {
+  .main-area-roll_outer-circle {
     // widthとheightがJavaScriptで設定される
 
     border-radius: 50%;
@@ -123,13 +123,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    .main-area-spool:hover & {
+    .main-area-roll:hover & {
       background: var(--main-area-bullet-outer-circle-hover-color);
     }
   }
 
   // メインエリアのバレットの内側の円
-  .main-area-spool_inner-circle {
+  .main-area-roll_inner-circle {
     width: 0.38em;
     aspect-ratio: 1;
     border-radius: 50%;
@@ -141,13 +141,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    .main-area-spool:hover & {
+    .main-area-roll:hover & {
       background: var(--main-area-bullet-inner-circle-hover-color);
     }
   }
 
   // ページのバレット
-  .main-area-spool_page-icon {
+  .main-area-roll_page-icon {
     width: 1em;
     aspect-ratio: 1;
 
@@ -161,13 +161,13 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    .main-area-spool:hover & {
+    .main-area-roll:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);
     }
   }
 
   // インデント領域
-  .main-area-spool_indent-area {
+  .main-area-roll_indent-area {
     position: absolute;
     // バレットの中心のY座標から子リストの下端までの領域にする
     top: calc(var(--main-area-calculated-line-height) / 2);
@@ -176,14 +176,14 @@
   }
 
   // インデントガイド
-  .main-area-spool_indent-guide {
+  .main-area-roll_indent-guide {
     background: var(--main-area-indent-guide-color);
     width: 1px;
     height: 100%;
     margin: 0 auto;
 
     // バレットとインデントの領域のホバー時のインデントガイド
-    .main-area-spool:hover & {
+    .main-area-roll:hover & {
       background: var(--main-area-indent-guide-hover-color);
     }
   }

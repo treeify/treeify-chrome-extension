@@ -6,7 +6,7 @@
   import MainAreaContent from './MainAreaContent.svelte'
   import MainAreaNode from './MainAreaNode.svelte'
   import {MainAreaNodeProps} from './MainAreaNodeProps'
-  import MainAreaSpool from './MainAreaSpool.svelte'
+  import MainAreaRoll from './MainAreaRoll.svelte'
 
   export let props: MainAreaNodeProps
 
@@ -44,11 +44,11 @@
   {:else}
     <!-- バレットとインデントガイドの領域 -->
     <div
-      class={'main-area-node_spool-area ' + props.cssClasses.join(' ')}
+      class={'main-area-node_roll-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
       use:dragItem={props.itemPath}
     >
-      <MainAreaSpool props={props.spoolProps} />
+      <MainAreaRoll props={props.rollProps} />
     </div>
   {/if}
   <div class="main-area-node_body-and-children-area">
@@ -143,7 +143,7 @@
     }
   }
 
-  .main-area-node_spool-area {
+  .main-area-node_roll-area {
     user-select: none;
   }
 

@@ -7,7 +7,7 @@ import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
-export type MainAreaSpoolProps = {
+export type MainAreaRollProps = {
   bulletState: MainAreaBulletState
   /**
    * expand時に表示される項目数。
@@ -25,7 +25,7 @@ export enum MainAreaBulletState {
   PAGE,
 }
 
-export function createMainAreaSpoolProps(state: State, itemPath: ItemPath): MainAreaSpoolProps {
+export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainAreaRollProps {
   return {
     bulletState: deriveBulletState(state, itemPath),
     hiddenItemsCount: countHiddenItems(state, itemPath),

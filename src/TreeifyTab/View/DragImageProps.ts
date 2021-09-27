@@ -51,17 +51,17 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
   const rect = itemElement.getBoundingClientRect()
   if (event.clientX < rect.x) {
-    // Spoolへのドロップの場合
+    // Rollへのドロップの場合
 
-    // どの項目のSpoolにドロップしたかを探索する
-    const spoolDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+    // どの項目のRollにドロップしたかを探索する
+    const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
 
-    const spoolDroppedItemId = ItemPath.getItemId(spoolDroppedItemPath)
+    const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
     const isPageOrCollapsed =
-      CurrentState.isPage(spoolDroppedItemId) || CurrentState.getIsCollapsed(spoolDroppedItemPath)
+      CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsCollapsed(rollDroppedItemPath)
 
-    if (is(spoolDroppedItemPath.take(draggedItemPath.size), draggedItemPath)) {
+    if (is(rollDroppedItemPath.take(draggedItemPath.size), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
       // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -74,30 +74,30 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     if (parentItemId === undefined) return
 
     if (event.altKey) {
-      if (!CurrentState.isSibling(spoolDroppedItemPath, draggedItemPath)) {
+      if (!CurrentState.isSibling(rollDroppedItemPath, draggedItemPath)) {
         // エッジを追加する（トランスクルード）
         if (isPageOrCollapsed) {
-          CurrentState.insertFirstChildItem(spoolDroppedItemId, draggedItemId)
+          CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId)
         } else {
-          CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId)
+          CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId)
         }
       }
     } else {
       // エッジを付け替える
       const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
       if (isPageOrCollapsed) {
-        CurrentState.insertFirstChildItem(spoolDroppedItemId, draggedItemId, edge)
-        CurrentState.setTargetItemPath(spoolDroppedItemPath)
+        CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
+        CurrentState.setTargetItemPath(rollDroppedItemPath)
       } else {
-        CurrentState.insertLastChildItem(spoolDroppedItemId, draggedItemId, edge)
-        CurrentState.setTargetItemPath(spoolDroppedItemPath.push(draggedItemId))
+        CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
+        CurrentState.setTargetItemPath(rollDroppedItemPath.push(draggedItemId))
       }
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
     Rerenderer.instance.rerender()
   } else {
-    // Spool以外の場所へのドロップの場合
+    // Roll以外の場所へのドロップの場合
 
     if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
@@ -168,7 +168,7 @@ function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined
   return undefined
 }
 
-// ItemPathの親を辿り、指定されたX座標にSpoolを表示しているItemPathを探索する
+// ItemPathの親を辿り、指定されたX座標にRollを表示しているItemPathを探索する
 function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath {
   console.assert(!itemPath.isEmpty())
 

@@ -16,11 +16,11 @@ import {
   MainAreaContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import {
-  createMainAreaSpoolProps,
+  createMainAreaRollProps,
   deriveBulletState,
   MainAreaBulletState,
-  MainAreaSpoolProps,
-} from 'src/TreeifyTab/View/MainArea/MainAreaSpoolProps'
+  MainAreaRollProps,
+} from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 
 export type MainAreaNodeProps = {
   itemPath: ItemPath
@@ -40,7 +40,7 @@ export type MainAreaNodeProps = {
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
   childItemPropses: List<MainAreaNodeProps>
-  spoolProps: MainAreaSpoolProps
+  rollProps: MainAreaRollProps
   onMouseDownContentArea: (event: MouseEvent) => void
   onContextMenu: (event: Event) => void
   onClickDeleteButton: (event: MouseEvent) => void
@@ -67,7 +67,7 @@ export function createMainAreaNodeProps(
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
-    spoolProps: createMainAreaSpoolProps(state, itemPath),
+    rollProps: createMainAreaRollProps(state, itemPath),
     contentProps: createMainAreaContentProps(state, itemPath, item.type),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
       return createMainAreaNodeProps(
