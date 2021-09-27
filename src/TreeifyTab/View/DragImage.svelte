@@ -1,5 +1,6 @@
 <script lang="ts">
   import {ItemPath} from '../Internal/ItemPath'
+  import {setupFocusTrap} from './Dialog/focusTrap'
   import {onItemDrop} from './dragAndDrop'
   import {DragImageProps} from './DragImageProps'
   import ItemContent from './ItemContent/ItemContent.svelte'
@@ -25,8 +26,8 @@
 
 <svelte:body on:mousemove={onMouseMove} />
 
-<div class="drag-image" use:onItemDrop={props.onDrop}>
-  <div class="drag-image_item-image" {style}>
+<div class="drag-image" use:onItemDrop={props.onDrop} use:setupFocusTrap>
+  <div class="drag-image_item-image" tabindex="0" {style}>
     <ItemContent props={createItemContentProps(itemId)} />
   </div>
 </div>
@@ -56,5 +57,7 @@
 
     // lch(85.0%, 0.0, 0.0)相当
     box-shadow: 2px 2px 4px #d4d4d4;
+
+    outline: none;
   }
 </style>

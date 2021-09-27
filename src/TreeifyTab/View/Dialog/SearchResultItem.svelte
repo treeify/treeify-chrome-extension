@@ -34,7 +34,7 @@
 
   .search-result-item_content-area {
     &:focus {
-      outline: transparent;
+      outline: none;
       background: var(--main-area-focused-item-background-color);
     }
 
