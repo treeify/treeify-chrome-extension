@@ -3,12 +3,9 @@
 
   export let props: MainAreaRollProps
 
-  // TODO: ↓ハードコーディングが激しい。できればユーザーがバレットのサイズを設定できるようにしたい
-  $: limitedHiddenItemsCount = Math.min(props.hiddenItemsCount, 20)
-  $: outerCircleRadiusEm = 1.1 + limitedHiddenItemsCount * 0.0125
   $: outerCircleStyle = `
-    width: ${outerCircleRadiusEm}em;
-    height: ${outerCircleRadiusEm}em;
+    width: ${props.outerCircleRadiusEm}em;
+    height: ${props.outerCircleRadiusEm}em;
   `
 </script>
 
@@ -32,6 +29,11 @@
 
 <style global lang="scss">
   :root {
+    --outer-circle-min-diameter: 1.1;
+    --outer-circle-max-diameter: 1.35;
+    // 外側の円が最大サイズになる子孫項目数
+    --outer-circle-item-count-limit: 20;
+
     // バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当
     --main-area-bullet-outer-circle-color: #e2e2e2;
     // バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当

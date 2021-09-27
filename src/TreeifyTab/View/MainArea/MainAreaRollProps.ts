@@ -1,4 +1,5 @@
 import {integer} from 'src/Common/integer'
+import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -14,6 +15,7 @@ export type MainAreaRollProps = {
    * collapsed状態以外の場合は常に0。
    */
   hiddenItemsCount: integer
+  outerCircleRadiusEm: integer
   onClick: (event: MouseEvent) => void
   onContextMenu: (event: Event) => void
 }
@@ -26,9 +28,20 @@ export enum MainAreaBulletState {
 }
 
 export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainAreaRollProps {
+  const hiddenItemsCount = countHiddenItems(state, itemPath)
+
+  const outerCircleMinDiameter = CssCustomProperty.getNumber('--outer-circle-min-diameter') ?? 1.1
+  const outerCircleMaxDiameter = CssCustomProperty.getNumber('--outer-circle-max-diameter') ?? 1.35
+  const outerCircleItemCountLimit =
+    CssCustomProperty.getNumber('--outer-circle-item-count-limit') ?? 20
+  const step = (outerCircleMaxDiameter - outerCircleMinDiameter) / outerCircleItemCountLimit
+  const limitedHiddenItemsCount = Math.min(hiddenItemsCount, outerCircleItemCountLimit)
+  const outerCircleRadiusEm = outerCircleMinDiameter + limitedHiddenItemsCount * step
+
   return {
     bulletState: deriveBulletState(state, itemPath),
-    hiddenItemsCount: countHiddenItems(state, itemPath),
+    hiddenItemsCount,
+    outerCircleRadiusEm,
     onClick: (event: MouseEvent) => {
       doWithErrorCapture(() => {
         CurrentState.setTargetItemPath(itemPath)
