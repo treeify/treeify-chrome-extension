@@ -436,6 +436,7 @@ export class DataFolder {
         return `items${Math.floor(itemId / 100)}.json`
       case 'pages':
       case 'mountedPageIds':
+      case 'workspaces':
         // ミューテーションされる頻度が非常に高く、しかも同時にミューテーションされやすいグループ
         return 'unstable.json'
       case 'availableItemIds':
