@@ -21,7 +21,7 @@ export function discardJustOneTab() {
 export function discardTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
+    for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(selectedItemId)) {
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId !== undefined) {
         chrome.tabs.discard(tabId)
@@ -50,7 +50,7 @@ export function closeJustOneTab() {
 export function closeTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
+    for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(selectedItemId)) {
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId !== undefined) {
         // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
@@ -79,7 +79,7 @@ export function openJustOneTab() {
 export function openTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
+    for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(selectedItemId)) {
       if (Internal.instance.state.items[subtreeItemId].type !== ItemType.WEB_PAGE) {
         continue
       }

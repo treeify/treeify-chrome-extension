@@ -76,7 +76,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
             if (itemId === TOP_ITEM_ID) break
 
             // ページ全体のタブを閉じる
-            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+            for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(itemId)) {
               const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
               if (tabId !== undefined) {
                 // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
@@ -97,7 +97,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             // ページ全体のタブを閉じる
-            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+            for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(itemId)) {
               const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
               if (tabId !== undefined) {
                 // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする

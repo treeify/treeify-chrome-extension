@@ -72,7 +72,7 @@ export function getParentPageIds(pageId: ItemId): Set<ItemId> {
  * 指定された項目を起点とするサブツリーに含まれる項目IDを全て返す。
  * ただしページは終端ノードとして扱い、その子孫は無視する。
  */
-export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
+export function* yieldSubtreeItemIdsShallowly(itemId: ItemId): Generator<ItemId> {
   yield itemId
 
   for (const childItemId of Internal.instance.state.items[itemId].childItemIds) {
@@ -80,7 +80,7 @@ export function* getSubtreeItemIds(itemId: ItemId): Generator<ItemId> {
       // ページは終端ノードとして扱う
       yield childItemId
     } else {
-      yield* getSubtreeItemIds(childItemId)
+      yield* yieldSubtreeItemIdsShallowly(childItemId)
     }
   }
 }
@@ -102,7 +102,7 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
  * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
  */
 export function countTabsInSubtree(state: State, itemId: ItemId): integer {
-  return Set(CurrentState.getSubtreeItemIds(itemId)).filter(
+  return Set(CurrentState.yieldSubtreeItemIdsShallowly(itemId)).filter(
     (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
   ).size
 }

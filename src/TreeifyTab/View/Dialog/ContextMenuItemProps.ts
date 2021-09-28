@@ -14,7 +14,7 @@ export type ContextMenuItemProps = {
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
-  const subtreeItemIds = selectedItemIds.flatMap(CurrentState.getSubtreeItemIds)
+  const subtreeItemIds = selectedItemIds.flatMap(CurrentState.yieldSubtreeItemIdsShallowly)
   const isSingleSelect = selectedItemPaths.size === 1
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)

@@ -12,7 +12,7 @@
 
   export let dialog: TabsDialog
 
-  const webPageItemIds = Set(CurrentState.getSubtreeItemIds(dialog.targetItemId)).filter(
+  const webPageItemIds = Set(CurrentState.yieldSubtreeItemIdsShallowly(dialog.targetItemId)).filter(
     (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
   )
   const rootNode = CurrentState.treeify(
