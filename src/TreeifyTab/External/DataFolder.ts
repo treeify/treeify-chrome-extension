@@ -18,6 +18,7 @@ type ChunkPack = {[K in ChunkId]: any}
 
 // メタデータファイル内のJSONに対応する型
 type Metadata = {
+  schemaVersion: 1
   timestamp: Timestamp
   // Keyはファイル名、Valueはハッシュ値
   hashes: {[K in string]: string}
@@ -169,7 +170,7 @@ export class DataFolder {
       }
     }
     const known = metadata?.known ?? {}
-    const newMetadata: Metadata = {timestamp: Timestamp.now(), hashes, known}
+    const newMetadata: Metadata = {schemaVersion: 1, timestamp: Timestamp.now(), hashes, known}
     const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
