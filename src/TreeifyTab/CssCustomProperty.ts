@@ -15,7 +15,11 @@ export namespace CssCustomProperty {
    */
   export function getNumber(propertyName: string): number | undefined {
     try {
-      return parseFloat(getValue(propertyName).trim())
+      const number = parseFloat(getValue(propertyName).trim())
+      if (isNaN(number)) {
+        return undefined
+      }
+      return number
     } catch {
       return undefined
     }
