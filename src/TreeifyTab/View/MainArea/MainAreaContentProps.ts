@@ -1,6 +1,5 @@
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {
@@ -11,10 +10,6 @@ import {
   createMainAreaImageContentProps,
   MainAreaImageContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaImageContentProps'
-import {
-  createMainAreaTableContentProps,
-  MainAreaTableContentProps,
-} from 'src/TreeifyTab/View/MainArea/MainAreaTableContentProps'
 import {
   createMainAreaTexContentProps,
   MainAreaTexContentProps,
@@ -31,18 +26,12 @@ export type MainAreaContentProps =
   | MainAreaImageContentProps
   | MainAreaCodeBlockContentProps
   | MainAreaTexContentProps
-  | MainAreaTableContentProps
 
 export function createMainAreaContentProps(
   state: State,
   itemPath: ItemPath,
   itemType: ItemType
 ): MainAreaContentProps {
-  // テーブル表示する条件判定
-  if (CurrentState.shouldBeDisplayedAsTable(itemPath)) {
-    return createMainAreaTableContentProps(state, itemPath)
-  }
-
   // 項目タイプごとの固有部分を追加して返す
   switch (itemType) {
     case ItemType.TEXT:

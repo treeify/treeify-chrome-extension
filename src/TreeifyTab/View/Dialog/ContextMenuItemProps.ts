@@ -40,7 +40,6 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  // TODO: おそらくテーブル表示中は表示しないべき
   if (
     isSingleSelect &&
     List.of(ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX).contains(item.type)

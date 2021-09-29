@@ -5,7 +5,6 @@ import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {toCsvText, tryParseAsTsvTable} from 'src/TreeifyTab/Internal/ImportExport/csv'
 import {
   exportAsIndentedText,
   pasteMultilineText,
@@ -33,18 +32,9 @@ export function onCopy(event: ClipboardEvent) {
       event.preventDefault()
 
       const selectedItemPaths = CurrentState.getSelectedItemPaths()
-      if (
-        selectedItemPaths.size === 1 &&
-        CurrentState.shouldBeDisplayedAsTable(selectedItemPaths.first())
-      ) {
-        // テーブル表示されている項目をターゲットしている場合、タブ区切り形式でクリップボードに入れる
-        const tsvText = toCsvText(ItemPath.getItemId(selectedItemPaths.first()), '\t')
-        event.clipboardData.setData('text/plain', tsvText)
-      } else {
-        // インデント形式のテキストをクリップボードに入れる
-        const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
-        event.clipboardData.setData('text/plain', contentText)
-      }
+      // インデント形式のテキストをクリップボードに入れる
+      const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
+      event.clipboardData.setData('text/plain', contentText)
 
       // OPML形式のテキストをクリップボードに入れる
       event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
@@ -70,18 +60,9 @@ export function onCut(event: ClipboardEvent) {
       event.preventDefault()
 
       const selectedItemPaths = CurrentState.getSelectedItemPaths()
-      if (
-        selectedItemPaths.size === 1 &&
-        CurrentState.shouldBeDisplayedAsTable(selectedItemPaths.first())
-      ) {
-        // テーブル表示されている項目をターゲットしている場合、タブ区切り形式でクリップボードに入れる
-        const tsvText = toCsvText(ItemPath.getItemId(selectedItemPaths.first()), '\t')
-        event.clipboardData.setData('text/plain', tsvText)
-      } else {
-        // インデント形式のテキストをクリップボードに入れる
-        const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
-        event.clipboardData.setData('text/plain', contentText)
-      }
+      // インデント形式のテキストをクリップボードに入れる
+      const contentText = selectedItemPaths.map(exportAsIndentedText).join('\n')
+      event.clipboardData.setData('text/plain', contentText)
 
       // OPML形式のテキストをクリップボードに入れる
       event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
@@ -146,25 +127,6 @@ export function onPaste(event: ClipboardEvent) {
       // ターゲットを更新する
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
       assertNonUndefined(belowItemPath)
-      CurrentState.setTargetItemPath(belowItemPath)
-
-      // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
-      if (CurrentState.isEmptyTextItem(targetItemId)) {
-        CurrentState.deleteItem(targetItemId)
-      }
-
-      Rerenderer.instance.rerender()
-      return
-    }
-
-    // タブ区切り形式（Tab Separated Values）のテキストはテーブルとして解釈する。
-    // 主にGoogleスプレッドシートからコピペのための機能。
-    // （スプレッドシートからコピーしてもクリップボードにCSV形式が含まれないのでこういう実装になった）
-    const tableItemId = tryParseAsTsvTable(text)
-    if (tableItemId !== undefined) {
-      const edge = {isCollapsed: true}
-      const belowItemPath = CurrentState.insertBelowItem(targetItemPath, tableItemId, edge)
-      // ターゲットを更新する
       CurrentState.setTargetItemPath(belowItemPath)
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
