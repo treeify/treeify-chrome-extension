@@ -3,6 +3,7 @@ import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
 import {Coordinate, integer} from 'src/Common/integer'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
@@ -73,6 +74,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     const parentItemId = ItemPath.getParentItemId(draggedItemPath)
     if (parentItemId === undefined) return
 
+    Internal.instance.saveCurrentStateToUndoStack()
+
     if (event.altKey) {
       if (!CurrentState.isSibling(rollDroppedItemPath, draggedItemPath)) {
         // エッジを追加する（トランスクルード）
@@ -117,6 +120,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       // ドロップ先がアクティブページなら何もしない
       if (!ItemPath.hasParent(itemPath)) return
 
+      Internal.instance.saveCurrentStateToUndoStack()
+
       if (event.altKey) {
         if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
           // エッジを追加する（トランスクルード）
@@ -131,6 +136,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       }
     } else {
       // ドロップ先座標がドロップ先要素の下の方の場合
+
+      Internal.instance.saveCurrentStateToUndoStack()
 
       if (event.altKey) {
         if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
@@ -193,6 +200,8 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
   // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
   if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
+
+  Internal.instance.saveCurrentStateToUndoStack()
 
   if (event.altKey) {
     // エッジを追加する（トランスクルード）
