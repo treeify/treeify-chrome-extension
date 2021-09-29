@@ -24,6 +24,8 @@ export type KeyBindingDialog = {type: 'KeyBindingDialog'}
 
 export type OtherParentsDialog = {type: 'OtherParentsDialog'}
 
+export type OtherSettingsDialog = {type: 'OtherSettingsDialog'}
+
 export type PreferenceDropdownMenuDialog = {type: 'PreferenceDropdownMenuDialog'}
 
 export type SearchDialog = {type: 'SearchDialog'}
@@ -58,6 +60,7 @@ export type Dialog =
   | ExportDialog
   | KeyBindingDialog
   | OtherParentsDialog
+  | OtherSettingsDialog
   | PreferenceDropdownMenuDialog
   | SearchDialog
   | TabsDialog

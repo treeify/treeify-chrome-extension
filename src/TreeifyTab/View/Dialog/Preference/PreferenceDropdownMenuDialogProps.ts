@@ -28,6 +28,12 @@ export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogPro
         onClick: () => {
           External.instance.dialogState = {type: 'CustomCssDialog'}
         },
+      },
+      {
+        title: 'その他の設定',
+        onClick: () => {
+          External.instance.dialogState = {type: 'OtherSettingsDialog'}
+        },
       }
     ),
   }
