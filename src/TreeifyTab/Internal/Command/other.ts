@@ -18,8 +18,7 @@ import {restart} from 'src/TreeifyTab/startup'
 export async function saveToDataFolder() {
   try {
     if (External.instance.dataFolder === undefined) {
-      const folderHandle = await showDirectoryPicker()
-      await folderHandle.requestPermission({mode: 'readwrite'})
+      const folderHandle = await pickDataFolder()
       External.instance.dataFolder = new DataFolder(folderHandle)
       const unknownUpdatedInstanceId =
         await External.instance.dataFolder.findUnknownUpdatedInstance()
@@ -76,6 +75,38 @@ export async function saveToDataFolder() {
 
     throw e
   }
+}
+
+/**
+ * ユーザーにデータフォルダを選択させ、そのハンドルを返す。
+ * ただしユーザーが選択したフォルダをそのまま返すとは限らない。
+ * もし選択されたフォルダが空だったり、Instancesフォルダが含まれる（= データフォルダだと推定できる）なら選択されたフォルダを返す。
+ * それ以外の場合、新たに「Treeify data」というフォルダを作り、そのハンドルを返す。
+ * （Treeify dataフォルダが既に存在する場合、そのフォルダを返す）
+ */
+async function pickDataFolder(): Promise<FileSystemDirectoryHandle> {
+  const folderHandle = await showDirectoryPicker()
+  await folderHandle.requestPermission({mode: 'readwrite'})
+
+  if (await isEmptyFolder(folderHandle)) {
+    // フォルダが空の場合、それはTreeify用にユーザーが用意したものと判断し、データフォルダとして使う
+    return folderHandle
+  }
+
+  try {
+    // Instancesフォルダが存在する場合
+    await folderHandle.getDirectoryHandle('Instances')
+    return folderHandle
+  } catch {}
+
+  return await folderHandle.getDirectoryHandle('Treeify data', {create: true})
+}
+
+async function isEmptyFolder(folderHandle: FileSystemDirectoryHandle): Promise<boolean> {
+  for await (const key of folderHandle.keys()) {
+    return false
+  }
+  return true
 }
 
 /**
