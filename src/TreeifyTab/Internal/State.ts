@@ -48,6 +48,7 @@ export type State = {
     }
   }
   leftEndMouseGestureEnabled: boolean
+  rightEndMouseGestureEnabled: boolean
 }
 
 /**
