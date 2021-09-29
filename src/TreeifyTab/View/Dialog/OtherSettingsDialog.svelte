@@ -12,7 +12,14 @@
         type="checkbox"
         checked={props.leftEndMouseGestureEnabled}
         on:change={props.onChangeLeftEndMouseGestureEnabled}
-      />ウェブページ閲覧中にマウスを画面左端まで動かすとTreeifyタブを表示する</label
+      />マウスを画面左端まで動かすとTreeifyタブを表示</label
+    >
+    <label class="other-settings-dialog_checkbox-label"
+      ><input
+        type="checkbox"
+        checked={props.rightEndMouseGestureEnabled}
+        on:change={props.onChangeRightEndMouseGestureEnabled}
+      />マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示</label
     >
   </div>
 </CommonDialog>
@@ -22,5 +29,11 @@
     padding: 1em;
 
     outline: none;
+  }
+
+  .other-settings-dialog_checkbox-label {
+    display: block;
+
+    cursor: pointer;
   }
 </style>
