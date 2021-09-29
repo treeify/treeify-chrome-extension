@@ -21,6 +21,8 @@ export const onMessage = (message: any, sender: MessageSender) => {
     const height = window.innerHeight
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
+        if (!Internal.instance.state.leftEndMouseGestureEnabled) break
+
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
         if (message.clientY < height * 0.15 || height * 0.85 < message.clientY) break
 

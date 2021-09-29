@@ -47,6 +47,7 @@ export type State = {
       }
     }
   }
+  leftEndMouseGestureEnabled: boolean
 }
 
 /**

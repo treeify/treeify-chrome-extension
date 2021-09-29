@@ -215,6 +215,7 @@ export class Internal {
           },
         },
       },
+      leftEndMouseGestureEnabled: true,
     }
   }
 }
