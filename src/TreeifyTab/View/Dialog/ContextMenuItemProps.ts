@@ -92,17 +92,5 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     }
   }
 
-  if (item.view.type !== 'table') {
-    result.push({
-      title: 'テーブル形式で表示',
-      onClick: () => Command.toggleTableView(),
-    })
-  } else {
-    result.push({
-      title: 'テーブル形式での表示を解除',
-      onClick: () => Command.toggleTableView(),
-    })
-  }
-
   return List(result)
 }
