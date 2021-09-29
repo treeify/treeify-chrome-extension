@@ -5,7 +5,7 @@
   export let props: OtherSettingsDialogProps
 </script>
 
-<CommonDialog title="その他の設定">
+<CommonDialog title="その他の設定" showCloseButton>
   <div class="other-settings-dialog_content" tabindex="0">
     <label class="other-settings-dialog_checkbox-label"
       ><input
