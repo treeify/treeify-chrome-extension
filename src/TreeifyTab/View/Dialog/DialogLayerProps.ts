@@ -4,6 +4,7 @@ import {createCaptionSettingDialogProps} from 'src/TreeifyTab/View/Dialog/Captio
 import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
 import {createImageItemEditDialogProps} from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
 import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
+import {createOtherSettingsDialogProps} from 'src/TreeifyTab/View/Dialog/OtherSettingsDialogProps'
 import {createTabsDialogProps} from 'src/TreeifyTab/View/Dialog/TabsDialogProps'
 import CaptionSettingDialog from './CaptionSettingDialog.svelte'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
@@ -17,6 +18,7 @@ import ExportDialog from './ExportDialog.svelte'
 import ImageItemEditDialog from './ImageItemEditDialog.svelte'
 import OtherParentsDialog from './OtherParentsDialog.svelte'
 import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
+import OtherSettingsDialog from './OtherSettingsDialog.svelte'
 import CustomCssDialog from './Preference/CustomCssDialog.svelte'
 import {createCustomCssDialogProps} from './Preference/CustomCssDialogProps'
 import KeyBindingDialog from './Preference/KeyBindingDialog.svelte'
@@ -104,6 +106,11 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
       return {
         component: OtherParentsDialog,
         props: createOtherParentsDialogProps(dialogState),
+      }
+    case 'OtherSettingsDialog':
+      return {
+        component: OtherSettingsDialog,
+        props: createOtherSettingsDialogProps(dialogState),
       }
     case 'SearchDialog':
       return {
