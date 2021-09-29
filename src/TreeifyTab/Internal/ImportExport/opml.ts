@@ -50,10 +50,6 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
     baseAttributes.citeUrl = item.cite.url
   }
 
-  if (item.view.type !== 'list') {
-    baseAttributes.view = JSON.stringify(item.view)
-  }
-
   switch (item.type) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
@@ -230,14 +226,6 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
       title: attrCiteTitle ?? '',
       url: attrCiteUrl ?? '',
     })
-  }
-
-  const attrView = outlineElement.getAttribute('view')
-  if (attrView !== null) {
-    try {
-      // TODO: ViewTypeのバリデーション
-      CurrentState.setView(itemId, JSON.parse(attrView))
-    } catch {}
   }
 
   return {itemId, edge}

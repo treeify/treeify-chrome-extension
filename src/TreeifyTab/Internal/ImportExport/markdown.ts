@@ -1,55 +1,36 @@
-import {List} from 'immutable'
-import {markdownTable} from 'markdown-table'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {ExportFormat} from 'src/TreeifyTab/Internal/State'
 
 export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
-  if (CurrentState.shouldBeDisplayedAsTable(itemPath)) {
-    // テーブル表示される項目のエクスポート
-
-    const state = Internal.instance.state
-    const rows = state.items[ItemPath.getItemId(itemPath)].childItemIds
-      .toArray()
-      .map((childItemId) => {
-        const grandchildren = state.items[childItemId].childItemIds.toArray()
-        return grandchildren.map((grandchild) => {
-          return extractPlainText(List.of(grandchild))
-        })
-      })
-    return '\n' + markdownTable(rows) + '\n'
+  // TODO: 循環参照があると無限ループになる
+  const state = Internal.instance.state
+  const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].ignoreInvisibleItems
+    ? CurrentState.getDisplayingChildItemIds(itemPath)
+    : state.items[ItemPath.getItemId(itemPath)].childItemIds
+  if (childItemIds.isEmpty()) {
+    return toMultiLineMarkdownContent(itemPath) + '  \n'
   } else {
-    // TODO: 循環参照があると無限ループになる
-
-    const state = Internal.instance.state
-    const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].ignoreInvisibleItems
-      ? CurrentState.getDisplayingChildItemIds(itemPath)
-      : state.items[ItemPath.getItemId(itemPath)].childItemIds
-    if (childItemIds.isEmpty()) {
-      return toMultiLineMarkdownContent(itemPath) + '  \n'
-    } else {
-      const headline = `${'#'.repeat(level)} ${toSingleLineMarkdownContent(itemPath)}\n`
-      const childrenContents = childItemIds.map((childItemId) => {
-        return toMarkdownText(itemPath.push(childItemId), level + 1)
-      })
-      // 子リストの末尾に空行を付けて段落化させている。
-      // 理由は次のような状況でBとCの切れ目を作るため。
-      // A
-      //   B
-      // C
-      // ↓ Markdown化
-      // # A
-      // B
-      // （ここに空行を入れて段落化しないと境界線が全く分からなくなる）
-      // C
-      return headline + childrenContents.join('') + '\n'
-    }
+    const headline = `${'#'.repeat(level)} ${toSingleLineMarkdownContent(itemPath)}\n`
+    const childrenContents = childItemIds.map((childItemId) => {
+      return toMarkdownText(itemPath.push(childItemId), level + 1)
+    })
+    // 子リストの末尾に空行を付けて段落化させている。
+    // 理由は次のような状況でBとCの切れ目を作るため。
+    // A
+    //   B
+    // C
+    // ↓ Markdown化
+    // # A
+    // B
+    // （ここに空行を入れて段落化しないと境界線が全く分からなくなる）
+    // C
+    return headline + childrenContents.join('') + '\n'
   }
 }
 

@@ -69,7 +69,6 @@ export type Item = {
    */
   cssClasses: List<string>
   cite: Cite | null
-  view: View
 }
 
 export type Edge = {
@@ -91,16 +90,6 @@ export function createDefaultEdge(): Edge {
 export type Cite = {
   title: string
   url: string
-}
-
-export type View = ListView | TableView
-
-export type ListView = {
-  type: 'list'
-}
-
-export type TableView = {
-  type: 'table'
 }
 
 /** テキスト項目が固有で持つデータの型 */
