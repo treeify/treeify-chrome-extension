@@ -25,18 +25,9 @@ export async function saveToDataFolder() {
       if (unknownUpdatedInstanceId === undefined) {
         // もし自身の知らない他インスタンスの更新がなければ
 
-        const chunks = await External.instance.dataFolder.readAllChunks()
-        if (chunks.isEmpty()) {
-          // 自インスタンスフォルダが無い場合
-
-          // メモリ上のStateを自インスタンスフォルダに書き込む
-          const allChunks = Chunk.createAllChunks(Internal.instance.state)
-          await External.instance.dataFolder.writeChunks(allChunks)
-        } else {
-          // 自インスタンスフォルダの内容からStateを読み込んで事実上の再起動を行う
-          const state = Chunk.inflateStateFromChunks(chunks)
-          await restart(state)
-        }
+        // メモリ上のStateを自インスタンスフォルダに書き込む
+        const allChunks = Chunk.createAllChunks(Internal.instance.state)
+        await External.instance.dataFolder.writeChunks(allChunks)
       } else {
         // もし自身の知らない他インスタンスの更新があれば
         await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
