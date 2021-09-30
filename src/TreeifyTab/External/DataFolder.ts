@@ -19,7 +19,7 @@ type ChunkPack = {[K in ChunkId]: any}
 // メタデータファイル内のJSONに対応する型
 type Metadata = {
   schemaVersion: 1
-  timestamp: Timestamp
+  lastModified: Timestamp
   // Keyはファイル名、Valueはハッシュ値
   hashes: {[K in string]: string}
   // 「このインスタンスフォルダは他インスタンスの更新をどの範囲まで把握しているか？」を表すためのデータ。
@@ -170,7 +170,7 @@ export class DataFolder {
       }
     }
     const known = metadata?.known ?? {}
-    const newMetadata: Metadata = {schemaVersion: 1, timestamp: Timestamp.now(), hashes, known}
+    const newMetadata: Metadata = {schemaVersion: 1, lastModified: Timestamp.now(), hashes, known}
     const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
@@ -269,7 +269,7 @@ export class DataFolder {
       const metadata = await this.readMetadataFile(instanceId)
       // インスタンスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
       assertNonUndefined(metadata)
-      return [instanceId, metadata.timestamp]
+      return [instanceId, metadata.lastModified]
     })
     const entries = await Promise.all(timestampPromises)
     return Object.fromEntries(entries)
@@ -296,19 +296,19 @@ export class DataFolder {
       const metadata = await this.readMetadataFile(instanceId)
       // インスタンスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
       assertNonUndefined(metadata)
-      return {instanceId, timestamp: metadata.timestamp}
+      return {instanceId, lastModified: metadata.lastModified}
     })
 
-    const timestamps = await Promise.all(timestampPromises)
-    const unknownUpdatedInstanceIds = timestamps.filter(({instanceId, timestamp}) => {
+    const timestamps = List(await Promise.all(timestampPromises))
+    const unknownUpdatedInstanceIds = timestamps.filter(({instanceId, lastModified}) => {
       const knownUpdateTimestamp = metadata.known[instanceId]
       if (knownUpdateTimestamp === undefined) {
         return true
       }
-      return knownUpdateTimestamp !== timestamp
+      return knownUpdateTimestamp !== lastModified
     })
 
-    return List(unknownUpdatedInstanceIds).maxBy(({instanceId, timestamp}) => timestamp)?.instanceId
+    return unknownUpdatedInstanceIds.maxBy(({instanceId, lastModified}) => lastModified)?.instanceId
   }
 
   // 全チャンクファイルのファイル名のリストを返す
