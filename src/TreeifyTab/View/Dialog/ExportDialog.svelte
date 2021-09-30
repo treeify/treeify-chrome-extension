@@ -51,7 +51,7 @@
         >
       {:else if props.selectedFormat === ExportFormat.MARKDOWN}
         <label
-          >見出しレベル: <input
+          >最上位の見出しの#の数: <input
             type="number"
             class="export-dialog_minimum-header-level"
             value={props.minimumHeaderLevel}
