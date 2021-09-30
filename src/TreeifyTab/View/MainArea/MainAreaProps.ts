@@ -26,6 +26,10 @@ import {
   createMainAreaNodeProps,
   MainAreaNodeProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
+import {
+  deriveBulletState,
+  MainAreaBulletState,
+} from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps
@@ -515,6 +519,12 @@ function onBackspace(event: KeyboardEvent) {
     if (aboveItemPath === undefined) return
 
     const aboveItemId = ItemPath.getItemId(aboveItemPath)
+
+    // ユーザー視点で何が起こったのか分かりにくいため、上の項目が非表示の子項目を持っている場合は何もしない
+    const bulletState = deriveBulletState(Internal.instance.state, aboveItemPath)
+    if (bulletState === MainAreaBulletState.PAGE || bulletState === MainAreaBulletState.COLLAPSED) {
+      return
+    }
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
