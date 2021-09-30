@@ -2,7 +2,6 @@
   import Color from 'color'
   import {integer} from '../../../Common/integer'
   import {CssCustomProperty} from '../../CssCustomProperty'
-  import {onItemDrop} from '../dragAndDrop'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
@@ -48,7 +47,6 @@
           class:active-page={props.isActivePage}
           data-item-id={props.itemId}
           on:mousedown={props.onClickContentArea}
-          use:onItemDrop={props.onDrop}
         >
           <ItemContent props={props.contentProps} />
           {#if props.isAudible}

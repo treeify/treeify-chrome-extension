@@ -35,7 +35,6 @@ export type PageTreeNodeProps = {
   onClickCloseButton: () => void
   onClickTabsCount: (event: MouseEvent) => void
   onTabsCountContextMenu: (event: Event) => void
-  onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
@@ -138,39 +137,6 @@ export function createPageTreeNodeProps(
 
       External.instance.dialogState = {type: 'TabsDialog', targetItemId: itemId}
       Rerenderer.instance.rerender()
-    },
-    onDrop: (event: MouseEvent, draggedItemPath: ItemPath) => {
-      doWithErrorCapture(() => {
-        if (!(event.target instanceof HTMLElement)) return
-
-        const draggedItemId = ItemPath.getItemId(draggedItemPath)
-
-        // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
-        // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-        if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
-
-        if (event.altKey) {
-          if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
-            // エッジを追加する（トランスクルード）
-            CurrentState.insertFirstChildItem(itemId, draggedItemId)
-          }
-        } else {
-          // targetItemPathが実在しなくなるので退避
-          const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
-          assertNonUndefined(aboveItemPath)
-          CurrentState.setTargetItemPath(aboveItemPath)
-
-          // エッジを付け替える
-          const edge = CurrentState.removeItemGraphEdge(
-            ItemPath.getParentItemId(draggedItemPath)!,
-            draggedItemId
-          )
-          CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
-        }
-
-        CurrentState.updateItemTimestamp(draggedItemId)
-        Rerenderer.instance.rerender()
-      })
     },
   }
 }
