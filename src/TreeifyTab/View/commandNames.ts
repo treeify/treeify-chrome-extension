@@ -47,5 +47,5 @@ export const commandNames: {[T in string]: string} = {
   showContextMenuDialog: 'コンテキストメニューを表示',
   doNothing: '何もしない',
   toggleExcluded: '除外トグル',
-  saveToDataFolder: 'データフォルダ同期',
+  syncWithDataFolder: 'データフォルダ同期',
 }

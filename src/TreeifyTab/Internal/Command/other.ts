@@ -12,10 +12,10 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {restart} from 'src/TreeifyTab/startup'
 
 /**
- * データフォルダに現在の状態を書き込む。
+ * オンメモリのStateとデータフォルダ内のStateを同期する（状況に応じて読み込みや書き込みを行う）。
  * もしデータフォルダがまだ開かれていない場合はデータフォルダを開くプロセスを開始する。
  */
-export async function saveToDataFolder() {
+export async function syncWithDataFolder() {
   try {
     if (External.instance.dataFolder === undefined) {
       const folderHandle = await pickDataFolder()

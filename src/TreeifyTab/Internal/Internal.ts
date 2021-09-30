@@ -186,7 +186,7 @@ export class Internal {
         '1100KeyU': List.of('toggleDoubtful'),
         '0010KeyC': List.of('copyForTransclusion'),
         '1100KeyV': List.of('pasteAsPlainText'),
-        '1000KeyS': List.of('saveToDataFolder'),
+        '1000KeyS': List.of('syncWithDataFolder'),
         '1100KeyF': List.of('showSearchDialog'),
         '0000F2': List.of('showEditDialog'),
         '1100Period': List.of('toggleCitation'),

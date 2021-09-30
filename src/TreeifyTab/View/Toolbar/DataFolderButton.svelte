@@ -15,7 +15,7 @@
       assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
       assert(External.instance.hardUnloadedTabIds.size === 0)
 
-      await Command.saveToDataFolder()
+      await Command.syncWithDataFolder()
       Rerenderer.instance.rerender()
     })
   }

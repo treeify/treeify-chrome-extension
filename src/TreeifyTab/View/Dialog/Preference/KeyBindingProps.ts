@@ -141,5 +141,5 @@ const commandGroups: List<CommandGroup> = List.of(
     ),
   },
   {name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems')},
-  {name: 'その他', commandIds: List.of('doNothing', 'saveToDataFolder', 'toggleExcluded')}
+  {name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded')}
 )
