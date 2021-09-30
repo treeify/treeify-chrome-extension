@@ -85,32 +85,22 @@ export function createPageTreeNodeProps(
     tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
     onClickContentArea: (event: MouseEvent) => {
       doWithErrorCapture(() => {
-        event.preventDefault()
-        CurrentState.switchActivePage(itemId)
-        Rerenderer.instance.rerender()
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            event.preventDefault()
+            CurrentState.switchActivePage(itemId)
+            Rerenderer.instance.rerender()
+            break
+          case '0000MouseButton1':
+            event.preventDefault()
+            unmountPage(itemId, activePageId)
+            break
+        }
       })
     },
     onClickCloseButton: () => {
       doWithErrorCapture(() => {
-        if (itemId === TOP_ITEM_ID) return
-
-        Internal.instance.saveCurrentStateToUndoStack()
-        CurrentState.unmountPage(itemId)
-
-        // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
-        if (itemId === activePageId) {
-          const hottestPageId = Internal.instance.state.mountedPageIds
-            .map((pageId) => {
-              return {
-                pageId,
-                timestamp: Internal.instance.state.items[pageId].timestamp,
-              }
-            })
-            .maxBy((a) => a.timestamp)!.pageId
-          CurrentState.switchActivePage(hottestPageId)
-        }
-
-        Rerenderer.instance.rerender()
+        unmountPage(itemId, activePageId)
       })
     },
     onClickTabsCount: (event) => {
@@ -165,4 +155,26 @@ function getAudiblePageIds(): Set<ItemId> {
     .filter((itemId) => itemId !== undefined) as List<ItemId>
 
   return Set(audibleItemIds.flatMap(CurrentState.getPageIdsBelongingTo))
+}
+
+function unmountPage(itemId: number, activePageId: number) {
+  if (itemId === TOP_ITEM_ID) return
+
+  Internal.instance.saveCurrentStateToUndoStack()
+  CurrentState.unmountPage(itemId)
+
+  // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
+  if (itemId === activePageId) {
+    const hottestPageId = Internal.instance.state.mountedPageIds
+      .map((pageId) => {
+        return {
+          pageId,
+          timestamp: Internal.instance.state.items[pageId].timestamp,
+        }
+      })
+      .maxBy((a) => a.timestamp)!.pageId
+    CurrentState.switchActivePage(hottestPageId)
+  }
+
+  Rerenderer.instance.rerender()
 }

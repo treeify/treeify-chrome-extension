@@ -11,7 +11,7 @@ import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentP
 import {tick} from 'svelte'
 
 /** アクティブページを切り替える */
-export async function switchActivePage(itemId: ItemId) {
+export function switchActivePage(itemId: ItemId) {
   // マウントされたページがmountedPageIdsの末尾に来るようにする。
   // （ページツリーの足跡表示を実現するための処理）
   const mountedPageIds = Internal.instance.state.mountedPageIds
