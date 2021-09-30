@@ -43,7 +43,10 @@ export function createCaptionSettingDialogProps(): CaptionSettingDialogProps {
       Rerenderer.instance.rerender()
     },
     onKeyDown: (event) => {
+      if (event.isComposing) return
+
       switch (InputId.fromKeyboardEvent(event)) {
+        case '0000Enter':
         case '1000Enter':
           onClickFinishButton()
           break
