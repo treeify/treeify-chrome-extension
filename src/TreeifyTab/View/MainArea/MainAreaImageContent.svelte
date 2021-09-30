@@ -82,8 +82,8 @@
     max-width: 100%;
 
     // 完了状態の画像
-    .finished &,
-    .finished-children & {
+    .completed &,
+    .completed-children & {
       filter: opacity(50%);
     }
   }
@@ -114,8 +114,8 @@
     overflow-wrap: break-word;
 
     // 完了状態のキャプション
-    .finished &,
-    .finished-children & {
+    .completed &,
+    .completed-children & {
       // lch(50.0%, 0.0, 0.0)相当
       color: #777777;
     }

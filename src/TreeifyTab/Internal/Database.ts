@@ -192,7 +192,7 @@ const sampleOpml = `<?xml version="1.0"?>
       <outline isPage="false" itemId="6" isCollapsed="false" citeTitle="Tamias - Wikipedia" citeUrl="https://en.wikipedia.org/wiki/Tamias" type="image" text="tamias" url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg" />
     </outline>
     <outline isPage="false" itemId="7" isCollapsed="true" type="text" text="isCollapsed true">
-      <outline isPage="false" itemId="8" isCollapsed="false" cssClass="finished" type="text" text="invisible child" />
+      <outline isPage="false" itemId="8" isCollapsed="false" cssClass="completed" type="text" text="invisible child" />
     </outline>
     <outline isPage="false" itemId="9" isCollapsed="false" type="link" text="ファビコン作成 favicon.ico 無料で半透過マルチアイコンが作れます" url="https://ao-system.net/favicon/" faviconUrl="https://ao-system.net/favicon/common/image/favicon.svg" />
     <outline isPage="false" itemId="10" isCollapsed="false" type="code-block" text="const url = 'https://google.com/'&#xA;if (url.length &gt; 10 || /https:/.test(url)) {&#xA;  console.log(\`OK: \${url.length}\`)&#xA;} " language="typescript" />

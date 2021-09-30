@@ -19,8 +19,8 @@
 </div>
 
 <style global lang="scss">
-  .finished .tex-item-content,
-  .finished-children .tex-item-content {
+  .completed .tex-item-content,
+  .completed-children .tex-item-content {
     filter: opacity(50%);
   }
 

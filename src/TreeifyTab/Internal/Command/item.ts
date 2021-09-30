@@ -218,18 +218,18 @@ export function deleteItemItself() {
  * 対象項目を完了状態にする。
  * もし既に完了状態なら非完了状態に戻す。
  */
-export function toggleFinished() {
+export function toggleCompleted() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
-  const existsNonFinishedItem = selectedItemIds.some((itemId) => {
-    return !Internal.instance.state.items[itemId].cssClasses.contains('finished')
+  const existsNonCompletedItem = selectedItemIds.some((itemId) => {
+    return !Internal.instance.state.items[itemId].cssClasses.contains('completed')
   })
-  if (existsNonFinishedItem) {
+  if (existsNonCompletedItem) {
     // 選択された項目の中に非完了状態のものが含まれる場合
 
     for (const selectedItemId of selectedItemIds) {
-      CurrentState.addCssClass(selectedItemId, 'finished')
+      CurrentState.addCssClass(selectedItemId, 'completed')
 
       // タイムスタンプを更新
       CurrentState.updateItemTimestamp(selectedItemId)
@@ -247,7 +247,7 @@ export function toggleFinished() {
     // 選択された項目が全て完了状態の場合
 
     for (const selectedItemId of selectedItemIds) {
-      CurrentState.toggleCssClass(selectedItemId, 'finished')
+      CurrentState.toggleCssClass(selectedItemId, 'completed')
 
       // タイムスタンプを更新
       CurrentState.updateItemTimestamp(selectedItemId)

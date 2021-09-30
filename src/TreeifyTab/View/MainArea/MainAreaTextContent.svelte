@@ -37,9 +37,9 @@
     }
 
     // 完了状態のテキスト項目
-    .finished &,
-    .finished-children & {
-      color: var(--finished-item-text-color);
+    .completed &,
+    .completed-children & {
+      color: var(--completed-item-text-color);
     }
   }
 </style>

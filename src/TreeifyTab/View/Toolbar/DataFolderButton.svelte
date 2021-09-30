@@ -25,7 +25,7 @@
   <div
     class="data-folder-button_icon"
     class:already-open={props.isAlreadyOpen}
-    class:finished={props.isFinished}
+    class:completed={props.isCompleted}
     title={props.isAlreadyOpen ? 'データフォルダと同期する' : 'データフォルダを開く'}
   />
 </ToolbarIconButton>
@@ -35,7 +35,7 @@
     // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
     --data-folder-button-icon-color: #6a6a6a;
     // データフォルダを開くボタンのアイコンの完了状態の色。lch(70.0%, 0.0, 0.0)相当
-    --data-folder-button-icon-finished-color: #ababab;
+    --data-folder-button-icon-completed-color: #ababab;
   }
 
   // データフォルダアイコン
@@ -54,8 +54,8 @@
     -webkit-mask-size: contain;
 
     // 完了状態のデータフォルダアイコン
-    &.finished {
-      background: var(--data-folder-button-icon-finished-color);
+    &.completed {
+      background: var(--data-folder-button-icon-completed-color);
     }
 
     &.already-open {

@@ -20,8 +20,8 @@
     overflow-x: auto;
 
     // 完了状態のコードブロック項目
-    .finished &,
-    .finished-children & {
+    .completed &,
+    .completed-children & {
       filter: opacity(50%);
     }
   }

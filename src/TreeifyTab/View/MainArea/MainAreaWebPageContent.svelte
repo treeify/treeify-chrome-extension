@@ -183,9 +183,9 @@
     }
 
     // 完了状態のウェブページ項目のタイトル
-    .finished &,
-    .finished-children & {
-      color: var(--finished-item-text-color);
+    .completed &,
+    .completed-children & {
+      color: var(--completed-item-text-color);
     }
   }
 
