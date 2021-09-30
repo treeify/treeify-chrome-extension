@@ -144,7 +144,10 @@ export function createMainAreaNodeProps(
         if (!CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)) {
           CurrentState.setTargetItemPath(itemPath)
         }
-        Command.showContextMenuDialog({x: event.clientX, y: event.clientY})
+        External.instance.dialogState = {
+          type: 'ContextMenuDialog',
+          mousePosition: {x: event.clientX, y: event.clientY},
+        }
         Rerenderer.instance.rerender()
       }
     },

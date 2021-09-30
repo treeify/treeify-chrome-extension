@@ -1,4 +1,4 @@
-import {Coordinate} from 'src/Common/integer'
+import {assertNonNull} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
@@ -60,6 +60,11 @@ export function showCitationSettingDialog() {
 }
 
 /** 独自コンテキストメニューを表示する */
-export function showContextMenuDialog(mousePosition: Coordinate) {
+export function showContextMenuDialog() {
+  const domElementId = MainAreaContentView.focusableDomElementId(CurrentState.getTargetItemPath())
+  const domElement = document.getElementById(domElementId)
+  assertNonNull(domElement)
+  const rect = domElement.getBoundingClientRect()
+  const mousePosition = {x: rect.x, y: rect.bottom}
   External.instance.dialogState = {type: 'ContextMenuDialog', mousePosition}
 }
