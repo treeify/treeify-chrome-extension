@@ -139,19 +139,44 @@ export function pasteMultilineText(text: string) {
 // 指定されたインデント単位のインデント形式テキストかどうか判定する。
 // インデントがおかしい場合や一箇所もインデントが見つからない場合はfalseを返す。
 function canParseAsIndentedText(lines: string[], indentUnit: string): boolean {
-  let prevIndentLevel: integer | undefined
-  let hasAtLeastOneIndent = false
-  for (const line of lines) {
-    const indentLevel = getIndentLevel(line, indentUnit)
-    if (prevIndentLevel !== undefined && indentLevel > prevIndentLevel + 1) {
-      // パース失敗
+  const results = lines.map((line) => analyzeIndentation(line, indentUnit))
+
+  for (let i = 0; i < results.length; i++) {
+    const result = results[i]
+    const prevLineResult = results[i - 1]
+
+    // インデントが省略された空行の場合、前の行のインデントレベルを継承する
+    if (result.indentLevel === 0 && result.text === '' && prevLineResult !== undefined) {
+      result.indentLevel = prevLineResult.indentLevel
+    }
+
+    if (prevLineResult !== undefined && result.indentLevel > prevLineResult.indentLevel + 1) {
+      // インデントレベルが飛び級になっている場合
       return false
     }
-    prevIndentLevel = indentLevel
-    // indentLevelが一度でも1以上になればhasAtLeastOneIndentはtrueになる
-    hasAtLeastOneIndent ||= indentLevel > 0
   }
-  return hasAtLeastOneIndent
+
+  const indentLevels = List(results).map((result) => result.indentLevel)
+  return (indentLevels.max() ?? 0) > 0
+}
+
+// インデント付きの行を「インデントレベル」と「インデントを除いたテキスト部」に分割する
+function analyzeIndentation(
+  line: string,
+  indentUnit: string
+): {indentLevel: integer; text: string} {
+  if (line.startsWith(indentUnit)) {
+    const indentation = analyzeIndentation(line.substring(indentUnit.length), indentUnit)
+    return {
+      indentLevel: indentation.indentLevel + 1,
+      text: indentation.text,
+    }
+  } else {
+    return {
+      indentLevel: 0,
+      text: line,
+    }
+  }
 }
 
 function getIndentLevel(line: string, indentUnit: string): integer {
