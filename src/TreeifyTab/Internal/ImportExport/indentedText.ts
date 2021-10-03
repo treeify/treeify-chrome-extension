@@ -94,7 +94,7 @@ export function pasteMultilineText(text: string) {
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const lines = removeRedundantIndent(text).split(/\r?\n/)
 
-  for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
+  for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '　　', '\t')) {
     // TODO: 最適化の余地あり。パースの試行とパース成功確認後の項目生成の2回に分けてトラバースしている
     if (canParseAsIndentedText(lines, indentUnit)) {
       // インデント形式のテキストとして認識できた場合
