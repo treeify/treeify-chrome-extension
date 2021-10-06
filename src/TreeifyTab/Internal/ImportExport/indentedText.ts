@@ -179,14 +179,6 @@ function analyzeIndentation(
   }
 }
 
-function getIndentLevel(line: string, indentUnit: string): integer {
-  if (line.startsWith(indentUnit)) {
-    return 1 + getIndentLevel(line.substring(indentUnit.length), indentUnit)
-  } else {
-    return 0
-  }
-}
-
 /*
 インデント形式のテキストから、新規項目のツリーを作成する。
 【動作イメージ】
@@ -203,37 +195,43 @@ function getIndentLevel(line: string, indentUnit: string): integer {
 [9]（自身より深い項目は全部削除する）
  */
 function createItemsFromIndentedText(lines: string[], indentUnit: string): List<ItemId> {
-  const itemIds: ItemId[] = []
+  const analyzedLines = lines.map((line) => analyzeIndentation(line, indentUnit))
 
-  const baseIndentLevel = getIndentLevel(lines[0], indentUnit)
-  const rootItemId = createItemFromSingleLineText(lines[0])
+  const rootItemId = createItemFromSingleLineText(analyzedLines[0].text)
+  const itemIds: ItemId[] = []
   itemIds.push(rootItemId)
   const rootItemIds = [rootItemId]
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i]
-    const indentLevel = getIndentLevel(line, indentUnit) - baseIndentLevel
-    if (indentLevel === itemIds.length) {
+  for (let i = 1; i < analyzedLines.length; i++) {
+    const analyzedLine = analyzedLines[i]
+
+    // インデントが省略された空行の場合、前の行のインデントレベルを継承する
+    if (analyzedLine.indentLevel === 0 && analyzedLine.text === '') {
+      analyzedLine.indentLevel = analyzedLines[i - 1].indentLevel
+    }
+
+    if (analyzedLine.indentLevel === itemIds.length) {
       // 前の行よりインデントが1つ深い場合
-      const newItemId = createItemFromSingleLineText(line)
+      const newItemId = createItemFromSingleLineText(analyzedLine.text)
       CurrentState.insertLastChildItem(itemIds[itemIds.length - 1], newItemId)
       itemIds.push(newItemId)
     } else {
       // 前の行とインデントの深さが同じか、それより浅い場合
-      itemIds.length = indentLevel + 1
+      itemIds.length = analyzedLine.indentLevel + 1
 
-      const newItemId = createItemFromSingleLineText(line)
+      const newItemId = createItemFromSingleLineText(analyzedLine.text)
 
       if (itemIds.length === 1) {
         // 親の居ない項目
-        itemIds[indentLevel] = newItemId
+        itemIds[analyzedLine.indentLevel] = newItemId
         rootItemIds.push(newItemId)
       } else {
         CurrentState.insertLastChildItem(itemIds[itemIds.length - 2], newItemId)
-        itemIds[indentLevel] = newItemId
+        itemIds[analyzedLine.indentLevel] = newItemId
       }
     }
   }
+
   return List(rootItemIds)
 }
 
