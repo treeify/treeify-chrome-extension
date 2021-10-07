@@ -498,6 +498,7 @@ function onBackspace(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
+    Internal.instance.saveCurrentStateToUndoStack()
     Command.removeEdge()
     Rerenderer.instance.rerender()
     return
@@ -524,6 +525,7 @@ function onBackspace(event: KeyboardEvent) {
     // 空の子なし項目なら
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
+      Internal.instance.saveCurrentStateToUndoStack()
 
       // 上の項目がテキスト項目ならキャレットを末尾に移す
       if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
@@ -549,6 +551,8 @@ function onBackspace(event: KeyboardEvent) {
       // TODO: 項目削除コマンドを実行するのがいいと思う
     } else {
       // ターゲット項目も上の項目もテキスト項目の場合、テキスト項目同士のマージを行う
+
+      Internal.instance.saveCurrentStateToUndoStack()
 
       // テキストを連結
       const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
@@ -581,6 +585,7 @@ function onBackspace(event: KeyboardEvent) {
     // ターゲット項目がテキスト項目以外の場合
 
     event.preventDefault()
+    Internal.instance.saveCurrentStateToUndoStack()
     // ターゲット項目を削除する
     Command.removeEdge()
     Rerenderer.instance.rerender()
@@ -592,6 +597,7 @@ function onDelete(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
+    Internal.instance.saveCurrentStateToUndoStack()
     Command.removeEdge()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
@@ -612,6 +618,7 @@ function onDelete(event: KeyboardEvent) {
     // 空の子なし項目なら
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
+      Internal.instance.saveCurrentStateToUndoStack()
       // ターゲット項目を削除して終了
       Command.removeEdge()
       // 下の項目をフォーカスする
@@ -649,6 +656,8 @@ function onDelete(event: KeyboardEvent) {
       } else {
         // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
+        Internal.instance.saveCurrentStateToUndoStack()
+
         // テキストを連結
         const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
         // TODO: テキストノード同士が連結されないことが気がかり
@@ -679,6 +688,7 @@ function onDelete(event: KeyboardEvent) {
     // ターゲット項目がテキスト項目以外の場合
 
     event.preventDefault()
+    Internal.instance.saveCurrentStateToUndoStack()
     // ターゲット項目を削除する
     Command.removeEdge()
     // 下の項目をフォーカスする
