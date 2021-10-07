@@ -189,6 +189,7 @@ export class Internal {
         '1000KeyS': List.of('syncWithDataFolder'),
         '1100KeyF': List.of('showSearchDialog'),
         '0000F2': List.of('showEditDialog'),
+        '0000ContextMenu': List.of('showContextMenuDialog'),
         '1100Period': List.of('toggleCitation'),
         '0110ArrowUp': List.of('selectAllAboveItems'),
         '0110ArrowDown': List.of('selectAllBelowItems'),

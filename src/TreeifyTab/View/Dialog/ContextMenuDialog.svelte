@@ -31,6 +31,11 @@
     })
   }
 
+  function onContextMenu(event: Event) {
+    // キーボードでコンテキストメニューを呼び出した際にブラウザの標準コンテキストメニューが表示される問題への対策
+    event.preventDefault()
+  }
+
   const style = `
     left: calc(${props.mousePosition.x}px - 0.8em);
     top: calc(${props.mousePosition.y}px - 0.8em);
@@ -41,6 +46,7 @@
   class="context-menu-dialog"
   on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
+  on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
   <div class="context-menu-dialog_frame" {style}>
