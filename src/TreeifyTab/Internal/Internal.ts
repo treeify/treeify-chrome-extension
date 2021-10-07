@@ -2,7 +2,6 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
-import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
@@ -127,7 +126,8 @@ export class Internal {
       items: {
         0: {
           type: ItemType.TEXT,
-          globalItemId: GlobalItemId.generate(),
+          // トップページはどのインスタンスで生成されたかを問わず同一視したい特別な項目なので専用のグローバル項目IDを持つ
+          globalItemId: 'Treeify#0',
           childItemIds: List.of(),
           parents: {},
           timestamp: Timestamp.now(),

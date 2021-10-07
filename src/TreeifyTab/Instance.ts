@@ -21,6 +21,8 @@ export type Iisn = integer
  * `${instanceId}#${base62(iisn)}`
  * base62は62進数への変換関数を表す。
  * この62進数の文字の種類は[0-9][A-Z][a-z]であり数値、大文字、小文字の順に値が大きくなる。
+ *
+ * なおトップページのみ特別に'Treeify#0'という固有のグローバル項目IDを持つ。
  */
 export type GlobalItemId = string
 
