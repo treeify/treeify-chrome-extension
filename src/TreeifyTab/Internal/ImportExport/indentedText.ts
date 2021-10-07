@@ -1,4 +1,5 @@
 import {List} from 'immutable'
+import {MultiSet} from 'mnemonist'
 import {assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
@@ -94,28 +95,27 @@ export function pasteMultilineText(text: string) {
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const lines = removeRedundantIndent(text).split(/\r?\n/)
 
-  for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '　　', '\t')) {
+  const indentUnit = detectIndent(lines)
+  if (indentUnit !== '') {
     // TODO: 最適化の余地あり。パースの試行とパース成功確認後の項目生成の2回に分けてトラバースしている
-    if (canParseAsIndentedText(lines, indentUnit)) {
-      // インデント形式のテキストとして認識できた場合
-      const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
-      for (const rootItemId of rootItemIds.reverse()) {
-        CurrentState.insertBelowItem(targetItemPath, rootItemId)
-      }
-
-      // ターゲットを更新する
-      const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      assertNonUndefined(belowItemPath)
-      CurrentState.setTargetItemPath(belowItemPath)
-
-      // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
-      if (CurrentState.isEmptyTextItem(targetItemId)) {
-        CurrentState.deleteItem(targetItemId)
-      }
-
-      Rerenderer.instance.rerender()
-      return
+    // インデント形式のテキストとして認識できた場合
+    const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
+    for (const rootItemId of rootItemIds.reverse()) {
+      CurrentState.insertBelowItem(targetItemPath, rootItemId)
     }
+
+    // ターゲットを更新する
+    const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+    assertNonUndefined(belowItemPath)
+    CurrentState.setTargetItemPath(belowItemPath)
+
+    // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
+    if (CurrentState.isEmptyTextItem(targetItemId)) {
+      CurrentState.deleteItem(targetItemId)
+    }
+
+    Rerenderer.instance.rerender()
+    return
   }
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
@@ -136,28 +136,48 @@ export function pasteMultilineText(text: string) {
   Rerenderer.instance.rerender()
 }
 
-// 指定されたインデント単位のインデント形式テキストかどうか判定する。
-// インデントがおかしい場合や一箇所もインデントが見つからない場合はfalseを返す。
-function canParseAsIndentedText(lines: string[], indentUnit: string): boolean {
-  const results = lines.map((line) => analyzeIndentation(line, indentUnit))
+// インデントを解析し、インデントの単位となる文字列を返す。
+// 例えばいわゆる2スペースインデントの場合は'  'を返す。
+// インデントが見つからなかった場合空文字列を返す。
+function detectIndent(lines: string[]): string {
+  const result = List.of(' ', '\t', '　')
+    .map((indentChar) => {
+      const {size, likelihood} = detectIndentSize(lines, indentChar)
+      return {indentChar, size, likelihood}
+    })
+    .maxBy((value) => value.likelihood)
+  assertNonUndefined(result)
 
-  for (let i = 0; i < results.length; i++) {
-    const result = results[i]
-    const prevLineResult = results[i - 1]
+  return result.indentChar.repeat(result.size)
+}
 
-    // インデントが省略された空行の場合、前の行のインデントレベルを継承する
-    if (result.indentLevel === 0 && result.text === '' && prevLineResult !== undefined) {
-      result.indentLevel = prevLineResult.indentLevel
-    }
+// 最も尤もらしいインデントサイズを解析する。
+// 指定された文字でのインデントが全く見つからない場合は{size: 0, likelihood: 0}を返す。
+function detectIndentSize(
+  lines: string[],
+  indentChar: string
+): {size: integer; likelihood: integer} {
+  // インデント文字の左端出現数を行ごとに数える。
+  // ただし空行はスキップする。
+  const indentCharCounts = lines
+    .filter((line) => line !== '')
+    .map((line) => line.search(new RegExp(`[^${indentChar}]`)))
 
-    if (prevLineResult !== undefined && result.indentLevel > prevLineResult.indentLevel + 1) {
-      // インデントレベルが飛び級になっている場合
-      return false
+  // 前の行からのインデントサイズの増分を計算・収集する
+  const positiveGaps = new MultiSet<integer>()
+  for (let i = 1; i < indentCharCounts.length; i++) {
+    const gap = indentCharCounts[i] - indentCharCounts[i - 1]
+    if (gap > 0) {
+      positiveGaps.add(gap)
     }
   }
 
-  const indentLevels = List(results).map((result) => result.indentLevel)
-  return (indentLevels.max() ?? 0) > 0
+  const result = positiveGaps.top(1)[0]
+  if (result !== undefined) {
+    return {size: result[0], likelihood: result[1]}
+  } else {
+    return {size: 0, likelihood: 0}
+  }
 }
 
 // インデント付きの行を「インデントレベル」と「インデントを除いたテキスト部」に分割する
