@@ -623,6 +623,12 @@ function onDelete(event: KeyboardEvent) {
       return
     }
 
+    // ユーザー視点で何が起こったのか分かりにくいため、上の項目が非表示の子項目を持っている場合は何もしない
+    const bulletState = deriveBulletState(Internal.instance.state, targetItemPath)
+    if (bulletState === MainAreaBulletState.PAGE || bulletState === MainAreaBulletState.COLLAPSED) {
+      return
+    }
+
     const selection = getTextItemSelectionFromDom()
     assertNonUndefined(selection)
 
