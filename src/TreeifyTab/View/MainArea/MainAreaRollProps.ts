@@ -98,9 +98,12 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
     },
     onContextMenu: (event: Event) => {
       event.preventDefault()
-      CurrentState.setTargetItemPath(itemPath)
-      Command.showOtherParentsDialog()
-      Rerenderer.instance.rerender()
+      // トランスクルードされた項目の場合、他のトランスクルード元ダイアログを表示する
+      if (CurrentState.countParents(ItemPath.getItemId(itemPath)) >= 2) {
+        CurrentState.setTargetItemPath(itemPath)
+        Command.showOtherParentsDialog()
+        Rerenderer.instance.rerender()
+      }
     },
   }
 }
