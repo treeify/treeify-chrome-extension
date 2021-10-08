@@ -99,7 +99,8 @@ export function pasteMultilineText(text: string) {
   const indentUnit = detectIndent(lines)
   if (indentUnit !== '') {
     const trees = parseIndentedText(lines, indentUnit)
-    if (trees !== undefined) {
+    // ※インデントされていない行が8割ある場合はインデント形式として認識しない
+    if (trees !== undefined && trees.size / lines.length < 0.8) {
       // インデント形式のテキストとして認識できた場合
 
       const rootItemIds = trees.map((tree) =>
