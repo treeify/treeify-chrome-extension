@@ -59,6 +59,7 @@
 
 <style global lang="scss">
   .search-dialog_content {
+    min-width: 25em;
     padding: 1em;
   }
 
