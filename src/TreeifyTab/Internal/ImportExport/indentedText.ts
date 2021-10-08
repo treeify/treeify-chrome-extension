@@ -1,6 +1,8 @@
 import {List} from 'immutable'
+import {MultiSet} from 'mnemonist'
 import {assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
+import {MutableOrderedTree} from 'src/Common/OrderedTree'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
@@ -94,11 +96,21 @@ export function pasteMultilineText(text: string) {
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const lines = removeRedundantIndent(text).split(/\r?\n/)
 
-  for (const indentUnit of List.of(' ', '  ', '   ', '    ', '　', '\t')) {
-    // TODO: 最適化の余地あり。パースの試行とパース成功確認後の項目生成の2回に分けてトラバースしている
-    if (canParseAsIndentedText(lines, indentUnit)) {
+  const indentUnit = detectIndent(lines)
+  if (indentUnit !== '') {
+    const trees = parseIndentedText(lines, indentUnit)
+    if (trees !== undefined) {
       // インデント形式のテキストとして認識できた場合
-      const rootItemIds = createItemsFromIndentedText(lines, indentUnit)
+
+      const rootItemIds = trees.map((tree) =>
+        tree.fold((value, children: ItemId[]) => {
+          const itemId = createItemFromSingleLineText(value)
+          for (const childItemId of children) {
+            CurrentState.insertLastChildItem(itemId, childItemId)
+          }
+          return itemId
+        })
+      )
       for (const rootItemId of rootItemIds.reverse()) {
         CurrentState.insertBelowItem(targetItemPath, rootItemId)
       }
@@ -136,80 +148,134 @@ export function pasteMultilineText(text: string) {
   Rerenderer.instance.rerender()
 }
 
-// 指定されたインデント単位のインデント形式テキストかどうか判定する。
-// インデントがおかしい場合や一箇所もインデントが見つからない場合はfalseを返す。
-function canParseAsIndentedText(lines: string[], indentUnit: string): boolean {
-  let prevIndentLevel: integer | undefined
-  let hasAtLeastOneIndent = false
-  for (const line of lines) {
-    const indentLevel = getIndentLevel(line, indentUnit)
-    if (prevIndentLevel !== undefined && indentLevel > prevIndentLevel + 1) {
-      // パース失敗
-      return false
-    }
-    prevIndentLevel = indentLevel
-    // indentLevelが一度でも1以上になればhasAtLeastOneIndentはtrueになる
-    hasAtLeastOneIndent ||= indentLevel > 0
-  }
-  return hasAtLeastOneIndent
+// インデントを解析し、インデントの単位となる文字列を返す。
+// 例えばいわゆる2スペースインデントの場合は'  'を返す。
+// インデントが見つからなかった場合空文字列を返す。
+function detectIndent(lines: string[]): string {
+  const result = List.of(' ', '\t', '　')
+    .map((indentChar) => {
+      const {size, likelihood} = detectIndentSize(lines, indentChar)
+      return {indentChar, size, likelihood}
+    })
+    .maxBy((value) => value.likelihood)
+  assertNonUndefined(result)
+
+  return result.indentChar.repeat(result.size)
 }
 
-function getIndentLevel(line: string, indentUnit: string): integer {
-  if (line.startsWith(indentUnit)) {
-    return 1 + getIndentLevel(line.substring(indentUnit.length), indentUnit)
+// 最も尤もらしいインデントサイズを解析する。
+// 指定された文字でのインデントが全く見つからない場合は{size: 0, likelihood: 0}を返す。
+function detectIndentSize(
+  lines: string[],
+  indentChar: string
+): {size: integer; likelihood: integer} {
+  // インデント文字の左端出現数を行ごとに数える。
+  // ただし空行はスキップする。
+  const indentCharCounts = lines
+    .filter((line) => line !== '')
+    .map((line) => line.search(new RegExp(`[^${indentChar}]`)))
+
+  // 前の行からのインデントサイズの増分を計算・収集する
+  const positiveGaps = new MultiSet<integer>()
+  for (let i = 1; i < indentCharCounts.length; i++) {
+    const gap = indentCharCounts[i] - indentCharCounts[i - 1]
+    if (gap > 0) {
+      positiveGaps.add(gap)
+    }
+  }
+
+  const result = positiveGaps.top(1)[0]
+  if (result !== undefined) {
+    return {size: result[0], likelihood: result[1]}
   } else {
-    return 0
+    return {size: 0, likelihood: 0}
+  }
+}
+
+// インデント付きの行を「インデントレベル」と「インデントを除いたテキスト部」に分割する
+function analyzeIndentation(
+  line: string,
+  indentUnit: string
+): {indentLevel: integer; text: string} {
+  if (line.startsWith(indentUnit)) {
+    const indentation = analyzeIndentation(line.substring(indentUnit.length), indentUnit)
+    return {
+      indentLevel: indentation.indentLevel + 1,
+      text: indentation.text,
+    }
+  } else {
+    return {
+      indentLevel: 0,
+      text: line,
+    }
   }
 }
 
 /*
-インデント形式のテキストから、新規項目のツリーを作成する。
-【動作イメージ】
+インデント形式のテキストからツリー構造に変換する。
+スタックを使って親候補を保持し、自身のインデントレベルに応じて特定できる親の子リストに自身を追加する。
+【スタックの動作イメージ】
 1
+  2
   3
-  4
-    8
-9
+    4
+5
 ↓
 [1]
-[1, 3]（自身の深さより1つ浅い1番項目の子リスト末尾に追加する）
-[1, 4]（深さ2の項目を4に上書き）
-[1, 4, 8]
-[9]（自身より深い項目は全部削除する）
- */
-function createItemsFromIndentedText(lines: string[], indentUnit: string): List<ItemId> {
-  const itemIds: ItemId[] = []
+[1, 2]
+[1, 3]
+[1, 3, 4]
+[5]
+*/
+function parseIndentedText(
+  lines: string[],
+  indentUnit: string
+): List<MutableOrderedTree<string>> | undefined {
+  if (lines.length === 0) return undefined
 
-  const baseIndentLevel = getIndentLevel(lines[0], indentUnit)
-  const rootItemId = createItemFromSingleLineText(lines[0])
-  itemIds.push(rootItemId)
-  const rootItemIds = [rootItemId]
+  const analyzedLines = lines.map((line) => analyzeIndentation(line, indentUnit))
 
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i]
-    const indentLevel = getIndentLevel(line, indentUnit) - baseIndentLevel
-    if (indentLevel === itemIds.length) {
+  if (analyzedLines[0].indentLevel > 0) return undefined
+
+  const firstRootNode = new MutableOrderedTree(analyzedLines[0].text)
+  const stack: MutableOrderedTree<string>[] = []
+  stack.push(firstRootNode)
+  const rootNodes = [firstRootNode]
+
+  for (let i = 1; i < analyzedLines.length; i++) {
+    const analyzedLine = analyzedLines[i]
+
+    // インデントが省略された空行の場合、前の行のインデントレベルを継承する
+    if (analyzedLine.indentLevel === 0 && analyzedLine.text === '') {
+      analyzedLine.indentLevel = analyzedLines[i - 1].indentLevel
+    }
+
+    // インデントレベルが飛び級になっている場合、ツリー化を諦める
+    if (analyzedLine.indentLevel > stack.length) return undefined
+
+    if (analyzedLine.indentLevel === stack.length) {
       // 前の行よりインデントが1つ深い場合
-      const newItemId = createItemFromSingleLineText(line)
-      CurrentState.insertLastChildItem(itemIds[itemIds.length - 1], newItemId)
-      itemIds.push(newItemId)
+      const newNode = new MutableOrderedTree(analyzedLine.text)
+      stack[stack.length - 1].children.push(newNode)
+      stack.push(newNode)
     } else {
       // 前の行とインデントの深さが同じか、それより浅い場合
-      itemIds.length = indentLevel + 1
 
-      const newItemId = createItemFromSingleLineText(line)
+      stack.length = analyzedLine.indentLevel + 1
 
-      if (itemIds.length === 1) {
+      const newNode = new MutableOrderedTree(analyzedLine.text)
+      stack[stack.length - 1] = newNode
+
+      if (stack.length === 1) {
         // 親の居ない項目
-        itemIds[indentLevel] = newItemId
-        rootItemIds.push(newItemId)
+        rootNodes.push(newNode)
       } else {
-        CurrentState.insertLastChildItem(itemIds[itemIds.length - 2], newItemId)
-        itemIds[indentLevel] = newItemId
+        stack[stack.length - 2].children.push(newNode)
       }
     }
   }
-  return List(rootItemIds)
+
+  return List(rootNodes)
 }
 
 function createItemFromSingleLineText(line: string): ItemId {

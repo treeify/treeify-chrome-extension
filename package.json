@@ -12,6 +12,7 @@
     "katex": "^0.13.13",
     "markdown-table": "^3.0.1",
     "md5": "^2.3.0",
+    "mnemonist": "^0.38.4",
     "nanoid": "^3.1.23",
     "papaparse": "^5.3.1",
     "power-radix": "^2.5.6",
