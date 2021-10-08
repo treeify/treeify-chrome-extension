@@ -1,5 +1,5 @@
 import {List, Set} from 'immutable'
-import {assert, assertNeverType} from 'src/Common/Debug/assert'
+import {assertNeverType} from 'src/Common/Debug/assert'
 import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
@@ -24,14 +24,14 @@ export class SearchEngine {
   }
 
   /** 全文検索を行う */
-  search(searchQuery: string): List<ItemId> {
+  search(searchQuery: string): Set<ItemId> {
     const {andSearchWords, notSearchWords} = SearchEngine.parseSearchQuery(searchQuery)
-    if (andSearchWords.isEmpty()) return List.of()
+    if (andSearchWords.isEmpty()) return Set.of()
 
     const normalizedNotSearchWords = notSearchWords.map(UnigramSearchIndex.normalize)
 
     // 検索ワードごとに、ヒットする項目の全ItemPathの集合を生成する
-    const hitItemIdSets = andSearchWords.map((andSearchWord) => {
+    const wordHitItemIdSets = andSearchWords.map((andSearchWord) => {
       const normalizedAndSearchWord = UnigramSearchIndex.normalize(andSearchWord)
 
       return Set(this.unigramSearchIndex.search(andSearchWord)).filter((itemId) => {
@@ -50,11 +50,21 @@ export class SearchEngine {
       })
     })
 
-    const combination = List(SearchEngine.combination(hitItemIdSets))
-    // ItemIdの組み合わせのうち、包含関係にあるものだけをピックアップする
-    const filtered = combination.filter(SearchEngine.isInclusive)
-    // 生き残った組み合わせに含まれる全ItemIdを返す
-    return Set(filtered.flatMap((list) => list)).toList()
+    const result: ItemId[] = []
+    for (let i = 0; i < wordHitItemIdSets.size; i++) {
+      const otherWordsHitItemIdSets = wordHitItemIdSets.remove(i)
+      for (const wordHitItemId of wordHitItemIdSets.get(i)!) {
+        const upperItemIds = Set(CurrentState.yieldAncestorItemIds(wordHitItemId)).add(
+          wordHitItemId
+        )
+        const intersections = otherWordsHitItemIdSets.map((set) => set.intersect(upperItemIds))
+        if (intersections.every((set) => !set.isEmpty())) {
+          // あるワードヒット項目の先祖集合（自身含む）に他の全てのワードのヒット項目が含まれる場合
+          result.push(wordHitItemId)
+        }
+      }
+    }
+    return Set(result)
   }
 
   /**
@@ -109,42 +119,6 @@ export class SearchEngine {
   /** 指定された項目のテキストトラックに含まれる文字の集合を返す */
   static appearingUnigrams(itemId: ItemId, state: State): Set<string> {
     return Set(this.getTextTracks(itemId, state).join(''))
-  }
-
-  // 要するに[{1, 2}, {3, 4}]を[1, 3], [1, 4], [2, 3], [2, 4]に変換する
-  static *combination<T>(sets: List<Set<T>>): Generator<List<T>> {
-    assert(sets.size > 0)
-
-    if (sets.size === 1) {
-      const first: Set<T> = sets.first()
-      for (const element of first) {
-        yield List.of(element)
-      }
-    } else {
-      const last: Set<T> = sets.last()
-      for (const sublist of this.combination(sets.pop())) {
-        for (const element of last) {
-          yield sublist.push(element)
-        }
-      }
-    }
-  }
-
-  // 全項目が先祖-子孫関係にある場合にtrueを返す
-  static isInclusive(itemIds: List<ItemId>): boolean {
-    const list = itemIds.map((itemId) => {
-      return Set(CurrentState.yieldAncestorItemIds(itemId)).add(itemId)
-    })
-
-    const sorted = list.sortBy((itemPath) => itemPath.size)
-    for (let i = 0; i < sorted.size - 1; i++) {
-      const lhs = sorted.get(i)!
-      const rhs = sorted.get(i + 1)!
-      if (!lhs.isSubset(rhs)) {
-        return false
-      }
-    }
-    return true
   }
 
   // 検索クエリをAND検索ワードとNOT検索ワードに分解する
