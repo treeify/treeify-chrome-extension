@@ -28,10 +28,15 @@
     // バレット領域のサイズ（正方形の一辺の長さ）
     --page-tree-bullet-area-size: 0.8em;
 
-    // 子を持つノードのバレット（二等辺三角形▼）の幅
-    --page-tree-bullet-triangle-width: 0.45em;
-    // 子を持つノードのバレット（二等辺三角形▼）の高さ
-    --page-tree-bullet-triangle-height: 0.3em;
+    // 折りたたまれたノードのバレット（二等辺三角形▶）の幅
+    --page-tree-bullet-collapsed-width: 0.56em;
+    // 折りたたまれたノードのバレット（二等辺三角形▶）の高さ
+    --page-tree-bullet-collapsed-height: 0.38em;
+
+    // 折りたたまれたノードのバレット（二等辺三角形▼）の幅
+    --page-tree-bullet-expanded-width: 0.45em;
+    // 折りたたまれたノードのバレット（二等辺三角形▼）の高さ
+    --page-tree-bullet-expanded-height: 0.3em;
 
     // バレットの色。lch(60.0%, 0.0, 0.0)相当
     --page-tree-bullet-color: #919191;
@@ -86,9 +91,9 @@
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: var(--page-tree-bullet-triangle-height)
-        calc(var(--page-tree-bullet-triangle-width) / 2) 0
-        calc(var(--page-tree-bullet-triangle-width) / 2);
+      border-width: var(--page-tree-bullet-expanded-height)
+        calc(var(--page-tree-bullet-expanded-width) / 2) 0
+        calc(var(--page-tree-bullet-expanded-width) / 2);
       border-color: var(--page-tree-bullet-color) transparent transparent transparent;
 
       .page-tree-bullet-and-indent:hover & {
@@ -101,8 +106,8 @@
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: calc(var(--page-tree-bullet-triangle-width) / 2) 0
-        calc(var(--page-tree-bullet-triangle-width) / 2) var(--page-tree-bullet-triangle-height);
+      border-width: calc(var(--page-tree-bullet-collapsed-width) / 2) 0
+        calc(var(--page-tree-bullet-collapsed-width) / 2) var(--page-tree-bullet-collapsed-height);
       border-color: transparent transparent transparent var(--page-tree-bullet-color);
 
       .page-tree-bullet-and-indent:hover & {
