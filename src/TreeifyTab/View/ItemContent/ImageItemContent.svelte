@@ -2,9 +2,14 @@
   import {ImageItemContentProps} from './ImageItemContentProps'
 
   export let props: ImageItemContentProps
+
+  $: imageStyle = `
+    width: ${props.width};
+    aspect-ratio: ${props.aspectRatio};
+  `
 </script>
 
-<img class="image-item-content" src={props.url} />
+<img class="image-item-content" style={imageStyle} src={props.url} />
 
 <style global lang="scss">
   .image-item-content {
