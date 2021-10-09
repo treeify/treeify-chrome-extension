@@ -136,13 +136,10 @@ function onClickContextMenu(info: OnClickData) {
   if (info.menuItemId !== 'treeify') return
 
   // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
-  const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(info.pageUrl)
-  const tab = tabs.first(undefined)
-  if (tab === undefined) return
+  const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
+  if (webPageItemId === undefined) return
 
-  const itemId =
-    tab.id !== undefined ? External.instance.tabItemCorrespondence.getItemIdBy(tab.id) : undefined
-  if (itemId === undefined) return
+  const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
 
   if (info.mediaType === 'image' && info.srcUrl !== undefined) {
     // 画像項目として取り込む
@@ -150,9 +147,9 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
     // 出典を設定
-    CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+    CurrentState.setCite(newItemId, {title: tabTitle, url: info.pageUrl})
 
-    CurrentState.insertLastChildItem(itemId, newItemId)
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
   } else if (info.selectionText !== undefined) {
     // テキスト項目として取り込む
@@ -160,11 +157,19 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
     // 出典を設定
-    CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+    CurrentState.setCite(newItemId, {title: tabTitle, url: info.pageUrl})
 
-    CurrentState.insertLastChildItem(itemId, newItemId)
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
   }
+}
+
+function findCorrespondWebPageItem(url: string): ItemId | undefined {
+  const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(url)
+  const tab = tabs.first(undefined)
+  if (tab?.id === undefined) return undefined
+
+  return External.instance.tabItemCorrespondence.getItemIdBy(tab.id)
 }
 
 async function onCommand(commandName: string) {
