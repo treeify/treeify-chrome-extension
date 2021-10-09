@@ -16,6 +16,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Database} from 'src/TreeifyTab/Internal/Database'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
@@ -136,13 +137,10 @@ function onClickContextMenu(info: OnClickData) {
   if (info.menuItemId !== 'treeify') return
 
   // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
-  const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(info.pageUrl)
-  const tab = tabs.first(undefined)
-  if (tab === undefined) return
+  const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
+  if (webPageItemId === undefined) return
 
-  const itemId =
-    tab.id !== undefined ? External.instance.tabItemCorrespondence.getItemIdBy(tab.id) : undefined
-  if (itemId === undefined) return
+  const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
 
   if (info.mediaType === 'image' && info.srcUrl !== undefined) {
     // 画像項目として取り込む
@@ -150,9 +148,9 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
     // 出典を設定
-    CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+    CurrentState.setCite(newItemId, {title: tabTitle, url: info.pageUrl})
 
-    CurrentState.insertLastChildItem(itemId, newItemId)
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
   } else if (info.selectionText !== undefined) {
     // テキスト項目として取り込む
@@ -160,11 +158,26 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
     // 出典を設定
-    CurrentState.setCite(newItemId, {title: tab.title ?? '', url: info.pageUrl})
+    CurrentState.setCite(newItemId, {title: tabTitle, url: info.pageUrl})
 
-    CurrentState.insertLastChildItem(itemId, newItemId)
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
   }
+}
+
+// 指定されたURLのタブに対応するウェブページ項目を探す。
+// 複数項目が該当する場合、ターゲット項目のIDを優先的に返す。
+function findCorrespondWebPageItem(url: string): ItemId | undefined {
+  const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(url)
+  const itemIds = tabs
+    .filter((tab) => tab.id !== undefined)
+    .map((tab) => External.instance.tabItemCorrespondence.getItemIdBy(tab.id!))
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  if (itemIds.contains(targetItemId)) {
+    return targetItemId
+  }
+
+  return itemIds.find((itemId) => itemId !== undefined)
 }
 
 async function onCommand(commandName: string) {
