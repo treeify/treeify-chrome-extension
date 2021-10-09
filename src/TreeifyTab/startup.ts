@@ -16,6 +16,7 @@ import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Database} from 'src/TreeifyTab/Internal/Database'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
@@ -164,12 +165,19 @@ function onClickContextMenu(info: OnClickData) {
   }
 }
 
+// 指定されたURLのタブに対応するウェブページ項目を探す。
+// 複数項目が該当する場合、ターゲット項目のIDを優先的に返す。
 function findCorrespondWebPageItem(url: string): ItemId | undefined {
   const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(url)
-  const tab = tabs.first(undefined)
-  if (tab?.id === undefined) return undefined
+  const itemIds = tabs
+    .filter((tab) => tab.id !== undefined)
+    .map((tab) => External.instance.tabItemCorrespondence.getItemIdBy(tab.id!))
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  if (itemIds.contains(targetItemId)) {
+    return targetItemId
+  }
 
-  return External.instance.tabItemCorrespondence.getItemIdBy(tab.id)
+  return itemIds.find((itemId) => itemId !== undefined)
 }
 
 async function onCommand(commandName: string) {
