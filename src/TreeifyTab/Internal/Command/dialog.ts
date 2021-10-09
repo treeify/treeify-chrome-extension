@@ -46,7 +46,10 @@ export function showWorkspaceDialog() {
 
 /** 他のトランスクルード元ダイアログを表示する */
 export function showOtherParentsDialog() {
-  External.instance.dialogState = {type: 'OtherParentsDialog'}
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  if (CurrentState.countParents(targetItemId) >= 2) {
+    External.instance.dialogState = {type: 'OtherParentsDialog'}
+  }
 }
 
 /** 検索ダイアログを表示する */
