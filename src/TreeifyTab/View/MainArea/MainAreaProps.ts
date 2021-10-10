@@ -12,8 +12,10 @@ import {
   setDomSelection,
 } from 'src/TreeifyTab/External/domTextSelection'
 import {External} from 'src/TreeifyTab/External/External'
+import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
 import {Command} from 'src/TreeifyTab/Internal/Command'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {Database} from 'src/TreeifyTab/Internal/Database'
 import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
 import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
@@ -746,6 +748,12 @@ async function undo() {
     Internal.instance.undo()
     External.instance.pendingMutatedChunkIds = External.instance.prevPendingMutatedChunkIds
     External.instance.prevPendingMutatedChunkIds = undefined
+
+    // IndexedDBを新しいStateと一致するよう更新
+    await Database.clearAllChunks()
+    // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
+    Database.writeChunks(Chunk.createAllChunks(Internal.instance.state))
+
     await matchTabsAndWebPageItems()
 
     Rerenderer.instance.rerender()
