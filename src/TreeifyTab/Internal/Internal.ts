@@ -55,48 +55,41 @@ export class Internal {
   /** State内の指定されたプロパティを書き換える */
   mutate(value: any, propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-    if (Internal._mutate(value, propertyKeys, this.state)) {
+    const parentObject = Internal.getParentObject(propertyKeys, this.state)
+    const lastKey = propertyKeys.last(undefined)
+    assertNonUndefined(lastKey)
+
+    if (parentObject[lastKey] !== value) {
+      parentObject[lastKey] = value
+
       for (const onMutateListener of this.onMutateListeners) {
         onMutateListener(propertyPath)
       }
     }
   }
 
-  // 指定されたプロパティに値を設定する。
-  // 設定前後で値が変わらなかったら（===だったら）falseを返す
-  private static _mutate(value: any, propertyKeys: List<string>, state: any): boolean {
-    const firstKey = propertyKeys.first(undefined)
-    assertNonUndefined(firstKey)
-
-    if (propertyKeys.size === 1) {
-      if (state[firstKey] !== value) {
-        state[firstKey] = value
-        return true
-      } else {
-        return false
-      }
-    } else {
-      return this._mutate(value, propertyKeys.shift(), state[firstKey])
-    }
-  }
-
   /** State内の指定されたプロパティを削除する */
   delete(propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-    Internal._delete(propertyKeys, this.state)
+    const parentObject = Internal.getParentObject(propertyKeys, this.state)
+    const lastKey = propertyKeys.last(undefined)
+    assertNonUndefined(lastKey)
+
+    delete parentObject[lastKey]
+
     for (const onMutateListener of this.onMutateListeners) {
       onMutateListener(propertyPath)
     }
   }
 
-  private static _delete(propertyKeys: List<string>, state: any) {
-    const firstKey = propertyKeys.first(undefined)
-    assertNonUndefined(firstKey)
-
+  private static getParentObject(propertyKeys: List<string>, state: any): any {
     if (propertyKeys.size === 1) {
-      delete state[firstKey]
+      return state
     } else {
-      this._delete(propertyKeys.shift(), state[firstKey])
+      const firstKey = propertyKeys.first(undefined)
+      assertNonUndefined(firstKey)
+
+      return this.getParentObject(propertyKeys.shift(), state[firstKey])
     }
   }
 
