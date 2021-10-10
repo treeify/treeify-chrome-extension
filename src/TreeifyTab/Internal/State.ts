@@ -26,10 +26,8 @@ export type State = {
   /** 削除され再利用される項目ID群 */
   availableItemIds: List<ItemId>
   maxItemId: ItemId
-  /** メインエリア領域におけるキーボード入力とコマンドの対応付け */
+  /** メインエリアにおけるキーボード入力とコマンドの対応付け */
   mainAreaKeyBindings: {[K in InputId]: List<CommandId>}
-  /** メインエリアの削除ボタンのマウス入力とコマンドの対応付け */
-  mainAreaDeleteButtonMouseBindings: {[K in InputId]: List<CommandId>}
   customCss: string
   exportSettings: {
     selectedFormat: ExportFormat

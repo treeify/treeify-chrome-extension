@@ -1,7 +1,7 @@
 import {is, List} from 'immutable'
 import {assertNeverType} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
-import {CommandId, ItemId} from 'src/TreeifyTab/basicType'
+import {ItemId} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {Command} from 'src/TreeifyTab/Internal/Command'
@@ -158,16 +158,18 @@ export function createMainAreaNodeProps(
         CurrentState.setTargetItemPath(itemPath)
 
         const inputId = InputId.fromMouseEvent(event)
-        const commandIds: List<CommandId> | undefined =
-          state.mainAreaDeleteButtonMouseBindings[inputId]
-        if (commandIds !== undefined) {
-          event.preventDefault()
-          for (const commandId of commandIds) {
-            // @ts-ignore
-            Command[commandId]?.()
-          }
+        switch (inputId) {
+          case '0000MouseButton0':
+            event.preventDefault()
+            Command.removeEdge()
+            Rerenderer.instance.rerender()
+            break
+          case '1000MouseButton0':
+            event.preventDefault()
+            Command.deleteItemItself()
+            Rerenderer.instance.rerender()
+            break
         }
-        Rerenderer.instance.rerender()
       })
     },
     onClickHiddenTabsCount: (event: MouseEvent) => {

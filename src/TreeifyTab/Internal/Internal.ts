@@ -194,10 +194,6 @@ export class Internal {
         '0110ArrowUp': List.of('selectAllAboveItems'),
         '0110ArrowDown': List.of('selectAllBelowItems'),
       },
-      mainAreaDeleteButtonMouseBindings: {
-        '0000MouseButton0': List.of('removeEdge'),
-        '1000MouseButton0': List.of('deleteItemItself'),
-      },
       customCss: '',
       exportSettings: {
         selectedFormat: ExportFormat.PLAIN_TEXT,
