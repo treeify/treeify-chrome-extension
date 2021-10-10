@@ -52,6 +52,35 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
+  if (isSingleSelect) {
+    switch (item.type) {
+      case ItemType.WEB_PAGE:
+        result.push({
+          title: 'タイトルを設定…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+      case ItemType.IMAGE:
+        result.push({
+          title: '画像URLを編集…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+      case ItemType.CODE_BLOCK:
+        result.push({
+          title: 'コードブロックを編集…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+      case ItemType.TEX:
+        result.push({
+          title: 'TeXを編集…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+    }
+  }
+
   result.push({
     title: 'トランスクルード用コピー',
     onClick: () => Command.copyForTransclusion(),
