@@ -740,11 +740,10 @@ async function undo() {
     return
   }
 
-  if (Internal.instance.prevState !== undefined) {
+  if (Internal.instance.undoStack.size > 0) {
     assertNonUndefined(External.instance.prevPendingMutatedChunkIds)
 
-    Internal.instance.state = Internal.instance.prevState
-    Internal.instance.prevState = undefined
+    Internal.instance.undo()
     External.instance.pendingMutatedChunkIds = External.instance.prevPendingMutatedChunkIds
     External.instance.prevPendingMutatedChunkIds = undefined
     await matchTabsAndWebPageItems()

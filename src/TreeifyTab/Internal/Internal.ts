@@ -2,7 +2,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
-import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
+import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import {ExportFormat, State} from 'src/TreeifyTab/Internal/State'
@@ -16,11 +16,8 @@ export class Internal {
   /** Treeifyの項目の全文検索エンジン */
   readonly searchEngine: SearchEngine
 
-  /**
-   * Undo用。1つ前のState。
-   * 現状の実装ではUndoスタックの深さは1が上限である。
-   */
-  prevState: State | undefined
+  // TODO: スタック化する
+  readonly undoStack = new Map<ChunkId, any>()
 
   private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
 
@@ -60,6 +57,12 @@ export class Internal {
     assertNonUndefined(lastKey)
 
     if (parentObject[lastKey] !== value) {
+      // Undo用にミューテート前のデータを退避する
+      const chunkId = Chunk.convertToChunkId(propertyPath)
+      if (!this.undoStack.has(chunkId)) {
+        this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
+      }
+
       parentObject[lastKey] = value
 
       for (const onMutateListener of this.onMutateListeners) {
@@ -74,6 +77,12 @@ export class Internal {
     const parentObject = Internal.getParentObject(propertyKeys, this.state)
     const lastKey = propertyKeys.last(undefined)
     assertNonUndefined(lastKey)
+
+    // Undo用にミューテート前のデータを退避する
+    const chunkId = Chunk.convertToChunkId(propertyPath)
+    if (!this.undoStack.has(chunkId)) {
+      this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
+    }
 
     delete parentObject[lastKey]
 
@@ -99,12 +108,23 @@ export class Internal {
 
   /** 現在のStateをUndoスタックに保存する */
   saveCurrentStateToUndoStack() {
-    // TODO: 最適化の余地あり。毎回cloneするのではなく、パッチを適用する形にできると思う
-    this.prevState = State.clone(this.state)
+    this.undoStack.clear()
 
     External.instance.prevPendingMutatedChunkIds = new Set<ChunkId>(
       External.instance.pendingMutatedChunkIds
     )
+  }
+
+  undo() {
+    for (const [chunkId, savedData] of this.undoStack) {
+      const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+      const parentObject = Internal.getParentObject(propertyKeys, this.state)
+      const lastKey = propertyKeys.last(undefined)
+      assertNonUndefined(lastKey)
+
+      parentObject[lastKey] = savedData
+    }
+    this.undoStack.clear()
   }
 
   dumpCurrentState() {
