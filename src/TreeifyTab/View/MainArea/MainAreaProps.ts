@@ -756,7 +756,8 @@ async function undo() {
 
     Rerenderer.instance.rerender()
 
-    // IndexedDBを新しいStateと一致するよう更新
+    // IndexedDBを新しいStateと一致するよう更新。
+    // このawaitで待っている間にStateがミューテーションされる可能性が気がかり。
     await Database.clearAllChunks()
     // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
     Database.writeChunks(Chunk.createAllChunks(Internal.instance.state))
