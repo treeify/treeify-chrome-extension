@@ -21,6 +21,7 @@ import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedTex
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
@@ -746,17 +747,20 @@ async function undo() {
     assertNonUndefined(External.instance.prevPendingMutatedChunkIds)
 
     Internal.instance.undo()
+    Internal.instance.searchEngine = new SearchEngine(Internal.instance.state)
+
     External.instance.pendingMutatedChunkIds = External.instance.prevPendingMutatedChunkIds
     External.instance.prevPendingMutatedChunkIds = undefined
-
-    // IndexedDBを新しいStateと一致するよう更新
-    await Database.clearAllChunks()
-    // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
-    Database.writeChunks(Chunk.createAllChunks(Internal.instance.state))
 
     await matchTabsAndWebPageItems()
 
     Rerenderer.instance.rerender()
+
+    // IndexedDBを新しいStateと一致するよう更新。
+    // このawaitで待っている間にStateがミューテーションされる可能性が気がかり。
+    await Database.clearAllChunks()
+    // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
+    Database.writeChunks(Chunk.createAllChunks(Internal.instance.state))
   }
 }
 

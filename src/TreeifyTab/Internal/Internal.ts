@@ -14,7 +14,7 @@ export class Internal {
 
   state: State
   /** Treeifyの項目の全文検索エンジン */
-  readonly searchEngine: SearchEngine
+  searchEngine: SearchEngine
 
   // TODO: スタック化する
   readonly undoStack = new Map<ChunkId, any>()
