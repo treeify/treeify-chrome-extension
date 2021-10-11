@@ -21,6 +21,7 @@ import {extractPlainText} from 'src/TreeifyTab/Internal/ImportExport/indentedTex
 import {InputId} from 'src/TreeifyTab/Internal/InputId'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import {State} from 'src/TreeifyTab/Internal/State'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
@@ -746,6 +747,8 @@ async function undo() {
     assertNonUndefined(External.instance.prevPendingMutatedChunkIds)
 
     Internal.instance.undo()
+    Internal.instance.searchEngine = new SearchEngine(Internal.instance.state)
+
     External.instance.pendingMutatedChunkIds = External.instance.prevPendingMutatedChunkIds
     External.instance.prevPendingMutatedChunkIds = undefined
 
