@@ -36,7 +36,7 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
 
   const baseAttributes: {[T in string]: string} = {
     isPage: CurrentState.isPage(itemId).toString(),
-    itemId: itemId.toString(),
+    id: itemId.toString(),
   }
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isCollapsed = CurrentState.getIsCollapsed(itemPath).toString()
@@ -188,7 +188,7 @@ export function createItemsBasedOnOpml(outlineElements: List<Element>): List<Ite
 
 /** パースされたOPMLのoutline要素を元に項目を作る */
 function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): ItemAndEdge {
-  const attrItemId = outlineElement.getAttribute('itemId')
+  const attrItemId = outlineElement.getAttribute('id')
   const isCollapsed = outlineElement.getAttribute('isCollapsed') === 'true'
   const edge = {isCollapsed}
   const existingItemId = attrItemId !== null ? itemIdMap[attrItemId] : undefined
