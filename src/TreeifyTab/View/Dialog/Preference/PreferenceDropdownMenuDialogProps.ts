@@ -20,6 +20,12 @@ export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogPro
         },
       },
       {
+        title: 'ブラウザコマンド設定',
+        onClick: () => {
+          chrome.tabs.create({url: 'chrome://extensions/shortcuts'})
+        },
+      },
+      {
         title: 'カスタムCSS',
         onClick: () => {
           External.instance.dialogState = {type: 'CustomCssDialog'}
