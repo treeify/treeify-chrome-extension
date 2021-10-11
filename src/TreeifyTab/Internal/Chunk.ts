@@ -77,7 +77,7 @@ export namespace Chunk {
     const rawObject = secondKey === undefined ? state[firstKey] : state[firstKey][secondKey]
     return {
       id: chunkId,
-      data: rawObject,
+      data: State.clone(rawObject),
     }
   }
 

@@ -2,7 +2,7 @@ import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
-import {ChunkId} from 'src/TreeifyTab/Internal/Chunk'
+import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
 import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
 import {SearchEngine} from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import {ExportFormat, State} from 'src/TreeifyTab/Internal/State'
@@ -16,11 +16,8 @@ export class Internal {
   /** Treeifyの項目の全文検索エンジン */
   readonly searchEngine: SearchEngine
 
-  /**
-   * Undo用。1つ前のState。
-   * 現状の実装ではUndoスタックの深さは1が上限である。
-   */
-  prevState: State | undefined
+  // TODO: スタック化する
+  readonly undoStack = new Map<ChunkId, any>()
 
   private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
 
@@ -55,48 +52,53 @@ export class Internal {
   /** State内の指定されたプロパティを書き換える */
   mutate(value: any, propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-    if (Internal._mutate(value, propertyKeys, this.state)) {
+    const parentObject = Internal.getParentObject(propertyKeys, this.state)
+    const lastKey = propertyKeys.last(undefined)
+    assertNonUndefined(lastKey)
+
+    if (parentObject[lastKey] !== value) {
+      // Undo用にミューテート前のデータを退避する
+      const chunkId = Chunk.convertToChunkId(propertyPath)
+      if (!this.undoStack.has(chunkId)) {
+        this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
+      }
+
+      parentObject[lastKey] = value
+
       for (const onMutateListener of this.onMutateListeners) {
         onMutateListener(propertyPath)
       }
     }
   }
 
-  // 指定されたプロパティに値を設定する。
-  // 設定前後で値が変わらなかったら（===だったら）falseを返す
-  private static _mutate(value: any, propertyKeys: List<string>, state: any): boolean {
-    const firstKey = propertyKeys.first(undefined)
-    assertNonUndefined(firstKey)
-
-    if (propertyKeys.size === 1) {
-      if (state[firstKey] !== value) {
-        state[firstKey] = value
-        return true
-      } else {
-        return false
-      }
-    } else {
-      return this._mutate(value, propertyKeys.shift(), state[firstKey])
-    }
-  }
-
   /** State内の指定されたプロパティを削除する */
   delete(propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-    Internal._delete(propertyKeys, this.state)
+    const parentObject = Internal.getParentObject(propertyKeys, this.state)
+    const lastKey = propertyKeys.last(undefined)
+    assertNonUndefined(lastKey)
+
+    // Undo用にミューテート前のデータを退避する
+    const chunkId = Chunk.convertToChunkId(propertyPath)
+    if (!this.undoStack.has(chunkId)) {
+      this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
+    }
+
+    delete parentObject[lastKey]
+
     for (const onMutateListener of this.onMutateListeners) {
       onMutateListener(propertyPath)
     }
   }
 
-  private static _delete(propertyKeys: List<string>, state: any) {
-    const firstKey = propertyKeys.first(undefined)
-    assertNonUndefined(firstKey)
-
+  private static getParentObject(propertyKeys: List<string>, state: any): any {
     if (propertyKeys.size === 1) {
-      delete state[firstKey]
+      return state
     } else {
-      this._delete(propertyKeys.shift(), state[firstKey])
+      const firstKey = propertyKeys.first(undefined)
+      assertNonUndefined(firstKey)
+
+      return this.getParentObject(propertyKeys.shift(), state[firstKey])
     }
   }
 
@@ -106,12 +108,23 @@ export class Internal {
 
   /** 現在のStateをUndoスタックに保存する */
   saveCurrentStateToUndoStack() {
-    // TODO: 最適化の余地あり。毎回cloneするのではなく、パッチを適用する形にできると思う
-    this.prevState = State.clone(this.state)
+    this.undoStack.clear()
 
     External.instance.prevPendingMutatedChunkIds = new Set<ChunkId>(
       External.instance.pendingMutatedChunkIds
     )
+  }
+
+  undo() {
+    for (const [chunkId, savedData] of this.undoStack) {
+      const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+      const parentObject = Internal.getParentObject(propertyKeys, this.state)
+      const lastKey = propertyKeys.last(undefined)
+      assertNonUndefined(lastKey)
+
+      parentObject[lastKey] = savedData
+    }
+    this.undoStack.clear()
   }
 
   dumpCurrentState() {
