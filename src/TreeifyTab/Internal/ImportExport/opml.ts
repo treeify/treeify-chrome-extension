@@ -34,8 +34,9 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
-  const baseAttributes: {[T in string]: string} = {
-    id: itemId.toString(),
+  const baseAttributes: {[T in string]: string} = {}
+  if (CurrentState.countParents(itemId) > 1) {
+    baseAttributes.id = itemId.toString()
   }
   if (CurrentState.isPage(itemId)) {
     baseAttributes.isPage = 'true'
@@ -46,7 +47,6 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
   if (!item.cssClasses.isEmpty()) {
     baseAttributes.cssClass = item.cssClasses.join(' ')
   }
-
   if (item.cite !== null) {
     baseAttributes.citeTitle = item.cite.title
     baseAttributes.citeUrl = item.cite.url
