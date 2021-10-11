@@ -14,13 +14,15 @@ export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogPro
     right: rect.right,
     itemPropses: List.of(
       {
-        title: 'ワークスペース',
-        onClick: () => Command.showWorkspaceDialog(),
-      },
-      {
         title: 'キーボード操作設定',
         onClick: () => {
           External.instance.dialogState = {type: 'KeyBindingDialog'}
+        },
+      },
+      {
+        title: 'ブラウザコマンド設定',
+        onClick: () => {
+          chrome.tabs.create({url: 'chrome://extensions/shortcuts'})
         },
       },
       {
@@ -28,6 +30,10 @@ export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogPro
         onClick: () => {
           External.instance.dialogState = {type: 'CustomCssDialog'}
         },
+      },
+      {
+        title: 'ワークスペース',
+        onClick: () => Command.showWorkspaceDialog(),
       },
       {
         title: 'その他の設定',
