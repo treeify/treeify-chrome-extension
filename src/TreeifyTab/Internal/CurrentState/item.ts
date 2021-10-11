@@ -36,6 +36,17 @@ export function deleteItem(itemId: ItemId) {
     modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
   }
 
+  // 除外リストから削除する
+  for (const key in Internal.instance.state.workspaces) {
+    const workspace = Internal.instance.state.workspaces[key]
+    if (workspace.excludedItemIds.contains(itemId)) {
+      Internal.instance.mutate(
+        workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
+        PropertyPath.of('workspaces', key, 'excludedItemIds')
+      )
+    }
+  }
+
   // 対応するタブがあれば閉じる
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
   if (tabId !== undefined) {
@@ -105,6 +116,17 @@ export function deleteItemItself(itemId: ItemId) {
       assert(index !== -1)
       return itemIds.splice(index, 1, ...childItemIds)
     })
+  }
+
+  // 除外リストから削除する
+  for (const key in Internal.instance.state.workspaces) {
+    const workspace = Internal.instance.state.workspaces[key]
+    if (workspace.excludedItemIds.contains(itemId)) {
+      Internal.instance.mutate(
+        workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
+        PropertyPath.of('workspaces', key, 'excludedItemIds')
+      )
+    }
   }
 
   // 対応するタブがあれば閉じる
