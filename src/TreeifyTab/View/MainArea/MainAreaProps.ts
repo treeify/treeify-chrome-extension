@@ -749,14 +749,14 @@ async function undo() {
     External.instance.pendingMutatedChunkIds = External.instance.prevPendingMutatedChunkIds
     External.instance.prevPendingMutatedChunkIds = undefined
 
+    await matchTabsAndWebPageItems()
+
+    Rerenderer.instance.rerender()
+
     // IndexedDBを新しいStateと一致するよう更新
     await Database.clearAllChunks()
     // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
     Database.writeChunks(Chunk.createAllChunks(Internal.instance.state))
-
-    await matchTabsAndWebPageItems()
-
-    Rerenderer.instance.rerender()
   }
 }
 
