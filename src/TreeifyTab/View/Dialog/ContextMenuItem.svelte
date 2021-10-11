@@ -3,6 +3,7 @@
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {InputId} from '../../Internal/InputId'
+  import {Internal} from '../../Internal/Internal'
   import {Rerenderer} from '../../Rerenderer'
   import {ContextMenuItemProps} from './ContextMenuItemProps'
 
@@ -10,6 +11,8 @@
 
   function onClick() {
     doWithErrorCapture(() => {
+      Internal.instance.saveCurrentStateToUndoStack()
+
       // props.onClick()より先にダイアログを閉じる必要がある。
       // なぜならprops.onClick()内でダイアログを表示する場合があり、
       // その後にダイアログを閉じると何も起こらなくなってしまうから。
