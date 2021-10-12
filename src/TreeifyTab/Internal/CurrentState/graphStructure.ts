@@ -1,6 +1,7 @@
-import {List, Set} from 'immutable'
+import {List, Seq, Set} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
+import {MutableOrderedTree} from 'src/Common/OrderedTree'
 import {ItemId} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -156,4 +157,48 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
   } else {
     return -1
   }
+}
+
+/**
+ * 項目群をグラフ構造に従って順序ツリー化する。
+ * トランスクルードによって同一項目が複数箇所に出現する場合がある。
+ */
+export function treeify(itemIdSet: Set<ItemId>, rootItemId: ItemId): MutableOrderedTree<ItemPath> {
+  const childrenMap = itemIdSet
+    .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet))
+    .groupBy((value) => ItemPath.getRootItemId(value))
+    .map((collection) => CurrentState.sortByDocumentOrder(collection.toList()))
+
+  return _treeify(childrenMap, List.of(rootItemId))
+}
+
+/**
+ * treeify関数用のヘルパー関数。
+ * 第1引数を先祖方向に探索し、第2引数に含まれる項目に到達したら、スタート地点からその項目までのItemPathを返す。
+ * @param itemIds アキュムレーター引数。長さは必ず1以上。
+ * @param itemIdSet 探索の終端となる項目ID群
+ */
+function* yieldItemPathsFor(itemIds: List<ItemId>, itemIdSet: Set<ItemId>): Generator<ItemPath> {
+  const itemId = itemIds.first(undefined)
+  assertNonUndefined(itemId)
+
+  if (itemIds.size > 1 && itemIdSet.contains(itemId)) {
+    yield itemIds
+    return
+  }
+
+  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
+    yield* yieldItemPathsFor(itemIds.unshift(parentItemId), itemIdSet)
+  }
+}
+
+function _treeify(
+  childrenMap: Seq.Keyed<ItemId, List<ItemPath>>,
+  itemPath: ItemPath
+): MutableOrderedTree<ItemPath> {
+  const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List.of()
+  return new MutableOrderedTree(
+    itemPath,
+    children.map((child) => _treeify(childrenMap, itemPath.concat(child.shift()))).toArray()
+  )
 }

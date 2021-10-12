@@ -23,9 +23,15 @@ export function createTabsDialogProps(dialog: TabsDialog): TabsDialogProps {
   const webPageItemIds = Set(CurrentState.getSubtreeItemIds(dialog.targetItemId)).filter(
     (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
   )
-  const webPageItemPaths = webPageItemIds.flatMap(CurrentState.yieldItemPaths)
-  // TODO: 検索結果と同じようにツリー化する
+  const rootNode = CurrentState.treeify(
+    webPageItemIds.add(dialog.targetItemId),
+    dialog.targetItemId
+  )
   return {
-    items: webPageItemPaths.toList().map(createTabsDialogItemProps),
+    items: List(rootNode.children).map((tree) => {
+      return tree.fold((itemPath, children: TabsDialogItemProps[]) =>
+        createTabsDialogItemProps(itemPath, List(children))
+      )
+    }),
   }
 }
