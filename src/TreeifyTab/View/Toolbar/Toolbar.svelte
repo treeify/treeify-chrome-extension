@@ -53,5 +53,9 @@
     background: var(--toolbar-background);
     // Dynalistを参考にして作った影。lch(85.0%, 0.0, 0.0)相当
     box-shadow: 0 1.5px 3px #d4d4d4;
+
+    @media print {
+      display: none;
+    }
   }
 </style>
