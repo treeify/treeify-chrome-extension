@@ -2,6 +2,7 @@
   import {ItemPath} from '../../Internal/ItemPath.js'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import {createItemContentProps} from '../ItemContent/ItemContentProps.js'
+  import TabsDialogItem from './TabsDialogItem.svelte'
   import {TabsDialogItemProps} from './TabsDialogItemProps'
 
   export let props: TabsDialogItemProps
@@ -9,6 +10,14 @@
 
 <div class="tabs-dialog-item" on:mousedown={props.onClick}>
   <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+  <div class="tabs-dialog-item_indent-and-children-area">
+    <div class="tabs-dialog-item_indent-area" />
+    <div class="tabs-dialog-item_children-area">
+      {#each props.children.toArray() as child}
+        <TabsDialogItem props={child} />
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style global lang="scss">
@@ -18,5 +27,15 @@
     &:hover {
       background: var(--main-area-mouse-hover-item-background-color);
     }
+  }
+
+  .tabs-dialog-item_indent-and-children-area {
+    display: flex;
+  }
+
+  .tabs-dialog-item_indent-area {
+    flex: 0 0 1.1em;
+    // lch(88.0%, 0.0, 0.0)相当
+    border-left: 1px solid #dddddd;
   }
 </style>

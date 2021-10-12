@@ -1,3 +1,4 @@
+import {List} from 'immutable'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
@@ -5,12 +6,17 @@ import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
 
 export type TabsDialogItemProps = {
   itemPath: ItemPath
+  children: List<TabsDialogItemProps>
   onClick: () => void
 }
 
-export function createTabsDialogItemProps(itemPath: ItemPath): TabsDialogItemProps {
+export function createTabsDialogItemProps(
+  itemPath: ItemPath,
+  children: List<TabsDialogItemProps>
+): TabsDialogItemProps {
   return {
     itemPath,
+    children,
     onClick() {
       CurrentState.jumpTo(itemPath)
 
