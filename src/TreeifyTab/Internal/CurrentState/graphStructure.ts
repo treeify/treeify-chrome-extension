@@ -163,13 +163,13 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
  * 項目群をグラフ構造に従って順序ツリー化する。
  * トランスクルードによって同一項目が複数箇所に出現する場合がある。
  */
-export function treeify(itemIdSet: Set<ItemId>, rootItemId: ItemId): MutableOrderedTree<ItemId> {
+export function treeify(itemIdSet: Set<ItemId>, rootItemId: ItemId): MutableOrderedTree<ItemPath> {
   const childrenMap = itemIdSet
     .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet))
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => CurrentState.sortByDocumentOrder(collection.toList()))
 
-  return _treeify(childrenMap, rootItemId)
+  return _treeify(childrenMap, List.of(rootItemId))
 }
 
 /**
@@ -194,11 +194,11 @@ function* yieldItemPathsFor(itemIds: List<ItemId>, itemIdSet: Set<ItemId>): Gene
 
 function _treeify(
   childrenMap: Seq.Keyed<ItemId, List<ItemPath>>,
-  itemId: ItemId
-): MutableOrderedTree<ItemId> {
-  const children = childrenMap.get(itemId) ?? List.of()
+  itemPath: ItemPath
+): MutableOrderedTree<ItemPath> {
+  const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List.of()
   return new MutableOrderedTree(
-    itemId,
-    children.map((child) => _treeify(childrenMap, ItemPath.getItemId(child))).toArray()
+    itemPath,
+    children.map((child) => _treeify(childrenMap, itemPath.concat(child.shift()))).toArray()
   )
 }
