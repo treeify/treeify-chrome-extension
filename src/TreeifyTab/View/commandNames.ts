@@ -38,7 +38,7 @@ export const commandNames: {[T in string]: string} = {
   selectAllAboveItems: '長男まで選択',
   selectAllBelowItems: '末弟まで選択',
   copyForTransclusion: 'トランスクルード用コピー',
-  pasteAsPlainText: 'テキストそのまま貼り付け',
+  pasteAsPlainText: 'プレーンテキストとして貼り付け',
   showEditDialog: '編集ダイアログを表示',
   showWorkspaceDialog: 'ワークスペースダイアログを表示',
   showOtherParentsDialog: '他のトランスクルード元を表示',
