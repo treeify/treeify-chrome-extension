@@ -18,5 +18,7 @@
   .tabs-dialog_content {
     min-width: 20em;
     padding: 1em;
+
+    outline: none;
   }
 </style>
