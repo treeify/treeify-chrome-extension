@@ -8,8 +8,10 @@
   export let props: TabsDialogItemProps
 </script>
 
-<div class="tabs-dialog-item" on:mousedown={props.onClick}>
-  <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+<div class="tabs-dialog-item">
+  <div class="tabs-dialog-item_content-area" on:mousedown={props.onClick}>
+    <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+  </div>
   <div class="tabs-dialog-item_indent-and-children-area">
     <div class="tabs-dialog-item_indent-area" />
     <div class="tabs-dialog-item_children-area">
@@ -21,7 +23,7 @@
 </div>
 
 <style global lang="scss">
-  .tabs-dialog-item {
+  .tabs-dialog-item_content-area {
     cursor: pointer;
 
     &:hover {
