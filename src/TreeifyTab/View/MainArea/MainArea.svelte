@@ -47,6 +47,10 @@
     background: #f6f6f6;
 
     padding: 20px 400px 0 40px;
+
+    @media print {
+      padding: 0;
+    }
   }
 
   .main-area_paper {
@@ -61,5 +65,9 @@
     box-shadow: 0 1.5px 5px #c6c6c6;
 
     background: #ffffff;
+
+    @media print {
+      box-shadow: none;
+    }
   }
 </style>

@@ -21,5 +21,9 @@
     box-shadow: 1.5px 0 3px #d4d4d4;
 
     z-index: 10;
+
+    @media print {
+      display: none;
+    }
   }
 </style>

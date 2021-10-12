@@ -48,6 +48,8 @@
   }
 
   body {
+    -webkit-print-color-adjust: exact;
+
     height: 100%;
     margin: 0;
     font-size: inherit;
