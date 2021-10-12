@@ -75,7 +75,7 @@
     z-index: 30;
 
     // バックドロップ
-    background: hsla(0, 0%, 0%, 0.1);
+    background: hsla(0, 0%, 0%, 0.05);
 
     // ダイアログを画面中央に表示する
     display: flex;
