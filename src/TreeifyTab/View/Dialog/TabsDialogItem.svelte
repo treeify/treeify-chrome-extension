@@ -37,7 +37,7 @@
 
   .tabs-dialog-item_indent-area {
     flex: 0 0 1.1em;
-    // lch(88.0%, 0.0, 0.0)相当
-    border-left: 1px solid #dddddd;
+    // lch(80.0%, 0.0, 0.0)相当
+    border-left: 1px solid #c6c6c6;
   }
 </style>
