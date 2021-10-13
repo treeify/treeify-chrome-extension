@@ -543,9 +543,11 @@ function onBackspace(event: KeyboardEvent) {
       return
     }
 
-    // ユーザー視点で何が起こったのか分かりにくいため、上の項目が非表示の子項目を持っている場合は何もしない
-    const bulletState = deriveBulletState(Internal.instance.state, aboveItemPath)
-    if (bulletState === MainAreaBulletState.PAGE || bulletState === MainAreaBulletState.COLLAPSED) {
+    // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
+    if (
+      !targetItem.childItemIds.isEmpty() &&
+      !Internal.instance.state.items[aboveItemId].childItemIds.isEmpty()
+    ) {
       return
     }
 
