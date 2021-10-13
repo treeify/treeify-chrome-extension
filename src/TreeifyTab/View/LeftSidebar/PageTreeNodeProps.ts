@@ -93,6 +93,8 @@ export function createPageTreeNodeProps(
             break
           case '0000MouseButton1':
             event.preventDefault()
+            if (itemId === TOP_ITEM_ID) break
+
             // ページ全体をハードアンロードする
             for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
               const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
