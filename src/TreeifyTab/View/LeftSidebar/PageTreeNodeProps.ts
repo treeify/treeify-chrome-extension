@@ -1,5 +1,4 @@
-import {Collection, List, Seq, Set} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {List, Set} from 'immutable'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
 import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
@@ -39,126 +38,89 @@ export type PageTreeNodeProps = {
 
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   const filteredPageIds = CurrentState.getFilteredMountedPageIds()
-  const itemPaths = filteredPageIds.flatMap((itemId) => [
-    ...searchItemPathForMountedPage(state, List.of(itemId)),
-  ])
-  const pageTreeEdges = itemPaths
-    .groupBy((value) => ItemPath.getRootItemId(value))
-    .map((collection) => CurrentState.sortByDocumentOrder(collection.toList()))
 
-  return createPageTreeNodeProps(state, List.of(TOP_ITEM_ID), pageTreeEdges, filteredPageIds)
-}
+  const tree = CurrentState.treeify(CurrentState.getFilteredMountedPageIds().toSet(), TOP_ITEM_ID)
+  return tree.fold((itemPath, children) => {
+    const itemId = ItemPath.getItemId(itemPath)
+    const activePageId = CurrentState.getActivePageId()
 
-export function createPageTreeNodeProps(
-  state: State,
-  itemPath: ItemPath,
-  pageTreeEdges: Seq.Keyed<ItemId, Collection<integer, ItemPath>>,
-  filteredPageIds: List<ItemId>
-): PageTreeNodeProps {
-  const itemId = ItemPath.getItemId(itemPath)
-  const childPagePaths = pageTreeEdges.get(itemId)?.toList() ?? List.of()
-  const displayingChildPagePaths =
-    ItemPath.hasParent(itemPath) && CurrentState.getIsCollapsed(itemPath)
-      ? List.of<ItemPath>()
-      : childPagePaths
-  const hasChildren = !pageTreeEdges.get(itemId, List()).isEmpty()
-  const activePageId = CurrentState.getActivePageId()
+    const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
+    const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.7
+    const footprintCount = Math.floor(nonActivePageIds.size ** exponent)
+    const index = nonActivePageIds.indexOf(itemId)
+    const rank = index !== -1 ? nonActivePageIds.size - index - 1 : 0
 
-  const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
-  const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.7
-  const footprintCount = Math.floor(nonActivePageIds.size ** exponent)
-  const index = nonActivePageIds.indexOf(itemId)
-  const rank = index !== -1 ? nonActivePageIds.size - index - 1 : 0
+    return {
+      itemId,
+      bulletAndIndentProps: createPageTreeBulletAndIndentProps(children.length > 0, itemPath),
+      contentProps: createItemContentProps(itemId),
+      childNodePropses: List(children),
+      isActivePage: activePageId === itemId,
+      isRoot: itemId === TOP_ITEM_ID,
+      isAudible: getAudiblePageIds().contains(itemId),
+      footprintRank: rank < footprintCount ? rank : undefined,
+      footprintCount,
+      tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
+      onClickContentArea: (event: MouseEvent) => {
+        doWithErrorCapture(() => {
+          switch (InputId.fromMouseEvent(event)) {
+            case '0000MouseButton0':
+              event.preventDefault()
+              CurrentState.switchActivePage(itemId)
+              Rerenderer.instance.rerender()
+              break
+            case '0000MouseButton1':
+              event.preventDefault()
+              if (itemId === TOP_ITEM_ID) break
 
-  return {
-    itemId,
-    bulletAndIndentProps: createPageTreeBulletAndIndentProps(hasChildren, itemPath),
-    contentProps: createItemContentProps(itemId),
-    childNodePropses: displayingChildPagePaths.map((childPagePath) =>
-      createPageTreeNodeProps(state, childPagePath, pageTreeEdges, filteredPageIds)
-    ),
-    isActivePage: activePageId === itemId,
-    isRoot: itemId === TOP_ITEM_ID,
-    isAudible: getAudiblePageIds().contains(itemId),
-    footprintRank: rank < footprintCount ? rank : undefined,
-    footprintCount,
-    tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
-    onClickContentArea: (event: MouseEvent) => {
-      doWithErrorCapture(() => {
-        switch (InputId.fromMouseEvent(event)) {
-          case '0000MouseButton0':
-            event.preventDefault()
-            CurrentState.switchActivePage(itemId)
-            Rerenderer.instance.rerender()
-            break
-          case '0000MouseButton1':
-            event.preventDefault()
-            if (itemId === TOP_ITEM_ID) break
+              // ページ全体をハードアンロードする
+              for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+                const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+                if (tabId !== undefined) {
+                  // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+                  External.instance.hardUnloadedTabIds.add(tabId)
 
-            // ページ全体をハードアンロードする
-            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
-              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-              if (tabId !== undefined) {
-                // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-                External.instance.hardUnloadedTabIds.add(tabId)
-
-                // 対応するタブを閉じる
-                chrome.tabs.remove(tabId)
+                  // 対応するタブを閉じる
+                  chrome.tabs.remove(tabId)
+                }
               }
-            }
-            unmountPage(itemId, activePageId)
-            break
-        }
-      })
-    },
-    onClickCloseButton: () => {
-      doWithErrorCapture(() => {
-        unmountPage(itemId, activePageId)
-      })
-    },
-    onClickTabsCount: (event) => {
-      doWithErrorCapture(() => {
-        switch (InputId.fromMouseEvent(event)) {
-          case '0000MouseButton0':
-            // ページ全体をハードアンロードする
-            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
-              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-              if (tabId !== undefined) {
-                // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-                External.instance.hardUnloadedTabIds.add(tabId)
+              unmountPage(itemId, activePageId)
+              break
+          }
+        })
+      },
+      onClickCloseButton: () => {
+        doWithErrorCapture(() => {
+          unmountPage(itemId, activePageId)
+        })
+      },
+      onClickTabsCount: (event) => {
+        doWithErrorCapture(() => {
+          switch (InputId.fromMouseEvent(event)) {
+            case '0000MouseButton0':
+              // ページ全体をハードアンロードする
+              for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+                const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+                if (tabId !== undefined) {
+                  // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+                  External.instance.hardUnloadedTabIds.add(tabId)
 
-                // 対応するタブを閉じる
-                chrome.tabs.remove(tabId)
+                  // 対応するタブを閉じる
+                  chrome.tabs.remove(tabId)
+                }
               }
-            }
-            break
-        }
-      })
-    },
-    onTabsCountContextMenu: (event: Event) => {
-      event.preventDefault()
+              break
+          }
+        })
+      },
+      onTabsCountContextMenu: (event: Event) => {
+        event.preventDefault()
 
-      External.instance.dialogState = {type: 'TabsDialog', targetItemId: itemId}
-      Rerenderer.instance.rerender()
-    },
-  }
-}
-
-// マウント済みページを先祖方向に探索し、そのページまでのItemPathを返す。
-// 複数該当する場合はすべて返す。
-function* searchItemPathForMountedPage(state: State, itemIds: List<ItemId>): Generator<ItemPath> {
-  const itemId = itemIds.first(undefined)
-  assertNonUndefined(itemId)
-
-  // もし他のマウント済みページに到達したら、そのページまでの経路を返す
-  if (itemIds.size > 1 && state.mountedPageIds.contains(itemId)) {
-    yield itemIds
-    return
-  }
-
-  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    yield* searchItemPathForMountedPage(state, itemIds.unshift(parentItemId))
-  }
+        External.instance.dialogState = {type: 'TabsDialog', targetItemId: itemId}
+        Rerenderer.instance.rerender()
+      },
+    }
+  })
 }
 
 function getAudiblePageIds(): Set<ItemId> {
