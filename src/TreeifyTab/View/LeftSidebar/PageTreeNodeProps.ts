@@ -93,6 +93,17 @@ export function createPageTreeNodeProps(
             break
           case '0000MouseButton1':
             event.preventDefault()
+            // ページ全体をハードアンロードする
+            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+              if (tabId !== undefined) {
+                // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+                External.instance.hardUnloadedTabIds.add(tabId)
+
+                // 対応するタブを閉じる
+                chrome.tabs.remove(tabId)
+              }
+            }
             unmountPage(itemId, activePageId)
             break
         }
