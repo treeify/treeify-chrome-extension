@@ -13,8 +13,8 @@
   <div class="main-area-web-page-content_body">
     <div
       class="main-area-web-page-content_favicon"
-      class:soft-unloaded-item={props.isSoftUnloaded}
-      class:hard-unloaded-item={props.isHardUnloaded}
+      class:soft-unloaded={props.isSoftUnloaded}
+      class:hard-unloaded={props.isHardUnloaded}
       on:mousedown={props.onClickFavicon}
     >
       {#if props.isLoading}
@@ -28,8 +28,8 @@
 
     <div
       class="main-area-web-page-content_title"
-      class:soft-unloaded-item={props.isSoftUnloaded}
-      class:hard-unloaded-item={props.isHardUnloaded}
+      class:soft-unloaded={props.isSoftUnloaded}
+      class:hard-unloaded={props.isHardUnloaded}
       class:unread={props.isUnread}
       title={props.title}
       on:click={props.onClickTitle}
@@ -157,12 +157,12 @@
     overflow-x: hidden;
     white-space: nowrap;
 
-    &.soft-unloaded-item {
+    &.soft-unloaded {
       // lch(35.0%, 0.0, 0.0)相当
       color: #525252;
     }
 
-    &.hard-unloaded-item {
+    &.hard-unloaded {
       // lch(60.0%, 0.0, 0.0)相当
       color: #919191;
     }
@@ -171,12 +171,12 @@
     &.unread {
       color: var(--main-area-unread-web-page-item-title-color);
 
-      &.soft-unloaded-item {
+      &.soft-unloaded {
         // lch(35.0%, 30.0, 160.4)相当
         color: #1a5d41;
       }
 
-      &.hard-unloaded-item {
+      &.hard-unloaded {
         // lch(60.0%, 30.0, 160.4)相当
         color: #5d9e7e;
       }
@@ -189,10 +189,10 @@
     }
   }
 
-  .main-area-web-page-content_favicon.soft-unloaded-item > * {
+  .main-area-web-page-content_favicon.soft-unloaded > * {
     filter: opacity(75%);
   }
-  .main-area-web-page-content_favicon.hard-unloaded-item > * {
+  .main-area-web-page-content_favicon.hard-unloaded > * {
     filter: opacity(55%);
   }
 </style>
