@@ -619,6 +619,20 @@ function onDelete(event: KeyboardEvent) {
   if (targetItem.type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
+    const selection = getTextItemSelectionFromDom()
+    assertNonUndefined(selection)
+
+    const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+    const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
+    // キャレットが末尾以外にあるならブラウザの標準の挙動に任せる
+    if (selection.focusDistance !== characterCount || selection.anchorDistance !== characterCount) {
+      return
+    }
+
+    const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+    // 一番下の項目なら何もしない
+    if (belowItemPath === undefined) return
+
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
@@ -640,20 +654,6 @@ function onDelete(event: KeyboardEvent) {
     if (bulletState === MainAreaBulletState.PAGE || bulletState === MainAreaBulletState.COLLAPSED) {
       return
     }
-
-    const selection = getTextItemSelectionFromDom()
-    assertNonUndefined(selection)
-
-    const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-    const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
-    // キャレットが末尾以外にあるならブラウザの標準の挙動に任せる
-    if (selection.focusDistance !== characterCount || selection.anchorDistance !== characterCount) {
-      return
-    }
-
-    const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-    // 一番下の項目なら何もしない
-    if (belowItemPath === undefined) return
 
     const belowItemId = ItemPath.getItemId(belowItemPath)
     const belowItem = Internal.instance.state.items[belowItemId]
