@@ -29,10 +29,6 @@ import {
   createMainAreaNodeProps,
   MainAreaNodeProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
-import {
-  deriveBulletState,
-  MainAreaBulletState,
-} from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps
@@ -619,6 +615,20 @@ function onDelete(event: KeyboardEvent) {
   if (targetItem.type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
+    const selection = getTextItemSelectionFromDom()
+    assertNonUndefined(selection)
+
+    const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+    const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
+    // キャレットが末尾以外にあるならブラウザの標準の挙動に任せる
+    if (selection.focusDistance !== characterCount || selection.anchorDistance !== characterCount) {
+      return
+    }
+
+    const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+    // 一番下の項目なら何もしない
+    if (belowItemPath === undefined) return
+
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
@@ -635,59 +645,48 @@ function onDelete(event: KeyboardEvent) {
       return
     }
 
-    // ユーザー視点で何が起こったのか分かりにくいため、上の項目が非表示の子項目を持っている場合は何もしない
-    const bulletState = deriveBulletState(Internal.instance.state, targetItemPath)
-    if (bulletState === MainAreaBulletState.PAGE || bulletState === MainAreaBulletState.COLLAPSED) {
+    const belowItemId = ItemPath.getItemId(belowItemPath)
+    // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
+    if (
+      !targetItem.childItemIds.isEmpty() &&
+      !Internal.instance.state.items[belowItemId].childItemIds.isEmpty()
+    ) {
       return
     }
 
-    const selection = getTextItemSelectionFromDom()
-    assertNonUndefined(selection)
+    const belowItem = Internal.instance.state.items[belowItemId]
+    if (belowItem.type !== ItemType.TEXT) {
+      // 下の項目がテキスト項目以外の場合
+      // TODO: 項目削除コマンドを実行するのがいいと思う
+    } else {
+      // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
-    const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-    const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
-    if (selection.focusDistance === characterCount && selection.anchorDistance === characterCount) {
-      // キャレットが末尾にあるなら
+      Internal.instance.saveCurrentStateToUndoStack()
 
-      const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      // 一番下の項目なら何もしない
-      if (belowItemPath === undefined) return
+      // テキストを連結
+      const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
+      // TODO: テキストノード同士が連結されないことが気がかり
+      CurrentState.setTextItemDomishObjects(
+        targetItemId,
+        focusedItemDomishObjects.concat(belowItemDomishObjects)
+      )
 
-      const belowItemId = ItemPath.getItemId(belowItemPath)
-      const belowItem = Internal.instance.state.items[belowItemId]
-      if (belowItem.type !== ItemType.TEXT) {
-        // 下の項目がテキスト項目以外の場合
-        // TODO: 項目削除コマンドを実行するのがいいと思う
-      } else {
-        // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
-
-        Internal.instance.saveCurrentStateToUndoStack()
-
-        // テキストを連結
-        const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
-        // TODO: テキストノード同士が連結されないことが気がかり
-        CurrentState.setTextItemDomishObjects(
-          targetItemId,
-          focusedItemDomishObjects.concat(belowItemDomishObjects)
-        )
-
-        // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
-        // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of belowItem.childItemIds) {
-          CurrentState.insertLastChildItem(targetItemId, childItemId)
-        }
-
-        // ↑の元のエッジごと削除
-        CurrentState.deleteItem(belowItemId)
-
-        // 元のキャレット位置を維持する
-        Rerenderer.instance.requestSetCaretDistanceAfterRendering(
-          DomishObject.countCharacters(focusedItemDomishObjects)
-        )
-
-        event.preventDefault()
-        Rerenderer.instance.rerender()
+      // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
+      // アンインデントに似ているが元のエッジを削除しない点が異なる。
+      for (const childItemId of belowItem.childItemIds) {
+        CurrentState.insertLastChildItem(targetItemId, childItemId)
       }
+
+      // ↑の元のエッジごと削除
+      CurrentState.deleteItem(belowItemId)
+
+      // 元のキャレット位置を維持する
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(
+        DomishObject.countCharacters(focusedItemDomishObjects)
+      )
+
+      event.preventDefault()
+      Rerenderer.instance.rerender()
     }
   } else {
     // ターゲット項目がテキスト項目以外の場合
