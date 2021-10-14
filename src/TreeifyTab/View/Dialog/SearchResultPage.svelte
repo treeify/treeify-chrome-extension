@@ -28,8 +28,8 @@
     width: 1.1em;
     aspect-ratio: 1;
 
-    // lch(40.0%, 0.0, 0.0)相当
-    background: #5e5e5e;
+    // lch(30.0%, 0.0, 0.0)相当
+    background: #474747;
     -webkit-mask: url('page-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
   }

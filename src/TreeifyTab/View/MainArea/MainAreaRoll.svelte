@@ -42,8 +42,8 @@
     --main-area-bullet-inner-circle-color: #919191;
     // バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当
     --main-area-bullet-inner-circle-hover-color: #5e5e5e;
-    // バレットとして表示されるページアイコンの色。lch(40.0%, 0.0, 0.0)相当
-    --main-area-bullet-page-icon-color: #5e5e5e;
+    // バレットとして表示されるページアイコンの色。lch(30.0%, 0.0, 0.0)相当
+    --main-area-bullet-page-icon-color: #474747;
     // バレットとして表示されるページアイコンのマウスホバー時の色。lch(20.0%, 0.0, 0.0)相当
     --main-area-bullet-page-icon-hover-color: #303030;
 
