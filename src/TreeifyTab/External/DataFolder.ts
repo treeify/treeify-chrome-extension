@@ -64,7 +64,7 @@ export class DataFolder {
     return this.instancesFolderPath.push(instanceId)
   }
   private static getChunkPacksFolderPath(instanceId = Instance.getId()): FilePath {
-    return this.getInstanceFolderPath(instanceId).push('ChunkPacks')
+    return this.getInstanceFolderPath(instanceId).push('Chunk packs')
   }
   private static getChunkPackFilePath(fileName: string, instanceId = Instance.getId()): FilePath {
     return this.getChunkPacksFolderPath(instanceId).push(fileName)
