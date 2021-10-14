@@ -94,7 +94,7 @@
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
-    --page-tree-footprint-count-exponent: 0.7;
+    --page-tree-footprint-count-exponent: 0.6;
 
     // 閉じるボタンのサイズ（正方形の一辺の長さ）
     --page-tree-close-button-size: 1.45em;

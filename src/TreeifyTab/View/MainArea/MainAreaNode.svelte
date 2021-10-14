@@ -111,7 +111,7 @@
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
-    --main-area-footprint-count-exponent: 0.5;
+    --main-area-footprint-count-exponent: 0.6;
 
     // 完了状態の項目の標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当
     --completed-item-text-color: #b9b9b9;
