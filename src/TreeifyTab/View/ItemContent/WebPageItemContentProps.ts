@@ -10,6 +10,7 @@ export type WebPageItemContentProps = {
   isSoftUnloaded: boolean
   isHardUnloaded: boolean
   isUnread: boolean
+  isAudible: boolean
 }
 
 export function createWebPageItemContentProps(itemId: ItemId): WebPageItemContentProps {
@@ -25,5 +26,6 @@ export function createWebPageItemContentProps(itemId: ItemId): WebPageItemConten
     isSoftUnloaded: tab?.discarded === true,
     isHardUnloaded: tab === undefined,
     isUnread: webPageItem.isUnread,
+    isAudible: tab?.audible === true,
   }
 }

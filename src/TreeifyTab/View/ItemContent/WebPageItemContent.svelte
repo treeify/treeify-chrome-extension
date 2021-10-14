@@ -19,17 +19,25 @@
       class:hard-unloaded-item={props.isHardUnloaded}
     />
   {/if}
-  <span
+  <div
     class="web-page-item-content_title"
     class:soft-unloaded-item={props.isSoftUnloaded}
     class:hard-unloaded-item={props.isHardUnloaded}
-    class:unread={props.isUnread}>{props.title}</span
+    class:unread={props.isUnread}
   >
+    {props.title}
+  </div>
+  {#if props.isAudible}
+    <div class="web-page-item-content_audible-icon" />
+  {:else}
+    <div class="grid-empty-cell" />
+  {/if}
 </div>
 
 <style global lang="scss">
   .web-page-item-content {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
   }
 
@@ -70,5 +78,14 @@
         color: #5d9e7e;
       }
     }
+  }
+
+  .web-page-item-content_audible-icon {
+    width: 1em;
+    aspect-ratio: 1;
+
+    background: var(--main-area-audible-icon-color);
+    -webkit-mask: url('./audible-icon.svg');
+    -webkit-mask-size: contain;
   }
 </style>
