@@ -34,6 +34,7 @@ export namespace Chunk {
     'imageItems',
     'codeBlockItems',
     'texItems',
+    'pages',
   ])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
