@@ -167,7 +167,14 @@ export function treeify(itemIdSet: Set<ItemId>, rootItemId: ItemId): MutableOrde
   const childrenMap = itemIdSet
     .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet))
     .groupBy((value) => ItemPath.getRootItemId(value))
-    .map((collection) => CurrentState.sortByDocumentOrder(collection.toList()))
+    .map((collection) => {
+      const sortedItemPaths = CurrentState.sortByDocumentOrder(collection.toList())
+      // 同じ兄弟リスト内での重複を排除する
+      return sortedItemPaths.filter((itemPath, index) => {
+        const appearedItemIds = sortedItemPaths.take(index).map(ItemPath.getItemId)
+        return !appearedItemIds.contains(ItemPath.getItemId(itemPath))
+      })
+    })
 
   return _treeify(childrenMap, List.of(rootItemId))
 }
