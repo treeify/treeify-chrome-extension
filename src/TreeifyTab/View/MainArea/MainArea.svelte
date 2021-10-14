@@ -46,7 +46,7 @@
     // lch(97.0%, 0.0, 0.0)相当
     background: #f6f6f6;
 
-    padding: 20px 400px 0 40px;
+    padding: 20px 40px 0 40px;
 
     @media print {
       padding: 0;
@@ -58,6 +58,9 @@
     padding-top: 20px;
     padding-bottom: 40vh;
     border-radius: 10px 10px 0 0;
+
+    // アウトライン表示の横幅が長すぎると右端のaudibleアイコンやタブ数カウントボタンが遠すぎてあまり役に立たなくなるので横幅を制限
+    max-width: 1200px;
 
     min-height: 100%;
 
