@@ -1,4 +1,5 @@
 import {List, Set} from 'immutable'
+import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
 import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
@@ -138,17 +139,11 @@ function unmountPage(itemId: number, activePageId: number) {
   Internal.instance.saveCurrentStateToUndoStack()
   CurrentState.unmountPage(itemId)
 
-  // もしアクティブページなら、タイムスタンプが最も新しいページを新たなアクティブページとする
+  // もしアクティブページなら、最も新しいページを新たなアクティブページとする
   if (itemId === activePageId) {
-    const hottestPageId = Internal.instance.state.mountedPageIds
-      .map((pageId) => {
-        return {
-          pageId,
-          timestamp: Internal.instance.state.items[pageId].timestamp,
-        }
-      })
-      .maxBy((a) => a.timestamp)!.pageId
-    CurrentState.switchActivePage(hottestPageId)
+    const lastPageId = CurrentState.getFilteredMountedPageIds().last(undefined)
+    assertNonUndefined(lastPageId)
+    CurrentState.switchActivePage(lastPageId)
   }
 
   Rerenderer.instance.rerender()
