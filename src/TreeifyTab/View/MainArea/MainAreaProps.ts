@@ -646,48 +646,49 @@ function onDelete(event: KeyboardEvent) {
 
     const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
-    if (selection.focusDistance === characterCount && selection.anchorDistance === characterCount) {
-      // キャレットが末尾にあるなら
+    // キャレットが末尾以外にあるならブラウザの標準の挙動に任せる
+    if (selection.focusDistance !== characterCount || selection.anchorDistance !== characterCount) {
+      return
+    }
 
-      const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      // 一番下の項目なら何もしない
-      if (belowItemPath === undefined) return
+    const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+    // 一番下の項目なら何もしない
+    if (belowItemPath === undefined) return
 
-      const belowItemId = ItemPath.getItemId(belowItemPath)
-      const belowItem = Internal.instance.state.items[belowItemId]
-      if (belowItem.type !== ItemType.TEXT) {
-        // 下の項目がテキスト項目以外の場合
-        // TODO: 項目削除コマンドを実行するのがいいと思う
-      } else {
-        // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
+    const belowItemId = ItemPath.getItemId(belowItemPath)
+    const belowItem = Internal.instance.state.items[belowItemId]
+    if (belowItem.type !== ItemType.TEXT) {
+      // 下の項目がテキスト項目以外の場合
+      // TODO: 項目削除コマンドを実行するのがいいと思う
+    } else {
+      // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
-        Internal.instance.saveCurrentStateToUndoStack()
+      Internal.instance.saveCurrentStateToUndoStack()
 
-        // テキストを連結
-        const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
-        // TODO: テキストノード同士が連結されないことが気がかり
-        CurrentState.setTextItemDomishObjects(
-          targetItemId,
-          focusedItemDomishObjects.concat(belowItemDomishObjects)
-        )
+      // テキストを連結
+      const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
+      // TODO: テキストノード同士が連結されないことが気がかり
+      CurrentState.setTextItemDomishObjects(
+        targetItemId,
+        focusedItemDomishObjects.concat(belowItemDomishObjects)
+      )
 
-        // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
-        // アンインデントに似ているが元のエッジを削除しない点が異なる。
-        for (const childItemId of belowItem.childItemIds) {
-          CurrentState.insertLastChildItem(targetItemId, childItemId)
-        }
-
-        // ↑の元のエッジごと削除
-        CurrentState.deleteItem(belowItemId)
-
-        // 元のキャレット位置を維持する
-        Rerenderer.instance.requestSetCaretDistanceAfterRendering(
-          DomishObject.countCharacters(focusedItemDomishObjects)
-        )
-
-        event.preventDefault()
-        Rerenderer.instance.rerender()
+      // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
+      // アンインデントに似ているが元のエッジを削除しない点が異なる。
+      for (const childItemId of belowItem.childItemIds) {
+        CurrentState.insertLastChildItem(targetItemId, childItemId)
       }
+
+      // ↑の元のエッジごと削除
+      CurrentState.deleteItem(belowItemId)
+
+      // 元のキャレット位置を維持する
+      Rerenderer.instance.requestSetCaretDistanceAfterRendering(
+        DomishObject.countCharacters(focusedItemDomishObjects)
+      )
+
+      event.preventDefault()
+      Rerenderer.instance.rerender()
     }
   } else {
     // ターゲット項目がテキスト項目以外の場合
