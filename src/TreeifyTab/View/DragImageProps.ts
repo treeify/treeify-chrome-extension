@@ -11,7 +11,14 @@ import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 export type DragImageProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
+  calculateLinePosition: (mouseX: integer, mouseY: integer) => DragLinePosition | undefined
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
+}
+
+export type DragLinePosition = {
+  top: integer
+  left: integer
+  width: integer
 }
 
 export function createDragImageProps(): DragImageProps | undefined {
@@ -20,7 +27,52 @@ export function createDragImageProps(): DragImageProps | undefined {
   return {
     initialMousePosition: currentDragData.initialMousePosition,
     itemPath: currentDragData.itemPath,
+    calculateLinePosition,
     onDrop,
+  }
+}
+
+function calculateLinePosition(mouseX: integer, mouseY: integer): DragLinePosition | undefined {
+  const leftSidebar = document.querySelector('.left-sidebar')
+  assertNonNull(leftSidebar)
+  if (leftSidebar.getBoundingClientRect().right < mouseX) {
+    // 左サイドバーより右の領域にドロップされた場合
+
+    const itemElement = searchMainAreaElementByYCoordinate(mouseY)
+    if (itemElement === undefined) return undefined
+
+    const rect = itemElement.getBoundingClientRect()
+    if (mouseX < rect.x) {
+      // Rollへのドロップの場合
+
+      return undefined
+    } else {
+      // Rollより右側（≒コンテンツエリア）へのドロップの場合
+
+      // ドロップ先要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
+      const ratio = (mouseY - rect.top) / (rect.bottom - rect.top)
+      if (ratio <= 0.5) {
+        // 座標が要素の上の方の場合
+
+        return {
+          top: rect.top,
+          left: rect.left,
+          width: rect.width,
+        }
+      } else {
+        // 座標が要素の下の方の場合
+
+        return {
+          top: rect.bottom,
+          left: rect.left,
+          width: rect.width,
+        }
+      }
+    }
+  } else {
+    // 左サイドバーにドロップされた場合
+
+    return undefined
   }
 }
 
