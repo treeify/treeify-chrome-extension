@@ -11,7 +11,10 @@ import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 export type DragImageProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
-  calculateLinePosition: (mouseX: integer, mouseY: integer) => DragLinePosition | undefined
+  calculateLinePosition: (
+    event: MouseEvent,
+    draggedItemPath: ItemPath
+  ) => DragLinePosition | undefined
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
@@ -32,47 +35,56 @@ export function createDragImageProps(): DragImageProps | undefined {
   }
 }
 
-function calculateLinePosition(mouseX: integer, mouseY: integer): DragLinePosition | undefined {
-  const leftSidebar = document.querySelector('.left-sidebar')
-  assertNonNull(leftSidebar)
-  if (leftSidebar.getBoundingClientRect().right < mouseX) {
-    // 左サイドバーより右の領域にドロップされた場合
+function calculateLinePosition(
+  event: MouseEvent,
+  draggedItemPath: ItemPath
+): DragLinePosition | undefined {
+  const parentItemId = ItemPath.getParentItemId(draggedItemPath)
+  if (parentItemId === undefined) return undefined
 
-    const itemElement = searchMainAreaElementByYCoordinate(mouseY)
-    if (itemElement === undefined) return undefined
+  const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
+  if (itemElement === undefined) return undefined
 
-    const rect = itemElement.getBoundingClientRect()
-    if (mouseX < rect.x) {
-      // Rollへのドロップの場合
+  const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
 
-      return undefined
-    } else {
-      // Rollより右側（≒コンテンツエリア）へのドロップの場合
-
-      // ドロップ先要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
-      const ratio = (mouseY - rect.top) / (rect.bottom - rect.top)
-      if (ratio <= 0.5) {
-        // 座標が要素の上の方の場合
-
-        return {
-          top: rect.top,
-          left: rect.left,
-          width: rect.width,
-        }
-      } else {
-        // 座標が要素の下の方の場合
-
-        return {
-          top: rect.bottom,
-          left: rect.left,
-          width: rect.width,
-        }
-      }
-    }
-  } else {
-    // 左サイドバーにドロップされた場合
+  const rect = itemElement.getBoundingClientRect()
+  if (event.clientX < rect.x) {
+    // Rollへのドロップの場合
 
     return undefined
+  } else {
+    // Roll以外の場所へのドロップの場合
+
+    if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+      // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
+      // 下記の2パターンが該当する。
+      // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
+      // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
+      return undefined
+    }
+
+    // 要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
+    const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
+    if (ratio <= 0.5) {
+      // 座標が要素の上の方の場合
+
+      // アクティブページのさらに上にはドロップできない
+      if (!ItemPath.hasParent(itemPath)) return undefined
+
+      return {
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+      }
+    } else {
+      // 座標が要素の下の方の場合
+
+      return {
+        top: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+      }
+    }
   }
 }
 
@@ -121,10 +133,6 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
       return
     }
-
-    // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-    const parentItemId = ItemPath.getParentItemId(draggedItemPath)
-    if (parentItemId === undefined) return
 
     Internal.instance.saveCurrentStateToUndoStack()
 

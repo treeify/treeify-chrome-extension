@@ -23,7 +23,7 @@
     $: mouseX = event.clientX
     $: mouseY = event.clientY
 
-    const linePosition = props.calculateLinePosition(mouseX, mouseY)
+    const linePosition = props.calculateLinePosition(event, props.itemPath)
     if (linePosition === undefined) {
       $: lineStyle = ''
     } else {
