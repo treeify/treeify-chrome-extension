@@ -15,7 +15,7 @@
     left: ${mouseX + 8}px;
     top: ${mouseY}px;
   `
-  $: lineStyle = ''
+  $: dropDestinationStyle = ''
 
   $: itemId = ItemPath.getItemId(props.itemPath)
 
@@ -25,9 +25,9 @@
 
     const linePosition = props.calculateLinePosition(event, props.itemPath)
     if (linePosition === undefined) {
-      $: lineStyle = ''
+      $: dropDestinationStyle = ''
     } else {
-      $: lineStyle = `
+      $: dropDestinationStyle = `
         left: ${linePosition.left}px;
         top: ${linePosition.top}px;
         width: ${linePosition.width}px;
@@ -39,7 +39,7 @@
 <svelte:body on:mousemove={onMouseMove} />
 
 <div class="drag-image" use:onItemDrop={props.onDrop} use:setupFocusTrap>
-  <div class="drag-image_line" style={lineStyle} />
+  <div class="drag-image_drop-destination" style={dropDestinationStyle} />
   <div class="drag-image_item-image" tabindex="0" {style}>
     <ItemContent props={createItemContentProps(itemId)} />
   </div>
@@ -58,7 +58,7 @@
     cursor: grabbing;
   }
 
-  .drag-image_line {
+  .drag-image_drop-destination {
     position: absolute;
     height: 1px;
     // left, top, widthはstyle属性で指定する
