@@ -23,16 +23,7 @@
     $: mouseX = event.clientX
     $: mouseY = event.clientY
 
-    const linePosition = props.calculateLinePosition(event, props.itemPath)
-    if (linePosition === undefined) {
-      $: dropDestinationStyle = ''
-    } else {
-      $: dropDestinationStyle = `
-        left: ${linePosition.left}px;
-        top: ${linePosition.top}px;
-        width: ${linePosition.width}px;
-      `
-    }
+    $: dropDestinationStyle = props.calculateDropDestinationStyle(event, props.itemPath)
   }
 </script>
 
@@ -46,6 +37,11 @@
 </div>
 
 <style global lang="scss">
+  :root {
+    // lch(50.0%, 0.0, 0.0)相当
+    --drop-destination-color: #777777;
+  }
+
   .drag-image {
     position: fixed;
     top: 0;
@@ -64,9 +60,6 @@
     // left, top, widthはstyle属性で指定する
 
     pointer-events: none;
-
-    // lch(50.0%, 0.0, 0.0)相当
-    background: #777777;
   }
 
   .drag-image_item-image {

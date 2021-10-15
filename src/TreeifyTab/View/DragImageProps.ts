@@ -11,17 +11,8 @@ import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 export type DragImageProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
-  calculateLinePosition: (
-    event: MouseEvent,
-    draggedItemPath: ItemPath
-  ) => DragLinePosition | undefined
+  calculateDropDestinationStyle: (event: MouseEvent, draggedItemPath: ItemPath) => string
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
-}
-
-export type DragLinePosition = {
-  top: integer
-  left: integer
-  width: integer
 }
 
 export function createDragImageProps(): DragImageProps | undefined {
@@ -30,61 +21,70 @@ export function createDragImageProps(): DragImageProps | undefined {
   return {
     initialMousePosition: currentDragData.initialMousePosition,
     itemPath: currentDragData.itemPath,
-    calculateLinePosition,
+    calculateDropDestinationStyle,
     onDrop,
   }
 }
 
-function calculateLinePosition(
-  event: MouseEvent,
-  draggedItemPath: ItemPath
-): DragLinePosition | undefined {
-  const parentItemId = ItemPath.getParentItemId(draggedItemPath)
-  if (parentItemId === undefined) return undefined
+function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemPath): string {
+  const leftSidebar = document.querySelector('.left-sidebar')
+  assertNonNull(leftSidebar)
+  if (leftSidebar.getBoundingClientRect().right < event.clientX) {
+    // 左サイドバーより右の領域にドロップされた場合
 
-  const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
-  if (itemElement === undefined) return undefined
+    const parentItemId = ItemPath.getParentItemId(draggedItemPath)
+    if (parentItemId === undefined) return ''
 
-  const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
+    const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
+    if (itemElement === undefined) return ''
 
-  const rect = itemElement.getBoundingClientRect()
-  if (event.clientX < rect.x) {
-    // Rollへのドロップの場合
+    const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
 
-    return undefined
-  } else {
-    // Roll以外の場所へのドロップの場合
+    const rect = itemElement.getBoundingClientRect()
+    if (event.clientX < rect.x) {
+      // Rollへのドロップの場合
 
-    if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
-      // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
-      // 下記の2パターンが該当する。
-      // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
-      // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
-      return undefined
-    }
-
-    // 要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
-    const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
-    if (ratio <= 0.5) {
-      // 座標が要素の上の方の場合
-
-      // アクティブページのさらに上にはドロップできない
-      if (!ItemPath.hasParent(itemPath)) return undefined
-
-      return {
-        top: rect.top,
-        left: rect.left,
-        width: rect.width,
-      }
+      return ''
     } else {
-      // 座標が要素の下の方の場合
+      // Roll以外の場所へのドロップの場合
 
-      return {
-        top: rect.bottom,
-        left: rect.left,
-        width: rect.width,
+      if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+        // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
+        // 下記の2パターンが該当する。
+        // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
+        // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
+        return ''
+      }
+
+      // 要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
+      const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
+      if (ratio <= 0.5) {
+        // 座標が要素の上の方の場合
+
+        // アクティブページのさらに上にはドロップできない
+        if (!ItemPath.hasParent(itemPath)) return ''
+
+        return `
+          top: ${rect.top}px;
+          left: ${rect.left}px;
+          width: ${rect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      } else {
+        // 座標が要素の下の方の場合
+
+        return `
+          top: ${rect.bottom}px;
+          left: ${rect.left}px;
+          width: ${rect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
       }
     }
+  } else {
+    // 左サイドバーにドロップされた場合
+
+    return ''
   }
 }
 
