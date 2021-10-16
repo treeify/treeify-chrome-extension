@@ -55,7 +55,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).size > 0) {
         return `
           top: ${rollRect.bottom}px;
-          left: ${rect.left}px;
+          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
           width: ${rect.width}px;
           border: 1px solid var(--drop-destination-color);
         `
@@ -89,7 +89,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 
         return `
           top: ${rect.top}px;
-          left: ${rect.left}px;
+          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
           width: ${rect.width}px;
           border: 1px solid var(--drop-destination-color);
         `
@@ -98,7 +98,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 
         return `
           top: ${rect.bottom}px;
-          left: ${rect.left}px;
+          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
           width: ${rect.width}px;
           border: 1px solid var(--drop-destination-color);
         `
