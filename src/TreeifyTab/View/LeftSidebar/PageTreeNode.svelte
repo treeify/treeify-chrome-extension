@@ -56,20 +56,22 @@
           {/if}
         </div>
       </div>
-      {#if props.tabsCount > 0}
-        <div
-          class="page-tree-node_tabs-count-button"
-          on:mousedown={props.onClickTabsCount}
-          on:contextmenu={props.onTabsCountContextMenu}
-        >
-          <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
-        </div>
-      {:else}
-        <div
-          class="page-tree-node_close-button icon-button"
-          on:mousedown={props.onClickCloseButton}
-        />
-      {/if}
+      <div class="page-tree-node_right-button-area">
+        {#if props.tabsCount > 0}
+          <div
+            class="page-tree-node_tabs-count-button"
+            on:mousedown={props.onClickTabsCount}
+            on:contextmenu={props.onTabsCountContextMenu}
+          >
+            <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
+          </div>
+        {:else if !props.isRoot}
+          <div
+            class="page-tree-node_close-button icon-button"
+            on:mousedown={props.onClickCloseButton}
+          />
+        {/if}
+      </div>
     </div>
     <div class="page-tree-node_children-area">
       {#each props.childNodePropses.toArray() as childNodeProps}
@@ -147,9 +149,14 @@
     -webkit-mask-size: contain;
   }
 
-  .page-tree-node_tabs-count-button {
+  .page-tree-node_right-button-area {
     width: var(--page-tree-close-button-size);
     aspect-ratio: 1;
+  }
+
+  .page-tree-node_tabs-count-button {
+    width: 100%;
+    height: 100%;
 
     position: relative;
 
@@ -203,8 +210,8 @@
   }
 
   .page-tree-node_close-button {
-    width: var(--page-tree-close-button-size);
-    aspect-ratio: 1;
+    width: 100%;
+    height: 100%;
 
     // マウスホバー時にのみ表示
     visibility: hidden;
