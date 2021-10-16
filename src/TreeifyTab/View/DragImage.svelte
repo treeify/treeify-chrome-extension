@@ -38,8 +38,8 @@
 
 <style global lang="scss">
   :root {
-    // lch(50.0%, 0.0, 0.0)相当
-    --drop-destination-color: #777777;
+    // lch(60.0%, 0.0, 0.0)相当
+    --drop-destination-color: #919191;
   }
 
   .drag-image {
