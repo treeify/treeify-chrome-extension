@@ -81,6 +81,15 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     }
   }
 
+  if (item.type === ItemType.CODE_BLOCK && isSingleSelect) {
+    result.push({
+      title: 'コードブロックの言語を設定…',
+      onClick: () => {
+        External.instance.dialogState = {type: 'CodeBlockLanguageSettingDialog'}
+      },
+    })
+  }
+
   result.push({
     title: 'トランスクルード用コピー',
     onClick: () => Command.copyForTransclusion(),

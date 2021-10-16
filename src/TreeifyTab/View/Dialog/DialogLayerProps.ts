@@ -1,6 +1,7 @@
 import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {External} from 'src/TreeifyTab/External/External'
 import {createCaptionSettingDialogProps} from 'src/TreeifyTab/View/Dialog/CaptionSettingDialogProps'
+import {createCodeBlockLanguageSettingDialogProps} from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialogProps'
 import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
 import {createImageItemEditDialogProps} from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
 import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
@@ -11,6 +12,7 @@ import CitationSettingDialog from './CitationSettingDialog.svelte'
 import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
 import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
 import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
+import CodeBlockLanguageSettingDialog from './CodeBlockLanguageSettingDialog.svelte'
 import ContextMenuDialog from './ContextMenuDialog.svelte'
 import {createContextMenuDialogProps} from './ContextMenuDialogProps'
 import DropdownMenuDialog from './DropdownMenuDialog.svelte'
@@ -66,6 +68,11 @@ function createDialogMaterials(dialogState: Dialog): {component: any; props: any
       return {
         component: CodeBlockItemEditDialog,
         props: createCodeBlockItemEditDialogProps(dialogState),
+      }
+    case 'CodeBlockLanguageSettingDialog':
+      return {
+        component: CodeBlockLanguageSettingDialog,
+        props: createCodeBlockLanguageSettingDialogProps(),
       }
     case 'ContextMenuDialog':
       return {
