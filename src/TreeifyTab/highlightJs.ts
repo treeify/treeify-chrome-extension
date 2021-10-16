@@ -331,10 +331,12 @@ const languageDefinitions = {
 }
 
 const languagesToExcludeFromAutoDetection = Set.of(
-  // typescript検出用
+  // TypeScriptのコードに対して誤検出された
   'qml',
-  // typescript検出用
-  'reasonml'
+  // TypeScriptのコードに対して誤検出された
+  'reasonml',
+  // TypeScriptのコードに対して誤検出された
+  'stylus'
 )
 
 export const autoDetectionLanguages = Set(Object.keys(languageDefinitions)).subtract(
