@@ -7,6 +7,8 @@ export type CitationSettingDialog = {type: 'CitationSettingDialog'}
 
 export type CodeBlockItemEditDialog = {type: 'CodeBlockItemEditDialog'}
 
+export type CodeBlockLanguageSettingDialog = {type: 'CodeBlockLanguageSettingDialog'}
+
 export type ContextMenuDialog = {
   type: 'ContextMenuDialog'
   mousePosition: Coordinate
@@ -53,11 +55,12 @@ export type Dialog =
   | CaptionSettingDialog
   | CitationSettingDialog
   | CodeBlockItemEditDialog
+  | CodeBlockLanguageSettingDialog
   | ContextMenuDialog
   | CustomCssDialog
+  | ExportDialog
   | ImageItemEditDialog
   | ItemAdditionDropdownMenuDialog
-  | ExportDialog
   | KeyBindingDialog
   | OtherParentsDialog
   | OtherSettingsDialog
