@@ -566,7 +566,7 @@ function onBackspace(event: KeyboardEvent) {
 
       // 子リストを連結するため、子を全て弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
-      for (const childItemId of targetItem.childItemIds.reverse()) {
+      for (const childItemId of targetItem.childItemIds) {
         CurrentState.insertLastChildItem(aboveItemId, childItemId)
       }
 
