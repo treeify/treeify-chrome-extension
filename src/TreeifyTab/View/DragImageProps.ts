@@ -11,6 +11,7 @@ import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
 export type DragImageProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
+  calculateDropDestinationStyle: (event: MouseEvent, draggedItemPath: ItemPath) => string
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 }
 
@@ -20,7 +21,103 @@ export function createDragImageProps(): DragImageProps | undefined {
   return {
     initialMousePosition: currentDragData.initialMousePosition,
     itemPath: currentDragData.itemPath,
+    calculateDropDestinationStyle,
     onDrop,
+  }
+}
+
+function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemPath): string {
+  const leftSidebar = document.querySelector('.left-sidebar')
+  assertNonNull(leftSidebar)
+  if (leftSidebar.getBoundingClientRect().right < event.clientX) {
+    // 左サイドバーより右の領域の場合
+
+    const parentItemId = ItemPath.getParentItemId(draggedItemPath)
+    if (parentItemId === undefined) return ''
+
+    const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
+    if (itemElement === undefined) return ''
+
+    const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
+
+    const rect = itemElement.getBoundingClientRect()
+    if (event.clientX < rect.x) {
+      // Rollへのドロップの場合
+
+      const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+      const rollElement = document
+        .getElementById(JSON.stringify(rollDroppedItemPath))
+        ?.querySelector('.main-area-roll')
+      assertNonNull(rollElement)
+      assertNonUndefined(rollElement)
+      const rollRect = rollElement.getBoundingClientRect()
+
+      if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).size > 0) {
+        return `
+          top: ${rollRect.bottom}px;
+          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
+          width: ${rect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      } else {
+        return `
+          top: ${rollRect.top}px;
+          left: ${rollRect.left}px;
+          width: ${rollRect.width}px;
+          height: ${rollRect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      }
+    } else {
+      // Roll以外の場所の場合
+
+      if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+        // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
+        // 下記の2パターンが該当する。
+        // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
+        // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
+        return ''
+      }
+
+      // 要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
+      const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
+      if (ratio <= 0.5) {
+        // 座標が要素の上の方の場合
+
+        // アクティブページのさらに上にはドロップできない
+        if (!ItemPath.hasParent(itemPath)) return ''
+
+        return `
+          top: ${rect.top}px;
+          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
+          width: ${rect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      } else {
+        // 座標が要素の下の方の場合
+
+        return `
+          top: ${rect.bottom}px;
+          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
+          width: ${rect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      }
+    }
+  } else {
+    // 左サイドバーにドロップされた場合
+
+    const pageElement = searchLeftSidebarElementByYCoordinate(event.clientY)
+    if (pageElement === undefined) return ''
+
+    const rect = pageElement.getBoundingClientRect()
+    return `
+      top: ${rect.top}px;
+      left: ${rect.left}px;
+      width: ${rect.width}px;
+      height: ${rect.height}px;
+      border: 1px solid var(--drop-destination-color);
+    `
   }
 }
 
@@ -69,10 +166,6 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
       return
     }
-
-    // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-    const parentItemId = ItemPath.getParentItemId(draggedItemPath)
-    if (parentItemId === undefined) return
 
     Internal.instance.saveCurrentStateToUndoStack()
 
