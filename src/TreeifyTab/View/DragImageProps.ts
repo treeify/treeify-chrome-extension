@@ -96,12 +96,21 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       } else {
         // 座標が要素の下の方の場合
 
-        return `
-          top: ${rect.bottom}px;
-          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
-          width: ${rect.width}px;
-          border: 1px solid var(--drop-destination-color);
-        `
+        if (CurrentState.getDisplayingChildItemIds(itemPath).size > 0) {
+          return `
+            top: ${rect.bottom}px;
+            left: ${rect.left}px;
+            width: ${rect.width}px;
+            border: 1px solid var(--drop-destination-color);
+          `
+        } else {
+          return `
+            top: ${rect.bottom}px;
+            left: calc(${rect.left}px - var(--main-area-calculated-line-height));
+            width: ${rect.width}px;
+            border: 1px solid var(--drop-destination-color);
+          `
+        }
       }
     }
   } else {
