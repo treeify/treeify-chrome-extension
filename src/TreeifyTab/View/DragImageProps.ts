@@ -107,7 +107,17 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
   } else {
     // 左サイドバーにドロップされた場合
 
-    return ''
+    const pageElement = searchLeftSidebarElementByYCoordinate(event.clientY)
+    if (pageElement === undefined) return ''
+
+    const rect = pageElement.getBoundingClientRect()
+    return `
+      top: ${rect.top}px;
+      left: ${rect.left}px;
+      width: ${rect.width}px;
+      height: ${rect.height}px;
+      border: 1px solid var(--drop-destination-color);
+    `
   }
 }
 
