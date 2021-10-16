@@ -8,7 +8,7 @@
 </script>
 
 <CommonDialog title="コードブロック言語設定">
-  <div class="language-setting-dialog_content">
+  <div class="language-setting-dialog_content" on:keydown={props.onKeyDown}>
     <input
       type="text"
       class="language-setting-dialog_language"
