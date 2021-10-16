@@ -95,6 +95,37 @@
     }
   }
 
+  .transcluded.highlighted {
+    .main-area-roll_inner-circle {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
+      );
+    }
+    .main-area-roll:hover .main-area-roll_inner-circle {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-hover-color) 50%,
+        var(--transcluded-item-bullet-hover-color) 50%
+      );
+    }
+    .main-area-roll_page-icon {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
+      );
+    }
+    .main-area-roll:hover .main-area-roll_page-icon {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-hover-color) 50%,
+        var(--transcluded-item-bullet-hover-color) 50%
+      );
+    }
+  }
+
   // メインエリアのバレットとインデントのルート要素
   .main-area-roll {
     width: var(--main-area-calculated-line-height);
