@@ -30,7 +30,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
   const leftSidebar = document.querySelector('.left-sidebar')
   assertNonNull(leftSidebar)
   if (leftSidebar.getBoundingClientRect().right < event.clientX) {
-    // 左サイドバーより右の領域にドロップされた場合
+    // 左サイドバーより右の領域の場合
 
     const parentItemId = ItemPath.getParentItemId(draggedItemPath)
     if (parentItemId === undefined) return ''
@@ -44,9 +44,32 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
     if (event.clientX < rect.x) {
       // Rollへのドロップの場合
 
-      return ''
+      const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+      const rollElement = document
+        .getElementById(JSON.stringify(rollDroppedItemPath))
+        ?.querySelector('.main-area-roll')
+      assertNonNull(rollElement)
+      assertNonUndefined(rollElement)
+      const rollRect = rollElement.getBoundingClientRect()
+
+      if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).size > 0) {
+        return `
+          top: ${rollRect.bottom}px;
+          left: ${rect.left}px;
+          width: ${rect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      } else {
+        return `
+          top: ${rollRect.top}px;
+          left: ${rollRect.left}px;
+          width: ${rollRect.width}px;
+          height: ${rollRect.width}px;
+          border: 1px solid var(--drop-destination-color);
+        `
+      }
     } else {
-      // Roll以外の場所へのドロップの場合
+      // Roll以外の場所の場合
 
       if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
         // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
