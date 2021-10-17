@@ -12,17 +12,18 @@
 <div class="main-area-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-web-page-content_body">
     <div
-      class="main-area-web-page-content_favicon"
+      class="main-area-web-page-content_favicon-area"
       class:soft-unloaded={props.isSoftUnloaded}
       class:hard-unloaded={props.isHardUnloaded}
       on:mousedown={props.onClickFavicon}
     >
+      {#if props.faviconUrl.length > 0}
+        <img class="main-area-web-page-content_favicon" src={props.faviconUrl} />
+      {:else if !props.isLoading}
+        <div class="default-favicon" />
+      {/if}
       {#if props.isLoading}
         <div class="loading-indicator" />
-      {:else if props.faviconUrl.length > 0}
-        <img src={props.faviconUrl} />
-      {:else}
-        <div class="default-favicon" />
       {/if}
     </div>
 
@@ -74,9 +75,9 @@
   }
 
   // ウェブページ項目のファビコン
-  .main-area-web-page-content_favicon {
+  .main-area-web-page-content_favicon-area {
     width: var(--main-area-favicon-size);
-    height: var(--main-area-favicon-size);
+    aspect-ratio: 1;
 
     position: relative;
 
@@ -120,13 +121,17 @@
 
   // ローディングインジケータ
   .loading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+
     border-radius: 50%;
     // lch(30.0%, 0.0, 0.0)相当
-    border-top: 4px solid #474747;
+    border-top: 3px solid #474747;
     // lch(70.0%, 0.0, 0.0)相当
-    border-right: 4px solid #ababab;
-    border-bottom: 4px solid #ababab;
-    border-left: 4px solid #ababab;
+    border-right: 3px solid #ababab;
+    border-bottom: 3px solid #ababab;
+    border-left: 3px solid #ababab;
     box-sizing: border-box;
     animation: rotation 0.8s infinite linear;
   }
@@ -189,10 +194,10 @@
     }
   }
 
-  .main-area-web-page-content_favicon.soft-unloaded > * {
+  .main-area-web-page-content_favicon-area.soft-unloaded > * {
     filter: opacity(75%);
   }
-  .main-area-web-page-content_favicon.hard-unloaded > * {
+  .main-area-web-page-content_favicon-area.hard-unloaded > * {
     filter: opacity(55%);
   }
 </style>
