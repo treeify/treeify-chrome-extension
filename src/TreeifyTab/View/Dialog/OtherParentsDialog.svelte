@@ -1,6 +1,6 @@
 <script lang="ts">
   import CommonDialog from './CommonDialog.svelte'
-  import OtherParentsDialogItem from './OtherParentsDialogItem.svelte'
+  import OtherParentsDialogPage from './OtherParentsDialogPage.svelte'
   import {OtherParentsDialogProps} from './OtherParentsDialogProps'
 
   export let props: OtherParentsDialogProps
@@ -8,8 +8,8 @@
 
 <CommonDialog title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
-    {#each props.itemPropses.toArray() as itemProps}
-      <OtherParentsDialogItem props={itemProps} />
+    {#each props.pagePropses.toArray() as pageProps}
+      <OtherParentsDialogPage props={pageProps} />
     {/each}
   </div>
 </CommonDialog>

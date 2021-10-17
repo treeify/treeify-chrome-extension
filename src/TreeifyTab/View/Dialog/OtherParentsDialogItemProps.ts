@@ -1,24 +1,27 @@
-import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId} from 'src/TreeifyTab/basicType'
 import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
+import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import {
+  createItemContentProps,
+  ItemContentProps,
+} from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 
 export type OtherParentsDialogItemProps = {
-  itemId: ItemId
+  itemContentProps: ItemContentProps
   onClick: () => void
 }
 
-export function createOtherParentsDialogItemProps(itemId: ItemId): OtherParentsDialogItemProps {
+export function createOtherParentsDialogItemProps(itemPath: ItemPath): OtherParentsDialogItemProps {
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  assertNonUndefined(parentItemId)
   return {
-    itemId,
+    itemContentProps: createItemContentProps(parentItemId),
     onClick() {
       doWithErrorCapture(() => {
-        const firstItemPath = List(CurrentState.yieldItemPaths(itemId)).first(undefined)
-        assertNonUndefined(firstItemPath)
-        CurrentState.jumpTo(firstItemPath)
+        CurrentState.jumpTo(itemPath)
 
         External.instance.dialogState = undefined
         Rerenderer.instance.rerender()

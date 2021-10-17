@@ -1,22 +1,29 @@
-import {List} from 'immutable'
+import {is, List, Set} from 'immutable'
 import {OtherParentsDialog} from 'src/TreeifyTab/External/DialogState'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 import {
-  createOtherParentsDialogItemProps,
-  OtherParentsDialogItemProps,
-} from 'src/TreeifyTab/View/Dialog/OtherParentsDialogItemProps'
+  createOtherParentsDialogPageProps,
+  OtherParentsDialogPageProps,
+} from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPageProps'
 
 export type OtherParentsDialogProps = {
-  itemPropses: List<OtherParentsDialogItemProps>
+  pagePropses: List<OtherParentsDialogPageProps>
 }
 
 export function createOtherParentsDialogProps(dialog: OtherParentsDialog): OtherParentsDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
-  const parentItemIds = CurrentState.getParentItemIds(ItemPath.getItemId(targetItemPath))
-  const targetParentItemId = ItemPath.getParentItemId(targetItemPath)
-  const itemContentPropses = parentItemIds
-    .filter((itemId) => targetParentItemId !== itemId)
-    .map(createOtherParentsDialogItemProps)
-  return {itemPropses: itemContentPropses}
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  const parentItemIds = CurrentState.getParentItemIds(targetItemId)
+  const itemPaths = parentItemIds
+    .map((parentItemId) => Set(CurrentState.yieldItemPaths(parentItemId)))
+    .flatMap((x) => x)
+    .map((itemPath) => itemPath.push(targetItemId))
+    .filter((itemPath) => !is(itemPath, targetItemPath))
+  return {
+    pagePropses: itemPaths
+      .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
+      .toList()
+      .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList())),
+  }
 }
