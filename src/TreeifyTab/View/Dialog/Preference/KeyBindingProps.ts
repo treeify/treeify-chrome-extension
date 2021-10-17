@@ -110,8 +110,8 @@ const commandGroups: List<CommandGroup> = List.of(
       'browseTab',
       'hardUnloadSubtree',
       'hardUnloadItem',
-      'softUnloadSubtree',
-      'softUnloadItem',
+      'discardSubtree',
+      'discardItem',
       'loadSubtree',
       'loadItem'
     ),

@@ -8,20 +8,20 @@
   {#if props.faviconUrl.length > 0}
     <img
       class="web-page-item-content_favicon"
-      class:soft-unloaded={props.isSoftUnloaded}
+      class:discarded={props.isDiscarded}
       class:hard-unloaded={props.isHardUnloaded}
       src={props.faviconUrl}
     />
   {:else}
     <div
       class="web-page-item-content_favicon default-favicon"
-      class:soft-unloaded={props.isSoftUnloaded}
+      class:discarded={props.isDiscarded}
       class:hard-unloaded={props.isHardUnloaded}
     />
   {/if}
   <div
     class="web-page-item-content_title"
-    class:soft-unloaded={props.isSoftUnloaded}
+    class:discarded={props.isDiscarded}
     class:hard-unloaded={props.isHardUnloaded}
     class:unread={props.isUnread}
   >
@@ -45,7 +45,7 @@
     width: 1em;
     aspect-ratio: 1;
 
-    &.soft-unloaded {
+    &.discarded {
       filter: opacity(75%);
     }
     &.hard-unloaded {
@@ -54,7 +54,7 @@
   }
 
   .web-page-item-content_title {
-    &.soft-unloaded {
+    &.discarded {
       // lch(35.0%, 0.0, 0.0)相当
       color: #525252;
     }
@@ -68,7 +68,7 @@
     &.unread {
       color: var(--main-area-unread-web-page-item-title-color);
 
-      &.soft-unloaded {
+      &.discarded {
         // lch(35.0%, 30.0, 160.4)相当
         color: #1a5d41;
       }

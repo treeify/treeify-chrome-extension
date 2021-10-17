@@ -6,7 +6,7 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
-export function softUnloadItem() {
+export function discardItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
@@ -19,7 +19,7 @@ export function softUnloadItem() {
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブをdiscardする */
-export function softUnloadSubtree() {
+export function discardSubtree() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {

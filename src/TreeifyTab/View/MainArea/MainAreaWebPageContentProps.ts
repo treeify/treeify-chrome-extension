@@ -15,7 +15,7 @@ export type MainAreaWebPageContentProps = {
   title: string
   faviconUrl: string
   isLoading: boolean
-  isSoftUnloaded: boolean
+  isDiscarded: boolean
   isHardUnloaded: boolean
   isUnread: boolean
   isAudible: boolean
@@ -42,7 +42,7 @@ export function createMainAreaWebPageContentProps(
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',
-    isSoftUnloaded: tab?.discarded === true,
+    isDiscarded: tab?.discarded === true,
     isHardUnloaded: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
@@ -80,7 +80,7 @@ export function createMainAreaWebPageContentProps(
               // ハードアンロード状態の場合
               Command.loadItem()
             } else {
-              // ソフトアンロード状態またはロード状態の場合
+              // discard状態またはロード状態の場合
               Command.hardUnloadSubtree()
             }
 
@@ -91,7 +91,7 @@ export function createMainAreaWebPageContentProps(
               // ハードアンロード状態の場合
               Command.loadSubtree()
             } else {
-              // ソフトアンロード状態またはロード状態の場合
+              // discard状態またはロード状態の場合
               Command.hardUnloadItem()
             }
 
@@ -103,7 +103,7 @@ export function createMainAreaWebPageContentProps(
               Command.loadItem()
             } else {
               // ロード状態の場合
-              Command.softUnloadSubtree()
+              Command.discardSubtree()
             }
 
             Rerenderer.instance.rerender()
@@ -114,7 +114,7 @@ export function createMainAreaWebPageContentProps(
               Command.loadSubtree()
             } else {
               // ロード状態の場合
-              Command.softUnloadItem()
+              Command.discardItem()
             }
 
             Rerenderer.instance.rerender()
