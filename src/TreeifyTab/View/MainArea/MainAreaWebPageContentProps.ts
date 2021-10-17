@@ -103,7 +103,7 @@ export function createMainAreaWebPageContentProps(
               Command.loadItem()
             } else {
               // ロード状態の場合
-              Command.discardSubtree()
+              Command.discardSubtreeTabs()
             }
 
             Rerenderer.instance.rerender()
@@ -114,7 +114,7 @@ export function createMainAreaWebPageContentProps(
               Command.loadSubtree()
             } else {
               // ロード状態の場合
-              Command.discardItem()
+              Command.discardItemTab()
             }
 
             Rerenderer.instance.rerender()
