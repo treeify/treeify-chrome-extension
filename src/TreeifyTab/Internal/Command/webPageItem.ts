@@ -32,7 +32,7 @@ export function discardSubtree() {
 }
 
 /** 対象ウェブページ項目に対応するタブを閉じる */
-export function hardUnloadItem() {
+export function closeItemTab() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
@@ -48,7 +48,7 @@ export function hardUnloadItem() {
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブを閉じる */
-export function hardUnloadSubtree() {
+export function closeSubtreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {

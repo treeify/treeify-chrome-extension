@@ -108,8 +108,8 @@ const commandGroups: List<CommandGroup> = List.of(
     name: 'ウェブページ項目操作',
     commandIds: List.of(
       'browseTab',
-      'hardUnloadSubtree',
-      'hardUnloadItem',
+      'closeSubtreeTabs',
+      'closeItemTab',
       'discardSubtree',
       'discardItem',
       'loadSubtree',

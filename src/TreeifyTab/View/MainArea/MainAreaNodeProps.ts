@@ -176,7 +176,7 @@ export function createMainAreaNodeProps(
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
           CurrentState.setTargetItemPath(itemPath)
-          Command.hardUnloadSubtree()
+          Command.closeSubtreeTabs()
           Rerenderer.instance.rerender()
           break
       }

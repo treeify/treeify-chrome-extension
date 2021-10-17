@@ -74,7 +74,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
               event.preventDefault()
               if (itemId === TOP_ITEM_ID) break
 
-              // ページ全体をハードアンロードする
+              // ページ全体のタブを閉じる
               for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
                 const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
                 if (tabId !== undefined) {
@@ -99,7 +99,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
         doWithErrorCapture(() => {
           switch (InputId.fromMouseEvent(event)) {
             case '0000MouseButton0':
-              // ページ全体をハードアンロードする
+              // ページ全体のタブを閉じる
               for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
                 const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
                 if (tabId !== undefined) {

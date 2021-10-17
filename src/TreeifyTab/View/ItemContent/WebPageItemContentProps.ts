@@ -8,7 +8,7 @@ export type WebPageItemContentProps = {
   title: string
   faviconUrl: string
   isDiscarded: boolean
-  isHardUnloaded: boolean
+  isTabClosed: boolean
   isUnread: boolean
   isAudible: boolean
 }
@@ -24,7 +24,7 @@ export function createWebPageItemContentProps(itemId: ItemId): WebPageItemConten
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: Internal.instance.state.webPageItems[itemId].faviconUrl,
     isDiscarded: tab?.discarded === true,
-    isHardUnloaded: tab === undefined,
+    isTabClosed: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
   }

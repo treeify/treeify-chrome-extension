@@ -170,7 +170,7 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
 
     if (External.instance.tabIdsToBeClosedForUnloading.has(tabId)) {
-      // ハードアンロードによりタブが閉じられた場合、ウェブページ項目は削除しない
+      // アンロードによりタブが閉じられた場合、ウェブページ項目は削除しない
       External.instance.tabIdsToBeClosedForUnloading.delete(tabId)
     } else if (CurrentState.isItem(itemId)) {
       // 対応するウェブページ項目を削除する

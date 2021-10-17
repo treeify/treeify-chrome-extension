@@ -16,7 +16,7 @@ export type MainAreaWebPageContentProps = {
   faviconUrl: string
   isLoading: boolean
   isDiscarded: boolean
-  isHardUnloaded: boolean
+  isTabClosed: boolean
   isUnread: boolean
   isAudible: boolean
   citeProps: CiteProps | undefined
@@ -43,7 +43,7 @@ export function createMainAreaWebPageContentProps(
     faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',
     isDiscarded: tab?.discarded === true,
-    isHardUnloaded: tab === undefined,
+    isTabClosed: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     citeProps: createCiteProps(itemId),
@@ -77,22 +77,22 @@ export function createMainAreaWebPageContentProps(
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             if (tab === undefined) {
-              // ハードアンロード状態の場合
+              // タブが閉じられている場合
               Command.loadItem()
             } else {
               // discard状態またはロード状態の場合
-              Command.hardUnloadSubtree()
+              Command.closeSubtreeTabs()
             }
 
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
             if (tab === undefined) {
-              // ハードアンロード状態の場合
+              // タブが閉じられている場合
               Command.loadSubtree()
             } else {
               // discard状態またはロード状態の場合
-              Command.hardUnloadItem()
+              Command.closeItemTab()
             }
 
             Rerenderer.instance.rerender()
