@@ -13,8 +13,8 @@
   <div class="main-area-web-page-content_body">
     <div
       class="main-area-web-page-content_favicon-area"
-      class:soft-unloaded={props.isSoftUnloaded}
-      class:hard-unloaded={props.isHardUnloaded}
+      class:discarded={props.isDiscarded}
+      class:tab-closed={props.isTabClosed}
       on:mousedown={props.onClickFavicon}
     >
       {#if props.faviconUrl.length > 0}
@@ -29,8 +29,8 @@
 
     <div
       class="main-area-web-page-content_title"
-      class:soft-unloaded={props.isSoftUnloaded}
-      class:hard-unloaded={props.isHardUnloaded}
+      class:discarded={props.isDiscarded}
+      class:tab-closed={props.isTabClosed}
       class:unread={props.isUnread}
       title={props.title}
       on:click={props.onClickTitle}
@@ -162,12 +162,12 @@
     overflow-x: hidden;
     white-space: nowrap;
 
-    &.soft-unloaded {
+    &.discarded {
       // lch(35.0%, 0.0, 0.0)相当
       color: #525252;
     }
 
-    &.hard-unloaded {
+    &.tab-closed {
       // lch(60.0%, 0.0, 0.0)相当
       color: #919191;
     }
@@ -176,12 +176,12 @@
     &.unread {
       color: var(--main-area-unread-web-page-item-title-color);
 
-      &.soft-unloaded {
+      &.discarded {
         // lch(35.0%, 30.0, 160.4)相当
         color: #1a5d41;
       }
 
-      &.hard-unloaded {
+      &.tab-closed {
         // lch(60.0%, 30.0, 160.4)相当
         color: #5d9e7e;
       }
@@ -194,10 +194,10 @@
     }
   }
 
-  .main-area-web-page-content_favicon-area.soft-unloaded > * {
+  .main-area-web-page-content_favicon-area.discarded > * {
     filter: opacity(75%);
   }
-  .main-area-web-page-content_favicon-area.hard-unloaded > * {
+  .main-area-web-page-content_favicon-area.tab-closed > * {
     filter: opacity(55%);
   }
 </style>

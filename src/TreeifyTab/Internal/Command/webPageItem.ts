@@ -6,7 +6,7 @@ import {Internal} from 'src/TreeifyTab/Internal/Internal'
 import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
-export function softUnloadItem() {
+export function discardItemTab() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
@@ -19,7 +19,7 @@ export function softUnloadItem() {
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブをdiscardする */
-export function softUnloadSubtree() {
+export function discardSubtreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
@@ -32,7 +32,7 @@ export function softUnloadSubtree() {
 }
 
 /** 対象ウェブページ項目に対応するタブを閉じる */
-export function hardUnloadItem() {
+export function closeItemTab() {
   const targetItemPath = CurrentState.getTargetItemPath()
 
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
@@ -42,20 +42,20 @@ export function hardUnloadItem() {
   if (tabId === undefined) return
 
   // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-  External.instance.hardUnloadedTabIds.add(tabId)
+  External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
   chrome.tabs.remove(tabId)
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブを閉じる */
-export function hardUnloadSubtree() {
+export function closeSubtreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId !== undefined) {
         // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-        External.instance.hardUnloadedTabIds.add(tabId)
+        External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
         // 対応するタブを閉じる
         chrome.tabs.remove(tabId)

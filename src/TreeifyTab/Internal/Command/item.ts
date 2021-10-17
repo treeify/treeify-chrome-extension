@@ -237,7 +237,7 @@ export function toggleCompleted() {
 
     // ヒューリスティックな追加効果
     Command.collapse()
-    Command.hardUnloadSubtree()
+    Command.closeSubtreeTabs()
     // フォーカスを下の項目に移動する
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
     if (firstFollowingItemPath !== undefined) {

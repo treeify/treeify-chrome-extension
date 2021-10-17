@@ -1,7 +1,7 @@
 import {List} from 'immutable'
 import md5 from 'md5'
 import {integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import {ItemId, TabId} from 'src/TreeifyTab/basicType'
 import {DataFolder} from 'src/TreeifyTab/External/DataFolder'
 import {Dialog} from 'src/TreeifyTab/External/DialogState'
 import {TabItemCorrespondence} from 'src/TreeifyTab/External/TabItemCorrespondence'
@@ -34,11 +34,8 @@ export class External {
   /** 独自クリップボード */
   treeifyClipboard: TreeifyClipboard | undefined
 
-  /**
-   * ハードアンロードによってタブを閉じられる途中のタブIDの集合。
-   * chrome.tabs.onRemovedイベント時に、タブがアンロード由来で閉じられたのかを判定するために用いる。
-   */
-  readonly hardUnloadedTabIds = new Set<integer>()
+  /** アンロードのために閉じられる途中のタブのIDの集合 */
+  readonly tabIdsToBeClosedForUnloading = new Set<TabId>()
 
   private constructor() {}
 

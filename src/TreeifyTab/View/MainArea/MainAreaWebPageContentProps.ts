@@ -15,8 +15,8 @@ export type MainAreaWebPageContentProps = {
   title: string
   faviconUrl: string
   isLoading: boolean
-  isSoftUnloaded: boolean
-  isHardUnloaded: boolean
+  isDiscarded: boolean
+  isTabClosed: boolean
   isUnread: boolean
   isAudible: boolean
   citeProps: CiteProps | undefined
@@ -42,8 +42,8 @@ export function createMainAreaWebPageContentProps(
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',
-    isSoftUnloaded: tab?.discarded === true,
-    isHardUnloaded: tab === undefined,
+    isDiscarded: tab?.discarded === true,
+    isTabClosed: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     citeProps: createCiteProps(itemId),
@@ -77,22 +77,22 @@ export function createMainAreaWebPageContentProps(
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             if (tab === undefined) {
-              // ハードアンロード状態の場合
+              // タブが閉じられている場合
               Command.loadItem()
             } else {
-              // ソフトアンロード状態またはロード状態の場合
-              Command.hardUnloadSubtree()
+              // discard状態またはロード状態の場合
+              Command.closeSubtreeTabs()
             }
 
             Rerenderer.instance.rerender()
             break
           case '1000MouseButton0':
             if (tab === undefined) {
-              // ハードアンロード状態の場合
+              // タブが閉じられている場合
               Command.loadSubtree()
             } else {
-              // ソフトアンロード状態またはロード状態の場合
-              Command.hardUnloadItem()
+              // discard状態またはロード状態の場合
+              Command.closeItemTab()
             }
 
             Rerenderer.instance.rerender()
@@ -103,7 +103,7 @@ export function createMainAreaWebPageContentProps(
               Command.loadItem()
             } else {
               // ロード状態の場合
-              Command.softUnloadSubtree()
+              Command.discardSubtreeTabs()
             }
 
             Rerenderer.instance.rerender()
@@ -114,7 +114,7 @@ export function createMainAreaWebPageContentProps(
               Command.loadSubtree()
             } else {
               // ロード状態の場合
-              Command.softUnloadItem()
+              Command.discardItemTab()
             }
 
             Rerenderer.instance.rerender()

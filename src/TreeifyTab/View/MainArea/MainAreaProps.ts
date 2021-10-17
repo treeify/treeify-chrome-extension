@@ -716,10 +716,10 @@ function onSpace(event: KeyboardEvent) {
 }
 
 async function undo() {
-  if (External.instance.hardUnloadedTabIds.size > 0) {
+  if (External.instance.tabIdsToBeClosedForUnloading.size > 0) {
     console.log('=============================================')
-    console.log('External.instance.hardUnloadedTabIds.size > 0')
-    for (const tabId of External.instance.hardUnloadedTabIds.values()) {
+    console.log('External.instance.tabIdsToBeClosedForUnloading.size > 0')
+    for (const tabId of External.instance.tabIdsToBeClosedForUnloading.values()) {
       const tab = External.instance.tabItemCorrespondence.getTab(tabId)
       dump(tab)
       const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
@@ -731,7 +731,7 @@ async function undo() {
       }
     }
     console.log('=============================================')
-    assert(External.instance.hardUnloadedTabIds.size === 0)
+    assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
     return
   }
   if (!List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty()) {
