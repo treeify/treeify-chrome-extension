@@ -45,6 +45,8 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       // Rollへのドロップの場合
 
       const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+      if (rollDroppedItemPath === undefined) return ''
+
       const rollElement = document
         .getElementById(JSON.stringify(rollDroppedItemPath))
         ?.querySelector('.main-area-roll')
@@ -162,6 +164,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     // どの項目のRollにドロップしたかを探索する
     const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+    if (rollDroppedItemPath === undefined) return
 
     const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
@@ -278,11 +281,12 @@ function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined
 }
 
 // ItemPathの親を辿り、指定されたX座標にRollを表示しているItemPathを探索する
-function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath {
-  console.assert(!itemPath.isEmpty())
+function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath | undefined {
+  if (itemPath.isEmpty()) return undefined
 
   const element = document.getElementById(JSON.stringify(itemPath))
-  assertNonNull(element)
+  if (element === null) return undefined
+
   if (element.getBoundingClientRect().x < x) {
     return itemPath
   }
