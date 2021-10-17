@@ -42,7 +42,7 @@ export function hardUnloadItem() {
   if (tabId === undefined) return
 
   // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-  External.instance.hardUnloadedTabIds.add(tabId)
+  External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
   chrome.tabs.remove(tabId)
 }
@@ -55,7 +55,7 @@ export function hardUnloadSubtree() {
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId !== undefined) {
         // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-        External.instance.hardUnloadedTabIds.add(tabId)
+        External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
         // 対応するタブを閉じる
         chrome.tabs.remove(tabId)
