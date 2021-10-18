@@ -13,6 +13,7 @@
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
+        event.preventDefault()
         External.instance.dialogState = undefined
         Rerenderer.instance.rerender()
       }

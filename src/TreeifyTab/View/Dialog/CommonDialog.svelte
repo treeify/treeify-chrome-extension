@@ -20,6 +20,7 @@
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
+        event.preventDefault()
         closeDialog()
       }
     })
