@@ -1,5 +1,4 @@
 <script lang="ts">
-  import {fade} from 'svelte/transition'
   import {doWithErrorCapture} from '../../errorCapture'
   import {External} from '../../External/External'
   import {InputId} from '../../Internal/InputId'
@@ -20,6 +19,7 @@
     doWithErrorCapture(() => {
       // ダイアログを閉じる
       if (event.eventPhase === Event.AT_TARGET) {
+        event.preventDefault()
         closeDialog()
       }
     })
@@ -39,13 +39,7 @@
   }
 </script>
 
-<div
-  class="common-dialog"
-  on:mousedown={onClickBackdrop}
-  on:keydown={onKeyDown}
-  use:setupFocusTrap
-  transition:fade={{duration: 50}}
->
+<div class="common-dialog" on:mousedown={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>
@@ -73,9 +67,6 @@
     width: 100%;
     height: 100%;
     z-index: 30;
-
-    // バックドロップ
-    background: hsla(0, 0%, 0%, 0.05);
 
     // ダイアログを画面中央に表示する
     display: flex;
