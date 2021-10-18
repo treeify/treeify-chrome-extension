@@ -40,12 +40,7 @@ export function createExportDialogProps(): ExportDialogProps {
     markdownIgnoreInvisibleItems: markdownOptions.ignoreInvisibleItems,
     opmlIgnoreInvisibleItems: opmlOptions.ignoreInvisibleItems,
     onClickCopyButton: () => {
-      const blob = new Blob([generateOutputText(selectedFormat)], {type: 'text/plain'})
-      navigator.clipboard.write([
-        new ClipboardItem({
-          [blob.type]: blob,
-        }),
-      ])
+      navigator.clipboard.writeText(generateOutputText(selectedFormat))
       External.instance.dialogState = undefined
       Rerenderer.instance.rerender()
     },
