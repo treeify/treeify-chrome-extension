@@ -15,12 +15,7 @@ export async function copyForTransclusion() {
   // クリップボードが上書きされたことを検出するために独自クリップボードのハッシュ値をクリップボードに書き込む。
   const treeifyClipboardHash = External.instance.getTreeifyClipboardHash()
   assertNonUndefined(treeifyClipboardHash)
-  const blob = new Blob([treeifyClipboardHash], {type: 'text/plain'})
-  await navigator.clipboard.write([
-    new ClipboardItem({
-      [blob.type]: blob,
-    }),
-  ])
+  await navigator.clipboard.writeText(treeifyClipboardHash)
 }
 
 export async function pasteAsPlainText() {

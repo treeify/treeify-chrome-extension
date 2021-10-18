@@ -62,12 +62,7 @@ export namespace Database {
 
         // 動作確認用のサンプルOPMLデータをクリップボードに入れる
         // TODO: リリース前に削除するか、ビルドフラグを導入して分岐する
-        const blob = new Blob([sampleOpml], {type: 'text/plain'})
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            [blob.type]: blob,
-          }),
-        ])
+        await navigator.clipboard.writeText(sampleOpml)
       }
     })
   }

@@ -62,7 +62,7 @@ export async function syncWithDataFolder() {
     }
   } catch (e) {
     // 何も選ばずピッカーを閉じた際、エラーアラートを出さないようにする
-    if (e.name === 'AbortError') return
+    if (e instanceof Error && e.name === 'AbortError') return
 
     throw e
   }
