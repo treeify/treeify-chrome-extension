@@ -54,6 +54,9 @@
   }
 
   .web-page-item-content_title {
+    overflow-x: hidden;
+    white-space: nowrap;
+
     &.discarded {
       // lch(35.0%, 0.0, 0.0)相当
       color: #525252;
