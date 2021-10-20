@@ -55,7 +55,10 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       itemId,
       bulletAndIndentProps: createPageTreeBulletAndIndentProps(children.length > 0, itemPath),
       contentProps: createItemContentProps(itemId),
-      childNodePropses: List(children),
+      childNodePropses:
+        ItemPath.hasParent(itemPath) && CurrentState.getIsCollapsed(itemPath)
+          ? List()
+          : List(children),
       isActivePage: activePageId === itemId,
       isRoot: itemId === TOP_ITEM_ID,
       isAudible: getAudiblePageIds().contains(itemId),
