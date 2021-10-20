@@ -57,7 +57,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).size > 0) {
         return `
           top: ${rollRect.bottom}px;
-          left: calc(${rect.left}px - var(--main-area-calculated-line-height));
+          left: ${rollRect.right}px;
           width: ${rect.width}px;
           border: 1px solid var(--drop-destination-color);
         `
