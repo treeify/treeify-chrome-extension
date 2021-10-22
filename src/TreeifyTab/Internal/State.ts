@@ -1,4 +1,4 @@
-import {is, List} from 'immutable'
+import {is, List, Set} from 'immutable'
 import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
 import {integer} from 'src/Common/integer'
 import {CommandId, ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
@@ -228,6 +228,12 @@ export namespace State {
           // TODO: Edgeの検証
         }
 
+        // 循環参照が存在しないことの確認
+        assert(
+          !hasCycle(state, TOP_ITEM_ID, Set()),
+          'トランスクルードによって循環参照が発生している'
+        )
+
         // itemTypeに対応するオブジェクトの存在チェック（ついでにitemTypeの型チェック）
         switch (item.type) {
           case ItemType.TEXT:
@@ -322,6 +328,21 @@ export namespace State {
       console.error(e)
       return false
     }
+  }
+
+  // 親子関係のグラフ構造が循環を持っているかどうか判定する。
+  // トップページからの深さ優先探索を行う。
+  function hasCycle(state: State, itemId: ItemId, stackLike: Set<ItemId>): boolean {
+    if (stackLike.has(itemId)) {
+      return true
+    }
+
+    for (const childItemId of state.items[itemId].childItemIds) {
+      if (hasCycle(state, childItemId, stackLike.add(itemId))) {
+        return true
+      }
+    }
+    return false
   }
 }
 
