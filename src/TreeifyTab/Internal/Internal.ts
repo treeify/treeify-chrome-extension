@@ -122,7 +122,11 @@ export class Internal {
       const lastKey = propertyKeys.last(undefined)
       assertNonUndefined(lastKey)
 
-      parentObject[lastKey] = savedData
+      if (savedData !== undefined) {
+        parentObject[lastKey] = savedData
+      } else {
+        delete parentObject[lastKey]
+      }
     }
     this.undoStack.clear()
   }
