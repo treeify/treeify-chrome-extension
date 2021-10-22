@@ -1,5 +1,6 @@
 <script lang="ts">
   import {List} from 'immutable'
+  import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
   import {assert} from '../../../Common/Debug/assert'
   import {toOpmlString} from '../../Internal/ImportExport/opml'
   import {Internal} from '../../Internal/Internal'
@@ -11,7 +12,7 @@
 
   export let props: ToolbarProps
 
-  function onClick() {
+  function onClickOpmlExport() {
     const fileName = 'treeify.opml'
 
     const content = toOpmlString(List.of(List.of(0)))
@@ -22,10 +23,17 @@
 
     assert(State.isValid(Internal.instance.state))
   }
+
+  function onClickStateValidation() {
+    doWithErrorCapture(() => {
+      assert(State.isValid(Internal.instance.state))
+    })
+  }
 </script>
 
 <div class="toolbar">
-  <button on:click={onClick}>OPMLエクスポート</button>
+  <button on:click={onClickOpmlExport}>OPMLエクスポート</button>
+  <button on:click={onClickStateValidation}>Stateバリデーション</button>
   <DataFolderButton props={props.dataFolderButtonProps} />
   <AddButton />
   <PreferenceButton />
