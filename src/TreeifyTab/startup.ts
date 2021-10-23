@@ -81,9 +81,11 @@ export async function cleanup() {
  * 必要に応じてリセット処理を行う。
  * DOMの状態もリセットされ、初回描画からやり直される。
  */
-export async function restart(state: State) {
+export async function restart(state: State, skipTabMigration: boolean = false) {
   if (State.isValid(state)) {
-    await migrateTabs(state)
+    if (!skipTabMigration) {
+      await migrateTabs(state)
+    }
 
     const dataFolder = External.instance.dataFolder
     await cleanup()
