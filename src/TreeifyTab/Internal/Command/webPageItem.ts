@@ -1,5 +1,6 @@
 import {List} from 'immutable'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
+import {ItemType} from 'src/TreeifyTab/basicType'
 import {External} from 'src/TreeifyTab/External/External'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Internal} from 'src/TreeifyTab/Internal/Internal'
@@ -83,6 +84,10 @@ export function loadSubtree() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
+      if (Internal.instance.state.items[subtreeItemId].type !== ItemType.WEB_PAGE) {
+        continue
+      }
+
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId === undefined) {
         const url = Internal.instance.state.webPageItems[subtreeItemId].url
