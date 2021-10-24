@@ -228,12 +228,6 @@ export namespace State {
           // TODO: Edgeの検証
         }
 
-        // 循環参照が存在しないことの確認
-        assert(
-          !hasCycle(state, TOP_ITEM_ID, Set()),
-          'トランスクルードによって循環参照が発生している'
-        )
-
         // itemTypeに対応するオブジェクトの存在チェック（ついでにitemTypeの型チェック）
         switch (item.type) {
           case ItemType.TEXT:
@@ -263,6 +257,9 @@ export namespace State {
         // TODO: 各要素の型チェックまではしていない
         assert(item.cssClasses instanceof List, `items[${itemId}]のcssClassesの型エラー`)
       }
+
+      // 循環参照が存在しないことの確認
+      assert(!hasCycle(state, TOP_ITEM_ID, Set()), 'トランスクルードによって循環参照が発生している')
 
       for (const pagesKey in state.pages) {
         const pageId = parseInt(pagesKey)
