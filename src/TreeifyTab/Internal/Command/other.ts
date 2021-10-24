@@ -34,7 +34,7 @@ export async function syncWithDataFolder() {
 
         const chunks = await External.instance.dataFolder.readAllChunks()
         const state = Chunk.inflateStateFromChunks(chunks)
-        await restart(state)
+        await restart(state, true)
       }
     } else {
       const unknownUpdatedInstanceId =
