@@ -43,6 +43,12 @@ export function setTexItemCode(itemId: ItemId, code: string) {
   })
 }
 
+export function setTexItemCaption(itemId: ItemId, caption: string) {
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.mutate(caption, PropertyPath.of('texItems', itemId, 'caption'))
+  })
+}
+
 export function isEmptyTexItem(itemId: ItemId): boolean {
   return Internal.instance.state.texItems[itemId].code.trim() === ''
 }

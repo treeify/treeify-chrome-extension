@@ -239,6 +239,7 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
   const attrText = outlineElement.getAttribute('text')
   assertNonNull(attrText)
   const attrUrl = outlineElement.getAttribute('url')
+  const attrCaption = outlineElement.getAttribute('caption')
 
   switch (outlineElement.getAttribute('type')) {
     case 'link':
@@ -286,12 +287,20 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
         CurrentState.setCodeBlockItemLanguage(codeBlockItemId, attrLanguage)
       }
 
-      const attrCaption = outlineElement.getAttribute('caption')
       if (attrCaption !== null) {
         CurrentState.setCodeBlockItemCaption(codeBlockItemId, attrCaption)
       }
 
       return codeBlockItemId
+    case 'tex':
+      const texItemId = CurrentState.createTexItem()
+      CurrentState.setTexItemCode(texItemId, attrText)
+
+      if (attrCaption !== null) {
+        CurrentState.setTexItemCaption(texItemId, attrCaption)
+      }
+
+      return texItemId
     case 'text':
     default:
       const textItemId = CurrentState.createTextItem()
