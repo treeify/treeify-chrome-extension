@@ -54,6 +54,12 @@ export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
   })
 }
 
+export function setCodeBlockItemCaption(itemId: ItemId, caption: string) {
+  Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+    Internal.instance.mutate(caption, PropertyPath.of('codeBlockItems', itemId, 'caption'))
+  })
+}
+
 export function isEmptyCodeBlockItem(itemId: ItemId): boolean {
   return Internal.instance.state.codeBlockItems[itemId].code.trim() === ''
 }

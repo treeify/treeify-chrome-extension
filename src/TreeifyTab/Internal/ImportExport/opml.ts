@@ -92,11 +92,13 @@ function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
       baseAttributes.type = 'code-block'
       baseAttributes.text = codeBlockItem.code
       baseAttributes.language = codeBlockItem.language
+      baseAttributes.caption = codeBlockItem.caption
       break
     case ItemType.TEX:
       const texItem = Internal.instance.state.texItems[itemId]
       baseAttributes.type = 'tex'
       baseAttributes.text = texItem.code
+      baseAttributes.caption = texItem.caption
       break
     default:
       assertNeverType(item.type)
@@ -278,10 +280,17 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
     case 'code-block':
       const codeBlockItemId = CurrentState.createCodeBlockItem()
       CurrentState.setCodeBlockItemCode(codeBlockItemId, attrText)
+
       const attrLanguage = outlineElement.getAttribute('language')
       if (attrLanguage !== null) {
         CurrentState.setCodeBlockItemLanguage(codeBlockItemId, attrLanguage)
       }
+
+      const attrCaption = outlineElement.getAttribute('caption')
+      if (attrCaption !== null) {
+        CurrentState.setCodeBlockItemCaption(codeBlockItemId, attrCaption)
+      }
+
       return codeBlockItemId
     case 'text':
     default:
