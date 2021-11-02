@@ -64,7 +64,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       isAudible: getAudiblePageIds().contains(itemId),
       footprintRank: rank < footprintCount ? rank : undefined,
       footprintCount,
-      tabsCount: CurrentState.countLoadedTabsInSubtree(state, itemId),
+      tabsCount: CurrentState.countTabsInSubtree(state, itemId),
       onClickContentArea: (event: MouseEvent) => {
         doWithErrorCapture(() => {
           switch (InputId.fromMouseEvent(event)) {

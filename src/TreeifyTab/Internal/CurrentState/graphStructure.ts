@@ -98,16 +98,6 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
 }
 
 /**
- * 指定された項目のサブツリーに対応するロード状態のタブを数える。
- * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
- */
-export function countLoadedTabsInSubtree(state: State, itemId: ItemId): integer {
-  return Set(CurrentState.getSubtreeItemIds(itemId)).filter(
-    (itemId) => !External.instance.tabItemCorrespondence.isUnloaded(itemId)
-  ).size
-}
-
-/**
  * 指定された項目のサブツリーに対応するタブを数える。
  * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
  */

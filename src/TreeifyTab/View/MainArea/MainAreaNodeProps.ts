@@ -66,7 +66,7 @@ export function createMainAreaNodeProps(
     cssClasses: item.cite === null ? item.cssClasses : item.cssClasses.push('citation'),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
-    hiddenTabsCount: countHiddenLoadedTabs(state, itemPath),
+    hiddenTabsCount: countHiddenTabs(state, itemPath),
     rollProps: createMainAreaRollProps(state, itemPath),
     contentProps: createMainAreaContentProps(state, itemPath, item.type),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
@@ -184,7 +184,7 @@ export function createMainAreaNodeProps(
   }
 }
 
-function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
+function countHiddenTabs(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
   switch (bulletState) {
     case MainAreaBulletState.NO_CHILDREN:
@@ -192,20 +192,20 @@ function countHiddenLoadedTabs(state: State, itemPath: ItemPath): integer {
     case MainAreaBulletState.PAGE:
       return 0
     case MainAreaBulletState.COLLAPSED:
-      return countLoadedTabsInDescendants(state, ItemPath.getItemId(itemPath))
+      return countTabsInDescendants(state, ItemPath.getItemId(itemPath))
     default:
       assertNeverType(bulletState)
   }
 }
 
-// 指定された項目の子孫項目に対応するロード状態のタブを数える。
+// 指定された項目の子孫項目に対応するタブを数える。
 // 自分自身に対応するタブはカウントしない。
 // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
-function countLoadedTabsInDescendants(state: State, itemId: ItemId): integer {
-  if (External.instance.tabItemCorrespondence.isUnloaded(itemId)) {
-    return CurrentState.countLoadedTabsInSubtree(state, itemId)
+function countTabsInDescendants(state: State, itemId: ItemId): integer {
+  if (External.instance.tabItemCorrespondence.getTabIdBy(itemId) === undefined) {
+    return CurrentState.countTabsInSubtree(state, itemId)
   } else {
-    return CurrentState.countLoadedTabsInSubtree(state, itemId) - 1
+    return CurrentState.countTabsInSubtree(state, itemId) - 1
   }
 }
 
