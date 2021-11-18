@@ -20,10 +20,10 @@
   $: itemId = ItemPath.getItemId(props.itemPath)
 
   function onMouseMove(event: MouseEvent) {
-    $: mouseX = event.clientX
-    $: mouseY = event.clientY
+    mouseX = event.clientX
+    mouseY = event.clientY
 
-    $: dropDestinationStyle = props.calculateDropDestinationStyle(event, props.itemPath)
+    dropDestinationStyle = props.calculateDropDestinationStyle(event, props.itemPath)
   }
 </script>
 
