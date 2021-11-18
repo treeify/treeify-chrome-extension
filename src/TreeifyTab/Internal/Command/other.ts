@@ -30,11 +30,24 @@ export async function syncWithDataFolder() {
         await External.instance.dataFolder.writeChunks(allChunks)
       } else {
         // もし自身の知らない他インスタンスの更新があれば
-        await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
-        const chunks = await External.instance.dataFolder.readAllChunks()
-        const state = Chunk.inflateStateFromChunks(chunks)
-        await restart(state, true)
+        switch (await External.instance.dataFolder.checkInstanceFolder(unknownUpdatedInstanceId)) {
+          case 'success':
+            await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
+
+            const chunks = await External.instance.dataFolder.readAllChunks()
+            const state = Chunk.inflateStateFromChunks(chunks)
+            await restart(state, true)
+            break
+          case 'incomplete':
+            alert(
+              '他デバイスのデータに整合性がないため読み込めません。\nオンラインストレージ等でデータフォルダを共有している場合は、同期が未完了だと考えられます。'
+            )
+            break
+          case 'unknown version':
+            alert('拡張機能をバージョンアップしてください')
+            break
+        }
       }
     } else {
       const unknownUpdatedInstanceId =
@@ -53,11 +66,24 @@ export async function syncWithDataFolder() {
         Rerenderer.instance.rerender()
       } else {
         // もし自身の知らない他インスタンスの更新があれば
-        await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
-        const chunks = await External.instance.dataFolder.readAllChunks()
-        const state = Chunk.inflateStateFromChunks(chunks)
-        await restart(state)
+        switch (await External.instance.dataFolder.checkInstanceFolder(unknownUpdatedInstanceId)) {
+          case 'success':
+            await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
+
+            const chunks = await External.instance.dataFolder.readAllChunks()
+            const state = Chunk.inflateStateFromChunks(chunks)
+            await restart(state)
+            break
+          case 'incomplete':
+            alert(
+              '他デバイスのデータに整合性がないため読み込めません。\nオンラインストレージ等でデータフォルダを共有している場合は、同期が未完了だと考えられます。'
+            )
+            break
+          case 'unknown version':
+            alert('拡張機能をバージョンアップしてください')
+            break
+        }
       }
     }
   } catch (e) {

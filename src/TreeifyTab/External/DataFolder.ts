@@ -324,8 +324,37 @@ export class DataFolder {
       return knownUpdateTimestamp !== lastModified
     })
 
-    return unknownUpdatedInstanceIds.maxBy(({ instanceId, lastModified }) => lastModified)
-      ?.instanceId
+    return unknownUpdatedInstanceIds.maxBy(({ lastModified }) => lastModified)?.instanceId
+  }
+
+  /**
+   * 指定されたインスタンスフォルダを読み込んで問題ないかどうかを検証する。
+   * 戻り値の意味は次の通り。
+   * success: 読み込んで問題ない
+   * incomplete: metadata.json内のhashesと各ファイルの実際のハッシュ値が食い違っている
+   * unknown version: データのスキーマバージョンが高いので正しい読み込み方が分からない
+   */
+  async checkInstanceFolder(
+    instanceId: InstanceId
+  ): Promise<'success' | 'incomplete' | 'unknown version'> {
+    const metadata = await this.readMetadataFile(instanceId)
+    if (metadata === undefined) return 'incomplete'
+
+    if (metadata.schemaVersion > CURRENT_SCHEMA_VERSION) return 'unknown version'
+
+    // 全チャンクパックファイルのハッシュ値を計算し、metadata.json内の値と比較
+    const chunkFileNames = await this.getChunkFileNames(instanceId)
+    const promises = chunkFileNames.map(async (fileName) => {
+      const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
+      const fileText = await this.readTextFile(chunkPackFilePath)
+      return metadata.hashes[fileName] === md5(fileText)
+    })
+    // TODO: 最適化の余地あり。Promise.allで全てを待つのではなく、来たデータから順に検証すればよい
+    if (List(await Promise.all(promises)).every((v) => v)) {
+      return 'incomplete'
+    }
+
+    return 'success'
   }
 
   // 全チャンクファイルのファイル名のリストを返す
