@@ -16,9 +16,11 @@ type FilePath = List<string>
 // キーはchunk.id、値はchunk.data
 type ChunkPack = { [K in ChunkId]: any }
 
+export const CURRENT_SCHEMA_VERSION = 1 as const
+
 // メタデータファイル内のJSONに対応する型
 type Metadata = {
-  schemaVersion: 1
+  schemaVersion: typeof CURRENT_SCHEMA_VERSION
   lastModified: Timestamp
   // Keyはファイル名、Valueはハッシュ値
   hashes: { [K in string]: string }
@@ -177,7 +179,12 @@ export class DataFolder {
       }
     }
     const known = metadata?.known ?? {}
-    const newMetadata: Metadata = { schemaVersion: 1, lastModified: Timestamp.now(), hashes, known }
+    const newMetadata: Metadata = {
+      schemaVersion: CURRENT_SCHEMA_VERSION,
+      lastModified: Timestamp.now(),
+      hashes,
+      known,
+    }
     const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
@@ -317,8 +324,37 @@ export class DataFolder {
       return knownUpdateTimestamp !== lastModified
     })
 
-    return unknownUpdatedInstanceIds.maxBy(({ instanceId, lastModified }) => lastModified)
-      ?.instanceId
+    return unknownUpdatedInstanceIds.maxBy(({ lastModified }) => lastModified)?.instanceId
+  }
+
+  /**
+   * 指定されたインスタンスフォルダを読み込んで問題ないかどうかを検証する。
+   * 戻り値の意味は次の通り。
+   * success: 読み込んで問題ない
+   * incomplete: metadata.json内のhashesと各ファイルの実際のハッシュ値が食い違っている
+   * unknown version: データのスキーマバージョンが高いので正しい読み込み方が分からない
+   */
+  async checkInstanceFolder(
+    instanceId: InstanceId
+  ): Promise<'success' | 'incomplete' | 'unknown version'> {
+    const metadata = await this.readMetadataFile(instanceId)
+    if (metadata === undefined) return 'incomplete'
+
+    if (metadata.schemaVersion > CURRENT_SCHEMA_VERSION) return 'unknown version'
+
+    // 全チャンクパックファイルのハッシュ値を計算し、metadata.json内の値と比較
+    const chunkFileNames = await this.getChunkFileNames(instanceId)
+    const promises = chunkFileNames.map(async (fileName) => {
+      const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
+      const fileText = await this.readTextFile(chunkPackFilePath)
+      return metadata.hashes[fileName] === md5(fileText)
+    })
+    // TODO: 最適化の余地あり。Promise.allで全てを待つのではなく、来たデータから順に検証すればよい
+    if (List(await Promise.all(promises)).every((v) => v)) {
+      return 'incomplete'
+    }
+
+    return 'success'
   }
 
   // 全チャンクファイルのファイル名のリストを返す
