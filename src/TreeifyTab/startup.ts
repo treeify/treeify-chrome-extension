@@ -11,6 +11,7 @@ import {
   onWindowFocusChanged,
 } from 'src/TreeifyTab/External/chromeEventListeners'
 import {External} from 'src/TreeifyTab/External/External'
+import {GlobalItemId} from 'src/TreeifyTab/Instance'
 import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
 import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
 import {Database} from 'src/TreeifyTab/Internal/Database'
@@ -106,7 +107,7 @@ export async function restart(state: State, skipTabMigration: boolean = false) {
 // また、新しいStateでURLが変わっていたらタブのURLを更新する。
 async function migrateTabs(newState: State) {
   // newStateにおけるグローバル項目IDから項目IDへのMapを作る
-  const globalItemIdMap = new Map<string, ItemId>()
+  const globalItemIdMap = new Map<GlobalItemId, ItemId>()
   for (const itemsKey in newState.items) {
     globalItemIdMap.set(newState.items[itemsKey].globalItemId, parseInt(itemsKey))
   }
