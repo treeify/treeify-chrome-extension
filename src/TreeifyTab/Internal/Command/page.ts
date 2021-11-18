@@ -1,5 +1,5 @@
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 
 /**
  * ターゲット項目がページなら非ページ化する。

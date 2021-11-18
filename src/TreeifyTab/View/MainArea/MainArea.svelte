@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {onCopy, onCut, onPaste} from '../../Internal/ImportExport/clipboard'
-  import {onResizeImage} from '../dragAndDrop'
+  import { onCopy, onCut, onPaste } from '../../Internal/ImportExport/clipboard'
+  import { onResizeImage } from '../dragAndDrop'
   import MainAreaNode from './MainAreaNode.svelte'
-  import {MainAreaProps} from './MainAreaProps'
+  import { MainAreaProps } from './MainAreaProps'
 
   export let props: MainAreaProps
 </script>

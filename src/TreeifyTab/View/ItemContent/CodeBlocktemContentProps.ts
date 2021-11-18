@@ -1,6 +1,6 @@
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
 
 export type CodeBlockItemContentProps = {
   itemType: ItemType.CODE_BLOCK

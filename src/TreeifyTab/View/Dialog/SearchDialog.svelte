@@ -1,13 +1,13 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {InputId} from '../../Internal/InputId'
-  import {Internal} from '../../Internal/Internal'
-  import {ItemPath} from '../../Internal/ItemPath'
+  import { List } from 'immutable'
+  import { CurrentState } from '../../Internal/CurrentState'
+  import { InputId } from '../../Internal/InputId'
+  import { Internal } from '../../Internal/Internal'
+  import { ItemPath } from '../../Internal/ItemPath'
   import CommonDialog from './CommonDialog.svelte'
-  import {SearchDialogProps} from './SearchDialogProps'
+  import { SearchDialogProps } from './SearchDialogProps'
   import SearchResultPage from './SearchResultPage.svelte'
-  import {createSearchResultPageProps} from './SearchResultPageProps'
+  import { createSearchResultPageProps } from './SearchResultPageProps'
 
   export let props: SearchDialogProps
 

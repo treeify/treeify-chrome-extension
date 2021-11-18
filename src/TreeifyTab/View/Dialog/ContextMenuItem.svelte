@@ -1,11 +1,11 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {InputId} from '../../Internal/InputId'
-  import {Internal} from '../../Internal/Internal'
-  import {Rerenderer} from '../../Rerenderer'
-  import {ContextMenuItemProps} from './ContextMenuItemProps'
+  import { List } from 'immutable'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { InputId } from '../../Internal/InputId'
+  import { Internal } from '../../Internal/Internal'
+  import { Rerenderer } from '../../Rerenderer'
+  import { ContextMenuItemProps } from './ContextMenuItemProps'
 
   export let props: ContextMenuItemProps
 

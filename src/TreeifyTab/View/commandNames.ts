@@ -1,4 +1,4 @@
-export const commandNames: {[T in string]: string} = {
+export const commandNames: { [T in string]: string } = {
   indent: 'インデント',
   unindent: 'アンインデント',
   moveItemUpward: '上に移動',

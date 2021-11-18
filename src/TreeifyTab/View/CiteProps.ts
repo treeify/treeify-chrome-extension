@@ -1,5 +1,5 @@
-import {ItemId} from 'src/TreeifyTab/basicType'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { ItemId } from 'src/TreeifyTab/basicType'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 
 export type CiteProps = {
   title: string

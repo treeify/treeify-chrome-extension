@@ -1,4 +1,4 @@
-import {External} from 'src/TreeifyTab/External/External'
+import { External } from 'src/TreeifyTab/External/External'
 
 export type DataFolderButtonProps = {
   isAlreadyOpen: boolean

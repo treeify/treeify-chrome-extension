@@ -1,11 +1,11 @@
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {InputId} from '../../Internal/InputId'
-  import {Rerenderer} from '../../Rerenderer'
-  import {DropdownMenuDialogProps} from './DropdownMenuDialogProps'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { InputId } from '../../Internal/InputId'
+  import { Rerenderer } from '../../Rerenderer'
+  import { DropdownMenuDialogProps } from './DropdownMenuDialogProps'
   import DropdownMenuItem from './DropdownMenuItem.svelte'
-  import {setupFocusTrap} from './focusTrap'
+  import { setupFocusTrap } from './focusTrap'
 
   export let props: DropdownMenuDialogProps
 

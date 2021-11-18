@@ -1,15 +1,15 @@
-import {List} from 'immutable'
-import {MultiSet} from 'mnemonist'
-import {assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {MutableOrderedTree} from 'src/Common/OrderedTree'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {ExportFormat} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { List } from 'immutable'
+import { MultiSet } from 'mnemonist'
+import { assertNeverType, assertNonUndefined } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { MutableOrderedTree } from 'src/Common/OrderedTree'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { ExportFormat } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 /**
  * 与えられた複数行のテキストから無駄なインデントを除去する。
@@ -155,8 +155,8 @@ export function pasteMultilineText(text: string) {
 function detectIndent(lines: string[]): string {
   const result = List.of(' ', '\t', '　')
     .map((indentChar) => {
-      const {size, likelihood} = detectIndentSize(lines, indentChar)
-      return {indentChar, size, likelihood}
+      const { size, likelihood } = detectIndentSize(lines, indentChar)
+      return { indentChar, size, likelihood }
     })
     .maxBy((value) => value.likelihood)
   assertNonUndefined(result)
@@ -169,7 +169,7 @@ function detectIndent(lines: string[]): string {
 function detectIndentSize(
   lines: string[],
   indentChar: string
-): {size: integer; likelihood: integer} {
+): { size: integer; likelihood: integer } {
   // インデント文字の左端出現数を行ごとに数える。
   // ただし空行はスキップする。
   const indentCharCounts = lines
@@ -187,9 +187,9 @@ function detectIndentSize(
 
   const result = positiveGaps.top(1)[0]
   if (result !== undefined) {
-    return {size: result[0], likelihood: result[1]}
+    return { size: result[0], likelihood: result[1] }
   } else {
-    return {size: 0, likelihood: 0}
+    return { size: 0, likelihood: 0 }
   }
 }
 
@@ -197,7 +197,7 @@ function detectIndentSize(
 function analyzeIndentation(
   line: string,
   indentUnit: string
-): {indentLevel: integer; text: string} {
+): { indentLevel: integer; text: string } {
   if (line.startsWith(indentUnit)) {
     const indentation = analyzeIndentation(line.substring(indentUnit.length), indentUnit)
     return {

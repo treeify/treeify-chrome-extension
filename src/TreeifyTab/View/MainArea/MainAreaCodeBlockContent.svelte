@@ -1,7 +1,7 @@
 <script lang="ts">
   import CodeBlockItemContent from '../ItemContent/CodeBlockItemContent.svelte'
-  import {MainAreaCodeBlockContentProps} from './MainAreaCodeBlockContentProps'
-  import {MainAreaContentView} from './MainAreaContentProps'
+  import { MainAreaCodeBlockContentProps } from './MainAreaCodeBlockContentProps'
+  import { MainAreaContentView } from './MainAreaContentProps'
 
   export let props: MainAreaCodeBlockContentProps
 

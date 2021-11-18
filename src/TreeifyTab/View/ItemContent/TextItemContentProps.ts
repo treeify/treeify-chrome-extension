@@ -1,7 +1,7 @@
-import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { List } from 'immutable'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 
 export type TextItemContentProps = {
   itemType: ItemType.TEXT

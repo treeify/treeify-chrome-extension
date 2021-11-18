@@ -1,43 +1,43 @@
-import {Dialog} from 'src/TreeifyTab/External/DialogState'
-import {External} from 'src/TreeifyTab/External/External'
-import {createCaptionSettingDialogProps} from 'src/TreeifyTab/View/Dialog/CaptionSettingDialogProps'
-import {createCodeBlockLanguageSettingDialogProps} from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialogProps'
-import {createExportDialogProps} from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
-import {createImageItemEditDialogProps} from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
-import {createItemAdditionDropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
-import {createOtherSettingsDialogProps} from 'src/TreeifyTab/View/Dialog/OtherSettingsDialogProps'
-import {createTabsDialogProps} from 'src/TreeifyTab/View/Dialog/TabsDialogProps'
+import { Dialog } from 'src/TreeifyTab/External/DialogState'
+import { External } from 'src/TreeifyTab/External/External'
+import { createCaptionSettingDialogProps } from 'src/TreeifyTab/View/Dialog/CaptionSettingDialogProps'
+import { createCodeBlockLanguageSettingDialogProps } from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialogProps'
+import { createExportDialogProps } from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
+import { createImageItemEditDialogProps } from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
+import { createItemAdditionDropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps'
+import { createOtherSettingsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherSettingsDialogProps'
+import { createTabsDialogProps } from 'src/TreeifyTab/View/Dialog/TabsDialogProps'
 import CaptionSettingDialog from './CaptionSettingDialog.svelte'
 import CitationSettingDialog from './CitationSettingDialog.svelte'
-import {createCitationSettingDialogProps} from './CitationSettingDialogProps'
+import { createCitationSettingDialogProps } from './CitationSettingDialogProps'
 import CodeBlockItemEditDialog from './CodeBlockItemEditDialog.svelte'
-import {createCodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
+import { createCodeBlockItemEditDialogProps } from './CodeBlockItemEditDialogProps'
 import CodeBlockLanguageSettingDialog from './CodeBlockLanguageSettingDialog.svelte'
 import ContextMenuDialog from './ContextMenuDialog.svelte'
-import {createContextMenuDialogProps} from './ContextMenuDialogProps'
+import { createContextMenuDialogProps } from './ContextMenuDialogProps'
 import DropdownMenuDialog from './DropdownMenuDialog.svelte'
 import ExportDialog from './ExportDialog.svelte'
 import ImageItemEditDialog from './ImageItemEditDialog.svelte'
 import OtherParentsDialog from './OtherParentsDialog.svelte'
-import {createOtherParentsDialogProps} from './OtherParentsDialogProps'
+import { createOtherParentsDialogProps } from './OtherParentsDialogProps'
 import OtherSettingsDialog from './OtherSettingsDialog.svelte'
 import CustomCssDialog from './Preference/CustomCssDialog.svelte'
-import {createCustomCssDialogProps} from './Preference/CustomCssDialogProps'
+import { createCustomCssDialogProps } from './Preference/CustomCssDialogProps'
 import KeyBindingDialog from './Preference/KeyBindingDialog.svelte'
-import {createKeyBindingDialogProps} from './Preference/KeyBindingDialogProps'
-import {createPreferenceDropdownMenuDialogProps} from './Preference/PreferenceDropdownMenuDialogProps'
+import { createKeyBindingDialogProps } from './Preference/KeyBindingDialogProps'
+import { createPreferenceDropdownMenuDialogProps } from './Preference/PreferenceDropdownMenuDialogProps'
 import WorkspaceDialog from './Preference/WorkspaceDialog.svelte'
-import {createWorkspaceDialogProps} from './Preference/WorkspaceDialogProps'
+import { createWorkspaceDialogProps } from './Preference/WorkspaceDialogProps'
 import SearchDialog from './SearchDialog.svelte'
-import {createSearchDialogProps} from './SearchDialogProps'
+import { createSearchDialogProps } from './SearchDialogProps'
 import TabsDialog from './TabsDialog.svelte'
 import TexEditDialog from './TexEditDialog.svelte'
-import {createTexEditDialogProps} from './TexEditDialogProps'
+import { createTexEditDialogProps } from './TexEditDialogProps'
 import WebPageItemTitleSettingDialog from './WebPageItemTitleSettingDialog.svelte'
-import {createWebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
+import { createWebPageItemTitleSettingDialogProps } from './WebPageItemTitleSettingDialogProps'
 
 export type DialogLayerProps = {
-  dialog: {component: any; props: any} | undefined
+  dialog: { component: any; props: any } | undefined
 }
 
 export function createDialogLayerProps(): DialogLayerProps {
@@ -52,7 +52,7 @@ export function createDialogLayerProps(): DialogLayerProps {
   }
 }
 
-function createDialogMaterials(dialogState: Dialog): {component: any; props: any} {
+function createDialogMaterials(dialogState: Dialog): { component: any; props: any } {
   switch (dialogState.type) {
     case 'CaptionSettingDialog':
       return {

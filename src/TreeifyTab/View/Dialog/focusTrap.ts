@@ -1,5 +1,5 @@
-import {createFocusTrap} from 'focus-trap'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
+import { createFocusTrap } from 'focus-trap'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 
 /** モーダルダイアログを実現するためフォーカストラップを作るディレクティブ用の関数 */
 export function setupFocusTrap(domElement: HTMLElement) {

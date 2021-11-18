@@ -1,9 +1,9 @@
-import {assertNonNull} from 'src/Common/Debug/assert'
-import {Coordinate, integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull } from 'src/Common/Debug/assert'
+import { Coordinate, integer } from 'src/Common/integer'
+import { ItemId } from 'src/TreeifyTab/basicType'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type ItemDragData = {
   type: 'ItemDragData'
@@ -21,7 +21,7 @@ export let currentDragData: ItemDragData | ImageBottomDragData | undefined
 
 // クリックしているつもりなのにドラッグ扱いされてしまう問題に対処するため導入した変数。
 // ドラッグ開始の判断が早すぎるのが原因なので、ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない。
-let itemMouseDown: {position: Coordinate; itemPath: ItemPath} | undefined
+let itemMouseDown: { position: Coordinate; itemPath: ItemPath } | undefined
 
 /**
  * 項目のドラッグ開始を行うDOM要素に対して設定するuseディレクティブ用関数。
@@ -30,7 +30,7 @@ let itemMouseDown: {position: Coordinate; itemPath: ItemPath} | undefined
 export function dragItem(element: HTMLElement, itemPath: ItemPath) {
   function onMouseDown(event: MouseEvent) {
     if (event.buttons === 1) {
-      itemMouseDown = {position: {x: event.clientX, y: event.clientY}, itemPath}
+      itemMouseDown = { position: { x: event.clientX, y: event.clientY }, itemPath }
     }
   }
 
@@ -79,6 +79,7 @@ export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
       isAfterMouseDown = true
     }
   }
+
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && isAfterMouseDown) {
       assertNonNull(element.parentElement)
@@ -134,10 +135,11 @@ export function dragStateResetter(element: HTMLElement) {
       Rerenderer.instance.rerender()
     }
   }
+
   function onMouseMove(event: MouseEvent) {
     if (event.buttons === 1 && itemMouseDown !== undefined) {
       // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
-      const currentMousePosition = {x: event.clientX, y: event.clientY}
+      const currentMousePosition = { x: event.clientX, y: event.clientY }
       const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
       if (distance > 5) {
         currentDragData = {

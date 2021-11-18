@@ -1,6 +1,6 @@
 <script lang="ts">
-  import {removeRedundantIndent} from '../../Internal/ImportExport/indentedText'
-  import {CodeBlockItemEditDialogProps} from './CodeBlockItemEditDialogProps'
+  import { removeRedundantIndent } from '../../Internal/ImportExport/indentedText'
+  import { CodeBlockItemEditDialogProps } from './CodeBlockItemEditDialogProps'
   import CommonDialog from './CommonDialog.svelte'
   import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
 

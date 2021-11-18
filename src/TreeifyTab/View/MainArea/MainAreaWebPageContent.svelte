@@ -1,8 +1,8 @@
 <script lang="ts">
   import Cite from '../Cite.svelte'
-  import {dragItem} from '../dragAndDrop'
-  import {MainAreaContentView} from './MainAreaContentProps'
-  import {MainAreaWebPageContentProps} from './MainAreaWebPageContentProps'
+  import { dragItem } from '../dragAndDrop'
+  import { MainAreaContentView } from './MainAreaContentProps'
+  import { MainAreaWebPageContentProps } from './MainAreaWebPageContentProps'
 
   export let props: MainAreaWebPageContentProps
 
@@ -135,6 +135,7 @@
     box-sizing: border-box;
     animation: rotation 0.8s infinite linear;
   }
+
   @keyframes rotation {
     0% {
       transform: rotate(0deg);
@@ -197,6 +198,7 @@
   .main-area-web-page-content_favicon-area.discarded > * {
     filter: opacity(75%);
   }
+
   .main-area-web-page-content_favicon-area.tab-closed > * {
     filter: opacity(55%);
   }

@@ -1,4 +1,4 @@
-import {StackTrace} from 'src/Common/Debug/StackTrace'
+import { StackTrace } from 'src/Common/Debug/StackTrace'
 
 /**
  * 与えられた論理式がtrueになることを表明する。

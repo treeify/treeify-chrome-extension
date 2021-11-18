@@ -1,12 +1,12 @@
-import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type CaptionSettingDialogProps = {
   initialCaption: string

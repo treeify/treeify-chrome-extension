@@ -1,19 +1,19 @@
-import {List} from 'immutable'
-import {assertNonNull} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
+import { List } from 'immutable'
+import { assertNonNull } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
 import {
   focusMainAreaBackground,
   setDomSelection,
   TextItemSelection,
 } from 'src/TreeifyTab/External/domTextSelection'
-import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Database} from 'src/TreeifyTab/Internal/Database'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {MainAreaContentView} from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-import {tick} from 'svelte'
-import {Readable, writable} from 'svelte/store'
+import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Database } from 'src/TreeifyTab/Internal/Database'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import { tick } from 'svelte'
+import { Readable, writable } from 'svelte/store'
 import Root from './View/Root.svelte'
 
 /**
@@ -123,7 +123,7 @@ export class Rerenderer {
 
   /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
   requestSetCaretDistanceAfterRendering(distance: integer) {
-    this.requestSelectAfterRendering({focusDistance: distance, anchorDistance: distance})
+    this.requestSelectAfterRendering({ focusDistance: distance, anchorDistance: distance })
   }
 
   onMutateState(propertyPath: PropertyPath) {

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {InputId} from '../../../Internal/InputId'
-  import {commandNames} from '../../commandNames'
-  import {KeyBindingProps} from './KeyBindingProps'
+  import { InputId } from '../../../Internal/InputId'
+  import { commandNames } from '../../commandNames'
+  import { KeyBindingProps } from './KeyBindingProps'
 
   export let props: KeyBindingProps
 </script>

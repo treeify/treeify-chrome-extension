@@ -1,8 +1,8 @@
-import {List, Set} from 'immutable'
-import {TabsDialog} from 'src/TreeifyTab/External/DialogState'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { List, Set } from 'immutable'
+import { TabsDialog } from 'src/TreeifyTab/External/DialogState'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import {
   createTabsDialogItemProps,
   TabsDialogItemProps,

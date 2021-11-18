@@ -1,4 +1,4 @@
-import {integer} from 'src/Common/integer'
+import { integer } from 'src/Common/integer'
 
 /**
  * いわゆるUnix time（ミリ秒）。

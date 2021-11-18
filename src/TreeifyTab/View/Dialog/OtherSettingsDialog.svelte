@@ -1,6 +1,6 @@
 <script lang="ts">
   import CommonDialog from './CommonDialog.svelte'
-  import {OtherSettingsDialogProps} from './OtherSettingsDialogProps'
+  import { OtherSettingsDialogProps } from './OtherSettingsDialogProps'
 
   export let props: OtherSettingsDialogProps
 </script>

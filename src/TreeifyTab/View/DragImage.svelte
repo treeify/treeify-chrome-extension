@@ -1,10 +1,10 @@
 <script lang="ts">
-  import {ItemPath} from '../Internal/ItemPath'
-  import {setupFocusTrap} from './Dialog/focusTrap'
-  import {onItemDrop} from './dragAndDrop'
-  import {DragImageProps} from './DragImageProps'
+  import { ItemPath } from '../Internal/ItemPath'
+  import { setupFocusTrap } from './Dialog/focusTrap'
+  import { onItemDrop } from './dragAndDrop'
+  import { DragImageProps } from './DragImageProps'
   import ItemContent from './ItemContent/ItemContent.svelte'
-  import {createItemContentProps} from './ItemContent/ItemContentProps'
+  import { createItemContentProps } from './ItemContent/ItemContentProps'
 
   export let props: DragImageProps
 

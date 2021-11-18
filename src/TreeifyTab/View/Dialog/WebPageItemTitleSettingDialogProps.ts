@@ -1,10 +1,10 @@
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {WebPageItemTitleSettingDialog} from 'src/TreeifyTab/External/DialogState'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { WebPageItemTitleSettingDialog } from 'src/TreeifyTab/External/DialogState'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type WebPageItemTitleSettingDialogProps = {
   webPageItemTitleSettingDialog: WebPageItemTitleSettingDialog

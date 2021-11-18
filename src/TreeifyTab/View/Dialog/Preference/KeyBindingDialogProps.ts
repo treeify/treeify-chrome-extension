@@ -1,5 +1,5 @@
-import {List} from 'immutable'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { List } from 'immutable'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import {
   createKeyBindingProps,
   KeyBindingProps,

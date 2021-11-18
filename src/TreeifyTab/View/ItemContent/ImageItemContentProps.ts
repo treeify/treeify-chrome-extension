@@ -1,5 +1,5 @@
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 
 export type ImageItemContentProps = {
   itemType: ItemType.IMAGE

@@ -1,8 +1,8 @@
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 
 /**
  * Treeifyのデータを永続化するため（だけ）のデータベース（IndexedDB）。
@@ -54,7 +54,7 @@ export namespace Database {
         // 初回起動時
 
         // ObjectStoreを新規作成する
-        const objectStore = database.createObjectStore(chunkStoreName, {keyPath: 'id'})
+        const objectStore = database.createObjectStore(chunkStoreName, { keyPath: 'id' })
 
         // 初期データを投入する
         const allChunks = Chunk.createAllChunks(Internal.createInitialState())
@@ -74,8 +74,8 @@ export namespace Database {
       const request = objectStore.getAll()
       // 読み込みリクエスト成功時
       request.onsuccess = () => {
-        const chunks: List<Chunk> = List(request.result).map(({id, data}) => {
-          return {id, data: convertArrayToList(data)}
+        const chunks: List<Chunk> = List(request.result).map(({ id, data }) => {
+          return { id, data: convertArrayToList(data) }
         })
         resolve(chunks)
       }

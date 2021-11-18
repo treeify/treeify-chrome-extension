@@ -1,13 +1,13 @@
-import {integer} from 'src/Common/integer'
-import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { integer } from 'src/Common/integer'
+import { CssCustomProperty } from 'src/TreeifyTab/CssCustomProperty'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type MainAreaRollProps = {
   bulletState: MainAreaBulletState

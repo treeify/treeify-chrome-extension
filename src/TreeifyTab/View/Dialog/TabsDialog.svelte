@@ -1,7 +1,7 @@
 <script lang="ts">
   import CommonDialog from './CommonDialog.svelte'
   import TabsDialogItem from './TabsDialogItem.svelte'
-  import {TabsDialogProps} from './TabsDialogProps'
+  import { TabsDialogProps } from './TabsDialogProps'
 
   export let props: TabsDialogProps
 </script>

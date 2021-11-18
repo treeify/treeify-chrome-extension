@@ -1,4 +1,4 @@
-import {State} from 'src/TreeifyTab/Internal/State'
+import { State } from 'src/TreeifyTab/Internal/State'
 import {
   createPageTreeRootNodeProps,
   PageTreeNodeProps,

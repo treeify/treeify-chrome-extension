@@ -1,4 +1,4 @@
-import {List} from 'immutable'
+import { List } from 'immutable'
 
 /**
  * Stateオブジェクト内の特定の位置を示す値の型。

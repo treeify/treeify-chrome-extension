@@ -1,11 +1,11 @@
-import {List} from 'immutable'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {GlobalItemId} from 'src/TreeifyTab/Instance'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState/index'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {Item, TexItem} from 'src/TreeifyTab/Internal/State'
-import {Timestamp} from 'src/TreeifyTab/Timestamp'
+import { List } from 'immutable'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { GlobalItemId } from 'src/TreeifyTab/Instance'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { Item, TexItem } from 'src/TreeifyTab/Internal/State'
+import { Timestamp } from 'src/TreeifyTab/Timestamp'
 
 /**
  * 新しい空のTeX項目を作成し、CurrentStateに登録する。
@@ -25,7 +25,7 @@ export function createTexItem(): ItemId {
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
-  const texItem: TexItem = {code: '', caption: ''}
+  const texItem: TexItem = { code: '', caption: '' }
   Internal.instance.mutate(texItem, PropertyPath.of('texItems', newItemId))
 
   return newItemId

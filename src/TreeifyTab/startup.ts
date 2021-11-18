@@ -1,6 +1,6 @@
-import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import { assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { ItemId } from 'src/TreeifyTab/basicType'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -10,18 +10,18 @@ import {
   onUpdated,
   onWindowFocusChanged,
 } from 'src/TreeifyTab/External/chromeEventListeners'
-import {External} from 'src/TreeifyTab/External/External'
-import {GlobalItemId} from 'src/TreeifyTab/Instance'
-import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Database} from 'src/TreeifyTab/Internal/Database'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
+import { External } from 'src/TreeifyTab/External/External'
+import { GlobalItemId } from 'src/TreeifyTab/Instance'
+import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Database } from 'src/TreeifyTab/Internal/Database'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import OnClickData = chrome.contextMenus.OnClickData
 
 export async function startup(initialState: State) {
@@ -124,7 +124,7 @@ async function migrateTabs(newState: State) {
       const newUrl = newState.webPageItems[newItemId].url
       if (newUrl !== Internal.instance.state.webPageItems[itemId].url) {
         // newStateでURLが変わっていた場合
-        await chrome.tabs.update(tabId, {url: newUrl})
+        await chrome.tabs.update(tabId, { url: newUrl })
       }
     }
   })
@@ -151,7 +151,7 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
     // 出典を設定
-    CurrentState.setCite(newItemId, {title: tabTitle, url: info.pageUrl})
+    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
 
     CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
@@ -161,7 +161,7 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
     // 出典を設定
-    CurrentState.setCite(newItemId, {title: tabTitle, url: info.pageUrl})
+    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
 
     CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
@@ -190,7 +190,7 @@ async function onCommand(commandName: string) {
       break
     case 'close-tab-and-show-treeify-tab':
       TreeifyTab.open()
-      const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
       if (tab.id !== undefined) {
         chrome.tabs.remove(tab.id)
       }

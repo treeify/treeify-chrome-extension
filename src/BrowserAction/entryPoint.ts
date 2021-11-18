@@ -1,4 +1,4 @@
-import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
+import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 
 // Treeifyタブを開く
 await TreeifyTab.open()

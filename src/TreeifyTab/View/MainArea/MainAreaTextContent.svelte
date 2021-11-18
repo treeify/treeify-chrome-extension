@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {DomishObject} from '../../Internal/DomishObject'
+  import { DomishObject } from '../../Internal/DomishObject'
   import Cite from '../Cite.svelte'
-  import {MainAreaContentView} from './MainAreaContentProps'
-  import {MainAreaTextContentProps} from './MainAreaTextContentProps'
+  import { MainAreaContentView } from './MainAreaContentProps'
+  import { MainAreaTextContentProps } from './MainAreaTextContentProps'
 
   export let props: MainAreaTextContentProps
 

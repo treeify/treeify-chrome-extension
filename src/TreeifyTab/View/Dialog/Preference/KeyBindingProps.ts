@@ -1,10 +1,10 @@
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {CommandId} from 'src/TreeifyTab/basicType'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { CommandId } from 'src/TreeifyTab/basicType'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type KeyBindingProps = {
   inputId: string
@@ -72,7 +72,7 @@ export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyB
   }
 }
 
-export type CommandGroup = {name: string; commandIds: List<CommandId>}
+export type CommandGroup = { name: string; commandIds: List<CommandId> }
 
 // コマンド一覧をoptgroup要素でグルーピングするためのデータ
 const commandGroups: List<CommandGroup> = List.of(
@@ -128,7 +128,7 @@ const commandGroups: List<CommandGroup> = List.of(
     name: '空の項目作成',
     commandIds: List.of('createEmptyCodeBlockItem', 'createEmptyTexItem', 'createEmptyTextItem'),
   },
-  {name: 'クリップボード', commandIds: List.of('copyForTransclusion', 'pasteAsPlainText')},
+  { name: 'クリップボード', commandIds: List.of('copyForTransclusion', 'pasteAsPlainText') },
   {
     name: 'ダイアログ表示',
     commandIds: List.of(
@@ -140,6 +140,6 @@ const commandGroups: List<CommandGroup> = List.of(
       'showOtherParentsDialog'
     ),
   },
-  {name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems')},
-  {name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded')}
+  { name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems') },
+  { name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded') }
 )

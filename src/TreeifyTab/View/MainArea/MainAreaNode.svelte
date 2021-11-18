@@ -1,11 +1,11 @@
 <script lang="ts">
   import Color from 'color'
-  import {integer} from '../../../Common/integer'
-  import {CssCustomProperty} from '../../CssCustomProperty'
-  import {dragItem} from '../dragAndDrop'
+  import { integer } from '../../../Common/integer'
+  import { CssCustomProperty } from '../../CssCustomProperty'
+  import { dragItem } from '../dragAndDrop'
   import MainAreaContent from './MainAreaContent.svelte'
   import MainAreaNode from './MainAreaNode.svelte'
-  import {MainAreaNodeProps} from './MainAreaNodeProps'
+  import { MainAreaNodeProps } from './MainAreaNodeProps'
   import MainAreaRoll from './MainAreaRoll.svelte'
 
   export let props: MainAreaNodeProps
@@ -156,6 +156,7 @@
       // マウスホバー項目の強調表示
       background: var(--main-area-mouse-hover-item-background-color);
     }
+
     // 単一選択された項目のコンテンツ領域
     &.single-selected {
       background: var(--main-area-focused-item-background-color);

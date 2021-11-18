@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {CaptionSettingDialogProps} from './CaptionSettingDialogProps'
+  import { CaptionSettingDialogProps } from './CaptionSettingDialogProps'
   import CommonDialog from './CommonDialog.svelte'
   import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
 

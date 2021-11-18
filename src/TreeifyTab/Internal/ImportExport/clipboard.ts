@@ -1,10 +1,10 @@
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import {
   exportAsIndentedText,
   pasteMultilineText,
@@ -14,10 +14,10 @@ import {
   toOpmlString,
   tryParseAsOpml,
 } from 'src/TreeifyTab/Internal/ImportExport/opml'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Edge} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Edge } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export function onCopy(event: ClipboardEvent) {
   doWithErrorCapture(() => {
@@ -95,7 +95,7 @@ export function onPaste(event: ClipboardEvent) {
           if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
             // 循環参照発生時を考慮して、トランスクルード時は必ずcollapsedとする
-            const initialEdge: Edge = {isCollapsed: true}
+            const initialEdge: Edge = { isCollapsed: true }
             CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
           }
         }

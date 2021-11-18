@@ -1,7 +1,7 @@
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type PageTreeBulletAndIndentProps = {
   bulletState: PageTreeBulletState

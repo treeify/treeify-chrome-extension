@@ -5,4 +5,4 @@
  */
 export type integer = number
 
-export type Coordinate = {x: integer; y: integer}
+export type Coordinate = { x: integer; y: integer }

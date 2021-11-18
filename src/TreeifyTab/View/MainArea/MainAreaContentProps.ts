@@ -1,7 +1,7 @@
-import {assertNeverType} from 'src/Common/Debug/assert'
-import {ItemType} from 'src/TreeifyTab/basicType'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
+import { assertNeverType } from 'src/Common/Debug/assert'
+import { ItemType } from 'src/TreeifyTab/basicType'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
 import {
   createMainAreaCodeBlockContentProps,
   MainAreaCodeBlockContentProps,
@@ -18,7 +18,10 @@ import {
   createMainAreaWebPageContentProps,
   MainAreaWebPageContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
-import {createMainAreaTextContentProps, MainAreaTextContentProps} from './MainAreaTextContentProps'
+import {
+  createMainAreaTextContentProps,
+  MainAreaTextContentProps,
+} from './MainAreaTextContentProps'
 
 export type MainAreaContentProps =
   | MainAreaTextContentProps

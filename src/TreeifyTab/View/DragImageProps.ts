@@ -1,12 +1,12 @@
-import {is, List} from 'immutable'
-import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {Coordinate, integer} from 'src/Common/integer'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {currentDragData, ItemDragData} from 'src/TreeifyTab/View/dragAndDrop'
+import { is, List } from 'immutable'
+import { assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
+import { Coordinate, integer } from 'src/Common/integer'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { currentDragData, ItemDragData } from 'src/TreeifyTab/View/dragAndDrop'
 
 export type DragImageProps = {
   initialMousePosition: Coordinate

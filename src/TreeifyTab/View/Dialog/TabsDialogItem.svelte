@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {ItemPath} from '../../Internal/ItemPath.js'
+  import { ItemPath } from '../../Internal/ItemPath.js'
   import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {createItemContentProps} from '../ItemContent/ItemContentProps.js'
+  import { createItemContentProps } from '../ItemContent/ItemContentProps.js'
   import TabsDialogItem from './TabsDialogItem.svelte'
-  import {TabsDialogItemProps} from './TabsDialogItemProps'
+  import { TabsDialogItemProps } from './TabsDialogItemProps'
 
   export let props: TabsDialogItemProps
 </script>

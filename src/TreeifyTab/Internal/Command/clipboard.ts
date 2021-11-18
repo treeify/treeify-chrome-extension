@@ -1,14 +1,14 @@
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */
 export async function copyForTransclusion() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  External.instance.treeifyClipboard = {selectedItemPaths}
+  External.instance.treeifyClipboard = { selectedItemPaths }
 
   // 「独自クリップボードにコピー→他アプリで何かをコピー→Treeify上でペースト」としたとき、
   // 本来なら他アプリ由来のデータが貼り付けられるべきなのに独自クリップボードが優先されてしまう問題の対策。

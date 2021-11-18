@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {ItemPath} from '../../Internal/ItemPath'
+  import { ItemPath } from '../../Internal/ItemPath'
   import ItemContent from '../ItemContent/ItemContent.svelte'
-  import {createItemContentProps} from '../ItemContent/ItemContentProps'
+  import { createItemContentProps } from '../ItemContent/ItemContentProps'
   import SearchResultItem from './SearchResultItem.svelte'
-  import {SearchResultItemProps} from './SearchResultItemProps'
+  import { SearchResultItemProps } from './SearchResultItemProps'
 
   export let props: SearchResultItemProps
 </script>

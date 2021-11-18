@@ -1,10 +1,10 @@
 <script lang="ts">
-  import {CurrentState} from '../../Internal/CurrentState'
-  import {ItemPath} from '../../Internal/ItemPath'
+  import { CurrentState } from '../../Internal/CurrentState'
+  import { ItemPath } from '../../Internal/ItemPath'
   import Cite from '../Cite.svelte'
-  import {dragImageBottom} from '../dragAndDrop'
-  import {MainAreaContentView} from './MainAreaContentProps'
-  import {MainAreaImageContentProps} from './MainAreaImageContentProps'
+  import { dragImageBottom } from '../dragAndDrop'
+  import { MainAreaContentView } from './MainAreaContentProps'
+  import { MainAreaImageContentProps } from './MainAreaImageContentProps'
 
   export let props: MainAreaImageContentProps
 

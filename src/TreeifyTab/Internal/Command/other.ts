@@ -1,15 +1,15 @@
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
-import {DataFolder} from 'src/TreeifyTab/External/DataFolder'
-import {focusMainAreaBackground} from 'src/TreeifyTab/External/domTextSelection'
-import {External} from 'src/TreeifyTab/External/External'
-import {Chunk} from 'src/TreeifyTab/Internal/Chunk'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {restart} from 'src/TreeifyTab/startup'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
+import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
+import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
+import { External } from 'src/TreeifyTab/External/External'
+import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { restart } from 'src/TreeifyTab/startup'
 
 /**
  * オンメモリのStateとデータフォルダ内のStateを同期する（状況に応じて読み込みや書き込みを行う）。
@@ -77,7 +77,7 @@ export async function syncWithDataFolder() {
  */
 async function pickDataFolder(): Promise<FileSystemDirectoryHandle> {
   const folderHandle = await showDirectoryPicker()
-  await folderHandle.requestPermission({mode: 'readwrite'})
+  await folderHandle.requestPermission({ mode: 'readwrite' })
 
   if (await isEmptyFolder(folderHandle)) {
     // フォルダが空の場合、それはTreeify用にユーザーが用意したものと判断し、データフォルダとして使う
@@ -90,7 +90,7 @@ async function pickDataFolder(): Promise<FileSystemDirectoryHandle> {
     return folderHandle
   } catch {}
 
-  return await folderHandle.getDirectoryHandle('Treeify data', {create: true})
+  return await folderHandle.getDirectoryHandle('Treeify data', { create: true })
 }
 
 async function isEmptyFolder(folderHandle: FileSystemDirectoryHandle): Promise<boolean> {

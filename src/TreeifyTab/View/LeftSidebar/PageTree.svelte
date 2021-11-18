@@ -1,6 +1,6 @@
 <script lang="ts">
   import PageTreeNode from './PageTreeNode.svelte'
-  import {PageTreeProps} from './PageTreeProps'
+  import { PageTreeProps } from './PageTreeProps'
 
   export let props: PageTreeProps
 </script>

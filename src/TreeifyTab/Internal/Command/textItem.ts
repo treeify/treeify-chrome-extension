@@ -1,8 +1,8 @@
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export function createEmptyTextItem() {
   const targetItemPath = CurrentState.getTargetItemPath()

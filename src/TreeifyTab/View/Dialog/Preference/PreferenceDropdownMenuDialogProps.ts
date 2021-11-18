@@ -1,8 +1,8 @@
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {DropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { DropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
 
 export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogProps {
   const preferenceButton = document.querySelector('.preference-button_icon')?.parentElement
@@ -16,19 +16,19 @@ export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogPro
       {
         title: 'キーボード操作設定',
         onClick: () => {
-          External.instance.dialogState = {type: 'KeyBindingDialog'}
+          External.instance.dialogState = { type: 'KeyBindingDialog' }
         },
       },
       {
         title: 'ブラウザコマンド設定',
         onClick: () => {
-          chrome.tabs.create({url: 'chrome://extensions/shortcuts'})
+          chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
         },
       },
       {
         title: 'カスタムCSS',
         onClick: () => {
-          External.instance.dialogState = {type: 'CustomCssDialog'}
+          External.instance.dialogState = { type: 'CustomCssDialog' }
         },
       },
       {
@@ -38,7 +38,7 @@ export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogPro
       {
         title: 'その他の設定',
         onClick: () => {
-          External.instance.dialogState = {type: 'OtherSettingsDialog'}
+          External.instance.dialogState = { type: 'OtherSettingsDialog' }
         },
       }
     ),

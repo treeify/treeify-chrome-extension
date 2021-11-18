@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {ExportFormat} from 'src/TreeifyTab/Internal/State'
+  import { ExportFormat } from 'src/TreeifyTab/Internal/State'
   import CommonDialog from './CommonDialog.svelte'
-  import {ExportDialogProps} from './ExportDialogProps'
+  import { ExportDialogProps } from './ExportDialogProps'
 
   export let props: ExportDialogProps
 </script>
@@ -78,14 +78,14 @@
       {/if}
     </div>
     <div class="export-dialog_button-area">
-      <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}
-        ><div class="export-dialog_copy-button-icon" />
-        クリップボードにコピー</button
-      >
-      <button class="export-dialog_save-button" on:click={props.onClickSaveButton}
-        ><div class="export-dialog_save-button-icon" />
-        ファイルとして保存</button
-      >
+      <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}>
+        <div class="export-dialog_copy-button-icon" />
+        クリップボードにコピー
+      </button>
+      <button class="export-dialog_save-button" on:click={props.onClickSaveButton}>
+        <div class="export-dialog_save-button-icon" />
+        ファイルとして保存
+      </button>
     </div>
   </div>
 </CommonDialog>
@@ -151,6 +151,7 @@
     display: inline-flex;
     align-items: center;
   }
+
   .export-dialog_copy-button-icon {
     width: 1.5em;
     aspect-ratio: 1;
@@ -165,6 +166,7 @@
     display: inline-flex;
     align-items: center;
   }
+
   .export-dialog_save-button-icon {
     width: 1.5em;
     aspect-ratio: 1;

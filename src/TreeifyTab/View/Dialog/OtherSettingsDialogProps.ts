@@ -1,6 +1,6 @@
-import {OtherSettingsDialog} from 'src/TreeifyTab/External/DialogState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
+import { OtherSettingsDialog } from 'src/TreeifyTab/External/DialogState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 
 export type OtherSettingsDialogProps = {
   leftEndMouseGestureEnabled: boolean
