@@ -1,19 +1,19 @@
 import {List} from 'immutable'
+import {BiMap} from 'mnemonist'
 import {assertNonUndefined} from 'src/Common/Debug/assert'
 import {ItemId, TabId} from 'src/TreeifyTab/basicType'
 import Tab = chrome.tabs.Tab
 
 /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのクラス */
 export class TabItemCorrespondence {
-  // タブIDから項目IDへのMap
-  private readonly tabIdToItemId = new Map<TabId, ItemId>()
-  // 項目IDからタブIDへのMap
-  private readonly itemIdToTabId = new Map<ItemId, TabId>()
+  // タブIDと項目IDの対応付け
+  private readonly bimap = new BiMap<TabId, ItemId>()
+
   // タブIDからTabオブジェクトへのMap
   private readonly tabIdToTab = new Map<TabId, Tab>()
 
   getTabIdBy(itemId: ItemId): TabId | undefined {
-    return this.itemIdToTabId.get(itemId)
+    return this.bimap.inverse.get(itemId)
   }
 
   /**
@@ -23,7 +23,7 @@ export class TabItemCorrespondence {
    * その間はこの関数の戻り値がundefinedになることに要注意。
    */
   getItemIdBy(tabId: TabId): ItemId | undefined {
-    return this.tabIdToItemId.get(tabId)
+    return this.bimap.get(tabId)
   }
 
   getTab(tabId: TabId): Tab | undefined {
@@ -42,16 +42,12 @@ export class TabItemCorrespondence {
 
   /** タブIDと項目IDを結びつける */
   tieTabAndItem(tabId: TabId, itemId: ItemId) {
-    this.tabIdToItemId.set(tabId, itemId)
-    this.itemIdToTabId.set(itemId, tabId)
+    this.bimap.set(tabId, itemId)
   }
 
   /** タブIDと項目IDの結びつけを解除する */
   untieTabAndItemByTabId(tabId: TabId) {
-    const itemId = this.tabIdToItemId.get(tabId)
-    assertNonUndefined(itemId)
-    this.itemIdToTabId.delete(itemId)
-    this.tabIdToItemId.delete(tabId)
+    this.bimap.delete(tabId)
   }
 
   /** 指定されたウェブページ項目がアンロード状態かどうかを判定する */
@@ -61,7 +57,7 @@ export class TabItemCorrespondence {
   }
 
   getAllItemIds(): List<ItemId> {
-    return List(this.tabIdToItemId.values())
+    return List(this.bimap.values())
   }
 
   /** 全てのaudibleなタブのIDを返す */
