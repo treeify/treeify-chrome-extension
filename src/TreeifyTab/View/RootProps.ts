@@ -1,12 +1,15 @@
-import {State} from 'src/TreeifyTab/Internal/State'
-import {createDialogLayerProps, DialogLayerProps} from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
-import {createDragImageProps, DragImageProps} from 'src/TreeifyTab/View/DragImageProps'
+import { State } from 'src/TreeifyTab/Internal/State'
+import {
+  createDialogLayerProps,
+  DialogLayerProps,
+} from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
+import { createDragImageProps, DragImageProps } from 'src/TreeifyTab/View/DragImageProps'
 import {
   createLeftSidebarProps,
   LeftSidebarProps,
 } from 'src/TreeifyTab/View/LeftSidebar/LeftSidebarProps'
-import {createMainAreaProps, MainAreaProps} from 'src/TreeifyTab/View/MainArea/MainAreaProps'
-import {createToolbarProps, ToolbarProps} from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
+import { createMainAreaProps, MainAreaProps } from 'src/TreeifyTab/View/MainArea/MainAreaProps'
+import { createToolbarProps, ToolbarProps } from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
 
 export type RootProps = {
   customCssHtml: string

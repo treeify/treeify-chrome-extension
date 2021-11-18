@@ -1,12 +1,12 @@
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {Rerenderer} from '../../Rerenderer'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { Rerenderer } from '../../Rerenderer'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   function onClick() {
     doWithErrorCapture(() => {
-      External.instance.dialogState = {type: 'ItemAdditionDropdownMenuDialog'}
+      External.instance.dialogState = { type: 'ItemAdditionDropdownMenuDialog' }
       Rerenderer.instance.rerender()
     })
   }

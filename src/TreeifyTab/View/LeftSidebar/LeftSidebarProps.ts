@@ -1,5 +1,5 @@
-import {State} from 'src/TreeifyTab/Internal/State'
-import {createPageTreeProps, PageTreeProps} from 'src/TreeifyTab/View/LeftSidebar/PageTreeProps'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { createPageTreeProps, PageTreeProps } from 'src/TreeifyTab/View/LeftSidebar/PageTreeProps'
 
 export type LeftSidebarProps = {
   pageTreeProps: PageTreeProps

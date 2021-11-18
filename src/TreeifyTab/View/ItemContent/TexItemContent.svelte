@@ -1,14 +1,14 @@
 <script lang="ts">
   import katex from 'katex'
   import Cite from '../Cite.svelte'
-  import {TexItemContentProps} from './TexItemContentProps'
+  import { TexItemContentProps } from './TexItemContentProps'
 
   export let props: TexItemContentProps
 </script>
 
 <div class="tex-item-content">
   <div class="tex-item-content_rendered-tex">
-    {@html katex.renderToString(props.code, {throwOnError: false})}
+    {@html katex.renderToString(props.code, { throwOnError: false })}
   </div>
   {#if props.caption !== ''}
     <div class="tex-item-content_caption">{props.caption}</div>

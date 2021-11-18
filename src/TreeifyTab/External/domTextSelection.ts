@@ -1,4 +1,4 @@
-import {integer} from 'src/Common/integer'
+import { integer } from 'src/Common/integer'
 
 /** テキスト項目のcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
 export type TextItemSelection = {
@@ -31,7 +31,7 @@ export function getTextItemSelectionFromDom(): TextItemSelection | undefined {
       selection.anchorNode,
       selection.anchorOffset
     )
-    return {focusDistance, anchorDistance}
+    return { focusDistance, anchorDistance }
   } else {
     return undefined
   }
@@ -66,24 +66,24 @@ export function countBrElements(node: Node): integer {
 }
 
 /** {@link getDistance}で算出された距離をDOMのoffsetに変換する */
-function convertToDomOffset(node: Node, distance: integer): {node: Node; offset: integer} {
+function convertToDomOffset(node: Node, distance: integer): { node: Node; offset: integer } {
   if (distance === 0) {
-    return {node, offset: 0}
+    return { node, offset: 0 }
   }
 
   // 改行直後の行頭を指しているケース
   if (node instanceof HTMLBRElement && distance === 1) {
     if (node.nextSibling === null) {
-      return {node, offset: 0}
+      return { node, offset: 0 }
     } else {
-      return {node: node.nextSibling, offset: 0}
+      return { node: node.nextSibling, offset: 0 }
     }
   }
 
   const childNodes = Array.from(node.childNodes)
   // テキストノードやその他の終端ノード用
   if (childNodes.length === 0) {
-    return {node, offset: distance}
+    return { node, offset: distance }
   }
 
   // トップダウンにターゲットNodeを探す

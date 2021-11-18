@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {MainAreaBulletState, MainAreaRollProps} from './MainAreaRollProps'
+  import { MainAreaBulletState, MainAreaRollProps } from './MainAreaRollProps'
 
   export let props: MainAreaRollProps
 
@@ -68,12 +68,15 @@
     .main-area-roll_inner-circle {
       background: var(--transcluded-item-bullet-color);
     }
+
     .main-area-roll:hover .main-area-roll_inner-circle {
       background: var(--transcluded-item-bullet-hover-color);
     }
+
     .main-area-roll_page-icon {
       background: var(--transcluded-item-bullet-color);
     }
+
     .main-area-roll:hover .main-area-roll_page-icon {
       background: var(--transcluded-item-bullet-hover-color);
     }
@@ -84,12 +87,15 @@
     .main-area-roll_inner-circle {
       background: var(--highlighted-item-bullet-color);
     }
+
     .main-area-roll:hover .main-area-roll_inner-circle {
       background: var(--highlighted-item-bullet-hover-color);
     }
+
     .main-area-roll_page-icon {
       background: var(--highlighted-item-bullet-color);
     }
+
     .main-area-roll:hover .main-area-roll_page-icon {
       background: var(--highlighted-item-bullet-hover-color);
     }
@@ -103,6 +109,7 @@
         var(--transcluded-item-bullet-color) 50%
       );
     }
+
     .main-area-roll:hover .main-area-roll_inner-circle {
       background: linear-gradient(
         to right,
@@ -110,6 +117,7 @@
         var(--transcluded-item-bullet-hover-color) 50%
       );
     }
+
     .main-area-roll_page-icon {
       background: linear-gradient(
         to right,
@@ -117,6 +125,7 @@
         var(--transcluded-item-bullet-color) 50%
       );
     }
+
     .main-area-roll:hover .main-area-roll_page-icon {
       background: linear-gradient(
         to right,

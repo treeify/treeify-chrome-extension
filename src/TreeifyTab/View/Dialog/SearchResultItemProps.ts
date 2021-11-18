@@ -1,11 +1,11 @@
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type SearchResultItemProps = {
   itemPath: ItemPath
@@ -75,7 +75,7 @@ function transclude(itemPath: ItemPath) {
   const newItemPath = CurrentState.insertBelowItem(
     CurrentState.getTargetItemPath(),
     ItemPath.getItemId(itemPath),
-    {isCollapsed: true}
+    { isCollapsed: true }
   )
   CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)

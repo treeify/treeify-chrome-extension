@@ -2,7 +2,7 @@
   import katex from 'katex'
   import CommonDialog from './CommonDialog.svelte'
   import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
-  import {TexEditDialogProps} from './TexEditDialogProps'
+  import { TexEditDialogProps } from './TexEditDialogProps'
 
   export let props: TexEditDialogProps
 
@@ -27,7 +27,7 @@
       {props.code}
     </div>
     <div class="tex-edit-dialog_rendered-tex">
-      {@html katex.renderToString(currentCode, {throwOnError: false})}
+      {@html katex.renderToString(currentCode, { throwOnError: false })}
     </div>
     <div class="tex-edit-dialog_button-area">
       <FinishAndCancelButtons

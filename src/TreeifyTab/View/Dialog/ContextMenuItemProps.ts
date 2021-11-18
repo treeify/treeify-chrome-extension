@@ -1,10 +1,10 @@
-import {List} from 'immutable'
-import {ItemType} from 'src/TreeifyTab/basicType'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import { List } from 'immutable'
+import { ItemType } from 'src/TreeifyTab/basicType'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 
 export type ContextMenuItemProps = {
   title: string
@@ -47,7 +47,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     result.push({
       title: 'キャプションを設定…',
       onClick: () => {
-        External.instance.dialogState = {type: 'CaptionSettingDialog'}
+        External.instance.dialogState = { type: 'CaptionSettingDialog' }
       },
     })
   }
@@ -85,7 +85,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     result.push({
       title: 'コードブロックの言語を設定…',
       onClick: () => {
-        External.instance.dialogState = {type: 'CodeBlockLanguageSettingDialog'}
+        External.instance.dialogState = { type: 'CodeBlockLanguageSettingDialog' }
       },
     })
   }
@@ -98,7 +98,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   result.push({
     title: 'エクスポート…',
     onClick: () => {
-      External.instance.dialogState = {type: 'ExportDialog'}
+      External.instance.dialogState = { type: 'ExportDialog' }
     },
   })
 

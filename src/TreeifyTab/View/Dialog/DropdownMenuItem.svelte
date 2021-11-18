@@ -1,10 +1,10 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {InputId} from '../../Internal/InputId'
-  import {Rerenderer} from '../../Rerenderer'
-  import {DropdownMenuItemProps} from './DropdownMenuItemProps'
+  import { List } from 'immutable'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { InputId } from '../../Internal/InputId'
+  import { Rerenderer } from '../../Rerenderer'
+  import { DropdownMenuItemProps } from './DropdownMenuItemProps'
 
   export let props: DropdownMenuItemProps
 

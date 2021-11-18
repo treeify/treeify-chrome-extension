@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {PageTreeBulletAndIndentProps, PageTreeBulletState} from './PageTreeBulletAndIndentProps'
+  import { PageTreeBulletAndIndentProps, PageTreeBulletState } from './PageTreeBulletAndIndentProps'
 
   export let props: PageTreeBulletAndIndentProps
 </script>

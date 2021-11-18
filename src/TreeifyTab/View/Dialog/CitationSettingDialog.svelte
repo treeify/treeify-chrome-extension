@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {CitationSettingDialogProps} from './CitationSettingDialogProps'
+  import { CitationSettingDialogProps } from './CitationSettingDialogProps'
   import CommonDialog from './CommonDialog.svelte'
   import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
 

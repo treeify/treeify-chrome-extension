@@ -1,11 +1,11 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {assert} from '../../../Common/Debug/assert'
-  import {doAsyncWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {Command} from '../../Internal/Command'
-  import {Rerenderer} from '../../Rerenderer'
-  import {DataFolderButtonProps} from './DataFolderButtonProps'
+  import { List } from 'immutable'
+  import { assert } from '../../../Common/Debug/assert'
+  import { doAsyncWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { Command } from '../../Internal/Command'
+  import { Rerenderer } from '../../Rerenderer'
+  import { DataFolderButtonProps } from './DataFolderButtonProps'
   import ToolbarIconButton from './ToolbarIconButton.svelte'
 
   export let props: DataFolderButtonProps

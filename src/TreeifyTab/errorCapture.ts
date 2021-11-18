@@ -1,6 +1,6 @@
-import {dump} from 'src/Common/Debug/logger'
-import {External} from 'src/TreeifyTab/External/External'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { dump } from 'src/Common/Debug/logger'
+import { External } from 'src/TreeifyTab/External/External'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 
 /**
  * 予期せぬ例外を補足し、何か有益なことをするための汎用関数。

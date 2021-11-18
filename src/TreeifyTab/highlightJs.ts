@@ -99,7 +99,7 @@ import xml from 'highlight.js/lib/languages/xml'
 import xquery from 'highlight.js/lib/languages/xquery'
 import yaml from 'highlight.js/lib/languages/yaml'
 import zephir from 'highlight.js/lib/languages/zephir'
-import {List, Set} from 'immutable'
+import { List, Set } from 'immutable'
 
 /** シンタックスハイライトした結果のHTML文字列を返す */
 export function getHighlightedHtml(code: string, language: string): string {

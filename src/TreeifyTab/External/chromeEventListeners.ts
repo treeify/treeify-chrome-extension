@@ -3,18 +3,18 @@ import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {ItemId, TabId} from 'src/TreeifyTab/basicType'
-import {doAsyncWithErrorCapture, doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {TreeifyTab} from 'src/TreeifyTab/TreeifyTab'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { ItemId, TabId } from 'src/TreeifyTab/basicType'
+import { doAsyncWithErrorCapture, doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 
 export const onMessage = (message: any, sender: MessageSender) => {
   doAsyncWithErrorCapture(async () => {
@@ -253,7 +253,7 @@ export async function matchTabsAndWebPageItems() {
 
 // Treeifyタブを除く全タブを返す
 async function getAllNonTreeifyTabs(): Promise<Tab[]> {
-  const windows = await chrome.windows.getAll({populate: true})
+  const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   return tabs.filter((tab) => !tab.url?.startsWith(chrome.runtime.getURL('TreeifyTab/index.html')))
 }

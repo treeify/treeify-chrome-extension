@@ -1,11 +1,11 @@
-import {List, Set} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {UnigramSearchIndex} from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
-import {State} from 'src/TreeifyTab/Internal/State'
+import { List, Set } from 'immutable'
+import { assertNeverType } from 'src/Common/Debug/assert'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
+import { State } from 'src/TreeifyTab/Internal/State'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {
@@ -25,7 +25,7 @@ export class SearchEngine {
 
   /** 全文検索を行う */
   search(searchQuery: string): Set<ItemId> {
-    const {andSearchWords, notSearchWords} = SearchEngine.parseSearchQuery(searchQuery)
+    const { andSearchWords, notSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
     if (andSearchWords.isEmpty()) return Set.of()
 
     const normalizedNotSearchWords = notSearchWords.map(UnigramSearchIndex.normalize)

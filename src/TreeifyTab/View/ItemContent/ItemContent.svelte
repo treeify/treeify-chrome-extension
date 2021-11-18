@@ -1,8 +1,8 @@
 <script lang="ts">
-  import {ItemType} from '../../basicType'
+  import { ItemType } from '../../basicType'
   import CodeBlockItemContent from './CodeBlockItemContent.svelte'
   import ImageItemContent from './ImageItemContent.svelte'
-  import {ItemContentProps} from './ItemContentProps'
+  import { ItemContentProps } from './ItemContentProps'
   import TexItemContent from './TexItemContent.svelte'
   import TextItemContent from './TextItemContent.svelte'
   import WebPageItemContent from './WebPageItemContent.svelte'

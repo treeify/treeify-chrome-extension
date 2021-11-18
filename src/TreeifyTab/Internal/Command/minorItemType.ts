@@ -1,6 +1,6 @@
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 
 /** 空の画像項目を作る */
 export function createEmptyImageItem() {
@@ -16,7 +16,7 @@ export function createEmptyImageItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  External.instance.dialogState = {type: 'ImageItemEditDialog'}
+  External.instance.dialogState = { type: 'ImageItemEditDialog' }
 }
 
 /** 空のコードブロック項目を作る */
@@ -33,7 +33,7 @@ export function createEmptyCodeBlockItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  External.instance.dialogState = {type: 'CodeBlockItemEditDialog'}
+  External.instance.dialogState = { type: 'CodeBlockItemEditDialog' }
 }
 
 /** 空のTeX項目を作る */
@@ -50,5 +50,5 @@ export function createEmptyTexItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  External.instance.dialogState = {type: 'TexEditDialog'}
+  External.instance.dialogState = { type: 'TexEditDialog' }
 }

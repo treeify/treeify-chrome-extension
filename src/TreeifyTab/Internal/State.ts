@@ -1,23 +1,23 @@
-import {is, List, Set} from 'immutable'
-import {assert, assertNeverType, assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {CommandId, ItemId, ItemType, TOP_ITEM_ID, WorkspaceId} from 'src/TreeifyTab/basicType'
-import {GlobalItemId} from 'src/TreeifyTab/Instance'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Timestamp} from 'src/TreeifyTab/Timestamp'
+import { is, List, Set } from 'immutable'
+import { assert, assertNeverType, assertNonUndefined } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { CommandId, ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
+import { GlobalItemId } from 'src/TreeifyTab/Instance'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Timestamp } from 'src/TreeifyTab/Timestamp'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
-  items: {[K in ItemId]: Item}
-  textItems: {[K in ItemId]: TextItem}
-  webPageItems: {[K in ItemId]: WebPageItem}
-  imageItems: {[K in ItemId]: ImageItem}
-  codeBlockItems: {[K in ItemId]: CodeBlockItem}
-  texItems: {[K in ItemId]: TexItem}
-  pages: {[K in ItemId]: Page}
-  workspaces: {[K in WorkspaceId]: Workspace}
+  items: { [K in ItemId]: Item }
+  textItems: { [K in ItemId]: TextItem }
+  webPageItems: { [K in ItemId]: WebPageItem }
+  imageItems: { [K in ItemId]: ImageItem }
+  codeBlockItems: { [K in ItemId]: CodeBlockItem }
+  texItems: { [K in ItemId]: TexItem }
+  pages: { [K in ItemId]: Page }
+  workspaces: { [K in WorkspaceId]: Workspace }
   /**
    * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
@@ -27,7 +27,7 @@ export type State = {
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyBindings: {[K in InputId]: List<CommandId>}
+  mainAreaKeyBindings: { [K in InputId]: List<CommandId> }
   customCss: string
   exportSettings: {
     selectedFormat: ExportFormat
@@ -57,7 +57,7 @@ export type Item = {
   type: ItemType
   globalItemId: GlobalItemId
   childItemIds: List<ItemId>
-  parents: {[K in ItemId]: Edge}
+  parents: { [K in ItemId]: Edge }
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
   /**
@@ -81,8 +81,9 @@ export type Edge = {
    */
   isCollapsed: boolean
 }
+
 export function createDefaultEdge(): Edge {
-  return {isCollapsed: false}
+  return { isCollapsed: false }
 }
 
 export type Cite = {

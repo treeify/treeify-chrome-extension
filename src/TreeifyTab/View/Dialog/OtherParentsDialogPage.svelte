@@ -1,7 +1,7 @@
 <script lang="ts">
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import OtherParentsDialogItem from './OtherParentsDialogItem.svelte'
-  import {OtherParentsDialogPageProps} from './OtherParentsDialogPageProps'
+  import { OtherParentsDialogPageProps } from './OtherParentsDialogPageProps'
 
   export let props: OtherParentsDialogPageProps
 </script>

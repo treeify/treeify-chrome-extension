@@ -1,7 +1,7 @@
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 
 export type WebPageItemContentProps = {
   itemType: ItemType.WEB_PAGE

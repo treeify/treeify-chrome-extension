@@ -1,8 +1,8 @@
-import {ItemType} from 'src/TreeifyTab/basicType'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
+import { ItemType } from 'src/TreeifyTab/basicType'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaImageContentProps = {
   itemPath: ItemPath

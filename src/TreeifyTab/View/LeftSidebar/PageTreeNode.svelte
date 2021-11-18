@@ -1,11 +1,11 @@
 <script lang="ts">
   import Color from 'color'
-  import {integer} from '../../../Common/integer'
-  import {CssCustomProperty} from '../../CssCustomProperty'
+  import { integer } from '../../../Common/integer'
+  import { CssCustomProperty } from '../../CssCustomProperty'
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from './PageTreeBulletAndIndent.svelte'
   import PageTreeNode from './PageTreeNode.svelte'
-  import {PageTreeNodeProps} from './PageTreeNodeProps'
+  import { PageTreeNodeProps } from './PageTreeNodeProps'
 
   export let props: PageTreeNodeProps
 

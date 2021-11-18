@@ -1,11 +1,11 @@
-import {assertNonNull} from 'src/Common/Debug/assert'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull } from 'src/Common/Debug/assert'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type ImageItemEditDialogProps = {
   dialogTitle: string

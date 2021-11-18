@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {LeftSidebarProps} from './LeftSidebarProps'
+  import { LeftSidebarProps } from './LeftSidebarProps'
   import PageTree from './PageTree.svelte'
 
   export let props: LeftSidebarProps

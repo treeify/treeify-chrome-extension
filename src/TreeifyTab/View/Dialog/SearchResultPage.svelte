@@ -1,7 +1,7 @@
 <script lang="ts">
   import ItemContent from '../ItemContent/ItemContent.svelte'
   import SearchResultItem from './SearchResultItem.svelte'
-  import {SearchResultPageProps} from './SearchResultPageProps'
+  import { SearchResultPageProps } from './SearchResultPageProps'
 
   export let props: SearchResultPageProps
 </script>

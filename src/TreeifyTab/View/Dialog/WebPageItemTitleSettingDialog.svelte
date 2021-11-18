@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {Rerenderer} from '../../Rerenderer'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { Rerenderer } from '../../Rerenderer'
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
@@ -15,8 +15,8 @@
 </script>
 
 <script lang="ts">
-  import {WebPageItemTitleSettingDialogProps} from './WebPageItemTitleSettingDialogProps'
-  import {setupFocusTrap} from './focusTrap'
+  import { WebPageItemTitleSettingDialogProps } from './WebPageItemTitleSettingDialogProps'
+  import { setupFocusTrap } from './focusTrap'
 
   export let props: WebPageItemTitleSettingDialogProps
 

@@ -1,5 +1,5 @@
-import {List} from 'immutable'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import { List } from 'immutable'
+import { ItemId } from 'src/TreeifyTab/basicType'
 
 /**
  * 全文検索用のunigram転置インデックス。

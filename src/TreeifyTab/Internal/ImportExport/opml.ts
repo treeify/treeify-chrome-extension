@@ -1,11 +1,11 @@
-import {List} from 'immutable'
-import {assertNeverType, assertNonNull} from 'src/Common/Debug/assert'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {Edge} from 'src/TreeifyTab/Internal/State'
+import { List } from 'immutable'
+import { assertNeverType, assertNonNull } from 'src/Common/Debug/assert'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Edge } from 'src/TreeifyTab/Internal/State'
 
 function toOpmlOutlineElement(
   itemPath: ItemPath,
@@ -30,11 +30,11 @@ function toOpmlOutlineElement(
   return outlineElement
 }
 
-function toOpmlAttributes(itemPath: ItemPath): {[T in string]: string} {
+function toOpmlAttributes(itemPath: ItemPath): { [T in string]: string } {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
-  const baseAttributes: {[T in string]: string} = {}
+  const baseAttributes: { [T in string]: string } = {}
   if (CurrentState.countParents(itemId) > 1) {
     baseAttributes.id = itemId.toString()
   }
@@ -180,10 +180,10 @@ function isValidOutlineElement(possiblyOutlineElement: Element): boolean {
   return true
 }
 
-type ItemAndEdge = {itemId: ItemId; edge: Edge}
+type ItemAndEdge = { itemId: ItemId; edge: Edge }
 // トランスクルージョンを復元するために、OPML内に出現した項目IDを記録しておくオブジェクト。
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応する項目ID。
-type ItemIdMap = {[K in string | number]: ItemId}
+type ItemIdMap = { [K in string | number]: ItemId }
 
 export function createItemsBasedOnOpml(outlineElements: List<Element>): List<ItemAndEdge> {
   const itemIdMap = {}
@@ -194,10 +194,10 @@ export function createItemsBasedOnOpml(outlineElements: List<Element>): List<Ite
 function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): ItemAndEdge {
   const attrItemId = outlineElement.getAttribute('id')
   const isCollapsed = outlineElement.getAttribute('isCollapsed') === 'true'
-  const edge = {isCollapsed}
+  const edge = { isCollapsed }
   const existingItemId = attrItemId !== null ? itemIdMap[attrItemId] : undefined
   if (existingItemId !== undefined) {
-    return {itemId: existingItemId, edge}
+    return { itemId: existingItemId, edge }
   }
 
   const itemId = createBaseItemBasedOnOpml(outlineElement)
@@ -232,7 +232,7 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
     })
   }
 
-  return {itemId, edge}
+  return { itemId, edge }
 }
 
 function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {

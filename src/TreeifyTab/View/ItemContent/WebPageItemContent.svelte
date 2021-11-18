@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {WebPageItemContentProps} from 'src/TreeifyTab/View/ItemContent/WebPageItemContentProps'
+  import { WebPageItemContentProps } from 'src/TreeifyTab/View/ItemContent/WebPageItemContentProps'
 
   export let props: WebPageItemContentProps
 </script>
@@ -48,6 +48,7 @@
     &.discarded {
       filter: opacity(75%);
     }
+
     &.tab-closed {
       filter: opacity(55%);
     }

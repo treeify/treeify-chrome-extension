@@ -1,6 +1,6 @@
 <script lang="ts">
-  import {allLanguages} from 'src/TreeifyTab/highlightJs.js'
-  import {CodeBlockLanguageSettingDialogProps} from './CodeBlockLanguageSettingDialogProps'
+  import { allLanguages } from 'src/TreeifyTab/highlightJs.js'
+  import { CodeBlockLanguageSettingDialogProps } from './CodeBlockLanguageSettingDialogProps'
   import CommonDialog from './CommonDialog.svelte'
   import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
 

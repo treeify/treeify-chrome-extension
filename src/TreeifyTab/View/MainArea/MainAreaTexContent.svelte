@@ -1,7 +1,7 @@
 <script lang="ts">
   import TexItemContent from '../ItemContent/TexItemContent.svelte'
-  import {MainAreaContentView} from './MainAreaContentProps'
-  import {MainAreaTexContentProps} from './MainAreaTexContentProps'
+  import { MainAreaContentView } from './MainAreaContentProps'
+  import { MainAreaTexContentProps } from './MainAreaTexContentProps'
 
   export let props: MainAreaTexContentProps
 

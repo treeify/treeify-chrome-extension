@@ -1,6 +1,6 @@
 chrome.runtime.onInstalled.addListener(async () => {
   // 全ての既存タブでContent scriptを動かす
-  const windows = await chrome.windows.getAll({populate: true})
+  const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   for (const tab of tabs) {
     if (tab.id === undefined) continue
@@ -8,7 +8,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     if (tab.url?.startsWith(chrome.runtime.getURL('TreeifyTab/index.html'))) continue
 
     chrome.scripting.executeScript({
-      target: {tabId: tab.id},
+      target: { tabId: tab.id },
       files: ['ContentScript/entryPoint.js'],
     })
   }
@@ -18,7 +18,7 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.runtime.onStartup.addListener(openTreeifyTab)
 
 async function openTreeifyTab() {
-  const windows = await chrome.windows.getAll({populate: true})
+  const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
   if (tabs.find((tab) => tab.url === treeifyTabUrl) === undefined) {

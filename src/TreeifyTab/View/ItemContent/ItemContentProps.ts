@@ -1,6 +1,6 @@
-import {assertNeverType} from 'src/Common/Debug/assert'
-import {ItemId, ItemType} from 'src/TreeifyTab/basicType'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
+import { assertNeverType } from 'src/Common/Debug/assert'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import {
   CodeBlockItemContentProps,
   createCodeBlockItemContentProps,

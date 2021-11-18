@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {ItemType} from '../../basicType'
+  import { ItemType } from '../../basicType'
   import MainAreaCodeBlockContent from './MainAreaCodeBlockContent.svelte'
-  import {MainAreaContentProps} from './MainAreaContentProps'
+  import { MainAreaContentProps } from './MainAreaContentProps'
   import MainAreaImageContent from './MainAreaImageContent.svelte'
   import MainAreaTexContent from './MainAreaTexContent.svelte'
   import MainAreaTextContent from './MainAreaTextContent.svelte'

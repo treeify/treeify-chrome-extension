@@ -1,11 +1,11 @@
-import {List} from 'immutable'
+import { List } from 'immutable'
 import md5 from 'md5'
-import {assert, assertNonUndefined} from 'src/Common/Debug/assert'
-import {Instance, InstanceId} from 'src/TreeifyTab/Instance'
-import {Chunk, ChunkId} from 'src/TreeifyTab/Internal/Chunk'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {Timestamp} from 'src/TreeifyTab/Timestamp'
+import { assert, assertNonUndefined } from 'src/Common/Debug/assert'
+import { Instance, InstanceId } from 'src/TreeifyTab/Instance'
+import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { Timestamp } from 'src/TreeifyTab/Timestamp'
 
 // データフォルダをルートとするファイルパス。
 // "./"や"../"のような相対ファイルパスの概念はない。
@@ -14,17 +14,17 @@ import {Timestamp} from 'src/TreeifyTab/Timestamp'
 type FilePath = List<string>
 
 // キーはchunk.id、値はchunk.data
-type ChunkPack = {[K in ChunkId]: any}
+type ChunkPack = { [K in ChunkId]: any }
 
 // メタデータファイル内のJSONに対応する型
 type Metadata = {
   schemaVersion: 1
   lastModified: Timestamp
   // Keyはファイル名、Valueはハッシュ値
-  hashes: {[K in string]: string}
+  hashes: { [K in string]: string }
   // 「このインスタンスフォルダは他インスタンスの更新をどの範囲まで把握しているか？」を表すためのデータ。
   // Keyは存在を把握している他インスタンスID、Valueは把握している最新の更新タイムスタンプ。
-  known: {[K in InstanceId]: Timestamp}
+  known: { [K in InstanceId]: Timestamp }
 }
 
 /**
@@ -60,15 +60,19 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   private static instancesFolderPath = List.of('Instances')
+
   private static getInstanceFolderPath(instanceId = Instance.getId()): FilePath {
     return this.instancesFolderPath.push(instanceId)
   }
+
   private static getChunkPacksFolderPath(instanceId = Instance.getId()): FilePath {
     return this.getInstanceFolderPath(instanceId).push('Chunk packs')
   }
+
   private static getChunkPackFilePath(fileName: string, instanceId = Instance.getId()): FilePath {
     return this.getChunkPacksFolderPath(instanceId).push(fileName)
   }
+
   private static getMetadataFilePath(instanceId = Instance.getId()): FilePath {
     return this.getInstanceFolderPath(instanceId).push('metadata.json')
   }
@@ -86,12 +90,15 @@ export class DataFolder {
    * 書き込み内容が反映されていないデータが返ってくる場合がある」という問題の対策。
    */
   private fileContentCache = new Map<string, string>()
+
   private fetchCache(filePath: FilePath): string | undefined {
     return this.fileContentCache.get(filePath.join('/'))
   }
+
   private setCacheEntry(filePath: FilePath, fileContent: string) {
     this.fileContentCache.set(filePath.join('/'), fileContent)
   }
+
   private deleteCacheEntry(filePath: FilePath) {
     this.fileContentCache.delete(filePath.join('/'))
   }
@@ -136,17 +143,17 @@ export class DataFolder {
         }
       }
       if (Object.keys(chunkPack).length > 0) {
-        return {fileName, text: JSON.stringify(chunkPack, State.jsonReplacer)}
+        return { fileName, text: JSON.stringify(chunkPack, State.jsonReplacer) }
       } else {
         // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
-        return {fileName, undefined}
+        return { fileName, undefined }
       }
     })
     const fileTexts = await Promise.all(fileTextPromises)
 
     const chunksFolderHandle = await this.getFolderHandle(DataFolder.getChunkPacksFolderPath())
     // 各ファイルに並列に書き込む
-    const writingPromises = fileTexts.map(async ({fileName, text}) => {
+    const writingPromises = fileTexts.map(async ({ fileName, text }) => {
       const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
       if (text !== undefined) {
         this.setCacheEntry(chunkPackFilePath, text)
@@ -162,7 +169,7 @@ export class DataFolder {
     // 各ファイルのMD5を計算し、メタデータファイルを更新
     const metadata = await this.readMetadataFile()
     const hashes = metadata?.hashes ?? {}
-    for (const {fileName, text} of fileTexts) {
+    for (const { fileName, text } of fileTexts) {
       if (text !== undefined) {
         hashes[fileName] = md5(text)
       } else {
@@ -170,7 +177,7 @@ export class DataFolder {
       }
     }
     const known = metadata?.known ?? {}
-    const newMetadata: Metadata = {schemaVersion: 1, lastModified: Timestamp.now(), hashes, known}
+    const newMetadata: Metadata = { schemaVersion: 1, lastModified: Timestamp.now(), hashes, known }
     const newMetadataText = JSON.stringify(newMetadata, undefined, 2)
     const metadataFilePath = DataFolder.getMetadataFilePath()
     this.setCacheEntry(metadataFilePath, newMetadataText)
@@ -200,9 +207,11 @@ export class DataFolder {
   ): Promise<FileSystemFileHandle> {
     assert(!filePath.isEmpty())
     if (filePath.size === 1) {
-      return await folderHandle.getFileHandle(filePath.first(), {create: true})
+      return await folderHandle.getFileHandle(filePath.first(), { create: true })
     }
-    const nextFolderHandle = await folderHandle.getDirectoryHandle(filePath.first(), {create: true})
+    const nextFolderHandle = await folderHandle.getDirectoryHandle(filePath.first(), {
+      create: true,
+    })
     return this.getFileHandle(filePath.shift(), nextFolderHandle)
   }
 
@@ -213,18 +222,18 @@ export class DataFolder {
   async copyFrom(instanceId: InstanceId) {
     // 自インスタンスフォルダをクリア（チャンクパックファイルを全削除）
     const chunkPacksFolder = await this.getFolderHandle(DataFolder.getChunkPacksFolderPath())
-    await chunkPacksFolder.removeEntry(Instance.getId(), {recursive: true})
+    await chunkPacksFolder.removeEntry(Instance.getId(), { recursive: true })
 
     // 各ファイルを自インスタンスフォルダにコピーする準備
     const targetChunkPacksFolderPath = DataFolder.getChunkPacksFolderPath(instanceId)
     const targetChunkFileNames = await this.getChunkFileNames(instanceId)
     const chunkPackFileTextPromises = targetChunkFileNames.map(async (fileName) => {
-      return {fileName, text: await this.readTextFile(targetChunkPacksFolderPath.push(fileName))}
+      return { fileName, text: await this.readTextFile(targetChunkPacksFolderPath.push(fileName)) }
     })
     const chunkPackFileTexts = await Promise.all(chunkPackFileTextPromises)
 
     // チャンクパックファイル群を自インスタンスフォルダに書き込み
-    const chunkPackFileWritingPromises = chunkPackFileTexts.map(async ({fileName, text}) => {
+    const chunkPackFileWritingPromises = chunkPackFileTexts.map(async ({ fileName, text }) => {
       const chunkPackFilePath = DataFolder.getChunkPackFilePath(fileName)
       this.setCacheEntry(chunkPackFilePath, text)
       return await this.writeTextFile(chunkPackFilePath, text)
@@ -263,7 +272,7 @@ export class DataFolder {
     return instanceIds.filter((instanceId) => instanceId !== Instance.getId())
   }
 
-  private async getAllOtherInstanceTimestamps(): Promise<{[K in InstanceId]: Timestamp}> {
+  private async getAllOtherInstanceTimestamps(): Promise<{ [K in InstanceId]: Timestamp }> {
     const instanceIds = await this.getAllOtherInstanceIds()
     const timestampPromises = instanceIds.map(async (instanceId) => {
       const metadata = await this.readMetadataFile(instanceId)
@@ -296,11 +305,11 @@ export class DataFolder {
       const metadata = await this.readMetadataFile(instanceId)
       // インスタンスIDが取得できるのにメタデータファイルは取得できない状況というのは想定していない
       assertNonUndefined(metadata)
-      return {instanceId, lastModified: metadata.lastModified}
+      return { instanceId, lastModified: metadata.lastModified }
     })
 
     const timestamps = List(await Promise.all(timestampPromises))
-    const unknownUpdatedInstanceIds = timestamps.filter(({instanceId, lastModified}) => {
+    const unknownUpdatedInstanceIds = timestamps.filter(({ instanceId, lastModified }) => {
       const knownUpdateTimestamp = metadata.known[instanceId]
       if (knownUpdateTimestamp === undefined) {
         return true
@@ -308,7 +317,8 @@ export class DataFolder {
       return knownUpdateTimestamp !== lastModified
     })
 
-    return unknownUpdatedInstanceIds.maxBy(({instanceId, lastModified}) => lastModified)?.instanceId
+    return unknownUpdatedInstanceIds.maxBy(({ instanceId, lastModified }) => lastModified)
+      ?.instanceId
   }
 
   // 全チャンクファイルのファイル名のリストを返す

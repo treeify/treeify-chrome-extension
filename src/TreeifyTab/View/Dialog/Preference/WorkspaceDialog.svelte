@@ -1,6 +1,6 @@
 <script lang="ts">
   import CommonDialog from '../CommonDialog.svelte'
-  import {WorkspaceDialogProps} from './WorkspaceDialogProps'
+  import { WorkspaceDialogProps } from './WorkspaceDialogProps'
   import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
 
   export let props: WorkspaceDialogProps
@@ -12,8 +12,9 @@
       <WorkspaceDialogRow {workspace} />
     {/each}
     <div>
-      <button class="workspace-dialog_add-button" on:click={props.onClickAddButton}>新規作成</button
-      >
+      <button class="workspace-dialog_add-button" on:click={props.onClickAddButton}
+        >新規作成
+      </button>
     </div>
   </div>
 </CommonDialog>

@@ -1,16 +1,16 @@
-import {List, Set} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {ItemId, TOP_ITEM_ID} from 'src/TreeifyTab/basicType'
-import {CssCustomProperty} from 'src/TreeifyTab/CssCustomProperty'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { List, Set } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
+import { CssCustomProperty } from 'src/TreeifyTab/CssCustomProperty'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import {
   createItemContentProps,
   ItemContentProps,
@@ -120,7 +120,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       onTabsCountContextMenu: (event: Event) => {
         event.preventDefault()
 
-        External.instance.dialogState = {type: 'TabsDialog', targetItemId: itemId}
+        External.instance.dialogState = { type: 'TabsDialog', targetItemId: itemId }
         Rerenderer.instance.rerender()
       },
     }

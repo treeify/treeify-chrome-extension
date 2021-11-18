@@ -1,16 +1,16 @@
-import {is, List} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { is, List } from 'immutable'
+import { assertNeverType } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
+import { ItemId } from 'src/TreeifyTab/basicType'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import {
   createMainAreaContentProps,
   MainAreaContentProps,
@@ -146,7 +146,7 @@ export function createMainAreaNodeProps(
         }
         External.instance.dialogState = {
           type: 'ContextMenuDialog',
-          mousePosition: {x: event.clientX, y: event.clientY},
+          mousePosition: { x: event.clientX, y: event.clientY },
         }
         Rerenderer.instance.rerender()
       }

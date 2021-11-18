@@ -1,7 +1,7 @@
-import {is, List, Set} from 'immutable'
-import {OtherParentsDialog} from 'src/TreeifyTab/External/DialogState'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import { is, List, Set } from 'immutable'
+import { OtherParentsDialog } from 'src/TreeifyTab/External/DialogState'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
   createOtherParentsDialogPageProps,
   OtherParentsDialogPageProps,

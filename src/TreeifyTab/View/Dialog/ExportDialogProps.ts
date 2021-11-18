@@ -1,13 +1,13 @@
-import {integer} from 'src/Common/integer'
-import {External} from 'src/TreeifyTab/External/External'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {exportAsIndentedText} from 'src/TreeifyTab/Internal/ImportExport/indentedText'
-import {toMarkdownText} from 'src/TreeifyTab/Internal/ImportExport/markdown'
-import {toOpmlString} from 'src/TreeifyTab/Internal/ImportExport/opml'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {ExportFormat} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { integer } from 'src/Common/integer'
+import { External } from 'src/TreeifyTab/External/External'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { exportAsIndentedText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
+import { toMarkdownText } from 'src/TreeifyTab/Internal/ImportExport/markdown'
+import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { ExportFormat } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 export type ExportDialogProps = {
   selectedFormat: ExportFormat
@@ -47,7 +47,7 @@ export function createExportDialogProps(): ExportDialogProps {
     onClickSaveButton: () => {
       const content = generateOutputText(selectedFormat)
       const aElement = document.createElement('a')
-      aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'text/plain'}))
+      aElement.href = window.URL.createObjectURL(new Blob([content], { type: 'text/plain' }))
       aElement.download = deriveFileName(selectedFormat)
       aElement.click()
       External.instance.dialogState = undefined

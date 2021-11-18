@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {DialogLayerProps} from './DialogLayerProps'
+  import { DialogLayerProps } from './DialogLayerProps'
 
   export let props: DialogLayerProps
 </script>

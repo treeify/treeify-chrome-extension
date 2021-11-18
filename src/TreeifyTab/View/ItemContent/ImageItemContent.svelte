@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {ImageItemContentProps} from './ImageItemContentProps'
+  import { ImageItemContentProps } from './ImageItemContentProps'
 
   export let props: ImageItemContentProps
 

@@ -1,13 +1,13 @@
-import {ItemType} from 'src/TreeifyTab/basicType'
-import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-import {External} from 'src/TreeifyTab/External/External'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {InputId} from 'src/TreeifyTab/Internal/InputId'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {State} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {CiteProps, createCiteProps} from 'src/TreeifyTab/View/CiteProps'
+import { ItemType } from 'src/TreeifyTab/basicType'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { External } from 'src/TreeifyTab/External/External'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { InputId } from 'src/TreeifyTab/Internal/InputId'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath

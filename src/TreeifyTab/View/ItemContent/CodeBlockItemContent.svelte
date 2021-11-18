@@ -1,7 +1,7 @@
 <script lang="ts">
-  import {getHighlightedHtml} from '../../highlightJs'
+  import { getHighlightedHtml } from '../../highlightJs'
   import Cite from '../Cite.svelte'
-  import {CodeBlockItemContentProps} from './CodeBlocktemContentProps'
+  import { CodeBlockItemContentProps } from './CodeBlocktemContentProps'
 
   export let props: CodeBlockItemContentProps
 </script>

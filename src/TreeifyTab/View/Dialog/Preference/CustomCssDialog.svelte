@@ -1,7 +1,7 @@
 <script lang="ts">
   import CommonDialog from '../CommonDialog.svelte'
   import FinishAndCancelButtons from '../FinishAndCancelButtons.svelte'
-  import {CustomCssDialogProps} from './CustomCssDialogProps'
+  import { CustomCssDialogProps } from './CustomCssDialogProps'
 
   export let props: CustomCssDialogProps
 </script>

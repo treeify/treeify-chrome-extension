@@ -1,9 +1,9 @@
 <script lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {InputId} from '../../Internal/InputId'
-  import {Rerenderer} from '../../Rerenderer'
-  import {setupFocusTrap} from './focusTrap'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { InputId } from '../../Internal/InputId'
+  import { Rerenderer } from '../../Rerenderer'
+  import { setupFocusTrap } from './focusTrap'
 
   export let title: string
   export let onClose = () => {}

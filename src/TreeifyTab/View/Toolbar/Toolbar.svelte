@@ -1,14 +1,14 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {doWithErrorCapture} from 'src/TreeifyTab/errorCapture'
-  import {assert} from '../../../Common/Debug/assert'
-  import {toOpmlString} from '../../Internal/ImportExport/opml'
-  import {Internal} from '../../Internal/Internal'
-  import {State} from '../../Internal/State'
+  import { List } from 'immutable'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { assert } from '../../../Common/Debug/assert'
+  import { toOpmlString } from '../../Internal/ImportExport/opml'
+  import { Internal } from '../../Internal/Internal'
+  import { State } from '../../Internal/State'
   import DataFolderButton from './DataFolderButton.svelte'
   import AddButton from './ItemAdditionButton.svelte'
   import PreferenceButton from './PreferenceButton.svelte'
-  import {ToolbarProps} from './ToolbarProps'
+  import { ToolbarProps } from './ToolbarProps'
 
   export let props: ToolbarProps
 
@@ -17,7 +17,7 @@
 
     const content = toOpmlString(List.of(List.of(0)))
     const aElement = document.createElement('a')
-    aElement.href = window.URL.createObjectURL(new Blob([content], {type: 'application/xml'}))
+    aElement.href = window.URL.createObjectURL(new Blob([content], { type: 'application/xml' }))
     aElement.download = fileName
     aElement.click()
 

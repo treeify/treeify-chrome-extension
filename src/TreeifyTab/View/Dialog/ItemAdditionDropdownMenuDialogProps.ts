@@ -1,11 +1,11 @@
-import {List} from 'immutable'
-import {assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemId} from 'src/TreeifyTab/basicType'
-import {Command} from 'src/TreeifyTab/Internal/Command'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
-import {DropdownMenuDialogProps} from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
+import { List } from 'immutable'
+import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { ItemId } from 'src/TreeifyTab/basicType'
+import { Command } from 'src/TreeifyTab/Internal/Command'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { DropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode
 
 export function createItemAdditionDropdownMenuDialogProps(): DropdownMenuDialogProps {

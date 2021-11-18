@@ -1,6 +1,6 @@
-import {List} from 'immutable'
-import {assertNeverType} from 'src/Common/Debug/assert'
-import {integer} from 'src/Common/integer'
+import { List } from 'immutable'
+import { assertNeverType } from 'src/Common/Debug/assert'
+import { integer } from 'src/Common/integer'
 
 /**
  * DOM要素っぽいオブジェクトの型。
@@ -140,10 +140,10 @@ export namespace DomishObject {
    */
   export function from(node: Node): DomishObject | undefined {
     if (node instanceof HTMLBRElement) {
-      return {type: 'br'}
+      return { type: 'br' }
     }
     if (node.nodeType === Node.TEXT_NODE) {
-      return {type: 'text', textContent: node.textContent ?? ''}
+      return { type: 'text', textContent: node.textContent ?? '' }
     }
     if (node instanceof HTMLElement) {
       switch (node.tagName.toLowerCase()) {
@@ -226,9 +226,9 @@ export namespace DomishObject {
       // 通常の半角スペースをいわゆる「&nbsp;」に変換してからテキストノード化する
       const nbsp = String.fromCharCode(160)
       const line = lines[i].replaceAll(' ', nbsp)
-      domishObjectArray.push({type: 'text', textContent: line})
+      domishObjectArray.push({ type: 'text', textContent: line })
       if (i !== lines.length - 1) {
-        domishObjectArray.push({type: 'br'})
+        domishObjectArray.push({ type: 'br' })
       }
     }
     return List(domishObjectArray)

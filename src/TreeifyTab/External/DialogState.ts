@@ -1,36 +1,36 @@
-import {Coordinate} from 'src/Common/integer'
-import {ItemId} from 'src/TreeifyTab/basicType'
+import { Coordinate } from 'src/Common/integer'
+import { ItemId } from 'src/TreeifyTab/basicType'
 
-export type CaptionSettingDialog = {type: 'CaptionSettingDialog'}
+export type CaptionSettingDialog = { type: 'CaptionSettingDialog' }
 
-export type CitationSettingDialog = {type: 'CitationSettingDialog'}
+export type CitationSettingDialog = { type: 'CitationSettingDialog' }
 
-export type CodeBlockItemEditDialog = {type: 'CodeBlockItemEditDialog'}
+export type CodeBlockItemEditDialog = { type: 'CodeBlockItemEditDialog' }
 
-export type CodeBlockLanguageSettingDialog = {type: 'CodeBlockLanguageSettingDialog'}
+export type CodeBlockLanguageSettingDialog = { type: 'CodeBlockLanguageSettingDialog' }
 
 export type ContextMenuDialog = {
   type: 'ContextMenuDialog'
   mousePosition: Coordinate
 }
 
-export type CustomCssDialog = {type: 'CustomCssDialog'}
+export type CustomCssDialog = { type: 'CustomCssDialog' }
 
-export type ExportDialog = {type: 'ExportDialog'}
+export type ExportDialog = { type: 'ExportDialog' }
 
-export type ImageItemEditDialog = {type: 'ImageItemEditDialog'}
+export type ImageItemEditDialog = { type: 'ImageItemEditDialog' }
 
-export type ItemAdditionDropdownMenuDialog = {type: 'ItemAdditionDropdownMenuDialog'}
+export type ItemAdditionDropdownMenuDialog = { type: 'ItemAdditionDropdownMenuDialog' }
 
-export type KeyBindingDialog = {type: 'KeyBindingDialog'}
+export type KeyBindingDialog = { type: 'KeyBindingDialog' }
 
-export type OtherParentsDialog = {type: 'OtherParentsDialog'}
+export type OtherParentsDialog = { type: 'OtherParentsDialog' }
 
-export type OtherSettingsDialog = {type: 'OtherSettingsDialog'}
+export type OtherSettingsDialog = { type: 'OtherSettingsDialog' }
 
-export type PreferenceDropdownMenuDialog = {type: 'PreferenceDropdownMenuDialog'}
+export type PreferenceDropdownMenuDialog = { type: 'PreferenceDropdownMenuDialog' }
 
-export type SearchDialog = {type: 'SearchDialog'}
+export type SearchDialog = { type: 'SearchDialog' }
 
 export type TabsDialog = {
   type: 'TabsDialog'
@@ -40,7 +40,7 @@ export type TabsDialog = {
   targetItemId: ItemId
 }
 
-export type TexEditDialog = {type: 'TexEditDialog'}
+export type TexEditDialog = { type: 'TexEditDialog' }
 
 /** ウェブページ項目のタイトル設定ダイアログが固有で持つ状態の型 */
 export type WebPageItemTitleSettingDialog = {
@@ -49,7 +49,7 @@ export type WebPageItemTitleSettingDialog = {
   targetItemRect: DOMRect
 }
 
-export type WorkspaceDialog = {type: 'WorkspaceDialog'}
+export type WorkspaceDialog = { type: 'WorkspaceDialog' }
 
 export type Dialog =
   | CaptionSettingDialog

@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
-  import {doWithErrorCapture} from '../../errorCapture'
-  import {External} from '../../External/External'
-  import {Rerenderer} from '../../Rerenderer'
+  import { doWithErrorCapture } from '../../errorCapture'
+  import { External } from '../../External/External'
+  import { Rerenderer } from '../../Rerenderer'
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
@@ -16,10 +16,10 @@
 </script>
 
 <script lang="ts">
-  import {InputId} from '../../Internal/InputId'
+  import { InputId } from '../../Internal/InputId'
   import ContextMenuItem from './ContextMenuItem.svelte'
-  import {ContextMenuDialogProps} from './ContextMenuDialogProps'
-  import {setupFocusTrap} from './focusTrap'
+  import { ContextMenuDialogProps } from './ContextMenuDialogProps'
+  import { setupFocusTrap } from './focusTrap'
 
   export let props: ContextMenuDialogProps
 

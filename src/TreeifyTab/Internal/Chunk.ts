@@ -1,7 +1,7 @@
-import {List} from 'immutable'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {State} from 'src/TreeifyTab/Internal/State'
+import { List } from 'immutable'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { State } from 'src/TreeifyTab/Internal/State'
 
 /**
  * データ型の実体としてはPropertyPathと同じだが、

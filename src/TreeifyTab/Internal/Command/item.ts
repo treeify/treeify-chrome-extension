@@ -1,14 +1,14 @@
-import {assertNonNull, assertNonUndefined} from 'src/Common/Debug/assert'
-import {ItemType} from 'src/TreeifyTab/basicType'
-import {getTextItemSelectionFromDom} from 'src/TreeifyTab/External/domTextSelection'
-import {Command} from 'src/TreeifyTab/Internal/Command/index'
-import {CurrentState} from 'src/TreeifyTab/Internal/CurrentState'
-import {DomishObject} from 'src/TreeifyTab/Internal/DomishObject'
-import {Internal} from 'src/TreeifyTab/Internal/Internal'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
-import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-import {Cite} from 'src/TreeifyTab/Internal/State'
-import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
+import { ItemType } from 'src/TreeifyTab/basicType'
+import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
+import { Command } from 'src/TreeifyTab/Internal/Command/index'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { Cite } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 /** 選択された項目を折りたたむコマンド */
 export function collapse() {
@@ -307,7 +307,7 @@ export function toggleCitation() {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
     if (Internal.instance.state.items[selectedItemId].cite === null) {
-      const emptyCite: Cite = {title: '', url: ''}
+      const emptyCite: Cite = { title: '', url: '' }
       Internal.instance.mutate(emptyCite, PropertyPath.of('items', selectedItemId, 'cite'))
     } else {
       Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'cite'))

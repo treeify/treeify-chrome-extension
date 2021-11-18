@@ -1,7 +1,7 @@
 <script lang="ts">
   import CommonDialog from './CommonDialog.svelte'
   import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
-  import {ImageItemEditDialogProps} from './ImageItemEditDialogProps'
+  import { ImageItemEditDialogProps } from './ImageItemEditDialogProps'
 
   export let props: ImageItemEditDialogProps
 </script>

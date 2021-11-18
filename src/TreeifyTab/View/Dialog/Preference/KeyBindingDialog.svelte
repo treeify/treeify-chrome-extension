@@ -1,12 +1,12 @@
 <script lang="ts">
-  import {List} from 'immutable'
-  import {InputId} from 'src/TreeifyTab/Internal/InputId'
-  import {Internal} from 'src/TreeifyTab/Internal/Internal'
-  import {PropertyPath} from 'src/TreeifyTab/Internal/PropertyPath'
-  import {Rerenderer} from 'src/TreeifyTab/Rerenderer'
+  import { List } from 'immutable'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from '../CommonDialog.svelte'
   import KeyBinding from './KeyBinding.svelte'
-  import {KeyBindingDialogProps} from './KeyBindingDialogProps'
+  import { KeyBindingDialogProps } from './KeyBindingDialogProps'
 
   export let props: KeyBindingDialogProps
 
@@ -47,8 +47,8 @@
       <tr class="key-binding-dialog_add-binding-button-row">
         <td class="key-binding-dialog_add-binding-button-cell">
           <button class="key-binding-dialog_add-binding-button" on:click={onClick}
-            >新しい割り当てを追加</button
-          >
+            >新しい割り当てを追加
+          </button>
         </td>
         <td />
       </tr>

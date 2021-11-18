@@ -1,5 +1,5 @@
-import {List} from 'immutable'
-import {ItemPath} from 'src/TreeifyTab/Internal/ItemPath'
+import { List } from 'immutable'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
   createOtherParentsDialogItemProps,
   OtherParentsDialogItemProps,

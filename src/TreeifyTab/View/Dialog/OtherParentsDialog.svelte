@@ -1,7 +1,7 @@
 <script lang="ts">
   import CommonDialog from './CommonDialog.svelte'
   import OtherParentsDialogPage from './OtherParentsDialogPage.svelte'
-  import {OtherParentsDialogProps} from './OtherParentsDialogProps'
+  import { OtherParentsDialogProps } from './OtherParentsDialogProps'
 
   export let props: OtherParentsDialogProps
 </script>
