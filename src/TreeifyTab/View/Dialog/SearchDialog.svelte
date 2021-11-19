@@ -66,4 +66,12 @@
   .search-dialog_search-query {
     width: 100%;
   }
+
+  .search-dialog_result {
+    margin-block: 1em;
+
+    display: flex;
+    flex-direction: column;
+    row-gap: 1em;
+  }
 </style>
