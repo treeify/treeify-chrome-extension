@@ -4,6 +4,7 @@
     "module": "esnext",
     "strict": true,
     "noImplicitReturns": true,
+    "noEmitOnError": true,
     "baseUrl": ".",
     "paths": {
       "src/*": ["src/*"]
