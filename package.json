@@ -46,13 +46,12 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "build": "run-p rollup typeCheck copy",
+    "build": "run-p rollup copy",
     "copy": "cpx \"static/**\" dist",
     "format": "prettier --write \"src/**/*.{ts,tsx,svelte}\"",
-    "release": "run-p rollup typeCheck copy",
+    "release": "run-p rollup copy",
     "rollup": "rollup -c",
     "svelte-check": "svelte-check",
-    "typeCheck": "tsc --noEmit --extendedDiagnostics",
     "watch": "rollup -c -w"
   }
 }
