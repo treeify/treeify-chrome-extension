@@ -24,7 +24,6 @@
     "@types/color": "^3.0.2",
     "@types/katex": "^0.11.1",
     "@types/md5": "^2.3.1",
-    "@types/papaparse": "^5.3.1",
     "@types/power-radix": "^2.5.0",
     "@types/ua-parser-js": "^0.7.36",
     "@types/wicg-file-system-access": "^2020.9.4",
