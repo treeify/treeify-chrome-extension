@@ -192,7 +192,7 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
 }
 
 /**
- * 与えられたItemPathの途中経路を全てexpandする。
+ * 与えられたItemPathの途中経路を全てunfoldする。
  * もし途中経路にページがあったとしても非ページ化までは行わない。
  */
 export function moses(itemPath: ItemPath) {

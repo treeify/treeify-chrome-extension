@@ -193,7 +193,7 @@ export class Internal {
         '1000KeyG': List.of('grouping'),
         '1000KeyP': List.of('toggleFolded'),
         '0010ArrowUp': List.of('fold'),
-        '0010ArrowDown': List.of('expand'),
+        '0010ArrowDown': List.of('unfold'),
         '1000KeyB': List.of('toggleBold'),
         '1000KeyU': List.of('toggleUnderline'),
         '1000KeyI': List.of('toggleItalic'),

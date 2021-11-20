@@ -10,7 +10,7 @@ export type PageTreeBulletAndIndentProps = {
 
 export enum PageTreeBulletState {
   NO_CHILDREN,
-  EXPANDED,
+  UNFOLDED,
   FOLDED,
 }
 
@@ -33,7 +33,7 @@ export function createPageTreeBulletAndIndentProps(
       }
     } else {
       return {
-        bulletState: PageTreeBulletState.EXPANDED,
+        bulletState: PageTreeBulletState.UNFOLDED,
         onClick,
       }
     }

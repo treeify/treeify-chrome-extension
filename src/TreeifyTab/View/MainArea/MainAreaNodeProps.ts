@@ -188,7 +188,7 @@ function countHiddenTabs(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
   switch (bulletState) {
     case MainAreaBulletState.NO_CHILDREN:
-    case MainAreaBulletState.EXPANDED:
+    case MainAreaBulletState.UNFOLDED:
     case MainAreaBulletState.PAGE:
       return 0
     case MainAreaBulletState.FOLDED:

@@ -8,7 +8,7 @@
 </script>
 
 <div class="page-tree-bullet-and-indent" on:mousedown={props.onClick}>
-  {#if props.bulletState === PageTreeBulletState.EXPANDED}
+  {#if props.bulletState === PageTreeBulletState.UNFOLDED}
     <div class="page-tree-bullet-and-indent_indent-area">
       <div class="page-tree-bullet-and-indent_indent-guide" />
     </div>
@@ -16,7 +16,7 @@
   <div
     class="page-tree-bullet-and-indent_bullet-area"
     class:no-children={props.bulletState === PageTreeBulletState.NO_CHILDREN}
-    class:expanded={props.bulletState === PageTreeBulletState.EXPANDED}
+    class:unfolded={props.bulletState === PageTreeBulletState.UNFOLDED}
     class:folded={props.bulletState === PageTreeBulletState.FOLDED}
   />
 </div>
@@ -37,9 +37,9 @@
     --page-tree-bullet-folded-height: 0.38em;
 
     // 折りたたまれたノードのバレット（二等辺三角形▼）の幅
-    --page-tree-bullet-expanded-width: 0.45em;
+    --page-tree-bullet-unfolded-width: 0.45em;
     // 折りたたまれたノードのバレット（二等辺三角形▼）の高さ
-    --page-tree-bullet-expanded-height: 0.3em;
+    --page-tree-bullet-unfolded-height: 0.3em;
 
     // バレットの色。lch(60.0%, 0.0, 0.0)相当
     --page-tree-bullet-color: #919191;
@@ -90,13 +90,13 @@
     aspect-ratio: 1;
 
     // 展開済み状態のバレット
-    &.expanded {
+    &.unfolded {
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: var(--page-tree-bullet-expanded-height)
-        calc(var(--page-tree-bullet-expanded-width) / 2) 0
-        calc(var(--page-tree-bullet-expanded-width) / 2);
+      border-width: var(--page-tree-bullet-unfolded-height)
+        calc(var(--page-tree-bullet-unfolded-width) / 2) 0
+        calc(var(--page-tree-bullet-unfolded-width) / 2);
       border-color: var(--page-tree-bullet-color) transparent transparent transparent;
 
       .page-tree-bullet-and-indent:hover & {

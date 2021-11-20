@@ -12,7 +12,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 export type MainAreaRollProps = {
   bulletState: MainAreaBulletState
   /**
-   * expand時に表示される項目数。
+   * unfold時に表示される項目数。
    * folded状態以外の場合は常に0。
    */
   hiddenItemsCount: integer
@@ -23,7 +23,7 @@ export type MainAreaRollProps = {
 
 export enum MainAreaBulletState {
   NO_CHILDREN,
-  EXPANDED,
+  UNFOLDED,
   FOLDED,
   PAGE,
 }
@@ -53,19 +53,19 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
           case MainAreaBulletState.NO_CHILDREN:
             switch (inputId) {
               case '1000MouseButton0':
-                Command.expand()
+                Command.unfold()
                 Command.turnIntoPage()
                 Command.showPage()
                 break
             }
             break
-          case MainAreaBulletState.EXPANDED:
+          case MainAreaBulletState.UNFOLDED:
             switch (inputId) {
               case '0000MouseButton0':
                 Command.toggleFolded()
                 break
               case '1000MouseButton0':
-                Command.expand()
+                Command.unfold()
                 Command.turnIntoPage()
                 Command.showPage()
                 break
@@ -77,7 +77,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
                 Command.toggleFolded()
                 break
               case '1000MouseButton0':
-                Command.expand()
+                Command.unfold()
                 Command.turnIntoPage()
                 Command.showPage()
                 break
@@ -90,7 +90,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
                 break
               case '1000MouseButton0':
                 Command.turnIntoNonPage()
-                Command.expand()
+                Command.unfold()
                 break
             }
             break
@@ -127,6 +127,6 @@ export function deriveBulletState(state: State, itemPath: ItemPath): MainAreaBul
     CurrentState.getIsFolded(itemPath)
     return CurrentState.getIsFolded(itemPath)
       ? MainAreaBulletState.FOLDED
-      : MainAreaBulletState.EXPANDED
+      : MainAreaBulletState.UNFOLDED
   }
 }

@@ -6,7 +6,7 @@ export const commandNames = {
   moveItemToPrevSibling: '上に移動（兄弟指向）',
   moveItemToNextSibling: '下に移動（兄弟指向）',
   fold: '折りたたむ',
-  expand: '展開する',
+  unfold: '展開する',
   toggleFolded: '折りたたみ状態トグル',
   enterKeyDefault: 'Enterキーデフォルト動作',
   removeEdge: '項目を削除',

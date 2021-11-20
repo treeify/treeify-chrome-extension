@@ -19,7 +19,7 @@ export function fold() {
 }
 
 /** 選択された項目を展開するコマンド */
-export function expand() {
+export function unfold() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     CurrentState.setIsFolded(selectedItemPath, false)
     CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
