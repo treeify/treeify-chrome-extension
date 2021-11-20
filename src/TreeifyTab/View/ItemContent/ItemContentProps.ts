@@ -1,5 +1,5 @@
 import { assertNeverType } from 'src/Common/Debug/assert'
-import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { DiscriminatedUnion, ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import {
   CodeBlockItemContentProps,
@@ -22,14 +22,15 @@ import {
   WebPageItemContentProps,
 } from 'src/TreeifyTab/View/ItemContent/WebPageItemContentProps'
 
-export type ItemContentProps =
-  | TextItemContentProps
-  | WebPageItemContentProps
-  | ImageItemContentProps
-  | CodeBlockItemContentProps
-  | TexItemContentProps
+export type ItemContentProps = DiscriminatedUnion<{
+  TextItemContentProps: TextItemContentProps
+  WebPageItemContentProps: WebPageItemContentProps
+  ImageItemContentProps: ImageItemContentProps
+  CodeBlockItemContentProps: CodeBlockItemContentProps
+  TexItemContentProps: TexItemContentProps
+}>
 
-export function createItemContentProps(itemId: ItemId) {
+export function createItemContentProps(itemId: ItemId): ItemContentProps {
   const itemType = Internal.instance.state.items[itemId].type
   switch (itemType) {
     case ItemType.TEXT:
