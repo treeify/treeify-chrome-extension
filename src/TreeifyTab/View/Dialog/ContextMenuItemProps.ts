@@ -91,11 +91,6 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   }
 
   result.push({
-    title: 'トランスクルード用コピー',
-    onClick: () => Command.copyForTransclusion(),
-  })
-
-  result.push({
     title: 'エクスポート…',
     onClick: () => {
       External.instance.dialogState = { type: 'ExportDialog' }
