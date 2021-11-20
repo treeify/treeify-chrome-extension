@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ItemContent from '../ItemContent/ItemContent.svelte'
-  import { OtherParentsDialogItemProps } from './OtherParentsDialogItemProps'
+  import { OtherParentsDialogItemProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogItemProps'
+  import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
 
   export let props: OtherParentsDialogItemProps
 </script>

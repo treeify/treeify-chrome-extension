@@ -1,7 +1,7 @@
 <script lang="ts">
   import { ExportFormat } from 'src/TreeifyTab/Internal/State'
-  import CommonDialog from './CommonDialog.svelte'
-  import { ExportDialogProps } from './ExportDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { ExportDialogProps } from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
 
   export let props: ExportDialogProps
 </script>

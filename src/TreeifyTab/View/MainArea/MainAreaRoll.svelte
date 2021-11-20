@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { MainAreaBulletState, MainAreaRollProps } from './MainAreaRollProps'
+  import {
+    MainAreaBulletState,
+    MainAreaRollProps,
+  } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 
   export let props: MainAreaRollProps
 

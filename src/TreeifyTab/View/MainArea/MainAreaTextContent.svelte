@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { DomishObject } from '../../Internal/DomishObject'
-  import Cite from '../Cite.svelte'
-  import { MainAreaContentView } from './MainAreaContentProps'
-  import { MainAreaTextContentProps } from './MainAreaTextContentProps'
+  import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+  import Cite from 'src/TreeifyTab/View/Cite.svelte'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { MainAreaTextContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaTextContentProps'
 
   export let props: MainAreaTextContentProps
 

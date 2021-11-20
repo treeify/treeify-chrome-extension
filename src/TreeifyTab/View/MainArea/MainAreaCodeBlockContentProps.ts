@@ -1,15 +1,13 @@
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import {
-  CodeBlockItemContentProps,
-  createCodeBlockItemContentProps,
-} from 'src/TreeifyTab/View/ItemContent/CodeBlocktemContentProps'
+import { createCodeBlockItemContentProps } from 'src/TreeifyTab/View/ItemContent/CodeBlocktemContentProps'
+import { ItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
 export type MainAreaCodeBlockContentProps = {
   itemPath: ItemPath
-  contentProps: CodeBlockItemContentProps
+  contentProps: ItemContentProps
   onFocus: (event: FocusEvent) => void
 }
 

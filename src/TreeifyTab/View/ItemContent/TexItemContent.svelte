@@ -1,7 +1,7 @@
 <script lang="ts">
   import katex from 'katex'
-  import Cite from '../Cite.svelte'
-  import { TexItemContentProps } from './TexItemContentProps'
+  import Cite from 'src/TreeifyTab/View/Cite.svelte'
+  import { TexItemContentProps } from 'src/TreeifyTab/View/ItemContent/TexItemContentProps'
 
   export let props: TexItemContentProps
 </script>

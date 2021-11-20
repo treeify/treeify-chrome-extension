@@ -1,6 +1,6 @@
 <script lang="ts">
-  import CommonDialog from './CommonDialog.svelte'
-  import { OtherSettingsDialogProps } from './OtherSettingsDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { OtherSettingsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherSettingsDialogProps'
 
   export let props: OtherSettingsDialogProps
 </script>

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import TexItemContent from '../ItemContent/TexItemContent.svelte'
-  import { MainAreaContentView } from './MainAreaContentProps'
-  import { MainAreaTexContentProps } from './MainAreaTexContentProps'
+  import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { MainAreaTexContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaTexContentProps'
 
   export let props: MainAreaTexContentProps
 
@@ -9,7 +9,7 @@
 </script>
 
 <div class="main-area-tex-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <TexItemContent props={props.contentProps} />
+  <ItemContent props={props.contentProps} />
 </div>
 
 <style global lang="scss">

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { List } from 'immutable'
+  import { assert } from 'src/Common/Debug/assert'
   import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
-  import { assert } from '../../../Common/Debug/assert'
-  import { toOpmlString } from '../../Internal/ImportExport/opml'
-  import { Internal } from '../../Internal/Internal'
-  import { State } from '../../Internal/State'
-  import DataFolderButton from './DataFolderButton.svelte'
-  import AddButton from './ItemAdditionButton.svelte'
-  import PreferenceButton from './PreferenceButton.svelte'
-  import { ToolbarProps } from './ToolbarProps'
+  import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { State } from 'src/TreeifyTab/Internal/State'
+  import DataFolderButton from 'src/TreeifyTab/View/Toolbar/DataFolderButton.svelte'
+  import ItemAdditionButton from 'src/TreeifyTab/View/Toolbar/ItemAdditionButton.svelte'
+  import PreferenceButton from 'src/TreeifyTab/View/Toolbar/PreferenceButton.svelte'
+  import { ToolbarProps } from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
 
   export let props: ToolbarProps
 
@@ -35,7 +35,7 @@
   <button on:click={onClickOpmlExport}>OPMLエクスポート</button>
   <button on:click={onClickStateValidation}>Stateバリデーション</button>
   <DataFolderButton props={props.dataFolderButtonProps} />
-  <AddButton />
+  <ItemAdditionButton />
   <PreferenceButton />
 </div>
 

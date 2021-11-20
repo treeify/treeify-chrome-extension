@@ -1,13 +1,13 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { CurrentState } from '../../Internal/CurrentState'
-  import { InputId } from '../../Internal/InputId'
-  import { Internal } from '../../Internal/Internal'
-  import { ItemPath } from '../../Internal/ItemPath'
-  import CommonDialog from './CommonDialog.svelte'
-  import { SearchDialogProps } from './SearchDialogProps'
-  import SearchResultPage from './SearchResultPage.svelte'
-  import { createSearchResultPageProps } from './SearchResultPageProps'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { SearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps'
+  import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
+  import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
 
   export let props: SearchDialogProps
 

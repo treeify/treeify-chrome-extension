@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { InputId } from '../../../Internal/InputId'
-  import { commandNames } from '../../commandNames'
-  import { KeyBindingProps } from './KeyBindingProps'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId.js'
+  import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
+  import { KeyBindingProps } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingProps'
 
   export let props: KeyBindingProps
 </script>

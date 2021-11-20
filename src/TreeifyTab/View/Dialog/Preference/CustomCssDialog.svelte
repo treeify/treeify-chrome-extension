@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CommonDialog from '../CommonDialog.svelte'
-  import FinishAndCancelButtons from '../FinishAndCancelButtons.svelte'
-  import { CustomCssDialogProps } from './CustomCssDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { CustomCssDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/CustomCssDialogProps'
 
   export let props: CustomCssDialogProps
 </script>

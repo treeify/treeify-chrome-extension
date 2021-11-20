@@ -1,10 +1,10 @@
 <script lang="ts">
-  import MainAreaCodeBlockContent from './MainAreaCodeBlockContent.svelte'
-  import { MainAreaContentProps } from './MainAreaContentProps'
-  import MainAreaImageContent from './MainAreaImageContent.svelte'
-  import MainAreaTexContent from './MainAreaTexContent.svelte'
-  import MainAreaTextContent from './MainAreaTextContent.svelte'
-  import MainAreaWebPageContent from './MainAreaWebPageContent.svelte'
+  import MainAreaCodeBlockContent from 'src/TreeifyTab/View/MainArea/MainAreaCodeBlockContent.svelte'
+  import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import MainAreaImageContent from 'src/TreeifyTab/View/MainArea/MainAreaImageContent.svelte'
+  import MainAreaTexContent from 'src/TreeifyTab/View/MainArea/MainAreaTexContent.svelte'
+  import MainAreaTextContent from 'src/TreeifyTab/View/MainArea/MainAreaTextContent.svelte'
+  import MainAreaWebPageContent from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContent.svelte'
 
   export let props: MainAreaContentProps
 </script>

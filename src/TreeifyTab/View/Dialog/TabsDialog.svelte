@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CommonDialog from './CommonDialog.svelte'
-  import TabsDialogItem from './TabsDialogItem.svelte'
-  import { TabsDialogProps } from './TabsDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import TabsDialogItem from 'src/TreeifyTab/View/Dialog/TabsDialogItem.svelte'
+  import { TabsDialogProps } from 'src/TreeifyTab/View/Dialog/TabsDialogProps'
 
   export let props: TabsDialogProps
 </script>

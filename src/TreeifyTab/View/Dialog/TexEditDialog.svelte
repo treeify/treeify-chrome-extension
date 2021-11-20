@@ -1,8 +1,8 @@
 <script lang="ts">
   import katex from 'katex'
-  import CommonDialog from './CommonDialog.svelte'
-  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
-  import { TexEditDialogProps } from './TexEditDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { TexEditDialogProps } from 'src/TreeifyTab/View/Dialog/TexEditDialogProps'
 
   export let props: TexEditDialogProps
 

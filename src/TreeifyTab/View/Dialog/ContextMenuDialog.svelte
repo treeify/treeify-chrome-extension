@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
-  import { doWithErrorCapture } from '../../errorCapture'
-  import { External } from '../../External/External'
-  import { Rerenderer } from '../../Rerenderer'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
@@ -16,10 +15,11 @@
 </script>
 
 <script lang="ts">
-  import { InputId } from '../../Internal/InputId'
-  import ContextMenuItem from './ContextMenuItem.svelte'
-  import { ContextMenuDialogProps } from './ContextMenuDialogProps'
-  import { setupFocusTrap } from './focusTrap'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { ContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps'
+  import ContextMenuItem from 'src/TreeifyTab/View/Dialog/ContextMenuItem.svelte'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
   export let props: ContextMenuDialogProps
 

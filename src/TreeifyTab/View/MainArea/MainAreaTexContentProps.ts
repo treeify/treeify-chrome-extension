@@ -1,15 +1,13 @@
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import {
-  createTexItemContentProps,
-  TexItemContentProps,
-} from 'src/TreeifyTab/View/ItemContent/TexItemContentProps'
+import { ItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
+import { createTexItemContentProps } from 'src/TreeifyTab/View/ItemContent/TexItemContentProps'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
 export type MainAreaTexContentProps = {
   itemPath: ItemPath
-  contentProps: TexItemContentProps
+  contentProps: ItemContentProps
   onFocus: (event: FocusEvent) => void
 }
 

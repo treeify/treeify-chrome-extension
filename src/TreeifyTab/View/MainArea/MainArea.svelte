@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onCopy, onCut, onPaste } from '../../Internal/ImportExport/clipboard'
-  import { onResizeImage } from '../dragAndDrop'
-  import MainAreaNode from './MainAreaNode.svelte'
-  import { MainAreaProps } from './MainAreaProps'
+  import { onCopy, onCut, onPaste } from 'src/TreeifyTab/Internal/ImportExport/clipboard'
+  import { onResizeImage } from 'src/TreeifyTab/View/dragAndDrop'
+  import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
+  import { MainAreaProps } from 'src/TreeifyTab/View/MainArea/MainAreaProps'
 
   export let props: MainAreaProps
 </script>

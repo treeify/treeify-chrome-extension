@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { CitationSettingDialogProps } from './CitationSettingDialogProps'
-  import CommonDialog from './CommonDialog.svelte'
-  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
+  import { CitationSettingDialogProps } from 'src/TreeifyTab/View/Dialog/CitationSettingDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
   export let props: CitationSettingDialogProps
 </script>

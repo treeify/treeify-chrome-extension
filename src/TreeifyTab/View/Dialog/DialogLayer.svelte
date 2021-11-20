@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DialogLayerProps } from './DialogLayerProps'
+  import { DialogLayerProps } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
 
   export let props: DialogLayerProps
 </script>

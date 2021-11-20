@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ItemContent from '../ItemContent/ItemContent.svelte'
-  import SearchResultItem from './SearchResultItem.svelte'
-  import { SearchResultPageProps } from './SearchResultPageProps'
+  import SearchResultItem from 'src/TreeifyTab/View/Dialog/SearchResultItem.svelte'
+  import { SearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps'
+  import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
 
   export let props: SearchResultPageProps
 </script>

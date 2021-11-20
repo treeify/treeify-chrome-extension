@@ -1,6 +1,6 @@
 <script lang="ts">
-  import PageTreeNode from './PageTreeNode.svelte'
-  import { PageTreeProps } from './PageTreeProps'
+  import PageTreeNode from 'src/TreeifyTab/View/LeftSidebar/PageTreeNode.svelte'
+  import { PageTreeProps } from 'src/TreeifyTab/View/LeftSidebar/PageTreeProps'
 
   export let props: PageTreeProps
 </script>

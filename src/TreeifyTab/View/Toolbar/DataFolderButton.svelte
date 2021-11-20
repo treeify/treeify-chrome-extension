@@ -1,12 +1,12 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { assert } from '../../../Common/Debug/assert'
-  import { doAsyncWithErrorCapture } from '../../errorCapture'
-  import { External } from '../../External/External'
-  import { Command } from '../../Internal/Command'
-  import { Rerenderer } from '../../Rerenderer'
-  import { DataFolderButtonProps } from './DataFolderButtonProps'
-  import ToolbarIconButton from './ToolbarIconButton.svelte'
+  import { assert } from 'src/Common/Debug/assert'
+  import { doAsyncWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { Command } from 'src/TreeifyTab/Internal/Command'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { DataFolderButtonProps } from 'src/TreeifyTab/View/Toolbar/DataFolderButtonProps'
+  import ToolbarIconButton from 'src/TreeifyTab/View/Toolbar/ToolbarIconButton.svelte'
 
   export let props: DataFolderButtonProps
 
