@@ -17,7 +17,7 @@
     class="page-tree-bullet-and-indent_bullet-area"
     class:no-children={props.bulletState === PageTreeBulletState.NO_CHILDREN}
     class:expanded={props.bulletState === PageTreeBulletState.EXPANDED}
-    class:collapsed={props.bulletState === PageTreeBulletState.COLLAPSED}
+    class:folded={props.bulletState === PageTreeBulletState.FOLDED}
   />
 </div>
 
@@ -32,9 +32,9 @@
     --page-tree-bullet-area-size: 0.8em;
 
     // 折りたたまれたノードのバレット（二等辺三角形▶）の幅
-    --page-tree-bullet-collapsed-width: 0.56em;
+    --page-tree-bullet-folded-width: 0.56em;
     // 折りたたまれたノードのバレット（二等辺三角形▶）の高さ
-    --page-tree-bullet-collapsed-height: 0.38em;
+    --page-tree-bullet-folded-height: 0.38em;
 
     // 折りたたまれたノードのバレット（二等辺三角形▼）の幅
     --page-tree-bullet-expanded-width: 0.45em;
@@ -105,12 +105,12 @@
     }
 
     // 折りたたみ済み状態のバレット
-    &.collapsed {
+    &.folded {
       width: 0;
       height: 0;
       border-style: solid;
-      border-width: calc(var(--page-tree-bullet-collapsed-width) / 2) 0
-        calc(var(--page-tree-bullet-collapsed-width) / 2) var(--page-tree-bullet-collapsed-height);
+      border-width: calc(var(--page-tree-bullet-folded-width) / 2) 0
+        calc(var(--page-tree-bullet-folded-width) / 2) var(--page-tree-bullet-folded-height);
       border-color: transparent transparent transparent var(--page-tree-bullet-color);
 
       .page-tree-bullet-and-indent:hover & {

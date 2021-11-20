@@ -11,9 +11,9 @@ import { Cite } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 /** 選択された項目を折りたたむコマンド */
-export function collapse() {
+export function fold() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
-    CurrentState.setIsCollapsed(selectedItemPath, true)
+    CurrentState.setIsFolded(selectedItemPath, true)
     CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
   }
 }
@@ -21,16 +21,16 @@ export function collapse() {
 /** 選択された項目を展開するコマンド */
 export function expand() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
-    CurrentState.setIsCollapsed(selectedItemPath, false)
+    CurrentState.setIsFolded(selectedItemPath, false)
     CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
   }
 }
 
-/** ターゲット項目のisCollapsedがtrueならfalseに、falseならtrueにするコマンド */
-export function toggleCollapsed() {
+/** ターゲット項目のisFoldedがtrueならfalseに、falseならtrueにするコマンド */
+export function toggleFolded() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  CurrentState.setIsCollapsed(targetItemPath, !CurrentState.getIsCollapsed(targetItemPath))
+  CurrentState.setIsFolded(targetItemPath, !CurrentState.getIsFolded(targetItemPath))
   CurrentState.updateItemTimestamp(targetItemId)
 }
 
@@ -236,7 +236,7 @@ export function toggleCompleted() {
     }
 
     // ヒューリスティックな追加効果
-    Command.collapse()
+    Command.fold()
     Command.closeSubtreeTabs()
     // フォーカスを下の項目に移動する
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())

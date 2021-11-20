@@ -13,7 +13,7 @@ export type MainAreaRollProps = {
   bulletState: MainAreaBulletState
   /**
    * expand時に表示される項目数。
-   * collapsed状態以外の場合は常に0。
+   * folded状態以外の場合は常に0。
    */
   hiddenItemsCount: integer
   outerCircleRadiusEm: integer
@@ -24,7 +24,7 @@ export type MainAreaRollProps = {
 export enum MainAreaBulletState {
   NO_CHILDREN,
   EXPANDED,
-  COLLAPSED,
+  FOLDED,
   PAGE,
 }
 
@@ -62,7 +62,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
           case MainAreaBulletState.EXPANDED:
             switch (inputId) {
               case '0000MouseButton0':
-                Command.toggleCollapsed()
+                Command.toggleFolded()
                 break
               case '1000MouseButton0':
                 Command.expand()
@@ -71,10 +71,10 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
                 break
             }
             break
-          case MainAreaBulletState.COLLAPSED:
+          case MainAreaBulletState.FOLDED:
             switch (inputId) {
               case '0000MouseButton0':
-                Command.toggleCollapsed()
+                Command.toggleFolded()
                 break
               case '1000MouseButton0':
                 Command.expand()
@@ -109,7 +109,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
 
 function countHiddenItems(state: State, itemPath: ItemPath): integer {
   const bulletState = deriveBulletState(state, itemPath)
-  if (bulletState !== MainAreaBulletState.COLLAPSED) return 0
+  if (bulletState !== MainAreaBulletState.FOLDED) return 0
 
   const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
     return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
@@ -124,9 +124,9 @@ export function deriveBulletState(state: State, itemPath: ItemPath): MainAreaBul
   } else if (state.items[itemId].childItemIds.size === 0) {
     return MainAreaBulletState.NO_CHILDREN
   } else {
-    CurrentState.getIsCollapsed(itemPath)
-    return CurrentState.getIsCollapsed(itemPath)
-      ? MainAreaBulletState.COLLAPSED
+    CurrentState.getIsFolded(itemPath)
+    return CurrentState.getIsFolded(itemPath)
+      ? MainAreaBulletState.FOLDED
       : MainAreaBulletState.EXPANDED
   }
 }

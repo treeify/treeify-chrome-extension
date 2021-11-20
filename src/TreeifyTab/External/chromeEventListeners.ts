@@ -86,7 +86,7 @@ export function onCreated(tab: Tab) {
         // openerがターゲット項目なら
         if (targetItemId === openerItemId) {
           // 自動的に展開する
-          CurrentState.setIsCollapsed(targetItemPath, false)
+          CurrentState.setIsFolded(targetItemPath, false)
 
           // フォーカスを移す
           if (tab.active) {

@@ -180,38 +180,38 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
-  // アクティブページはisCollapsedフラグの状態によらず子を強制的に表示する
+  // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
   if (itemPath.size === 1) {
     return item.childItemIds
   }
 
-  if (CurrentState.getIsCollapsed(itemPath) || CurrentState.isPage(itemId)) {
+  if (CurrentState.getIsFolded(itemPath) || CurrentState.isPage(itemId)) {
     return List.of()
   } else {
     return item.childItemIds
   }
 }
 
-/** 指定された項目のisCollapsedフラグを設定する */
-export function setIsCollapsed(itemPath: ItemPath, isCollapsed: boolean) {
+/** 指定された項目のisFoldedフラグを設定する */
+export function setIsFolded(itemPath: ItemPath, isFolded: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
   Internal.instance.mutate(
-    isCollapsed,
-    PropertyPath.of('items', itemId, 'parents', parentItemId, 'isCollapsed')
+    isFolded,
+    PropertyPath.of('items', itemId, 'parents', parentItemId, 'isFolded')
   )
 }
 
 /**
- * 指定された項目のisCollapsedフラグを返す。
+ * 指定された項目のisFoldedフラグを返す。
  * 親項目に依存するのでItemIdではなくItemPathを取る。
  */
-export function getIsCollapsed(itemPath: ItemPath): boolean {
+export function getIsFolded(itemPath: ItemPath): boolean {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
-  return Internal.instance.state.items[itemId].parents[parentItemId].isCollapsed
+  return Internal.instance.state.items[itemId].parents[parentItemId].isFolded
 }
 
 /** 指定された項目のタイムスタンプを現在時刻に更新する */

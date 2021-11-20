@@ -191,7 +191,7 @@ function countHiddenTabs(state: State, itemPath: ItemPath): integer {
     case MainAreaBulletState.EXPANDED:
     case MainAreaBulletState.PAGE:
       return 0
-    case MainAreaBulletState.COLLAPSED:
+    case MainAreaBulletState.FOLDED:
       return countTabsInDescendants(state, ItemPath.getItemId(itemPath))
     default:
       assertNeverType(bulletState)

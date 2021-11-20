@@ -198,8 +198,8 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
 export function moses(itemPath: ItemPath) {
   const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath !== undefined) {
-    if (CurrentState.getIsCollapsed(itemPath)) {
-      CurrentState.setIsCollapsed(itemPath, false)
+    if (CurrentState.getIsFolded(itemPath)) {
+      CurrentState.setIsFolded(itemPath, false)
     }
     moses(parentItemPath)
   }
