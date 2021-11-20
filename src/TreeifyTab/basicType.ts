@@ -1,5 +1,6 @@
 import { integer } from 'src/Common/integer'
 import { Timestamp } from 'src/TreeifyTab/Timestamp'
+import { commandNames } from 'src/TreeifyTab/View/commandNames'
 
 /**
  * 項目IDの型エイリアス。
@@ -36,7 +37,7 @@ export type TabId = integer
 
 export type WorkspaceId = Timestamp
 
-export type CommandId = string
+export type CommandId = keyof typeof commandNames
 
 /**
  * タグ付きUnion型を定義するためのユーティリティ。

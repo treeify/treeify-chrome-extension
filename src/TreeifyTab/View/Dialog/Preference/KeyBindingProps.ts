@@ -26,7 +26,7 @@ export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyB
       const index = parseInt(event.target.dataset.index)
 
       const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
-      const newCommandIds = oldCommandIds.set(index, event.target.value)
+      const newCommandIds = oldCommandIds.set(index, event.target.value as CommandId)
       Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
     }
   }

@@ -1,4 +1,4 @@
-export const commandNames: { [T in string]: string } = {
+export const commandNames = {
   indent: 'インデント',
   unindent: 'アンインデント',
   moveItemUpward: '上に移動',
@@ -48,4 +48,4 @@ export const commandNames: { [T in string]: string } = {
   doNothing: '何もしない',
   toggleExcluded: '除外トグル',
   syncWithDataFolder: 'データフォルダ同期',
-}
+} as const
