@@ -13,9 +13,6 @@
     width: ${props.width};
     aspect-ratio: ${props.aspectRatio};
   `
-  $: captionStyle = `
-    max-width: ${props.width};
-  `
 
   function onLoad(event: Event) {
     if (event.target instanceof HTMLImageElement) {
@@ -28,7 +25,7 @@
 </script>
 
 <div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <div class="main-area-image-content_caption-layout">
+  <table class="main-area-image-content_caption-layout">
     <div class="main-area-image-content_image-with-resize-handle">
       <img
         class="main-area-image-content_image"
@@ -42,8 +39,10 @@
         use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
       />
     </div>
-    <div class="main-area-image-content_caption" style={captionStyle}>{props.caption}</div>
-  </div>
+    <caption class="main-area-image-content_caption">
+      {props.caption}
+    </caption>
+  </table>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
   {/if}
@@ -54,16 +53,6 @@
   .main-area-image-content {
     // フォーカス時の枠線を非表示
     outline: none;
-  }
-
-  // 画像とキャプションを中央揃えにする
-  .main-area-image-content_caption-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: fit-content;
-    max-width: 100%;
   }
 
   .main-area-image-content_image-with-resize-handle {
@@ -111,7 +100,7 @@
   }
 
   .main-area-image-content_caption {
-    overflow-wrap: break-word;
+    caption-side: bottom;
 
     // 完了状態のキャプション
     .completed &,
