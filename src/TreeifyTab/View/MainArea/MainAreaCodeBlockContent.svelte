@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CodeBlockItemContent from '../ItemContent/CodeBlockItemContent.svelte'
+  import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { MainAreaCodeBlockContentProps } from './MainAreaCodeBlockContentProps'
   import { MainAreaContentView } from './MainAreaContentProps'
 
@@ -9,7 +9,7 @@
 </script>
 
 <div class="main-area-code-block-content" {id} tabindex="0" on:focus={props.onFocus}>
-  <CodeBlockItemContent props={props.contentProps} />
+  <ItemContent props={props.contentProps} />
 </div>
 
 <style global lang="scss">
