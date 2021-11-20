@@ -1,5 +1,4 @@
 import { assertNonNull } from 'src/Common/Debug/assert'
-import { CodeBlockItemEditDialog } from 'src/TreeifyTab/External/DialogState'
 import { External } from 'src/TreeifyTab/External/External'
 import { detectLanguage } from 'src/TreeifyTab/highlightJs'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -18,9 +17,7 @@ export type CodeBlockItemEditDialogProps = {
   onKeyDown: (event: KeyboardEvent) => void
 }
 
-export function createCodeBlockItemEditDialogProps(
-  dialog: CodeBlockItemEditDialog
-): CodeBlockItemEditDialogProps {
+export function createCodeBlockItemEditDialogProps(): CodeBlockItemEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(targetItemPath))
   const onClickFinishButton = () => {

@@ -1,5 +1,4 @@
 import { assertNonNull } from 'src/Common/Debug/assert'
-import { TexEditDialog } from 'src/TreeifyTab/External/DialogState'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -17,7 +16,7 @@ export type TexEditDialogProps = {
   onKeyDown: (event: KeyboardEvent) => void
 }
 
-export function createTexEditDialogProps(dialog: TexEditDialog): TexEditDialogProps {
+export function createTexEditDialogProps(): TexEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   const isEmptyTexItem = CurrentState.isEmptyTexItem(ItemPath.getItemId(targetItemPath))
   const onClickFinishButton = () => {

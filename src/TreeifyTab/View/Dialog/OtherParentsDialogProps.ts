@@ -1,5 +1,4 @@
 import { is, List, Set } from 'immutable'
-import { OtherParentsDialog } from 'src/TreeifyTab/External/DialogState'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
@@ -11,7 +10,7 @@ export type OtherParentsDialogProps = {
   pagePropses: List<OtherParentsDialogPageProps>
 }
 
-export function createOtherParentsDialogProps(dialog: OtherParentsDialog): OtherParentsDialogProps {
+export function createOtherParentsDialogProps(): OtherParentsDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const parentItemIds = CurrentState.getParentItemIds(targetItemId)

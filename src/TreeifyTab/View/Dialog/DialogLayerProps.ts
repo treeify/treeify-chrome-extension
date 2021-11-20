@@ -62,12 +62,12 @@ function createDialogMaterials(dialogState: Dialog): { component: any; props: an
     case 'CitationSettingDialog':
       return {
         component: CitationSettingDialog,
-        props: createCitationSettingDialogProps(dialogState),
+        props: createCitationSettingDialogProps(),
       }
     case 'CodeBlockItemEditDialog':
       return {
         component: CodeBlockItemEditDialog,
-        props: createCodeBlockItemEditDialogProps(dialogState),
+        props: createCodeBlockItemEditDialogProps(),
       }
     case 'CodeBlockLanguageSettingDialog':
       return {
@@ -112,17 +112,17 @@ function createDialogMaterials(dialogState: Dialog): { component: any; props: an
     case 'OtherParentsDialog':
       return {
         component: OtherParentsDialog,
-        props: createOtherParentsDialogProps(dialogState),
+        props: createOtherParentsDialogProps(),
       }
     case 'OtherSettingsDialog':
       return {
         component: OtherSettingsDialog,
-        props: createOtherSettingsDialogProps(dialogState),
+        props: createOtherSettingsDialogProps(),
       }
     case 'SearchDialog':
       return {
         component: SearchDialog,
-        props: createSearchDialogProps(dialogState),
+        props: createSearchDialogProps(),
       }
     case 'TabsDialog':
       return {
@@ -132,7 +132,7 @@ function createDialogMaterials(dialogState: Dialog): { component: any; props: an
     case 'TexEditDialog':
       return {
         component: TexEditDialog,
-        props: createTexEditDialogProps(dialogState),
+        props: createTexEditDialogProps(),
       }
     case 'WebPageItemTitleSettingDialog':
       return {
@@ -142,7 +142,7 @@ function createDialogMaterials(dialogState: Dialog): { component: any; props: an
     case 'WorkspaceDialog':
       return {
         component: WorkspaceDialog,
-        props: createWorkspaceDialogProps(dialogState),
+        props: createWorkspaceDialogProps(),
       }
   }
 }
