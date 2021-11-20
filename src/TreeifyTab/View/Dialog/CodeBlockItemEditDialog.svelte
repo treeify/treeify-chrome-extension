@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { removeRedundantIndent } from '../../Internal/ImportExport/indentedText'
-  import { CodeBlockItemEditDialogProps } from './CodeBlockItemEditDialogProps'
-  import CommonDialog from './CommonDialog.svelte'
-  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
+  import { removeRedundantIndent } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
+  import { CodeBlockItemEditDialogProps } from 'src/TreeifyTab/View/Dialog/CodeBlockItemEditDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
   export let props: CodeBlockItemEditDialogProps
 

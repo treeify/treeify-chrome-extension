@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { doWithErrorCapture } from '../../errorCapture'
-  import { External } from '../../External/External'
-  import { InputId } from '../../Internal/InputId'
-  import { Rerenderer } from '../../Rerenderer'
-  import { DropdownMenuDialogProps } from './DropdownMenuDialogProps'
-  import DropdownMenuItem from './DropdownMenuItem.svelte'
-  import { setupFocusTrap } from './focusTrap'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { DropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
+  import DropdownMenuItem from 'src/TreeifyTab/View/Dialog/DropdownMenuItem.svelte'
+  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
   export let props: DropdownMenuDialogProps
 

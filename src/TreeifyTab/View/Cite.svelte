@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { CiteProps } from './CiteProps'
+  import { CiteProps } from 'src/TreeifyTab/View/CiteProps'
 
   export let props: CiteProps
 </script>

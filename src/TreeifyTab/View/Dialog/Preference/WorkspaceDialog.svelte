@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CommonDialog from '../CommonDialog.svelte'
-  import { WorkspaceDialogProps } from './WorkspaceDialogProps'
-  import WorkspaceDialogRow from './WorkspaceDialogRow.svelte'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { WorkspaceDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
+  import WorkspaceDialogRow from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogRow.svelte'
 
   export let props: WorkspaceDialogProps
 </script>

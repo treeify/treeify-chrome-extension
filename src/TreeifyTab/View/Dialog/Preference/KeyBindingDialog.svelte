@@ -4,9 +4,9 @@
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-  import CommonDialog from '../CommonDialog.svelte'
-  import KeyBinding from './KeyBinding.svelte'
-  import { KeyBindingDialogProps } from './KeyBindingDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import KeyBinding from 'src/TreeifyTab/View/Dialog/Preference/KeyBinding.svelte'
+  import { KeyBindingDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialogProps'
 
   export let props: KeyBindingDialogProps
 

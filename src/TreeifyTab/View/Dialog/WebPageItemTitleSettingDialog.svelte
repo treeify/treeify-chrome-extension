@@ -1,7 +1,8 @@
 <script context="module" lang="ts">
-  import { doWithErrorCapture } from '../../errorCapture'
-  import { External } from '../../External/External'
-  import { Rerenderer } from '../../Rerenderer'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
   function onClickBackdrop(event: Event) {
     doWithErrorCapture(() => {
@@ -15,8 +16,7 @@
 </script>
 
 <script lang="ts">
-  import { WebPageItemTitleSettingDialogProps } from './WebPageItemTitleSettingDialogProps'
-  import { setupFocusTrap } from './focusTrap'
+  import { WebPageItemTitleSettingDialogProps } from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialogProps'
 
   export let props: WebPageItemTitleSettingDialogProps
 

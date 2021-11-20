@@ -1,5 +1,8 @@
 <script lang="ts">
-  import { PageTreeBulletAndIndentProps, PageTreeBulletState } from './PageTreeBulletAndIndentProps'
+  import {
+    PageTreeBulletAndIndentProps,
+    PageTreeBulletState,
+  } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
 
   export let props: PageTreeBulletAndIndentProps
 </script>

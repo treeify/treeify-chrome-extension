@@ -15,13 +15,13 @@ import {
   MainAreaTexContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaTexContentProps'
 import {
+  createMainAreaTextContentProps,
+  MainAreaTextContentProps,
+} from 'src/TreeifyTab/View/MainArea/MainAreaTextContentProps'
+import {
   createMainAreaWebPageContentProps,
   MainAreaWebPageContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
-import {
-  createMainAreaTextContentProps,
-  MainAreaTextContentProps,
-} from './MainAreaTextContentProps'
 
 export type MainAreaContentProps = DiscriminatedUnion<{
   MainAreaTextContentProps: MainAreaTextContentProps

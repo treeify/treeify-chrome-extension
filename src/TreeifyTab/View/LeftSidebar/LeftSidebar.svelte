@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { LeftSidebarProps } from './LeftSidebarProps'
-  import PageTree from './PageTree.svelte'
+  import { LeftSidebarProps } from 'src/TreeifyTab/View/LeftSidebar/LeftSidebarProps'
+  import PageTree from 'src/TreeifyTab/View/LeftSidebar/PageTree.svelte'
 
   export let props: LeftSidebarProps
 </script>

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { ItemPath } from '../Internal/ItemPath'
-  import { setupFocusTrap } from './Dialog/focusTrap'
-  import { onItemDrop } from './dragAndDrop'
-  import { DragImageProps } from './DragImageProps'
-  import ItemContent from './ItemContent/ItemContent.svelte'
-  import { createItemContentProps } from './ItemContent/ItemContentProps'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
+  import { onItemDrop } from 'src/TreeifyTab/View/dragAndDrop'
+  import { DragImageProps } from 'src/TreeifyTab/View/DragImageProps'
+  import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
+  import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 
   export let props: DragImageProps
 

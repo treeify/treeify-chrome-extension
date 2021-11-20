@@ -1,14 +1,14 @@
 <script lang="ts">
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import DialogLayer from 'src/TreeifyTab/View/Dialog/DialogLayer.svelte'
+  import { dragStateResetter } from 'src/TreeifyTab/View/dragAndDrop'
+  import DragImage from 'src/TreeifyTab/View/DragImage.svelte'
+  import LeftSidebar from 'src/TreeifyTab/View/LeftSidebar/LeftSidebar.svelte'
+  import MainArea from 'src/TreeifyTab/View/MainArea/MainArea.svelte'
   import { createRootProps, RootProps } from 'src/TreeifyTab/View/RootProps'
+  import Toolbar from 'src/TreeifyTab/View/Toolbar/Toolbar.svelte'
   import { derived, Readable } from 'svelte/store'
-  import DialogLayer from './Dialog/DialogLayer.svelte'
-  import { dragStateResetter } from './dragAndDrop'
-  import DragImage from './DragImage.svelte'
-  import LeftSidebar from './LeftSidebar/LeftSidebar.svelte'
-  import MainArea from './MainArea/MainArea.svelte'
-  import Toolbar from './Toolbar/Toolbar.svelte'
 
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
     return createRootProps(Internal.instance.state)

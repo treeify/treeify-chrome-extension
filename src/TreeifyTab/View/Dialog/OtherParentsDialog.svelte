@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CommonDialog from './CommonDialog.svelte'
-  import OtherParentsDialogPage from './OtherParentsDialogPage.svelte'
-  import { OtherParentsDialogProps } from './OtherParentsDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import OtherParentsDialogPage from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPage.svelte'
+  import { OtherParentsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogProps'
 
   export let props: OtherParentsDialogProps
 </script>

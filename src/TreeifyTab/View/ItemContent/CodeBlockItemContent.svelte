@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { getHighlightedHtml } from '../../highlightJs'
-  import Cite from '../Cite.svelte'
-  import { CodeBlockItemContentProps } from './CodeBlocktemContentProps'
+  import { getHighlightedHtml } from 'src/TreeifyTab/highlightJs'
+  import Cite from 'src/TreeifyTab/View/Cite.svelte'
+  import { CodeBlockItemContentProps } from 'src/TreeifyTab/View/ItemContent/CodeBlocktemContentProps'
 
   export let props: CodeBlockItemContentProps
 </script>

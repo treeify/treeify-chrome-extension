@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { doWithErrorCapture } from '../../../errorCapture'
-  import { CurrentState } from '../../../Internal/CurrentState'
-  import { Internal } from '../../../Internal/Internal'
-  import { Rerenderer } from '../../../Rerenderer'
-  import { WorkspaceRecord } from './WorkspaceDialogProps'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { WorkspaceRecord } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
 
   export let workspace: WorkspaceRecord
 

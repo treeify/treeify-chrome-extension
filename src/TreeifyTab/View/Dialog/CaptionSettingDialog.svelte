@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { CaptionSettingDialogProps } from './CaptionSettingDialogProps'
-  import CommonDialog from './CommonDialog.svelte'
-  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
+  import { CaptionSettingDialogProps } from 'src/TreeifyTab/View/Dialog/CaptionSettingDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
   export let props: CaptionSettingDialogProps
 </script>

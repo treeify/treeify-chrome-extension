@@ -4,7 +4,7 @@ import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { startup } from 'src/TreeifyTab/startup'
-import StartupError from './View/StartupError.svelte'
+import StartupError from 'src/TreeifyTab/View/StartupError.svelte'
 
 doAsyncWithErrorCapture(async () => {
   // Treeifyウィンドウが多重起動された場合はエラー画面を映す

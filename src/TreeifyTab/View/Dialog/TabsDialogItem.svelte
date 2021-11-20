@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { ItemPath } from '../../Internal/ItemPath.js'
-  import ItemContent from '../ItemContent/ItemContent.svelte'
-  import { createItemContentProps } from '../ItemContent/ItemContentProps.js'
-  import TabsDialogItem from './TabsDialogItem.svelte'
-  import { TabsDialogItemProps } from './TabsDialogItemProps'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath.js'
+  import TabsDialogItem from 'src/TreeifyTab/View/Dialog/TabsDialogItem.svelte'
+  import { TabsDialogItemProps } from 'src/TreeifyTab/View/Dialog/TabsDialogItemProps'
+  import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
+  import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps.js'
 
   export let props: TabsDialogItemProps
 </script>

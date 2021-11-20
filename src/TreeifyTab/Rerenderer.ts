@@ -12,9 +12,9 @@ import { Database } from 'src/TreeifyTab/Internal/Database'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import Root from 'src/TreeifyTab/View/Root.svelte'
 import { tick } from 'svelte'
 import { Readable, writable } from 'svelte/store'
-import Root from './View/Root.svelte'
 
 /**
  * 画面の再描画に関する制御を担当するクラス。

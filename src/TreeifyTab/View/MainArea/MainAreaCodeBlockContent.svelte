@@ -1,7 +1,7 @@
 <script lang="ts">
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
-  import { MainAreaCodeBlockContentProps } from './MainAreaCodeBlockContentProps'
-  import { MainAreaContentView } from './MainAreaContentProps'
+  import { MainAreaCodeBlockContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaCodeBlockContentProps'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
   export let props: MainAreaCodeBlockContentProps
 

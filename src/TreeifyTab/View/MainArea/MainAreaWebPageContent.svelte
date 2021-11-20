@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Cite from '../Cite.svelte'
-  import { dragItem } from '../dragAndDrop'
-  import { MainAreaContentView } from './MainAreaContentProps'
-  import { MainAreaWebPageContentProps } from './MainAreaWebPageContentProps'
+  import Cite from 'src/TreeifyTab/View/Cite.svelte'
+  import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { MainAreaWebPageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
 
   export let props: MainAreaWebPageContentProps
 

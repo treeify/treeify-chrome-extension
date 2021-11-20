@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ImageItemContentProps } from './ImageItemContentProps'
+  import { ImageItemContentProps } from 'src/TreeifyTab/View/ItemContent/ImageItemContentProps'
 
   export let props: ImageItemContentProps
 

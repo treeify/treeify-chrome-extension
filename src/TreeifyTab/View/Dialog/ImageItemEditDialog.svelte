@@ -1,7 +1,7 @@
 <script lang="ts">
-  import CommonDialog from './CommonDialog.svelte'
-  import FinishAndCancelButtons from './FinishAndCancelButtons.svelte'
-  import { ImageItemEditDialogProps } from './ImageItemEditDialogProps'
+  import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { ImageItemEditDialogProps } from 'src/TreeifyTab/View/Dialog/ImageItemEditDialogProps'
 
   export let props: ImageItemEditDialogProps
 </script>

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { doWithErrorCapture } from '../../errorCapture'
-  import { External } from '../../External/External'
-  import { InputId } from '../../Internal/InputId'
-  import { Internal } from '../../Internal/Internal'
-  import { Rerenderer } from '../../Rerenderer'
-  import { ContextMenuItemProps } from './ContextMenuItemProps'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { ContextMenuItemProps } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
 
   export let props: ContextMenuItemProps
 

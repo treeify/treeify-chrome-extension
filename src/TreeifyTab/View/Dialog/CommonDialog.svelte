@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { doWithErrorCapture } from '../../errorCapture'
-  import { External } from '../../External/External'
-  import { InputId } from '../../Internal/InputId'
-  import { Rerenderer } from '../../Rerenderer'
-  import { setupFocusTrap } from './focusTrap'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
   export let title: string
   export let onClose = () => {}

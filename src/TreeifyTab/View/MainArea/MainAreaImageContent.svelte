@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { CurrentState } from '../../Internal/CurrentState'
-  import { ItemPath } from '../../Internal/ItemPath'
-  import Cite from '../Cite.svelte'
-  import { dragImageBottom } from '../dragAndDrop'
-  import { MainAreaContentView } from './MainAreaContentProps'
-  import { MainAreaImageContentProps } from './MainAreaImageContentProps'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import Cite from 'src/TreeifyTab/View/Cite.svelte'
+  import { dragImageBottom } from 'src/TreeifyTab/View/dragAndDrop'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { MainAreaImageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaImageContentProps'
 
   export let props: MainAreaImageContentProps
 
