@@ -13,7 +13,6 @@
   const propsStream: Readable<RootProps> = derived(Rerenderer.instance.rerenderingPulse, () => {
     return createRootProps(Internal.instance.state)
   })
-  $: props = $propsStream
 </script>
 
 <div class="root" use:dragStateResetter>
@@ -23,17 +22,17 @@
   body要素の下にstyle要素を入れることで優先度の問題を解決した。
   またSvelteでは<style>{css}</style>のように書いても動的にCSSを設定できないので、innerHTMLの形で強引に埋め込む。
   -->
-  {@html props.customCssHtml}
+  {@html $propsStream.customCssHtml}
   <div class="toolbar-and-sidebar-layout">
-    <Toolbar props={props.toolbarProps} />
+    <Toolbar props={$propsStream.toolbarProps} />
     <div class="sidebar-layout">
-      <LeftSidebar props={props.leftSidebarProps} />
-      <MainArea props={props.mainAreaProps} />
+      <LeftSidebar props={$propsStream.leftSidebarProps} />
+      <MainArea props={$propsStream.mainAreaProps} />
     </div>
   </div>
-  <DialogLayer props={props.dialogLayerProps} />
-  {#if props.dragImageProps !== undefined}
-    <DragImage props={props.dragImageProps} />
+  <DialogLayer props={$propsStream.dialogLayerProps} />
+  {#if $propsStream.dragImageProps !== undefined}
+    <DragImage props={$propsStream.dragImageProps} />
   {/if}
 </div>
 
