@@ -1,12 +1,11 @@
-import { ItemType } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
+import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
 export type MainAreaImageContentProps = {
   itemPath: ItemPath
-  type: ItemType.IMAGE
   url: string
   caption: string
   width: string
@@ -18,14 +17,14 @@ export type MainAreaImageContentProps = {
 export function createMainAreaImageContentProps(
   state: State,
   itemPath: ItemPath
-): MainAreaImageContentProps {
+): MainAreaContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const imageItem = state.imageItems[itemId]
   const originalSize = imageItem.originalSize
 
   return {
     itemPath,
-    type: ItemType.IMAGE,
+    type: 'MainAreaImageContentProps',
     url: imageItem.url,
     caption: imageItem.caption,
     width: imageItem.widthPx !== null ? `${Math.max(20, imageItem.widthPx)}px` : 'auto',

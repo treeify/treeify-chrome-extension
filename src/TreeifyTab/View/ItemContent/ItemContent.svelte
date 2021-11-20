@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { ItemType } from '../../basicType'
   import CodeBlockItemContent from './CodeBlockItemContent.svelte'
   import ImageItemContent from './ImageItemContent.svelte'
   import { ItemContentProps } from './ItemContentProps'
@@ -10,14 +9,14 @@
   export let props: ItemContentProps
 </script>
 
-{#if props.itemType === ItemType.TEXT}
+{#if props.type === 'TextItemContentProps'}
   <TextItemContent {props} />
-{:else if props.itemType === ItemType.WEB_PAGE}
+{:else if props.type === 'WebPageItemContentProps'}
   <WebPageItemContent {props} />
-{:else if props.itemType === ItemType.IMAGE}
+{:else if props.type === 'ImageItemContentProps'}
   <ImageItemContent {props} />
-{:else if props.itemType === ItemType.CODE_BLOCK}
+{:else if props.type === 'CodeBlockItemContentProps'}
   <CodeBlockItemContent {props} />
-{:else if props.itemType === ItemType.TEX}
+{:else if props.type === 'TexItemContentProps'}
   <TexItemContent {props} />
 {/if}

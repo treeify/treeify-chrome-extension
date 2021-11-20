@@ -1,4 +1,3 @@
-import { ItemType } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -8,10 +7,10 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
+import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
-  type: ItemType.WEB_PAGE
   title: string
   faviconUrl: string
   isLoading: boolean
@@ -28,7 +27,7 @@ export type MainAreaWebPageContentProps = {
 export function createMainAreaWebPageContentProps(
   state: State,
   itemPath: ItemPath
-): MainAreaWebPageContentProps {
+): MainAreaContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
@@ -39,7 +38,7 @@ export function createMainAreaWebPageContentProps(
 
   return {
     itemPath,
-    type: ItemType.WEB_PAGE,
+    type: 'MainAreaWebPageContentProps',
     title: CurrentState.deriveWebPageItemTitle(itemId),
     faviconUrl: webPageItem.faviconUrl,
     isLoading: tab?.status === 'loading',

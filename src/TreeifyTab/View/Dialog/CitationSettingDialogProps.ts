@@ -1,5 +1,4 @@
 import { assertNonNull } from 'src/Common/Debug/assert'
-import { CitationSettingDialog } from 'src/TreeifyTab/External/DialogState'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -15,9 +14,7 @@ export type CitationSettingDialogProps = {
   onClickCancelButton: () => void
 }
 
-export function createCitationSettingDialogProps(
-  dialog: CitationSettingDialog
-): CitationSettingDialogProps {
+export function createCitationSettingDialogProps(): CitationSettingDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   const item = Internal.instance.state.items[ItemPath.getItemId(targetItemPath)]
   const onClickFinishButton = () => {

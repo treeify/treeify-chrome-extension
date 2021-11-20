@@ -1,5 +1,5 @@
 import { assertNeverType } from 'src/Common/Debug/assert'
-import { ItemType } from 'src/TreeifyTab/basicType'
+import { DiscriminatedUnion, ItemType } from 'src/TreeifyTab/basicType'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import {
@@ -23,12 +23,13 @@ import {
   MainAreaTextContentProps,
 } from './MainAreaTextContentProps'
 
-export type MainAreaContentProps =
-  | MainAreaTextContentProps
-  | MainAreaWebPageContentProps
-  | MainAreaImageContentProps
-  | MainAreaCodeBlockContentProps
-  | MainAreaTexContentProps
+export type MainAreaContentProps = DiscriminatedUnion<{
+  MainAreaTextContentProps: MainAreaTextContentProps
+  MainAreaWebPageContentProps: MainAreaWebPageContentProps
+  MainAreaImageContentProps: MainAreaImageContentProps
+  MainAreaCodeBlockContentProps: MainAreaCodeBlockContentProps
+  MainAreaTexContentProps: MainAreaTexContentProps
+}>
 
 export function createMainAreaContentProps(
   state: State,
