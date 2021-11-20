@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { ItemType } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -9,10 +8,10 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
+import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 
 export type MainAreaTextContentProps = {
   itemPath: ItemPath
-  type: ItemType.TEXT
   domishObjects: List<DomishObject>
   citeProps: CiteProps | undefined
   onInput: (event: Event) => void
@@ -22,11 +21,11 @@ export type MainAreaTextContentProps = {
 export function createMainAreaTextContentProps(
   state: State,
   itemPath: ItemPath
-): MainAreaTextContentProps {
+): MainAreaContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   return {
     itemPath,
-    type: ItemType.TEXT,
+    type: 'MainAreaTextContentProps',
     domishObjects: state.textItems[itemId].domishObjects,
     citeProps: createCiteProps(itemId),
     onInput: (event: Event) => {

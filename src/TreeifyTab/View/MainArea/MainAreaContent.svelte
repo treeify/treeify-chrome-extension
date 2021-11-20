@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { ItemType } from '../../basicType'
   import MainAreaCodeBlockContent from './MainAreaCodeBlockContent.svelte'
   import { MainAreaContentProps } from './MainAreaContentProps'
   import MainAreaImageContent from './MainAreaImageContent.svelte'
@@ -10,15 +9,15 @@
   export let props: MainAreaContentProps
 </script>
 
-{#if props.type === ItemType.TEXT}
+{#if props.type === 'MainAreaTextContentProps'}
   <MainAreaTextContent {props} />
-{:else if props.type === ItemType.WEB_PAGE}
+{:else if props.type === 'MainAreaWebPageContentProps'}
   <MainAreaWebPageContent {props} />
-{:else if props.type === ItemType.IMAGE}
+{:else if props.type === 'MainAreaImageContentProps'}
   <MainAreaImageContent {props} />
-{:else if props.type === ItemType.CODE_BLOCK}
+{:else if props.type === 'MainAreaCodeBlockContentProps'}
   <MainAreaCodeBlockContent {props} />
-{:else if props.type === ItemType.TEX}
+{:else if props.type === 'MainAreaTexContentProps'}
   <MainAreaTexContent {props} />
 {/if}
 
