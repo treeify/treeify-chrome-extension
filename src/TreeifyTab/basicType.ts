@@ -37,3 +37,11 @@ export type TabId = integer
 export type WorkspaceId = Timestamp
 
 export type CommandId = string
+
+/**
+ * タグ付きUnion型をボイラープレート的なコードなしで定義するためのユーティリティ。
+ * この型関数では再帰的な構造を持つ代数的データ型は定義できない。
+ */
+export type DiscriminatedUnion<T, K extends keyof T = keyof T> = K extends K
+  ? { type: K } & T[K]
+  : never
