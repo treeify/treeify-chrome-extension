@@ -148,7 +148,7 @@ export class DataFolder {
         return { fileName, text: JSON.stringify(chunkPack, State.jsonReplacer) }
       } else {
         // チャンクパックが{}になった場合はテキストの代わりにundefinedとする。
-        return { fileName, undefined }
+        return { fileName, text: undefined }
       }
     })
     const fileTexts = await Promise.all(fileTextPromises)
