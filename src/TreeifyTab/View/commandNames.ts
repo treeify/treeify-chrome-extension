@@ -32,6 +32,7 @@ export const commandNames = {
   loadItem: '単体をロード',
   loadSubtree: 'ツリーをロード',
   browseTab: 'ウェブページを閲覧',
+  createEmptyImageItem: '空の画像項目を作成',
   createEmptyCodeBlockItem: '空のコードブロック項目を作成',
   createEmptyTexItem: '空のTeX項目を作成',
   createEmptyTextItem: '空のテキスト項目を作成',

@@ -126,7 +126,12 @@ const commandGroups: List<CommandGroup> = List.of(
   },
   {
     name: '空の項目作成',
-    commandIds: List.of('createEmptyCodeBlockItem', 'createEmptyTexItem', 'createEmptyTextItem'),
+    commandIds: List.of(
+      'createEmptyImageItem',
+      'createEmptyCodeBlockItem',
+      'createEmptyTexItem',
+      'createEmptyTextItem'
+    ),
   },
   { name: 'クリップボード', commandIds: List.of('copyForTransclusion', 'pasteAsPlainText') },
   {
