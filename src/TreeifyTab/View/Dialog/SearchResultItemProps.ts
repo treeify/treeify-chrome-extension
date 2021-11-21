@@ -75,7 +75,7 @@ function transclude(itemPath: ItemPath) {
   const newItemPath = CurrentState.insertBelowItem(
     CurrentState.getTargetItemPath(),
     ItemPath.getItemId(itemPath),
-    { isCollapsed: true }
+    { isFolded: true }
   )
   CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)

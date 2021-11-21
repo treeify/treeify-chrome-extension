@@ -10,8 +10,8 @@ export type PageTreeBulletAndIndentProps = {
 
 export enum PageTreeBulletState {
   NO_CHILDREN,
-  EXPANDED,
-  COLLAPSED,
+  UNFOLDED,
+  FOLDED,
 }
 
 export function createPageTreeBulletAndIndentProps(
@@ -20,20 +20,20 @@ export function createPageTreeBulletAndIndentProps(
 ): PageTreeBulletAndIndentProps {
   function onClick() {
     doWithErrorCapture(() => {
-      CurrentState.setIsCollapsed(itemPath, !CurrentState.getIsCollapsed(itemPath))
+      CurrentState.setIsFolded(itemPath, !CurrentState.getIsFolded(itemPath))
       Rerenderer.instance.rerender()
     })
   }
 
   if (hasChildren) {
-    if (ItemPath.hasParent(itemPath) && CurrentState.getIsCollapsed(itemPath)) {
+    if (ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath)) {
       return {
-        bulletState: PageTreeBulletState.COLLAPSED,
+        bulletState: PageTreeBulletState.FOLDED,
         onClick,
       }
     } else {
       return {
-        bulletState: PageTreeBulletState.EXPANDED,
+        bulletState: PageTreeBulletState.UNFOLDED,
         onClick,
       }
     }

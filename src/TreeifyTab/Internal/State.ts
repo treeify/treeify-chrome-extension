@@ -74,16 +74,16 @@ export type Edge = {
    * 折りたたみ状態か展開状態かのフラグ。
    *
    * 【ItemではなくEdgeで持つ理由】
-   * トランスクルードされた項目のisCollapsedを変更しても、他の視座に影響を与えずに済む。
-   * アクティブページを表示する際に、そのページがisCollapsedかどうかを気にせず済む。
+   * トランスクルードされた項目のisFoldedを変更しても、他の視座に影響を与えずに済む。
+   * アクティブページを表示する際に、そのページがisFoldedかどうかを気にせず済む。
    * 正直、具体的なメリットはこれくらいしか思いつかない。
    * リスクはあるが直感的に面白そうなこちらに賭けてみた。
    */
-  isCollapsed: boolean
+  isFolded: boolean
 }
 
 export function createDefaultEdge(): Edge {
-  return { isCollapsed: false }
+  return { isFolded: false }
 }
 
 export type Cite = {

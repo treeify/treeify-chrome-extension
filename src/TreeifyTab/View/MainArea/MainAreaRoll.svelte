@@ -13,7 +13,7 @@
 </script>
 
 <div class="main-area-roll" on:click={props.onClick} on:contextmenu={props.onContextMenu}>
-  {#if props.bulletState === MainAreaBulletState.EXPANDED}
+  {#if props.bulletState === MainAreaBulletState.UNFOLDED}
     <div class="main-area-roll_indent-area">
       <div class="main-area-roll_indent-guide" />
     </div>
@@ -22,7 +22,7 @@
     {#if props.bulletState === MainAreaBulletState.PAGE}
       <div class="main-area-roll_page-icon" />
     {:else}
-      {#if props.bulletState === MainAreaBulletState.COLLAPSED}
+      {#if props.bulletState === MainAreaBulletState.FOLDED}
         <div class="main-area-roll_outer-circle" style={outerCircleStyle} />
       {/if}
       <div class="main-area-roll_inner-circle" />

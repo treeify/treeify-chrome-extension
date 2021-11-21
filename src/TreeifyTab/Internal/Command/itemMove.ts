@@ -18,7 +18,7 @@ export function indent() {
   if (CurrentState.isPage(prevSiblingItemId)) return
 
   // 兄を展開する
-  CurrentState.setIsCollapsed(prevSiblingItemPath, false)
+  CurrentState.setIsFolded(prevSiblingItemPath, false)
 
   const parentItemId = ItemPath.getParentItemId(prevSiblingItemPath)
   assertNonUndefined(parentItemId)

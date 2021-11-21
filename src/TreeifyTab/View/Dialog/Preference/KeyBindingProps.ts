@@ -89,9 +89,9 @@ const commandGroups: List<CommandGroup> = List.of(
       'indent',
       'unindent',
       'grouping',
-      'collapse',
-      'expand',
-      'toggleCollapsed'
+      'fold',
+      'unfold',
+      'toggleFolded'
     ),
   },
   {

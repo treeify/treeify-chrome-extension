@@ -168,8 +168,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
-    const isPageOrCollapsed =
-      CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsCollapsed(rollDroppedItemPath)
+    const isPageOrFolded =
+      CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
 
     if (is(rollDroppedItemPath.take(draggedItemPath.size), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
@@ -184,7 +184,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     if (event.altKey) {
       if (!CurrentState.isSibling(rollDroppedItemPath, draggedItemPath)) {
         // エッジを追加する（トランスクルード）
-        if (isPageOrCollapsed) {
+        if (isPageOrFolded) {
           CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId)
         } else {
           CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId)
@@ -193,7 +193,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     } else {
       // エッジを付け替える
       const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-      if (isPageOrCollapsed) {
+      if (isPageOrFolded) {
         CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
         CurrentState.setTargetItemPath(rollDroppedItemPath)
       } else {

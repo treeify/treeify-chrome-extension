@@ -192,14 +192,14 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
 }
 
 /**
- * 与えられたItemPathの途中経路を全てexpandする。
+ * 与えられたItemPathの途中経路を全てunfoldする。
  * もし途中経路にページがあったとしても非ページ化までは行わない。
  */
 export function moses(itemPath: ItemPath) {
   const parentItemPath = ItemPath.getParent(itemPath)
   if (parentItemPath !== undefined) {
-    if (CurrentState.getIsCollapsed(itemPath)) {
-      CurrentState.setIsCollapsed(itemPath, false)
+    if (CurrentState.getIsFolded(itemPath)) {
+      CurrentState.setIsFolded(itemPath, false)
     }
     moses(parentItemPath)
   }
