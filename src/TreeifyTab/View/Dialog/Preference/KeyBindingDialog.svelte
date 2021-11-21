@@ -1,5 +1,6 @@
 <script lang="ts">
   import { List } from 'immutable'
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
@@ -19,22 +20,27 @@
   }
 
   function onKeyDown(event: KeyboardEvent) {
-    if (!isAddBindingMode) return
+    doWithErrorCapture(() => {
+      if (!isAddBindingMode) return
 
-    event.preventDefault()
-    event.stopPropagation()
-    if (List.of('Control', 'Shift', 'Alt', 'Meta').contains(event.key)) return
+      event.preventDefault()
+      event.stopPropagation()
+      if (List.of('Control', 'Shift', 'Alt', 'Meta').contains(event.key)) return
 
-    const inputId = InputId.fromKeyboardEvent(event)
-    if (Internal.instance.state.mainAreaKeyBindings[inputId] !== undefined) {
-      // TODO: 該当キーバインドが既にある旨のメッセージを表示する
-      return
-    }
+      const inputId = InputId.fromKeyboardEvent(event)
+      if (Internal.instance.state.mainAreaKeyBindings[inputId] !== undefined) {
+        // TODO: 該当キーバインドが既にある旨のメッセージを表示する
+        return
+      }
 
-    isAddBindingMode = false
+      isAddBindingMode = false
 
-    Internal.instance.mutate(List.of('doNothing'), PropertyPath.of('mainAreaKeyBindings', inputId))
-    Rerenderer.instance.rerender()
+      Internal.instance.mutate(
+        List.of('doNothing'),
+        PropertyPath.of('mainAreaKeyBindings', inputId)
+      )
+      Rerenderer.instance.rerender()
+    })
   }
 </script>
 

@@ -1,4 +1,5 @@
 import { assertNonNull } from 'src/Common/Debug/assert'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -18,17 +19,19 @@ export function createCodeBlockLanguageSettingDialogProps(): CodeBlockLanguageSe
   const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
 
   function onClickFinishButton() {
-    const languageElement = document.querySelector<HTMLInputElement>(
-      '.language-setting-dialog_language'
-    )
-    assertNonNull(languageElement)
-    CurrentState.setCodeBlockItemLanguage(itemId, languageElement.value)
+    doWithErrorCapture(() => {
+      const languageElement = document.querySelector<HTMLInputElement>(
+        '.language-setting-dialog_language'
+      )
+      assertNonNull(languageElement)
+      CurrentState.setCodeBlockItemLanguage(itemId, languageElement.value)
 
-    CurrentState.updateItemTimestamp(itemId)
+      CurrentState.updateItemTimestamp(itemId)
 
-    // ダイアログを閉じる
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
+      // ダイアログを閉じる
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    })
   }
 
   return {

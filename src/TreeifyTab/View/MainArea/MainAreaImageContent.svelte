@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import Cite from 'src/TreeifyTab/View/Cite.svelte'
@@ -15,12 +16,14 @@
   `
 
   function onLoad(event: Event) {
-    if (event.target instanceof HTMLImageElement) {
-      CurrentState.setImageItemOriginalSize(ItemPath.getItemId(props.itemPath), {
-        widthPx: event.target.naturalWidth,
-        heightPx: event.target.naturalHeight,
-      })
-    }
+    doWithErrorCapture(() => {
+      if (event.target instanceof HTMLImageElement) {
+        CurrentState.setImageItemOriginalSize(ItemPath.getItemId(props.itemPath), {
+          widthPx: event.target.naturalWidth,
+          heightPx: event.target.naturalHeight,
+        })
+      }
+    })
   }
 </script>
 

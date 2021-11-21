@@ -1,6 +1,7 @@
 import { assertNonNull } from 'src/Common/Debug/assert'
 import { Coordinate, integer } from 'src/Common/integer'
 import { ItemId } from 'src/TreeifyTab/basicType'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -55,11 +56,13 @@ export function onItemDrop(
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 ) {
   function onMouseUp(event: MouseEvent) {
-    if (currentDragData?.type === 'ItemDragData') {
-      onDrop(event, currentDragData.itemPath)
-      currentDragData = undefined
-      Rerenderer.instance.rerender()
-    }
+    doWithErrorCapture(() => {
+      if (currentDragData?.type === 'ItemDragData') {
+        onDrop(event, currentDragData.itemPath)
+        currentDragData = undefined
+        Rerenderer.instance.rerender()
+      }
+    })
   }
 
   element.addEventListener('mouseup', onMouseUp)
@@ -74,25 +77,29 @@ export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
   let isAfterMouseDown = false
 
   function onMouseDown(event: MouseEvent) {
-    event.preventDefault()
-    if (event.buttons === 1) {
-      isAfterMouseDown = true
-    }
+    doWithErrorCapture(() => {
+      event.preventDefault()
+      if (event.buttons === 1) {
+        isAfterMouseDown = true
+      }
+    })
   }
 
   function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && isAfterMouseDown) {
-      assertNonNull(element.parentElement)
+    doWithErrorCapture(() => {
+      if (event.buttons === 1 && isAfterMouseDown) {
+        assertNonNull(element.parentElement)
 
-      // ドラッグ開始
-      currentDragData = {
-        type: 'ImageBottomDragData',
-        itemId,
-        imageRectLeft: element.parentElement.getBoundingClientRect().left,
+        // ドラッグ開始
+        currentDragData = {
+          type: 'ImageBottomDragData',
+          itemId,
+          imageRectLeft: element.parentElement.getBoundingClientRect().left,
+        }
+        Rerenderer.instance.rerender()
       }
-      Rerenderer.instance.rerender()
-    }
-    isAfterMouseDown = false
+      isAfterMouseDown = false
+    })
   }
 
   element.addEventListener('mousedown', onMouseDown)
@@ -110,9 +117,11 @@ export function onResizeImage(
   onDrag: (event: MouseEvent, itemId: ItemId, imageRectLeft: integer) => void
 ) {
   function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && currentDragData?.type === 'ImageBottomDragData') {
-      onDrag(event, currentDragData.itemId, currentDragData.imageRectLeft)
-    }
+    doWithErrorCapture(() => {
+      if (event.buttons === 1 && currentDragData?.type === 'ImageBottomDragData') {
+        onDrag(event, currentDragData.itemId, currentDragData.imageRectLeft)
+      }
+    })
   }
 
   element.addEventListener('mousemove', onMouseMove)
@@ -130,37 +139,41 @@ export function onResizeImage(
  */
 export function dragStateResetter(element: HTMLElement) {
   function onMouseUp(event: MouseEvent) {
-    if (currentDragData !== undefined) {
-      currentDragData = undefined
-      Rerenderer.instance.rerender()
-    }
-  }
-
-  function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && itemMouseDown !== undefined) {
-      // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
-      const currentMousePosition = { x: event.clientX, y: event.clientY }
-      const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
-      if (distance > 5) {
-        currentDragData = {
-          type: 'ItemDragData',
-          itemPath: itemMouseDown.itemPath,
-          initialMousePosition: currentMousePosition,
-        }
-        CurrentState.setTargetItemPath(itemMouseDown.itemPath)
-        itemMouseDown = undefined
-        Rerenderer.instance.rerender()
-      }
-    }
-
-    if ((event.buttons & 1) === 0) {
-      itemMouseDown = undefined
-
+    doWithErrorCapture(() => {
       if (currentDragData !== undefined) {
         currentDragData = undefined
         Rerenderer.instance.rerender()
       }
-    }
+    })
+  }
+
+  function onMouseMove(event: MouseEvent) {
+    doWithErrorCapture(() => {
+      if (event.buttons === 1 && itemMouseDown !== undefined) {
+        // ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない
+        const currentMousePosition = { x: event.clientX, y: event.clientY }
+        const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
+        if (distance > 5) {
+          currentDragData = {
+            type: 'ItemDragData',
+            itemPath: itemMouseDown.itemPath,
+            initialMousePosition: currentMousePosition,
+          }
+          CurrentState.setTargetItemPath(itemMouseDown.itemPath)
+          itemMouseDown = undefined
+          Rerenderer.instance.rerender()
+        }
+      }
+
+      if ((event.buttons & 1) === 0) {
+        itemMouseDown = undefined
+
+        if (currentDragData !== undefined) {
+          currentDragData = undefined
+          Rerenderer.instance.rerender()
+        }
+      }
+    })
   }
 
   element.addEventListener('mouseup', onMouseUp)
