@@ -1,4 +1,5 @@
 import { assertNonNull } from 'src/Common/Debug/assert'
+import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { detectLanguage } from 'src/TreeifyTab/highlightJs'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -70,7 +71,9 @@ export function createCodeBlockItemEditDialogProps(): CodeBlockItemEditDialogPro
 }
 
 function onCloseDialog() {
-  if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
-    Command.removeEdge()
-  }
+  doWithErrorCapture(() => {
+    if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+      Command.removeEdge()
+    }
+  })
 }
