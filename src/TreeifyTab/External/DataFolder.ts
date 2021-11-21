@@ -250,7 +250,6 @@ export class DataFolder {
     const metadata = await this.readMetadataFile(instanceId)
     assertNonUndefined(metadata)
     metadata.known = await this.getAllOtherInstanceTimestamps()
-    // TODO: ハッシュ値の一致チェック（本来は↑の自インスタンスフォルダのクリア前にやるのが正解）
 
     // メタデータファイルを自インスタンスフォルダに書き込み
     const newMetadataText = JSON.stringify(metadata, undefined, 2)
