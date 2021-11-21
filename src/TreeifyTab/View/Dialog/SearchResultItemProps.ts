@@ -39,12 +39,14 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
       doWithErrorCapture(() => {
         const inputId = InputId.fromMouseEvent(event)
         if (inputId === '0000MouseButton0') {
+          event.preventDefault()
           CurrentState.jumpTo(itemPath)
 
           // 検索ダイアログを閉じる
           External.instance.dialogState = undefined
           Rerenderer.instance.rerender()
         } else if (inputId === '0010MouseButton0') {
+          event.preventDefault()
           transclude(itemPath)
         }
       })
