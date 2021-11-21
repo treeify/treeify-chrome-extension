@@ -50,5 +50,5 @@ export function createEmptyTexItem() {
     CurrentState.deleteItem(targetItemId)
   }
 
-  External.instance.dialogState = { type: 'TexEditDialog' }
+  External.instance.dialogState = { type: 'TexItemEditDialog' }
 }

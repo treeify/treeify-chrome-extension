@@ -34,7 +34,7 @@ export type Dialog = DiscriminatedUnion<{
   PreferenceDropdownMenuDialog: {}
   SearchDialog: {}
   TabsDialog: TabsDialog
-  TexEditDialog: {}
+  TexItemEditDialog: {}
   WebPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
   WorkspaceDialog: {}
 }>

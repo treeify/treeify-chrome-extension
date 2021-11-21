@@ -34,7 +34,7 @@ export function showEditDialog() {
       External.instance.dialogState = { type: 'CodeBlockItemEditDialog' }
       break
     case ItemType.TEX:
-      External.instance.dialogState = { type: 'TexEditDialog' }
+      External.instance.dialogState = { type: 'TexItemEditDialog' }
       break
   }
 }

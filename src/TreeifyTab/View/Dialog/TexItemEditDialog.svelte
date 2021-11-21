@@ -2,9 +2,9 @@
   import katex from 'katex'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
-  import { TexEditDialogProps } from 'src/TreeifyTab/View/Dialog/TexEditDialogProps'
+  import { TexItemEditDialogProps } from 'src/TreeifyTab/View/Dialog/TexItemEditDialogProps'
 
-  export let props: TexEditDialogProps
+  export let props: TexItemEditDialogProps
 
   // リアルタイムプレビュー用の変数
   let currentCode = props.code

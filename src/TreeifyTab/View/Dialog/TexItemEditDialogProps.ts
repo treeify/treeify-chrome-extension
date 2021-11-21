@@ -7,7 +7,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
-export type TexEditDialogProps = {
+export type TexItemEditDialogProps = {
   dialogTitle: string
   code: string
   onClickFinishButton: () => void
@@ -16,7 +16,7 @@ export type TexEditDialogProps = {
   onKeyDown: (event: KeyboardEvent) => void
 }
 
-export function createTexEditDialogProps(): TexEditDialogProps {
+export function createTexItemEditDialogProps(): TexItemEditDialogProps {
   const targetItemPath = CurrentState.getTargetItemPath()
   const isEmptyTexItem = CurrentState.isEmptyTexItem(ItemPath.getItemId(targetItemPath))
   const onClickFinishButton = () => {

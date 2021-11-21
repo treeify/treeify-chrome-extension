@@ -31,8 +31,8 @@ import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
 import { createSearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps'
 import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
 import { createTabsDialogProps } from 'src/TreeifyTab/View/Dialog/TabsDialogProps'
-import TexEditDialog from 'src/TreeifyTab/View/Dialog/TexEditDialog.svelte'
-import { createTexEditDialogProps } from 'src/TreeifyTab/View/Dialog/TexEditDialogProps'
+import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
+import { createTexItemEditDialogProps } from 'src/TreeifyTab/View/Dialog/TexItemEditDialogProps'
 import WebPageItemTitleSettingDialog from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialog.svelte'
 import { createWebPageItemTitleSettingDialogProps } from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialogProps'
 
@@ -129,10 +129,10 @@ function createDialogMaterials(dialogState: Dialog): { component: any; props: an
         component: TabsDialog,
         props: createTabsDialogProps(dialogState),
       }
-    case 'TexEditDialog':
+    case 'TexItemEditDialog':
       return {
-        component: TexEditDialog,
-        props: createTexEditDialogProps(),
+        component: TexItemEditDialog,
+        props: createTexItemEditDialogProps(),
       }
     case 'WebPageItemTitleSettingDialog':
       return {
