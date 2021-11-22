@@ -87,6 +87,9 @@
   }
 
   .key-binding-dialog_scroll-area {
+    // lch(80.0%, 0.0, 0.0)相当
+    border: 1px solid #c6c6c6;
+
     max-height: 100%;
     overflow-y: auto;
 
