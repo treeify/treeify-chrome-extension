@@ -82,9 +82,17 @@ export function extractPlainText(itemPath: ItemPath): string {
         return imageItem.url
       }
     case ItemType.CODE_BLOCK:
-      return Internal.instance.state.codeBlockItems[itemId].code
+      const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      if (codeBlockItem.caption !== '') {
+        return `${codeBlockItem.code}\n${codeBlockItem.caption}`
+      }
+      return codeBlockItem.code
     case ItemType.TEX:
-      return Internal.instance.state.texItems[itemId].code
+      const texItem = Internal.instance.state.texItems[itemId]
+      if (texItem.caption !== '') {
+        return `${texItem.code}\n${texItem.caption}`
+      }
+      return texItem.code
     default:
       assertNeverType(itemType)
   }
