@@ -59,8 +59,8 @@
         {/each}
         <tr class="key-binding-dialog_add-binding-button-row">
           <td class="key-binding-dialog_add-binding-button-cell">
-            <button class="key-binding-dialog_add-binding-button" on:click={onClick}
-              >新しい割り当てを追加
+            <button class="key-binding-dialog_add-binding-button" on:click={onClick}>
+              新しい割り当てを追加
             </button>
           </td>
           <td />
