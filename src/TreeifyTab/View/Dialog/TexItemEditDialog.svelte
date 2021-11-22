@@ -42,6 +42,9 @@
   .tex-edit-dialog_content {
     min-width: 20em;
     padding: 1em;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   .tex-edit-dialog_code {

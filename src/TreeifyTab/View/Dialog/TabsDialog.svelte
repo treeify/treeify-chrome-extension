@@ -20,5 +20,8 @@
     padding: 1em;
 
     outline: none;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 </style>

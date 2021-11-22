@@ -57,7 +57,6 @@
   :root {
     // lch(25.0%, 0.0, 0.0)相当
     --common-dialog-title-bar-background: #3b3b3b;
-    --common-dialog-title-bar-height: 2.2em;
   }
 
   .common-dialog {
@@ -76,6 +75,11 @@
 
   .common-dialog_frame {
     max-width: 90vw;
+    max-height: 90vh;
+
+    // 各ダイアログコンポーネントで縦スクロールを自由に設定できるようにする
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
 
     border-radius: 5px;
     // 子要素を角丸からはみ出させない
@@ -97,8 +101,8 @@
   }
 
   .common-dialog_title {
-    line-height: var(--common-dialog-title-bar-height);
-    color: white;
+    line-height: 2.2em;
+    color: #ffffff;
   }
 
   .common-dialog_close-button {
@@ -130,10 +134,6 @@
   }
 
   .common-dialog_content-area {
-    max-height: calc(90vh - var(--common-dialog-title-bar-height));
-    overflow-y: auto;
-    overflow-x: hidden;
-
     font-size: 0.95rem;
   }
 </style>

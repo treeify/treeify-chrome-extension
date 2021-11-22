@@ -29,6 +29,9 @@
     padding: 1em;
 
     outline: none;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   .other-settings-dialog_checkbox-label {

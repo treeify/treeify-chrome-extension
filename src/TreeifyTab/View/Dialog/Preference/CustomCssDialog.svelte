@@ -28,6 +28,9 @@
 <style global lang="scss">
   .custom-css-dialog_content {
     padding: 1em;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   .custom-css-dialog_code {
