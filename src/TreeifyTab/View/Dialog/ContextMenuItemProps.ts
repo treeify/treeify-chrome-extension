@@ -40,18 +40,6 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (
-    isSingleSelect &&
-    List.of(ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX).contains(item.type)
-  ) {
-    result.push({
-      title: 'キャプションを設定…',
-      onClick: () => {
-        External.instance.dialogState = { type: 'CaptionSettingDialog' }
-      },
-    })
-  }
-
   if (isSingleSelect) {
     switch (item.type) {
       case ItemType.WEB_PAGE:
@@ -86,6 +74,18 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
       title: 'コードブロックの言語を設定…',
       onClick: () => {
         External.instance.dialogState = { type: 'CodeBlockLanguageSettingDialog' }
+      },
+    })
+  }
+
+  if (
+    isSingleSelect &&
+    List.of(ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX).contains(item.type)
+  ) {
+    result.push({
+      title: 'キャプションを設定…',
+      onClick: () => {
+        External.instance.dialogState = { type: 'CaptionSettingDialog' }
       },
     })
   }
