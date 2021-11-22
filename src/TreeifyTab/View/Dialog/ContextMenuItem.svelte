@@ -9,8 +9,9 @@
 
   export let props: ContextMenuItemProps
 
-  function onClick() {
+  function onClick(event: MouseEvent) {
     doWithErrorCapture(() => {
+      event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
 
       // props.onClick()より先にダイアログを閉じる必要がある。
@@ -65,7 +66,7 @@
 <div
   class="context-menu-item"
   tabindex="0"
-  on:click={onClick}
+  on:mousedown={onClick}
   on:mouseenter={onMouseEnter}
   on:keydown={onKeyDown}
 >
