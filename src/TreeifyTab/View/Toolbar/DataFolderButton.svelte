@@ -21,12 +21,14 @@
   }
 </script>
 
-<ToolbarIconButton on:click={onClick}>
+<ToolbarIconButton
+  title={props.isAlreadyOpen ? 'データフォルダと同期する' : 'データフォルダを開く'}
+  on:click={onClick}
+>
   <div
     class="data-folder-button_icon"
     class:already-open={props.isAlreadyOpen}
     class:completed={props.isCompleted}
-    title={props.isAlreadyOpen ? 'データフォルダと同期する' : 'データフォルダを開く'}
   />
 </ToolbarIconButton>
 
