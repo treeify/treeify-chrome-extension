@@ -25,7 +25,8 @@
   }
 
   .tex-item-content_caption {
-    margin-top: 0.5em;
+    margin-top: 0.2em;
+    margin-left: 0.2em;
 
     font-size: 85%;
     // lch(50.0%, 0.0, 0.0)相当
