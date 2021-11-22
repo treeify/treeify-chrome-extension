@@ -23,6 +23,9 @@
   .workspace-dialog_content {
     padding: 1em;
 
+    max-height: 100%;
+    overflow-y: auto;
+
     // フォーカス時の枠線を非表示
     outline: none;
 

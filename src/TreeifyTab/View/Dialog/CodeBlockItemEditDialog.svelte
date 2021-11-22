@@ -52,6 +52,10 @@
   .code-block-edit-dialog_content {
     min-width: 30em;
     padding: 1em;
+
+    max-height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
   }
 
   .code-block-edit-dialog_code {
@@ -60,6 +64,9 @@
 
     // lch(60.0%, 0.0, 0.0)相当
     outline: 1px solid #919191;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   .code-block-edit-dialog_button-area {

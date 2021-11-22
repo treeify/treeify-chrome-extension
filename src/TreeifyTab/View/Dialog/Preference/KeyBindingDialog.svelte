@@ -69,6 +69,9 @@
 <style global lang="scss">
   .key-binding-dialog_content {
     padding: 1em;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 
   .key-binding-dialog_table {

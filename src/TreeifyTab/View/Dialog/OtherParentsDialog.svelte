@@ -24,5 +24,8 @@
     row-gap: 0.3em;
 
     outline: none;
+
+    max-height: 100%;
+    overflow-y: auto;
   }
 </style>

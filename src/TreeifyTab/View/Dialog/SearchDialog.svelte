@@ -62,6 +62,11 @@
 
 <style global lang="scss">
   .search-dialog_content {
+    // 検索結果一覧領域だけをスクロール可能にするための設定
+    max-height: 100%;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+
     min-width: 25em;
     padding: 1em;
   }
@@ -76,5 +81,7 @@
     display: flex;
     flex-direction: column;
     row-gap: 1em;
+
+    overflow-y: auto;
   }
 </style>
