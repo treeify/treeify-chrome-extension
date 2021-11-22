@@ -1,6 +1,7 @@
 <script lang="ts">
   import { List } from 'immutable'
   import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
@@ -42,27 +43,37 @@
       Rerenderer.instance.rerender()
     })
   }
+
+  function closeDialog() {
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
 </script>
 
-<CommonDialog title="キーボード操作設定" showCloseButton>
+<CommonDialog title="キーボード操作設定">
   <div class="key-binding-dialog_content" on:keydown={onKeyDown}>
-    <table class="key-binding-dialog_table">
-      {#each props.keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
-        <KeyBinding props={keyBindingProps} />
-      {/each}
-      <tr class="key-binding-dialog_add-binding-button-row">
-        <td class="key-binding-dialog_add-binding-button-cell">
-          <button class="key-binding-dialog_add-binding-button" on:click={onClick}
-            >新しい割り当てを追加
-          </button>
-        </td>
-        <td />
-      </tr>
-    </table>
-    <p class="key-binding-dialog_message-for-add-binding" {style}>
-      コマンドを割り当てたいキーをそのまま入力してください。<br />
-      （例：Shift+Alt+F）
-    </p>
+    <div class="key-binding-dialog_scroll-area">
+      <table class="key-binding-dialog_table">
+        {#each props.keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
+          <KeyBinding props={keyBindingProps} />
+        {/each}
+        <tr class="key-binding-dialog_add-binding-button-row">
+          <td class="key-binding-dialog_add-binding-button-cell">
+            <button class="key-binding-dialog_add-binding-button" on:click={onClick}>
+              新しい割り当てを追加
+            </button>
+          </td>
+          <td />
+        </tr>
+      </table>
+      <p class="key-binding-dialog_message-for-add-binding" {style}>
+        コマンドを割り当てたいキーをそのまま入力してください。<br />
+        （例：Shift+Alt+F）
+      </p>
+    </div>
+    <div class="key-binding-dialog_button-area">
+      <button on:click={closeDialog}>OK</button>
+    </div>
   </div>
 </CommonDialog>
 
@@ -71,7 +82,19 @@
     padding: 1em;
 
     max-height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .key-binding-dialog_scroll-area {
+    // lch(80.0%, 0.0, 0.0)相当
+    border: 1px solid #c6c6c6;
+
+    max-height: 100%;
     overflow-y: auto;
+
+    // 横スクロールバーが表示される現象への対策
+    overflow-x: hidden;
   }
 
   .key-binding-dialog_table {
@@ -90,6 +113,12 @@
 
   .key-binding-dialog_message-for-add-binding {
     margin-inline: auto;
+    width: max-content;
+  }
+
+  .key-binding-dialog_button-area {
+    // ボタンを右寄せにする
+    margin: 1em 0 0 auto;
     width: max-content;
   }
 </style>
