@@ -7,20 +7,22 @@
 
 <CommonDialog title="その他の設定" showCloseButton>
   <div class="other-settings-dialog_content" tabindex="0">
-    <label class="other-settings-dialog_checkbox-label"
-      ><input
+    <label class="other-settings-dialog_checkbox-label">
+      <input
         type="checkbox"
         checked={props.leftEndMouseGestureEnabled}
         on:change={props.onChangeLeftEndMouseGestureEnabled}
-      />マウスを画面左端まで動かすとTreeifyタブを表示</label
-    >
-    <label class="other-settings-dialog_checkbox-label"
-      ><input
+      />
+      マウスを画面左端まで動かすとTreeifyタブを表示
+    </label>
+    <label class="other-settings-dialog_checkbox-label">
+      <input
         type="checkbox"
         checked={props.rightEndMouseGestureEnabled}
         on:change={props.onChangeRightEndMouseGestureEnabled}
-      />マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示</label
-    >
+      />
+      マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
+    </label>
   </div>
 </CommonDialog>
 
