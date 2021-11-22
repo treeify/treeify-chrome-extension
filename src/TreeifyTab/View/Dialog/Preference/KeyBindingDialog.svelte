@@ -89,6 +89,9 @@
   .key-binding-dialog_scroll-area {
     max-height: 100%;
     overflow-y: auto;
+
+    // 横スクロールバーが表示される現象への対策
+    overflow-x: hidden;
   }
 
   .key-binding-dialog_table {
