@@ -1,6 +1,6 @@
 import { List } from 'immutable'
-import { integer } from 'src/Common/integer'
 import { DropdownMenuItemProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuItemProps'
+import { integer } from 'src/Utility/integer'
 
 export type DropdownMenuDialogProps = {
   top: integer

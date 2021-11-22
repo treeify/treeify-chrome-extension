@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
@@ -10,6 +9,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /**
  * オンメモリのStateとデータフォルダ内のStateを同期する（状況に応じて読み込みや書き込みを行う）。

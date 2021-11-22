@@ -1,7 +1,4 @@
 import { List, Set } from 'immutable'
-import { CssCustomProperty } from 'src/Common/CssCustomProperty'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
@@ -19,6 +16,9 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
+import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
   itemId: ItemId

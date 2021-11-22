@@ -1,11 +1,11 @@
 <script lang="ts">
   import Color from 'color'
-  import { CssCustomProperty } from 'src/Common/CssCustomProperty'
-  import { integer } from 'src/Common/integer'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndent.svelte'
   import PageTreeNode from 'src/TreeifyTab/View/LeftSidebar/PageTreeNode.svelte'
   import { PageTreeNodeProps } from 'src/TreeifyTab/View/LeftSidebar/PageTreeNodeProps'
+  import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+  import { integer } from 'src/Utility/integer'
 
   export let props: PageTreeNodeProps
 

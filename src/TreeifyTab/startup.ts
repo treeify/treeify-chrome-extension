@@ -1,5 +1,3 @@
-import { assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { doAsyncWithErrorCapture, doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import {
@@ -23,6 +21,8 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
+import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 import OnClickData = chrome.contextMenus.OnClickData
 
 export async function startup(initialState: State) {

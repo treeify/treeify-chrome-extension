@@ -1,6 +1,4 @@
 import { is, List } from 'immutable'
-import { assertNeverType } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
@@ -21,6 +19,8 @@ import {
   MainAreaBulletState,
   MainAreaRollProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
+import { assertNeverType } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 export type MainAreaNodeProps = {
   itemPath: ItemPath

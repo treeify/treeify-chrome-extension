@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import { BiMap } from 'mnemonist'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { ItemId, TabId } from 'src/TreeifyTab/basicType'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import Tab = chrome.tabs.Tab
 
 /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのクラス */

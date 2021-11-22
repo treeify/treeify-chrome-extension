@@ -1,4 +1,3 @@
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -8,6 +7,7 @@ import {
   createItemContentProps,
   ItemContentProps,
 } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export type OtherParentsDialogItemProps = {
   itemContentProps: ItemContentProps

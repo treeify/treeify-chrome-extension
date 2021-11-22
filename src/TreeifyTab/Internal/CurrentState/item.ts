@@ -1,7 +1,4 @@
 import { List } from 'immutable'
-import { assert, assertNeverType, assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
-import { Timestamp } from 'src/Common/Timestamp'
 import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -9,6 +6,9 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Cite, createDefaultEdge, Edge } from 'src/TreeifyTab/Internal/State'
+import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * 指定された項目に関するデータを削除する。

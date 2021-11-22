@@ -1,10 +1,10 @@
 import { List } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
 export function discardItemTab() {

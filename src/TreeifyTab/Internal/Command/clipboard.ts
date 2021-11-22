@@ -1,9 +1,9 @@
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */
 export async function copyForTransclusion() {

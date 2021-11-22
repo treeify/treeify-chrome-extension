@@ -1,8 +1,8 @@
 import { List } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { DropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export function createPreferenceDropdownMenuDialogProps(): DropdownMenuDialogProps {
   const preferenceButton = document.querySelector('.preference-button_icon')?.parentElement

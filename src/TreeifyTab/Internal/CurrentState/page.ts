@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { assertNonNull } from 'src/Common/Debug/assert'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -8,6 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Page } from 'src/TreeifyTab/Internal/State'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import { assertNonNull } from 'src/Utility/Debug/assert'
 import { tick } from 'svelte'
 
 /** アクティブページを切り替える */

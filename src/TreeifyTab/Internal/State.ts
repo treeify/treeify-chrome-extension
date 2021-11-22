@@ -1,13 +1,13 @@
 import { is, List, Set } from 'immutable'
-import { assert, assertNeverType, assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
-import { Timestamp } from 'src/Common/Timestamp'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
+import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {

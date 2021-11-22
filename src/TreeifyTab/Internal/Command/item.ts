@@ -1,4 +1,3 @@
-import { assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { Command } from 'src/TreeifyTab/Internal/Command/index'
@@ -9,6 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Cite } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /** 選択された項目を折りたたむコマンド */
 export function fold() {

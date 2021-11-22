@@ -1,11 +1,11 @@
 import { List } from 'immutable'
-import { Timestamp } from 'src/Common/Timestamp'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { CodeBlockItem, Item } from 'src/TreeifyTab/Internal/State'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * 新しい空のコードブロック項目を作成し、CurrentStateに登録する。

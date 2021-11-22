@@ -1,10 +1,10 @@
-import { assertNonNull } from 'src/Common/Debug/assert'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import { assertNonNull } from 'src/Utility/Debug/assert'
 
 /** 項目の種類に応じた編集系ダイアログなどを出す */
 export function showEditDialog() {

@@ -1,5 +1,5 @@
-import { Coordinate } from 'src/Common/integer'
 import { DiscriminatedUnion, ItemId } from 'src/TreeifyTab/basicType'
+import { Coordinate } from 'src/Utility/integer'
 
 export type ContextMenuDialog = {
   mousePosition: Coordinate

@@ -1,6 +1,4 @@
 import { List } from 'immutable'
-import { assertNonNull } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import {
   focusMainAreaBackground,
   setDomSelection,
@@ -13,6 +11,8 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import Root from 'src/TreeifyTab/View/Root.svelte'
+import { assertNonNull } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 import { tick } from 'svelte'
 import { Readable, writable } from 'svelte/store'
 

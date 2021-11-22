@@ -1,8 +1,4 @@
 import { List } from 'immutable'
-import { CssCustomProperty } from 'src/Common/CssCustomProperty'
-import { assert, assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
-import { dump } from 'src/Common/Debug/logger'
-import { integer } from 'src/Common/integer'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { matchTabsAndWebPageItems } from 'src/TreeifyTab/External/chromeEventListeners'
@@ -29,6 +25,10 @@ import {
   createMainAreaNodeProps,
   MainAreaNodeProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
+import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { dump } from 'src/Utility/Debug/logger'
+import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps

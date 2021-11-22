@@ -1,11 +1,11 @@
 import { List, Set } from 'immutable'
-import { assertNeverType } from 'src/Common/Debug/assert'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { assertNeverType } from 'src/Utility/Debug/assert'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {

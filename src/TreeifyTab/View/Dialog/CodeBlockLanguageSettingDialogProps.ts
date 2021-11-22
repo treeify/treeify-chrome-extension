@@ -1,4 +1,3 @@
-import { assertNonNull } from 'src/Common/Debug/assert'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -6,6 +5,7 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull } from 'src/Utility/Debug/assert'
 
 export type CodeBlockLanguageSettingDialogProps = {
   language: string

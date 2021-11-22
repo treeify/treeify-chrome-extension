@@ -1,5 +1,5 @@
-import { integer } from 'src/Common/integer'
-import { Timestamp } from 'src/Common/Timestamp'
+import { integer } from 'src/Utility/integer'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * 項目IDの型エイリアス。
