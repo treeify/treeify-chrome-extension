@@ -76,7 +76,8 @@
   }
 
   .search-dialog_result {
-    margin-block: 1em;
+    margin-top: 1em;
+    padding-bottom: 1em;
 
     display: flex;
     flex-direction: column;
