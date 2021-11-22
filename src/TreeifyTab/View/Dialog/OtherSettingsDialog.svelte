@@ -12,7 +12,7 @@
   }
 </script>
 
-<CommonDialog title="その他の設定" showCloseButton>
+<CommonDialog title="その他の設定">
   <div class="other-settings-dialog_content" tabindex="0">
     <label class="other-settings-dialog_checkbox-label">
       <input
