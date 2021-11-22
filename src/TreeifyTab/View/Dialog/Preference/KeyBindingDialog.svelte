@@ -30,7 +30,7 @@
 
       const inputId = InputId.fromKeyboardEvent(event)
       if (Internal.instance.state.mainAreaKeyBindings[inputId] !== undefined) {
-        // TODO: 該当キーバインドが既にある旨のメッセージを表示する
+        alert(`キーバインド「${InputId.toReadableText(inputId)}」は既に登録されています。`)
         return
       }
 
