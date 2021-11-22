@@ -483,14 +483,12 @@ export class DataFolder {
       case 'pages':
       case 'mountedPageIds':
       case 'workspaces':
-        // ミューテーションされる頻度が非常に高く、しかも同時にミューテーションされやすいグループ
-        return 'unstable.json'
       case 'availableItemIds':
       case 'maxItemId':
-        // ミューテーションされる頻度は高いが、同時にミューテーションされないことが多いので分けたいもの
-        return `${firstKey}.json`
+        // ミューテーションされる頻度が高いグループ
+        return 'unstable.json'
       default:
-        // ミューテーションされる頻度が非常に低いグループ
+        // ミューテーションされる頻度が低いグループ
         return 'stable.json'
     }
   }
