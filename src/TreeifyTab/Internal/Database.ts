@@ -1,8 +1,8 @@
 import { List } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 /**
  * Treeifyのデータを永続化するため（だけ）のデータベース（IndexedDB）。

@@ -1,13 +1,13 @@
 import { List, Seq, Set } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
-import { MutableOrderedTree } from 'src/Common/OrderedTree'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
+import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
 /**
  * 全ての子孫と自身の項目IDを返す。

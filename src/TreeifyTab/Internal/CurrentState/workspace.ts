@@ -4,7 +4,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 

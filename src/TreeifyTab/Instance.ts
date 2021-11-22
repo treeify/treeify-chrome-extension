@@ -1,6 +1,6 @@
 import { nanoid } from 'nanoid'
 import PowerRadix from 'power-radix'
-import { integer } from 'src/Common/integer'
+import { integer } from 'src/Utility/integer'
 
 /**
  * 複数デバイスでデータを同期する際にデバイスを一意に識別するために導入した概念。

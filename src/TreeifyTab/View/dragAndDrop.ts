@@ -1,10 +1,10 @@
-import { assertNonNull } from 'src/Common/Debug/assert'
-import { Coordinate, integer } from 'src/Common/integer'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNonNull } from 'src/Utility/Debug/assert'
+import { Coordinate, integer } from 'src/Utility/integer'
 
 export type ItemDragData = {
   type: 'ItemDragData'

@@ -6,7 +6,7 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Item, TextItem } from 'src/TreeifyTab/Internal/State'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /** 指定されたテキスト項目のdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {

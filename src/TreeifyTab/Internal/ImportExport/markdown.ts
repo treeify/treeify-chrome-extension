@@ -1,11 +1,11 @@
-import { assertNeverType } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
+import { assertNeverType } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
   // TODO: 循環参照があると無限ループになる

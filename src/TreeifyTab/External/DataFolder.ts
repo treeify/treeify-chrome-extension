@@ -1,11 +1,11 @@
 import { List } from 'immutable'
 import md5 from 'md5'
-import { assert, assertNonUndefined } from 'src/Common/Debug/assert'
 import { Instance, InstanceId } from 'src/TreeifyTab/Instance'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
+import { assert, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 // データフォルダをルートとするファイルパス。
 // "./"や"../"のような相対ファイルパスの概念はない。

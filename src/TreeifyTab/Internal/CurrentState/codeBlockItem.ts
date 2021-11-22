@@ -5,7 +5,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { CodeBlockItem, Item } from 'src/TreeifyTab/Internal/State'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * 新しい空のコードブロック項目を作成し、CurrentStateに登録する。

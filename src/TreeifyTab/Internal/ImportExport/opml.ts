@@ -1,11 +1,11 @@
 import { List } from 'immutable'
-import { assertNeverType, assertNonNull } from 'src/Common/Debug/assert'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
+import { assertNeverType, assertNonNull } from 'src/Utility/Debug/assert'
 
 function toOpmlOutlineElement(
   itemPath: ItemPath,

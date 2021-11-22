@@ -1,4 +1,3 @@
-import { assertNonUndefined } from 'src/Common/Debug/assert'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
@@ -18,6 +17,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export function onCopy(event: ClipboardEvent) {
   doWithErrorCapture(() => {

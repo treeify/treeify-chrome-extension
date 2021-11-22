@@ -1,5 +1,5 @@
 import { List } from 'immutable'
-import { StackFrame, StackTrace } from 'src/Common/Debug/StackTrace'
+import { StackFrame, StackTrace } from 'src/Utility/Debug/StackTrace'
 
 /**
  * console.logに色々な機能を追加したユーティリティ関数。

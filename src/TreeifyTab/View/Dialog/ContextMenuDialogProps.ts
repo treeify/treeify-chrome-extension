@@ -1,10 +1,10 @@
 import { List } from 'immutable'
-import { Coordinate } from 'src/Common/integer'
 import { ContextMenuDialog } from 'src/TreeifyTab/External/DialogState'
 import {
   ContextMenuItemProps,
   createContextMenuItemPropses,
 } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
+import { Coordinate } from 'src/Utility/integer'
 
 export type ContextMenuDialogProps = {
   mousePosition: Coordinate

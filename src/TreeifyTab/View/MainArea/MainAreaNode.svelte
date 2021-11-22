@@ -1,12 +1,12 @@
 <script lang="ts">
   import Color from 'color'
-  import { integer } from 'src/Common/integer'
-  import { CssCustomProperty } from 'src/TreeifyTab/CssCustomProperty'
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
   import MainAreaContent from 'src/TreeifyTab/View/MainArea/MainAreaContent.svelte'
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
   import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
+  import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+  import { integer } from 'src/Utility/integer'
 
   export let props: MainAreaNodeProps
 

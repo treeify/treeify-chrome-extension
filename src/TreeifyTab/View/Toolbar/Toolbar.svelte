@@ -1,6 +1,5 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { assert } from 'src/Common/Debug/assert'
   import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -9,6 +8,7 @@
   import ItemAdditionButton from 'src/TreeifyTab/View/Toolbar/ItemAdditionButton.svelte'
   import PreferenceButton from 'src/TreeifyTab/View/Toolbar/PreferenceButton.svelte'
   import { ToolbarProps } from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
+  import { assert } from 'src/Utility/Debug/assert'
 
   export let props: ToolbarProps
 

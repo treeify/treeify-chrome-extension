@@ -1,6 +1,5 @@
-import { integer } from 'src/Common/integer'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
-import { commandNames } from 'src/TreeifyTab/View/commandNames'
+import { integer } from 'src/Utility/integer'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * 項目IDの型エイリアス。
@@ -36,8 +35,6 @@ export enum ItemType {
 export type TabId = integer
 
 export type WorkspaceId = Timestamp
-
-export type CommandId = keyof typeof commandNames
 
 /**
  * タグ付きUnion型を定義するためのユーティリティ。

@@ -1,6 +1,6 @@
 import { List } from 'immutable'
-import { assertNeverType } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
+import { assertNeverType } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 /**
  * DOM要素っぽいオブジェクトの型。

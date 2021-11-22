@@ -1,11 +1,11 @@
 import { List } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
-import { CommandId } from 'src/TreeifyTab/basicType'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { CommandId } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export type KeyBindingProps = {
   inputId: string

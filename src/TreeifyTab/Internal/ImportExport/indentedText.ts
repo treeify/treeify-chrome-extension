@@ -1,8 +1,5 @@
 import { List } from 'immutable'
 import { MultiSet } from 'mnemonist'
-import { assertNeverType, assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
-import { MutableOrderedTree } from 'src/Common/OrderedTree'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -10,6 +7,9 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
+import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
 /**
  * 与えられた複数行のテキストから無駄なインデントを除去する。

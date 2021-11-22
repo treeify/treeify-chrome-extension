@@ -4,8 +4,6 @@ import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import { List } from 'immutable'
-import { assertNonUndefined } from 'src/Common/Debug/assert'
-import { integer } from 'src/Common/integer'
 import { ItemId, TabId } from 'src/TreeifyTab/basicType'
 import { doAsyncWithErrorCapture, doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
@@ -15,6 +13,8 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 export const onMessage = (message: any, sender: MessageSender) => {
   doAsyncWithErrorCapture(async () => {
