@@ -8,8 +8,9 @@
 
   export let props: DropdownMenuItemProps
 
-  function onClick() {
+  function onClick(event: MouseEvent) {
     doWithErrorCapture(() => {
+      event.preventDefault()
       External.instance.dialogState = undefined
       props.onClick()
       Rerenderer.instance.rerender()
@@ -56,7 +57,7 @@
 <div
   class="dropdown-menu-item"
   tabindex="0"
-  on:click={onClick}
+  on:mousedown={onClick}
   on:mouseenter={onMouseEnter}
   on:keydown={onKeyDown}
 >
