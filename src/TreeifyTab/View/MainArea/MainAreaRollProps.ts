@@ -1,5 +1,5 @@
+import { CssCustomProperty } from 'src/Common/CssCustomProperty'
 import { integer } from 'src/Common/integer'
-import { CssCustomProperty } from 'src/TreeifyTab/CssCustomProperty'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'

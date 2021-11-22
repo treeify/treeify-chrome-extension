@@ -1,12 +1,12 @@
 import { List } from 'immutable'
 import { assertNonUndefined } from 'src/Common/Debug/assert'
+import { Timestamp } from 'src/Common/Timestamp'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { ExportFormat, State } from 'src/TreeifyTab/Internal/State'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
 
 /** TODO: コメント */
 export class Internal {

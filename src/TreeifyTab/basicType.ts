@@ -1,5 +1,5 @@
 import { integer } from 'src/Common/integer'
-import { Timestamp } from 'src/TreeifyTab/Timestamp'
+import { Timestamp } from 'src/Common/Timestamp'
 
 /**
  * 項目IDの型エイリアス。

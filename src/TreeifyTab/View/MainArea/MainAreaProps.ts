@@ -1,9 +1,9 @@
 import { List } from 'immutable'
+import { CssCustomProperty } from 'src/Common/CssCustomProperty'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Common/Debug/assert'
 import { dump } from 'src/Common/Debug/logger'
 import { integer } from 'src/Common/integer'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
-import { CssCustomProperty } from 'src/TreeifyTab/CssCustomProperty'
 import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { matchTabsAndWebPageItems } from 'src/TreeifyTab/External/chromeEventListeners'
 import {

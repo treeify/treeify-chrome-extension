@@ -1,7 +1,7 @@
 <script lang="ts">
   import Color from 'color'
+  import { CssCustomProperty } from 'src/Common/CssCustomProperty'
   import { integer } from 'src/Common/integer'
-  import { CssCustomProperty } from 'src/TreeifyTab/CssCustomProperty'
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
   import MainAreaContent from 'src/TreeifyTab/View/MainArea/MainAreaContent.svelte'
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
