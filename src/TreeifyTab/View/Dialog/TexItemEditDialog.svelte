@@ -18,16 +18,18 @@
 
 <CommonDialog title={props.dialogTitle} onClose={props.onCloseDialog}>
   <div class="tex-edit-dialog_content" on:keydown={props.onKeyDown}>
-    <div
-      class="tex-edit-dialog_code"
-      contenteditable="plaintext-only"
-      tabindex="0"
-      on:input={onInput}
-    >
-      {props.code}
-    </div>
-    <div class="tex-edit-dialog_rendered-tex">
-      {@html katex.renderToString(currentCode, { throwOnError: false })}
+    <div class="tex-edit-dialog_scroll-area">
+      <div
+        class="tex-edit-dialog_code"
+        contenteditable="plaintext-only"
+        tabindex="0"
+        on:input={onInput}
+      >
+        {props.code}
+      </div>
+      <div class="tex-edit-dialog_rendered-tex">
+        {@html katex.renderToString(currentCode, { throwOnError: false })}
+      </div>
     </div>
     <div class="tex-edit-dialog_button-area">
       <FinishAndCancelButtons
@@ -44,14 +46,23 @@
     padding: 1em;
 
     max-height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .tex-edit-dialog_scroll-area {
+    max-height: 100%;
     overflow-y: auto;
   }
 
   .tex-edit-dialog_code {
     padding: 0.5em;
 
+    $outline-size: 1px;
     // lch(60.0%, 0.0, 0.0)相当
-    outline: 1px solid #919191;
+    outline: $outline-size solid #919191;
+    // 親要素によってoutlineが見えなくなってしまう現象へのワークアラウンド。
+    margin: $outline-size;
   }
 
   .tex-edit-dialog_rendered-tex {
