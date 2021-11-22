@@ -1,10 +1,13 @@
 import { integer } from 'src/Common/integer'
+import { ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { exportAsIndentedText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { toMarkdownText } from 'src/TreeifyTab/Internal/ImportExport/markdown'
 import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -143,6 +146,38 @@ function deriveFileName(format: ExportFormat): string {
     [ExportFormat.MARKDOWN]: '.md',
     [ExportFormat.OPML]: '.opml',
   }
-  // TODO: ファイル名を内容依存にする。例えば先頭行テキストとか
-  return 'export' + fileExtensions[format]
+  const fileExtension = fileExtensions[format]
+  const defaultFileName = 'export' + fileExtension
+
+  const itemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  switch (Internal.instance.state.items[itemId].type) {
+    case ItemType.TEXT:
+      const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
+      const plainText = DomishObject.toPlainText(domishObjects)
+      if (plainText === '') {
+        return defaultFileName
+      }
+      return plainText.split(/\r?\n/)[0] + fileExtension
+    case ItemType.WEB_PAGE:
+      const webPageItem = Internal.instance.state.webPageItems[itemId]
+      return (webPageItem.title ?? webPageItem.tabTitle) + fileExtension
+    case ItemType.IMAGE:
+      const imageItem = Internal.instance.state.imageItems[itemId]
+      if (imageItem.caption !== '') {
+        return imageItem.caption + fileExtension
+      }
+      return defaultFileName
+    case ItemType.CODE_BLOCK:
+      const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      if (codeBlockItem.caption !== '') {
+        return codeBlockItem.caption + fileExtension
+      }
+      return defaultFileName
+    case ItemType.TEX:
+      const texItem = Internal.instance.state.texItems[itemId]
+      if (texItem.caption !== '') {
+        return texItem.caption + fileExtension
+      }
+      return defaultFileName
+  }
 }
