@@ -14,18 +14,7 @@ export function showEditDialog() {
     case ItemType.TEXT:
       break
     case ItemType.WEB_PAGE:
-      // ウェブページ項目のタイトル設定ダイアログを表示する
-      const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-      const domElement = document
-        .getElementById(domElementId)
-        ?.querySelector('.main-area-web-page-content_title')
-      if (domElement != null) {
-        External.instance.dialogState = {
-          type: 'WebPageItemTitleSettingDialog',
-          targetItemRect: domElement.getBoundingClientRect(),
-        }
-      }
-
+      External.instance.dialogState = { type: 'WebPageItemTitleSettingDialog' }
       break
     case ItemType.IMAGE:
       External.instance.dialogState = { type: 'ImageItemEditDialog' }

@@ -137,7 +137,7 @@ function createDialogMaterials(dialogState: Dialog): { component: any; props: an
     case 'WebPageItemTitleSettingDialog':
       return {
         component: WebPageItemTitleSettingDialog,
-        props: createWebPageItemTitleSettingDialogProps(dialogState),
+        props: createWebPageItemTitleSettingDialogProps(),
       }
     case 'WorkspaceDialog':
       return {

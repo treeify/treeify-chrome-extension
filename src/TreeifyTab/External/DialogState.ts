@@ -12,12 +12,6 @@ export type TabsDialog = {
   targetItemId: ItemId
 }
 
-/** ウェブページ項目のタイトル設定ダイアログが固有で持つ状態の型 */
-export type WebPageItemTitleSettingDialog = {
-  /** 対象となる項目のDOM要素のgetBoundingClientRect()の結果 */
-  targetItemRect: DOMRect
-}
-
 export type Dialog = DiscriminatedUnion<{
   CaptionSettingDialog: {}
   CitationSettingDialog: {}
@@ -35,6 +29,6 @@ export type Dialog = DiscriminatedUnion<{
   SearchDialog: {}
   TabsDialog: TabsDialog
   TexItemEditDialog: {}
-  WebPageItemTitleSettingDialog: WebPageItemTitleSettingDialog
+  WebPageItemTitleSettingDialog: {}
   WorkspaceDialog: {}
 }>

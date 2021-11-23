@@ -18,10 +18,10 @@
   export let props: WebPageItemTitleSettingDialogProps
 
   $: style = `
-    left: ${props.webPageItemTitleSettingDialog.targetItemRect.left}px;
-    top: ${props.webPageItemTitleSettingDialog.targetItemRect.top}px;
-    width: ${props.webPageItemTitleSettingDialog.targetItemRect.width}px;
-    height: ${props.webPageItemTitleSettingDialog.targetItemRect.height}px;
+    left: ${props.rect.left}px;
+    top: ${props.rect.top}px;
+    width: ${props.rect.width}px;
+    height: ${props.rect.height}px;
   `
 </script>
 
