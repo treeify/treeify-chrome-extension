@@ -18,10 +18,10 @@
   export let props: WebPageItemTitleSettingDialogProps
 
   $: style = `
-    left: ${props.webPageItemTitleSettingDialog.targetItemRect.left}px;
-    top: ${props.webPageItemTitleSettingDialog.targetItemRect.top}px;
-    width: ${props.webPageItemTitleSettingDialog.targetItemRect.width}px;
-    height: ${props.webPageItemTitleSettingDialog.targetItemRect.height}px;
+    left: ${props.rect.left}px;
+    top: ${props.rect.top}px;
+    width: ${props.rect.width}px;
+    height: ${props.rect.height}px;
   `
 </script>
 
@@ -31,6 +31,7 @@
       type="text"
       class="web-page-item-title-setting-dialog_text-box"
       value={props.initialTitle}
+      style={`font-size: ${props.fontSize}`}
       on:keydown={props.onKeyDown}
     />
   </div>
@@ -57,5 +58,7 @@
   .web-page-item-title-setting-dialog_text-box {
     width: 100%;
     height: 100%;
+    padding: 0;
+    border: none;
   }
 </style>
