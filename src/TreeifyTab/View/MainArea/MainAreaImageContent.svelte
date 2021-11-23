@@ -5,6 +5,7 @@
   import { dragImageBottom } from 'src/TreeifyTab/View/dragAndDrop'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaImageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaImageContentProps'
+  import ResizeHandle from 'src/TreeifyTab/View/MainArea/ResizeHandle.svelte'
 
   export let props: MainAreaImageContentProps
 
@@ -37,7 +38,9 @@
       <div
         class="main-area-image-content_resize-handle"
         use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
-      />
+      >
+        <ResizeHandle />
+      </div>
     </div>
     {#if props.caption !== ''}
       <caption class="main-area-image-content_caption">{props.caption}</caption>
@@ -80,17 +83,14 @@
   .main-area-image-content_resize-handle {
     position: absolute;
     right: 0;
-    bottom: 0;
+    top: 50%;
+    transform: translateY(-50%);
 
-    width: 20px;
-    aspect-ratio: 1;
+    height: 35%;
+    min-height: 20px;
+    max-height: 160px;
 
-    // lch(35.0%, 0.0, 0.0)相当
-    --border: 3px solid #525252;
-    border-right: var(--border);
-    border-bottom: var(--border);
-
-    cursor: ew-resize;
+    width: max-content;
 
     visibility: hidden;
 
