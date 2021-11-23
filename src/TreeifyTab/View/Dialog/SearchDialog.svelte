@@ -1,6 +1,5 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -15,28 +14,26 @@
   let searchResult: List<List<ItemPath>> | undefined
 
   function onKeyDownSearchQuery(event: KeyboardEvent) {
-    doWithErrorCapture(() => {
-      if (event.isComposing) return
-      if (!(event.target instanceof HTMLInputElement)) return
+    if (event.isComposing) return
+    if (!(event.target instanceof HTMLInputElement)) return
 
-      // Enterキー押下時
-      if (InputId.fromKeyboardEvent(event) === '0000Enter') {
-        event.preventDefault()
+    // Enterキー押下時
+    if (InputId.fromKeyboardEvent(event) === '0000Enter') {
+      event.preventDefault()
 
-        const itemIds = Internal.instance.searchEngine.search(event.target.value)
+      const itemIds = Internal.instance.searchEngine.search(event.target.value)
 
-        // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
-        const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
+      // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
+      const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
 
-        searchResult = allItemPaths
-          // ItemPathをページIDでグループ化する
-          .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
-          .toList()
-          .map((itemPaths) => itemPaths.toList())
-          // ヒットした項目数によってページの並びをソートする
-          .sortBy((itemPaths) => -itemPaths.size)
-      }
-    })
+      searchResult = allItemPaths
+        // ItemPathをページIDでグループ化する
+        .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
+        .toList()
+        .map((itemPaths) => itemPaths.toList())
+        // ヒットした項目数によってページの並びをソートする
+        .sortBy((itemPaths) => -itemPaths.size)
+    }
   }
 </script>
 

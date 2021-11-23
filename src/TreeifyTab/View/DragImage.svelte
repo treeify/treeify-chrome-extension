@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
   import { onItemDrop } from 'src/TreeifyTab/View/dragAndDrop'
@@ -21,12 +20,10 @@
   $: itemId = ItemPath.getItemId(props.itemPath)
 
   function onMouseMove(event: MouseEvent) {
-    doWithErrorCapture(() => {
-      mouseX = event.clientX
-      mouseY = event.clientY
+    mouseX = event.clientX
+    mouseY = event.clientY
 
-      dropDestinationStyle = props.calculateDropDestinationStyle(event, props.itemPath)
-    })
+    dropDestinationStyle = props.calculateDropDestinationStyle(event, props.itemPath)
   }
 </script>
 

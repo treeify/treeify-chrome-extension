@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -36,20 +35,18 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
     itemPath,
     children: List(children),
     onClick(event: MouseEvent) {
-      doWithErrorCapture(() => {
-        const inputId = InputId.fromMouseEvent(event)
-        if (inputId === '0000MouseButton0') {
-          event.preventDefault()
-          CurrentState.jumpTo(itemPath)
+      const inputId = InputId.fromMouseEvent(event)
+      if (inputId === '0000MouseButton0') {
+        event.preventDefault()
+        CurrentState.jumpTo(itemPath)
 
-          // 検索ダイアログを閉じる
-          External.instance.dialogState = undefined
-          Rerenderer.instance.rerender()
-        } else if (inputId === '0010MouseButton0') {
-          event.preventDefault()
-          transclude(itemPath)
-        }
-      })
+        // 検索ダイアログを閉じる
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
+      } else if (inputId === '0010MouseButton0') {
+        event.preventDefault()
+        transclude(itemPath)
+      }
     },
     onKeyDown(event: KeyboardEvent) {
       switch (InputId.fromKeyboardEvent(event)) {

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { State } from 'src/TreeifyTab/Internal/State'
@@ -25,9 +24,7 @@
   }
 
   function onClickStateValidation() {
-    doWithErrorCapture(() => {
-      assert(State.isValid(Internal.instance.state))
-    })
+    assert(State.isValid(Internal.instance.state))
   }
 </script>
 

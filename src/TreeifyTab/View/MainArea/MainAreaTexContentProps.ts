@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { ItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
@@ -20,12 +19,10 @@ export function createMainAreaTexContentProps(
     type: 'MainAreaTexContentProps',
     contentProps: createTexItemContentProps(ItemPath.getItemId(itemPath)),
     onFocus: (event) => {
-      doWithErrorCapture(() => {
-        // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
-        if (event.target instanceof Node) {
-          getSelection()?.setPosition(event.target)
-        }
-      })
+      // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+      if (event.target instanceof Node) {
+        getSelection()?.setPosition(event.target)
+      }
     },
   }
 }

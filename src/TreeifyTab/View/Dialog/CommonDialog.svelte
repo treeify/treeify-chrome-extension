@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -16,26 +15,22 @@
   }
 
   const onClickBackdrop = (event: MouseEvent) => {
-    doWithErrorCapture(() => {
-      // ダイアログを閉じる
-      if (event.eventPhase === Event.AT_TARGET) {
-        event.preventDefault()
-        closeDialog()
-      }
-    })
+    // ダイアログを閉じる
+    if (event.eventPhase === Event.AT_TARGET) {
+      event.preventDefault()
+      closeDialog()
+    }
   }
 
   // ESCキー押下時にダイアログを閉じるためのイベントハンドラー。
   // focus-trapにはESCキー押下時にdeactivateする標準機能があるが、
   // それを使うとイベント発生順序の違いにより難解なエラーが起こるので自前でハンドリングする。
   const onKeyDown = (event: KeyboardEvent) => {
-    doWithErrorCapture(() => {
-      if (event.isComposing) return
+    if (event.isComposing) return
 
-      if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        closeDialog()
-      }
-    })
+    if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+      closeDialog()
+    }
   }
 </script>
 

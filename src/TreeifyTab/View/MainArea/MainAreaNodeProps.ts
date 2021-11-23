@@ -1,6 +1,5 @@
 import { is, List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -78,56 +77,54 @@ export function createMainAreaNodeProps(
       )
     }),
     onMouseDownContentArea: (event: MouseEvent) => {
-      doWithErrorCapture(() => {
-        switch (InputId.fromMouseEvent(event)) {
-          case '0100MouseButton0':
-            const targetItemPath = CurrentState.getTargetItemPath()
-            // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
-            if (is(itemPath, targetItemPath)) break
+      switch (InputId.fromMouseEvent(event)) {
+        case '0100MouseButton0':
+          const targetItemPath = CurrentState.getTargetItemPath()
+          // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
+          if (is(itemPath, targetItemPath)) break
 
-            event.preventDefault()
+          event.preventDefault()
 
-            // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
-            const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
-            const targetCandidate = itemPath.take(commonPrefix.size + 1)
-            const anchorCandidate = targetItemPath.take(commonPrefix.size + 1)
-            if (targetCandidate.size === anchorCandidate.size) {
-              CurrentState.setTargetItemPathOnly(targetCandidate)
-              CurrentState.setAnchorItemPath(anchorCandidate)
-              Rerenderer.instance.rerender()
-            }
-            break
-          case '0000MouseButton1':
-          case '1000MouseButton2':
-            event.preventDefault()
-            Internal.instance.saveCurrentStateToUndoStack()
-            CurrentState.setTargetItemPath(itemPath)
-            Command.removeEdge()
+          // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
+          const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
+          const targetCandidate = itemPath.take(commonPrefix.size + 1)
+          const anchorCandidate = targetItemPath.take(commonPrefix.size + 1)
+          if (targetCandidate.size === anchorCandidate.size) {
+            CurrentState.setTargetItemPathOnly(targetCandidate)
+            CurrentState.setAnchorItemPath(anchorCandidate)
             Rerenderer.instance.rerender()
-            break
-          case '1000MouseButton1':
-            event.preventDefault()
-            Internal.instance.saveCurrentStateToUndoStack()
+          }
+          break
+        case '0000MouseButton1':
+        case '1000MouseButton2':
+          event.preventDefault()
+          Internal.instance.saveCurrentStateToUndoStack()
+          CurrentState.setTargetItemPath(itemPath)
+          Command.removeEdge()
+          Rerenderer.instance.rerender()
+          break
+        case '1000MouseButton1':
+          event.preventDefault()
+          Internal.instance.saveCurrentStateToUndoStack()
+          CurrentState.setTargetItemPath(itemPath)
+          Command.deleteItemItself()
+          Rerenderer.instance.rerender()
+          break
+        case '0000MouseButton2':
+          // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
+          // その複数選択された項目をコンテキストメニューの操作対象にする。
+          if (
+            CurrentState.getSelectedItemPaths().size === 1 ||
+            !CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)
+          ) {
             CurrentState.setTargetItemPath(itemPath)
-            Command.deleteItemItself()
-            Rerenderer.instance.rerender()
-            break
-          case '0000MouseButton2':
-            // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
-            // その複数選択された項目をコンテキストメニューの操作対象にする。
-            if (
-              CurrentState.getSelectedItemPaths().size === 1 ||
-              !CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)
-            ) {
-              CurrentState.setTargetItemPath(itemPath)
-            }
-            break
-          default:
-            CurrentState.setTargetItemPath(itemPath)
-            Rerenderer.instance.rerender()
-            break
-        }
-      })
+          }
+          break
+        default:
+          CurrentState.setTargetItemPath(itemPath)
+          Rerenderer.instance.rerender()
+          break
+      }
     },
     onContextMenu: (event: Event) => {
       // テキスト選択中はブラウザ標準のコンテキストメニューを表示する
@@ -152,25 +149,23 @@ export function createMainAreaNodeProps(
       }
     },
     onClickDeleteButton: (event) => {
-      doWithErrorCapture(() => {
-        Internal.instance.saveCurrentStateToUndoStack()
+      Internal.instance.saveCurrentStateToUndoStack()
 
-        CurrentState.setTargetItemPath(itemPath)
+      CurrentState.setTargetItemPath(itemPath)
 
-        const inputId = InputId.fromMouseEvent(event)
-        switch (inputId) {
-          case '0000MouseButton0':
-            event.preventDefault()
-            Command.removeEdge()
-            Rerenderer.instance.rerender()
-            break
-          case '1000MouseButton0':
-            event.preventDefault()
-            Command.deleteItemItself()
-            Rerenderer.instance.rerender()
-            break
-        }
-      })
+      const inputId = InputId.fromMouseEvent(event)
+      switch (inputId) {
+        case '0000MouseButton0':
+          event.preventDefault()
+          Command.removeEdge()
+          Rerenderer.instance.rerender()
+          break
+        case '1000MouseButton0':
+          event.preventDefault()
+          Command.deleteItemItself()
+          Rerenderer.instance.rerender()
+          break
+      }
     },
     onClickHiddenTabsCount: (event: MouseEvent) => {
       switch (InputId.fromMouseEvent(event)) {

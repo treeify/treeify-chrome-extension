@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -8,29 +7,23 @@
   export let workspace: WorkspaceRecord
 
   const onInput = (event: Event) => {
-    doWithErrorCapture(() => {
-      if (event.target instanceof HTMLInputElement) {
-        CurrentState.setWorkspaceName(workspace.id, event.target.value)
-      }
-    })
+    if (event.target instanceof HTMLInputElement) {
+      CurrentState.setWorkspaceName(workspace.id, event.target.value)
+    }
   }
 
   const onClickRadioButton = () => {
-    doWithErrorCapture(() => {
-      CurrentState.setCurrentWorkspaceId(workspace.id)
-      Rerenderer.instance.rerender()
-    })
+    CurrentState.setCurrentWorkspaceId(workspace.id)
+    Rerenderer.instance.rerender()
   }
 
   const onClickDeleteButton = () => {
-    doWithErrorCapture(() => {
-      if (Object.keys(Internal.instance.state.workspaces).length === 1) {
-        alert('ワークスペースを0個にはできません')
-      } else {
-        CurrentState.deleteWorkspace(workspace.id)
-        Rerenderer.instance.rerender()
-      }
-    })
+    if (Object.keys(Internal.instance.state.workspaces).length === 1) {
+      alert('ワークスペースを0個にはできません')
+    } else {
+      CurrentState.deleteWorkspace(workspace.id)
+      Rerenderer.instance.rerender()
+    }
   }
 </script>
 

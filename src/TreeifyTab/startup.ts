@@ -1,5 +1,4 @@
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { doAsyncWithErrorCapture, doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -22,6 +21,7 @@ import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { doAsync } from 'src/Utility/doAsync'
 import { integer } from 'src/Utility/integer'
 import OnClickData = chrome.contextMenus.OnClickData
 
@@ -35,6 +35,9 @@ export async function startup(initialState: State) {
   await matchTabsAndWebPageItems()
 
   Rerenderer.instance.renderForFirstTime()
+
+  window.addEventListener('error', onError)
+  window.addEventListener('unhandledrejection', onUnhandledRejection)
 
   // バックグラウンドページなどからのメッセージを受信する
   chrome.runtime.onMessage.addListener(onMessage)
@@ -62,12 +65,15 @@ export async function cleanup() {
 
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
 
-  chrome.tabs.onCreated.removeListener(onCreated)
-  chrome.tabs.onUpdated.removeListener(onUpdated)
-  chrome.tabs.onRemoved.removeListener(onRemoved)
   chrome.tabs.onActivated.removeListener(onActivated)
+  chrome.tabs.onRemoved.removeListener(onRemoved)
+  chrome.tabs.onUpdated.removeListener(onUpdated)
+  chrome.tabs.onCreated.removeListener(onCreated)
 
   chrome.runtime.onMessage.removeListener(onMessage)
+
+  window.removeEventListener('unhandledrejection', onUnhandledRejection)
+  window.removeEventListener('error', onError)
 
   Internal.cleanup()
   External.cleanup()
@@ -138,40 +144,35 @@ function onMutateState(propertyPath: PropertyPath) {
 }
 
 function onClickContextMenu(info: OnClickData) {
-  doWithErrorCapture(() => {
-    if (info.menuItemId !== 'treeify') return
+  if (info.menuItemId !== 'treeify') return
 
-    // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
-    const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
-    if (webPageItemId === undefined) return
+  // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
+  const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
+  if (webPageItemId === undefined) return
 
-    const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
+  const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
 
-    if (info.mediaType === 'image' && info.srcUrl !== undefined) {
-      // 画像項目として取り込む
-      const newItemId = CurrentState.createImageItem()
-      CurrentState.setImageItemUrl(newItemId, info.srcUrl)
+  if (info.mediaType === 'image' && info.srcUrl !== undefined) {
+    // 画像項目として取り込む
+    const newItemId = CurrentState.createImageItem()
+    CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
-      // 出典を設定
-      CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
+    // 出典を設定
+    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
 
-      CurrentState.insertLastChildItem(webPageItemId, newItemId)
-      Rerenderer.instance.rerender()
-    } else if (info.selectionText !== undefined) {
-      // テキスト項目として取り込む
-      const newItemId = CurrentState.createTextItem()
-      CurrentState.setTextItemDomishObjects(
-        newItemId,
-        DomishObject.fromPlainText(info.selectionText)
-      )
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
+    Rerenderer.instance.rerender()
+  } else if (info.selectionText !== undefined) {
+    // テキスト項目として取り込む
+    const newItemId = CurrentState.createTextItem()
+    CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
-      // 出典を設定
-      CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
+    // 出典を設定
+    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
 
-      CurrentState.insertLastChildItem(webPageItemId, newItemId)
-      Rerenderer.instance.rerender()
-    }
-  })
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
+    Rerenderer.instance.rerender()
+  }
 }
 
 // 指定されたURLのタブに対応するウェブページ項目を探す。
@@ -190,7 +191,7 @@ function findCorrespondWebPageItem(url: string): ItemId | undefined {
 }
 
 async function onCommand(commandName: string) {
-  doAsyncWithErrorCapture(async () => {
+  doAsync(async () => {
     switch (commandName) {
       case 'show-treeify-tab':
         TreeifyTab.open()
@@ -211,4 +212,25 @@ async function getLastFocusedWindowId(): Promise<integer> {
   // TODO: assertしていい理由が特にない
   assertNonUndefined(window.id)
   return window.id
+}
+
+function onError(event: ErrorEvent) {
+  if (event.error instanceof Error) {
+    handleError(event.error)
+  }
+}
+
+function onUnhandledRejection(event: PromiseRejectionEvent) {
+  if (event.reason instanceof Error) {
+    handleError(event.reason)
+  }
+}
+
+function handleError(error: Error) {
+  // TODO: リリースビルドではalertは出さない方が良いだろう
+  if (error.stack !== undefined) {
+    alert(error.stack)
+  } else {
+    alert(error)
+  }
 }

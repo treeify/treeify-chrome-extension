@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -19,10 +18,8 @@ export function createPageTreeBulletAndIndentProps(
   itemPath: ItemPath
 ): PageTreeBulletAndIndentProps {
   function onClick() {
-    doWithErrorCapture(() => {
-      CurrentState.setIsFolded(itemPath, !CurrentState.getIsFolded(itemPath))
-      Rerenderer.instance.rerender()
-    })
+    CurrentState.setIsFolded(itemPath, !CurrentState.getIsFolded(itemPath))
+    Rerenderer.instance.rerender()
   }
 
   if (hasChildren) {
