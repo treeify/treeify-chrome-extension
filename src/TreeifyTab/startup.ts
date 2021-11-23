@@ -62,10 +62,10 @@ export async function cleanup() {
 
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
 
-  chrome.tabs.onCreated.removeListener(onCreated)
-  chrome.tabs.onUpdated.removeListener(onUpdated)
-  chrome.tabs.onRemoved.removeListener(onRemoved)
   chrome.tabs.onActivated.removeListener(onActivated)
+  chrome.tabs.onRemoved.removeListener(onRemoved)
+  chrome.tabs.onUpdated.removeListener(onUpdated)
+  chrome.tabs.onCreated.removeListener(onCreated)
 
   chrome.runtime.onMessage.removeListener(onMessage)
 
