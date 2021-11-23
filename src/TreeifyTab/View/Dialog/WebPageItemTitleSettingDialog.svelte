@@ -31,6 +31,7 @@
       type="text"
       class="web-page-item-title-setting-dialog_text-box"
       value={props.initialTitle}
+      style={`font-size: ${props.fontSize}`}
       on:keydown={props.onKeyDown}
     />
   </div>
@@ -57,5 +58,7 @@
   .web-page-item-title-setting-dialog_text-box {
     width: 100%;
     height: 100%;
+    padding: 0;
+    border: none;
   }
 </style>

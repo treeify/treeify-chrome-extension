@@ -4,10 +4,11 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export type WebPageItemTitleSettingDialogProps = {
   rect: DOMRect
+  fontSize: string
   /** タイトル入力欄のテキストの初期値 */
   initialTitle: string
   onKeyDown: (event: KeyboardEvent) => void
@@ -18,14 +19,15 @@ export function createWebPageItemTitleSettingDialogProps(): WebPageItemTitleSett
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-  const rect = document
+  const domElement = document
     .getElementById(domElementId)
     ?.querySelector('.main-area-web-page-content_title')
-    ?.getBoundingClientRect()
-  assertNonUndefined(rect)
+  assertNonNull(domElement)
+  assertNonUndefined(domElement)
 
   return {
-    rect,
+    rect: domElement.getBoundingClientRect(),
+    fontSize: getComputedStyle(domElement).getPropertyValue('font-size'),
     initialTitle: CurrentState.deriveWebPageItemTitle(targetItemId),
     onKeyDown: (event) => {
       if (event.isComposing) return
