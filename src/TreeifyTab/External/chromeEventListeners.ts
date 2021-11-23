@@ -79,8 +79,8 @@ export function onCreated(tab: Tab) {
         }
       }
     } else {
-      // openerの最後の子として追加する
-      CurrentState.insertLastChildItem(openerItemId, newWebPageItemId)
+      // openerの最初の子として追加する
+      CurrentState.insertFirstChildItem(openerItemId, newWebPageItemId)
 
       // openerがターゲット項目なら
       if (targetItemId === openerItemId) {
