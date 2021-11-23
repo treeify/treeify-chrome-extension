@@ -25,9 +25,9 @@ export function createCodeBlockItemEditDialogProps(): CodeBlockItemEditDialogPro
 
     const editBox = document.querySelector<HTMLDivElement>('.code-block-edit-dialog_code')
     assertNonNull(editBox)
-    const code = editBox.textContent ?? ''
+    const code = editBox.textContent?.replace(/\r?\n$/, '') ?? ''
 
-    if (code.trim() !== '') {
+    if (code !== '') {
       // コードが空でない場合
 
       // コードを更新
