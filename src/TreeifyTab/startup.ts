@@ -36,6 +36,9 @@ export async function startup(initialState: State) {
 
   Rerenderer.instance.renderForFirstTime()
 
+  window.addEventListener('error', onError)
+  window.addEventListener('unhandledrejection', onUnhandledRejection)
+
   // バックグラウンドページなどからのメッセージを受信する
   chrome.runtime.onMessage.addListener(onMessage)
 
@@ -68,6 +71,9 @@ export async function cleanup() {
   chrome.tabs.onCreated.removeListener(onCreated)
 
   chrome.runtime.onMessage.removeListener(onMessage)
+
+  window.removeEventListener('unhandledrejection', onUnhandledRejection)
+  window.removeEventListener('error', onError)
 
   Internal.cleanup()
   External.cleanup()
@@ -211,4 +217,25 @@ async function getLastFocusedWindowId(): Promise<integer> {
   // TODO: assertしていい理由が特にない
   assertNonUndefined(window.id)
   return window.id
+}
+
+function onError(event: ErrorEvent) {
+  if (event.error instanceof Error) {
+    handleError(event.error)
+  }
+}
+
+function onUnhandledRejection(event: PromiseRejectionEvent) {
+  if (event.reason instanceof Error) {
+    handleError(event.reason)
+  }
+}
+
+function handleError(error: Error) {
+  // TODO: リリースビルドではalertは出さない方が良いだろう
+  if (error.stack !== undefined) {
+    alert(error.stack)
+  } else {
+    alert(error)
+  }
 }

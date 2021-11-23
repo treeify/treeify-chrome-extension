@@ -1,38 +1,19 @@
 import { External } from 'src/TreeifyTab/External/External'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { dump } from 'src/Utility/Debug/logger'
 
 /**
- * 予期せぬ例外を補足し、何か有益なことをするための汎用関数。
- * 現在はアラートでエラーを通知するようにしている。
- * これはドッグフーディング中にエラーに気づかず使い続けてしまう問題への対策である。
- * リリース時はアラートを出さないようにするかもしれない（何をするのがいいか検討中）。
+ * @deprecated
  */
 export function doWithErrorCapture<T>(f: () => T): T {
-  try {
-    return f()
-  } catch (e) {
-    if (e instanceof Error) {
-      dump(e.name, e.message)
-    }
-    alert(e)
-    dumpCurrentMemory()
-    throw e
-  }
+  return f()
 }
 
-/** {@link doWithErrorCapture}のasync版 */
+/**
+ * {@link doWithErrorCapture}のasync版
+ * @deprecated
+ */
 export async function doAsyncWithErrorCapture<T>(f: () => Promise<T>): Promise<T> {
-  try {
-    return await f()
-  } catch (e) {
-    if (e instanceof Error) {
-      dump(e.name, e.message)
-    }
-    alert(e)
-    dumpCurrentMemory()
-    throw e
-  }
+  return await f()
 }
 
 function dumpCurrentMemory() {
