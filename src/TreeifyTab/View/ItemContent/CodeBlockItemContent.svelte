@@ -9,7 +9,9 @@
 <div class="code-block-item-content">
   <pre
     class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
-  <div class="code-block-item-content_caption">{props.caption}</div>
+  {#if props.caption !== ''}
+    <div class="code-block-item-content_caption">{props.caption}</div>
+  {/if}
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
   {/if}

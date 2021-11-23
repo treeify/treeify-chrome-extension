@@ -149,7 +149,6 @@
 
   .main-area-node_content-area {
     height: 100%;
-    padding-block: var(--main-area-content-area-vertical-padding);
 
     // マウスホバー時のコンテンツ領域
     &:hover {

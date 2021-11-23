@@ -160,6 +160,8 @@
     cursor: default;
     user-select: none;
 
+    padding-block: var(--main-area-content-area-vertical-padding);
+
     overflow-x: hidden;
     white-space: nowrap;
 
