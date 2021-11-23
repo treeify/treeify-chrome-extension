@@ -1,6 +1,6 @@
 <script lang="ts">
   import { List } from 'immutable'
-  import { doAsyncWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+  import { doAsync } from 'src/TreeifyTab/errorCapture'
   import { External } from 'src/TreeifyTab/External/External'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -11,7 +11,7 @@
   export let props: DataFolderButtonProps
 
   function onClick() {
-    doAsyncWithErrorCapture(async () => {
+    doAsync(async () => {
       assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
       assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
 

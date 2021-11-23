@@ -1,5 +1,5 @@
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { doAsyncWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { doAsync } from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -191,7 +191,7 @@ function findCorrespondWebPageItem(url: string): ItemId | undefined {
 }
 
 async function onCommand(commandName: string) {
-  doAsyncWithErrorCapture(async () => {
+  doAsync(async () => {
     switch (commandName) {
       case 'show-treeify-tab':
         TreeifyTab.open()

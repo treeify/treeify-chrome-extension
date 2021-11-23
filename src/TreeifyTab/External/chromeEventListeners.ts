@@ -5,7 +5,7 @@ import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import { List } from 'immutable'
 import { ItemId, TabId } from 'src/TreeifyTab/basicType'
-import { doAsyncWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { doAsync } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -17,7 +17,7 @@ import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 
 export const onMessage = (message: any, sender: MessageSender) => {
-  doAsyncWithErrorCapture(async () => {
+  doAsync(async () => {
     const height = window.innerHeight
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
@@ -122,7 +122,7 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  doAsyncWithErrorCapture(async () => {
+  doAsync(async () => {
     // Treeifyタブだった場合は何もしない。
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
     if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
