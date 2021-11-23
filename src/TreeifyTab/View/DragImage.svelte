@@ -12,8 +12,8 @@
   let mouseY = props.initialMousePosition.y
 
   $: style = `
-    left: ${mouseX + 8}px;
-    top: ${mouseY}px;
+    --mouse-x: ${mouseX}px;
+    --mouse-y: ${mouseY}px;
   `
   $: dropDestinationStyle = ''
 
@@ -29,9 +29,9 @@
 
 <svelte:body on:mousemove={onMouseMove} />
 
-<div class="drag-image" use:onItemDrop={props.onDrop} use:setupFocusTrap>
+<div class="drag-image" {style} use:onItemDrop={props.onDrop} use:setupFocusTrap>
   <div class="drag-image_drop-destination" style={dropDestinationStyle} />
-  <div class="drag-image_item-image" tabindex="0" {style}>
+  <div class="drag-image_item-image" tabindex="0">
     <ItemContent props={createItemContentProps(itemId)} />
   </div>
 </div>
@@ -64,7 +64,8 @@
 
   .drag-image_item-image {
     position: absolute;
-    // left, topはstyle属性で指定する
+    left: calc(var(--mouse-x) + 8px);
+    top: var(--mouse-y);
 
     pointer-events: none;
 

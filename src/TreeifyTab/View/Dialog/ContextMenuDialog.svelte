@@ -33,19 +33,20 @@
   }
 
   const style = `
-    left: calc(${props.mousePosition.x}px - 0.8em);
-    top: calc(${props.mousePosition.y}px - 0.8em);
+    --x: ${props.mousePosition.x}px;
+    --y: ${props.mousePosition.y}px;
   `
 </script>
 
 <div
   class="context-menu-dialog"
+  {style}
   on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
-  <div class="context-menu-dialog_frame" {style}>
+  <div class="context-menu-dialog_frame">
     {#each props.contextMenuItemPropses.toArray() as contextMenuItemProps}
       <ContextMenuItem props={contextMenuItemProps} />
     {/each}
@@ -64,8 +65,9 @@
   }
 
   .context-menu-dialog_frame {
-    // topとleftはstyle属性で動的に設定する
     position: absolute;
+    left: calc(var(--x) - 0.8em);
+    top: calc(var(--y) - 0.8em);
 
     // lch(98.0%, 0.0, 0.0)相当
     background: #f9f9f9;

@@ -10,9 +10,9 @@
   export let props: MainAreaImageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
-  $: imageStyle = `
-    width: ${props.width};
-    aspect-ratio: ${props.aspectRatio};
+  $: style = `
+    --width: ${props.width};
+    --aspect-ratio: ${props.aspectRatio};
   `
 
   function onLoad(event: Event) {
@@ -25,14 +25,13 @@
   }
 </script>
 
-<div class="main-area-image-content" {id} tabindex="0" on:focus={props.onFocus}>
+<div class="main-area-image-content" {id} {style} tabindex="0" on:focus={props.onFocus}>
   <table class="main-area-image-content_caption-layout">
     <div class="main-area-image-content_image-with-resize-handle">
       <img
         class="main-area-image-content_image"
         src={props.url}
         draggable="false"
-        style={imageStyle}
         on:load={onLoad}
       />
       <div
@@ -70,8 +69,9 @@
   }
 
   .main-area-image-content_image {
-    // style属性でwidthとaspect-ratioが指定される
+    width: var(--width);
     max-width: 100%;
+    aspect-ratio: var(--aspect-ratio);
 
     // 完了状態の画像
     .completed &,

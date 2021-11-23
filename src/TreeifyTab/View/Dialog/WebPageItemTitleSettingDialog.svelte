@@ -18,20 +18,25 @@
   export let props: WebPageItemTitleSettingDialogProps
 
   $: style = `
-    left: ${props.rect.left}px;
-    top: ${props.rect.top}px;
-    width: ${props.rect.width}px;
-    height: ${props.rect.height}px;
+    --left: ${props.rect.left}px;
+    --top: ${props.rect.top}px;
+    --width: ${props.rect.width}px;
+    --height: ${props.rect.height}px;
+    --font-size: ${props.fontSize};
   `
 </script>
 
-<div class="web-page-item-title-setting-dialog" on:mousedown={onClickBackdrop} use:setupFocusTrap>
-  <div class="web-page-item-title-setting-dialog_frame" {style}>
+<div
+  class="web-page-item-title-setting-dialog"
+  {style}
+  on:mousedown={onClickBackdrop}
+  use:setupFocusTrap
+>
+  <div class="web-page-item-title-setting-dialog_frame">
     <input
       type="text"
       class="web-page-item-title-setting-dialog_text-box"
       value={props.initialTitle}
-      style={`font-size: ${props.fontSize}`}
       on:keydown={props.onKeyDown}
     />
   </div>
@@ -49,9 +54,12 @@
 
   // ウェブページ項目のタイトル設定ダイアログ
   .web-page-item-title-setting-dialog_frame {
-    // ウェブページ項目の位置に合わせたフローティング。
-    // left, top, width, heightがJavaScriptで設定される。
+    // ウェブページ項目の位置に合わせたフローティング
     position: absolute;
+    left: var(--left);
+    top: var(--top);
+    width: var(--width);
+    height: var(--height);
   }
 
   // ウェブページ項目のタイトル設定ダイアログのテキスト入力欄
@@ -60,5 +68,6 @@
     height: 100%;
     padding: 0;
     border: none;
+    font-size: var(--font-size);
   }
 </style>
