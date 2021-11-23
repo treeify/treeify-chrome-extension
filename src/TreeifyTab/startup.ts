@@ -1,5 +1,4 @@
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { doAsync } from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -22,6 +21,7 @@ import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { doAsync } from 'src/Utility/doAsync'
 import { integer } from 'src/Utility/integer'
 import OnClickData = chrome.contextMenus.OnClickData
 
