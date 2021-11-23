@@ -1,5 +1,4 @@
 import { is, List } from 'immutable'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -133,19 +132,17 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 }
 
 function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
-  doWithErrorCapture(() => {
-    const leftSidebar = document.querySelector('.left-sidebar')
-    assertNonNull(leftSidebar)
-    if (leftSidebar.getBoundingClientRect().right < event.clientX) {
-      // 左サイドバーより右の領域にドロップされた場合
+  const leftSidebar = document.querySelector('.left-sidebar')
+  assertNonNull(leftSidebar)
+  if (leftSidebar.getBoundingClientRect().right < event.clientX) {
+    // 左サイドバーより右の領域にドロップされた場合
 
-      onDropIntoMainArea(event, draggedItemPath)
-    } else {
-      // 左サイドバーにドロップされた場合
+    onDropIntoMainArea(event, draggedItemPath)
+  } else {
+    // 左サイドバーにドロップされた場合
 
-      onDropIntoLeftSidebar(event, draggedItemPath)
-    }
-  })
+    onDropIntoLeftSidebar(event, draggedItemPath)
+  }
 }
 
 function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {

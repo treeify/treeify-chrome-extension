@@ -1,5 +1,5 @@
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { doAsyncWithErrorCapture, doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { doAsyncWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -144,40 +144,35 @@ function onMutateState(propertyPath: PropertyPath) {
 }
 
 function onClickContextMenu(info: OnClickData) {
-  doWithErrorCapture(() => {
-    if (info.menuItemId !== 'treeify') return
+  if (info.menuItemId !== 'treeify') return
 
-    // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
-    const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
-    if (webPageItemId === undefined) return
+  // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
+  const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
+  if (webPageItemId === undefined) return
 
-    const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
+  const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
 
-    if (info.mediaType === 'image' && info.srcUrl !== undefined) {
-      // 画像項目として取り込む
-      const newItemId = CurrentState.createImageItem()
-      CurrentState.setImageItemUrl(newItemId, info.srcUrl)
+  if (info.mediaType === 'image' && info.srcUrl !== undefined) {
+    // 画像項目として取り込む
+    const newItemId = CurrentState.createImageItem()
+    CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
-      // 出典を設定
-      CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
+    // 出典を設定
+    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
 
-      CurrentState.insertLastChildItem(webPageItemId, newItemId)
-      Rerenderer.instance.rerender()
-    } else if (info.selectionText !== undefined) {
-      // テキスト項目として取り込む
-      const newItemId = CurrentState.createTextItem()
-      CurrentState.setTextItemDomishObjects(
-        newItemId,
-        DomishObject.fromPlainText(info.selectionText)
-      )
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
+    Rerenderer.instance.rerender()
+  } else if (info.selectionText !== undefined) {
+    // テキスト項目として取り込む
+    const newItemId = CurrentState.createTextItem()
+    CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
-      // 出典を設定
-      CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
+    // 出典を設定
+    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
 
-      CurrentState.insertLastChildItem(webPageItemId, newItemId)
-      Rerenderer.instance.rerender()
-    }
-  })
+    CurrentState.insertLastChildItem(webPageItemId, newItemId)
+    Rerenderer.instance.rerender()
+  }
 }
 
 // 指定されたURLのタブに対応するウェブページ項目を探す。

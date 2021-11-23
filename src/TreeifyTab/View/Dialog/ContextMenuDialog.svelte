@@ -1,16 +1,13 @@
 <script context="module" lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
   function onClickBackdrop(event: Event) {
-    doWithErrorCapture(() => {
-      // ダイアログを閉じる
-      if (event.eventPhase === Event.AT_TARGET) {
-        event.preventDefault()
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      }
-    })
+    // ダイアログを閉じる
+    if (event.eventPhase === Event.AT_TARGET) {
+      event.preventDefault()
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
   }
 </script>
 
@@ -24,12 +21,10 @@
   export let props: ContextMenuDialogProps
 
   function onKeyDown(event: KeyboardEvent) {
-    doWithErrorCapture(() => {
-      if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      }
-    })
+    if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
   }
 
   function onContextMenu(event: Event) {

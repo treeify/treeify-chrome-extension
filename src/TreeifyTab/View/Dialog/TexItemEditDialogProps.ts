@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -68,9 +67,7 @@ export function createTexItemEditDialogProps(): TexItemEditDialogProps {
 }
 
 function onCloseDialog() {
-  doWithErrorCapture(() => {
-    if (CurrentState.isEmptyTexItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
-      Command.removeEdge()
-    }
-  })
+  if (CurrentState.isEmptyTexItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+    Command.removeEdge()
+  }
 }

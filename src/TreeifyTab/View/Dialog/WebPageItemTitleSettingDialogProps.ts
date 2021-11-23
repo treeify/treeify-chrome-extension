@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { WebPageItemTitleSettingDialog } from 'src/TreeifyTab/External/DialogState'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -23,26 +22,24 @@ export function createWebPageItemTitleSettingDialogProps(
     webPageItemTitleSettingDialog: dialog,
     initialTitle: CurrentState.deriveWebPageItemTitle(targetItemId),
     onKeyDown: (event) => {
-      doWithErrorCapture(() => {
-        if (event.isComposing) return
+      if (event.isComposing) return
 
-        if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
-          if (event.target.value === '') {
-            // 入力欄が空の状態でEnterキーを押したらタイトル設定を削除する
-            CurrentState.setWebPageItemTitle(targetItemId, null)
-          } else {
-            CurrentState.setWebPageItemTitle(targetItemId, event.target.value)
-          }
-          // タイトル設定ダイアログを閉じる
-          External.instance.dialogState = undefined
-          Rerenderer.instance.rerender()
+      if (event.key === 'Enter' && event.target instanceof HTMLInputElement) {
+        if (event.target.value === '') {
+          // 入力欄が空の状態でEnterキーを押したらタイトル設定を削除する
+          CurrentState.setWebPageItemTitle(targetItemId, null)
+        } else {
+          CurrentState.setWebPageItemTitle(targetItemId, event.target.value)
         }
+        // タイトル設定ダイアログを閉じる
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
+      }
 
-        if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-          External.instance.dialogState = undefined
-          Rerenderer.instance.rerender()
-        }
-      })
+      if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
+      }
     },
   }
 }

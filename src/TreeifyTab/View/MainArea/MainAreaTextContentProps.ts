@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -29,34 +28,30 @@ export function createMainAreaTextContentProps(
     domishObjects: state.textItems[itemId].domishObjects,
     citeProps: createCiteProps(itemId),
     onInput: (event: Event) => {
-      doWithErrorCapture(() => {
-        if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
-          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+      if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
+        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
-          Internal.instance.saveCurrentStateToUndoStack()
+        Internal.instance.saveCurrentStateToUndoStack()
 
-          // contenteditableな要素のinnerHTMLをModelに反映する
-          const domishObjects = DomishObject.fromChildren(event.target)
-          CurrentState.setTextItemDomishObjects(itemId, domishObjects)
+        // contenteditableな要素のinnerHTMLをModelに反映する
+        const domishObjects = DomishObject.fromChildren(event.target)
+        CurrentState.setTextItemDomishObjects(itemId, domishObjects)
 
-          CurrentState.updateItemTimestamp(itemId)
-          Rerenderer.instance.rerender()
-        }
-      })
+        CurrentState.updateItemTimestamp(itemId)
+        Rerenderer.instance.rerender()
+      }
     },
     onCompositionEnd: (event) => {
-      doWithErrorCapture(() => {
-        if (event.target instanceof Node) {
-          Internal.instance.saveCurrentStateToUndoStack()
+      if (event.target instanceof Node) {
+        Internal.instance.saveCurrentStateToUndoStack()
 
-          // contenteditableな要素のinnerHTMLをModelに反映する
-          const domishObjects = DomishObject.fromChildren(event.target)
-          CurrentState.setTextItemDomishObjects(itemId, domishObjects)
-          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-          CurrentState.updateItemTimestamp(itemId)
-          Rerenderer.instance.rerender()
-        }
-      })
+        // contenteditableな要素のinnerHTMLをModelに反映する
+        const domishObjects = DomishObject.fromChildren(event.target)
+        CurrentState.setTextItemDomishObjects(itemId, domishObjects)
+        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+        CurrentState.updateItemTimestamp(itemId)
+        Rerenderer.instance.rerender()
+      }
     },
   }
 }

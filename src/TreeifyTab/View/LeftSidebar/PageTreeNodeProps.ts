@@ -1,6 +1,5 @@
 import { List, Set } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -66,56 +65,50 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       footprintCount,
       tabsCount: CurrentState.countTabsInSubtree(state, itemId),
       onClickContentArea: (event: MouseEvent) => {
-        doWithErrorCapture(() => {
-          switch (InputId.fromMouseEvent(event)) {
-            case '0000MouseButton0':
-              event.preventDefault()
-              CurrentState.switchActivePage(itemId)
-              Rerenderer.instance.rerender()
-              break
-            case '0000MouseButton1':
-              event.preventDefault()
-              if (itemId === TOP_ITEM_ID) break
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            event.preventDefault()
+            CurrentState.switchActivePage(itemId)
+            Rerenderer.instance.rerender()
+            break
+          case '0000MouseButton1':
+            event.preventDefault()
+            if (itemId === TOP_ITEM_ID) break
 
-              // ページ全体のタブを閉じる
-              for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
-                const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-                if (tabId !== undefined) {
-                  // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-                  External.instance.tabIdsToBeClosedForUnloading.add(tabId)
+            // ページ全体のタブを閉じる
+            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+              if (tabId !== undefined) {
+                // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+                External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
-                  // 対応するタブを閉じる
-                  chrome.tabs.remove(tabId)
-                }
+                // 対応するタブを閉じる
+                chrome.tabs.remove(tabId)
               }
-              unmountPage(itemId, activePageId)
-              break
-          }
-        })
+            }
+            unmountPage(itemId, activePageId)
+            break
+        }
       },
       onClickCloseButton: () => {
-        doWithErrorCapture(() => {
-          unmountPage(itemId, activePageId)
-        })
+        unmountPage(itemId, activePageId)
       },
       onClickTabsCount: (event) => {
-        doWithErrorCapture(() => {
-          switch (InputId.fromMouseEvent(event)) {
-            case '0000MouseButton0':
-              // ページ全体のタブを閉じる
-              for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
-                const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
-                if (tabId !== undefined) {
-                  // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-                  External.instance.tabIdsToBeClosedForUnloading.add(tabId)
+        switch (InputId.fromMouseEvent(event)) {
+          case '0000MouseButton0':
+            // ページ全体のタブを閉じる
+            for (const subtreeItemId of CurrentState.getSubtreeItemIds(itemId)) {
+              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+              if (tabId !== undefined) {
+                // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+                External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
-                  // 対応するタブを閉じる
-                  chrome.tabs.remove(tabId)
-                }
+                // 対応するタブを閉じる
+                chrome.tabs.remove(tabId)
               }
-              break
-          }
-        })
+            }
+            break
+        }
       },
       onTabsCountContextMenu: (event: Event) => {
         event.preventDefault()

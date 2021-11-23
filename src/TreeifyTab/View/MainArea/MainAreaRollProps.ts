@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -44,59 +43,57 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
     hiddenItemsCount,
     outerCircleRadiusEm,
     onClick: (event: MouseEvent) => {
-      doWithErrorCapture(() => {
-        Internal.instance.saveCurrentStateToUndoStack()
-        CurrentState.setTargetItemPath(itemPath)
+      Internal.instance.saveCurrentStateToUndoStack()
+      CurrentState.setTargetItemPath(itemPath)
 
-        const inputId = InputId.fromMouseEvent(event)
-        switch (deriveBulletState(state, itemPath)) {
-          case MainAreaBulletState.NO_CHILDREN:
-            switch (inputId) {
-              case '1000MouseButton0':
-                Command.unfold()
-                Command.turnIntoPage()
-                Command.showPage()
-                break
-            }
-            break
-          case MainAreaBulletState.UNFOLDED:
-            switch (inputId) {
-              case '0000MouseButton0':
-                Command.toggleFolded()
-                break
-              case '1000MouseButton0':
-                Command.unfold()
-                Command.turnIntoPage()
-                Command.showPage()
-                break
-            }
-            break
-          case MainAreaBulletState.FOLDED:
-            switch (inputId) {
-              case '0000MouseButton0':
-                Command.toggleFolded()
-                break
-              case '1000MouseButton0':
-                Command.unfold()
-                Command.turnIntoPage()
-                Command.showPage()
-                break
-            }
-            break
-          case MainAreaBulletState.PAGE:
-            switch (inputId) {
-              case '0000MouseButton0':
-                Command.showPage()
-                break
-              case '1000MouseButton0':
-                Command.turnIntoNonPage()
-                Command.unfold()
-                break
-            }
-            break
-        }
-        Rerenderer.instance.rerender()
-      })
+      const inputId = InputId.fromMouseEvent(event)
+      switch (deriveBulletState(state, itemPath)) {
+        case MainAreaBulletState.NO_CHILDREN:
+          switch (inputId) {
+            case '1000MouseButton0':
+              Command.unfold()
+              Command.turnIntoPage()
+              Command.showPage()
+              break
+          }
+          break
+        case MainAreaBulletState.UNFOLDED:
+          switch (inputId) {
+            case '0000MouseButton0':
+              Command.toggleFolded()
+              break
+            case '1000MouseButton0':
+              Command.unfold()
+              Command.turnIntoPage()
+              Command.showPage()
+              break
+          }
+          break
+        case MainAreaBulletState.FOLDED:
+          switch (inputId) {
+            case '0000MouseButton0':
+              Command.toggleFolded()
+              break
+            case '1000MouseButton0':
+              Command.unfold()
+              Command.turnIntoPage()
+              Command.showPage()
+              break
+          }
+          break
+        case MainAreaBulletState.PAGE:
+          switch (inputId) {
+            case '0000MouseButton0':
+              Command.showPage()
+              break
+            case '1000MouseButton0':
+              Command.turnIntoNonPage()
+              Command.unfold()
+              break
+          }
+          break
+      }
+      Rerenderer.instance.rerender()
     },
     onContextMenu: (event: Event) => {
       event.preventDefault()

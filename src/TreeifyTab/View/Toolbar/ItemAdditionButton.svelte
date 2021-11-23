@@ -1,14 +1,11 @@
 <script lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { External } from 'src/TreeifyTab/External/External'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import ToolbarIconButton from 'src/TreeifyTab/View/Toolbar/ToolbarIconButton.svelte'
 
   function onClick() {
-    doWithErrorCapture(() => {
-      External.instance.dialogState = { type: 'ItemAdditionDropdownMenuDialog' }
-      Rerenderer.instance.rerender()
-    })
+    External.instance.dialogState = { type: 'ItemAdditionDropdownMenuDialog' }
+    Rerenderer.instance.rerender()
   }
 </script>
 

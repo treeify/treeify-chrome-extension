@@ -1,5 +1,4 @@
 import { List } from 'immutable'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
@@ -21,52 +20,46 @@ export function createKeyBindingProps(binding: [InputId, List<CommandId>]): KeyB
   const commandIds = binding[1]
 
   function onChange(event: Event) {
-    doWithErrorCapture(() => {
-      if (event.target instanceof HTMLSelectElement) {
-        // コマンドリストの何番目が変更されたかを取得する
-        assertNonUndefined(event.target.dataset.index)
-        const index = parseInt(event.target.dataset.index)
+    if (event.target instanceof HTMLSelectElement) {
+      // コマンドリストの何番目が変更されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
 
-        const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
-        const newCommandIds = oldCommandIds.set(index, event.target.value as CommandId)
-        Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
-      }
-    })
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+      const newCommandIds = oldCommandIds.set(index, event.target.value as CommandId)
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+    }
   }
 
   function onClickDeleteButton(event: Event) {
-    doWithErrorCapture(() => {
-      if (event.target instanceof HTMLElement) {
-        if (commandIds.size === 1) {
-          // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
-          Internal.instance.delete(PropertyPath.of('mainAreaKeyBindings', inputId))
-        } else {
-          // コマンドリストの何番目のボタンが押下されたかを取得する
-          assertNonUndefined(event.target.dataset.index)
-          const index = parseInt(event.target.dataset.index)
-
-          const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
-          const newCommandIds = oldCommandIds.remove(index)
-          Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
-        }
-        Rerenderer.instance.rerender()
-      }
-    })
-  }
-
-  function onClickAddCommandButton(event: Event) {
-    doWithErrorCapture(() => {
-      if (event.target instanceof HTMLElement) {
+    if (event.target instanceof HTMLElement) {
+      if (commandIds.size === 1) {
+        // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
+        Internal.instance.delete(PropertyPath.of('mainAreaKeyBindings', inputId))
+      } else {
         // コマンドリストの何番目のボタンが押下されたかを取得する
         assertNonUndefined(event.target.dataset.index)
         const index = parseInt(event.target.dataset.index)
 
         const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
-        const newCommandIds = oldCommandIds.insert(index + 1, 'doNothing')
+        const newCommandIds = oldCommandIds.remove(index)
         Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
-        Rerenderer.instance.rerender()
       }
-    })
+      Rerenderer.instance.rerender()
+    }
+  }
+
+  function onClickAddCommandButton(event: Event) {
+    if (event.target instanceof HTMLElement) {
+      // コマンドリストの何番目のボタンが押下されたかを取得する
+      assertNonUndefined(event.target.dataset.index)
+      const index = parseInt(event.target.dataset.index)
+
+      const oldCommandIds = Internal.instance.state.mainAreaKeyBindings[inputId]
+      const newCommandIds = oldCommandIds.insert(index + 1, 'doNothing')
+      Internal.instance.mutate(newCommandIds, PropertyPath.of('mainAreaKeyBindings', inputId))
+      Rerenderer.instance.rerender()
+    }
   }
 
   return {

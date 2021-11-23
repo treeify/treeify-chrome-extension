@@ -1,17 +1,14 @@
 <script context="module" lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { External } from 'src/TreeifyTab/External/External'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
   function onClickBackdrop(event: Event) {
-    doWithErrorCapture(() => {
-      // ダイアログを閉じる
-      if (event.eventPhase === Event.AT_TARGET) {
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      }
-    })
+    // ダイアログを閉じる
+    if (event.eventPhase === Event.AT_TARGET) {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
   }
 </script>
 

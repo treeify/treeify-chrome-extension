@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -10,23 +9,19 @@
   export let props: DropdownMenuDialogProps
 
   function onClickBackdrop(event: Event) {
-    doWithErrorCapture(() => {
-      // ダイアログを閉じる
-      if (event.eventPhase === Event.AT_TARGET) {
-        event.preventDefault()
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      }
-    })
+    // ダイアログを閉じる
+    if (event.eventPhase === Event.AT_TARGET) {
+      event.preventDefault()
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
   }
 
   function onKeyDown(event: KeyboardEvent) {
-    doWithErrorCapture(() => {
-      if (InputId.fromKeyboardEvent(event) === '0000Escape') {
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      }
-    })
+    if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
   }
 
   const style = `

@@ -5,7 +5,7 @@ import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import { List } from 'immutable'
 import { ItemId, TabId } from 'src/TreeifyTab/basicType'
-import { doAsyncWithErrorCapture, doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
+import { doAsyncWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -46,72 +46,70 @@ export const onMessage = (message: any, sender: MessageSender) => {
 }
 
 export function onCreated(tab: Tab) {
-  doWithErrorCapture(() => {
-    // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
-    assertNonUndefined(tab.id)
+  // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
+  assertNonUndefined(tab.id)
 
-    const url = tab.url || tab.pendingUrl || ''
-    const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
-    if (itemIdsForTabCreation.isEmpty()) {
-      // タブに対応するウェブページ項目がない時
+  const url = tab.url || tab.pendingUrl || ''
+  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+  if (itemIdsForTabCreation.isEmpty()) {
+    // タブに対応するウェブページ項目がない時
 
-      // ウェブページ項目を作る
-      const newWebPageItemId = CurrentState.createWebPageItem()
-      reflectInWebPageItem(newWebPageItemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
+    // ウェブページ項目を作る
+    const newWebPageItemId = CurrentState.createWebPageItem()
+    reflectInWebPageItem(newWebPageItemId, tab)
+    External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, newWebPageItemId)
 
-      // タブがバックグラウンドで開かれたら未読フラグを立てる
-      if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
-        CurrentState.setIsUnreadFlag(newWebPageItemId, true)
-      }
+    // タブがバックグラウンドで開かれたら未読フラグを立てる
+    if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
+      CurrentState.setIsUnreadFlag(newWebPageItemId, true)
+    }
 
-      const targetItemPath = CurrentState.getTargetItemPath()
-      const targetItemId = ItemPath.getItemId(targetItemPath)
+    const targetItemPath = CurrentState.getTargetItemPath()
+    const targetItemId = ItemPath.getItemId(targetItemPath)
 
-      const openerItemId = getOpenerItemId(url, tab.openerTabId)
-      if (openerItemId === undefined) {
-        const newItemPath = CurrentState.insertBelowItem(targetItemPath, newWebPageItemId)
-        if (tab.active) {
-          CurrentState.setTargetItemPath(newItemPath)
+    const openerItemId = getOpenerItemId(url, tab.openerTabId)
+    if (openerItemId === undefined) {
+      const newItemPath = CurrentState.insertBelowItem(targetItemPath, newWebPageItemId)
+      if (tab.active) {
+        CurrentState.setTargetItemPath(newItemPath)
 
-          // 空のテキスト項目上で新しいタブを開いた場合は空のテキスト項目を削除する
-          if (CurrentState.isEmptyTextItem(targetItemId)) {
-            CurrentState.deleteItem(targetItemId)
-          }
-        }
-      } else {
-        // openerの最後の子として追加する
-        CurrentState.insertLastChildItem(openerItemId, newWebPageItemId)
-
-        // openerがターゲット項目なら
-        if (targetItemId === openerItemId) {
-          // 自動的に展開する
-          CurrentState.setIsFolded(targetItemPath, false)
-
-          // フォーカスを移す
-          if (tab.active) {
-            const newItemPath = targetItemPath.push(newWebPageItemId)
-            CurrentState.setTargetItemPath(newItemPath)
-          }
+        // 空のテキスト項目上で新しいタブを開いた場合は空のテキスト項目を削除する
+        if (CurrentState.isEmptyTextItem(targetItemId)) {
+          CurrentState.deleteItem(targetItemId)
         }
       }
     } else {
-      // 既存のウェブページ項目に対応するタブが開かれた時
+      // openerの最後の子として追加する
+      CurrentState.insertLastChildItem(openerItemId, newWebPageItemId)
 
-      const itemId = itemIdsForTabCreation.first(undefined)
-      assertNonUndefined(itemId)
-      reflectInWebPageItem(itemId, tab)
-      External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
-      External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
+      // openerがターゲット項目なら
+      if (targetItemId === openerItemId) {
+        // 自動的に展開する
+        CurrentState.setIsFolded(targetItemPath, false)
 
-      // タブがバックグラウンドで開かれたら未読フラグを立てる
-      if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
-        CurrentState.setIsUnreadFlag(itemId, true)
+        // フォーカスを移す
+        if (tab.active) {
+          const newItemPath = targetItemPath.push(newWebPageItemId)
+          CurrentState.setTargetItemPath(newItemPath)
+        }
       }
     }
+  } else {
+    // 既存のウェブページ項目に対応するタブが開かれた時
 
-    Rerenderer.instance.rerender()
-  })
+    const itemId = itemIdsForTabCreation.first(undefined)
+    assertNonUndefined(itemId)
+    reflectInWebPageItem(itemId, tab)
+    External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
+    External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
+
+    // タブがバックグラウンドで開かれたら未読フラグを立てる
+    if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
+      CurrentState.setIsUnreadFlag(itemId, true)
+    }
+  }
+
+  Rerenderer.instance.rerender()
 }
 
 // どのウェブページ項目から開かれたタブかを返す
@@ -160,49 +158,45 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 }
 
 export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
-  doWithErrorCapture(() => {
-    External.instance.tabItemCorrespondence.unregisterTab(tabId)
+  External.instance.tabItemCorrespondence.unregisterTab(tabId)
 
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-    // 項目削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
-    if (itemId === undefined) return
+  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+  // 項目削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
+  if (itemId === undefined) return
 
-    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
+  External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
 
-    if (External.instance.tabIdsToBeClosedForUnloading.has(tabId)) {
-      // アンロードによりタブが閉じられた場合、ウェブページ項目は削除しない
-      External.instance.tabIdsToBeClosedForUnloading.delete(tabId)
-    } else if (CurrentState.isItem(itemId)) {
-      // 対応するウェブページ項目を削除する
-      if (itemId === ItemPath.getItemId(CurrentState.getTargetItemPath())) {
-        Command.deleteItemItself()
-      } else {
-        CurrentState.deleteItemItself(itemId)
-      }
+  if (External.instance.tabIdsToBeClosedForUnloading.has(tabId)) {
+    // アンロードによりタブが閉じられた場合、ウェブページ項目は削除しない
+    External.instance.tabIdsToBeClosedForUnloading.delete(tabId)
+  } else if (CurrentState.isItem(itemId)) {
+    // 対応するウェブページ項目を削除する
+    if (itemId === ItemPath.getItemId(CurrentState.getTargetItemPath())) {
+      Command.deleteItemItself()
+    } else {
+      CurrentState.deleteItemItself(itemId)
     }
+  }
 
-    Rerenderer.instance.rerender()
-  })
+  Rerenderer.instance.rerender()
 }
 
 export function onActivated(tabActiveInfo: TabActiveInfo) {
-  doWithErrorCapture(() => {
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
-    if (itemId === undefined) return
+  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
+  if (itemId === undefined) return
 
-    CurrentState.updateItemTimestamp(itemId)
-    CurrentState.setIsUnreadFlag(itemId, false)
+  CurrentState.updateItemTimestamp(itemId)
+  CurrentState.setIsUnreadFlag(itemId, false)
 
-    // もしタブに対応する項目がアクティブページに所属していれば、それをターゲットする
-    const activePageId = CurrentState.getActivePageId()
-    for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
-      if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
-        CurrentState.setTargetItemPath(itemPath)
-        break
-      }
+  // もしタブに対応する項目がアクティブページに所属していれば、それをターゲットする
+  const activePageId = CurrentState.getActivePageId()
+  for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
+    if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
+      CurrentState.setTargetItemPath(itemPath)
+      break
     }
-    Rerenderer.instance.rerender()
-  })
+  }
+  Rerenderer.instance.rerender()
 }
 
 /**
@@ -259,7 +253,5 @@ async function getAllNonTreeifyTabs(): Promise<Tab[]> {
 }
 
 export function onWindowFocusChanged(windowId: integer) {
-  doWithErrorCapture(() => {
-    External.instance.lastFocusedWindowId = windowId
-  })
+  External.instance.lastFocusedWindowId = windowId
 }

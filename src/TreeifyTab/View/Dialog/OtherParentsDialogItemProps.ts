@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -20,12 +19,10 @@ export function createOtherParentsDialogItemProps(itemPath: ItemPath): OtherPare
   return {
     itemContentProps: createItemContentProps(parentItemId),
     onClick() {
-      doWithErrorCapture(() => {
-        CurrentState.jumpTo(itemPath)
+      CurrentState.jumpTo(itemPath)
 
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      })
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
     },
   }
 }

@@ -1,4 +1,3 @@
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -48,79 +47,73 @@ export function createMainAreaWebPageContentProps(
     isAudible: tab?.audible === true,
     citeProps: createCiteProps(itemId),
     onFocus: (event) => {
-      doWithErrorCapture(() => {
-        // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
-        if (event.target instanceof Node) {
-          getSelection()?.setPosition(event.target)
-        }
-      })
+      // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
+      if (event.target instanceof Node) {
+        getSelection()?.setPosition(event.target)
+      }
     },
     onClickTitle: (event) => {
-      doWithErrorCapture(() => {
-        switch (InputId.fromMouseEvent(event)) {
-          case '0000MouseButton0':
-            event.preventDefault()
-            CurrentState.setTargetItemPath(itemPath)
-            Command.browseTab()
-            Rerenderer.instance.rerender()
-            break
-        }
-      })
+      switch (InputId.fromMouseEvent(event)) {
+        case '0000MouseButton0':
+          event.preventDefault()
+          CurrentState.setTargetItemPath(itemPath)
+          Command.browseTab()
+          Rerenderer.instance.rerender()
+          break
+      }
     },
     onClickFavicon: (event) => {
-      doWithErrorCapture(() => {
-        event.stopPropagation()
-        event.preventDefault()
+      event.stopPropagation()
+      event.preventDefault()
 
-        CurrentState.setTargetItemPath(itemPath)
+      CurrentState.setTargetItemPath(itemPath)
 
-        switch (InputId.fromMouseEvent(event)) {
-          case '0000MouseButton0':
-            if (tab === undefined) {
-              // タブが閉じられている場合
-              Command.loadItem()
-            } else {
-              // discard状態またはロード状態の場合
-              Command.closeSubtreeTabs()
-            }
+      switch (InputId.fromMouseEvent(event)) {
+        case '0000MouseButton0':
+          if (tab === undefined) {
+            // タブが閉じられている場合
+            Command.loadItem()
+          } else {
+            // discard状態またはロード状態の場合
+            Command.closeSubtreeTabs()
+          }
 
-            Rerenderer.instance.rerender()
-            break
-          case '1000MouseButton0':
-            if (tab === undefined) {
-              // タブが閉じられている場合
-              Command.loadSubtree()
-            } else {
-              // discard状態またはロード状態の場合
-              Command.closeItemTab()
-            }
+          Rerenderer.instance.rerender()
+          break
+        case '1000MouseButton0':
+          if (tab === undefined) {
+            // タブが閉じられている場合
+            Command.loadSubtree()
+          } else {
+            // discard状態またはロード状態の場合
+            Command.closeItemTab()
+          }
 
-            Rerenderer.instance.rerender()
-            break
-          case '0100MouseButton0':
-            if (isUnloaded) {
-              // アンロード状態の場合
-              Command.loadItem()
-            } else {
-              // ロード状態の場合
-              Command.discardSubtreeTabs()
-            }
+          Rerenderer.instance.rerender()
+          break
+        case '0100MouseButton0':
+          if (isUnloaded) {
+            // アンロード状態の場合
+            Command.loadItem()
+          } else {
+            // ロード状態の場合
+            Command.discardSubtreeTabs()
+          }
 
-            Rerenderer.instance.rerender()
-            break
-          case '1100MouseButton0':
-            if (isUnloaded) {
-              // アンロード状態の場合
-              Command.loadSubtree()
-            } else {
-              // ロード状態の場合
-              Command.discardItemTab()
-            }
+          Rerenderer.instance.rerender()
+          break
+        case '1100MouseButton0':
+          if (isUnloaded) {
+            // アンロード状態の場合
+            Command.loadSubtree()
+          } else {
+            // ロード状態の場合
+            Command.discardItemTab()
+          }
 
-            Rerenderer.instance.rerender()
-            break
-        }
-      })
+          Rerenderer.instance.rerender()
+          break
+      }
     },
   }
 }

@@ -1,6 +1,5 @@
 import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
-import { doWithErrorCapture } from 'src/TreeifyTab/errorCapture'
 import { matchTabsAndWebPageItems } from 'src/TreeifyTab/External/chromeEventListeners'
 import {
   focusMainAreaBackground,
@@ -63,65 +62,63 @@ export function createMainAreaProps(state: State): MainAreaProps {
 }
 
 function onKeyDown(event: KeyboardEvent) {
-  doWithErrorCapture(() => {
-    // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
-    // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
-    if (event.isComposing) return
+  // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
+  // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
+  if (event.isComposing) return
 
-    const inputId = InputId.fromKeyboardEvent(event)
-    switch (inputId) {
-      case '0000ArrowLeft':
-        onArrowLeft(event)
-        return
-      case '0000ArrowRight':
-        onArrowRight(event)
-        return
-      case '0000ArrowUp':
-        onArrowUp(event)
-        return
-      case '0000ArrowDown':
-        onArrowDown(event)
-        return
-      case '0100ArrowUp':
-        onShiftArrowUp(event)
-        return
-      case '0100ArrowDown':
-        onShiftArrowDown(event)
-        return
-      case '0000Backspace':
-        onBackspace(event)
-        return
-      case '0000Delete':
-        onDelete(event)
-        return
-      case '0000Space':
-        onSpace(event)
-        return
-      case '1000KeyA':
-        event.preventDefault()
-        CurrentState.selectAll()
-        Rerenderer.instance.rerender()
-        return
-      case '1000KeyZ':
-        event.preventDefault()
-        undo()
-        return
-    }
-
-    const commandIds: List<CommandId> | undefined =
-      Internal.instance.state.mainAreaKeyBindings[inputId]
-    if (commandIds !== undefined) {
+  const inputId = InputId.fromKeyboardEvent(event)
+  switch (inputId) {
+    case '0000ArrowLeft':
+      onArrowLeft(event)
+      return
+    case '0000ArrowRight':
+      onArrowRight(event)
+      return
+    case '0000ArrowUp':
+      onArrowUp(event)
+      return
+    case '0000ArrowDown':
+      onArrowDown(event)
+      return
+    case '0100ArrowUp':
+      onShiftArrowUp(event)
+      return
+    case '0100ArrowDown':
+      onShiftArrowDown(event)
+      return
+    case '0000Backspace':
+      onBackspace(event)
+      return
+    case '0000Delete':
+      onDelete(event)
+      return
+    case '0000Space':
+      onSpace(event)
+      return
+    case '1000KeyA':
       event.preventDefault()
-
-      Internal.instance.saveCurrentStateToUndoStack()
-
-      for (const commandId of commandIds) {
-        // @ts-ignore
-        Command[commandId]?.()
-      }
+      CurrentState.selectAll()
       Rerenderer.instance.rerender()
+      return
+    case '1000KeyZ':
+      event.preventDefault()
+      undo()
+      return
+  }
+
+  const commandIds: List<CommandId> | undefined =
+    Internal.instance.state.mainAreaKeyBindings[inputId]
+  if (commandIds !== undefined) {
+    event.preventDefault()
+
+    Internal.instance.saveCurrentStateToUndoStack()
+
+    for (const commandId of commandIds) {
+      // @ts-ignore
+      Command[commandId]?.()
     }
-  })
+    Rerenderer.instance.rerender()
+  }
 }
 
 /**
