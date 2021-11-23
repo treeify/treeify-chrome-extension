@@ -6,13 +6,12 @@
 
   export let props: MainAreaRollProps
 
-  $: outerCircleStyle = `
-    width: ${props.outerCircleRadiusEm}em;
-    height: ${props.outerCircleRadiusEm}em;
+  $: style = `
+    --outer-circle-radius: ${props.outerCircleRadiusEm}em;
   `
 </script>
 
-<div class="main-area-roll" on:click={props.onClick} on:contextmenu={props.onContextMenu}>
+<div class="main-area-roll" {style} on:click={props.onClick} on:contextmenu={props.onContextMenu}>
   {#if props.bulletState === MainAreaBulletState.UNFOLDED}
     <div class="main-area-roll_indent-area">
       <div class="main-area-roll_indent-guide" />
@@ -23,7 +22,7 @@
       <div class="main-area-roll_page-icon" />
     {:else}
       {#if props.bulletState === MainAreaBulletState.FOLDED}
-        <div class="main-area-roll_outer-circle" style={outerCircleStyle} />
+        <div class="main-area-roll_outer-circle" />
       {/if}
       <div class="main-area-roll_inner-circle" />
     {/if}
@@ -157,7 +156,8 @@
 
   // メインエリアのバレットの外側の円（展開状態用）
   .main-area-roll_outer-circle {
-    // widthとheightがJavaScriptで設定される
+    width: var(--outer-circle-radius);
+    aspect-ratio: 1;
 
     border-radius: 50%;
     background: var(--main-area-bullet-outer-circle-color);

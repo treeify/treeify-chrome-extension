@@ -25,18 +25,20 @@
   }
 
   const style = `
-    top: ${props.top}px;
-    right: ${screen.width - props.right}px;
+    --top: ${props.top}px;
+    --right: ${props.right}px;
+    --screen-width: ${screen.width}px;
   `
 </script>
 
 <div
   class="dropdown-menu-dialog"
+  {style}
   on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
   use:setupFocusTrap
 >
-  <div class="dropdown-menu-dialog_frame" {style}>
+  <div class="dropdown-menu-dialog_frame">
     {#each props.itemPropses.toArray() as itemProps}
       <DropdownMenuItem props={itemProps} />
     {/each}
@@ -55,8 +57,9 @@
   }
 
   .dropdown-menu-dialog_frame {
-    // topとrightをstyle属性で動的に設定する
     position: absolute;
+    top: var(--top);
+    right: calc(var(--screen-width) - var(--right));
 
     // lch(98.0%, 0.0, 0.0)相当
     background: #f9f9f9;

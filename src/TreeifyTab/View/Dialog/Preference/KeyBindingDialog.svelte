@@ -13,7 +13,7 @@
 
   let isAddBindingMode = false
 
-  $: style = `visibility: ${isAddBindingMode ? 'visible' : 'hidden'};`
+  $: style = `--visibility: ${isAddBindingMode ? 'visible' : 'hidden'};`
 
   function onClick() {
     isAddBindingMode = true
@@ -45,7 +45,7 @@
 </script>
 
 <CommonDialog title="キーボード操作設定">
-  <div class="key-binding-dialog_content" on:keydown={onKeyDown}>
+  <div class="key-binding-dialog_content" {style} on:keydown={onKeyDown}>
     <div class="key-binding-dialog_scroll-area">
       <table class="key-binding-dialog_table">
         {#each props.keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
@@ -60,7 +60,7 @@
           <td />
         </tr>
       </table>
-      <p class="key-binding-dialog_message-for-add-binding" {style}>
+      <p class="key-binding-dialog_message-for-add-binding">
         コマンドを割り当てたいキーをそのまま入力してください。<br />
         （例：Shift+Alt+F）
       </p>
@@ -108,6 +108,8 @@
   .key-binding-dialog_message-for-add-binding {
     margin-inline: auto;
     width: max-content;
+
+    visibility: var(--visibility);
   }
 
   .key-binding-dialog_button-area {
