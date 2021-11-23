@@ -77,7 +77,7 @@ export function onPaste(event: ClipboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  const text = event.clipboardData.getData('text/plain')
+  const text = event.clipboardData.getData('text/plain').replace(/\r?\n$/, '')
 
   // 独自クリップボードを優先して貼り付ける
   if (External.instance.treeifyClipboard !== undefined) {
