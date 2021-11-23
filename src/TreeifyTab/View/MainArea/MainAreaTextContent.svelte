@@ -30,6 +30,8 @@
     // contenteditableな要素のフォーカス時の枠線を非表示
     outline: none;
 
+    padding-block: var(--main-area-content-area-vertical-padding);
+
     .citation & {
       // lch(80.0%, 0.0, 0.0)相当
       border-left: 0.25em solid #c6c6c6;

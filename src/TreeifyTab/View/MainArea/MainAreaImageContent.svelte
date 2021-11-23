@@ -39,9 +39,9 @@
         use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
       />
     </div>
-    <caption class="main-area-image-content_caption">
-      {props.caption}
-    </caption>
+    {#if props.caption !== ''}
+      <caption class="main-area-image-content_caption">{props.caption}</caption>
+    {/if}
   </table>
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
