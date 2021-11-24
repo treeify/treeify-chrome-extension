@@ -1,18 +1,16 @@
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
-import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export type CaptionSettingDialogProps = {
   initialCaption: string
-  onClickFinishButton: () => void
+  onSubmit: (newCaption: string) => void
   onClickCancelButton: () => void
-  onKeyDown: (event: KeyboardEvent) => void
 }
 
 export function createCaptionSettingDialogProps(): CaptionSettingDialogProps {
@@ -21,36 +19,20 @@ export function createCaptionSettingDialogProps(): CaptionSettingDialogProps {
   const caption = getCaption(targetItemId)
   assertNonUndefined(caption)
 
-  const onClickFinishButton = () => {
-    const editBox = document.querySelector<HTMLInputElement>('.caption-setting-dialog_caption')
-    assertNonNull(editBox)
-    const newCaption = editBox.value
-
-    setCaption(targetItemId, newCaption)
-    CurrentState.updateItemTimestamp(targetItemId)
-
-    // ダイアログを閉じる
-    External.instance.dialogState = undefined
-    Rerenderer.instance.rerender()
-  }
-
   return {
     initialCaption: caption,
-    onClickFinishButton,
-    onClickCancelButton: () => {
+    onSubmit: (newCaption: string) => {
+      setCaption(targetItemId, newCaption)
+      CurrentState.updateItemTimestamp(targetItemId)
+
       // ダイアログを閉じる
       External.instance.dialogState = undefined
       Rerenderer.instance.rerender()
     },
-    onKeyDown: (event) => {
-      if (event.isComposing) return
-
-      switch (InputId.fromKeyboardEvent(event)) {
-        case '0000Enter':
-        case '1000Enter':
-          onClickFinishButton()
-          break
-      }
+    onClickCancelButton: () => {
+      // ダイアログを閉じる
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
     },
   }
 }
