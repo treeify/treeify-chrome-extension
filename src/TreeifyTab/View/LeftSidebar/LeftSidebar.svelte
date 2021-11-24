@@ -12,6 +12,8 @@
 <style global lang="scss">
   .left-sidebar {
     width: 260px;
+    min-width: 10vw;
+    max-width: 30vw;
     height: 100%;
 
     overflow-y: auto;
