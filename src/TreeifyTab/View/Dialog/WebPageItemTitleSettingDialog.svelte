@@ -1,21 +1,15 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import { External } from 'src/TreeifyTab/External/External'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
-
-  function onClickBackdrop(event: Event) {
-    // ダイアログを閉じる
-    if (event.eventPhase === Event.AT_TARGET) {
-      External.instance.dialogState = undefined
-      Rerenderer.instance.rerender()
-    }
-  }
-</script>
-
-<script lang="ts">
   import { WebPageItemTitleSettingDialogProps } from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialogProps'
 
   export let props: WebPageItemTitleSettingDialogProps
+
+  let titleValue: string = props.initialTitle
 
   $: style = `
     --left: ${props.rect.left}px;
@@ -24,6 +18,37 @@
     --height: ${props.rect.height}px;
     --font-size: ${props.fontSize};
   `
+
+  function onClickBackdrop(event: Event) {
+    // ダイアログを閉じる
+    if (event.eventPhase === Event.AT_TARGET) {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
+  }
+
+  function onKeyDown(event: KeyboardEvent) {
+    if (event.isComposing) return
+
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+
+    if (event.key === 'Enter') {
+      if (titleValue === '') {
+        // 入力欄が空の状態でEnterキーを押したらタイトル設定を削除する
+        CurrentState.setWebPageItemTitle(targetItemId, null)
+      } else {
+        CurrentState.setWebPageItemTitle(targetItemId, titleValue)
+      }
+      // タイトル設定ダイアログを閉じる
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
+
+    if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
+  }
 </script>
 
 <div
@@ -36,8 +61,8 @@
     <input
       type="text"
       class="web-page-item-title-setting-dialog_text-box"
-      value={props.initialTitle}
-      on:keydown={props.onKeyDown}
+      bind:value={titleValue}
+      on:keydown={onKeyDown}
     />
   </div>
 </div>
