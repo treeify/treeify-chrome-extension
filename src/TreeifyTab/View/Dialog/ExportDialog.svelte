@@ -139,6 +139,9 @@
   }
 
   .export-dialog_checkbox-label {
+    display: flex;
+    align-items: center;
+
     cursor: pointer;
   }
 

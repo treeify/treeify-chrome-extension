@@ -47,7 +47,8 @@
   }
 
   .other-settings-dialog_checkbox-label {
-    display: block;
+    display: flex;
+    align-items: center;
 
     cursor: pointer;
   }
