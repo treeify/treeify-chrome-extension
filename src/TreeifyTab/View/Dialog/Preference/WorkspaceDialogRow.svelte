@@ -3,6 +3,7 @@
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { WorkspaceRecord } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
+  import { fly } from 'svelte/transition'
 
   export let workspace: WorkspaceRecord
 
@@ -27,7 +28,7 @@
   }
 </script>
 
-<div class="workspace-dialog_existing-workspace">
+<div class="workspace-dialog_existing-workspace" transition:fly|local>
   <input
     type="radio"
     name="currentWorkspaceId"

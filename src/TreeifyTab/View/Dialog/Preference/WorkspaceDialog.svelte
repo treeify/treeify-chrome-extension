@@ -8,7 +8,7 @@
 
 <CommonDialog title="ワークスペース" showCloseButton>
   <div class="workspace-dialog_content" tabindex="0">
-    {#each props.workspaces.toArray() as workspace}
+    {#each props.workspaces.toArray() as workspace (workspace.id)}
       <WorkspaceDialogRow {workspace} />
     {/each}
     <div>
