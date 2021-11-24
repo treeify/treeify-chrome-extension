@@ -28,7 +28,7 @@
 
     const inputId = InputId.fromKeyboardEvent(event)
     if (Internal.instance.state.mainAreaKeyBindings[inputId] !== undefined) {
-      alert(`キーバインド「${InputId.toReadableText(inputId)}」は既に登録されています。`)
+      alert(`${InputId.toReadableText(inputId)} には既に割り当てられています。`)
       return
     }
 
