@@ -121,6 +121,9 @@ async function pickDataFolder(): Promise<FileSystemDirectoryHandle> {
 
 async function isEmptyFolder(folderHandle: FileSystemDirectoryHandle): Promise<boolean> {
   for await (const key of folderHandle.keys()) {
+    // .DS_Storeファイルや.gitフォルダなどは無視する
+    if (key.startsWith('.')) continue
+
     return false
   }
   return true
