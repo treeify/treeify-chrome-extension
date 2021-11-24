@@ -88,8 +88,7 @@ export function onPaste(event: ClipboardEvent) {
         // 兄弟リスト内に同一項目を入れてしまわないようガード
         if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
-          // 循環参照発生時を考慮して、トランスクルード時は必ずfoldedとする
-          const initialEdge: Edge = { isFolded: true }
+          const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
           CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
         }
       }
