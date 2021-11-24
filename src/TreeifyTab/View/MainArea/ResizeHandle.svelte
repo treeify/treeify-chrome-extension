@@ -5,7 +5,7 @@
 <style global lang="scss">
   @use 'sass:math';
 
-  $aspectRatio: 0.2;
+  $aspectRatio: 0.16;
 
   // 角丸のストローク役
   .resize-handle {
