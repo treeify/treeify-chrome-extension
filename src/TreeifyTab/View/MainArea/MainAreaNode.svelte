@@ -94,7 +94,7 @@
 
 <style global lang="scss">
   :root {
-    --main-area-content-area-vertical-padding: 0.08em;
+    --main-area-content-area-vertical-padding: 0.12em;
 
     // フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当
     --main-area-focused-item-background-color: #ecf0ff;
