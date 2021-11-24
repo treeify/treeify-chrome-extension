@@ -1,9 +1,20 @@
 <script lang="ts">
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
   import { CustomCssDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/CustomCssDialogProps'
 
   export let props: CustomCssDialogProps
+
+  let textContent: string = props.code
+
+  function onKeyDown(event: KeyboardEvent) {
+    switch (InputId.fromKeyboardEvent(event)) {
+      case '1000Enter':
+        props.onSubmit(textContent)
+        break
+    }
+  }
 </script>
 
 <CommonDialog title="カスタムCSS">
@@ -12,13 +23,14 @@
       class="custom-css-dialog_code"
       contenteditable="plaintext-only"
       tabindex="0"
-      on:keydown={props.onKeyDown}
+      bind:textContent
+      on:keydown={onKeyDown}
     >
       {props.code}
     </div>
     <div class="custom-css-dialog_button-area">
       <FinishAndCancelButtons
-        onClickFinishButton={props.onClickFinishButton}
+        onClickFinishButton={() => props.onSubmit(textContent)}
         onClickCancelButton={props.onClickCancelButton}
       />
     </div>
