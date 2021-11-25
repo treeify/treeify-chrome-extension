@@ -12,6 +12,7 @@
   import { ExportFormat } from 'src/TreeifyTab/Internal/State'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { integer } from 'src/Utility/integer'
 
   let selectedFormat = Internal.instance.state.exportSettings.selectedFormat
 
@@ -20,7 +21,7 @@
   const opmlOptions = Internal.instance.state.exportSettings.options[ExportFormat.OPML]
   let plainTextIgnoreInvisibleItems = plainTextOptions.ignoreInvisibleItems
   let indentationExpression = plainTextOptions.indentationExpression
-  let minimumHeaderLevel = markdownOptions.minimumHeaderLevel
+  let minimumHeaderLevel: integer = markdownOptions.minimumHeaderLevel
   let markdownIgnoreInvisibleItems = markdownOptions.ignoreInvisibleItems
   let opmlIgnoreInvisibleItems = opmlOptions.ignoreInvisibleItems
 
@@ -28,59 +29,39 @@
     Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
   }
 
-  function onChangePlainTextIgnoreInvisibleItems(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      Internal.instance.mutate(
-        event.target.checked,
-        PropertyPath.of(
-          'exportSettings',
-          'options',
-          ExportFormat.PLAIN_TEXT,
-          'ignoreInvisibleItems'
-        )
-      )
-    }
+  function onChangePlainTextIgnoreInvisibleItems() {
+    Internal.instance.mutate(
+      plainTextIgnoreInvisibleItems,
+      PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'ignoreInvisibleItems')
+    )
   }
 
-  function onInputIndentationExpression(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      Internal.instance.mutate(
-        event.target.value,
-        PropertyPath.of(
-          'exportSettings',
-          'options',
-          ExportFormat.PLAIN_TEXT,
-          'indentationExpression'
-        )
-      )
-    }
+  function onInputIndentationExpression() {
+    Internal.instance.mutate(
+      indentationExpression,
+      PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
+    )
   }
 
-  function onInputMinimumHeaderLevel(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      Internal.instance.mutate(
-        parseInt(event.target.value),
-        PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
-      )
-    }
+  function onInputMinimumHeaderLevel() {
+    Internal.instance.mutate(
+      minimumHeaderLevel,
+      PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
+    )
   }
 
-  function onChangeMarkdownIgnoreInvisibleItems(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      Internal.instance.mutate(
-        event.target.checked,
-        PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'ignoreInvisibleItems')
-      )
-    }
+  function onChangeMarkdownIgnoreInvisibleItems() {
+    Internal.instance.mutate(
+      markdownIgnoreInvisibleItems,
+      PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'ignoreInvisibleItems')
+    )
   }
 
-  function onChangeOpmlIgnoreInvisibleItems(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      Internal.instance.mutate(
-        event.target.checked,
-        PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
-      )
-    }
+  function onChangeOpmlIgnoreInvisibleItems() {
+    Internal.instance.mutate(
+      opmlIgnoreInvisibleItems,
+      PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
+    )
   }
 
   function onClickCopyButton() {
