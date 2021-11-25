@@ -7,9 +7,10 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import KeyBinding from 'src/TreeifyTab/View/Dialog/Preference/KeyBinding.svelte'
-  import { KeyBindingDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialogProps'
+  import { createKeyBindingProps } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingProps'
 
-  export let props: KeyBindingDialogProps
+  const bindings = Object.entries(Internal.instance.state.mainAreaKeyBindings)
+  const keyBindingPropses = List(bindings).map(createKeyBindingProps)
 
   let isAddBindingMode = false
 
@@ -48,7 +49,7 @@
   <div class="key-binding-dialog_content" {style} on:keydown={onKeyDown}>
     <div class="key-binding-dialog_scroll-area">
       <table class="key-binding-dialog_table">
-        {#each props.keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
+        {#each keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
           <KeyBinding props={keyBindingProps} />
         {/each}
         <tr class="key-binding-dialog_add-binding-button-row">

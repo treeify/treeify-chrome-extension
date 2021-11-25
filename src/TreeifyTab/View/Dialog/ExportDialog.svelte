@@ -1,88 +1,204 @@
 <script lang="ts">
+  import { ItemType } from 'src/TreeifyTab/basicType'
+  import { External } from 'src/TreeifyTab/External/External'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+  import { exportAsIndentedText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
+  import { toMarkdownText } from 'src/TreeifyTab/Internal/ImportExport/markdown'
+  import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { ExportFormat } from 'src/TreeifyTab/Internal/State'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { ExportDialogProps } from 'src/TreeifyTab/View/Dialog/ExportDialogProps'
+  import { integer } from 'src/Utility/integer'
 
-  export let props: ExportDialogProps
+  let selectedFormat = Internal.instance.state.exportSettings.selectedFormat
+
+  const plainTextOptions = Internal.instance.state.exportSettings.options[ExportFormat.PLAIN_TEXT]
+  const markdownOptions = Internal.instance.state.exportSettings.options[ExportFormat.MARKDOWN]
+  const opmlOptions = Internal.instance.state.exportSettings.options[ExportFormat.OPML]
+  let plainTextIgnoreInvisibleItems = plainTextOptions.ignoreInvisibleItems
+  let indentationExpression = plainTextOptions.indentationExpression
+  let minimumHeaderLevel: integer = markdownOptions.minimumHeaderLevel
+  let markdownIgnoreInvisibleItems = markdownOptions.ignoreInvisibleItems
+  let opmlIgnoreInvisibleItems = opmlOptions.ignoreInvisibleItems
+
+  $: Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
+
+  $: Internal.instance.mutate(
+    plainTextIgnoreInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'ignoreInvisibleItems')
+  )
+
+  $: Internal.instance.mutate(
+    indentationExpression,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
+  )
+
+  $: Internal.instance.mutate(
+    minimumHeaderLevel,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
+  )
+
+  $: Internal.instance.mutate(
+    markdownIgnoreInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'ignoreInvisibleItems')
+  )
+
+  $: Internal.instance.mutate(
+    opmlIgnoreInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
+  )
+
+  function onClickCopyButton() {
+    navigator.clipboard.writeText(generateOutputText(selectedFormat))
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
+
+  function onClickSaveButton() {
+    const content = generateOutputText(selectedFormat)
+    const aElement = document.createElement('a')
+    aElement.href = window.URL.createObjectURL(new Blob([content], { type: 'text/plain' }))
+    aElement.download = deriveFileName(selectedFormat)
+    aElement.click()
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
+
+  function generateOutputText(format: ExportFormat): string {
+    const exportSettings = Internal.instance.state.exportSettings
+    switch (format) {
+      case ExportFormat.PLAIN_TEXT:
+        return CurrentState.getSelectedItemPaths().map(exportAsIndentedText).join('\n')
+      case ExportFormat.MARKDOWN:
+        const minimumHeaderLevel = exportSettings.options[ExportFormat.MARKDOWN].minimumHeaderLevel
+        return CurrentState.getSelectedItemPaths()
+          .map((selectedItemPath) => toMarkdownText(selectedItemPath, minimumHeaderLevel))
+          .join('')
+      case ExportFormat.OPML:
+        const ignoreInvisibleItems = exportSettings.options[ExportFormat.OPML].ignoreInvisibleItems
+        return toOpmlString(CurrentState.getSelectedItemPaths(), ignoreInvisibleItems)
+    }
+  }
+
+  function deriveFileName(format: ExportFormat): string {
+    const fileExtensions = {
+      [ExportFormat.PLAIN_TEXT]: '.txt',
+      [ExportFormat.MARKDOWN]: '.md',
+      [ExportFormat.OPML]: '.opml',
+    }
+    const fileExtension = fileExtensions[format]
+    const defaultFileName = 'export' + fileExtension
+
+    const itemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    switch (Internal.instance.state.items[itemId].type) {
+      case ItemType.TEXT:
+        const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
+        const plainText = DomishObject.toPlainText(domishObjects)
+        if (plainText === '') {
+          return defaultFileName
+        }
+        return plainText.split(/\r?\n/)[0] + fileExtension
+      case ItemType.WEB_PAGE:
+        const webPageItem = Internal.instance.state.webPageItems[itemId]
+        return (webPageItem.title ?? webPageItem.tabTitle) + fileExtension
+      case ItemType.IMAGE:
+        const imageItem = Internal.instance.state.imageItems[itemId]
+        if (imageItem.caption !== '') {
+          return imageItem.caption + fileExtension
+        }
+        return defaultFileName
+      case ItemType.CODE_BLOCK:
+        const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+        if (codeBlockItem.caption !== '') {
+          return codeBlockItem.caption + fileExtension
+        }
+        return defaultFileName
+      case ItemType.TEX:
+        const texItem = Internal.instance.state.texItems[itemId]
+        if (texItem.caption !== '') {
+          return texItem.caption + fileExtension
+        }
+        return defaultFileName
+    }
+  }
 </script>
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <div class="export-dialog_format-select-button-area" on:change={props.onChangeTabsRadioButton}>
+    <div class="export-dialog_format-select-button-area">
       <label
         class="export-dialog_format-select-button"
-        class:selected={props.selectedFormat === ExportFormat.PLAIN_TEXT}
+        class:selected={selectedFormat === ExportFormat.PLAIN_TEXT}
       >
-        <input type="radio" name="format" value={ExportFormat.PLAIN_TEXT} />
+        <input type="radio" bind:group={selectedFormat} value={ExportFormat.PLAIN_TEXT} />
         プレーンテキスト
       </label>
       <label
         class="export-dialog_format-select-button"
-        class:selected={props.selectedFormat === ExportFormat.MARKDOWN}
+        class:selected={selectedFormat === ExportFormat.MARKDOWN}
       >
-        <input type="radio" name="format" value={ExportFormat.MARKDOWN} />
+        <input type="radio" bind:group={selectedFormat} value={ExportFormat.MARKDOWN} />
         Markdown
       </label>
       <label
         class="export-dialog_format-select-button"
-        class:selected={props.selectedFormat === ExportFormat.OPML}
+        class:selected={selectedFormat === ExportFormat.OPML}
       >
-        <input type="radio" name="format" value={ExportFormat.OPML} />
+        <input type="radio" bind:group={selectedFormat} value={ExportFormat.OPML} />
         OPML
       </label>
     </div>
     <div class="export-dialog_option-area">
-      {#if props.selectedFormat === ExportFormat.PLAIN_TEXT}
+      {#if selectedFormat === ExportFormat.PLAIN_TEXT}
         <label
           >インデントの表現: <input
             type="text"
             class="export-dialog_indentation-expression"
-            value={props.indentationExpression}
+            bind:value={indentationExpression}
             size="4"
-            on:input={props.onInputIndentationExpression}
           /></label
         >
         <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
-            checked={props.plainTextIgnoreInvisibleItems}
-            on:change={props.onChangePlainTextIgnoreInvisibleItems}
+            bind:checked={plainTextIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      {:else if props.selectedFormat === ExportFormat.MARKDOWN}
+      {:else if selectedFormat === ExportFormat.MARKDOWN}
         <label
           >最上位の見出しの#の数: <input
             type="number"
             class="export-dialog_minimum-header-level"
-            value={props.minimumHeaderLevel}
+            bind:value={minimumHeaderLevel}
             min="1"
             max="6"
-            on:input={props.onInputMinimumHeaderLevel}
           /></label
         >
         <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
-            checked={props.markdownIgnoreInvisibleItems}
-            on:change={props.onChangeMarkdownIgnoreInvisibleItems}
+            bind:checked={markdownIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
-      {:else if props.selectedFormat === ExportFormat.OPML}
+      {:else if selectedFormat === ExportFormat.OPML}
         <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
-            checked={props.opmlIgnoreInvisibleItems}
-            on:change={props.onChangeOpmlIgnoreInvisibleItems}
+            bind:checked={opmlIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
       {/if}
     </div>
     <div class="export-dialog_button-area">
-      <button class="export-dialog_copy-button" on:click={props.onClickCopyButton}>
+      <button class="export-dialog_copy-button" on:click={onClickCopyButton}>
         <div class="export-dialog_copy-button-icon" />
         クリップボードにコピー
       </button>
-      <button class="export-dialog_save-button" on:click={props.onClickSaveButton}>
+      <button class="export-dialog_save-button" on:click={onClickSaveButton}>
         <div class="export-dialog_save-button-icon" />
         ファイルとして保存
       </button>
@@ -121,7 +237,7 @@
       border-bottom-style: none;
     }
 
-    input[type='radio'][name='format'] {
+    input[type='radio'] {
       display: none;
     }
   }
