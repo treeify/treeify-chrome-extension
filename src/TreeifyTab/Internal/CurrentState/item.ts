@@ -18,6 +18,9 @@ import { Timestamp } from 'src/Utility/Timestamp'
 export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   assert(itemId !== TOP_ITEM_ID)
 
+  // ダイアログを開いた状態で項目が削除されると、削除済みの項目に対する処理が走って危険なので自動的にダイアログを閉じる
+  External.instance.dialogState = undefined
+
   Internal.instance.searchEngine.deleteSearchIndex(itemId)
 
   const item = Internal.instance.state.items[itemId]
