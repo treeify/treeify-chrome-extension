@@ -1,13 +1,38 @@
 <script lang="ts">
+  import { External } from 'src/TreeifyTab/External/External'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
-  import { CitationSettingDialogProps } from 'src/TreeifyTab/View/Dialog/CitationSettingDialogProps'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
-  export let props: CitationSettingDialogProps
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const item = Internal.instance.state.items[ItemPath.getItemId(targetItemPath)]
 
-  let titleValue: string = props.title
-  let urlValue: string = props.url
+  let titleValue: string = item.cite?.title ?? ''
+  let urlValue: string = item.cite?.url ?? ''
+
+  function onClickFinishButton() {
+    const targetItemId = ItemPath.getItemId(targetItemPath)
+
+    // citeプロパティを更新
+    CurrentState.setCite(targetItemId, { title: titleValue, url: urlValue })
+
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetItemId)
+
+    // ダイアログを閉じる
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
+
+  function onClickCancelButton() {
+    // ダイアログを閉じる
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
 
   function onKeyDown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -16,7 +41,7 @@
       case '0000Enter':
       case '1000Enter':
         event.preventDefault()
-        props.onSubmit(titleValue, urlValue)
+        onClickFinishButton()
         break
     }
   }
@@ -31,10 +56,7 @@
       <input type="url" class="citation-setting-dialog_cite-url" bind:value={urlValue} />
     </div>
     <div class="citation-setting-dialog_button-area">
-      <FinishAndCancelButtons
-        onClickFinishButton={() => props.onSubmit(titleValue, urlValue)}
-        onClickCancelButton={props.onClickCancelButton}
-      />
+      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
   </div>
 </CommonDialog>
