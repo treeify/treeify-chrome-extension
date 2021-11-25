@@ -10,21 +10,13 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
-  import { assertNonNull } from 'src/Utility/Debug/assert'
 
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(targetItemPath))
-
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(targetItemId)
   const dialogTitle = isEmptyCodeBlockItem ? 'コードブロック項目作成' : 'コードブロック編集'
-  const code = Internal.instance.state.codeBlockItems[ItemPath.getItemId(targetItemPath)].code
+  let code = Internal.instance.state.codeBlockItems[targetItemId].code
 
   function onClickFinishButton() {
-    const targetItemId = ItemPath.getItemId(targetItemPath)
-
-    const editBox = document.querySelector<HTMLDivElement>('.code-block-edit-dialog_code')
-    assertNonNull(editBox)
-    const code = editBox.textContent?.replace(/\r?\n$/, '') ?? ''
-
     if (code !== '') {
       // コードが空でない場合
 
@@ -93,10 +85,9 @@
       class="code-block-edit-dialog_code"
       contenteditable="plaintext-only"
       tabindex="0"
+      bind:textContent={code}
       on:paste={onPaste}
-    >
-      {code}
-    </div>
+    />
     <div class="code-block-edit-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
