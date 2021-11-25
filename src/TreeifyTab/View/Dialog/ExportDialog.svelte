@@ -24,11 +24,8 @@
   let markdownIgnoreInvisibleItems = markdownOptions.ignoreInvisibleItems
   let opmlIgnoreInvisibleItems = opmlOptions.ignoreInvisibleItems
 
-  function onChangeTabsRadioButton(event: Event) {
-    if (event.target instanceof HTMLInputElement) {
-      selectedFormat = event.target.value as ExportFormat
-      Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
-    }
+  function onChangeTabsRadioButton() {
+    Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
   }
 
   function onChangePlainTextIgnoreInvisibleItems(event: Event) {
@@ -168,21 +165,31 @@
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.PLAIN_TEXT}
       >
-        <input type="radio" name="format" value={ExportFormat.PLAIN_TEXT} />
+        <input
+          type="radio"
+          name="format"
+          bind:group={selectedFormat}
+          value={ExportFormat.PLAIN_TEXT}
+        />
         プレーンテキスト
       </label>
       <label
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.MARKDOWN}
       >
-        <input type="radio" name="format" value={ExportFormat.MARKDOWN} />
+        <input
+          type="radio"
+          name="format"
+          bind:group={selectedFormat}
+          value={ExportFormat.MARKDOWN}
+        />
         Markdown
       </label>
       <label
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.OPML}
       >
-        <input type="radio" name="format" value={ExportFormat.OPML} />
+        <input type="radio" name="format" bind:group={selectedFormat} value={ExportFormat.OPML} />
         OPML
       </label>
     </div>
