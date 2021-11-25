@@ -25,13 +25,11 @@ export class SearchEngine {
 
   /** 全文検索を行う */
   search(searchQuery: string): Set<ItemId> {
-    const { andSearchWords, notSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
-    if (andSearchWords.isEmpty()) return Set.of()
-
-    const normalizedNotSearchWords = notSearchWords.map(UnigramSearchIndex.normalize)
+    const { positiveSearchWords, negativeSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
+    if (positiveSearchWords.isEmpty()) return Set.of()
 
     // 検索ワードごとに、ヒットする項目の全ItemPathの集合を生成する
-    const wordHitItemIdSets = andSearchWords.map((andSearchWord) => {
+    const wordHitItemIdSets = positiveSearchWords.map((andSearchWord) => {
       const normalizedAndSearchWord = UnigramSearchIndex.normalize(andSearchWord)
 
       return Set(this.unigramSearchIndex.search(andSearchWord)).filter((itemId) => {
@@ -42,10 +40,7 @@ export class SearchEngine {
         return textTracks.some((textTrack) => {
           // 大文字・小文字を区別せず検索する
           const normalizedTextTrack = UnigramSearchIndex.normalize(textTrack)
-          return (
-            normalizedTextTrack.includes(normalizedAndSearchWord) &&
-            normalizedNotSearchWords.every((word) => !normalizedTextTrack.includes(word))
-          )
+          return normalizedTextTrack.includes(normalizedAndSearchWord)
         })
       })
     })
@@ -60,7 +55,16 @@ export class SearchEngine {
         const intersections = otherWordsHitItemIdSets.map((set) => set.intersect(upperItemIds))
         if (intersections.every((set) => !set.isEmpty())) {
           // あるワードヒット項目の先祖集合（自身含む）に他の全てのワードのヒット項目が含まれる場合
-          result.push(wordHitItemId)
+
+          const textTracks = SearchEngine.getTextTracks(wordHitItemId, Internal.instance.state)
+          // 全てのテキストトラックにどのNOT検索ワードも含まれない
+          const success = textTracks.every((textTrack) => {
+            // どのNOT検索ワードもtextTrackに含まれない
+            return negativeSearchWords.every((word) => !textTrack.includes(word))
+          })
+          if (success) {
+            result.push(wordHitItemId)
+          }
         }
       }
     }
@@ -121,24 +125,23 @@ export class SearchEngine {
     return Set(this.getTextTracks(itemId, state).join(''))
   }
 
-  // 検索クエリをAND検索ワードとNOT検索ワードに分解する
   static parseSearchQuery(searchQuery: string): {
-    andSearchWords: List<string>
-    notSearchWords: List<string>
+    positiveSearchWords: List<string>
+    negativeSearchWords: List<string>
   } {
     const searchWords = List(searchQuery.split(/\s/).filter((str) => str !== ''))
-    const andSearchWords = []
-    const notSearchWords = []
+    const positiveSearchWords = []
+    const negativeSearchWords = []
     for (const searchWord of searchWords) {
       if (searchWord.startsWith('-') && searchWord.length >= 2) {
-        notSearchWords.push(searchWord.substring(1))
+        negativeSearchWords.push(searchWord.substring(1))
       } else {
-        andSearchWords.push(searchWord)
+        positiveSearchWords.push(searchWord)
       }
     }
     return {
-      andSearchWords: List(andSearchWords),
-      notSearchWords: List(notSearchWords),
+      positiveSearchWords: List(positiveSearchWords),
+      negativeSearchWords: List(negativeSearchWords),
     }
   }
 }
