@@ -1,9 +1,10 @@
-import { ItemId } from 'src/TreeifyTab/basicType'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /**
@@ -34,4 +35,38 @@ export function selectAll() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setAnchorItemPath(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
+}
+
+export function setCaption(itemId: ItemId, caption: string) {
+  switch (Internal.instance.state.items[itemId].type) {
+    case ItemType.IMAGE:
+      Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+        Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
+      })
+      break
+    case ItemType.CODE_BLOCK:
+      Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+        Internal.instance.mutate(caption, PropertyPath.of('codeBlockItems', itemId, 'caption'))
+      })
+      break
+    case ItemType.TEX:
+      Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
+        Internal.instance.mutate(caption, PropertyPath.of('texItems', itemId, 'caption'))
+      })
+      break
+  }
+}
+
+export function getCaption(itemId: ItemId): string | undefined {
+  const state = Internal.instance.state
+  switch (state.items[itemId].type) {
+    case ItemType.IMAGE:
+      return state.imageItems[itemId].caption
+    case ItemType.CODE_BLOCK:
+      return state.codeBlockItems[itemId].caption
+    case ItemType.TEX:
+      return state.texItems[itemId].caption
+    default:
+      return undefined
+  }
 }
