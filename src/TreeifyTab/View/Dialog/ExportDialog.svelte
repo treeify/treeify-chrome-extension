@@ -25,44 +25,32 @@
   let markdownIgnoreInvisibleItems = markdownOptions.ignoreInvisibleItems
   let opmlIgnoreInvisibleItems = opmlOptions.ignoreInvisibleItems
 
-  function onChangeTabsRadioButton() {
-    Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
-  }
+  $: Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
 
-  function onChangePlainTextIgnoreInvisibleItems() {
-    Internal.instance.mutate(
-      plainTextIgnoreInvisibleItems,
-      PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'ignoreInvisibleItems')
-    )
-  }
+  $: Internal.instance.mutate(
+    plainTextIgnoreInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'ignoreInvisibleItems')
+  )
 
-  function onInputIndentationExpression() {
-    Internal.instance.mutate(
-      indentationExpression,
-      PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
-    )
-  }
+  $: Internal.instance.mutate(
+    indentationExpression,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
+  )
 
-  function onInputMinimumHeaderLevel() {
-    Internal.instance.mutate(
-      minimumHeaderLevel,
-      PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
-    )
-  }
+  $: Internal.instance.mutate(
+    minimumHeaderLevel,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
+  )
 
-  function onChangeMarkdownIgnoreInvisibleItems() {
-    Internal.instance.mutate(
-      markdownIgnoreInvisibleItems,
-      PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'ignoreInvisibleItems')
-    )
-  }
+  $: Internal.instance.mutate(
+    markdownIgnoreInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'ignoreInvisibleItems')
+  )
 
-  function onChangeOpmlIgnoreInvisibleItems() {
-    Internal.instance.mutate(
-      opmlIgnoreInvisibleItems,
-      PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
-    )
-  }
+  $: Internal.instance.mutate(
+    opmlIgnoreInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
+  )
 
   function onClickCopyButton() {
     navigator.clipboard.writeText(generateOutputText(selectedFormat))
@@ -141,7 +129,7 @@
 
 <CommonDialog title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
-    <div class="export-dialog_format-select-button-area" on:change={onChangeTabsRadioButton}>
+    <div class="export-dialog_format-select-button-area">
       <label
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.PLAIN_TEXT}
@@ -172,14 +160,12 @@
             class="export-dialog_indentation-expression"
             bind:value={indentationExpression}
             size="4"
-            on:input={onInputIndentationExpression}
           /></label
         >
         <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             bind:checked={plainTextIgnoreInvisibleItems}
-            on:change={onChangePlainTextIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
       {:else if selectedFormat === ExportFormat.MARKDOWN}
@@ -190,14 +176,12 @@
             bind:value={minimumHeaderLevel}
             min="1"
             max="6"
-            on:input={onInputMinimumHeaderLevel}
           /></label
         >
         <label class="export-dialog_checkbox-label"
           ><input
             type="checkbox"
             bind:checked={markdownIgnoreInvisibleItems}
-            on:change={onChangeMarkdownIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
       {:else if selectedFormat === ExportFormat.OPML}
@@ -205,7 +189,6 @@
           ><input
             type="checkbox"
             bind:checked={opmlIgnoreInvisibleItems}
-            on:change={onChangeOpmlIgnoreInvisibleItems}
           />不可視の項目を無視する</label
         >
       {/if}
