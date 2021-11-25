@@ -1,10 +1,42 @@
 <script lang="ts">
+  import { External } from 'src/TreeifyTab/External/External'
+  import { detectLanguage } from 'src/TreeifyTab/highlightJs'
+  import { Command } from 'src/TreeifyTab/Internal/Command'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { removeRedundantIndent } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
-  import { CodeBlockItemEditDialogProps } from 'src/TreeifyTab/View/Dialog/CodeBlockItemEditDialogProps'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
-  export let props: CodeBlockItemEditDialogProps
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(targetItemId)
+  const dialogTitle = isEmptyCodeBlockItem ? 'コードブロック項目作成' : 'コードブロック編集'
+  let code = Internal.instance.state.codeBlockItems[targetItemId].code
+
+  function onClickFinishButton() {
+    if (code !== '') {
+      // コードが空でない場合
+
+      // コードを更新
+      CurrentState.setCodeBlockItemCode(targetItemId, code)
+      // 言語を自動検出
+      CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
+      // タイムスタンプを更新
+      CurrentState.updateItemTimestamp(targetItemId)
+    } else {
+      // コードが空の場合
+
+      // コードブロック項目を削除
+      Command.removeEdge()
+    }
+
+    // ダイアログを閉じる
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
 
   function onPaste(event: ClipboardEvent) {
     if (event.clipboardData !== null) {
@@ -24,23 +56,40 @@
       }
     }
   }
+
+  function onClickCancelButton() {
+    // ダイアログを閉じる
+    External.instance.dialogState = undefined
+    onCloseDialog()
+    Rerenderer.instance.rerender()
+  }
+
+  function onKeyDown(event: KeyboardEvent) {
+    switch (InputId.fromKeyboardEvent(event)) {
+      case '1000Enter':
+        onClickFinishButton()
+        break
+    }
+  }
+
+  function onCloseDialog() {
+    if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+      Command.removeEdge()
+    }
+  }
 </script>
 
-<CommonDialog title={props.dialogTitle} onClose={props.onCloseDialog}>
-  <div class="code-block-edit-dialog_content" on:keydown={props.onKeyDown}>
+<CommonDialog title={dialogTitle} onClose={onCloseDialog}>
+  <div class="code-block-edit-dialog_content" on:keydown={onKeyDown}>
     <div
       class="code-block-edit-dialog_code"
       contenteditable="plaintext-only"
       tabindex="0"
+      bind:textContent={code}
       on:paste={onPaste}
-    >
-      {props.code}
-    </div>
+    />
     <div class="code-block-edit-dialog_button-area">
-      <FinishAndCancelButtons
-        onClickFinishButton={props.onClickFinishButton}
-        onClickCancelButton={props.onClickCancelButton}
-      />
+      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
   </div>
 </CommonDialog>

@@ -1,7 +1,31 @@
-<script context="module" lang="ts">
+<script lang="ts">
   import { External } from 'src/TreeifyTab/External/External'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
+  import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  let titleValue: string = CurrentState.deriveWebPageItemTitle(targetItemId)
+
+  const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+  const domElement = document
+    .getElementById(domElementId)
+    ?.querySelector('.main-area-web-page-content_title')
+  assertNonNull(domElement)
+  assertNonUndefined(domElement)
+  const rect = domElement.getBoundingClientRect()
+  const style = `
+    --left: ${rect.left}px;
+    --top: ${rect.top}px;
+    --width: ${rect.width}px;
+    --height: ${rect.height}px;
+    --font-size: ${getComputedStyle(domElement).getPropertyValue('font-size')};
+  `
 
   function onClickBackdrop(event: Event) {
     // ダイアログを閉じる
@@ -10,20 +34,29 @@
       Rerenderer.instance.rerender()
     }
   }
-</script>
 
-<script lang="ts">
-  import { WebPageItemTitleSettingDialogProps } from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialogProps'
+  function onKeyDown(event: KeyboardEvent) {
+    if (event.isComposing) return
 
-  export let props: WebPageItemTitleSettingDialogProps
+    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
-  $: style = `
-    --left: ${props.rect.left}px;
-    --top: ${props.rect.top}px;
-    --width: ${props.rect.width}px;
-    --height: ${props.rect.height}px;
-    --font-size: ${props.fontSize};
-  `
+    if (event.key === 'Enter') {
+      if (titleValue === '') {
+        // 入力欄が空の状態でEnterキーを押したらタイトル設定を削除する
+        CurrentState.setWebPageItemTitle(targetItemId, null)
+      } else {
+        CurrentState.setWebPageItemTitle(targetItemId, titleValue)
+      }
+      // タイトル設定ダイアログを閉じる
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
+
+    if (InputId.fromKeyboardEvent(event) === '0000Escape') {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
+    }
+  }
 </script>
 
 <div
@@ -36,8 +69,8 @@
     <input
       type="text"
       class="web-page-item-title-setting-dialog_text-box"
-      value={props.initialTitle}
-      on:keydown={props.onKeyDown}
+      bind:value={titleValue}
+      on:keydown={onKeyDown}
     />
   </div>
 </div>
