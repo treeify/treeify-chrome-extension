@@ -5,18 +5,26 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
-  import { WebPageItemTitleSettingDialogProps } from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialogProps'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 
-  export let props: WebPageItemTitleSettingDialogProps
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+  let titleValue: string = CurrentState.deriveWebPageItemTitle(targetItemId)
 
-  let titleValue: string = props.initialTitle
-
-  $: style = `
-    --left: ${props.rect.left}px;
-    --top: ${props.rect.top}px;
-    --width: ${props.rect.width}px;
-    --height: ${props.rect.height}px;
-    --font-size: ${props.fontSize};
+  const domElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+  const domElement = document
+    .getElementById(domElementId)
+    ?.querySelector('.main-area-web-page-content_title')
+  assertNonNull(domElement)
+  assertNonUndefined(domElement)
+  const rect = domElement.getBoundingClientRect()
+  const style = `
+    --left: ${rect.left}px;
+    --top: ${rect.top}px;
+    --width: ${rect.width}px;
+    --height: ${rect.height}px;
+    --font-size: ${getComputedStyle(domElement).getPropertyValue('font-size')};
   `
 
   function onClickBackdrop(event: Event) {
