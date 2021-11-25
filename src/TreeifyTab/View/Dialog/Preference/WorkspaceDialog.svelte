@@ -3,8 +3,9 @@
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { WorkspaceRow } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
-  import WorkspaceDialogRow from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogRow.svelte'
+  import WorkspaceDialogRow, {
+    WorkspaceRow,
+  } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogRow.svelte'
   import { Writable, writable } from 'svelte/store'
 
   const initialWorkspaces = Object.keys(Internal.instance.state.workspaces).map((key) => {

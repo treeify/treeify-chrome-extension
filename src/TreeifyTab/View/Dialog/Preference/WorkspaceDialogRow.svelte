@@ -1,8 +1,14 @@
+<script context="module" lang="ts">
+  import { WorkspaceId } from 'src/TreeifyTab/basicType'
+  import { Workspace } from 'src/TreeifyTab/Internal/State'
+
+  export type WorkspaceRow = { id: WorkspaceId } & Pick<Workspace, 'name'>
+</script>
+
 <script lang="ts">
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-  import { WorkspaceRow } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
   import { fly } from 'svelte/transition'
 
   export let workspace: WorkspaceRow
