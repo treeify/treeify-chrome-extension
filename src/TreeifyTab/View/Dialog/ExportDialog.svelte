@@ -146,31 +146,21 @@
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.PLAIN_TEXT}
       >
-        <input
-          type="radio"
-          name="format"
-          bind:group={selectedFormat}
-          value={ExportFormat.PLAIN_TEXT}
-        />
+        <input type="radio" bind:group={selectedFormat} value={ExportFormat.PLAIN_TEXT} />
         プレーンテキスト
       </label>
       <label
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.MARKDOWN}
       >
-        <input
-          type="radio"
-          name="format"
-          bind:group={selectedFormat}
-          value={ExportFormat.MARKDOWN}
-        />
+        <input type="radio" bind:group={selectedFormat} value={ExportFormat.MARKDOWN} />
         Markdown
       </label>
       <label
         class="export-dialog_format-select-button"
         class:selected={selectedFormat === ExportFormat.OPML}
       >
-        <input type="radio" name="format" bind:group={selectedFormat} value={ExportFormat.OPML} />
+        <input type="radio" bind:group={selectedFormat} value={ExportFormat.OPML} />
         OPML
       </label>
     </div>
@@ -264,7 +254,7 @@
       border-bottom-style: none;
     }
 
-    input[type='radio'][name='format'] {
+    input[type='radio'] {
       display: none;
     }
   }
