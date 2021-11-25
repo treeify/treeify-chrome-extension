@@ -26,35 +26,28 @@
 </script>
 
 <div class="main-area-image-content" {id} {style} tabindex="0" on:focus={props.onFocus}>
-  <table class="main-area-image-content_caption-layout">
-    <div class="main-area-image-content_image-with-resize-handle">
-      <img
-        class="main-area-image-content_image"
-        src={props.url}
-        draggable="false"
-        on:load={onLoad}
-      />
-      <div
-        class="main-area-image-content_resize-handle"
-        use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
-      >
-        <ResizeHandle />
-      </div>
+  <div class="main-area-image-content_image-with-resize-handle">
+    <img class="main-area-image-content_image" src={props.url} draggable="false" on:load={onLoad} />
+    <div
+      class="main-area-image-content_resize-handle"
+      use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
+    >
+      <ResizeHandle />
     </div>
-    {#if props.caption !== ''}
-      <caption class="main-area-image-content_caption">{props.caption}</caption>
-    {/if}
-  </table>
+  </div>
+  {#if props.caption !== ''}
+    <div class="main-area-image-content_caption">{props.caption}</div>
+  {/if}
   {#if props.citeProps !== undefined}
     <Cite props={props.citeProps} />
   {/if}
 </div>
 
 <style global lang="scss">
-  // 画像項目のコンテンツ領域のルート
   .main-area-image-content {
-    // フォーカス時の枠線を非表示
     outline: none;
+
+    max-width: 100%;
   }
 
   .main-area-image-content_image-with-resize-handle {
@@ -100,7 +93,10 @@
   }
 
   .main-area-image-content_caption {
-    caption-side: bottom;
+    width: var(--width);
+    max-width: 100%;
+
+    text-align: center;
 
     // 完了状態のキャプション
     .completed &,
