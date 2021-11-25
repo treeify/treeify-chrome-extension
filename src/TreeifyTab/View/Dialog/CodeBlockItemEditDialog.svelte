@@ -64,7 +64,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onKeyDown(event) {
+  function onKeyDown(event: KeyboardEvent) {
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
         onClickFinishButton()
