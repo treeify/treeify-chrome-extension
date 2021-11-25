@@ -28,8 +28,6 @@ export class SearchEngine {
     const { andSearchWords, notSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
     if (andSearchWords.isEmpty()) return Set.of()
 
-    const normalizedNotSearchWords = notSearchWords.map(UnigramSearchIndex.normalize)
-
     // 検索ワードごとに、ヒットする項目の全ItemPathの集合を生成する
     const wordHitItemIdSets = andSearchWords.map((andSearchWord) => {
       const normalizedAndSearchWord = UnigramSearchIndex.normalize(andSearchWord)
@@ -42,10 +40,7 @@ export class SearchEngine {
         return textTracks.some((textTrack) => {
           // 大文字・小文字を区別せず検索する
           const normalizedTextTrack = UnigramSearchIndex.normalize(textTrack)
-          return (
-            normalizedTextTrack.includes(normalizedAndSearchWord) &&
-            normalizedNotSearchWords.every((word) => !normalizedTextTrack.includes(word))
-          )
+          return normalizedTextTrack.includes(normalizedAndSearchWord)
         })
       })
     })
@@ -60,7 +55,16 @@ export class SearchEngine {
         const intersections = otherWordsHitItemIdSets.map((set) => set.intersect(upperItemIds))
         if (intersections.every((set) => !set.isEmpty())) {
           // あるワードヒット項目の先祖集合（自身含む）に他の全てのワードのヒット項目が含まれる場合
-          result.push(wordHitItemId)
+
+          const textTracks = SearchEngine.getTextTracks(wordHitItemId, Internal.instance.state)
+          // 全てのテキストトラックにどのNOT検索ワードも含まれない
+          const success = textTracks.every((textTrack) => {
+            // どのNOT検索ワードもtextTrackに含まれない
+            return notSearchWords.every((word) => !textTrack.includes(word))
+          })
+          if (success) {
+            result.push(wordHitItemId)
+          }
         }
       }
     }
