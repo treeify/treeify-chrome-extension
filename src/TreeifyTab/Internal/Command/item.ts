@@ -211,7 +211,7 @@ export function deleteItemItself() {
     CurrentState.setTargetItemPath(newItemPath)
   }
 
-  CurrentState.deleteItemItself(targetItemId)
+  CurrentState.deleteItem(targetItemId, true)
 }
 
 /**

@@ -174,7 +174,7 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     if (itemId === ItemPath.getItemId(CurrentState.getTargetItemPath())) {
       Command.deleteItemItself()
     } else {
-      CurrentState.deleteItemItself(itemId)
+      CurrentState.deleteItem(itemId, true)
     }
   }
 

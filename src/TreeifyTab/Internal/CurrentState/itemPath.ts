@@ -1,5 +1,4 @@
 import { is, List } from 'immutable'
-import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -32,10 +31,6 @@ export function setAnchorItemPath(itemPath: ItemPath) {
 export function setTargetItemPathOnly(itemPath: ItemPath) {
   const activePageId = CurrentState.getActivePageId()
   Internal.instance.mutate(itemPath, PropertyPath.of('pages', activePageId, 'targetItemPath'))
-
-  // ダイアログを開いた状態でターゲット項目が変わった際に起こる問題への対策。
-  // 例えばダイアログを開いた状態でブラウザウィンドウでタブを閉じるとターゲット項目が変わりうる。
-  External.instance.dialogState = undefined
 }
 
 /**
