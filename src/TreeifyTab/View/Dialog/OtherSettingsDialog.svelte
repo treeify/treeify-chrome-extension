@@ -1,10 +1,26 @@
 <script lang="ts">
   import { External } from 'src/TreeifyTab/External/External'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { OtherSettingsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherSettingsDialogProps'
 
-  export let props: OtherSettingsDialogProps
+  let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
+  let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
+
+  function onChangeLeftEndMouseGestureEnabled() {
+    Internal.instance.mutate(
+      leftEndMouseGestureEnabled,
+      PropertyPath.of('leftEndMouseGestureEnabled')
+    )
+  }
+
+  function onChangeRightEndMouseGestureEnabled() {
+    Internal.instance.mutate(
+      rightEndMouseGestureEnabled,
+      PropertyPath.of('rightEndMouseGestureEnabled')
+    )
+  }
 
   function closeDialog() {
     External.instance.dialogState = undefined
@@ -17,16 +33,16 @@
     <label class="other-settings-dialog_checkbox-label">
       <input
         type="checkbox"
-        checked={props.leftEndMouseGestureEnabled}
-        on:change={props.onChangeLeftEndMouseGestureEnabled}
+        bind:checked={leftEndMouseGestureEnabled}
+        on:change={onChangeLeftEndMouseGestureEnabled}
       />
       マウスを画面左端まで動かすとTreeifyタブを表示
     </label>
     <label class="other-settings-dialog_checkbox-label">
       <input
         type="checkbox"
-        checked={props.rightEndMouseGestureEnabled}
-        on:change={props.onChangeRightEndMouseGestureEnabled}
+        bind:checked={rightEndMouseGestureEnabled}
+        on:change={onChangeRightEndMouseGestureEnabled}
       />
       マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
     </label>
