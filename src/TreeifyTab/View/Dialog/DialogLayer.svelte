@@ -15,7 +15,7 @@
   import OtherSettingsDialog from 'src/TreeifyTab/View/Dialog/OtherSettingsDialog.svelte'
   import CustomCssDialog from 'src/TreeifyTab/View/Dialog/Preference/CustomCssDialog.svelte'
   import KeyBindingDialog from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialog.svelte'
-  import { createPreferenceDropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialogProps.js'
+  import PreferenceDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialog.svelte'
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
   import { createSearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps.js'
@@ -54,7 +54,7 @@
 {:else if props.dialogState.type === 'OtherSettingsDialog'}
   <OtherSettingsDialog />
 {:else if props.dialogState.type === 'PreferenceDropdownMenuDialog'}
-  <DropdownMenuDialog props={createPreferenceDropdownMenuDialogProps()} />
+  <PreferenceDropdownMenuDialog />
 {:else if props.dialogState.type === 'SearchDialog'}
   <SearchDialog props={createSearchDialogProps()} />
 {:else if props.dialogState.type === 'TabsDialog'}
