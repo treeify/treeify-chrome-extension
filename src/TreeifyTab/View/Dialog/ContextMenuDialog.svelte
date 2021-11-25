@@ -1,5 +1,12 @@
-<script context="module" lang="ts">
+<script lang="ts">
+  import { External } from 'src/TreeifyTab/External/External'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { ContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps'
+  import ContextMenuItem from 'src/TreeifyTab/View/Dialog/ContextMenuItem.svelte'
+  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
+
+  export let props: ContextMenuDialogProps
 
   function onClickBackdrop(event: Event) {
     // ダイアログを閉じる
@@ -9,16 +16,6 @@
       Rerenderer.instance.rerender()
     }
   }
-</script>
-
-<script lang="ts">
-  import { InputId } from 'src/TreeifyTab/Internal/InputId'
-  import { ContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps'
-  import ContextMenuItem from 'src/TreeifyTab/View/Dialog/ContextMenuItem.svelte'
-  import { External } from 'src/TreeifyTab/External/External'
-  import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
-
-  export let props: ContextMenuDialogProps
 
   function onKeyDown(event: KeyboardEvent) {
     if (InputId.fromKeyboardEvent(event) === '0000Escape') {
