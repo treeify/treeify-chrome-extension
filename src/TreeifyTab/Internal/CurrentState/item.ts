@@ -15,25 +15,49 @@ import { Timestamp } from 'src/Utility/Timestamp'
  * 削除によって親の数が0になった子項目も再帰的に削除する。
  * キャレットの移動（ターゲット項目の変更）は行わない。
  */
-export function deleteItem(itemId: ItemId) {
+export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   assert(itemId !== TOP_ITEM_ID)
 
   Internal.instance.searchEngine.deleteSearchIndex(itemId)
 
   const item = Internal.instance.state.items[itemId]
-  for (const childItemId of item.childItemIds) {
-    if (CurrentState.countParents(childItemId) === 1) {
-      // 親を1つしか持たない子項目は再帰的に削除する
-      deleteItem(childItemId)
-    } else {
-      // 親を2つ以上持つ子項目は整合性のために親リストを修正する
+  if (deleteOnlyItself) {
+    // 全ての子項目の親リストから自身を削除し、代わりに自身の親リストを挿入する
+    for (const childItemId of item.childItemIds) {
+      const parents = Internal.instance.state.items[childItemId].parents
+      const edge = parents[itemId]
       Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
+      for (const parentsKey in item.parents) {
+        Internal.instance.mutate(
+          { ...edge },
+          PropertyPath.of('items', childItemId, 'parents', parentsKey)
+        )
+      }
     }
-  }
 
-  // 削除される項目を親項目の子リストから削除する
-  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+    // 全ての親項目の子リストから自身を削除し、代わりに自身の子リストを挿入する
+    for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
+      modifyChildItems(parentItemId, (itemIds) => {
+        const index = itemIds.indexOf(itemId)
+        assert(index !== -1)
+        return itemIds.splice(index, 1, ...item.childItemIds)
+      })
+    }
+  } else {
+    for (const childItemId of item.childItemIds) {
+      if (CurrentState.countParents(childItemId) === 1) {
+        // 親を1つしか持たない子項目は再帰的に削除する
+        deleteItem(childItemId)
+      } else {
+        // 親を2つ以上持つ子項目は整合性のために親リストを修正する
+        Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
+      }
+    }
+
+    // 削除される項目を親項目の子リストから削除する
+    for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
+      modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+    }
   }
 
   // 除外リストから削除する
@@ -89,80 +113,7 @@ export function deleteItem(itemId: ItemId) {
  * キャレットの移動（ターゲット項目の変更）は行わない。
  */
 export function deleteItemItself(itemId: ItemId) {
-  assert(itemId !== TOP_ITEM_ID)
-
-  Internal.instance.searchEngine.deleteSearchIndex(itemId)
-
-  const item = Internal.instance.state.items[itemId]
-  const childItemIds = item.childItemIds
-
-  // 全ての子項目の親リストから自身を削除し、代わりに自身の親リストを挿入する
-  for (const childItemId of childItemIds) {
-    const parents = Internal.instance.state.items[childItemId].parents
-    const edge = parents[itemId]
-    Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
-    for (const parentsKey in item.parents) {
-      Internal.instance.mutate(
-        { ...edge },
-        PropertyPath.of('items', childItemId, 'parents', parentsKey)
-      )
-    }
-  }
-
-  // 全ての親項目の子リストから自身を削除し、代わりに自身の子リストを挿入する
-  for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    modifyChildItems(parentItemId, (itemIds) => {
-      const index = itemIds.indexOf(itemId)
-      assert(index !== -1)
-      return itemIds.splice(index, 1, ...childItemIds)
-    })
-  }
-
-  // 除外リストから削除する
-  for (const key in Internal.instance.state.workspaces) {
-    const workspace = Internal.instance.state.workspaces[key]
-    if (workspace.excludedItemIds.contains(itemId)) {
-      Internal.instance.mutate(
-        workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
-        PropertyPath.of('workspaces', key, 'excludedItemIds')
-      )
-    }
-  }
-
-  // 対応するタブがあれば閉じる
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
-  if (tabId !== undefined) {
-    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
-    chrome.tabs.remove(tabId)
-  }
-
-  // 項目タイプごとのデータを削除する
-  const itemType = item.type
-  switch (itemType) {
-    case ItemType.TEXT:
-      CurrentState.deleteTextItemEntry(itemId)
-      break
-    case ItemType.WEB_PAGE:
-      CurrentState.deleteWebPageItemEntry(itemId)
-      break
-    case ItemType.IMAGE:
-      CurrentState.deleteImageItemEntry(itemId)
-      break
-    case ItemType.CODE_BLOCK:
-      CurrentState.deleteCodeBlockItemEntry(itemId)
-      break
-    case ItemType.TEX:
-      CurrentState.deleteTexItemEntry(itemId)
-      break
-    default:
-      assertNeverType(itemType)
-  }
-
-  CurrentState.unmountPage(itemId)
-  CurrentState.turnIntoNonPage(itemId)
-
-  CurrentState.deleteItemEntry(itemId)
-  CurrentState.recycleItemId(itemId)
+  deleteItem(itemId, true)
 }
 
 /** Stateのitemsオブジェクトから指定された項目IDのエントリーを削除する */
