@@ -1,45 +1,41 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { WorkspaceId } from 'src/TreeifyTab/basicType'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Workspace } from 'src/TreeifyTab/Internal/State'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { Writable, writable } from 'svelte/store'
   import { fly } from 'svelte/transition'
 
   type WorkspaceRow = { id: WorkspaceId } & Pick<Workspace, 'name'>
 
-  const workspaceList: Writable<List<WorkspaceRow>> = writable(List())
-  reflectStateToView()
+  let workspaceArray: WorkspaceRow[] = getStateWorkspaceArray()
 
-  function reflectStateToView() {
-    const workspaces = Object.keys(Internal.instance.state.workspaces).map((key) => {
+  function getStateWorkspaceArray(): WorkspaceRow[] {
+    return Object.keys(Internal.instance.state.workspaces).map((key) => {
       const workspaceId = parseInt(key)
       return {
         id: workspaceId,
         ...Internal.instance.state.workspaces[workspaceId],
       }
     })
-    $workspaceList = List(workspaces)
   }
 
   function onClickAddButton() {
     const workspaceId = CurrentState.createWorkspace()
     CurrentState.setCurrentWorkspaceId(workspaceId)
-    reflectStateToView()
+    workspaceArray = getStateWorkspaceArray()
   }
 
   const onInput = (event: Event, workspace: WorkspaceRow) => {
     if (event.target instanceof HTMLInputElement) {
       CurrentState.setWorkspaceName(workspace.id, event.target.value)
-      reflectStateToView()
+      workspaceArray = getStateWorkspaceArray()
     }
   }
 
   const onClickRadioButton = (workspace: WorkspaceRow) => {
     CurrentState.setCurrentWorkspaceId(workspace.id)
-    reflectStateToView()
+    workspaceArray = getStateWorkspaceArray()
   }
 
   const onClickDeleteButton = (workspace: WorkspaceRow) => {
@@ -47,14 +43,14 @@
       alert('ワークスペースを0個にはできません')
     } else {
       CurrentState.deleteWorkspace(workspace.id)
-      reflectStateToView()
+      workspaceArray = getStateWorkspaceArray()
     }
   }
 </script>
 
 <CommonDialog title="ワークスペース" showCloseButton>
   <div class="workspace-dialog_content" tabindex="0">
-    {#each $workspaceList.toArray() as workspace (workspace.id)}
+    {#each workspaceArray as workspace (workspace.id)}
       <div class="workspace-dialog_existing-workspace" transition:fly|local>
         <input
           type="radio"
