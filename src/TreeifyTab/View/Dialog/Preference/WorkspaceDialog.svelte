@@ -3,7 +3,7 @@
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { WorkspaceRecord } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
+  import { WorkspaceRow } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
   import WorkspaceDialogRow from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogRow.svelte'
   import { Writable, writable } from 'svelte/store'
 
@@ -15,7 +15,7 @@
     }
   })
 
-  const workspaceList: Writable<List<WorkspaceRecord>> = writable(List(initialWorkspaces))
+  const workspaceList: Writable<List<WorkspaceRow>> = writable(List(initialWorkspaces))
 
   function onClickAddButton() {
     const workspaceId = CurrentState.createWorkspace()

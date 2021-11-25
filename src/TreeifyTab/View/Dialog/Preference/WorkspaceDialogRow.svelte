@@ -2,10 +2,10 @@
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-  import { WorkspaceRecord } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
+  import { WorkspaceRow } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
   import { fly } from 'svelte/transition'
 
-  export let workspace: WorkspaceRecord
+  export let workspace: WorkspaceRow
 
   const onInput = (event: Event) => {
     if (event.target instanceof HTMLInputElement) {
