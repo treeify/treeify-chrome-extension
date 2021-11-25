@@ -1,20 +1,39 @@
 <script lang="ts">
+  import { List } from 'immutable'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { WorkspaceDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
+  import { WorkspaceRecord } from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogProps'
   import WorkspaceDialogRow from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialogRow.svelte'
+  import { Writable, writable } from 'svelte/store'
 
-  export let props: WorkspaceDialogProps
+  const initialWorkspaces = Object.keys(Internal.instance.state.workspaces).map((key) => {
+    const workspaceId = parseInt(key)
+    return {
+      id: workspaceId,
+      ...Internal.instance.state.workspaces[workspaceId],
+    }
+  })
+
+  const workspaceList: Writable<List<WorkspaceRecord>> = writable(List(initialWorkspaces))
+
+  function onClickAddButton() {
+    const workspaceId = CurrentState.createWorkspace()
+    CurrentState.setCurrentWorkspaceId(workspaceId)
+    $workspaceList = $workspaceList.push({
+      id: workspaceId,
+      ...Internal.instance.state.workspaces[workspaceId],
+    })
+  }
 </script>
 
 <CommonDialog title="ワークスペース" showCloseButton>
   <div class="workspace-dialog_content" tabindex="0">
-    {#each props.workspaces.toArray() as workspace (workspace.id)}
+    {#each $workspaceList.toArray() as workspace (workspace.id)}
       <WorkspaceDialogRow {workspace} />
     {/each}
     <div>
-      <button class="workspace-dialog_add-button" on:click={props.onClickAddButton}
-        >新規作成
-      </button>
+      <button class="workspace-dialog_add-button" on:click={onClickAddButton}>新規作成</button>
     </div>
   </div>
 </CommonDialog>
