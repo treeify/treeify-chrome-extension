@@ -107,15 +107,6 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   CurrentState.recycleItemId(itemId)
 }
 
-/**
- * 指定された項目に関するデータを削除する。
- * 子項目は親項目の子リストに移動する。
- * キャレットの移動（ターゲット項目の変更）は行わない。
- */
-export function deleteItemItself(itemId: ItemId) {
-  deleteItem(itemId, true)
-}
-
 /** Stateのitemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteItemEntry(itemId: ItemId) {
   Internal.instance.delete(PropertyPath.of('items', itemId))
