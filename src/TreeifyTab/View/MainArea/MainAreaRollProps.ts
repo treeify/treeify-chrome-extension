@@ -53,7 +53,6 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
             case '1000MouseButton0':
               Command.unfold()
               Command.turnIntoPage()
-              Command.showPage()
               break
           }
           break
@@ -65,7 +64,6 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
             case '1000MouseButton0':
               Command.unfold()
               Command.turnIntoPage()
-              Command.showPage()
               break
           }
           break
@@ -77,7 +75,6 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
             case '1000MouseButton0':
               Command.unfold()
               Command.turnIntoPage()
-              Command.showPage()
               break
           }
           break
