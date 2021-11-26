@@ -76,7 +76,8 @@
         break
       case ItemType.TEX:
         const texItem = state.texItems[itemId]
-        CurrentState.setCodeBlockItemCaption(
+        CurrentState.setTexItemCode(itemId, texItem.code.replaceAll(beforeReplace, afterReplace))
+        CurrentState.setTexItemCaption(
           itemId,
           texItem.caption.replaceAll(beforeReplace, afterReplace)
         )
