@@ -18,6 +18,7 @@
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
+  import TextReplaceDialog from 'src/TreeifyTab/View/Dialog/TextReplaceDialog.svelte'
   import WebPageItemTitleSettingDialog from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialog.svelte'
 
   export let props: DialogLayerProps
@@ -57,6 +58,8 @@
   <TabsDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'TexItemEditDialog'}
   <TexItemEditDialog />
+{:else if props.dialogState.type === 'TextReplaceDialog'}
+  <TextReplaceDialog />
 {:else if props.dialogState.type === 'WebPageItemTitleSettingDialog'}
   <WebPageItemTitleSettingDialog />
 {:else if props.dialogState.type === 'WorkspaceDialog'}

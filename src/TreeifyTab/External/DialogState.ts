@@ -27,6 +27,7 @@ export type Dialog = DiscriminatedUnion<{
   SearchDialog: {}
   TabsDialog: TabsDialog
   TexItemEditDialog: {}
+  TextReplaceDialog: {}
   WebPageItemTitleSettingDialog: {}
   WorkspaceDialog: {}
 }>

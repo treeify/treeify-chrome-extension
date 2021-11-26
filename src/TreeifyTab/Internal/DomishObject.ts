@@ -319,4 +319,30 @@ export namespace DomishObject {
     divElement.innerText = plainText
     return divElement.innerHTML
   }
+
+  export function replace(
+    domishObject: DomishObject,
+    beforeReplace: string,
+    afterReplace: string
+  ): DomishObject {
+    switch (domishObject.type) {
+      case 'br':
+        return domishObject
+      case 'b':
+      case 'u':
+      case 'i':
+      case 'strike':
+        return {
+          type: domishObject.type,
+          children: domishObject.children.map((child) =>
+            replace(child, beforeReplace, afterReplace)
+          ),
+        }
+      case 'text':
+        return {
+          type: 'text',
+          textContent: domishObject.textContent.replaceAll(beforeReplace, afterReplace),
+        }
+    }
+  }
 }

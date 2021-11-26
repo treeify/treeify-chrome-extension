@@ -50,10 +50,14 @@
 <CommonDialog title="出典設定">
   <div class="citation-setting-dialog_content" on:keydown={onKeyDown}>
     <div class="citation-setting-dialog_input-area">
-      <label>タイトル（省略可）</label>
-      <input type="text" class="citation-setting-dialog_cite-title" bind:value={titleValue} />
-      <label>URL（省略可）</label>
-      <input type="url" class="citation-setting-dialog_cite-url" bind:value={urlValue} />
+      <label class="citation-setting-dialog_label">
+        タイトル（省略可）
+        <input type="text" class="citation-setting-dialog_cite-title" bind:value={titleValue} />
+      </label>
+      <label class="citation-setting-dialog_label">
+        URL（省略可）
+        <input type="url" class="citation-setting-dialog_cite-url" bind:value={urlValue} />
+      </label>
     </div>
     <div class="citation-setting-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
@@ -72,6 +76,10 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-gap: 0.5em;
+  }
+
+  .citation-setting-dialog_label {
+    display: contents;
   }
 
   .citation-setting-dialog_button-area {

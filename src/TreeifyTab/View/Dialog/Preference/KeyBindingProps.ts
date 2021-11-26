@@ -139,6 +139,7 @@ const commandGroups: List<CommandGroup> = List.of(
     commandIds: List.of(
       'showEditDialog',
       'showSearchDialog',
+      'showTextReplaceDialog',
       'showCitationSettingDialog',
       'showContextMenuDialog',
       'showWorkspaceDialog',

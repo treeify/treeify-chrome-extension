@@ -60,3 +60,7 @@ export function showContextMenuDialog() {
   const mousePosition = { x: rect.x, y: rect.bottom }
   External.instance.dialogState = { type: 'ContextMenuDialog', mousePosition }
 }
+
+export function showTextReplaceDialog() {
+  External.instance.dialogState = { type: 'TextReplaceDialog' }
+}
