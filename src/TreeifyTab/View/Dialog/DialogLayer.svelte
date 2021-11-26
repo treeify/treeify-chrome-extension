@@ -10,7 +10,6 @@
   import ImageItemEditDialog from 'src/TreeifyTab/View/Dialog/ImageItemEditDialog.svelte'
   import ItemAdditionDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialog.svelte'
   import OtherParentsDialog from 'src/TreeifyTab/View/Dialog/OtherParentsDialog.svelte'
-  import { createOtherParentsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogProps.js'
   import OtherSettingsDialog from 'src/TreeifyTab/View/Dialog/OtherSettingsDialog.svelte'
   import CustomCssDialog from 'src/TreeifyTab/View/Dialog/Preference/CustomCssDialog.svelte'
   import KeyBindingDialog from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialog.svelte'
@@ -48,7 +47,7 @@
 {:else if props.dialogState.type === 'KeyBindingDialog'}
   <KeyBindingDialog />
 {:else if props.dialogState.type === 'OtherParentsDialog'}
-  <OtherParentsDialog props={createOtherParentsDialogProps()} />
+  <OtherParentsDialog />
 {:else if props.dialogState.type === 'OtherSettingsDialog'}
   <OtherSettingsDialog />
 {:else if props.dialogState.type === 'PreferenceDropdownMenuDialog'}
