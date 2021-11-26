@@ -6,21 +6,17 @@
   import ContextMenuDialog from 'src/TreeifyTab/View/Dialog/ContextMenuDialog.svelte'
   import { createContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps.js'
   import { DialogLayerProps } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
-  import DropdownMenuDialog from 'src/TreeifyTab/View/Dialog/DropdownMenuDialog.svelte'
   import ExportDialog from 'src/TreeifyTab/View/Dialog/ExportDialog.svelte'
   import ImageItemEditDialog from 'src/TreeifyTab/View/Dialog/ImageItemEditDialog.svelte'
-  import { createItemAdditionDropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps.js'
+  import ItemAdditionDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialog.svelte'
   import OtherParentsDialog from 'src/TreeifyTab/View/Dialog/OtherParentsDialog.svelte'
-  import { createOtherParentsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogProps.js'
   import OtherSettingsDialog from 'src/TreeifyTab/View/Dialog/OtherSettingsDialog.svelte'
   import CustomCssDialog from 'src/TreeifyTab/View/Dialog/Preference/CustomCssDialog.svelte'
   import KeyBindingDialog from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialog.svelte'
-  import { createPreferenceDropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialogProps.js'
+  import PreferenceDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialog.svelte'
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
-  import { createSearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps.js'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
-  import { createTabsDialogProps } from 'src/TreeifyTab/View/Dialog/TabsDialogProps.js'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
   import WebPageItemTitleSettingDialog from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialog.svelte'
 
@@ -46,19 +42,19 @@
 {:else if props.dialogState.type === 'ImageItemEditDialog'}
   <ImageItemEditDialog />
 {:else if props.dialogState.type === 'ItemAdditionDropdownMenuDialog'}
-  <DropdownMenuDialog props={createItemAdditionDropdownMenuDialogProps()} />
+  <ItemAdditionDropdownMenuDialog />
 {:else if props.dialogState.type === 'KeyBindingDialog'}
   <KeyBindingDialog />
 {:else if props.dialogState.type === 'OtherParentsDialog'}
-  <OtherParentsDialog props={createOtherParentsDialogProps()} />
+  <OtherParentsDialog />
 {:else if props.dialogState.type === 'OtherSettingsDialog'}
   <OtherSettingsDialog />
 {:else if props.dialogState.type === 'PreferenceDropdownMenuDialog'}
-  <DropdownMenuDialog props={createPreferenceDropdownMenuDialogProps()} />
+  <PreferenceDropdownMenuDialog />
 {:else if props.dialogState.type === 'SearchDialog'}
-  <SearchDialog props={createSearchDialogProps()} />
+  <SearchDialog />
 {:else if props.dialogState.type === 'TabsDialog'}
-  <TabsDialog props={createTabsDialogProps(props.dialogState)} />
+  <TabsDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'TexItemEditDialog'}
   <TexItemEditDialog />
 {:else if props.dialogState.type === 'WebPageItemTitleSettingDialog'}
