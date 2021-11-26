@@ -178,25 +178,14 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     Internal.instance.saveCurrentStateToUndoStack()
 
-    if (event.altKey) {
-      if (!CurrentState.isSibling(rollDroppedItemPath, draggedItemPath)) {
-        // エッジを追加する（トランスクルード）
-        if (isPageOrFolded) {
-          CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId)
-        } else {
-          CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId)
-        }
-      }
+    // エッジを付け替える
+    const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+    if (isPageOrFolded) {
+      CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
+      CurrentState.setTargetItemPath(rollDroppedItemPath)
     } else {
-      // エッジを付け替える
-      const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-      if (isPageOrFolded) {
-        CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
-        CurrentState.setTargetItemPath(rollDroppedItemPath)
-      } else {
-        CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
-        CurrentState.setTargetItemPath(rollDroppedItemPath.push(draggedItemId))
-      }
+      CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
+      CurrentState.setTargetItemPath(rollDroppedItemPath.push(draggedItemId))
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
@@ -224,35 +213,19 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
       Internal.instance.saveCurrentStateToUndoStack()
 
-      if (event.altKey) {
-        if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
-          // エッジを追加する（トランスクルード）
-          const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId)
-          CurrentState.setTargetItemPath(newItemPath)
-        }
-      } else {
-        // エッジを付け替える
-        const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-        const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
-        CurrentState.setTargetItemPath(newItemPath)
-      }
+      // エッジを付け替える
+      const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+      const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
+      CurrentState.setTargetItemPath(newItemPath)
     } else {
       // ドロップ先座標がドロップ先要素の下の方の場合
 
       Internal.instance.saveCurrentStateToUndoStack()
 
-      if (event.altKey) {
-        if (!CurrentState.isSibling(itemPath, draggedItemPath)) {
-          // エッジを追加する（トランスクルード）
-          const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId)
-          CurrentState.setTargetItemPath(newItemPath)
-        }
-      } else {
-        // エッジを付け替える
-        const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
-        const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId, edge)
-        CurrentState.setTargetItemPath(newItemPath)
-      }
+      // エッジを付け替える
+      const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+      const newItemPath = CurrentState.insertBelowItem(itemPath, draggedItemId, edge)
+      CurrentState.setTargetItemPath(newItemPath)
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
@@ -306,23 +279,17 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
 
   Internal.instance.saveCurrentStateToUndoStack()
 
-  if (event.altKey) {
-    // エッジを追加する（トランスクルード）
-    // TODO: エッジを追加していいかどうか整合性チェック
-    CurrentState.insertFirstChildItem(itemId, draggedItemId)
-  } else {
-    // targetItemPathが実在しなくなるので退避
-    const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
-    assertNonUndefined(aboveItemPath)
-    CurrentState.setTargetItemPath(aboveItemPath)
+  // targetItemPathが実在しなくなるので退避
+  const aboveItemPath = CurrentState.findAboveItemPath(draggedItemPath)
+  assertNonUndefined(aboveItemPath)
+  CurrentState.setTargetItemPath(aboveItemPath)
 
-    // エッジを付け替える
-    const edge = CurrentState.removeItemGraphEdge(
-      ItemPath.getParentItemId(draggedItemPath)!,
-      draggedItemId
-    )
-    CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
-  }
+  // エッジを付け替える
+  const edge = CurrentState.removeItemGraphEdge(
+    ItemPath.getParentItemId(draggedItemPath)!,
+    draggedItemId
+  )
+  CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
 
   CurrentState.updateItemTimestamp(draggedItemId)
   Rerenderer.instance.rerender()
