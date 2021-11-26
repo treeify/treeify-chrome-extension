@@ -3,25 +3,18 @@
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+  import { CommandId, State } from 'src/TreeifyTab/Internal/State'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import KeyBinding from 'src/TreeifyTab/View/Dialog/Preference/KeyBinding.svelte'
-  import {
-    createKeyBindingProps,
-    KeyBindingProps,
-  } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingProps'
+  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { integer } from 'src/Utility/integer'
 
-  let keyBindingPropses: List<KeyBindingProps> = readFromState()
+  let clonedKeyBindings = State.clone(Internal.instance.state.mainAreaKeyBindings)
 
   let isAddBindingMode = false
 
   $: style = `--visibility: ${isAddBindingMode ? 'visible' : 'hidden'};`
-
-  function readFromState(): List<KeyBindingProps> {
-    const bindings = Object.entries(Internal.instance.state.mainAreaKeyBindings)
-    return List(bindings).map(createKeyBindingProps)
-  }
 
   function onClick() {
     isAddBindingMode = true
@@ -35,29 +28,163 @@
     if (List.of('Control', 'Shift', 'Alt', 'Meta').contains(event.key)) return
 
     const inputId = InputId.fromKeyboardEvent(event)
-    if (Internal.instance.state.mainAreaKeyBindings[inputId] !== undefined) {
+    if (clonedKeyBindings[inputId] !== undefined) {
       alert(`${InputId.toReadableText(inputId)} には既に割り当てられています。`)
       return
     }
 
     isAddBindingMode = false
 
-    Internal.instance.mutate(List.of('doNothing'), PropertyPath.of('mainAreaKeyBindings', inputId))
-    keyBindingPropses = readFromState()
+    clonedKeyBindings[inputId] = List.of('doNothing')
   }
 
   function closeDialog() {
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
+
+  function onChange(event: Event, index: integer, inputId: InputId) {
+    if (event.target instanceof HTMLSelectElement) {
+      clonedKeyBindings[inputId] = clonedKeyBindings[inputId].set(
+        index,
+        event.target.value as CommandId
+      )
+    }
+  }
+
+  function onClickDeleteButton(index: integer, inputId: InputId) {
+    if (clonedKeyBindings[inputId].size === 1) {
+      // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
+      delete clonedKeyBindings[inputId]
+      clonedKeyBindings = clonedKeyBindings
+    } else {
+      clonedKeyBindings[inputId] = clonedKeyBindings[inputId].remove(index)
+    }
+  }
+
+  function onClickAddCommandButton(index: integer, inputId: InputId) {
+    clonedKeyBindings[inputId] = clonedKeyBindings[inputId].insert(index + 1, 'doNothing')
+  }
+
+  // コマンド一覧をoptgroup要素でグルーピングするためのデータ
+  // コマンド一覧をoptgroup要素でグルーピングするためのデータ
+  const commandGroups: List<{ name: string; commandIds: List<CommandId> }> = List.of(
+    {
+      name: '基本操作',
+      commandIds: List.of(
+        'enterKeyDefault',
+        'removeEdge',
+        'deleteItemItself',
+        'moveItemUpward',
+        'moveItemDownward',
+        'moveItemToPrevSibling',
+        'moveItemToNextSibling',
+        'indent',
+        'unindent',
+        'grouping',
+        'fold',
+        'unfold',
+        'toggleFolded'
+      ),
+    },
+    {
+      name: 'テキスト項目操作',
+      commandIds: List.of(
+        'insertLineBreak',
+        'toggleBold',
+        'toggleUnderline',
+        'toggleItalic',
+        'toggleStrikethrough'
+      ),
+    },
+    {
+      name: 'ウェブページ項目操作',
+      commandIds: List.of(
+        'browseTab',
+        'closeSubtreeTabs',
+        'closeItemTab',
+        'discardSubtreeTabs',
+        'discardItemTab',
+        'openSubtreeTabs',
+        'openItemTab'
+      ),
+    },
+    {
+      name: 'ページ関連',
+      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'showPage'),
+    },
+    {
+      name: '項目装飾',
+      commandIds: List.of(
+        'toggleCompleted',
+        'toggleHighlighted',
+        'toggleDoubtful',
+        'toggleCitation'
+      ),
+    },
+    {
+      name: '空の項目作成',
+      commandIds: List.of(
+        'createEmptyImageItem',
+        'createEmptyCodeBlockItem',
+        'createEmptyTexItem',
+        'createEmptyTextItem'
+      ),
+    },
+    { name: 'クリップボード', commandIds: List.of('copyForTransclusion', 'pasteAsPlainText') },
+    {
+      name: 'ダイアログ表示',
+      commandIds: List.of(
+        'showEditDialog',
+        'showSearchDialog',
+        'showTextReplaceDialog',
+        'showCitationSettingDialog',
+        'showContextMenuDialog',
+        'showWorkspaceDialog',
+        'showOtherParentsDialog',
+        'showCommandPaletteDialog'
+      ),
+    },
+    { name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems') },
+    { name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded') }
+  )
 </script>
 
 <CommonDialog title="キーボード操作設定">
   <div class="key-binding-dialog_content" {style} on:keydown={onKeyDown}>
     <div class="key-binding-dialog_scroll-area">
       <table class="key-binding-dialog_table">
-        {#each keyBindingPropses.toArray() as keyBindingProps (keyBindingProps.inputId)}
-          <KeyBinding props={keyBindingProps} />
+        {#each Object.entries(clonedKeyBindings) as [inputId, commandIds] (inputId)}
+          <tr class="key-binding_binding-row">
+            <td class="key-binding_input-id">{InputId.toReadableText(inputId)}</td>
+            <td class="key-binding_commands">
+              {#each commandIds.toArray() as selectedCommandId, index}
+                <div class="key-binding_command-row">
+                  <select on:change={(event) => onChange(event, index, inputId)}>
+                    {#each commandGroups.toArray() as commandGroup}
+                      <optgroup label={commandGroup.name}>
+                        {#each commandGroup.commandIds.toArray() as commandId}
+                          <option value={commandId} selected={selectedCommandId === commandId}>
+                            {commandNames[commandId]}
+                          </option>
+                        {/each}
+                      </optgroup>
+                    {/each}
+                  </select>
+                  <div
+                    class="delete-button icon-button"
+                    tabindex="-1"
+                    on:click={() => onClickDeleteButton(index, inputId)}
+                  />
+                  <div
+                    class="add-command-button icon-button"
+                    tabindex="-1"
+                    on:click={() => onClickAddCommandButton(index, inputId)}
+                  />
+                </div>
+              {/each}
+            </td>
+          </tr>
         {/each}
         <tr class="key-binding-dialog_add-binding-button-row">
           <td class="key-binding-dialog_add-binding-button-cell">
@@ -74,12 +201,18 @@
       </p>
     </div>
     <div class="key-binding-dialog_button-area">
-      <button on:click={closeDialog}>OK</button>
+      <FinishAndCancelButtons onClickCancelButton={closeDialog} />
     </div>
   </div>
 </CommonDialog>
 
 <style global lang="scss">
+  :root {
+    --key-binding-dialog-command-button-size: 1.5em;
+    --key-binding-dialog-delete-icon-size: 1.2em;
+    --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
+  }
+
   .key-binding-dialog_content {
     padding: 1em;
 
@@ -105,6 +238,82 @@
     tr:nth-child(odd) {
       // lch(96.0%, 0.0, 0.0)相当
       background: #f3f3f3;
+    }
+  }
+
+  .key-binding_input-id {
+    text-align: right;
+    padding-left: 3em;
+  }
+
+  .key-binding_commands {
+    padding-block: 0.3em;
+  }
+
+  .key-binding_command-row {
+    display: flex;
+    align-items: center;
+
+    padding-left: 2em;
+  }
+
+  .delete-button {
+    width: var(--key-binding-dialog-command-button-size);
+    aspect-ratio: 1;
+
+    // マウスホバー時にのみ表示
+    visibility: hidden;
+
+    &::before {
+      content: '';
+
+      width: var(--key-binding-dialog-delete-icon-size);
+      aspect-ratio: 1;
+
+      // 中央寄せ
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      // lch(40.0%, 0.0, 0.0)相当
+      background: #5e5e5e;
+      -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
+      -webkit-mask-size: contain;
+    }
+
+    .key-binding_command-row:hover & {
+      visibility: visible;
+    }
+  }
+
+  .add-command-button {
+    width: var(--key-binding-dialog-command-button-size);
+    aspect-ratio: 1;
+
+    // マウスホバー時にのみ表示
+    visibility: hidden;
+
+    &::before {
+      content: '';
+
+      width: var(--key-binding-dialog-add-icon-size);
+      aspect-ratio: 1;
+
+      // 中央寄せ
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      // lch(40.0%, 0.0, 0.0)相当
+      background: #5e5e5e;
+      -webkit-mask: url('./plus-icon.svg') no-repeat center;
+      -webkit-mask-size: contain;
+    }
+
+    .key-binding_command-row:hover & {
+      visibility: visible;
     }
   }
 

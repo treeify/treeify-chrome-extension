@@ -194,10 +194,9 @@ export namespace State {
     return value
   }
 
-  /** Stateオブジェクトを複製する。Undo機能のために必要 */
-  export function clone(state: State): State
-  export function clone(state: any): any {
-    if (state === undefined) return undefined
+  /** Stateオブジェクトまたはそのサブオブジェクトを複製する。Undo機能のために必要 */
+  export function clone<T>(state: T): T {
+    if (state === undefined) return undefined as unknown as T
 
     // 最適化の余地ありかも
     const json = JSON.stringify(state, jsonReplacer)
