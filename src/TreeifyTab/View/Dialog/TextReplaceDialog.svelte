@@ -3,6 +3,7 @@
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+  import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
@@ -10,6 +11,17 @@
 
   let beforeReplace: string = ''
   let afterReplace: string = ''
+
+  function onKeydown(event: KeyboardEvent) {
+    if (event.isComposing) return
+
+    switch (InputId.fromKeyboardEvent(event)) {
+      case '0000Enter':
+      case '1000Enter':
+        onSubmit()
+        break
+    }
+  }
 
   function onSubmit() {
     Internal.instance.saveCurrentStateToUndoStack()
@@ -76,7 +88,7 @@
 </script>
 
 <CommonDialog title="テキスト置換" showCloseButton>
-  <div class="text-replace-dialog_content">
+  <div class="text-replace-dialog_content" on:keydown={onKeydown}>
     <div class="text-replace-dialog_input-area">
       <label class="text-replace-dialog_label">
         置換前
