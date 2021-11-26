@@ -16,19 +16,12 @@
   let code = Internal.instance.state.texItems[targetItemId].code
 
   function onClickFinishButton() {
-    if (code.trim() !== '') {
-      // コードが空でない場合
+    // コードを更新
+    CurrentState.setTexItemCode(targetItemId, code)
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetItemId)
 
-      // コードを更新
-      CurrentState.setTexItemCode(targetItemId, code)
-      // タイムスタンプを更新
-      CurrentState.updateItemTimestamp(targetItemId)
-    } else {
-      // コードが空の場合
-
-      // TeX項目を削除
-      Command.removeEdge()
-    }
+    onCloseDialog()
 
     // ダイアログを閉じる
     External.instance.dialogState = undefined
@@ -45,13 +38,14 @@
   function onKeyDown(event: KeyboardEvent) {
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
+        event.preventDefault()
         onClickFinishButton()
         break
     }
   }
 
   function onCloseDialog() {
-    if (CurrentState.isEmptyTexItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+    if (CurrentState.isEmptyTexItem(targetItemId)) {
       Command.removeEdge()
     }
   }

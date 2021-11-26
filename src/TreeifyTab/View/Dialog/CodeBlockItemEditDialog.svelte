@@ -17,21 +17,14 @@
   let code = Internal.instance.state.codeBlockItems[targetItemId].code
 
   function onClickFinishButton() {
-    if (code !== '') {
-      // コードが空でない場合
+    // コードを更新
+    CurrentState.setCodeBlockItemCode(targetItemId, code)
+    // 言語を自動検出
+    CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetItemId)
 
-      // コードを更新
-      CurrentState.setCodeBlockItemCode(targetItemId, code)
-      // 言語を自動検出
-      CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
-      // タイムスタンプを更新
-      CurrentState.updateItemTimestamp(targetItemId)
-    } else {
-      // コードが空の場合
-
-      // コードブロック項目を削除
-      Command.removeEdge()
-    }
+    onCloseDialog()
 
     // ダイアログを閉じる
     External.instance.dialogState = undefined
@@ -67,13 +60,14 @@
   function onKeyDown(event: KeyboardEvent) {
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
+        event.preventDefault()
         onClickFinishButton()
         break
     }
   }
 
   function onCloseDialog() {
-    if (CurrentState.isEmptyCodeBlockItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+    if (CurrentState.isEmptyCodeBlockItem(targetItemId)) {
       Command.removeEdge()
     }
   }

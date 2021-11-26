@@ -21,24 +21,19 @@
     switch (InputId.fromKeyboardEvent(event)) {
       case '0000Enter':
       case '1000Enter':
+        event.preventDefault()
         onClickFinishButton()
         break
     }
   }
 
   function onClickFinishButton() {
-    if (url.trim() !== '') {
-      // URLが空でない場合
+    // URLを更新
+    CurrentState.setImageItemUrl(targetItemId, url)
+    // タイムスタンプを更新
+    CurrentState.updateItemTimestamp(targetItemId)
 
-      // URLを更新
-      CurrentState.setImageItemUrl(targetItemId, url)
-      // タイムスタンプを更新
-      CurrentState.updateItemTimestamp(targetItemId)
-    } else {
-      // コードが空の場合
-
-      Command.removeEdge()
-    }
+    onCloseDialog()
 
     // ダイアログを閉じる
     External.instance.dialogState = undefined
@@ -53,7 +48,7 @@
   }
 
   function onCloseDialog() {
-    if (CurrentState.isEmptyImageItem(ItemPath.getItemId(CurrentState.getTargetItemPath()))) {
+    if (CurrentState.isEmptyImageItem(targetItemId)) {
       Command.removeEdge()
     }
   }
