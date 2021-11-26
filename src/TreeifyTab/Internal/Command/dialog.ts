@@ -64,3 +64,7 @@ export function showContextMenuDialog() {
 export function showTextReplaceDialog() {
   External.instance.dialogState = { type: 'TextReplaceDialog' }
 }
+
+export function showCommandPaletteDialog() {
+  External.instance.dialogState = { type: 'CommandPaletteDialog' }
+}

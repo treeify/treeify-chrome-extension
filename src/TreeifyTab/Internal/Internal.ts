@@ -2,7 +2,6 @@ import { List } from 'immutable'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
-import { showTextReplaceDialog } from 'src/TreeifyTab/Internal/Command/dialog'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { ExportFormat, State } from 'src/TreeifyTab/Internal/State'
@@ -207,6 +206,7 @@ export class Internal {
         '1000KeyS': List.of('syncWithDataFolder'),
         '1100KeyF': List.of('showSearchDialog'),
         '1100KeyR': List.of('showTextReplaceDialog'),
+        '1000Slash': List.of('showCommandPaletteDialog'),
         '0000F2': List.of('showEditDialog'),
         '0000ContextMenu': List.of('showContextMenuDialog'),
         '1100Period': List.of('toggleCitation'),

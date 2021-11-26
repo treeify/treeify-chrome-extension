@@ -143,7 +143,8 @@ const commandGroups: List<CommandGroup> = List.of(
       'showCitationSettingDialog',
       'showContextMenuDialog',
       'showWorkspaceDialog',
-      'showOtherParentsDialog'
+      'showOtherParentsDialog',
+      'showCommandPaletteDialog'
     ),
   },
   { name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems') },

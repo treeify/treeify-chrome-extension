@@ -16,6 +16,7 @@ export type Dialog = DiscriminatedUnion<{
   CitationSettingDialog: {}
   CodeBlockItemEditDialog: {}
   CodeBlockLanguageSettingDialog: {}
+  CommandPaletteDialog: {}
   ContextMenuDialog: ContextMenuDialog
   CustomCssDialog: {}
   ExportDialog: {}
