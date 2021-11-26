@@ -1,12 +1,15 @@
 <script lang="ts">
+  import { ContextMenuDialog } from 'src/TreeifyTab/External/DialogState'
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-  import { ContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps'
   import ContextMenuItem from 'src/TreeifyTab/View/Dialog/ContextMenuItem.svelte'
+  import { createContextMenuItemPropses } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
-  export let props: ContextMenuDialogProps
+  export let dialog: ContextMenuDialog
+
+  const contextMenuItemPropses = createContextMenuItemPropses()
 
   function onClickBackdrop(event: Event) {
     // ダイアログを閉じる
@@ -30,8 +33,8 @@
   }
 
   const style = `
-    --x: ${props.mousePosition.x}px;
-    --y: ${props.mousePosition.y}px;
+    --x: ${dialog.mousePosition.x}px;
+    --y: ${dialog.mousePosition.y}px;
   `
 </script>
 
@@ -44,7 +47,7 @@
   use:setupFocusTrap
 >
   <div class="context-menu-dialog_frame">
-    {#each props.contextMenuItemPropses.toArray() as contextMenuItemProps}
+    {#each contextMenuItemPropses.toArray() as contextMenuItemProps}
       <ContextMenuItem props={contextMenuItemProps} />
     {/each}
   </div>

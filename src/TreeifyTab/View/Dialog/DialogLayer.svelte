@@ -4,7 +4,6 @@
   import CodeBlockItemEditDialog from 'src/TreeifyTab/View/Dialog/CodeBlockItemEditDialog.svelte'
   import CodeBlockLanguageSettingDialog from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialog.svelte'
   import ContextMenuDialog from 'src/TreeifyTab/View/Dialog/ContextMenuDialog.svelte'
-  import { createContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps.js'
   import { DialogLayerProps } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
   import ExportDialog from 'src/TreeifyTab/View/Dialog/ExportDialog.svelte'
   import ImageItemEditDialog from 'src/TreeifyTab/View/Dialog/ImageItemEditDialog.svelte'
@@ -35,7 +34,7 @@
 {:else if props.dialogState.type === 'CodeBlockLanguageSettingDialog'}
   <CodeBlockLanguageSettingDialog />
 {:else if props.dialogState.type === 'ContextMenuDialog'}
-  <ContextMenuDialog props={createContextMenuDialogProps(props.dialogState)} />
+  <ContextMenuDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'CustomCssDialog'}
   <CustomCssDialog />
 {:else if props.dialogState.type === 'ExportDialog'}
