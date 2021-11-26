@@ -112,8 +112,8 @@ const commandGroups: List<CommandGroup> = List.of(
       'closeItemTab',
       'discardSubtreeTabs',
       'discardItemTab',
-      'loadSubtree',
-      'loadItem'
+      'openSubtreeTabs',
+      'openItemTab'
     ),
   },
   {

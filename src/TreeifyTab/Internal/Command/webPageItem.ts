@@ -8,15 +8,13 @@ import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
 export function discardItemTab() {
-  const targetItemPath = CurrentState.getTargetItemPath()
-
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
-    ItemPath.getItemId(targetItemPath)
-  )
-  // 対応するタブがなければ何もしない
-  if (tabId === undefined) return
-
-  chrome.tabs.discard(tabId)
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
+    if (tabId !== undefined) {
+      chrome.tabs.discard(tabId)
+    }
+  }
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブをdiscardする */
@@ -34,18 +32,18 @@ export function discardSubtreeTabs() {
 
 /** 対象ウェブページ項目に対応するタブを閉じる */
 export function closeItemTab() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
+      ItemPath.getItemId(selectedItemPath)
+    )
 
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
-    ItemPath.getItemId(targetItemPath)
-  )
-  // 対応するタブがなければ何もしない
-  if (tabId === undefined) return
+    if (tabId !== undefined) {
+      // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
+      External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
-  // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
-  External.instance.tabIdsToBeClosedForUnloading.add(tabId)
-
-  chrome.tabs.remove(tabId)
+      chrome.tabs.remove(tabId)
+    }
+  }
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブを閉じる */
@@ -65,22 +63,20 @@ export function closeSubtreeTabs() {
   }
 }
 
-/** ウェブページ項目のロード操作 */
-export function loadItem() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
-  // 対応するタブがあれば何もしない。
-  // discarded状態のタブをバックグラウンドで非discarded化できれば望ましいのだがそのようなAPIが見当たらない。
-  if (tabId !== undefined) return
-
-  const url = Internal.instance.state.webPageItems[targetItemId].url
-  const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
-  External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
-  chrome.tabs.create({ url, active: false })
+export function openItemTab() {
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
+    if (tabId === undefined) {
+      const url = Internal.instance.state.webPageItems[selectedItemId].url
+      const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+      External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(selectedItemId))
+      chrome.tabs.create({ url, active: false })
+    }
+  }
 }
 
-/** ウェブページ項目のサブツリーロード操作 */
-export function loadSubtree() {
+export function openSubtreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
