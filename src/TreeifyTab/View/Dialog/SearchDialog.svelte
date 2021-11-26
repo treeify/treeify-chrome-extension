@@ -8,6 +8,7 @@
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
 
+  let searchQueryValue = ''
   let searchResult: List<List<ItemPath>> | undefined
 
   function onContentAreaKeyDown(event: KeyboardEvent) {
@@ -42,13 +43,12 @@
 
   function onSearchQueryKeyDown(event: KeyboardEvent) {
     if (event.isComposing) return
-    if (!(event.target instanceof HTMLInputElement)) return
 
     // Enterキー押下時
     if (InputId.fromKeyboardEvent(event) === '0000Enter') {
       event.preventDefault()
 
-      const itemIds = Internal.instance.searchEngine.search(event.target.value)
+      const itemIds = Internal.instance.searchEngine.search(searchQueryValue)
 
       // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
       const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
@@ -70,6 +70,7 @@
       type="text"
       class="search-dialog_search-query"
       placeholder="検索ワード -除外ワード"
+      bind:value={searchQueryValue}
       on:keydown={onSearchQueryKeyDown}
     />
     <div class="search-dialog_result">
