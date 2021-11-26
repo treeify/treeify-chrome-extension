@@ -43,20 +43,18 @@
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_body-area">
-      <div class="page-tree-node_footprint-layer">
-        <div
-          class="page-tree-node_content-area"
-          class:active-page={props.isActivePage}
-          data-item-id={props.itemId}
-          on:mousedown={props.onClickContentArea}
-        >
-          <ItemContent props={props.contentProps} />
-          {#if props.isAudible}
-            <div class="page-tree-node_audible-icon" />
-          {:else}
-            <div class="grid-empty-cell" />
-          {/if}
-        </div>
+      <div
+        class="page-tree-node_content-area"
+        class:active-page={props.isActivePage}
+        data-item-id={props.itemId}
+        on:mousedown={props.onClickContentArea}
+      >
+        <ItemContent props={props.contentProps} />
+        {#if props.isAudible}
+          <div class="page-tree-node_audible-icon" />
+        {:else}
+          <div class="grid-empty-cell" />
+        {/if}
       </div>
       <div class="page-tree-node_right-button-area">
         {#if props.tabsCount > 0}
@@ -119,10 +117,6 @@
     align-items: center;
   }
 
-  .page-tree-node_footprint-layer {
-    background-color: var(--footprint-color);
-  }
-
   .page-tree-node_content-area {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -133,6 +127,8 @@
     // ページツリーではテキストは折り返さない
     overflow-x: hidden;
     white-space: nowrap;
+
+    background-color: var(--footprint-color);
 
     &.active-page {
       // アクティブページの強調表示

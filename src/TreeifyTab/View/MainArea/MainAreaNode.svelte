@@ -62,18 +62,15 @@
       class:excluded={props.isExcluded}
       data-depth={depth}
     >
-      <!-- 足跡表示用のレイヤー -->
-      <div class="main-area-node_footprint-layer">
-        <!-- コンテンツ領域 -->
-        <div
-          data-item-path={JSON.stringify(props.itemPath.toArray())}
-          class="main-area-node_content-area"
-          class:single-selected={props.selected === 'single'}
-          on:mousedown={props.onMouseDownContentArea}
-          on:contextmenu={props.onContextMenu}
-        >
-          <MainAreaContent props={props.contentProps} />
-        </div>
+      <!-- コンテンツ領域 -->
+      <div
+        data-item-path={JSON.stringify(props.itemPath.toArray())}
+        class="main-area-node_content-area"
+        class:single-selected={props.selected === 'single'}
+        on:mousedown={props.onMouseDownContentArea}
+        on:contextmenu={props.onContextMenu}
+      >
+        <MainAreaContent props={props.contentProps} />
       </div>
       <!-- 隠れているタブ数 -->
       {#if props.hiddenTabsCount > 0}
@@ -150,16 +147,13 @@
     }
   }
 
-  .main-area-node_footprint-layer {
-    background-color: var(--footprint-color);
-  }
-
   .main-area-node_roll-area {
     user-select: none;
   }
 
   .main-area-node_content-area {
     height: 100%;
+    background-color: var(--footprint-color);
 
     // マウスホバー時のコンテンツ領域
     &:hover {
