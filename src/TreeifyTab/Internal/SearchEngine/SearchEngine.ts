@@ -72,6 +72,22 @@ export class SearchEngine {
   }
 
   /**
+   * テキスト置換機能のための全文検索メソッド。
+   * この関数は{@link search}とは次の点が異なる。
+   * - AND検索やNOT検索などは行わず、与えられた文字列全体をそのまま検索ワードとして用いる
+   * - 大文字・小文字を区別する
+   */
+  searchToReplace(searchWord: string): Set<ItemId> {
+    return Set(this.unigramSearchIndex.search(searchWord)).filter((itemId) => {
+      // 除外項目で検索結果をフィルタリングする
+      if (CurrentState.shouldBeHidden(itemId)) return false
+
+      const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
+      return textTracks.some((textTrack) => textTrack.includes(searchWord))
+    })
+  }
+
+  /**
    * 指定された項目のテキストトラックの変化に合わせて検索インデックスを更新する。
    * 項目内のテキストを更新する処理は全て第2引数の関数内で行うべし。
    */

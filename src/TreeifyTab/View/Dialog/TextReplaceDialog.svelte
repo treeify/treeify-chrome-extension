@@ -14,7 +14,7 @@
   function onSubmit() {
     Internal.instance.saveCurrentStateToUndoStack()
 
-    const itemIds = Internal.instance.searchEngine.search(beforeReplace)
+    const itemIds = Internal.instance.searchEngine.searchToReplace(beforeReplace)
     for (const itemId of itemIds) {
       replaceItemData(itemId, beforeReplace, afterReplace)
     }
