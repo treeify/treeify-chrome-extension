@@ -6,10 +6,9 @@
   import ContextMenuDialog from 'src/TreeifyTab/View/Dialog/ContextMenuDialog.svelte'
   import { createContextMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ContextMenuDialogProps.js'
   import { DialogLayerProps } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
-  import DropdownMenuDialog from 'src/TreeifyTab/View/Dialog/DropdownMenuDialog.svelte'
   import ExportDialog from 'src/TreeifyTab/View/Dialog/ExportDialog.svelte'
   import ImageItemEditDialog from 'src/TreeifyTab/View/Dialog/ImageItemEditDialog.svelte'
-  import { createItemAdditionDropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialogProps.js'
+  import ItemAdditionDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/ItemAdditionDropdownMenuDialog.svelte'
   import OtherParentsDialog from 'src/TreeifyTab/View/Dialog/OtherParentsDialog.svelte'
   import { createOtherParentsDialogProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogProps.js'
   import OtherSettingsDialog from 'src/TreeifyTab/View/Dialog/OtherSettingsDialog.svelte'
@@ -46,7 +45,7 @@
 {:else if props.dialogState.type === 'ImageItemEditDialog'}
   <ImageItemEditDialog />
 {:else if props.dialogState.type === 'ItemAdditionDropdownMenuDialog'}
-  <DropdownMenuDialog props={createItemAdditionDropdownMenuDialogProps()} />
+  <ItemAdditionDropdownMenuDialog />
 {:else if props.dialogState.type === 'KeyBindingDialog'}
   <KeyBindingDialog />
 {:else if props.dialogState.type === 'OtherParentsDialog'}
