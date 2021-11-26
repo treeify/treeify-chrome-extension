@@ -46,7 +46,7 @@
     />
     <datalist id="command-palette-dialog_command-id-list">
       {#each commandIds as commandId}
-        <option value={commandId} />
+        <option value={commandId}>{commandNames[commandId]}</option>
       {/each}
     </datalist>
   </div>
