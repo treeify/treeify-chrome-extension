@@ -63,8 +63,7 @@ export function closeSubtreeTabs() {
   }
 }
 
-/** ウェブページ項目のロード操作 */
-export function loadItem() {
+export function openItemTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
@@ -77,8 +76,7 @@ export function loadItem() {
   }
 }
 
-/** ウェブページ項目のサブツリーロード操作 */
-export function loadSubtree() {
+export function openSubtreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {

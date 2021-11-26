@@ -72,7 +72,7 @@ export function createMainAreaWebPageContentProps(
         case '0000MouseButton0':
           if (tab === undefined) {
             // タブが閉じられている場合
-            Command.loadItem()
+            Command.openItemTab()
           } else {
             // discard状態またはロード状態の場合
             Command.closeSubtreeTabs()
@@ -83,7 +83,7 @@ export function createMainAreaWebPageContentProps(
         case '1000MouseButton0':
           if (tab === undefined) {
             // タブが閉じられている場合
-            Command.loadSubtree()
+            Command.openSubtreeTabs()
           } else {
             // discard状態またはロード状態の場合
             Command.closeItemTab()
@@ -94,7 +94,7 @@ export function createMainAreaWebPageContentProps(
         case '0100MouseButton0':
           if (isUnloaded) {
             // アンロード状態の場合
-            Command.loadItem()
+            Command.openItemTab()
           } else {
             // ロード状態の場合
             Command.discardSubtreeTabs()
@@ -105,7 +105,7 @@ export function createMainAreaWebPageContentProps(
         case '1100MouseButton0':
           if (isUnloaded) {
             // アンロード状態の場合
-            Command.loadSubtree()
+            Command.openSubtreeTabs()
           } else {
             // ロード状態の場合
             Command.discardItemTab()
