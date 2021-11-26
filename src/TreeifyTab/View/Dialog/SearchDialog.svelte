@@ -5,15 +5,42 @@
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import { SearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
 
-  export let props: SearchDialogProps
-
   let searchResult: List<List<ItemPath>> | undefined
 
-  function onKeyDownSearchQuery(event: KeyboardEvent) {
+  function onContentAreaKeyDown(event: KeyboardEvent) {
+    if (event.isComposing) return
+
+    const inputId = InputId.fromKeyboardEvent(event)
+    switch (inputId) {
+      case '0000ArrowDown':
+      case '0000ArrowUp':
+        event.preventDefault()
+
+        const focusableElements = List(
+          document.querySelectorAll(
+            '.search-dialog_content input, .search-dialog_content [tabindex]'
+          )
+        ) as List<HTMLElement>
+        const index = focusableElements.findIndex((element) => document.activeElement === element)
+        if (index === -1) return
+
+        if (inputId === '0000ArrowDown') {
+          // フォーカスを次の要素に移す
+          const nextIndex = (index + 1) % focusableElements.size
+          focusableElements.get(nextIndex)!.focus()
+        } else {
+          // フォーカスを前の要素に移す
+          const prevIndex = (index - 1) % focusableElements.size
+          focusableElements.get(prevIndex)!.focus()
+        }
+        break
+    }
+  }
+
+  function onSearchQueryKeyDown(event: KeyboardEvent) {
     if (event.isComposing) return
     if (!(event.target instanceof HTMLInputElement)) return
 
@@ -38,12 +65,12 @@
 </script>
 
 <CommonDialog title="検索" showCloseButton>
-  <div class="search-dialog_content" on:keydown={props.onKeyDown}>
+  <div class="search-dialog_content" on:keydown={onContentAreaKeyDown}>
     <input
       type="text"
       class="search-dialog_search-query"
       placeholder="検索ワード -除外ワード"
-      on:keydown={onKeyDownSearchQuery}
+      on:keydown={onSearchQueryKeyDown}
     />
     <div class="search-dialog_result">
       {#if searchResult !== undefined}

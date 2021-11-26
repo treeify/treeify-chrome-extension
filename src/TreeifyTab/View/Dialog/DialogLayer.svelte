@@ -17,7 +17,6 @@
   import PreferenceDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialog.svelte'
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
-  import { createSearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps.js'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
   import { createTabsDialogProps } from 'src/TreeifyTab/View/Dialog/TabsDialogProps.js'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
@@ -55,7 +54,7 @@
 {:else if props.dialogState.type === 'PreferenceDropdownMenuDialog'}
   <PreferenceDropdownMenuDialog />
 {:else if props.dialogState.type === 'SearchDialog'}
-  <SearchDialog props={createSearchDialogProps()} />
+  <SearchDialog />
 {:else if props.dialogState.type === 'TabsDialog'}
   <TabsDialog props={createTabsDialogProps(props.dialogState)} />
 {:else if props.dialogState.type === 'TexItemEditDialog'}
