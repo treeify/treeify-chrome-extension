@@ -82,6 +82,9 @@ export class SearchEngine {
       // 除外項目で検索結果をフィルタリングする
       if (CurrentState.shouldBeHidden(itemId)) return false
 
+      // 出典付き項目は置換対象から外す
+      if (Internal.instance.state.items[itemId].cite !== null) return false
+
       const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
       return textTracks.some((textTrack) => textTrack.includes(searchWord))
     })
