@@ -1,4 +1,4 @@
-import { DiscriminatedUnion, ItemType } from 'src/TreeifyTab/basicType'
+import { ItemType } from 'src/TreeifyTab/basicType'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import {
@@ -22,6 +22,7 @@ import {
   MainAreaWebPageContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
 import { assertNeverType } from 'src/Utility/Debug/assert'
+import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 
 export type MainAreaContentProps = DiscriminatedUnion<{
   MainAreaTextContentProps: MainAreaTextContentProps

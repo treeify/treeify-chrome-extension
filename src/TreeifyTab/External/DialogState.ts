@@ -1,4 +1,5 @@
-import { DiscriminatedUnion, ItemId } from 'src/TreeifyTab/basicType'
+import { ItemId } from 'src/TreeifyTab/basicType'
+import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { Coordinate } from 'src/Utility/integer'
 
 export type ContextMenuDialog = {

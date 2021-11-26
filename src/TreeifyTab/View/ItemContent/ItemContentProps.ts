@@ -1,4 +1,4 @@
-import { DiscriminatedUnion, ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import {
   CodeBlockItemContentProps,
@@ -21,6 +21,7 @@ import {
   WebPageItemContentProps,
 } from 'src/TreeifyTab/View/ItemContent/WebPageItemContentProps'
 import { assertNeverType } from 'src/Utility/Debug/assert'
+import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 
 export type ItemContentProps = DiscriminatedUnion<{
   TextItemContentProps: TextItemContentProps
