@@ -5,19 +5,19 @@
 </script>
 
 {#if props.title !== '' && props.url !== ''}
-  <cite class="main-area-image-content_cite"
-    ><a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}
-      >{props.title}</a
-    ></cite
-  >
+  <cite class="main-area-image-content_cite">
+    <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
+      {props.title}
+    </a>
+  </cite>
 {:else if props.title !== '' && props.url === ''}
   <cite class="main-area-image-content_cite">{props.title}</cite>
 {:else if props.title === '' && props.url !== ''}
-  <cite class="main-area-image-content_cite"
-    ><a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}
-      >{props.url}</a
-    ></cite
-  >
+  <cite class="main-area-image-content_cite">
+    <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
+      {props.url}
+    </a>
+  </cite>
 {/if}
 
 <style global lang="scss">

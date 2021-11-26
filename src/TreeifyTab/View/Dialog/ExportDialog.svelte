@@ -154,43 +154,39 @@
     </div>
     <div class="export-dialog_option-area">
       {#if selectedFormat === ExportFormat.PLAIN_TEXT}
-        <label
-          >インデントの表現: <input
+        <label>
+          インデントの表現:
+          <input
             type="text"
             class="export-dialog_indentation-expression"
             bind:value={indentationExpression}
             size="4"
-          /></label
-        >
-        <label class="export-dialog_checkbox-label"
-          ><input
-            type="checkbox"
-            bind:checked={plainTextIgnoreInvisibleItems}
-          />不可視の項目を無視する</label
-        >
+          />
+        </label>
+        <label class="export-dialog_checkbox-label">
+          <input type="checkbox" bind:checked={plainTextIgnoreInvisibleItems} />
+          不可視の項目を無視する
+        </label>
       {:else if selectedFormat === ExportFormat.MARKDOWN}
-        <label
-          >最上位の見出しの#の数: <input
+        <label>
+          最上位の見出しの#の数:
+          <input
             type="number"
             class="export-dialog_minimum-header-level"
             bind:value={minimumHeaderLevel}
             min="1"
             max="6"
-          /></label
-        >
-        <label class="export-dialog_checkbox-label"
-          ><input
-            type="checkbox"
-            bind:checked={markdownIgnoreInvisibleItems}
-          />不可視の項目を無視する</label
-        >
+          />
+        </label>
+        <label class="export-dialog_checkbox-label">
+          <input type="checkbox" bind:checked={markdownIgnoreInvisibleItems} />
+          不可視の項目を無視する
+        </label>
       {:else if selectedFormat === ExportFormat.OPML}
-        <label class="export-dialog_checkbox-label"
-          ><input
-            type="checkbox"
-            bind:checked={opmlIgnoreInvisibleItems}
-          />不可視の項目を無視する</label
-        >
+        <label class="export-dialog_checkbox-label">
+          <input type="checkbox" bind:checked={opmlIgnoreInvisibleItems} />
+          不可視の項目を無視する
+        </label>
       {/if}
     </div>
     <div class="export-dialog_button-area">
