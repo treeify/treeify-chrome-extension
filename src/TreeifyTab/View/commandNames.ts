@@ -47,6 +47,7 @@ export const commandNames = {
   showTextReplaceDialog: 'テキスト置換ダイアログを表示',
   showCitationSettingDialog: '出典設定ダイアログを表示',
   showContextMenuDialog: 'コンテキストメニューを表示',
+  showCommandPaletteDialog: 'コマンドパレットを表示',
   doNothing: '何もしない',
   toggleExcluded: '除外トグル',
   syncWithDataFolder: 'データフォルダ同期',

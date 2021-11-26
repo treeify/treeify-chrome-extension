@@ -3,6 +3,7 @@
   import CitationSettingDialog from 'src/TreeifyTab/View/Dialog/CitationSettingDialog.svelte'
   import CodeBlockItemEditDialog from 'src/TreeifyTab/View/Dialog/CodeBlockItemEditDialog.svelte'
   import CodeBlockLanguageSettingDialog from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialog.svelte'
+  import CommandPaletteDialog from 'src/TreeifyTab/View/Dialog/CommandPaletteDialog.svelte'
   import ContextMenuDialog from 'src/TreeifyTab/View/Dialog/ContextMenuDialog.svelte'
   import { DialogLayerProps } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
   import ExportDialog from 'src/TreeifyTab/View/Dialog/ExportDialog.svelte'
@@ -33,6 +34,8 @@
   <CodeBlockItemEditDialog />
 {:else if props.dialogState.type === 'CodeBlockLanguageSettingDialog'}
   <CodeBlockLanguageSettingDialog />
+{:else if props.dialogState.type === 'CommandPaletteDialog'}
+  <CommandPaletteDialog />
 {:else if props.dialogState.type === 'ContextMenuDialog'}
   <ContextMenuDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'CustomCssDialog'}
