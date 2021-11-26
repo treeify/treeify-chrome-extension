@@ -12,6 +12,7 @@
   function onKeyDown(event: KeyboardEvent) {
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
+        event.preventDefault()
         onSubmit(textContent)
         break
     }

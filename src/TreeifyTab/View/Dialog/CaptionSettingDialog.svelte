@@ -38,6 +38,7 @@
     switch (InputId.fromKeyboardEvent(event)) {
       case '0000Enter':
       case '1000Enter':
+        event.preventDefault()
         onClickFinishButton()
         break
     }
