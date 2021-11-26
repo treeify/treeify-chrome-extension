@@ -39,7 +39,6 @@ export default {
     svelte({
       preprocess: sveltePreprocess(),
       emitCss: false,
-      compilerOptions: { immutable: true },
     }),
     typescript(),
     json(),
