@@ -28,10 +28,12 @@
   }
 
   $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
-  $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
+  $: style = `
+    --footprint-color: ${footprintColor ?? 'transparent'};
+  `
 </script>
 
-<div class="page-tree-node">
+<div class="page-tree-node" {style}>
   {#if props.isRoot}
     <div class="grid-empty-cell" />
   {:else}
@@ -41,7 +43,7 @@
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_body-area">
-      <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
+      <div class="page-tree-node_footprint-layer">
         <div
           class="page-tree-node_content-area"
           class:active-page={props.isActivePage}
@@ -115,6 +117,10 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
+  }
+
+  .page-tree-node_footprint-layer {
+    background-color: var(--footprint-color);
   }
 
   .page-tree-node_content-area {
