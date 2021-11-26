@@ -29,7 +29,10 @@
   }
 
   $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
-  $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
+  $: style = `
+    --footprint-color: ${footprintColor ?? 'transparent'};
+  `
+
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
   $: depth = props.itemPath.size - 1
 </script>
@@ -38,6 +41,7 @@
   class="main-area-node"
   class:multi-selected={props.selected === 'multi'}
   id={JSON.stringify(props.itemPath)}
+  {style}
 >
   {#if props.isActivePage}
     <div class="grid-empty-cell" />
@@ -58,18 +62,15 @@
       class:excluded={props.isExcluded}
       data-depth={depth}
     >
-      <!-- 足跡表示用のレイヤー -->
-      <div class="main-area-node_footprint-layer" style={footprintLayerStyle}>
-        <!-- コンテンツ領域 -->
-        <div
-          data-item-path={JSON.stringify(props.itemPath.toArray())}
-          class="main-area-node_content-area"
-          class:single-selected={props.selected === 'single'}
-          on:mousedown={props.onMouseDownContentArea}
-          on:contextmenu={props.onContextMenu}
-        >
-          <MainAreaContent props={props.contentProps} />
-        </div>
+      <!-- コンテンツ領域 -->
+      <div
+        data-item-path={JSON.stringify(props.itemPath.toArray())}
+        class="main-area-node_content-area"
+        class:single-selected={props.selected === 'single'}
+        on:mousedown={props.onMouseDownContentArea}
+        on:contextmenu={props.onContextMenu}
+      >
+        <MainAreaContent props={props.contentProps} />
       </div>
       <!-- 隠れているタブ数 -->
       {#if props.hiddenTabsCount > 0}
@@ -152,6 +153,7 @@
 
   .main-area-node_content-area {
     height: 100%;
+    background-color: var(--footprint-color);
 
     // マウスホバー時のコンテンツ領域
     &:hover {

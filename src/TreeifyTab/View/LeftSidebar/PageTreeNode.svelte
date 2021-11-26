@@ -28,10 +28,12 @@
   }
 
   $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
-  $: footprintLayerStyle = footprintColor !== undefined ? `background-color: ${footprintColor}` : ''
+  $: style = `
+    --footprint-color: ${footprintColor ?? 'transparent'};
+  `
 </script>
 
-<div class="page-tree-node">
+<div class="page-tree-node" {style}>
   {#if props.isRoot}
     <div class="grid-empty-cell" />
   {:else}
@@ -41,20 +43,18 @@
   {/if}
   <div class="page-tree-node_body-and-children-area">
     <div class="page-tree-node_body-area">
-      <div class="page-tree-node_footprint-layer" style={footprintLayerStyle}>
-        <div
-          class="page-tree-node_content-area"
-          class:active-page={props.isActivePage}
-          data-item-id={props.itemId}
-          on:mousedown={props.onClickContentArea}
-        >
-          <ItemContent props={props.contentProps} />
-          {#if props.isAudible}
-            <div class="page-tree-node_audible-icon" />
-          {:else}
-            <div class="grid-empty-cell" />
-          {/if}
-        </div>
+      <div
+        class="page-tree-node_content-area"
+        class:active-page={props.isActivePage}
+        data-item-id={props.itemId}
+        on:mousedown={props.onClickContentArea}
+      >
+        <ItemContent props={props.contentProps} />
+        {#if props.isAudible}
+          <div class="page-tree-node_audible-icon" />
+        {:else}
+          <div class="grid-empty-cell" />
+        {/if}
       </div>
       <div class="page-tree-node_right-button-area">
         {#if props.tabsCount > 0}
@@ -127,6 +127,8 @@
     // ページツリーではテキストは折り返さない
     overflow-x: hidden;
     white-space: nowrap;
+
+    background-color: var(--footprint-color);
 
     &.active-page {
       // アクティブページの強調表示

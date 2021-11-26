@@ -7,14 +7,21 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import KeyBinding from 'src/TreeifyTab/View/Dialog/Preference/KeyBinding.svelte'
-  import { createKeyBindingProps } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingProps'
+  import {
+    createKeyBindingProps,
+    KeyBindingProps,
+  } from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingProps'
 
-  const bindings = Object.entries(Internal.instance.state.mainAreaKeyBindings)
-  const keyBindingPropses = List(bindings).map(createKeyBindingProps)
+  let keyBindingPropses: List<KeyBindingProps> = readFromState()
 
   let isAddBindingMode = false
 
   $: style = `--visibility: ${isAddBindingMode ? 'visible' : 'hidden'};`
+
+  function readFromState(): List<KeyBindingProps> {
+    const bindings = Object.entries(Internal.instance.state.mainAreaKeyBindings)
+    return List(bindings).map(createKeyBindingProps)
+  }
 
   function onClick() {
     isAddBindingMode = true
@@ -36,7 +43,7 @@
     isAddBindingMode = false
 
     Internal.instance.mutate(List.of('doNothing'), PropertyPath.of('mainAreaKeyBindings', inputId))
-    Rerenderer.instance.rerender()
+    keyBindingPropses = readFromState()
   }
 
   function closeDialog() {
