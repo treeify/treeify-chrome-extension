@@ -22,14 +22,14 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   if (ItemPath.hasParent(targetItemPath)) {
     result.push({
       title: '削除',
-      onClick: () => Command.removeEdge(),
+      onClick: () => Command.removeItem(),
     })
   }
 
   if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
     result.push({
       title: 'このツリーのタブを閉じる',
-      onClick: () => Command.closeSubtreeTabs(),
+      onClick: () => Command.closeTreeTabs(),
     })
   }
 

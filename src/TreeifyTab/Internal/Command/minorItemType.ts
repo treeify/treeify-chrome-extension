@@ -3,7 +3,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 
 /** 空の画像項目を作る */
-export function createEmptyImageItem() {
+export function createImageItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const newItemId = CurrentState.createImageItem()
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
@@ -20,7 +20,7 @@ export function createEmptyImageItem() {
 }
 
 /** 空のコードブロック項目を作る */
-export function createEmptyCodeBlockItem() {
+export function createCodeBlockItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const newItemId = CurrentState.createCodeBlockItem()
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
@@ -37,7 +37,7 @@ export function createEmptyCodeBlockItem() {
 }
 
 /** 空のTeX項目を作る */
-export function createEmptyTexItem() {
+export function createTexItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const newItemId = CurrentState.createTexItem()
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)

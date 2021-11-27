@@ -80,10 +80,10 @@
       name: '基本操作',
       commandIds: List.of(
         'enterKeyDefault',
-        'removeEdge',
-        'deleteItemItself',
-        'moveItemUpward',
-        'moveItemDownward',
+        'removeItem',
+        'deleteJustOneItem',
+        'moveItemToAbove',
+        'moveItemToBelow',
         'moveItemToPrevSibling',
         'moveItemToNextSibling',
         'indent',
@@ -97,7 +97,7 @@
     {
       name: 'テキスト項目操作',
       commandIds: List.of(
-        'insertLineBreak',
+        'insertNewline',
         'toggleBold',
         'toggleUnderline',
         'toggleItalic',
@@ -108,17 +108,17 @@
       name: 'ウェブページ項目操作',
       commandIds: List.of(
         'browseTab',
-        'closeSubtreeTabs',
-        'closeItemTab',
-        'discardSubtreeTabs',
-        'discardItemTab',
-        'openSubtreeTabs',
-        'openItemTab'
+        'closeTreeTabs',
+        'closeJustOneTab',
+        'discardTreeTabs',
+        'discardJustOneTab',
+        'openTreeTabs',
+        'openJustOneTab'
       ),
     },
     {
       name: 'ページ関連',
-      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'showPage'),
+      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'),
     },
     {
       name: '項目装飾',
@@ -132,13 +132,13 @@
     {
       name: '空の項目作成',
       commandIds: List.of(
-        'createEmptyImageItem',
-        'createEmptyCodeBlockItem',
-        'createEmptyTexItem',
-        'createEmptyTextItem'
+        'createImageItem',
+        'createCodeBlockItem',
+        'createTexItem',
+        'createTextItem'
       ),
     },
-    { name: 'クリップボード', commandIds: List.of('copyForTransclusion', 'pasteAsPlainText') },
+    { name: 'クリップボード', commandIds: List.of('copyForTransclude', 'pasteAsPlainText') },
     {
       name: 'ダイアログ表示',
       commandIds: List.of(
@@ -152,7 +152,7 @@
         'showCommandPaletteDialog'
       ),
     },
-    { name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems') },
+    { name: '複数選択', commandIds: List.of('selectToStartOfList', 'selectToEndOfList') },
     { name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded') }
   )
 </script>

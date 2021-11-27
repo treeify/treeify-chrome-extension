@@ -6,7 +6,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /** トランスクルードするために独自クリップボードに情報を書き込む */
-export async function copyForTransclusion() {
+export async function copyForTransclude() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   External.instance.treeifyClipboard = { selectedItemPaths }
 

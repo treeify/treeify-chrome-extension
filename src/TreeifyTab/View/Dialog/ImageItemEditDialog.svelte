@@ -49,7 +49,7 @@
 
   function onCloseDialog() {
     if (CurrentState.isEmptyImageItem(targetItemId)) {
-      Command.removeEdge()
+      Command.removeItem()
     }
   }
 </script>

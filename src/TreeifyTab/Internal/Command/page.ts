@@ -21,7 +21,7 @@ export function togglePaged() {
 }
 
 /** 対象項目がページなら、そのページに切り替える */
-export function showPage() {
+export function switchPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   if (CurrentState.isPage(targetItemId)) {

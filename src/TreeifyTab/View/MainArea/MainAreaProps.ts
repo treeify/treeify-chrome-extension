@@ -494,7 +494,7 @@ function onBackspace(event: KeyboardEvent) {
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
-    Command.removeEdge()
+    Command.removeItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -530,7 +530,7 @@ function onBackspace(event: KeyboardEvent) {
       }
 
       // ターゲット項目を削除して終了
-      Command.removeEdge()
+      Command.removeItem()
       Rerenderer.instance.rerender()
       return
     }
@@ -584,7 +584,7 @@ function onBackspace(event: KeyboardEvent) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     // ターゲット項目を削除する
-    Command.removeEdge()
+    Command.removeItem()
     Rerenderer.instance.rerender()
   }
 }
@@ -595,7 +595,7 @@ function onDelete(event: KeyboardEvent) {
   if (CurrentState.getSelectedItemPaths().size > 1) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
-    Command.removeEdge()
+    Command.removeItem()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
@@ -631,7 +631,7 @@ function onDelete(event: KeyboardEvent) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
       // ターゲット項目を削除して終了
-      Command.removeEdge()
+      Command.removeItem()
       // 下の項目をフォーカスする
       const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
       if (belowItemPath !== undefined) {
@@ -690,7 +690,7 @@ function onDelete(event: KeyboardEvent) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     // ターゲット項目を削除する
-    Command.removeEdge()
+    Command.removeItem()
     // 下の項目をフォーカスする
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {

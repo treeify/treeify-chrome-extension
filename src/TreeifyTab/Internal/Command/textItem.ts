@@ -4,7 +4,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
-export function createEmptyTextItem() {
+export function createTextItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const newItemId = CurrentState.createTextItem()
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
@@ -51,7 +51,7 @@ function execTextEditCommand(commandName: string) {
 }
 
 /** contenteditableな要素で改行を実行する */
-export function insertLineBreak() {
+export function insertNewline() {
   document.execCommand('insertLineBreak')
 }
 

@@ -46,7 +46,7 @@
 
   function onCloseDialog() {
     if (CurrentState.isEmptyTexItem(targetItemId)) {
-      Command.removeEdge()
+      Command.removeItem()
     }
   }
 </script>

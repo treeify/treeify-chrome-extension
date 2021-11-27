@@ -157,7 +157,7 @@ export function enterKeyDefault() {
  * ターゲット項目がアクティブページの場合は何もしない。
  * トランスクルードされた項目の場合はエッジのみ削除する。
  */
-export function removeEdge() {
+export function removeItem() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const parentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
 
@@ -191,7 +191,7 @@ export function removeEdge() {
  * 子項目は（アンインデントと同じように）親側に繰り上げられる。
  * ターゲット項目がアクティブページの場合は何もしない。
  */
-export function deleteItemItself() {
+export function deleteJustOneItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -237,7 +237,7 @@ export function toggleCompleted() {
 
     // ヒューリスティックな追加効果
     Command.fold()
-    Command.closeSubtreeTabs()
+    Command.closeTreeTabs()
     // フォーカスを下の項目に移動する
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
     if (firstFollowingItemPath !== undefined) {

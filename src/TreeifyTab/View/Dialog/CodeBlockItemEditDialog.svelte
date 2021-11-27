@@ -68,7 +68,7 @@
 
   function onCloseDialog() {
     if (CurrentState.isEmptyCodeBlockItem(targetItemId)) {
-      Command.removeEdge()
+      Command.removeItem()
     }
   }
 </script>
