@@ -81,7 +81,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
         case MainAreaBulletState.PAGE:
           switch (inputId) {
             case '0000MouseButton0':
-              Command.showPage()
+              Command.switchPage()
               break
             case '1000MouseButton0':
               Command.turnIntoNonPage()

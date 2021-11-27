@@ -210,8 +210,8 @@ export class Internal {
         '0000F2': List.of('showEditDialog'),
         '0000ContextMenu': List.of('showContextMenuDialog'),
         '1100Period': List.of('toggleCitation'),
-        '0110ArrowUp': List.of('selectAllAboveItems'),
-        '0110ArrowDown': List.of('selectAllBelowItems'),
+        '0110ArrowUp': List.of('selectToStartOfList'),
+        '0110ArrowDown': List.of('selectToEndOfList'),
       },
       customCss: '',
       exportSettings: {

@@ -118,7 +118,7 @@
     },
     {
       name: 'ページ関連',
-      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'showPage'),
+      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'),
     },
     {
       name: '項目装飾',
@@ -152,7 +152,7 @@
         'showCommandPaletteDialog'
       ),
     },
-    { name: '複数選択', commandIds: List.of('selectAllAboveItems', 'selectAllBelowItems') },
+    { name: '複数選択', commandIds: List.of('selectToStartOfList', 'selectToEndOfList') },
     { name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded') }
   )
 </script>
