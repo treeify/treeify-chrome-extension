@@ -8,19 +8,15 @@
   let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
   let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
 
-  function onChangeLeftEndMouseGestureEnabled() {
-    Internal.instance.mutate(
-      leftEndMouseGestureEnabled,
-      PropertyPath.of('leftEndMouseGestureEnabled')
-    )
-  }
+  $: Internal.instance.mutate(
+    leftEndMouseGestureEnabled,
+    PropertyPath.of('leftEndMouseGestureEnabled')
+  )
 
-  function onChangeRightEndMouseGestureEnabled() {
-    Internal.instance.mutate(
-      rightEndMouseGestureEnabled,
-      PropertyPath.of('rightEndMouseGestureEnabled')
-    )
-  }
+  $: Internal.instance.mutate(
+    rightEndMouseGestureEnabled,
+    PropertyPath.of('rightEndMouseGestureEnabled')
+  )
 
   function closeDialog() {
     External.instance.dialogState = undefined
@@ -31,19 +27,11 @@
 <CommonDialog title="その他の設定">
   <div class="other-settings-dialog_content" tabindex="0">
     <label class="other-settings-dialog_checkbox-label">
-      <input
-        type="checkbox"
-        bind:checked={leftEndMouseGestureEnabled}
-        on:change={onChangeLeftEndMouseGestureEnabled}
-      />
+      <input type="checkbox" bind:checked={leftEndMouseGestureEnabled} />
       マウスを画面左端まで動かすとTreeifyタブを表示
     </label>
     <label class="other-settings-dialog_checkbox-label">
-      <input
-        type="checkbox"
-        bind:checked={rightEndMouseGestureEnabled}
-        on:change={onChangeRightEndMouseGestureEnabled}
-      />
+      <input type="checkbox" bind:checked={rightEndMouseGestureEnabled} />
       マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
     </label>
     <div class="other-settings-dialog_button-area">
