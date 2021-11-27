@@ -28,10 +28,10 @@ export function unfold() {
 
 /** ターゲット項目のisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  const targetItemPath = CurrentState.getTargetItemPath()
-  const targetItemId = ItemPath.getItemId(targetItemPath)
-  CurrentState.setIsFolded(targetItemPath, !CurrentState.getIsFolded(targetItemPath))
-  CurrentState.updateItemTimestamp(targetItemId)
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    CurrentState.setIsFolded(selectedItemPath, !CurrentState.getIsFolded(selectedItemPath))
+    CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+  }
 }
 
 /** メインエリア上でEnterキーを押したときのデフォルトの挙動 */
