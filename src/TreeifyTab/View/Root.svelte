@@ -43,7 +43,7 @@
 
   html {
     height: 100%;
-    font-size: 15.5px;
+    font-size: 16px;
   }
 
   body {
