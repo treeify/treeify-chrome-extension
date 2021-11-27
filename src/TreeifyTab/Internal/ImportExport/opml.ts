@@ -193,7 +193,7 @@ export function createItemsBasedOnOpml(outlineElements: List<Element>): List<Ite
 /** パースされたOPMLのoutline要素を元に項目を作る */
 function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): ItemAndEdge {
   const attrItemId = outlineElement.getAttribute('id')
-  const isFolded = outlineElement.getAttribute('isFolded') === 'true'
+  const isFolded = deriveIsFolded(outlineElement)
   const edge = { isFolded }
   const existingItemId = attrItemId !== null ? itemIdMap[attrItemId] : undefined
   if (existingItemId !== undefined) {
@@ -233,6 +233,23 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
   }
 
   return { itemId, edge }
+}
+
+/**
+ * isFolded属性が"true"ならtrueを返す。
+ * isFolded属性が存在しない場合、子要素の数が6以上ならtrueを返す（大きな項目を自動で折りたたむ機能）。
+ * 【大きな項目を自動で折りたたむ機能の採用理由】
+ * WorkFlowyやDynalistからエクスポートしたOPMLデータには折りたたみ情報が含まれていない。
+ * それらのアウトライナーからは巨大なOPMLデータがエクスポートされる場合があるので、
+ * そのままTreeifyにインポートするとひどい目に合う。
+ */
+function deriveIsFolded(outlineElement: Element): boolean {
+  const attrIsFolded = outlineElement.getAttribute('isFolded')
+  if (attrIsFolded !== null) {
+    return attrIsFolded === 'true'
+  } else {
+    return outlineElement.childElementCount >= 6
+  }
 }
 
 function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
