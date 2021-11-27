@@ -7,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
-export function discardItemTab() {
+export function discardJustOneTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
@@ -18,7 +18,7 @@ export function discardItemTab() {
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブをdiscardする */
-export function discardSubtreeTabs() {
+export function discardTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
@@ -31,7 +31,7 @@ export function discardSubtreeTabs() {
 }
 
 /** 対象ウェブページ項目に対応するタブを閉じる */
-export function closeItemTab() {
+export function closeJustOneTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
       ItemPath.getItemId(selectedItemPath)
@@ -47,7 +47,7 @@ export function closeItemTab() {
 }
 
 /** 対象項目のサブツリーの各ウェブページ項目に対応するタブを閉じる */
-export function closeSubtreeTabs() {
+export function closeTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {
@@ -63,7 +63,7 @@ export function closeSubtreeTabs() {
   }
 }
 
-export function openItemTab() {
+export function openJustOneTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
@@ -76,7 +76,7 @@ export function openItemTab() {
   }
 }
 
-export function openSubtreeTabs() {
+export function openTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.getSubtreeItemIds(selectedItemId)) {

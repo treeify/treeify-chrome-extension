@@ -63,7 +63,7 @@ export function onCut(event: ClipboardEvent) {
     // OPML形式のテキストをクリップボードに入れる
     event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
 
-    Command.removeEdge()
+    Command.removeItem()
     Rerenderer.instance.rerender()
   }
 }

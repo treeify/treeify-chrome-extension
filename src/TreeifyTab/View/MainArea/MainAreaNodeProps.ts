@@ -100,14 +100,14 @@ export function createMainAreaNodeProps(
           event.preventDefault()
           Internal.instance.saveCurrentStateToUndoStack()
           CurrentState.setTargetItemPath(itemPath)
-          Command.removeEdge()
+          Command.removeItem()
           Rerenderer.instance.rerender()
           break
         case '1000MouseButton1':
           event.preventDefault()
           Internal.instance.saveCurrentStateToUndoStack()
           CurrentState.setTargetItemPath(itemPath)
-          Command.deleteItemItself()
+          Command.deleteJustOneItem()
           Rerenderer.instance.rerender()
           break
         case '0000MouseButton2':
@@ -157,12 +157,12 @@ export function createMainAreaNodeProps(
       switch (inputId) {
         case '0000MouseButton0':
           event.preventDefault()
-          Command.removeEdge()
+          Command.removeItem()
           Rerenderer.instance.rerender()
           break
         case '1000MouseButton0':
           event.preventDefault()
-          Command.deleteItemItself()
+          Command.deleteJustOneItem()
           Rerenderer.instance.rerender()
           break
       }
@@ -171,7 +171,7 @@ export function createMainAreaNodeProps(
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
           CurrentState.setTargetItemPath(itemPath)
-          Command.closeSubtreeTabs()
+          Command.closeTreeTabs()
           Rerenderer.instance.rerender()
           break
       }

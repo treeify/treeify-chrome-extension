@@ -95,7 +95,7 @@ export function unindent() {
  * 項目をドキュメント順で1つ上に移動するコマンド。
  * 親が居ない場合など、そのような移動ができない場合は何もしない。
  */
-export function moveItemUpward() {
+export function moveItemToAbove() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
@@ -140,7 +140,7 @@ export function moveItemUpward() {
  * ドキュメント順で項目を1つ下に移動するコマンド。
  * すでに下端の場合など、そのような移動ができない場合は何もしない。
  */
-export function moveItemDownward() {
+export function moveItemToBelow() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
@@ -255,7 +255,7 @@ export function moveItemToPrevSibling() {
       }
     }
 
-    moveItemUpward()
+    moveItemToAbove()
   }
 }
 
@@ -283,6 +283,6 @@ export function moveItemToNextSibling() {
     // キャレット位置、テキスト選択範囲を維持する
     Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
   } else {
-    moveItemDownward()
+    moveItemToBelow()
   }
 }

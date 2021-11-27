@@ -167,7 +167,7 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   } else if (CurrentState.isItem(itemId)) {
     // 対応するウェブページ項目を削除する
     if (itemId === ItemPath.getItemId(CurrentState.getTargetItemPath())) {
-      Command.deleteItemItself()
+      Command.deleteJustOneItem()
     } else {
       CurrentState.deleteItem(itemId, true)
     }

@@ -20,15 +20,15 @@
     const a = [
       {
         title: '画像項目を作成…',
-        onClick: () => Command.createEmptyImageItem(),
+        onClick: () => Command.createImageItem(),
       },
       {
         title: 'コードブロック項目を作成…',
-        onClick: () => Command.createEmptyCodeBlockItem(),
+        onClick: () => Command.createCodeBlockItem(),
       },
       {
         title: 'TeX項目を作成…',
-        onClick: () => Command.createEmptyTexItem(),
+        onClick: () => Command.createTexItem(),
       },
       {
         title: 'ブックマークを全てインポート',
