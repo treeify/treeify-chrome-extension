@@ -3,6 +3,7 @@
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { CommandId, State } from 'src/TreeifyTab/Internal/State'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
@@ -38,7 +39,13 @@
     clonedKeyBindings[inputId] = List.of('doNothing')
   }
 
-  function closeDialog() {
+  function onClickFinishButton() {
+    Internal.instance.mutate(clonedKeyBindings, PropertyPath.of('mainAreaKeyBindings'))
+    External.instance.dialogState = undefined
+    Rerenderer.instance.rerender()
+  }
+
+  function onClickCancelButton() {
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
@@ -201,7 +208,7 @@
       </p>
     </div>
     <div class="key-binding-dialog_button-area">
-      <FinishAndCancelButtons onClickCancelButton={closeDialog} />
+      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
   </div>
 </CommonDialog>
