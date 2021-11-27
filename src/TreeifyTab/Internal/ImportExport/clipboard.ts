@@ -140,8 +140,7 @@ export function onPaste(event: ClipboardEvent) {
     if (gyazoUrlPattern.test(text)) {
       // GyazoのスクリーンショットのURLなら画像項目を作る
       const newItemId = CurrentState.createImageItem()
-      // TODO: Gyazoの画像はpngとは限らない
-      CurrentState.setImageItemUrl(newItemId, text + '.png')
+      CurrentState.setImageItemUrl(newItemId, getGyazoImageUrl(text))
       const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
       // ターゲットを更新する
@@ -175,6 +174,22 @@ export function onPaste(event: ClipboardEvent) {
     // 複数行にわたるテキストの場合
     pasteMultilineText(text)
   }
+}
+
+/** 画像のURL（直リンク）かどうかを同期XHRで判定する */
+function isImageUrl(url: string): boolean {
+  const xhr = new XMLHttpRequest()
+  xhr.open('HEAD', url, false)
+  xhr.send(null)
+  const contentType = xhr.getResponseHeader('content-type')
+  return contentType?.startsWith('image/') ?? false
+}
+
+function getGyazoImageUrl(gyazoUrl: string): string {
+  if (isImageUrl(gyazoUrl + '.png')) {
+    return gyazoUrl + '.png'
+  }
+  return gyazoUrl + '.jpg'
 }
 
 // OPMLの可能性があるMIMEタイプをいろいろ試してテキストを取り出す
