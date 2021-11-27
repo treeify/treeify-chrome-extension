@@ -43,7 +43,6 @@ export function createMainAreaProps(state: State): MainAreaProps {
   const exponent = CssCustomProperty.getNumber('--main-area-footprint-count-exponent') ?? 0.5
   const footprintCount = Math.floor(allDisplayingItemIds.length ** exponent)
 
-  // TODO: 同時に複数の項目が操作された場合でも足跡をきちんと表示できるように修正する
   const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {
     return state.items[b].timestamp - state.items[a].timestamp
   })
