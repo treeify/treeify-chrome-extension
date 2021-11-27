@@ -57,12 +57,17 @@
     Rerenderer.instance.rerender()
   }
 
-  function onKeyDown(event: KeyboardEvent) {
+  async function onKeyDown(event: KeyboardEvent) {
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
         event.preventDefault()
         onClickFinishButton()
         break
+      case '1100KeyV':
+        // インデント自動除去機能を回避する「そのまま貼り付け」機能
+        event.preventDefault()
+        const text = await navigator.clipboard.readText()
+        document.execCommand('insertText', false, text)
     }
   }
 
