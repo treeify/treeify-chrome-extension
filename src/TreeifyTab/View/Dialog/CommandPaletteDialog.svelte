@@ -7,8 +7,6 @@
   import { commandNames } from 'src/TreeifyTab/View/commandNames'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
 
-  const commandIds = Object.keys(commandNames)
-
   let commandIdValue = ''
 
   function onKeydown(event: KeyboardEvent) {
@@ -45,8 +43,8 @@
       bind:value={commandIdValue}
     />
     <datalist id="command-palette-dialog_command-id-list">
-      {#each commandIds as commandId}
-        <option value={commandId}>{commandNames[commandId]}</option>
+      {#each Object.entries(commandNames) as [commandId, commandName]}
+        <option value={commandId}>{commandName}</option>
       {/each}
     </datalist>
   </div>
