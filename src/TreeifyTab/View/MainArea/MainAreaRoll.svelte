@@ -31,8 +31,8 @@
 
 <style global lang="scss">
   :root {
-    --outer-circle-min-diameter: 1.1;
-    --outer-circle-max-diameter: 1.35;
+    --outer-circle-min-diameter: 1.05;
+    --outer-circle-max-diameter: 1.3;
     // 外側の円が最大サイズになる子孫項目数
     --outer-circle-item-count-limit: 20;
 
