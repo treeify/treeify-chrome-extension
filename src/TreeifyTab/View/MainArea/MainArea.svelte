@@ -33,6 +33,8 @@
     --main-area-calculated-line-height: calc(
       1em * var(--main-area-line-height) + 2 * var(--main-area-content-area-vertical-padding)
     );
+
+    --main-area-max-width: 1200px;
   }
 
   .main-area {
@@ -57,7 +59,7 @@
     margin-top: 20px;
 
     // アウトライン表示の横幅が長すぎると右端のaudibleアイコンやタブ数カウントボタンが遠すぎてあまり役に立たなくなるので横幅を制限
-    max-width: 1200px;
+    max-width: var(--main-area-max-width);
 
     min-height: 100%;
 

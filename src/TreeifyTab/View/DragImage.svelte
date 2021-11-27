@@ -67,6 +67,8 @@
     left: calc(var(--mouse-x) + 8px);
     top: var(--mouse-y);
 
+    max-width: var(--main-area-max-width);
+
     pointer-events: none;
 
     background: #ffffff;
