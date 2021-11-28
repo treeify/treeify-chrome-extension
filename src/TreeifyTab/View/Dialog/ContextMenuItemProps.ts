@@ -34,7 +34,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     )
   ) {
     result.push({
-      title: 'このツリーのタブを閉じる',
+      title: 'ツリーに紐づくタブを閉じる',
       onClick: () => Command.closeTreeTabs(),
     })
   }
