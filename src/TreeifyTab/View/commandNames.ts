@@ -41,6 +41,7 @@ export const commandNames = {
   copyForTransclude: 'トランスクルード用コピー',
   pasteAsPlainText: 'プレーンテキストとして貼り付け',
   showEditDialog: '編集ダイアログを表示',
+  showExportDialog: 'エクスポートダイアログを表示',
   showWorkspaceDialog: 'ワークスペースダイアログを表示',
   showOtherParentsDialog: '他のトランスクルード元を表示',
   showSearchDialog: '検索ダイアログを表示',

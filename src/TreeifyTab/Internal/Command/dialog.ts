@@ -61,3 +61,7 @@ export function showReplaceDialog() {
 export function showCommandPaletteDialog() {
   External.instance.dialogState = { type: 'CommandPaletteDialog' }
 }
+
+export function showExportDialog() {
+  External.instance.dialogState = { type: 'ExportDialog' }
+}

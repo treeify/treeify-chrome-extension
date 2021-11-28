@@ -107,9 +107,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
 
   result.push({
     title: 'エクスポート…',
-    onClick: () => {
-      External.instance.dialogState = { type: 'ExportDialog' }
-    },
+    onClick: () => Command.showExportDialog(),
   })
 
   if (isSingleSelect) {

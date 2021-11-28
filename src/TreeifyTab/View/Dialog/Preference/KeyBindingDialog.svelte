@@ -147,6 +147,7 @@
         'showReplaceDialog',
         'showCitationSettingDialog',
         'showContextMenuDialog',
+        'showExportDialog',
         'showWorkspaceDialog',
         'showOtherParentsDialog',
         'showCommandPaletteDialog'
