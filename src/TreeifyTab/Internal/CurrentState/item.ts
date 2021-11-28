@@ -1,5 +1,6 @@
 import { List } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
+import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -320,10 +321,26 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 /** 新しい未使用の項目IDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds
-  const last = availableItemIds.last(undefined)
-  if (last !== undefined) {
-    Internal.instance.mutate(availableItemIds.pop(), PropertyPath.of('availableItemIds'))
-    return last
+  if (!availableItemIds.isEmpty()) {
+    // ItemIdの局所性を高めてデータフォルダの同期データ量を削減するために、
+    // targetItemPathに「近い」ものをavailableItemIdsから選ぶ。
+
+    const itemPath = CurrentState.getTargetItemPath()
+    const relatedItemId = ItemPath.getParentItemId(itemPath) ?? ItemPath.getItemId(itemPath)
+
+    // TODO: 最適化の余地あり。線形探索を2回行っているが1回で済むはず
+    const min = availableItemIds.minBy((itemId) =>
+      Math.abs(
+        Math.floor(itemId / DataFolder.ITEMS_FILE_CAPACITY) -
+          Math.floor(relatedItemId / DataFolder.ITEMS_FILE_CAPACITY)
+      )
+    )
+    assertNonUndefined(min)
+    Internal.instance.mutate(
+      availableItemIds.remove(availableItemIds.indexOf(min)),
+      PropertyPath.of('availableItemIds')
+    )
+    return min
   } else {
     const maxItemId = Internal.instance.state.maxItemId
     Internal.instance.mutate(maxItemId + 1, PropertyPath.of('maxItemId'))

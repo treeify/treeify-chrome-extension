@@ -61,6 +61,9 @@ type Metadata = {
 export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
+  /** 1つのファイルに最大何項目のデータを書き込むか */
+  static readonly ITEMS_FILE_CAPACITY = 100
+
   private static instancesFolderPath = List.of('Instances')
 
   private static getInstanceFolderPath(instanceId = Instance.getId()): FilePath {
@@ -449,37 +452,11 @@ export class DataFolder {
 
         const itemId = parseInt(propertyKeys.get(1)!)
 
-        /**
-         * このコメント欄では1ファイルに項目を詰め込む個数として100を選んだ理由を説明する。
-         *
-         * 【SSDの寿命に与える影響の観点】
-         * 1ファイルに項目を詰め込みすぎると書き込み量が増えてSSDの寿命が縮む。
-         * itemsの1エントリーをJSON化したらサイズは平均150バイトほど。
-         * textItemsの1エントリーをJSON化したらサイズは平均150バイトほど。
-         * webPageItemsの1エントリーをJSON化したらサイズは平均350バイトほど。
-         * よって、1つの項目をJSON化したらだいたい300~500バイトくらいになる。
-         * 100個の項目を詰め込むとファイルサイズは30~50KBになる。
-         *
-         * 仮に1分あたり30回の書き込みが行われると仮定する（2秒に1回ペース）。
-         * また、1回あたりに書き込まれるデータ量は平均50KBと仮定する（1ファイルで済む保証はないのでやや多めに見る）。
-         * そうすると、もし1日の作業時間が15時間（睡眠時間などだけを除いたほぼ上限値）だとしても、
-         * 合計書き込み量は1.35GBで収まる。
-         * 一般に一日あたりのSSD書き込み量は10~50GBと言われているので、SSDの寿命への影響は非常に少ないと考えられる。
-         *
-         * 【オンラインストレージでの同期にかかる時間の観点】
-         * ファイル数が多すぎるとオンラインストレージでの同期に異常な時間がかかる。
-         * （変更されたファイル数が少なければ同期はすぐ終わる。なので主に新しいインスタンスでの初回同期の時間が対象）
-         *
-         * ヘビーユーザーの項目数は（個人差が大きいが）1万個が1つの目安である。
-         * 100項目を1ファイルにパッキングしたらファイル数は100個になる。
-         * Googleドライブで実測したところ、500ファイルを同期するのに約1分かかった。
-         * よって、項目が1万個あるユーザーの初回同期には約10秒かかる。
-         * これはUX的には十分長い待ち時間だが、以下の理由で許容範囲内と判断した。
-         * ・新しい端末を買ったときくらいしかこの待ち時間は発生しない
-         * ・OSのアップデートや大きなアプリのインストールで10秒以上待たされることもよくある
-         * ・そもそも大量ファイルの同期が遅いのはオンラインストレージ側の問題であり、Treeify側の問題ではない
-         */
-        return `items${Math.floor(itemId / 100)}.json`
+        // ファイル数を削減するために、一定の個数の項目をまとめて1つのファイルに詰め込む。
+        // 特にDropboxなどのオンラインストレージの同期速度を向上させる効果があると思われる。
+        // （経験上、オンラインストレージの同期速度はファイルサイズよりファイル数の影響を強く受ける）
+        // 逆に1ファイルに詰め込みすぎるとSSDの寿命を縮める恐れがある。
+        return `items${Math.floor(itemId / DataFolder.ITEMS_FILE_CAPACITY)}.json`
       case 'pages':
       case 'mountedPageIds':
       case 'workspaces':
