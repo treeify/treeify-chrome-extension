@@ -39,6 +39,7 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
       if (inputId === '0000MouseButton0') {
         event.preventDefault()
         CurrentState.jumpTo(itemPath)
+        CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
 
         // 検索ダイアログを閉じる
         External.instance.dialogState = undefined
@@ -46,6 +47,11 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
       } else if (inputId === '0010MouseButton0') {
         event.preventDefault()
         transclude(itemPath)
+        CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
+
+        // 検索ダイアログを閉じる
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
       }
     },
     onKeyDown(event: KeyboardEvent) {
@@ -54,6 +60,7 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
         case '0000Space':
           event.preventDefault()
           CurrentState.jumpTo(itemPath)
+          CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
 
           // 検索ダイアログを閉じる
           External.instance.dialogState = undefined
@@ -63,6 +70,11 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
         case '0010Space':
           event.preventDefault()
           transclude(itemPath)
+          CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
+
+          // 検索ダイアログを閉じる
+          External.instance.dialogState = undefined
+          Rerenderer.instance.rerender()
           break
       }
     },
@@ -78,8 +90,4 @@ function transclude(itemPath: ItemPath) {
   )
   CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)
-
-  // 検索ダイアログを閉じる
-  External.instance.dialogState = undefined
-  Rerenderer.instance.rerender()
 }
