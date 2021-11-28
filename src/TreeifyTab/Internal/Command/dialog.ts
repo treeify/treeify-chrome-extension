@@ -3,8 +3,6 @@ import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-import { assertNonNull } from 'src/Utility/Debug/assert'
 
 /** 項目の種類に応じた編集系ダイアログなどを出す */
 export function showEditDialog() {
@@ -53,12 +51,7 @@ export function showCitationSettingDialog() {
 
 /** 独自コンテキストメニューを表示する */
 export function showContextMenuDialog() {
-  const domElementId = MainAreaContentView.focusableDomElementId(CurrentState.getTargetItemPath())
-  const domElement = document.getElementById(domElementId)
-  assertNonNull(domElement)
-  const rect = domElement.getBoundingClientRect()
-  const mousePosition = { x: rect.x, y: rect.bottom }
-  External.instance.dialogState = { type: 'ContextMenuDialog', mousePosition }
+  External.instance.dialogState = { type: 'ContextMenuDialog' }
 }
 
 export function showReplaceDialog() {
