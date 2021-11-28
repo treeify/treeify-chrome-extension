@@ -36,8 +36,6 @@
   :root {
     // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
     --data-folder-button-icon-color: #6a6a6a;
-    // データフォルダを開くボタンのアイコンの完了状態の色。lch(70.0%, 0.0, 0.0)相当
-    --data-folder-button-icon-completed-color: #ababab;
   }
 
   // データフォルダアイコン
@@ -55,13 +53,12 @@
     -webkit-mask: url('folder-open.svg') no-repeat center;
     -webkit-mask-size: contain;
 
-    // 完了状態のデータフォルダアイコン
-    &.completed {
-      background: var(--data-folder-button-icon-completed-color);
-    }
-
     &.already-open {
       -webkit-mask: url('folder-sync.svg');
+    }
+
+    &.completed {
+      -webkit-mask: url('folder-check.svg');
     }
   }
 </style>
