@@ -12,7 +12,9 @@ export type ContextMenuItemProps = {
 }
 
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
-  const isSingleSelect = CurrentState.getSelectedItemPaths().size === 1
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
+  const isSingleSelect = selectedItemPaths.size === 1
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const item = Internal.instance.state.items[targetItemId]
@@ -26,7 +28,11 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
+  if (
+    selectedItemIds.some(
+      (itemId) => CurrentState.countTabsInSubtree(Internal.instance.state, itemId) > 0
+    )
+  ) {
     result.push({
       title: 'このツリーのタブを閉じる',
       onClick: () => Command.closeTreeTabs(),
