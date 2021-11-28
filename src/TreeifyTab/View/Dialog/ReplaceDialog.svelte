@@ -89,7 +89,7 @@
   }
 </script>
 
-<CommonDialog title="テキスト置換" showCloseButton>
+<CommonDialog title="置換" showCloseButton>
   <div class="text-replace-dialog_content" on:keydown={onKeydown}>
     <div class="text-replace-dialog_input-area">
       <label class="text-replace-dialog_label">

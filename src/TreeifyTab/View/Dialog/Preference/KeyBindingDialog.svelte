@@ -144,7 +144,7 @@
       commandIds: List.of(
         'showEditDialog',
         'showSearchDialog',
-        'showTextReplaceDialog',
+        'showReplaceDialog',
         'showCitationSettingDialog',
         'showContextMenuDialog',
         'showWorkspaceDialog',
