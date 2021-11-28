@@ -205,7 +205,7 @@ export class Internal {
         '1100KeyV': List.of('pasteAsPlainText'),
         '1000KeyS': List.of('syncWithDataFolder'),
         '1100KeyF': List.of('showSearchDialog'),
-        '1100KeyR': List.of('showTextReplaceDialog'),
+        '1100KeyR': List.of('showReplaceDialog'),
         '1000Slash': List.of('showCommandPaletteDialog'),
         '0000F2': List.of('showEditDialog'),
         '0000ContextMenu': List.of('showContextMenuDialog'),

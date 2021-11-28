@@ -15,10 +15,10 @@
   import KeyBindingDialog from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialog.svelte'
   import PreferenceDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialog.svelte'
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
+  import ReplaceDialog from 'src/TreeifyTab/View/Dialog/ReplaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
-  import TextReplaceDialog from 'src/TreeifyTab/View/Dialog/TextReplaceDialog.svelte'
   import WebPageItemTitleSettingDialog from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialog.svelte'
 
   export let props: DialogLayerProps
@@ -60,8 +60,8 @@
   <TabsDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'TexItemEditDialog'}
   <TexItemEditDialog />
-{:else if props.dialogState.type === 'TextReplaceDialog'}
-  <TextReplaceDialog />
+{:else if props.dialogState.type === 'ReplaceDialog'}
+  <ReplaceDialog />
 {:else if props.dialogState.type === 'WebPageItemTitleSettingDialog'}
   <WebPageItemTitleSettingDialog />
 {:else if props.dialogState.type === 'WorkspaceDialog'}

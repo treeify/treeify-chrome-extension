@@ -44,7 +44,7 @@ export const commandNames = {
   showWorkspaceDialog: 'ワークスペースダイアログを表示',
   showOtherParentsDialog: '他のトランスクルード元を表示',
   showSearchDialog: '検索ダイアログを表示',
-  showTextReplaceDialog: 'テキスト置換ダイアログを表示',
+  showReplaceDialog: '置換ダイアログを表示',
   showCitationSettingDialog: '出典設定ダイアログを表示',
   showContextMenuDialog: 'コンテキストメニューを表示',
   showCommandPaletteDialog: 'コマンドパレットを表示',
