@@ -3,7 +3,7 @@ import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { Coordinate } from 'src/Utility/integer'
 
 export type ContextMenuDialog = {
-  mousePosition: Coordinate
+  mousePosition?: Coordinate
 }
 
 export type TabsDialog = {

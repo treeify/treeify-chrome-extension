@@ -1,15 +1,20 @@
 <script lang="ts">
   import { ContextMenuDialog } from 'src/TreeifyTab/External/DialogState'
   import { External } from 'src/TreeifyTab/External/External'
+  import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import ContextMenuItem from 'src/TreeifyTab/View/Dialog/ContextMenuItem.svelte'
   import { createContextMenuItemPropses } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
+  import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+  import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 
   export let dialog: ContextMenuDialog
 
   const contextMenuItemPropses = createContextMenuItemPropses()
+
+  const style = deriveStyle()
 
   function onClickBackdrop(event: Event) {
     // ダイアログを閉じる
@@ -32,10 +37,25 @@
     event.preventDefault()
   }
 
-  const style = `
-    --x: ${dialog.mousePosition.x}px;
-    --y: ${dialog.mousePosition.y}px;
-  `
+  function deriveStyle(): string {
+    if (dialog.mousePosition !== undefined) {
+      return `
+        --left: calc(${dialog.mousePosition.x}px - 0.2em);
+        --top: calc(${dialog.mousePosition.y}px - 0.5em);
+      `
+    }
+
+    const itemPath = CurrentState.getSelectedItemPaths().last(undefined)
+    assertNonUndefined(itemPath)
+    const domElementId = MainAreaContentView.focusableDomElementId(itemPath)
+    const domElement = document.getElementById(domElementId)
+    assertNonNull(domElement)
+    const rect = domElement.getBoundingClientRect()
+    return `
+      --left: ${rect.left}px;
+      --top: ${rect.bottom}px;
+    `
+  }
 </script>
 
 <div
@@ -66,8 +86,8 @@
 
   .context-menu-dialog_frame {
     position: absolute;
-    left: calc(var(--x) - 0.8em);
-    top: calc(var(--y) - 0.8em);
+    left: var(--left);
+    top: var(--top);
 
     // lch(98.0%, 0.0, 0.0)相当
     background: #f9f9f9;

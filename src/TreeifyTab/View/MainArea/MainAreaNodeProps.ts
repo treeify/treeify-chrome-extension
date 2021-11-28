@@ -136,11 +136,6 @@ export function createMainAreaNodeProps(
 
         if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
 
-        // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
-        // その複数選択された項目をコンテキストメニューの操作対象にする。
-        if (!CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)) {
-          CurrentState.setTargetItemPath(itemPath)
-        }
         External.instance.dialogState = {
           type: 'ContextMenuDialog',
           mousePosition: { x: event.clientX, y: event.clientY },

@@ -73,7 +73,7 @@
     outline: none;
 
     font-size: 0.9rem;
-    padding: 0.1em 0.5em;
+    padding: 0.1em 0.8em;
 
     cursor: pointer;
 
