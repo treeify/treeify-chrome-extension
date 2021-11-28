@@ -1,5 +1,5 @@
 import { List } from 'immutable'
-import { ItemType } from 'src/TreeifyTab/basicType'
+import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -12,7 +12,10 @@ export type ContextMenuItemProps = {
 }
 
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
-  const isSingleSelect = CurrentState.getSelectedItemPaths().size === 1
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
+  const subtreeItemIds = selectedItemIds.flatMap(CurrentState.getSubtreeItemIds)
+  const isSingleSelect = selectedItemPaths.size === 1
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const item = Internal.instance.state.items[targetItemId]
@@ -26,10 +29,22 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (CurrentState.countTabsInSubtree(Internal.instance.state, targetItemId) > 0) {
+  const hasTab = (itemId: ItemId) =>
+    External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+  if (subtreeItemIds.some(hasTab)) {
     result.push({
-      title: 'このツリーのタブを閉じる',
+      title: 'ツリーに紐づくタブを閉じる',
       onClick: () => Command.closeTreeTabs(),
+    })
+  }
+
+  const isTabClosed = (itemId: ItemId) =>
+    Internal.instance.state.items[itemId].type === ItemType.WEB_PAGE &&
+    External.instance.tabItemCorrespondence.getTabIdBy(itemId) === undefined
+  if (subtreeItemIds.some(isTabClosed)) {
+    result.push({
+      title: 'ツリーに紐づくタブをバックグラウンドで開く',
+      onClick: () => Command.openTreeTabs(),
     })
   }
 
