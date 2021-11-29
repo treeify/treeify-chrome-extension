@@ -28,10 +28,4 @@ export enum ItemType {
   TEX = 'TeX',
 }
 
-/**
- * chrome.tabs.Tab型のidプロパティ用の型。
- * 可読性のために導入。
- */
-export type TabId = integer
-
 export type WorkspaceId = Timestamp

@@ -15,7 +15,7 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+import { CssCustomProperty, forceCloseTab } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 
@@ -83,7 +83,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
                 External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
                 // 対応するタブを閉じる
-                chrome.tabs.remove(tabId)
+                forceCloseTab(tabId)
               }
             }
             unmountPage(itemId, activePageId)

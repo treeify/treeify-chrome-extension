@@ -4,7 +4,7 @@
   import PageTreeBulletAndIndent from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndent.svelte'
   import PageTreeNode from 'src/TreeifyTab/View/LeftSidebar/PageTreeNode.svelte'
   import { PageTreeNodeProps } from 'src/TreeifyTab/View/LeftSidebar/PageTreeNodeProps'
-  import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+  import { CssCustomProperty } from 'src/Utility/browser'
   import { integer } from 'src/Utility/integer'
 
   export let props: PageTreeNodeProps

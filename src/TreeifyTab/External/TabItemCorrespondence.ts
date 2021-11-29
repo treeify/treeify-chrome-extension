@@ -1,6 +1,7 @@
 import { List } from 'immutable'
 import { BiMap } from 'mnemonist'
-import { ItemId, TabId } from 'src/TreeifyTab/basicType'
+import { ItemId } from 'src/TreeifyTab/basicType'
+import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import Tab = chrome.tabs.Tab
 

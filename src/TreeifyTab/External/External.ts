@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import md5 from 'md5'
-import { ItemId, TabId } from 'src/TreeifyTab/basicType'
+import { ItemId } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { Dialog } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
@@ -8,6 +8,7 @@ import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { TabId } from 'src/Utility/browser'
 import { integer } from 'src/Utility/integer'
 
 /** TODO: コメント */

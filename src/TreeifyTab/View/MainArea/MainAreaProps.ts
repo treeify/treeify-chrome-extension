@@ -24,7 +24,7 @@ import {
   createMainAreaNodeProps,
   MainAreaNodeProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
-import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+import { CssCustomProperty } from 'src/Utility/browser'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
 import { integer } from 'src/Utility/integer'
