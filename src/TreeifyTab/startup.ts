@@ -20,6 +20,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
+import { forceCloseTab } from 'src/Utility/browser'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { doAsync } from 'src/Utility/doAsync'
 import { integer } from 'src/Utility/integer'
@@ -126,7 +127,7 @@ async function migrateTabs(newState: State) {
     const newItemId = globalItemIdMap.get(Internal.instance.state.items[itemId].globalItemId)
     if (newItemId === undefined) {
       // newStateで対応項目が削除されていた場合
-      await chrome.tabs.remove(tabId)
+      await forceCloseTab(tabId)
     } else {
       const newUrl = newState.webPageItems[newItemId].url
       if (newUrl !== Internal.instance.state.webPageItems[itemId].url) {
@@ -197,7 +198,7 @@ async function onCommand(commandName: string) {
         TreeifyTab.open()
         break
       case 'close-tab-and-show-treeify-tab':
-        TreeifyTab.open()
+        await TreeifyTab.open()
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
         if (tab.id !== undefined) {
           chrome.tabs.remove(tab.id)
