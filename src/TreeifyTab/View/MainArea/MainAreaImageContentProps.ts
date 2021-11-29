@@ -20,13 +20,14 @@ export function createMainAreaImageContentProps(
   const itemId = ItemPath.getItemId(itemPath)
   const imageItem = state.imageItems[itemId]
   const originalSize = imageItem.originalSize
+  const widthPx = imageItem.widthPx ?? originalSize?.widthPx
 
   return {
     itemPath,
     type: 'MainAreaImageContentProps',
     url: imageItem.url,
     caption: imageItem.caption,
-    width: imageItem.widthPx !== null ? `${Math.max(20, imageItem.widthPx)}px` : 'auto',
+    width: widthPx !== undefined ? `${Math.max(20, widthPx)}px` : 'max-content',
     aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
     citeProps: createCiteProps(itemId),
     onFocus: (event) => {
