@@ -51,7 +51,7 @@
       const itemIds = Internal.instance.searchEngine.search(searchQueryValue)
 
       // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
-      const allItemPaths = itemIds.flatMap((itemId) => List(CurrentState.yieldItemPaths(itemId)))
+      const allItemPaths = itemIds.flatMap((itemId) => CurrentState.yieldItemPaths(itemId))
 
       searchResult = allItemPaths
         // ItemPathをページIDでグループ化する
