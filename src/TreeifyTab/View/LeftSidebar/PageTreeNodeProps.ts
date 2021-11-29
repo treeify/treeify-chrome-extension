@@ -15,7 +15,7 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 

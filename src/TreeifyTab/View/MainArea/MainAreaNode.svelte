@@ -5,7 +5,7 @@
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
   import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
-  import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+  import { CssCustomProperty } from 'src/Utility/browser'
   import { integer } from 'src/Utility/integer'
 
   export let props: MainAreaNodeProps

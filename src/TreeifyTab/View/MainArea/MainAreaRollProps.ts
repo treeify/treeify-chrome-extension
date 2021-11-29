@@ -5,7 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { CssCustomProperty } from 'src/Utility/CssCustomProperty'
+import { CssCustomProperty } from 'src/Utility/browser'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaRollProps = {
