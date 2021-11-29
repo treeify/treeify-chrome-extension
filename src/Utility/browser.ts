@@ -1,6 +1,6 @@
 import Color from 'color'
-import { TabId } from 'src/TreeifyTab/basicType'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { integer } from 'src/Utility/integer'
 
 export namespace CssCustomProperty {
   /**
@@ -36,6 +36,12 @@ export namespace CssCustomProperty {
     return getComputedStyle(document.documentElement).getPropertyValue(propertyName)
   }
 }
+
+/**
+ * chrome.tabs.Tab型のidプロパティ用の型。
+ * 可読性のために導入。
+ */
+export type TabId = integer
 
 /**
  * タブを強制的に閉じる。
