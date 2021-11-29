@@ -14,12 +14,18 @@
     Rerenderer.instance.rerender()
   }
 
-  const onClickBackdrop = (event: MouseEvent) => {
-    // ダイアログを閉じる
+  const onMouseDownBackdrop = (event: MouseEvent) => {
     if (event.eventPhase === Event.AT_TARGET) {
       event.preventDefault()
-      closeDialog()
+      // ダイアログを閉じる
+      if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
+        closeDialog()
+      }
     }
+  }
+
+  function onContextMenu(event: Event) {
+    event.preventDefault()
   }
 
   // ESCキー押下時にダイアログを閉じるためのイベントハンドラー。
@@ -34,7 +40,13 @@
   }
 </script>
 
-<div class="common-dialog" on:mousedown={onClickBackdrop} on:keydown={onKeyDown} use:setupFocusTrap>
+<div
+  class="common-dialog"
+  on:mousedown={onMouseDownBackdrop}
+  on:keydown={onKeyDown}
+  on:contextmenu={onContextMenu}
+  use:setupFocusTrap
+>
   <div class="common-dialog_frame">
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>

@@ -8,13 +8,19 @@
 
   export let props: DropdownMenuDialogProps
 
-  function onClickBackdrop(event: Event) {
-    // ダイアログを閉じる
+  function onClickBackdrop(event: MouseEvent) {
     if (event.eventPhase === Event.AT_TARGET) {
       event.preventDefault()
-      External.instance.dialogState = undefined
-      Rerenderer.instance.rerender()
+      // ダイアログを閉じる
+      if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
+      }
     }
+  }
+
+  function onContextMenu(event: Event) {
+    event.preventDefault()
   }
 
   function onKeyDown(event: KeyboardEvent) {
@@ -36,6 +42,7 @@
   {style}
   on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
+  on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
   <div class="dropdown-menu-dialog_frame">

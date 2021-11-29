@@ -27,12 +27,19 @@
     --font-size: ${getComputedStyle(domElement).getPropertyValue('font-size')};
   `
 
-  function onClickBackdrop(event: Event) {
-    // ダイアログを閉じる
+  function onClickBackdrop(event: MouseEvent) {
     if (event.eventPhase === Event.AT_TARGET) {
-      External.instance.dialogState = undefined
-      Rerenderer.instance.rerender()
+      event.preventDefault()
+      // ダイアログを閉じる
+      if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
+      }
     }
+  }
+
+  function onContextMenu(event: Event) {
+    event.preventDefault()
   }
 
   function onKeyDown(event: KeyboardEvent) {
@@ -63,6 +70,7 @@
   class="web-page-item-title-setting-dialog"
   {style}
   on:mousedown={onClickBackdrop}
+  on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
   <div class="web-page-item-title-setting-dialog_frame">

@@ -16,12 +16,14 @@
 
   const style = deriveStyle()
 
-  function onClickBackdrop(event: Event) {
-    // ダイアログを閉じる
+  function onMouseDownBackdrop(event: MouseEvent) {
     if (event.eventPhase === Event.AT_TARGET) {
       event.preventDefault()
-      External.instance.dialogState = undefined
-      Rerenderer.instance.rerender()
+      // ダイアログを閉じる
+      if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
+        External.instance.dialogState = undefined
+        Rerenderer.instance.rerender()
+      }
     }
   }
 
@@ -33,7 +35,6 @@
   }
 
   function onContextMenu(event: Event) {
-    // キーボードでコンテキストメニューを呼び出した際にブラウザの標準コンテキストメニューが表示される問題への対策
     event.preventDefault()
   }
 
@@ -61,7 +62,7 @@
 <div
   class="context-menu-dialog"
   {style}
-  on:mousedown={onClickBackdrop}
+  on:mousedown={onMouseDownBackdrop}
   on:keydown={onKeyDown}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap
