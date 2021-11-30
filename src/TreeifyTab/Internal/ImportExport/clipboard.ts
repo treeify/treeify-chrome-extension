@@ -77,6 +77,7 @@ export function onPaste(event: ClipboardEvent) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
+  // 無駄な空行を作らないために末尾の改行は削除しておく
   const text = event.clipboardData.getData('text/plain').replace(/\r?\n$/, '')
 
   // 独自クリップボードを優先して貼り付ける
