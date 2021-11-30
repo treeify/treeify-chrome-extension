@@ -133,7 +133,7 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   }
 
   if (CurrentState.getIsFolded(itemPath) || CurrentState.isPage(itemId)) {
-    return List.of()
+    return List()
   } else {
     return item.childItemIds
   }

@@ -17,10 +17,10 @@ export function createCodeBlockItem(): ItemId {
   const newItem: Item = {
     type: ItemType.CODE_BLOCK,
     globalItemId: GlobalItemId.generate(),
-    childItemIds: List.of(),
+    childItemIds: List(),
     parents: {},
     timestamp: Timestamp.now(),
-    cssClasses: List.of(),
+    cssClasses: List(),
     source: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))

@@ -159,13 +159,14 @@ export type Page = {
 }
 
 export type Workspace = {
+  name: string
   activePageId: ItemId
   /**
    * このワークスペースでページツリーや検索結果から除外したい項目群。
    * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
   excludedItemIds: List<ItemId>
-  name: string
+  searchHistory: List<string>
 }
 
 export type CommandId = keyof typeof commandNames

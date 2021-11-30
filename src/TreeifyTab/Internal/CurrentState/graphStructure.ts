@@ -193,7 +193,7 @@ function _treeify(
   childrenMap: Seq.Keyed<ItemId, List<ItemPath>>,
   itemPath: ItemPath
 ): MutableOrderedTree<ItemPath> {
-  const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List.of()
+  const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List()
   return new MutableOrderedTree(
     itemPath,
     children.map((child) => _treeify(childrenMap, itemPath.concat(child.shift()))).toArray()

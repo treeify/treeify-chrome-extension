@@ -59,9 +59,10 @@ export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
 export function createWorkspace(): WorkspaceId {
   const workspaceId = Timestamp.now()
   const workspace: Workspace = {
-    activePageId: CurrentState.getActivePageId(),
-    excludedItemIds: List.of(),
     name: `ワークスペース${CurrentState.getWorkspaceIds().count() + 1}`,
+    activePageId: CurrentState.getActivePageId(),
+    excludedItemIds: List(),
+    searchHistory: List(),
   }
   Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
   return workspaceId
