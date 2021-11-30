@@ -1,10 +1,12 @@
 <script lang="ts">
   import { List } from 'immutable'
+  import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
@@ -40,6 +42,11 @@
           const prevIndex = (index - 1) % focusableElements.size
           focusableElements.get(prevIndex)!.focus()
         }
+        break
+      case '1100KeyR':
+        event.preventDefault()
+        Command.showReplaceDialog()
+        Rerenderer.instance.rerender()
         break
     }
   }
