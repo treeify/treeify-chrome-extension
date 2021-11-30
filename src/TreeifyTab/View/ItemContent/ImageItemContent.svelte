@@ -13,9 +13,9 @@
 
 <style global lang="scss">
   .image-item-content {
-    // 画像が表示領域の横幅をはみ出さないよう設定
-    max-width: 100%;
     width: var(--width);
+    max-width: 100%;
+    min-width: 30px;
     height: auto;
     aspect-ratio: var(--aspect-ratio);
 

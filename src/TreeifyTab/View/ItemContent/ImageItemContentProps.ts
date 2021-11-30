@@ -11,11 +11,12 @@ export type ImageItemContentProps = {
 export function createImageItemContentProps(itemId: ItemId): ItemContentProps {
   const imageItem = Internal.instance.state.imageItems[itemId]
   const originalSize = imageItem.originalSize
+  const widthPx = imageItem.widthPx ?? originalSize?.widthPx
 
   return {
     type: 'ImageItemContentProps',
     url: imageItem.url,
-    width: imageItem.widthPx !== null ? `${Math.max(20, imageItem.widthPx)}px` : 'auto',
+    width: widthPx !== undefined ? `${widthPx}px` : 'max-content',
     aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
   }
 }

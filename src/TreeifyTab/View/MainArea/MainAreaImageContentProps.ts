@@ -27,7 +27,7 @@ export function createMainAreaImageContentProps(
     type: 'MainAreaImageContentProps',
     url: imageItem.url,
     caption: imageItem.caption,
-    width: widthPx !== undefined ? `${Math.max(20, widthPx)}px` : 'max-content',
+    width: widthPx !== undefined ? `${widthPx}px` : 'max-content',
     aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
     sourceProps: createSourceProps(itemId),
     onFocus: (event) => {

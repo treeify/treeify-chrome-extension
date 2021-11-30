@@ -64,6 +64,7 @@
   .main-area-image-content_image {
     width: var(--width);
     max-width: 100%;
+    min-width: 30px;
     aspect-ratio: var(--aspect-ratio);
 
     // 完了状態の画像
