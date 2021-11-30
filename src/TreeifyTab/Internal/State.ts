@@ -67,7 +67,7 @@ export type Item = {
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
   cssClasses: List<string>
-  cite: Cite | null
+  source: Source | null
 }
 
 export type Edge = {
@@ -87,7 +87,7 @@ export function createDefaultEdge(): Edge {
   return { isFolded: false }
 }
 
-export type Cite = {
+export type Source = {
   title: string
   url: string
 }

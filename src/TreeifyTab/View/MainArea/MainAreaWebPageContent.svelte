@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Cite from 'src/TreeifyTab/View/Cite.svelte'
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaWebPageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
+  import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: MainAreaWebPageContentProps
 
@@ -44,8 +44,8 @@
       <div class="grid-empty-cell" />
     {/if}
   </div>
-  {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps} />
+  {#if props.sourceProps !== undefined}
+    <Source props={props.sourceProps} />
   {/if}
 </div>
 

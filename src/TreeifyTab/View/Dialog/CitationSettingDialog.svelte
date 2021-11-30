@@ -11,14 +11,14 @@
   const targetItemPath = CurrentState.getTargetItemPath()
   const item = Internal.instance.state.items[ItemPath.getItemId(targetItemPath)]
 
-  let titleValue: string = item.cite?.title ?? ''
-  let urlValue: string = item.cite?.url ?? ''
+  let titleValue: string = item.source?.title ?? ''
+  let urlValue: string = item.source?.url ?? ''
 
   function onClickFinishButton() {
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
-    // citeプロパティを更新
-    CurrentState.setCite(targetItemId, { title: titleValue, url: urlValue })
+    // sourceプロパティを更新
+    CurrentState.setSource(targetItemId, { title: titleValue, url: urlValue })
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(targetItemId)
@@ -52,11 +52,11 @@
     <div class="citation-setting-dialog_input-area">
       <label class="citation-setting-dialog_label">
         タイトル（省略可）
-        <input type="text" class="citation-setting-dialog_cite-title" bind:value={titleValue} />
+        <input type="text" class="citation-setting-dialog_source-title" bind:value={titleValue} />
       </label>
       <label class="citation-setting-dialog_label">
         URL（省略可）
-        <input type="url" class="citation-setting-dialog_cite-url" bind:value={urlValue} />
+        <input type="url" class="citation-setting-dialog_source-url" bind:value={urlValue} />
       </label>
     </div>
     <div class="citation-setting-dialog_button-area">

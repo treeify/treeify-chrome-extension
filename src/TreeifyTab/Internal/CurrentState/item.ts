@@ -6,7 +6,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
-import { Cite, createDefaultEdge, Edge } from 'src/TreeifyTab/Internal/State'
+import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { forceCloseTab } from 'src/Utility/browser'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
@@ -396,6 +396,6 @@ export function addCssClass(itemId: ItemId, cssClass: string) {
   }
 }
 
-export function setCite(itemId: ItemId, cite: Cite) {
-  Internal.instance.mutate(cite, PropertyPath.of('items', itemId, 'cite'))
+export function setSource(itemId: ItemId, source: Source) {
+  Internal.instance.mutate(source, PropertyPath.of('items', itemId, 'source'))
 }

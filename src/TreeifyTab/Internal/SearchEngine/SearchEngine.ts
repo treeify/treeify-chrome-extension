@@ -83,7 +83,7 @@ export class SearchEngine {
       if (CurrentState.shouldBeHidden(itemId)) return false
 
       // 出典付き項目は置換対象から外す
-      if (Internal.instance.state.items[itemId].cite !== null) return false
+      if (Internal.instance.state.items[itemId].source !== null) return false
 
       const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
       return textTracks.some((textTrack) => textTrack.includes(searchWord))

@@ -5,7 +5,7 @@
   export let props: TextItemContentProps
 </script>
 
-<div class="text-item-content" class:citation={props.hasCite}>
+<div class="text-item-content" class:citation={props.hasSource}>
   {@html DomishObject.toHtml(props.domishObjects)}
 </div>
 

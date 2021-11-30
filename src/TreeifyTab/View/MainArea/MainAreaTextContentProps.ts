@@ -6,13 +6,13 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import { createSourceProps, SourceProps } from 'src/TreeifyTab/View/SourceProps'
 
 export type MainAreaTextContentProps = {
   itemPath: ItemPath
   domishObjects: List<DomishObject>
-  citeProps: CiteProps | undefined
+  sourceProps: SourceProps | undefined
   onInput: (event: Event) => void
   onCompositionEnd: (event: CompositionEvent) => void
 }
@@ -26,7 +26,7 @@ export function createMainAreaTextContentProps(
     itemPath,
     type: 'MainAreaTextContentProps',
     domishObjects: state.textItems[itemId].domishObjects,
-    citeProps: createCiteProps(itemId),
+    sourceProps: createSourceProps(itemId),
     onInput: (event: Event) => {
       if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
         Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())

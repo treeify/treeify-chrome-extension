@@ -47,9 +47,9 @@ function toOpmlAttributes(itemPath: ItemPath): { [T in string]: string } {
   if (!item.cssClasses.isEmpty()) {
     baseAttributes.cssClass = item.cssClasses.join(' ')
   }
-  if (item.cite !== null) {
-    baseAttributes.citeTitle = item.cite.title
-    baseAttributes.citeUrl = item.cite.url
+  if (item.source !== null) {
+    baseAttributes.sourceTitle = item.source.title
+    baseAttributes.sourceUrl = item.source.url
   }
 
   switch (item.type) {
@@ -223,12 +223,12 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
     CurrentState.turnIntoPage(itemId)
   }
 
-  const attrCiteTitle = outlineElement.getAttribute('citeTitle')
-  const attrCiteUrl = outlineElement.getAttribute('citeUrl')
-  if (attrCiteTitle !== null || attrCiteUrl !== null) {
-    CurrentState.setCite(itemId, {
-      title: attrCiteTitle ?? '',
-      url: attrCiteUrl ?? '',
+  const attrSourceTitle = outlineElement.getAttribute('sourceTitle')
+  const attrSourceUrl = outlineElement.getAttribute('sourceUrl')
+  if (attrSourceTitle !== null || attrSourceUrl !== null) {
+    CurrentState.setSource(itemId, {
+      title: attrSourceTitle ?? '',
+      url: attrSourceUrl ?? '',
     })
   }
 

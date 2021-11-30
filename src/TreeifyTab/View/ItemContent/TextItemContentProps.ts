@@ -6,13 +6,13 @@ import { ItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentPro
 
 export type TextItemContentProps = {
   domishObjects: List<DomishObject>
-  hasCite: boolean
+  hasSource: boolean
 }
 
 export function createTextItemContentProps(itemId: ItemId): ItemContentProps {
   return {
     type: 'TextItemContentProps',
     domishObjects: Internal.instance.state.textItems[itemId].domishObjects,
-    hasCite: Internal.instance.state.items[itemId].cite !== null,
+    hasSource: Internal.instance.state.items[itemId].source !== null,
   }
 }

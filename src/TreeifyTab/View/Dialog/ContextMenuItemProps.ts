@@ -115,7 +115,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
       title: '出典を設定…',
       onClick: () => Command.showCitationSettingDialog(),
     })
-    if (item.cite?.title === '' && item.cite.url === '') {
+    if (item.source?.title === '' && item.source.url === '') {
       result.push({
         title: '出典を削除',
         onClick: () => Command.toggleCitation(),

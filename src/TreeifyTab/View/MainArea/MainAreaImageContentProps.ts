@@ -1,7 +1,7 @@
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import { createSourceProps, SourceProps } from 'src/TreeifyTab/View/SourceProps'
 
 export type MainAreaImageContentProps = {
   itemPath: ItemPath
@@ -9,7 +9,7 @@ export type MainAreaImageContentProps = {
   caption: string
   width: string
   aspectRatio: string
-  citeProps: CiteProps | undefined
+  sourceProps: SourceProps | undefined
   onFocus: (event: FocusEvent) => void
 }
 
@@ -29,7 +29,7 @@ export function createMainAreaImageContentProps(
     caption: imageItem.caption,
     width: widthPx !== undefined ? `${Math.max(20, widthPx)}px` : 'max-content',
     aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
-    citeProps: createCiteProps(itemId),
+    sourceProps: createSourceProps(itemId),
     onFocus: (event) => {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {

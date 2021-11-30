@@ -6,7 +6,7 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
-import { Cite } from 'src/TreeifyTab/Internal/State'
+import { Source } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 
@@ -306,11 +306,11 @@ export function toggleCitation() {
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-    if (Internal.instance.state.items[selectedItemId].cite === null) {
-      const emptyCite: Cite = { title: '', url: '' }
-      Internal.instance.mutate(emptyCite, PropertyPath.of('items', selectedItemId, 'cite'))
+    if (Internal.instance.state.items[selectedItemId].source === null) {
+      const emptySource: Source = { title: '', url: '' }
+      Internal.instance.mutate(emptySource, PropertyPath.of('items', selectedItemId, 'source'))
     } else {
-      Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'cite'))
+      Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'source'))
     }
 
     // タイムスタンプを更新

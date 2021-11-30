@@ -38,8 +38,8 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
   // Markdownの引用記法のための接頭辞と接尾辞
-  const prefix = item.cite !== null ? '> ' : ''
-  const postfix = item.cite !== null ? '\n' : ''
+  const prefix = item.source !== null ? '> ' : ''
+  const postfix = item.source !== null ? '\n' : ''
 
   switch (item.type) {
     case ItemType.TEXT:

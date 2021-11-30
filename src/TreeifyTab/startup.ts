@@ -159,7 +159,7 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setImageItemUrl(newItemId, info.srcUrl)
 
     // 出典を設定
-    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
+    CurrentState.setSource(newItemId, { title: tabTitle, url: info.pageUrl })
 
     CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()
@@ -169,7 +169,7 @@ function onClickContextMenu(info: OnClickData) {
     CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
 
     // 出典を設定
-    CurrentState.setCite(newItemId, { title: tabTitle, url: info.pageUrl })
+    CurrentState.setSource(newItemId, { title: tabTitle, url: info.pageUrl })
 
     CurrentState.insertLastChildItem(webPageItemId, newItemId)
     Rerenderer.instance.rerender()

@@ -149,7 +149,7 @@ export class Internal {
           parents: {},
           timestamp: Timestamp.now(),
           cssClasses: List.of(),
-          cite: null,
+          source: null,
         },
       },
       textItems: {

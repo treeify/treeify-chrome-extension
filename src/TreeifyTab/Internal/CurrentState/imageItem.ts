@@ -22,7 +22,7 @@ export function createImageItem(): ItemId {
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: List.of(),
-    cite: null,
+    source: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
