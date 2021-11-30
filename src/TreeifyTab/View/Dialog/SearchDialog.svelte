@@ -102,11 +102,13 @@
       bind:value={searchQueryValue}
       on:keydown={onSearchQueryKeyDown}
     />
-    <datalist id="search-dialog_search-history-list">
-      {#each searchHistory.reverse().toArray() as searchQuery}
-        <option value={searchQuery} />
-      {/each}
-    </datalist>
+    {#if searchResult === undefined}
+      <datalist id="search-dialog_search-history-list">
+        {#each searchHistory.reverse().toArray() as searchQuery}
+          <option value={searchQuery} />
+        {/each}
+      </datalist>
+    {/if}
     <div class="search-dialog_result">
       {#if searchResult !== undefined}
         {#each searchResult.toArray() as itemPaths}
