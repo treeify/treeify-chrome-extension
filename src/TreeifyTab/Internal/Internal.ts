@@ -169,9 +169,10 @@ export class Internal {
       },
       workspaces: {
         [Timestamp.now()]: {
+          name: 'ワークスペース1',
           activePageId: 0,
           excludedItemIds: List.of(),
-          name: 'ワークスペース1',
+          searchHistory: List(),
         },
       },
       mountedPageIds: List.of(0),
