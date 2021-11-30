@@ -18,10 +18,10 @@ export function createImageItem(): ItemId {
   const newItem: Item = {
     type: ItemType.IMAGE,
     globalItemId: GlobalItemId.generate(),
-    childItemIds: List.of(),
+    childItemIds: List(),
     parents: {},
     timestamp: Timestamp.now(),
-    cssClasses: List.of(),
+    cssClasses: List(),
     source: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))

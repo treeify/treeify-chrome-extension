@@ -54,8 +54,8 @@ export namespace ItemPath {
   export function getCommonPrefix(lhs: ItemPath, rhs: ItemPath): ItemPath {
     const first1 = lhs.first(undefined)
     const first2 = rhs.first(undefined)
-    if (first1 === undefined || first2 === undefined) return List.of()
-    if (first1 !== first2) return List.of()
+    if (first1 === undefined || first2 === undefined) return List()
+    if (first1 !== first2) return List()
 
     return getCommonPrefix(lhs.shift(), rhs.shift()).unshift(first1)
   }

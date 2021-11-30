@@ -69,7 +69,7 @@ export function openJustOneTab() {
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
     if (tabId === undefined) {
       const url = Internal.instance.state.webPageItems[selectedItemId].url
-      const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+      const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
       External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(selectedItemId))
       chrome.tabs.create({ url, active: false })
     }
@@ -87,7 +87,7 @@ export function openTreeTabs() {
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId === undefined) {
         const url = Internal.instance.state.webPageItems[subtreeItemId].url
-        const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+        const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
         External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(subtreeItemId))
         chrome.tabs.create({ url, active: false })
       }
@@ -114,7 +114,7 @@ export function browseTab() {
   } else {
     // 対応するタブがなければ開く
     const url = Internal.instance.state.webPageItems[targetItemId].url
-    const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+    const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
     External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
     chrome.tabs.create({ url, active: true }, (tab) => {
       chrome.windows.update(tab.windowId, { focused: true })

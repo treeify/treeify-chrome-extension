@@ -145,10 +145,10 @@ export class Internal {
           type: ItemType.TEXT,
           // トップページはどのインスタンスで生成されたかを問わず同一視したい特別な項目なので専用のグローバル項目IDを持つ
           globalItemId: 'Treeify#0',
-          childItemIds: List.of(),
+          childItemIds: List(),
           parents: {},
           timestamp: Timestamp.now(),
-          cssClasses: List.of(),
+          cssClasses: List(),
           source: null,
         },
       },
@@ -171,12 +171,12 @@ export class Internal {
         [Timestamp.now()]: {
           name: 'ワークスペース1',
           activePageId: 0,
-          excludedItemIds: List.of(),
+          excludedItemIds: List(),
           searchHistory: List(),
         },
       },
       mountedPageIds: List.of(0),
-      availableItemIds: List.of(),
+      availableItemIds: List(),
       maxItemId: 0,
       mainAreaKeyBindings: {
         '0000Enter': List.of('enterKeyDefault'),

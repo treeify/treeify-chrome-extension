@@ -51,7 +51,7 @@ export function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
   const url = tab.url || tab.pendingUrl || ''
-  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List.of()
+  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
   if (itemIdsForTabCreation.isEmpty()) {
     // タブに対応するウェブページ項目がない時
 
@@ -207,7 +207,7 @@ export async function matchTabsAndWebPageItems() {
   for (const key in webPageItems) {
     const itemId = parseInt(key)
     const url = webPageItems[itemId].url
-    urlToItemIds.set(url, (urlToItemIds.get(url) ?? List.of()).push(itemId))
+    urlToItemIds.set(url, (urlToItemIds.get(url) ?? List()).push(itemId))
   }
 
   for (const tab of await getAllNonTreeifyTabs()) {
