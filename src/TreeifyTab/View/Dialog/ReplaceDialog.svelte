@@ -1,6 +1,7 @@
 <script lang="ts">
   import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
+  import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -20,6 +21,16 @@
       case '1000Enter':
         event.preventDefault()
         onSubmit()
+        break
+      case '1100KeyF':
+        event.preventDefault()
+        Command.showSearchDialog()
+        Rerenderer.instance.rerender()
+        break
+      case '1100KeyR':
+        event.preventDefault()
+        document.querySelector<HTMLElement>('.text-replace-dialog_before-replace')?.focus()
+        document.execCommand('selectAll')
         break
     }
   }
