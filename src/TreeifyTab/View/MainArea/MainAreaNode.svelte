@@ -123,7 +123,7 @@
     --main-area-node-button-background-hover-color: #e2e2e2;
 
     // 階層が深くなるごとにフォントサイズを小さくする仕組みの係数
-    --main-area-font-size-inheritance-rate: 99.5%;
+    --main-area-font-size-inheritance-rate: 100%;
   }
 
   .main-area-node {
