@@ -1,11 +1,11 @@
 <script lang="ts">
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import Cite from 'src/TreeifyTab/View/Cite.svelte'
   import { dragImageBottom } from 'src/TreeifyTab/View/dragAndDrop'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaImageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaImageContentProps'
   import ResizeHandle from 'src/TreeifyTab/View/MainArea/ResizeHandle.svelte'
+  import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: MainAreaImageContentProps
 
@@ -38,8 +38,8 @@
   {#if props.caption !== ''}
     <div class="main-area-image-content_caption">{props.caption}</div>
   {/if}
-  {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps} />
+  {#if props.sourceProps !== undefined}
+    <Source props={props.sourceProps} />
   {/if}
 </div>
 

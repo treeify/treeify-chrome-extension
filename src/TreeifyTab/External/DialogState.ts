@@ -13,7 +13,7 @@ export type TabsDialog = {
 
 export type Dialog = DiscriminatedUnion<{
   CaptionSettingDialog: {}
-  CitationSettingDialog: {}
+  SourceSettingDialog: {}
   CodeBlockItemEditDialog: {}
   CodeBlockLanguageSettingDialog: {}
   CommandPaletteDialog: {}

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
-  import Cite from 'src/TreeifyTab/View/Cite.svelte'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaTextContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaTextContentProps'
+  import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: MainAreaTextContentProps
 
@@ -19,8 +19,8 @@
   >
     {@html DomishObject.toHtml(props.domishObjects)}
   </div>
-  {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps} />
+  {#if props.sourceProps !== undefined}
+    <Source props={props.sourceProps} />
   {/if}
 </div>
 
@@ -32,7 +32,7 @@
 
     padding-block: var(--main-area-content-area-vertical-padding);
 
-    .citation & {
+    .has-source & {
       // lch(80.0%, 0.0, 0.0)相当
       border-left: 0.25em solid #c6c6c6;
       padding-left: 0.2em;

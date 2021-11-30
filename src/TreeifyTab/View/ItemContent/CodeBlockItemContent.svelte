@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getHighlightedHtml } from 'src/TreeifyTab/highlightJs'
-  import Cite from 'src/TreeifyTab/View/Cite.svelte'
   import { CodeBlockItemContentProps } from 'src/TreeifyTab/View/ItemContent/CodeBlocktemContentProps'
+  import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: CodeBlockItemContentProps
 </script>
@@ -12,8 +12,8 @@
   {#if props.caption !== ''}
     <div class="code-block-item-content_caption">{props.caption}</div>
   {/if}
-  {#if props.citeProps !== undefined}
-    <Cite props={props.citeProps} />
+  {#if props.sourceProps !== undefined}
+    <Source props={props.sourceProps} />
   {/if}
 </div>
 

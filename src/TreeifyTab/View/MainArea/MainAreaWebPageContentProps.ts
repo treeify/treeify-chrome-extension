@@ -5,8 +5,8 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { CiteProps, createCiteProps } from 'src/TreeifyTab/View/CiteProps'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
+import { createSourceProps, SourceProps } from 'src/TreeifyTab/View/SourceProps'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
@@ -17,7 +17,7 @@ export type MainAreaWebPageContentProps = {
   isTabClosed: boolean
   isUnread: boolean
   isAudible: boolean
-  citeProps: CiteProps | undefined
+  sourceProps: SourceProps | undefined
   onFocus: (event: FocusEvent) => void
   onClickTitle: (event: MouseEvent) => void
   onClickFavicon: (event: MouseEvent) => void
@@ -45,7 +45,7 @@ export function createMainAreaWebPageContentProps(
     isTabClosed: tab === undefined,
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
-    citeProps: createCiteProps(itemId),
+    sourceProps: createSourceProps(itemId),
     onFocus: (event) => {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {

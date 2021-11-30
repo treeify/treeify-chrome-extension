@@ -113,12 +113,12 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   if (isSingleSelect) {
     result.push({
       title: '出典を設定…',
-      onClick: () => Command.showCitationSettingDialog(),
+      onClick: () => Command.showSourceSettingDialog(),
     })
-    if (item.cite?.title === '' && item.cite.url === '') {
+    if (item.source?.title === '' && item.source.url === '') {
       result.push({
         title: '出典を削除',
-        onClick: () => Command.toggleCitation(),
+        onClick: () => Command.toggleSource(),
       })
     }
   }

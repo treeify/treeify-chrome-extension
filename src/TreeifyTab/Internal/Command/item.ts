@@ -6,7 +6,7 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
-import { Cite } from 'src/TreeifyTab/Internal/State'
+import { Source } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 
@@ -301,16 +301,16 @@ function toggleCssClass(cssClass: string) {
  * 対象項目が出典付きなら出典情報を削除する。
  * 出典がない場合はタイトル、URLともに空文字列の出典情報を付ける。
  */
-export function toggleCitation() {
+export function toggleSource() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-    if (Internal.instance.state.items[selectedItemId].cite === null) {
-      const emptyCite: Cite = { title: '', url: '' }
-      Internal.instance.mutate(emptyCite, PropertyPath.of('items', selectedItemId, 'cite'))
+    if (Internal.instance.state.items[selectedItemId].source === null) {
+      const emptySource: Source = { title: '', url: '' }
+      Internal.instance.mutate(emptySource, PropertyPath.of('items', selectedItemId, 'source'))
     } else {
-      Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'cite'))
+      Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'source'))
     }
 
     // タイムスタンプを更新

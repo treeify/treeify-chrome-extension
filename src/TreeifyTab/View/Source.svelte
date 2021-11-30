@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { CiteProps } from 'src/TreeifyTab/View/CiteProps'
+  import { SourceProps } from 'src/TreeifyTab/View/SourceProps'
 
-  export let props: CiteProps
+  export let props: SourceProps
 </script>
 
 {#if props.title !== '' && props.url !== ''}
-  <cite class="main-area-image-content_cite">
+  <cite class="source">
     <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
       {props.title}
     </a>
   </cite>
 {:else if props.title !== '' && props.url === ''}
-  <cite class="main-area-image-content_cite">{props.title}</cite>
+  <cite class="source">{props.title}</cite>
 {:else if props.title === '' && props.url !== ''}
-  <cite class="main-area-image-content_cite">
+  <cite class="source">
     <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
       {props.url}
     </a>
@@ -21,7 +21,7 @@
 {/if}
 
 <style global lang="scss">
-  .main-area-image-content_cite {
+  .source {
     font-size: 50%;
     // lch(60.0%, 0.0, 0.0)相当
     color: #919191;

@@ -184,7 +184,7 @@ const sampleOpml = `<?xml version="1.0"?>
     <outline isPage="false" itemId="3" isFolded="false" type="text" text="isFolded false">
       <outline isPage="false" itemId="4" isFolded="false" type="text" text="visible child" />
       <outline isPage="true" itemId="5" isFolded="false" type="text" text="子ページ" />
-      <outline isPage="false" itemId="6" isFolded="false" citeTitle="Tamias - Wikipedia" citeUrl="https://en.wikipedia.org/wiki/Tamias" type="image" text="tamias" url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg" />
+      <outline isPage="false" itemId="6" isFolded="false" sourceTitle="Tamias - Wikipedia" sourceUrl="https://en.wikipedia.org/wiki/Tamias" type="image" text="tamias" url="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Tamias_striatus2.jpg/320px-Tamias_striatus2.jpg" />
     </outline>
     <outline isPage="false" itemId="7" isFolded="true" type="text" text="isFolded true">
       <outline isPage="false" itemId="8" isFolded="false" cssClass="completed" type="text" text="invisible child" />

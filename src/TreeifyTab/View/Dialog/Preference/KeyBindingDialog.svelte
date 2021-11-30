@@ -122,12 +122,7 @@
     },
     {
       name: '項目装飾',
-      commandIds: List.of(
-        'toggleCompleted',
-        'toggleHighlighted',
-        'toggleDoubtful',
-        'toggleCitation'
-      ),
+      commandIds: List.of('toggleCompleted', 'toggleHighlighted', 'toggleDoubtful', 'toggleSource'),
     },
     {
       name: '空の項目作成',
@@ -145,7 +140,7 @@
         'showEditDialog',
         'showSearchDialog',
         'showReplaceDialog',
-        'showCitationSettingDialog',
+        'showSourceSettingDialog',
         'showContextMenuDialog',
         'showExportDialog',
         'showWorkspaceDialog',
