@@ -40,11 +40,11 @@
   }
 
   .code-block-item-content_caption {
-    margin-top: 0.2em;
-    margin-left: 0.2em;
+    margin-top: 0.1em;
+    margin-left: 0.5em;
 
-    font-size: 85%;
-    // lch(50.0%, 0.0, 0.0)相当
-    color: #777777;
+    font-size: 78%;
+    // lch(30.0%, 0.0, 0.0)相当
+    color: #474747;
   }
 </style>
