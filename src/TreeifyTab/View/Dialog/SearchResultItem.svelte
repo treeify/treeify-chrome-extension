@@ -9,16 +9,21 @@
 </script>
 
 <div class="search-result-item">
-  <div
-    class="search-result-item_content-area"
-    tabindex="0"
-    on:mousedown={props.onClick}
-    on:keydown={props.onKeyDown}
-  >
-    <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+  <div class="search-result-item_roll">
+    {#if !props.children.isEmpty()}
+      <div class="search-result-item_indent-guide" />
+    {/if}
+    <div class="search-result-item_bullet" />
   </div>
-  <div class="search-result-item_indent-and-children-area">
-    <div class="search-result-item_indent-area" />
+  <div class="search-result-item_content-and-children-area">
+    <div
+      class="search-result-item_content-area"
+      tabindex="0"
+      on:mousedown={props.onClick}
+      on:keydown={props.onKeyDown}
+    >
+      <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+    </div>
     <div class="search-result-item_children-area">
       {#each props.children.toArray() as child (child.itemPath.toString())}
         <SearchResultItem props={child} />
@@ -28,11 +33,53 @@
 </div>
 
 <style global lang="scss">
+  :root {
+    --search-result-line-height: 1.3em;
+    --search-result-bullet-size: 0.38em;
+  }
+
   .search-result-item {
-    cursor: pointer;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+
+    line-height: var(--search-result-line-height);
+  }
+
+  .search-result-item_roll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    position: relative;
+
+    width: var(--search-result-line-height);
+  }
+
+  .search-result-item_indent-guide {
+    width: 1px;
+    height: calc(100% - var(--search-result-line-height) / 2);
+
+    position: absolute;
+    top: calc(var(--search-result-line-height) / 2);
+
+    // lch(80.0%, 0.0, 0.0)相当
+    background: #c6c6c6;
+  }
+
+  .search-result-item_bullet {
+    width: var(--search-result-bullet-size);
+    aspect-ratio: 1;
+    border-radius: 50%;
+
+    position: absolute;
+    top: calc(var(--search-result-line-height) / 2 - var(--search-result-bullet-size) / 2);
+
+    background: var(--main-area-bullet-inner-circle-color);
   }
 
   .search-result-item_content-area {
+    cursor: pointer;
+
     &:focus {
       outline: none;
       background: var(--main-area-focused-item-background-color);
@@ -41,19 +88,5 @@
     &:hover {
       background: var(--main-area-mouse-hover-item-background-color);
     }
-  }
-
-  .search-result-item_indent-and-children-area {
-    display: flex;
-  }
-
-  .search-result-item_indent-area {
-    flex: 0 0 1.1em;
-    // lch(80.0%, 0.0, 0.0)相当
-    border-left: 1px solid #c6c6c6;
-  }
-
-  .search-result-item_children-area {
-    flex: 1 0;
   }
 </style>
