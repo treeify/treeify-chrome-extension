@@ -4,12 +4,15 @@
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
 
   let searchQueryValue = ''
   let searchResult: List<List<ItemPath>> | undefined
+  const workspaceId = CurrentState.getCurrentWorkspaceId()
+  const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
 
   function onContentAreaKeyDown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -48,6 +51,19 @@
     if (InputId.fromKeyboardEvent(event) === '0000Enter') {
       event.preventDefault()
 
+      // 検索履歴に保存
+      const workspaceId = CurrentState.getCurrentWorkspaceId()
+      const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
+      const newHistory = searchHistory
+        .filter((searchQuery) => searchQuery !== searchQueryValue)
+        .push(searchQueryValue)
+        .takeLast(10)
+      Internal.instance.mutate(
+        newHistory,
+        PropertyPath.of('workspaces', workspaceId, 'searchHistory')
+      )
+
+      // 全文検索
       const itemIds = Internal.instance.searchEngine.search(searchQueryValue)
 
       // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
@@ -70,9 +86,15 @@
       type="text"
       class="search-dialog_search-query"
       placeholder="検索ワード -除外ワード"
+      list="search-dialog_search-history-list"
       bind:value={searchQueryValue}
       on:keydown={onSearchQueryKeyDown}
     />
+    <datalist id="search-dialog_search-history-list">
+      {#each searchHistory.reverse().toArray() as searchQuery}
+        <option value={searchQuery} />
+      {/each}
+    </datalist>
     <div class="search-dialog_result">
       {#if searchResult !== undefined}
         {#each searchResult.toArray() as itemPaths}
