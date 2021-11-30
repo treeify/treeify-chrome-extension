@@ -32,7 +32,7 @@
 
     padding-block: var(--main-area-content-area-vertical-padding);
 
-    .citation & {
+    .has-source & {
       // lch(80.0%, 0.0, 0.0)相当
       border-left: 0.25em solid #c6c6c6;
       padding-left: 0.2em;

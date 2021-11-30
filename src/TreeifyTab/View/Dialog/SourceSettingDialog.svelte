@@ -48,41 +48,41 @@
 </script>
 
 <CommonDialog title="出典設定">
-  <div class="citation-setting-dialog_content" on:keydown={onKeyDown}>
-    <div class="citation-setting-dialog_input-area">
-      <label class="citation-setting-dialog_label">
+  <div class="source-setting-dialog_content" on:keydown={onKeyDown}>
+    <div class="source-setting-dialog_input-area">
+      <label class="source-setting-dialog_label">
         タイトル（省略可）
-        <input type="text" class="citation-setting-dialog_source-title" bind:value={titleValue} />
+        <input type="text" class="source-setting-dialog_source-title" bind:value={titleValue} />
       </label>
-      <label class="citation-setting-dialog_label">
+      <label class="source-setting-dialog_label">
         URL（省略可）
-        <input type="url" class="citation-setting-dialog_source-url" bind:value={urlValue} />
+        <input type="url" class="source-setting-dialog_source-url" bind:value={urlValue} />
       </label>
     </div>
-    <div class="citation-setting-dialog_button-area">
+    <div class="source-setting-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
   </div>
 </CommonDialog>
 
 <style global lang="scss">
-  .citation-setting-dialog_content {
+  .source-setting-dialog_content {
     width: 90vw;
     max-width: 40em;
     padding: 1em;
   }
 
-  .citation-setting-dialog_input-area {
+  .source-setting-dialog_input-area {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-gap: 0.5em;
   }
 
-  .citation-setting-dialog_label {
+  .source-setting-dialog_label {
     display: contents;
   }
 
-  .citation-setting-dialog_button-area {
+  .source-setting-dialog_button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

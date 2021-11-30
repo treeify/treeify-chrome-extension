@@ -209,7 +209,7 @@ export class Internal {
         '1000Slash': List.of('showCommandPaletteDialog'),
         '0000F2': List.of('showEditDialog'),
         '0000ContextMenu': List.of('showContextMenuDialog'),
-        '1100Period': List.of('toggleCitation'),
+        '1100Period': List.of('toggleSource'),
         '0110ArrowUp': List.of('selectToStartOfList'),
         '0110ArrowDown': List.of('selectToEndOfList'),
       },

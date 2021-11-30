@@ -1,6 +1,5 @@
 <script lang="ts">
   import CaptionSettingDialog from 'src/TreeifyTab/View/Dialog/CaptionSettingDialog.svelte'
-  import CitationSettingDialog from 'src/TreeifyTab/View/Dialog/CitationSettingDialog.svelte'
   import CodeBlockItemEditDialog from 'src/TreeifyTab/View/Dialog/CodeBlockItemEditDialog.svelte'
   import CodeBlockLanguageSettingDialog from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialog.svelte'
   import CommandPaletteDialog from 'src/TreeifyTab/View/Dialog/CommandPaletteDialog.svelte'
@@ -17,6 +16,7 @@
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
   import ReplaceDialog from 'src/TreeifyTab/View/Dialog/ReplaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
+  import SourceSettingDialog from 'src/TreeifyTab/View/Dialog/SourceSettingDialog.svelte'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
   import WebPageItemTitleSettingDialog from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialog.svelte'
@@ -28,8 +28,8 @@
   <!-- ダイアログなし -->
 {:else if props.dialogState.type === 'CaptionSettingDialog'}
   <CaptionSettingDialog />
-{:else if props.dialogState.type === 'CitationSettingDialog'}
-  <CitationSettingDialog />
+{:else if props.dialogState.type === 'SourceSettingDialog'}
+  <SourceSettingDialog />
 {:else if props.dialogState.type === 'CodeBlockItemEditDialog'}
   <CodeBlockItemEditDialog />
 {:else if props.dialogState.type === 'CodeBlockLanguageSettingDialog'}

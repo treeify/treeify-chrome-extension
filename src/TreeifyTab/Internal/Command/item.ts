@@ -301,7 +301,7 @@ function toggleCssClass(cssClass: string) {
  * 対象項目が出典付きなら出典情報を削除する。
  * 出典がない場合はタイトル、URLともに空文字列の出典情報を付ける。
  */
-export function toggleCitation() {
+export function toggleSource() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)

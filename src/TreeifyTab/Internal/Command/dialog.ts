@@ -45,8 +45,8 @@ export function showSearchDialog() {
 }
 
 /** 出典設定ダイアログを表示する */
-export function showCitationSettingDialog() {
-  External.instance.dialogState = { type: 'CitationSettingDialog' }
+export function showSourceSettingDialog() {
+  External.instance.dialogState = { type: 'SourceSettingDialog' }
 }
 
 /** 独自コンテキストメニューを表示する */
