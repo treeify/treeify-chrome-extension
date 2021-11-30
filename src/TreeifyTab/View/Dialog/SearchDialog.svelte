@@ -48,6 +48,11 @@
         Command.showReplaceDialog()
         Rerenderer.instance.rerender()
         break
+      case '1100KeyF':
+        event.preventDefault()
+        document.querySelector<HTMLElement>('.search-dialog_search-query')?.focus()
+        document.execCommand('selectAll')
+        break
     }
   }
 

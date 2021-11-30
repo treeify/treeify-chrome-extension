@@ -27,6 +27,11 @@
         Command.showSearchDialog()
         Rerenderer.instance.rerender()
         break
+      case '1100KeyR':
+        event.preventDefault()
+        document.querySelector<HTMLElement>('.text-replace-dialog_before-replace')?.focus()
+        document.execCommand('selectAll')
+        break
     }
   }
 
