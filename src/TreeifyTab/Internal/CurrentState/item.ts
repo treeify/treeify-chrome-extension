@@ -7,7 +7,6 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
-import { forceCloseTab } from 'src/Utility/browser'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
@@ -80,7 +79,8 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
   if (tabId !== undefined) {
     External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
-    forceCloseTab(tabId)
+    // TODO: タブを強制的に閉じる
+    chrome.tabs.remove(tabId)
   }
 
   // 項目タイプごとのデータを削除する
