@@ -15,7 +15,7 @@
   })
 </script>
 
-<div class="root" use:dragStateResetter>
+<div class="root" data-workspace-id={$propsStream.currentWorkspaceId} use:dragStateResetter>
   <!--
   カスタムCSSを埋め込む。
   Svelteは動的にstyle要素をhead要素の子リスト末尾に追加するので、尋常な方法ではCSSの優先度で負けてしまう。
