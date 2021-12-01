@@ -11,6 +11,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { integer } from 'src/Utility/integer'
 
 /** TODO: コメント */
@@ -97,6 +98,8 @@ export class External {
   }
 }
 
-type TreeifyClipboard = {
-  selectedItemPaths: List<ItemPath>
-}
+type TreeifyClipboard = DiscriminatedUnion<{
+  CopyForTransclude: {
+    selectedItemPaths: List<ItemPath>
+  }
+}>

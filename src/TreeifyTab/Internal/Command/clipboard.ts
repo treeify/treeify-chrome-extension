@@ -8,7 +8,7 @@ import { assertNonUndefined } from 'src/Utility/Debug/assert'
 /** トランスクルードするために独自クリップボードに情報を書き込む */
 export async function copyForTransclude() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  External.instance.treeifyClipboard = { selectedItemPaths }
+  External.instance.treeifyClipboard = { type: 'CopyForTransclude', selectedItemPaths }
 
   // 「独自クリップボードにコピー→他アプリで何かをコピー→Treeify上でペースト」としたとき、
   // 本来なら他アプリ由来のデータが貼り付けられるべきなのに独自クリップボードが優先されてしまう問題の対策。
