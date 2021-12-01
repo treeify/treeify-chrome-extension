@@ -203,6 +203,7 @@ export class Internal {
         '1000KeyH': List.of('toggleHighlighted'),
         '1100KeyU': List.of('toggleDoubtful'),
         '0010KeyC': List.of('copyForTransclude'),
+        '1100KeyX': List.of('copyForMove'),
         '1100KeyV': List.of('pasteAsPlainText'),
         '1000KeyS': List.of('syncWithDataFolder'),
         '1100KeyF': List.of('showSearchDialog'),

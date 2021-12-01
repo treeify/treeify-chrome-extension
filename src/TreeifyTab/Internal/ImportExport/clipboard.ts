@@ -84,28 +84,33 @@ export function onPaste(event: ClipboardEvent) {
   if (External.instance.treeifyClipboard !== undefined) {
     // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
     if (text === External.instance.getTreeifyClipboardHash()) {
-      // TODO: selectedItemPathsは削除や移動された項目を指している可能性がある
-      for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
-        // 兄弟リスト内に同一項目を入れてしまわないようガード
-        if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
-          const selectedItemId = ItemPath.getItemId(selectedItemPath)
-          const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
-          CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+      if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
+        // TODO: selectedItemPathsは削除や移動された項目を指している可能性がある
+        for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+          // 兄弟リスト内に同一項目を入れてしまわないようガード
+          if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
+            const selectedItemId = ItemPath.getItemId(selectedItemPath)
+            const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
+            CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+          }
         }
+
+        // ターゲットを更新する
+        const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+        assertNonUndefined(belowItemPath)
+        CurrentState.setTargetItemPath(belowItemPath)
+
+        // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
+        if (CurrentState.isEmptyTextItem(targetItemId)) {
+          CurrentState.deleteItem(targetItemId)
+        }
+
+        Rerenderer.instance.rerender()
+        return
+      } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
+        // TODO: 項目移動を実装する
+        return
       }
-
-      // ターゲットを更新する
-      const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
-      assertNonUndefined(belowItemPath)
-      CurrentState.setTargetItemPath(belowItemPath)
-
-      // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
-      if (CurrentState.isEmptyTextItem(targetItemId)) {
-        CurrentState.deleteItem(targetItemId)
-      }
-
-      Rerenderer.instance.rerender()
-      return
     } else {
       External.instance.treeifyClipboard = undefined
     }

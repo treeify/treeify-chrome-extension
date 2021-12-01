@@ -133,7 +133,10 @@
         'createTextItem'
       ),
     },
-    { name: 'クリップボード', commandIds: List.of('copyForTransclude', 'pasteAsPlainText') },
+    {
+      name: 'クリップボード',
+      commandIds: List.of('copyForTransclude', 'copyForMove', 'pasteAsPlainText'),
+    },
     {
       name: 'ダイアログ表示',
       commandIds: List.of(

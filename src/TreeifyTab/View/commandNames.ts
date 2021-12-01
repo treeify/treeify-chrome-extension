@@ -39,6 +39,7 @@ export const commandNames = {
   selectToStartOfList: '長男まで選択',
   selectToEndOfList: '末弟まで選択',
   copyForTransclude: 'トランスクルード用コピー',
+  copyForMove: '移動用コピー',
   pasteAsPlainText: 'プレーンテキストとして貼り付け',
   showEditDialog: '編集ダイアログを表示',
   showExportDialog: 'エクスポートダイアログを表示',

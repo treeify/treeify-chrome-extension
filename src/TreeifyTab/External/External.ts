@@ -102,4 +102,7 @@ type TreeifyClipboard = DiscriminatedUnion<{
   CopyForTransclude: {
     selectedItemPaths: List<ItemPath>
   }
+  CopyForMove: {
+    selectedItemPaths: List<ItemPath>
+  }
 }>
