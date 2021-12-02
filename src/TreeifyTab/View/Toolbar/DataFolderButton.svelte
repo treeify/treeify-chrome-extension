@@ -22,7 +22,7 @@
 </script>
 
 <ToolbarIconButton
-  title={props.isAlreadyOpen ? 'データフォルダと同期する' : 'データフォルダを開く'}
+  title={props.isAlreadyOpen ? '現在のデータをデータフォルダと同期する' : 'データフォルダを開く'}
   on:click={onClick}
 >
   <div
