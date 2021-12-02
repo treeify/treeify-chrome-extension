@@ -52,4 +52,5 @@ export const commandNames = {
   doNothing: '何もしない',
   toggleExcluded: '除外トグル',
   syncWithDataFolder: 'データフォルダ同期',
+  convertSpaceToNewline: '半角スペースを改行に変換',
 } as const

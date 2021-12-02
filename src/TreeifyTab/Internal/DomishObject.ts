@@ -1,5 +1,6 @@
 import { List } from 'immutable'
 import { assertNeverType } from 'src/Utility/Debug/assert'
+import { join } from 'src/Utility/immutable'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -343,6 +344,41 @@ export namespace DomishObject {
           type: 'text',
           textContent: domishObject.textContent.replaceAll(beforeReplace, afterReplace),
         }
+    }
+  }
+
+  /** 半角スペースまたはnbspをbrに変換する */
+  export function convertSpaceToNewline(
+    value: DomishObject | List<DomishObject>
+  ): List<DomishObject> {
+    if (value instanceof List) {
+      const domishObjects = value as List<DomishObject>
+      return domishObjects.flatMap(convertSpaceToNewline)
+    } else {
+      const domishObject = value as DomishObject
+      switch (domishObject.type) {
+        case 'br':
+          return List.of(domishObject)
+        case 'b':
+        case 'u':
+        case 'i':
+        case 'strike':
+          const newDomishObject: DomishObject = {
+            type: domishObject.type,
+            children: domishObject.children.flatMap(convertSpaceToNewline),
+          }
+          return List.of(newDomishObject)
+        case 'text':
+          // 半角スペースまたはnbspでsplit
+          const lines = List(domishObject.textContent.split(/[ \u00A0]/))
+          const list: List<DomishObject> = lines.map((text) => {
+            return {
+              type: 'text',
+              textContent: text,
+            }
+          })
+          return join(list, { type: 'br' })
+      }
     }
   }
 }
