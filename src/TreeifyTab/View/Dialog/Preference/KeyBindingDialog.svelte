@@ -149,7 +149,15 @@
       ),
     },
     { name: '複数選択', commandIds: List.of('selectToStartOfList', 'selectToEndOfList') },
-    { name: 'その他', commandIds: List.of('doNothing', 'syncWithDataFolder', 'toggleExcluded') }
+    {
+      name: 'その他',
+      commandIds: List.of(
+        'doNothing',
+        'syncWithDataFolder',
+        'toggleExcluded',
+        'convertSpaceToNewline'
+      ),
+    }
   )
 </script>
 

@@ -1,5 +1,8 @@
+import { ItemType } from 'src/TreeifyTab/basicType'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
@@ -81,4 +84,18 @@ export function grouping() {
   }
 
   CurrentState.setTargetItemPath(newItemPath)
+}
+
+export function convertSpaceToNewline() {
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  if (Internal.instance.state.items[targetItemId].type !== ItemType.TEXT) {
+    return
+  }
+
+  const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+  CurrentState.setTextItemDomishObjects(
+    targetItemId,
+    DomishObject.convertSpaceToNewline(domishObjects)
+  )
+  CurrentState.updateItemTimestamp(targetItemId)
 }
