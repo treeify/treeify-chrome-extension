@@ -197,12 +197,7 @@
     &::after {
       content: '';
       @include common.circle(100%);
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
@@ -245,12 +240,7 @@
 
   .main-area-node_delete-button-icon {
     @include common.square(var(--main-area-delete-button-size));
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include common.absolute-center;
 
     // lch(30.0%, 0.0, 0.0)相当
     background: #474747;

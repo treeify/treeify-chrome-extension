@@ -113,12 +113,7 @@
     &::before {
       content: '';
       @include common.square(1.2em);
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
       background: #5e5e5e;

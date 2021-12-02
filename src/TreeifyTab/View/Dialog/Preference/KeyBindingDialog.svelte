@@ -280,12 +280,7 @@
       content: '';
 
       @include common.square(var(--key-binding-dialog-delete-icon-size));
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
       background: #5e5e5e;
@@ -308,12 +303,7 @@
       content: '';
 
       @include common.square(var(--key-binding-dialog-add-icon-size));
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
       background: #5e5e5e;

@@ -18,12 +18,7 @@
 
   .preference-button_icon {
     @include common.square(22px);
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当
     background: #6a6a6a;

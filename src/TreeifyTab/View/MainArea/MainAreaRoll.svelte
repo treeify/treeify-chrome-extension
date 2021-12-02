@@ -159,14 +159,9 @@
   // メインエリアのバレットの外側の円（展開状態用）
   .main-area-roll_outer-circle {
     @include common.circle(var(--outer-circle-radius));
+    @include common.absolute-center;
 
     background: var(--main-area-bullet-outer-circle-color);
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-outer-circle-hover-color);
@@ -176,14 +171,9 @@
   // メインエリアのバレットの内側の円
   .main-area-roll_inner-circle {
     @include common.circle(0.38em);
+    @include common.absolute-center;
 
     background: var(--main-area-bullet-inner-circle-color);
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-inner-circle-hover-color);
@@ -193,16 +183,11 @@
   // ページのバレット
   .main-area-roll_page-icon {
     @include common.square(1em);
+    @include common.absolute-center;
 
     background: var(--main-area-bullet-page-icon-color);
     -webkit-mask: url('page-icon.svg') no-repeat center;
     -webkit-mask-size: contain;
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);

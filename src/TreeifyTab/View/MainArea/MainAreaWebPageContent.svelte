@@ -87,12 +87,7 @@
 
     > * {
       @include common.square(var(--main-area-favicon-size));
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
     }
 
     // 疑似リップルエフェクトの終了状態

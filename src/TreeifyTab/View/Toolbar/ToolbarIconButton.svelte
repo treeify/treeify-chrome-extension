@@ -32,12 +32,7 @@
       content: '';
 
       @include common.circle(100%);
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;

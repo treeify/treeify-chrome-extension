@@ -173,12 +173,7 @@
       content: '';
 
       @include common.circle(100%);
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
@@ -197,11 +192,7 @@
   }
 
   .page-tree-node_tabs-count {
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include common.absolute-center;
 
     // lch(40.0%, 0.0, 0.0)相当
     color: #5e5e5e;
@@ -218,12 +209,7 @@
       content: '';
 
       @include common.square(1.3em);
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.absolute-center;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
