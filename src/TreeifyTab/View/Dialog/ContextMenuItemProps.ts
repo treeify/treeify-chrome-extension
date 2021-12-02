@@ -137,5 +137,16 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     }
   }
 
+  const isCitation = selectedItemIds.some((itemId) => {
+    const item = Internal.instance.state.items[itemId]
+    return item.type === ItemType.TEXT && item.source !== null
+  })
+  if (isCitation) {
+    result.push({
+      title: '半角スペースを改行に変換',
+      onClick: () => Command.convertSpaceToNewline(),
+    })
+  }
+
   return List(result)
 }
