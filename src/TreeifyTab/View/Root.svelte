@@ -37,6 +37,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   * {
     box-sizing: border-box;
   }
@@ -110,18 +112,16 @@
     &::after {
       content: '';
 
+      @include common.circle(100%);
+
       // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;

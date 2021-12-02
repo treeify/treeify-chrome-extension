@@ -22,6 +22,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // インデントガイドの色。lch(88.0%, 0.0, 0.0)相当
     --page-tree-indent-guide-color: #dddddd;
@@ -120,10 +122,8 @@
 
     // 子を持たないノードのバレット
     &.no-children {
-      width: 0.25em;
-      aspect-ratio: 1;
+      @include common.circle(0.25em);
 
-      border-radius: 50%;
       background: var(--page-tree-bullet-color);
 
       .page-tree-bullet-and-indent:hover & {

@@ -82,6 +82,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // ページツリーの項目のマウスホバー時の背景色。lch(97.5%, 134.0, 280.4)相当
     --page-tree-hover-item-background-color: #f6f8ff;
@@ -157,12 +159,10 @@
   }
 
   .page-tree-node_tabs-count-button {
-    width: 100%;
-    height: 100%;
+    @include common.circle(100%);
 
     position: relative;
 
-    border-radius: 50%;
     cursor: pointer;
 
     &:hover {
@@ -174,18 +174,16 @@
     &::after {
       content: '';
 
+      @include common.circle(100%);
+
       // 中央寄せ
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;

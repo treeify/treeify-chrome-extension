@@ -30,6 +30,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --outer-circle-min-diameter: 1.05;
     --outer-circle-max-diameter: 1.3;
@@ -156,10 +158,8 @@
 
   // メインエリアのバレットの外側の円（展開状態用）
   .main-area-roll_outer-circle {
-    width: var(--outer-circle-radius);
-    aspect-ratio: 1;
+    @include common.circle(var(--outer-circle-radius));
 
-    border-radius: 50%;
     background: var(--main-area-bullet-outer-circle-color);
 
     // 中央寄せ
@@ -175,9 +175,8 @@
 
   // メインエリアのバレットの内側の円
   .main-area-roll_inner-circle {
-    width: 0.38em;
-    aspect-ratio: 1;
-    border-radius: 50%;
+    @include common.circle(0.38em);
+
     background: var(--main-area-bullet-inner-circle-color);
 
     // 中央寄せ

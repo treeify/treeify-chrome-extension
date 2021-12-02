@@ -50,6 +50,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // ウェブページ項目のファビコン領域（正方形）の一辺の長さ
     --main-area-favicon-size: 1em;
@@ -98,13 +100,10 @@
     // 疑似リップルエフェクトの終了状態
     &::after {
       content: '';
+      @include common.circle(100%);
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;

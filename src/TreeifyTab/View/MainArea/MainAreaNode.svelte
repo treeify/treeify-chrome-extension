@@ -94,6 +94,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --main-area-content-area-vertical-padding: 0.11em;
 
@@ -177,13 +179,11 @@
 
   // 隠れているタブ数
   .main-area-node_hidden-tabs-count {
-    width: var(--main-area-calculated-line-height);
-    aspect-ratio: 1;
+    @include common.circle(var(--main-area-calculated-line-height));
 
     position: relative;
     text-align: center;
 
-    border-radius: 50%;
     cursor: pointer;
 
     // lch(40.0%, 0.0, 0.0)相当
@@ -196,6 +196,7 @@
     // 疑似リップルエフェクトの終了状態
     &::after {
       content: '';
+      @include common.circle(100%);
 
       // 中央寄せ
       position: absolute;
@@ -203,12 +204,8 @@
       left: 50%;
       transform: translate(-50%, -50%);
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
@@ -225,10 +222,7 @@
 
   // 各項目の削除ボタン
   .main-area-node_delete-button {
-    width: var(--main-area-calculated-line-height);
-    aspect-ratio: 1;
-
-    border-radius: 50%;
+    @include common.circle(var(--main-area-calculated-line-height));
 
     // アイコンと疑似リップルエフェクトを中央寄せにする
     position: relative;
