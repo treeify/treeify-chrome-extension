@@ -14,9 +14,10 @@
 </ToolbarIconButton>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .preference-button_icon {
-    width: 22px;
-    aspect-ratio: 1;
+    @include common.square(22px);
 
     // 中央寄せ
     position: absolute;

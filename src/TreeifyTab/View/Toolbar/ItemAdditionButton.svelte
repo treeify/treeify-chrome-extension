@@ -14,9 +14,10 @@
 </ToolbarIconButton>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .item-addition-button_icon {
-    width: 24px;
-    aspect-ratio: 1;
+    @include common.square(24px);
 
     // 中央寄せ
     position: absolute;

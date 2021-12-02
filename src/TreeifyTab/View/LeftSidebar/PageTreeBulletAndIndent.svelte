@@ -83,13 +83,12 @@
 
   // バレットの共通設定
   .page-tree-bullet-and-indent_bullet-area {
+    @include common.square(var(--page-tree-bullet-area-size));
+
     position: absolute;
     top: calc(var(--page-tree-calculated-line-height) / 2);
     left: 50%;
     transform: translate(-50%, -50%);
-
-    width: var(--page-tree-bullet-area-size);
-    aspect-ratio: 1;
 
     // 展開済み状態のバレット
     &.unfolded {

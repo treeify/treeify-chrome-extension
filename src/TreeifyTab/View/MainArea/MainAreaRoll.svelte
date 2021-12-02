@@ -150,8 +150,8 @@
   }
 
   .main-area-roll_bullet-area {
-    width: var(--main-area-calculated-line-height);
-    aspect-ratio: 1;
+    @include common.square(var(--main-area-calculated-line-height));
+
     // 外側の円と内側の円を重ねて描画するための設定
     position: relative;
   }
@@ -192,8 +192,7 @@
 
   // ページのバレット
   .main-area-roll_page-icon {
-    width: 1em;
-    aspect-ratio: 1;
+    @include common.square(1em);
 
     background: var(--main-area-bullet-page-icon-color);
     -webkit-mask: url('page-icon.svg') no-repeat center;

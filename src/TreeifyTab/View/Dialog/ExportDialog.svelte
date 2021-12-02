@@ -203,6 +203,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .export-dialog_content {
     min-width: 30em;
     padding: 1em;
@@ -271,8 +273,7 @@
   }
 
   .export-dialog_copy-button-icon {
-    width: 1.5em;
-    aspect-ratio: 1;
+    @include common.square(1.5em);
 
     // lch(45.0%, 0.0, 0.0)相当
     background: #6a6a6a;
@@ -286,8 +287,7 @@
   }
 
   .export-dialog_save-button-icon {
-    width: 1.5em;
-    aspect-ratio: 1;
+    @include common.square(1.5em);
 
     // lch(45.0%, 0.0, 0.0)相当
     background: #6a6a6a;

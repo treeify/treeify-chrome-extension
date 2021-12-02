@@ -19,14 +19,15 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .search-result-page_page {
     display: flex;
     align-items: center;
   }
 
   .search-result-page_page-icon {
-    width: 1.1em;
-    aspect-ratio: 1;
+    @include common.square(1.1em);
 
     // lch(30.0%, 0.0, 0.0)相当
     background: #474747;

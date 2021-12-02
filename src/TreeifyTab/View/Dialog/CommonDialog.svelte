@@ -61,6 +61,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // lch(25.0%, 0.0, 0.0)相当
     --common-dialog-title-bar-background: #3b3b3b;
@@ -113,8 +115,7 @@
   }
 
   .common-dialog_close-button {
-    width: 1.4em;
-    aspect-ratio: 1;
+    @include common.square(1.4em);
 
     margin-left: auto;
 
@@ -125,8 +126,7 @@
 
     &::before {
       content: '';
-      width: 0.8em;
-      aspect-ratio: 1;
+      @include common.square(0.8em);
 
       // 中央寄せ
       position: absolute;

@@ -78,6 +78,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .workspace-dialog_content {
     padding: 1em;
 
@@ -106,13 +108,11 @@
   }
 
   .workspace-dialog_delete-button {
-    width: 1.5em;
-    aspect-ratio: 1;
+    @include common.square(1.5em);
 
     &::before {
       content: '';
-      width: 1.2em;
-      aspect-ratio: 1;
+      @include common.square(1.2em);
 
       // 中央寄せ
       position: absolute;

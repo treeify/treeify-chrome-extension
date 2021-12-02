@@ -144,8 +144,7 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .page-tree-node_audible-icon {
-    width: 1em;
-    aspect-ratio: 1;
+    @include common.square(1em);
 
     // lch(60.0%, 0.0, 0.0)相当
     background: #919191;
@@ -154,8 +153,7 @@
   }
 
   .page-tree-node_right-button-area {
-    width: var(--page-tree-close-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--page-tree-close-button-size));
   }
 
   .page-tree-node_tabs-count-button {
@@ -219,8 +217,7 @@
     &::before {
       content: '';
 
-      width: 1.3em;
-      aspect-ratio: 1;
+      @include common.square(1.3em);
 
       // 中央寄せ
       position: absolute;

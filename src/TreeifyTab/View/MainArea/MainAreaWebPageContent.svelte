@@ -78,8 +78,7 @@
 
   // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon-area {
-    width: var(--main-area-favicon-size);
-    aspect-ratio: 1;
+    @include common.square(var(--main-area-favicon-size));
 
     position: relative;
 
@@ -87,8 +86,7 @@
     cursor: pointer;
 
     > * {
-      width: var(--main-area-favicon-size);
-      aspect-ratio: 1;
+      @include common.square(var(--main-area-favicon-size));
 
       // 中央寄せ
       position: absolute;
@@ -146,8 +144,7 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
-    width: 1em;
-    aspect-ratio: 1;
+    @include common.square(1em);
 
     background: var(--main-area-audible-icon-color);
     -webkit-mask: url('./audible-icon.svg');

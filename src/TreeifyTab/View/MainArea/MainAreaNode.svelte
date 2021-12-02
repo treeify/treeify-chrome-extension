@@ -244,8 +244,7 @@
   }
 
   .main-area-node_delete-button-icon {
-    width: var(--main-area-delete-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--main-area-delete-button-size));
 
     // 中央寄せ
     position: absolute;

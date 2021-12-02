@@ -218,6 +218,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --key-binding-dialog-command-button-size: 1.5em;
     --key-binding-dialog-delete-icon-size: 1.2em;
@@ -269,8 +271,7 @@
   }
 
   .delete-button {
-    width: var(--key-binding-dialog-command-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--key-binding-dialog-command-button-size));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -278,8 +279,7 @@
     &::before {
       content: '';
 
-      width: var(--key-binding-dialog-delete-icon-size);
-      aspect-ratio: 1;
+      @include common.square(var(--key-binding-dialog-delete-icon-size));
 
       // 中央寄せ
       position: absolute;
@@ -299,8 +299,7 @@
   }
 
   .add-command-button {
-    width: var(--key-binding-dialog-command-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--key-binding-dialog-command-button-size));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -308,8 +307,7 @@
     &::before {
       content: '';
 
-      width: var(--key-binding-dialog-add-icon-size);
-      aspect-ratio: 1;
+      @include common.square(var(--key-binding-dialog-add-icon-size));
 
       // 中央寄せ
       position: absolute;
