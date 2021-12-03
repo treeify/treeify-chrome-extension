@@ -50,6 +50,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // ウェブページ項目のファビコン領域（正方形）の一辺の長さ
     --main-area-favicon-size: 1em;
@@ -76,8 +78,7 @@
 
   // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon-area {
-    width: var(--main-area-favicon-size);
-    aspect-ratio: 1;
+    @include common.square(var(--main-area-favicon-size));
 
     position: relative;
 
@@ -85,26 +86,17 @@
     cursor: pointer;
 
     > * {
-      width: var(--main-area-favicon-size);
-      aspect-ratio: 1;
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.square(var(--main-area-favicon-size));
+      @include common.absolute-center;
     }
 
     // 疑似リップルエフェクトの終了状態
     &::after {
       content: '';
+      @include common.circle(100%);
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
@@ -147,12 +139,8 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
-    width: 1em;
-    aspect-ratio: 1;
-
-    background: var(--main-area-audible-icon-color);
-    -webkit-mask: url('./audible-icon.svg');
-    -webkit-mask-size: contain;
+    @include common.square(1em);
+    @include common.icon(var(--main-area-audible-icon-color), url('./audible-icon.svg'));
   }
 
   // ウェブページ項目のタイトル

@@ -82,6 +82,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // ページツリーの項目のマウスホバー時の背景色。lch(97.5%, 134.0, 280.4)相当
     --page-tree-hover-item-background-color: #f6f8ff;
@@ -142,27 +144,21 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .page-tree-node_audible-icon {
-    width: 1em;
-    aspect-ratio: 1;
+    @include common.square(1em);
 
     // lch(60.0%, 0.0, 0.0)相当
-    background: #919191;
-    -webkit-mask: url('./audible-icon.svg');
-    -webkit-mask-size: contain;
+    @include common.icon(#919191, url('./audible-icon.svg'));
   }
 
   .page-tree-node_right-button-area {
-    width: var(--page-tree-close-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--page-tree-close-button-size));
   }
 
   .page-tree-node_tabs-count-button {
-    width: 100%;
-    height: 100%;
+    @include common.circle(100%);
 
     position: relative;
 
-    border-radius: 50%;
     cursor: pointer;
 
     &:hover {
@@ -174,18 +170,11 @@
     &::after {
       content: '';
 
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.circle(100%);
+      @include common.absolute-center;
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;
@@ -201,11 +190,7 @@
   }
 
   .page-tree-node_tabs-count {
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include common.absolute-center;
 
     // lch(40.0%, 0.0, 0.0)相当
     color: #5e5e5e;
@@ -221,19 +206,11 @@
     &::before {
       content: '';
 
-      width: 1.3em;
-      aspect-ratio: 1;
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.square(1.3em);
+      @include common.absolute-center;
 
       // lch(50.0%, 0.0, 0.0)相当
-      background: #777777;
-      -webkit-mask: url('close-icon2.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#777777, url('close-icon2.svg'));
     }
 
     .page-tree-node_body-area:hover & {

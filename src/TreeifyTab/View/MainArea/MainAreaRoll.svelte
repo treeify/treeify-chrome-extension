@@ -30,6 +30,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --outer-circle-min-diameter: 1.05;
     --outer-circle-max-diameter: 1.3;
@@ -148,25 +150,18 @@
   }
 
   .main-area-roll_bullet-area {
-    width: var(--main-area-calculated-line-height);
-    aspect-ratio: 1;
+    @include common.square(var(--main-area-calculated-line-height));
+
     // 外側の円と内側の円を重ねて描画するための設定
     position: relative;
   }
 
   // メインエリアのバレットの外側の円（展開状態用）
   .main-area-roll_outer-circle {
-    width: var(--outer-circle-radius);
-    aspect-ratio: 1;
+    @include common.circle(var(--outer-circle-radius));
+    @include common.absolute-center;
 
-    border-radius: 50%;
     background: var(--main-area-bullet-outer-circle-color);
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-outer-circle-hover-color);
@@ -175,16 +170,10 @@
 
   // メインエリアのバレットの内側の円
   .main-area-roll_inner-circle {
-    width: 0.38em;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--main-area-bullet-inner-circle-color);
+    @include common.circle(0.38em);
+    @include common.absolute-center;
 
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background: var(--main-area-bullet-inner-circle-color);
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-inner-circle-hover-color);
@@ -193,18 +182,9 @@
 
   // ページのバレット
   .main-area-roll_page-icon {
-    width: 1em;
-    aspect-ratio: 1;
-
-    background: var(--main-area-bullet-page-icon-color);
-    -webkit-mask: url('page-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include common.square(1em);
+    @include common.absolute-center;
+    @include common.icon(var(--main-area-bullet-page-icon-color), url('page-icon.svg'));
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);

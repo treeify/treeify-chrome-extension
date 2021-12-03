@@ -78,6 +78,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .workspace-dialog_content {
     padding: 1em;
 
@@ -106,24 +108,15 @@
   }
 
   .workspace-dialog_delete-button {
-    width: 1.5em;
-    aspect-ratio: 1;
+    @include common.square(1.5em);
 
     &::before {
       content: '';
-      width: 1.2em;
-      aspect-ratio: 1;
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.square(1.2em);
+      @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      background: #5e5e5e;
-      -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#5e5e5e, url('./trash-can-icon.svg'));
     }
   }
 

@@ -33,6 +33,8 @@
 </ToolbarIconButton>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
     --data-folder-button-icon-color: #6a6a6a;
@@ -40,18 +42,9 @@
 
   // データフォルダアイコン
   .data-folder-button_icon {
-    width: 24px;
-    aspect-ratio: 1;
-
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    background: var(--data-folder-button-icon-color);
-    -webkit-mask: url('folder-open.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.square(24px);
+    @include common.absolute-center;
+    @include common.icon(var(--data-folder-button-icon-color), url('folder-open.svg'));
 
     &.already-open {
       -webkit-mask: url('folder-sync.svg');

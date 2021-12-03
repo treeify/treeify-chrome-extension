@@ -218,6 +218,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --key-binding-dialog-command-button-size: 1.5em;
     --key-binding-dialog-delete-icon-size: 1.2em;
@@ -269,8 +271,7 @@
   }
 
   .delete-button {
-    width: var(--key-binding-dialog-command-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--key-binding-dialog-command-button-size));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -278,19 +279,11 @@
     &::before {
       content: '';
 
-      width: var(--key-binding-dialog-delete-icon-size);
-      aspect-ratio: 1;
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.square(var(--key-binding-dialog-delete-icon-size));
+      @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      background: #5e5e5e;
-      -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#5e5e5e, url('./trash-can-icon.svg'));
     }
 
     .key-binding_command-row:hover & {
@@ -299,8 +292,7 @@
   }
 
   .add-command-button {
-    width: var(--key-binding-dialog-command-button-size);
-    aspect-ratio: 1;
+    @include common.square(var(--key-binding-dialog-command-button-size));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -308,19 +300,11 @@
     &::before {
       content: '';
 
-      width: var(--key-binding-dialog-add-icon-size);
-      aspect-ratio: 1;
-
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.square(var(--key-binding-dialog-add-icon-size));
+      @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      background: #5e5e5e;
-      -webkit-mask: url('./plus-icon.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#5e5e5e, url('./plus-icon.svg'));
     }
 
     .key-binding_command-row:hover & {

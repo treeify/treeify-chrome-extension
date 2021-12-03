@@ -14,19 +14,13 @@
 </ToolbarIconButton>
 
 <style global lang="scss">
-  .preference-button_icon {
-    width: 22px;
-    aspect-ratio: 1;
+  @use 'src/TreeifyTab/View/common.scss';
 
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .preference-button_icon {
+    @include common.square(22px);
+    @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当
-    background: #6a6a6a;
-    -webkit-mask: url('gear-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(#6a6a6a, url('gear-icon.svg'));
   }
 </style>

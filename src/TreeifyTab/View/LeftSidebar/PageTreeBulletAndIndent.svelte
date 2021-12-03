@@ -22,6 +22,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     // インデントガイドの色。lch(88.0%, 0.0, 0.0)相当
     --page-tree-indent-guide-color: #dddddd;
@@ -81,13 +83,12 @@
 
   // バレットの共通設定
   .page-tree-bullet-and-indent_bullet-area {
+    @include common.square(var(--page-tree-bullet-area-size));
+
     position: absolute;
     top: calc(var(--page-tree-calculated-line-height) / 2);
     left: 50%;
     transform: translate(-50%, -50%);
-
-    width: var(--page-tree-bullet-area-size);
-    aspect-ratio: 1;
 
     // 展開済み状態のバレット
     &.unfolded {
@@ -120,10 +121,8 @@
 
     // 子を持たないノードのバレット
     &.no-children {
-      width: 0.25em;
-      aspect-ratio: 1;
+      @include common.circle(0.25em);
 
-      border-radius: 50%;
       background: var(--page-tree-bullet-color);
 
       .page-tree-bullet-and-indent:hover & {

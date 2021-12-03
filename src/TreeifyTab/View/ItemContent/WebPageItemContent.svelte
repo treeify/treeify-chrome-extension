@@ -35,6 +35,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .web-page-item-content {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
@@ -42,8 +44,7 @@
   }
 
   .web-page-item-content_favicon {
-    width: 1em;
-    aspect-ratio: 1;
+    @include common.square(1em);
 
     &.discarded {
       filter: opacity(75%);
@@ -85,11 +86,7 @@
   }
 
   .web-page-item-content_audible-icon {
-    width: 1em;
-    aspect-ratio: 1;
-
-    background: var(--main-area-audible-icon-color);
-    -webkit-mask: url('./audible-icon.svg');
-    -webkit-mask-size: contain;
+    @include common.square(1em);
+    @include common.icon(var(--main-area-audible-icon-color), url('./audible-icon.svg'));
   }
 </style>

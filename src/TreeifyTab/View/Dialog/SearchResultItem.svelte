@@ -33,6 +33,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --search-result-line-height: 1.3em;
     --search-result-bullet-size: 0.38em;
@@ -67,9 +69,7 @@
   }
 
   .search-result-item_bullet {
-    width: var(--search-result-bullet-size);
-    aspect-ratio: 1;
-    border-radius: 50%;
+    @include common.circle(var(--search-result-bullet-size));
 
     position: absolute;
     top: calc(var(--search-result-line-height) / 2 - var(--search-result-bullet-size) / 2);

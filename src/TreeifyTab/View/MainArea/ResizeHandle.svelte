@@ -3,6 +3,7 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
   @use 'sass:math';
 
   $aspectRatio: 0.16;
@@ -28,10 +29,7 @@
 
   // 角丸のフィル役
   .resize-handle_inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    @include common.absolute-center;
 
     $strokeSize: 7%;
     height: 100% - $strokeSize;

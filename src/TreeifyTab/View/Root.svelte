@@ -37,6 +37,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   * {
     box-sizing: border-box;
   }
@@ -85,8 +87,7 @@
 
   .default-favicon {
     // lch(40.0%, 0.0, 0.0)相当
-    background: #5e5e5e;
-    -webkit-mask-image: url('./default-favicon.svg');
+    @include common.icon(#5e5e5e, url('./default-favicon.svg'));
   }
 
   /*
@@ -110,18 +111,11 @@
     &::after {
       content: '';
 
-      // 中央寄せ
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      @include common.circle(100%);
+      @include common.absolute-center;
 
-      width: 100%;
-      height: 100%;
       opacity: 0;
       transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      border-radius: 50%;
 
       // lch(50.0%, 0.0, 0.0)相当
       background: #777777;

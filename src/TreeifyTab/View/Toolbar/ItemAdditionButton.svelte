@@ -14,19 +14,13 @@
 </ToolbarIconButton>
 
 <style global lang="scss">
-  .item-addition-button_icon {
-    width: 24px;
-    aspect-ratio: 1;
+  @use 'src/TreeifyTab/View/common.scss';
 
-    // 中央寄せ
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .item-addition-button_icon {
+    @include common.square(24px);
+    @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当
-    background: #6a6a6a;
-    -webkit-mask: url('plus-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(#6a6a6a, url('plus-icon.svg'));
   }
 </style>
