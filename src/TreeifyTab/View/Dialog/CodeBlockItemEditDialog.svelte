@@ -110,7 +110,6 @@
     // lch(60.0%, 0.0, 0.0)相当
     outline: 1px solid #919191;
 
-    max-height: 100%;
     overflow-y: auto;
   }
 

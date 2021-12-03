@@ -263,8 +263,9 @@
     margin-top: 0.5em;
 
     // 中央寄せ
-    margin-inline: auto;
-    width: max-content;
+    display: flex;
+    justify-content: center;
+    gap: 0.5em;
   }
 
   .export-dialog_copy-button {
