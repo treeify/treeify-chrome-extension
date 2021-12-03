@@ -21,8 +21,6 @@
     @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当
-    background: #6a6a6a;
-    -webkit-mask: url('plus-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(#6a6a6a, url('plus-icon.svg'));
   }
 </style>

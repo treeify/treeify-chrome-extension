@@ -243,8 +243,7 @@
     @include common.absolute-center;
 
     // lch(30.0%, 0.0, 0.0)相当
-    background: #474747;
-    -webkit-mask-image: url('close-icon.svg');
+    @include common.icon(#474747, url('close-icon.svg'));
   }
 
   .main-area-node_children-area {

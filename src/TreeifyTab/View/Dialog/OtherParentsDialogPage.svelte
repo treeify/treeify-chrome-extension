@@ -30,9 +30,7 @@
     @include common.square(1.1em);
 
     // lch(30.0%, 0.0, 0.0)相当
-    background: #474747;
-    -webkit-mask: url('page-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(#474747, url('page-icon.svg'));
   }
 
   .other-parents-dialog-page_item-list {

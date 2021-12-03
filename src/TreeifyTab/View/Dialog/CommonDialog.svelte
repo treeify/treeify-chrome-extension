@@ -130,8 +130,7 @@
       @include common.absolute-center;
 
       // lch(80.0%, 0.0, 0.0)相当
-      background: #c6c6c6;
-      -webkit-mask-image: url('close-icon.svg');
+      @include common.icon(#c6c6c6, url('close-icon.svg'));
     }
   }
 

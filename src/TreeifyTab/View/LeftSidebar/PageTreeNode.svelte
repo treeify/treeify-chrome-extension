@@ -147,9 +147,7 @@
     @include common.square(1em);
 
     // lch(60.0%, 0.0, 0.0)相当
-    background: #919191;
-    -webkit-mask: url('./audible-icon.svg');
-    -webkit-mask-size: contain;
+    @include common.icon(#919191, url('./audible-icon.svg'));
   }
 
   .page-tree-node_right-button-area {
@@ -212,9 +210,7 @@
       @include common.absolute-center;
 
       // lch(50.0%, 0.0, 0.0)相当
-      background: #777777;
-      -webkit-mask: url('close-icon2.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#777777, url('close-icon2.svg'));
     }
 
     .page-tree-node_body-area:hover & {

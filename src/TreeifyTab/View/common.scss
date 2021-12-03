@@ -16,3 +16,8 @@
   transform: translate(-50%, -50%);
 }
 
+@mixin icon($color, $url) {
+  background: $color;
+  -webkit-mask: $url no-repeat center;
+  -webkit-mask-size: contain;
+}

@@ -87,8 +87,7 @@
 
   .default-favicon {
     // lch(40.0%, 0.0, 0.0)相当
-    background: #5e5e5e;
-    -webkit-mask-image: url('./default-favicon.svg');
+    @include common.icon(#5e5e5e, url('./default-favicon.svg'));
   }
 
   /*

@@ -283,9 +283,7 @@
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      background: #5e5e5e;
-      -webkit-mask: url('./trash-can-icon.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#5e5e5e, url('./trash-can-icon.svg'));
     }
 
     .key-binding_command-row:hover & {
@@ -306,9 +304,7 @@
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      background: #5e5e5e;
-      -webkit-mask: url('./plus-icon.svg') no-repeat center;
-      -webkit-mask-size: contain;
+      @include common.icon(#5e5e5e, url('./plus-icon.svg'));
     }
 
     .key-binding_command-row:hover & {

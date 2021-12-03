@@ -87,9 +87,6 @@
 
   .web-page-item-content_audible-icon {
     @include common.square(1em);
-
-    background: var(--main-area-audible-icon-color);
-    -webkit-mask: url('./audible-icon.svg');
-    -webkit-mask-size: contain;
+    @include common.icon(var(--main-area-audible-icon-color), url('./audible-icon.svg'));
   }
 </style>

@@ -44,10 +44,7 @@
   .data-folder-button_icon {
     @include common.square(24px);
     @include common.absolute-center;
-
-    background: var(--data-folder-button-icon-color);
-    -webkit-mask: url('folder-open.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(var(--data-folder-button-icon-color), url('folder-open.svg'));
 
     &.already-open {
       -webkit-mask: url('folder-sync.svg');

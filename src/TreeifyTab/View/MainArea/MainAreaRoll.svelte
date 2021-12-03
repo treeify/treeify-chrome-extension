@@ -184,10 +184,7 @@
   .main-area-roll_page-icon {
     @include common.square(1em);
     @include common.absolute-center;
-
-    background: var(--main-area-bullet-page-icon-color);
-    -webkit-mask: url('page-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(var(--main-area-bullet-page-icon-color), url('page-icon.svg'));
 
     .main-area-roll:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);

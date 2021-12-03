@@ -276,9 +276,7 @@
     @include common.square(1.5em);
 
     // lch(45.0%, 0.0, 0.0)相当
-    background: #6a6a6a;
-    -webkit-mask: url('clipboard-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(#6a6a6a, url('clipboard-icon.svg'));
   }
 
   .export-dialog_save-button {
@@ -290,8 +288,6 @@
     @include common.square(1.5em);
 
     // lch(45.0%, 0.0, 0.0)相当
-    background: #6a6a6a;
-    -webkit-mask: url('file-download-icon.svg') no-repeat center;
-    -webkit-mask-size: contain;
+    @include common.icon(#6a6a6a, url('file-download-icon.svg'));
   }
 </style>
