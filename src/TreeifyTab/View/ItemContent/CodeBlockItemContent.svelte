@@ -7,8 +7,12 @@
 </script>
 
 <div class="code-block-item-content">
-  <pre
-    class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
+  {#if props.language !== ''}
+    <pre
+      class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
+  {:else}
+    <pre class="code-block-item-content_code">{@html props.code}</pre>
+  {/if}
   {#if props.caption !== ''}
     <div class="code-block-item-content_caption">{props.caption}</div>
   {/if}
