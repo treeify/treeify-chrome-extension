@@ -7,7 +7,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 export type TabsDialogItemProps = {
   itemPath: ItemPath
   children: List<TabsDialogItemProps>
-  onClick: () => void
+  onClick: (event: MouseEvent) => void
 }
 
 export function createTabsDialogItemProps(
@@ -17,7 +17,8 @@ export function createTabsDialogItemProps(
   return {
     itemPath,
     children,
-    onClick() {
+    onClick(event) {
+      event.preventDefault()
       CurrentState.jumpTo(itemPath)
 
       // ダイアログを閉じる
