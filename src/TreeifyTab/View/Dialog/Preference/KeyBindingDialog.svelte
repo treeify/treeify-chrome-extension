@@ -208,7 +208,7 @@
       </table>
       <p class="key-binding-dialog_message-for-add-binding">
         コマンドを割り当てたいキーをそのまま入力してください。<br />
-        （例：Shift+Alt+F）
+        （例：Ctrl+Shift+K）
       </p>
     </div>
     <div class="key-binding-dialog_button-area">
