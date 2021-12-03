@@ -1,5 +1,6 @@
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
+import { Command } from 'src/TreeifyTab/Internal/Command/index'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -55,7 +56,12 @@ function execTextEditCommand(commandName: string) {
 
 /** contenteditableな要素で改行を実行する */
 export function insertNewline() {
-  document.execCommand('insertLineBreak')
+  const itemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  if (Internal.instance.state.items[itemId].type === ItemType.TEXT) {
+    document.execCommand('insertLineBreak')
+  } else {
+    Command.createTextItem()
+  }
 }
 
 /**
