@@ -62,7 +62,7 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   /** 1つのファイルに最大何項目のデータを書き込むか */
-  static readonly ITEMS_FILE_CAPACITY = 100
+  static readonly ITEMS_FILE_CAPACITY = 1000000
 
   private static instancesFolderPath = List.of('Instances')
 
