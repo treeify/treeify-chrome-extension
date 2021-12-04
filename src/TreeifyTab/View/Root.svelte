@@ -23,9 +23,9 @@
   またSvelteでは<style>{css}</style>のように書いても動的にCSSを設定できないので、innerHTMLの形で強引に埋め込む。
   -->
   {@html $propsStream.customCssHtml}
-  <div class="toolbar-and-sidebar-layout">
+  <div class="root_toolbar-and-sidebar-layout">
     <Toolbar props={$propsStream.toolbarProps} />
-    <div class="sidebar-layout">
+    <div class="root_sidebar-layout">
       <LeftSidebar props={$propsStream.leftSidebarProps} />
       <MainArea props={$propsStream.mainAreaProps} />
     </div>
@@ -71,7 +71,7 @@
   }
 
   // ツールバーとその他の領域を縦に並べるためのレイアウト
-  .toolbar-and-sidebar-layout {
+  .root_toolbar-and-sidebar-layout {
     // スクロールされてもツールバーを常に画面上部に表示し続けるための設定
     height: 100%;
 
@@ -80,7 +80,7 @@
   }
 
   // 左サイドバーとメインエリアを横に並べるレイアウト
-  .sidebar-layout {
+  .root_sidebar-layout {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
   }
