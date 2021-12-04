@@ -18,43 +18,24 @@ import { dump } from 'src/Utility/Debug/logger'
  */
 export async function syncWithDataFolder() {
   try {
-    if (External.instance.dataFolder === undefined) {
+    const hadNotOpenedDataFolder = External.instance.dataFolder === undefined
+    if (hadNotOpenedDataFolder) {
       const folderHandle = await pickDataFolder()
       External.instance.dataFolder = new DataFolder(folderHandle)
-      const unknownUpdatedInstanceId =
-        await External.instance.dataFolder.findUnknownUpdatedInstance()
-      if (unknownUpdatedInstanceId === undefined) {
-        // もし自身の知らない他インスタンスの更新がなければ
+    }
+    assertNonUndefined(External.instance.dataFolder)
 
+    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
+
+    if (unknownUpdatedInstanceId === undefined) {
+      // もし自身の知らない他インスタンスの更新がなければ
+
+      if (hadNotOpenedDataFolder) {
         // メモリ上のStateを自インスタンスフォルダに書き込む
         const allChunks = Chunk.createAllChunks(Internal.instance.state)
         await External.instance.dataFolder.writeChunks(allChunks)
       } else {
-        // もし自身の知らない他インスタンスの更新があれば
-
-        switch (await External.instance.dataFolder.checkInstanceFolder(unknownUpdatedInstanceId)) {
-          case 'success':
-            await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
-
-            const chunks = await External.instance.dataFolder.readAllChunks()
-            const state = Chunk.inflateStateFromChunks(chunks)
-            await restart(state, true)
-            break
-          case 'incomplete':
-            alert(
-              '他デバイスのデータに整合性がないため読み込めません。\nオンラインストレージ等でデータフォルダを共有している場合は、同期が未完了だと考えられます。'
-            )
-            break
-          case 'unknown version':
-            alert('拡張機能をバージョンアップしてください')
-            break
-        }
-      }
-    } else {
-      const unknownUpdatedInstanceId =
-        await External.instance.dataFolder.findUnknownUpdatedInstance()
-      if (unknownUpdatedInstanceId === undefined) {
-        // もし自身の知らない他インスタンスの更新がなければ（つまり最も単純な自インスタンスフォルダ上書き更新のケース）
+        // 自インスタンスフォルダ上書き更新のケース
 
         // 変化のあったチャンクをデータベースに書き込む
         const chunks = []
@@ -65,26 +46,26 @@ export async function syncWithDataFolder() {
         External.instance.pendingMutatedChunkIds.clear()
         await External.instance.dataFolder.writeChunks(List(chunks))
         Rerenderer.instance.rerender()
-      } else {
-        // もし自身の知らない他インスタンスの更新があれば
+      }
+    } else {
+      // もし自身の知らない他インスタンスの更新があれば
 
-        switch (await External.instance.dataFolder.checkInstanceFolder(unknownUpdatedInstanceId)) {
-          case 'success':
-            await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
+      switch (await External.instance.dataFolder.checkInstanceFolder(unknownUpdatedInstanceId)) {
+        case 'success':
+          await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
-            const chunks = await External.instance.dataFolder.readAllChunks()
-            const state = Chunk.inflateStateFromChunks(chunks)
-            await restart(state)
-            break
-          case 'incomplete':
-            alert(
-              '他デバイスのデータに整合性がないため読み込めません。\nオンラインストレージ等でデータフォルダを共有している場合は、同期が未完了だと考えられます。'
-            )
-            break
-          case 'unknown version':
-            alert('拡張機能をバージョンアップしてください')
-            break
-        }
+          const chunks = await External.instance.dataFolder.readAllChunks()
+          const state = Chunk.inflateStateFromChunks(chunks)
+          await restart(state, hadNotOpenedDataFolder)
+          break
+        case 'incomplete':
+          alert(
+            '他デバイスのデータに整合性がないため読み込めません。\nオンラインストレージ等でデータフォルダを共有している場合は、同期が未完了だと考えられます。'
+          )
+          break
+        case 'unknown version':
+          alert('拡張機能をバージョンアップしてください')
+          break
       }
     }
   } catch (e) {
