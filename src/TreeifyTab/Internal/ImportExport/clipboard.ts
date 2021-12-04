@@ -108,7 +108,29 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
-        // TODO: 項目移動を実装する
+        // TODO: selectedItemPathsは削除や移動された項目を指している可能性がある
+        for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+          const selectedItemId = ItemPath.getItemId(selectedItemPath)
+          const parentItemId = ItemPath.getParentItemId(selectedItemPath)
+          if (parentItemId !== undefined) {
+            const edge = CurrentState.removeItemGraphEdge(parentItemId, selectedItemId)
+            CurrentState.insertBelowItem(targetItemPath, selectedItemId, edge)
+
+            CurrentState.updateItemTimestamp(selectedItemId)
+          }
+        }
+
+        // ターゲットを更新する
+        const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
+        assertNonUndefined(belowItemPath)
+        CurrentState.setTargetItemPath(belowItemPath)
+
+        // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
+        if (CurrentState.isEmptyTextItem(targetItemId)) {
+          CurrentState.deleteItem(targetItemId)
+        }
+
+        Rerenderer.instance.rerender()
         return
       }
     } else {
