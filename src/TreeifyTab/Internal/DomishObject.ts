@@ -144,7 +144,10 @@ export namespace DomishObject {
       return { type: 'br' }
     }
     if (node.nodeType === Node.TEXT_NODE) {
-      return { type: 'text', textContent: node.textContent ?? '' }
+      // 通常の半角スペースをいわゆる「&nbsp;」に変換してからテキストノード化する
+      const nbsp = String.fromCharCode(160)
+      const textContent = node.textContent ?? ''
+      return { type: 'text', textContent: textContent.replaceAll(' ', nbsp) }
     }
     if (node instanceof HTMLElement) {
       switch (node.tagName.toLowerCase()) {
