@@ -78,9 +78,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   // 対応するタブがあれば閉じる
   const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
   if (tabId !== undefined) {
-    External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
-    // TODO: タブを強制的に閉じる
-    chrome.tabs.remove(tabId)
+    External.instance.forceCloseTab(tabId)
   }
 
   // 項目タイプごとのデータを削除する

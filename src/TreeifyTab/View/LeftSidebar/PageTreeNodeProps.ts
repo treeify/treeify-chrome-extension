@@ -83,8 +83,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
                 External.instance.tabIdsToBeClosedForUnloading.add(tabId)
 
                 // 対応するタブを閉じる
-                // TODO: タブを強制的に閉じる
-                chrome.tabs.remove(tabId)
+                External.instance.forceCloseTab(tabId)
               }
             }
             unmountPage(itemId, activePageId)
