@@ -125,9 +125,8 @@ async function migrateTabs(newState: State) {
     assertNonUndefined(tabId)
     const newItemId = globalItemIdMap.get(Internal.instance.state.items[itemId].globalItemId)
     if (newItemId === undefined) {
-      // newStateで対応項目が削除されていた場合
-      // TODO: タブを強制的に閉じる
-      await chrome.tabs.remove(tabId)
+      // newStateで対応項目が削除されていた場合、タブを強制的に閉じる
+      await External.instance.forceCloseTab(tabId)
     } else {
       const newUrl = newState.webPageItems[newItemId].url
       if (newUrl !== Internal.instance.state.webPageItems[itemId].url) {

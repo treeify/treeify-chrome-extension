@@ -128,6 +128,15 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
     if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
 
+    const url = tab.url ?? ''
+    if (External.instance.forceClosingTabUrls.has(url)) {
+      if (!changeInfo.discarded) return
+
+      External.instance.forceClosingTabUrls.remove(url)
+      chrome.tabs.remove(tabId)
+      return
+    }
+
     if (changeInfo.discarded) {
       // discardされたらタブIDが変わるので項目IDとの対応関係を修正する
       // TODO: ↓は手抜き実装。最適化の余地あり
@@ -157,7 +166,10 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   External.instance.tabItemCorrespondence.unregisterTab(tabId)
 
   const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-  // 項目削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる
+  // 項目削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる。
+  // 次の2パターンが存在する。
+  // (1) タブを強制的に閉じる処理でdiscardによってタブIDが変わったままでremoveされた場合
+  // (2) 項目に対応するタブがdiscard済みのため直接閉じた場合（事前にuntieTabAndItemByTabIdが呼ばれている）
   if (itemId === undefined) return
 
   External.instance.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
