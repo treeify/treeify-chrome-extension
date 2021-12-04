@@ -156,16 +156,25 @@
   .main-area-node_content-area {
     height: 100%;
     background-color: var(--footprint-color);
+    @media print {
+      background-color: transparent;
+    }
 
     // マウスホバー時のコンテンツ領域
     &:hover {
       // マウスホバー項目の強調表示
       background: var(--main-area-mouse-hover-item-background-color);
+      @media print {
+        background-color: transparent;
+      }
     }
 
     // 単一選択された項目のコンテンツ領域
     &.single-selected {
       background: var(--main-area-focused-item-background-color);
+      @media print {
+        background-color: transparent;
+      }
     }
   }
 
