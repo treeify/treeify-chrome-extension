@@ -40,7 +40,7 @@
 
       // 改行を含むテキストをそのままdocument.execCommand('insertText', false, text)としても
       // うまくいかないので改行をbr要素にする
-      const lines = text.replace(/\r?\n$/, '').split(/\r?\n/)
+      const lines = text.split(/\r?\n/)
       for (let i = 0; i < lines.length; i++) {
         document.execCommand('insertText', false, lines[i])
         if (i !== lines.length - 1) {

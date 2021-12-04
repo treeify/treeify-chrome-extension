@@ -11,7 +11,7 @@
     <pre
       class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
   {:else}
-    <pre class="code-block-item-content_code">{@html props.code}</pre>
+    <pre class="code-block-item-content_code">{@html props.code.replace(/\r?\n$/, '')}</pre>
   {/if}
   {#if props.caption !== ''}
     <div class="code-block-item-content_caption">{props.caption}</div>
