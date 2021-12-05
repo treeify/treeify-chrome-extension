@@ -189,39 +189,12 @@
   // 隠れているタブ数
   .main-area-node_hidden-tabs-count {
     @include common.circle(var(--main-area-calculated-line-height));
+    @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
 
-    position: relative;
     text-align: center;
-
-    cursor: pointer;
 
     // lch(40.0%, 0.0, 0.0)相当
     color: #5e5e5e;
-
-    &:hover {
-      background: var(--main-area-node-button-background-hover-color);
-    }
-
-    // 疑似リップルエフェクトの終了状態
-    &::after {
-      content: '';
-      @include common.circle(100%);
-      @include common.absolute-center;
-
-      opacity: 0;
-      transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      // lch(50.0%, 0.0, 0.0)相当
-      background: #777777;
-    }
-
-    // 疑似リップルエフェクトの開始状態
-    &:active::after {
-      width: 0;
-      height: 0;
-      opacity: 0.5;
-      transition: opacity 0s, width 0s, height 0s;
-    }
   }
 
   // 各項目の削除ボタン

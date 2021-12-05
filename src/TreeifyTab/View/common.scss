@@ -21,3 +21,37 @@
   -webkit-mask: $url no-repeat center;
   -webkit-mask-size: contain;
 }
+
+@mixin pseudo-ripple-effect($hover-color) {
+  cursor: pointer;
+  
+  position: relative;
+  
+  &:hover {
+    background: $hover-color;
+  }
+  
+  // 疑似リップルエフェクトの終了状態
+  &::after {
+    content: '';
+    
+    @include circle(100%);
+    @include absolute-center;
+    
+    opacity: 0;
+    transition: opacity 0.5s, width 0.5s, height 0.5s;
+    
+    // lch(50.0%, 0.0, 0.0)相当
+    background: #777777;
+    
+    pointer-events: none;
+  }
+  
+  // 疑似リップルエフェクトの開始状態
+  &:active::after {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+    transition: opacity 0s, width 0s, height 0s;
+  }
+}
