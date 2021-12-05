@@ -155,6 +155,34 @@ export function enterKeyDefault() {
 /**
  * 項目を削除するコマンド。
  * ターゲット項目がアクティブページの場合は何もしない。
+ */
+export function deleteItem() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+
+  // アクティブページを削除しようとしている場合、何もしない
+  if (!ItemPath.hasParent(selectedItemPaths.first())) return
+
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  assertNonUndefined(aboveItemPath)
+  CurrentState.setTargetItemPath(aboveItemPath)
+
+  // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
+  const aboveItemId = ItemPath.getItemId(aboveItemPath)
+  if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
+    const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+    const characterCount = DomishObject.countCharacters(domishObjects)
+    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+  }
+
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.deleteItem(selectedItemId)
+  }
+}
+
+/**
+ * 項目を削除するコマンド。
+ * ターゲット項目がアクティブページの場合は何もしない。
  * トランスクルードされた項目の場合はエッジのみ削除する。
  */
 export function removeItem() {
