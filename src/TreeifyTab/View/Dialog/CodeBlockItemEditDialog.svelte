@@ -1,6 +1,7 @@
 <script lang="ts">
+  import { List, Set } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
-  import { detectLanguage } from 'src/TreeifyTab/highlightJs'
+  import { autoDetectionLanguages, detectLanguage } from 'src/TreeifyTab/highlightJs'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { removeRedundantIndent } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -20,7 +21,21 @@
     // コードを更新
     CurrentState.setCodeBlockItemCode(targetItemId, code)
     // 言語を自動検出
-    CurrentState.setCodeBlockItemLanguage(targetItemId, detectLanguage(code))
+    const preferredLanguages = Internal.instance.state.preferredLanguages
+    const preferredLanguageNames = Object.keys(preferredLanguages)
+    const preferredResults = preferredLanguageNames.map((language) => {
+      const score = detectLanguage(code, Set.of(language)).score + preferredLanguages[language]
+      return { language, score }
+    })
+    const originalResult = detectLanguage(
+      code,
+      autoDetectionLanguages.subtract(preferredLanguageNames)
+    )
+    const language = List(preferredResults)
+      .push(originalResult)
+      .maxBy(({ score }) => score)?.language
+    CurrentState.setCodeBlockItemLanguage(targetItemId, language ?? '')
+
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(targetItemId)
 

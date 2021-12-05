@@ -5,6 +5,7 @@
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
@@ -14,8 +15,19 @@
   let languageValue = ''
 
   function onClickFinishButton() {
-    CurrentState.setCodeBlockItemLanguage(itemId, languageValue)
+    // 言語自動検出の精度アップのためスコア補正値を計算・保存
+    const preferredLanguages = Internal.instance.state.preferredLanguages
+    const amount = 1
+    Internal.instance.mutate(
+      (preferredLanguages[languageValue] ?? 0) + amount,
+      PropertyPath.of('preferredLanguages', languageValue)
+    )
+    Internal.instance.mutate(
+      (preferredLanguages[codeBlockItem.language] ?? 0) - amount,
+      PropertyPath.of('preferredLanguages', codeBlockItem.language)
+    )
 
+    CurrentState.setCodeBlockItemLanguage(itemId, languageValue)
     CurrentState.updateItemTimestamp(itemId)
 
     // ダイアログを閉じる

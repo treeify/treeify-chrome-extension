@@ -211,6 +211,7 @@ export class Internal {
         '0110ArrowDown': List.of('selectToEndOfList'),
       },
       customCss: '',
+      preferredLanguages: {},
       exportSettings: {
         selectedFormat: ExportFormat.PLAIN_TEXT,
         options: {
