@@ -79,35 +79,11 @@
   // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon-area {
     @include common.square(var(--main-area-favicon-size));
-
-    position: relative;
-
-    // クリックして操作できることを示す
-    cursor: pointer;
+    @include common.pseudo-ripple-effect(transparent);
 
     > * {
       @include common.square(var(--main-area-favicon-size));
       @include common.absolute-center;
-    }
-
-    // 疑似リップルエフェクトの終了状態
-    &::after {
-      content: '';
-      @include common.circle(100%);
-
-      opacity: 0;
-      transition: opacity 0.5s, width 0.5s, height 0.5s;
-
-      // lch(50.0%, 0.0, 0.0)相当
-      background: #777777;
-    }
-
-    // 疑似リップルエフェクトの開始状態
-    &:active::after {
-      width: 0;
-      height: 0;
-      opacity: 0.5;
-      transition: opacity 0s, width 0s, height 0s;
     }
   }
 

@@ -187,12 +187,12 @@
                     {/each}
                   </select>
                   <div
-                    class="delete-button icon-button"
+                    class="delete-button"
                     tabindex="-1"
                     on:click={() => onClickDeleteButton(index, inputId)}
                   />
                   <div
-                    class="add-command-button icon-button"
+                    class="add-command-button"
                     tabindex="-1"
                     on:click={() => onClickAddCommandButton(index, inputId)}
                   />
@@ -275,7 +275,9 @@
   }
 
   .delete-button {
-    @include common.square(var(--key-binding-dialog-command-button-size));
+    @include common.circle(var(--key-binding-dialog-command-button-size));
+    // lch(90.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#e2e2e2);
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -296,7 +298,9 @@
   }
 
   .add-command-button {
-    @include common.square(var(--key-binding-dialog-command-button-size));
+    @include common.circle(var(--key-binding-dialog-command-button-size));
+    // lch(90.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#e2e2e2);
 
     // マウスホバー時にのみ表示
     visibility: hidden;
