@@ -35,6 +35,14 @@ function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultI
     itemPath,
     children: List(children),
     onClick(event: MouseEvent) {
+      // 横スクロールバーをクリックした場合は何もしないようにする
+      if (event.target instanceof HTMLElement) {
+        const rect = event.target.getBoundingClientRect()
+        if (event.target.offsetHeight - event.target.clientHeight > rect.bottom - event.clientY) {
+          return
+        }
+      }
+
       const inputId = InputId.fromMouseEvent(event)
       if (inputId === '0000MouseButton0') {
         event.preventDefault()
