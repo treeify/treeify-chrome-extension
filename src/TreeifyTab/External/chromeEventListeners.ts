@@ -95,6 +95,10 @@ export function onCreated(tab: Tab) {
         }
       }
     }
+
+    // もしUndoされるとタブと項目の対応関係が壊れるのでUndoさせないようにする
+    // TODO: Undoスタックのサポート後はUndoスタックをクリアするよう修正する
+    Internal.instance.saveCurrentStateToUndoStack()
   } else {
     // 既存のウェブページ項目に対応するタブが開かれた時
 
