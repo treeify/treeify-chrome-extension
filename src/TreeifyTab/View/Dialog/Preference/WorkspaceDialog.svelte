@@ -66,7 +66,7 @@
           on:input={(event) => onInput(event, workspace)}
         />
         <div
-          class="workspace-dialog_delete-button icon-button"
+          class="workspace-dialog_delete-button"
           on:click={() => onClickDeleteButton(workspace)}
         />
       </div>
@@ -108,7 +108,9 @@
   }
 
   .workspace-dialog_delete-button {
-    @include common.square(1.5em);
+    @include common.circle(1.5em);
+    // lch(90.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#e2e2e2);
 
     &::before {
       content: '';

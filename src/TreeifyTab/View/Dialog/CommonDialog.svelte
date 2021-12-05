@@ -51,7 +51,7 @@
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>
       {#if showCloseButton}
-        <div class="common-dialog_close-button icon-button" on:mousedown={closeDialog} />
+        <div class="common-dialog_close-button" on:mousedown={closeDialog} />
       {/if}
     </div>
     <div class="common-dialog_content-area">
@@ -115,9 +115,11 @@
   }
 
   .common-dialog_close-button {
-    @include common.square(1.4em);
+    @include common.circle(1.4em);
 
     margin-left: auto;
+
+    position: relative;
 
     &:hover {
       // lch(40.0%, 0.0, 0.0)相当

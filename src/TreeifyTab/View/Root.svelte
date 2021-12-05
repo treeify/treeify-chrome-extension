@@ -89,15 +89,4 @@
     // lch(40.0%, 0.0, 0.0)相当
     @include common.icon(#5e5e5e, url('./default-favicon.svg'));
   }
-
-  /*
-  アイコンのみ（テキストなし）の円形ボタンの共通クラス。
-  マウスホバー時の背景色変化と押下時の疑似リップルエフェクトが実装されている。
-  */
-  .icon-button {
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
-
-    border-radius: 50%;
-  }
 </style>

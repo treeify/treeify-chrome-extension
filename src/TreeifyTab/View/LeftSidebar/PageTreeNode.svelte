@@ -66,10 +66,7 @@
             <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
           </div>
         {:else if !props.isRoot}
-          <div
-            class="page-tree-node_close-button icon-button"
-            on:mousedown={props.onClickCloseButton}
-          />
+          <div class="page-tree-node_close-button" on:mousedown={props.onClickCloseButton} />
         {/if}
       </div>
     </div>
@@ -169,8 +166,9 @@
   }
 
   .page-tree-node_close-button {
-    width: 100%;
-    height: 100%;
+    @include common.circle(100%);
+    // lch(90.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#e2e2e2);
 
     // マウスホバー時にのみ表示
     visibility: hidden;
