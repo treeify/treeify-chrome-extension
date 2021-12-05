@@ -9,7 +9,7 @@
 <div class="code-block-item-content">
   {#if props.language !== ''}
     <pre
-      class="code-block-item-content_code">{@html getHighlightedHtml(props.code, props.language)}</pre>
+      class="code-block-item-content_code">{@html getHighlightedHtml(props.code.replace(/\r?\n$/, ""), props.language)}</pre>
   {:else}
     <pre class="code-block-item-content_code">{@html props.code.replace(/\r?\n$/, '')}</pre>
   {/if}
