@@ -1,9 +1,7 @@
-import { List } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
-import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -32,19 +30,14 @@ export async function syncWithDataFolder() {
 
       if (hadNotOpenedDataFolder) {
         // メモリ上のStateを自インスタンスフォルダに書き込む
-        const allChunks = Chunk.createAllChunks(Internal.instance.state)
-        await External.instance.dataFolder.writeChunks(allChunks)
+        await External.instance.dataFolder.writeState(Internal.instance.state)
+        External.instance.alreadyWrittenToDataFolder = true
+        Rerenderer.instance.rerender()
       } else {
         // 自インスタンスフォルダ上書き更新のケース
 
-        // 変化のあったチャンクをデータベースに書き込む
-        const chunks = []
-        for (const chunkId of External.instance.pendingMutatedChunkIds) {
-          const chunk = Chunk.create(Internal.instance.state, chunkId)
-          chunks.push(chunk)
-        }
-        External.instance.pendingMutatedChunkIds.clear()
-        await External.instance.dataFolder.writeChunks(List(chunks))
+        External.instance.alreadyWrittenToDataFolder = true
+        await External.instance.dataFolder.writeState(Internal.instance.state)
         Rerenderer.instance.rerender()
       }
     } else {
@@ -54,9 +47,9 @@ export async function syncWithDataFolder() {
         case 'success':
           await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
 
-          const chunks = await External.instance.dataFolder.readAllChunks()
-          const state = Chunk.inflateStateFromChunks(chunks)
-          await restart(state, hadNotOpenedDataFolder)
+          const instanceFile = await External.instance.dataFolder.readInstanceFile()
+          assertNonUndefined(instanceFile)
+          await restart(instanceFile.state, hadNotOpenedDataFolder)
           break
         case 'incomplete':
           alert(
@@ -86,37 +79,18 @@ export async function syncWithDataFolder() {
 
 /**
  * ユーザーにデータフォルダを選択させ、そのハンドルを返す。
- * ただしユーザーが選択したフォルダをそのまま返すとは限らない。
- * もし選択されたフォルダが空だったり、Instancesフォルダが含まれる（= データフォルダだと推定できる）なら選択されたフォルダを返す。
- * それ以外の場合、新たに「Treeify data」というフォルダを作り、そのハンドルを返す。
- * （Treeify dataフォルダが既に存在する場合、そのフォルダを返す）
+ * ただしユーザーが選択したフォルダにTreeifyとは無関係なファイルなどが入っている場合は「Treeify data」というフォルダを作り、そのハンドルを返す。
+ * Treeify dataフォルダが既に存在する場合、そのフォルダを返す。
  */
 async function pickDataFolder(): Promise<FileSystemDirectoryHandle> {
   const folderHandle = await showDirectoryPicker()
   await folderHandle.requestPermission({ mode: 'readwrite' })
 
-  if (await isEmptyFolder(folderHandle)) {
-    // フォルダが空の場合、それはTreeify用にユーザーが用意したものと判断し、データフォルダとして使う
+  if (await DataFolder.isDataFolder(folderHandle)) {
     return folderHandle
   }
-
-  try {
-    // Instancesフォルダが存在する場合
-    await folderHandle.getDirectoryHandle('Instances')
-    return folderHandle
-  } catch {}
 
   return await folderHandle.getDirectoryHandle('Treeify data', { create: true })
-}
-
-async function isEmptyFolder(folderHandle: FileSystemDirectoryHandle): Promise<boolean> {
-  for await (const key of folderHandle.keys()) {
-    // .DS_Storeファイルや.gitフォルダなどは無視する
-    if (key.startsWith('.')) continue
-
-    return false
-  }
-  return true
 }
 
 /**
