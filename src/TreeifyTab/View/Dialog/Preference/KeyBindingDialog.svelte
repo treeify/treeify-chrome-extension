@@ -80,6 +80,7 @@
       name: '基本操作',
       commandIds: List.of(
         'enterKeyDefault',
+        'deleteItem',
         'removeItem',
         'deleteJustOneItem',
         'moveItemToAbove',
