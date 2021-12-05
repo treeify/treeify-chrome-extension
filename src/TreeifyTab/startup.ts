@@ -150,6 +150,7 @@ function onClickContextMenu(info: OnClickData) {
   const webPageItemId = findCorrespondWebPageItem(info.pageUrl)
   if (webPageItemId === undefined) return
 
+  const targetItemPath = CurrentState.getTargetItemPath()
   const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
 
   if (info.mediaType === 'image' && info.srcUrl !== undefined) {
@@ -160,8 +161,14 @@ function onClickContextMenu(info: OnClickData) {
     // 出典を設定
     CurrentState.setSource(newItemId, { title: tabTitle, url: info.pageUrl })
 
-    CurrentState.insertLastChildItem(webPageItemId, newItemId)
+    CurrentState.insertFirstChildItem(webPageItemId, newItemId)
+    if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
+      const newItemPath = targetItemPath.push(newItemId)
+      CurrentState.setTargetItemPath(newItemPath)
+      CurrentState.moses(newItemPath)
+    }
     Rerenderer.instance.rerender()
+    TreeifyTab.open()
   } else if (info.selectionText !== undefined) {
     // テキスト項目として取り込む
     const newItemId = CurrentState.createTextItem()
@@ -170,8 +177,14 @@ function onClickContextMenu(info: OnClickData) {
     // 出典を設定
     CurrentState.setSource(newItemId, { title: tabTitle, url: info.pageUrl })
 
-    CurrentState.insertLastChildItem(webPageItemId, newItemId)
+    CurrentState.insertFirstChildItem(webPageItemId, newItemId)
+    if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
+      const newItemPath = targetItemPath.push(newItemId)
+      CurrentState.setTargetItemPath(newItemPath)
+      CurrentState.moses(newItemPath)
+    }
     Rerenderer.instance.rerender()
+    TreeifyTab.open()
   }
 }
 
