@@ -499,14 +499,15 @@ function onBackspace(event: KeyboardEvent) {
     return
   }
 
+  const selection = getTextItemSelectionFromDom()
+  if (selection === undefined) return
+
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItem = Internal.instance.state.items[targetItemId]
   if (targetItem.type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
 
-    const selection = getTextItemSelectionFromDom()
-    assertNonUndefined(selection)
     // キャレットが先頭以外にあるならブラウザのデフォルトの挙動に任せる
     if (selection.focusDistance > 0 || selection.anchorDistance > 0) return
 
@@ -605,14 +606,14 @@ function onDelete(event: KeyboardEvent) {
     return
   }
 
+  const selection = getTextItemSelectionFromDom()
+  if (selection === undefined) return
+
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const targetItem = Internal.instance.state.items[targetItemId]
   if (targetItem.type === ItemType.TEXT) {
     // ターゲット項目がテキスト項目の場合
-
-    const selection = getTextItemSelectionFromDom()
-    assertNonUndefined(selection)
 
     const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
