@@ -168,6 +168,7 @@ function onClickContextMenu(info: OnClickData) {
       CurrentState.moses(newItemPath)
     }
     Rerenderer.instance.rerender()
+    TreeifyTab.open()
   } else if (info.selectionText !== undefined) {
     // テキスト項目として取り込む
     const newItemId = CurrentState.createTextItem()
@@ -183,6 +184,7 @@ function onClickContextMenu(info: OnClickData) {
       CurrentState.moses(newItemPath)
     }
     Rerenderer.instance.rerender()
+    TreeifyTab.open()
   }
 }
 
