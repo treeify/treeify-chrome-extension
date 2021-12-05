@@ -9,7 +9,6 @@ export function createDataFolderButtonProps(): DataFolderButtonProps {
   return {
     isAlreadyOpen: External.instance.dataFolder !== undefined,
     isCompleted:
-      External.instance.dataFolder !== undefined &&
-      External.instance.pendingMutatedChunkIds.size === 0,
+      External.instance.dataFolder !== undefined && External.instance.alreadyWrittenToDataFolder,
   }
 }

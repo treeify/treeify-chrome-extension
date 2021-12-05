@@ -1,6 +1,5 @@
 import { List } from 'immutable'
 import { ItemType } from 'src/TreeifyTab/basicType'
-import { External } from 'src/TreeifyTab/External/External'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
@@ -109,10 +108,6 @@ export class Internal {
   /** 現在のStateをUndoスタックに保存する */
   saveCurrentStateToUndoStack() {
     this.undoStack.clear()
-
-    External.instance.prevPendingMutatedChunkIds = new Set<ChunkId>(
-      External.instance.pendingMutatedChunkIds
-    )
   }
 
   undo() {

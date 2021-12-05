@@ -5,7 +5,6 @@ import { ItemId } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { Dialog } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
-import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
@@ -22,10 +21,7 @@ export class External {
 
   /** データフォルダ */
   dataFolder: DataFolder | undefined
-  /** データフォルダに書き込むべきChunkId群 */
-  pendingMutatedChunkIds = new Set<ChunkId>()
-  /** Undo用 */
-  prevPendingMutatedChunkIds: Set<ChunkId> | undefined
+  alreadyWrittenToDataFolder = false
 
   /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
@@ -64,8 +60,7 @@ export class External {
 
   onMutateState(propertyPath: PropertyPath) {
     if (this.dataFolder !== undefined) {
-      // データフォルダへの差分書き込みの対象箇所を伝える
-      this.pendingMutatedChunkIds.add(Chunk.convertToChunkId(propertyPath))
+      this.alreadyWrittenToDataFolder = false
     }
   }
 
