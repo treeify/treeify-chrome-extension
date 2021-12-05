@@ -115,10 +115,19 @@ export function getHighlightedHtml(code: string, language: string): string {
   }
 }
 
-/** 与えられたコードの言語を自動検出して言語名を返す */
-export function detectLanguage(code: string): string {
-  const autoHighlightResult = hljs.highlightAuto(code, autoDetectionLanguages.toArray())
-  return autoHighlightResult.language ?? ''
+/**
+ * 与えられたコードの言語を自動検出して最有力な言語名とスコアを返す。
+ * 候補が存在しない場合は{ language: '', score: 0 }を返す。
+ */
+export function detectLanguage(
+  code: string,
+  languages: Set<string> = autoDetectionLanguages
+): { language: string; score: number } {
+  const { language, relevance } = hljs.highlightAuto(code, languages.toArray())
+  return {
+    language: language ?? '',
+    score: relevance,
+  }
 }
 
 /**

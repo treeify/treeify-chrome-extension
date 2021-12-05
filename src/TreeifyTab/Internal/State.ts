@@ -30,6 +30,7 @@ export type State = {
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
   mainAreaKeyBindings: { [K in InputId]: List<CommandId> }
   customCss: string
+  preferredLanguages: { [K in string]: number }
   exportSettings: {
     selectedFormat: ExportFormat
     options: {
