@@ -1,5 +1,5 @@
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
-import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
+import { CURRENT_SCHEMA_VERSION, DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -43,22 +43,16 @@ export async function syncWithDataFolder() {
     } else {
       // もし自身の知らない他インスタンスの更新があれば
 
-      switch (await External.instance.dataFolder.checkInstanceFolder(unknownUpdatedInstanceId)) {
-        case 'success':
-          await External.instance.dataFolder.copyFrom(unknownUpdatedInstanceId)
+      const instanceFile = await External.instance.dataFolder.readInstanceFile(
+        unknownUpdatedInstanceId
+      )
+      assertNonUndefined(instanceFile)
 
-          const instanceFile = await External.instance.dataFolder.readInstanceFile()
-          assertNonUndefined(instanceFile)
-          await restart(instanceFile.state, hadNotOpenedDataFolder)
-          break
-        case 'incomplete':
-          alert(
-            '他デバイスのデータに整合性がないため読み込めません。\nオンラインストレージ等でデータフォルダを共有している場合は、同期が未完了だと考えられます。'
-          )
-          break
-        case 'unknown version':
-          alert('拡張機能をバージョンアップしてください')
-          break
+      if (instanceFile.schemaVersion > CURRENT_SCHEMA_VERSION) {
+        alert('拡張機能をバージョンアップしてください')
+      } else {
+        await External.instance.dataFolder.copyFrom(instanceFile)
+        await restart(instanceFile.state, hadNotOpenedDataFolder)
       }
     }
   } catch (e) {

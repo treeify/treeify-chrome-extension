@@ -48,12 +48,9 @@ export class DataFolder {
 
   /**
    * 他インスタンスフォルダのデータを自インスタンスフォルダに取り込む。
-   * 単純に全ファイルをコピーするだけでなく、メタデータファイルを自インスタンス視点で更新する。
+   * 単純にファイルをコピーするのとは微妙に異なり、メタデータを自インスタンス視点で更新する。
    */
-  async copyFrom(instanceId: InstanceId) {
-    const instanceFile = await this.readInstanceFile(instanceId)
-    assertNonUndefined(instanceFile)
-
+  async copyFrom(instanceFile: InstanceFile) {
     await this.writeInstanceFile({
       schemaVersion: CURRENT_SCHEMA_VERSION,
       lastModified: Timestamp.now(),
@@ -126,25 +123,6 @@ export class DataFolder {
     })
 
     return unknownUpdatedInstanceIds.maxBy(({ lastModified }) => lastModified)?.instanceId
-  }
-
-  /**
-   * 指定されたインスタンスフォルダを読み込んで問題ないかどうかを検証する。
-   * 戻り値の意味は次の通り。
-   * success: 読み込んで問題ない
-   * incomplete: metadata.json内のhashesと各ファイルの実際のハッシュ値が食い違っている
-   * unknown version: データのスキーマバージョンが高いので正しい読み込み方が分からない
-   * @deprecated
-   */
-  async checkInstanceFolder(
-    instanceId: InstanceId
-  ): Promise<'success' | 'incomplete' | 'unknown version'> {
-    const instanceFile = await this.readInstanceFile(instanceId)
-    assertNonUndefined(instanceFile)
-
-    if (instanceFile.schemaVersion > CURRENT_SCHEMA_VERSION) return 'unknown version'
-
-    return 'success'
   }
 
   async readInstanceFile(
