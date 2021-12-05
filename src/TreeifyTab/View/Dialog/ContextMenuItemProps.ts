@@ -19,12 +19,23 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const item = Internal.instance.state.items[targetItemId]
+  const hasParent = ItemPath.hasParent(targetItemPath)
+  const includeTranscludedItem = selectedItemIds.some(
+    (itemId) => CurrentState.countParents(itemId) >= 2
+  )
 
   const result: ContextMenuItemProps[] = []
 
-  if (ItemPath.hasParent(targetItemPath)) {
+  if (hasParent) {
     result.push({
       title: '削除',
+      onClick: () => Command.deleteItem(),
+    })
+  }
+
+  if (hasParent && includeTranscludedItem) {
+    result.push({
+      title: '除去（トランスクルード先の項目自体は削除しない）',
       onClick: () => Command.removeItem(),
     })
   }
@@ -48,7 +59,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (CurrentState.countParents(targetItemId) >= 2 && isSingleSelect) {
+  if (includeTranscludedItem && isSingleSelect) {
     result.push({
       title: '他のトランスクルード元を表示…',
       onClick: () => Command.showOtherParentsDialog(),
