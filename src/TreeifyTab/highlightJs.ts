@@ -339,14 +339,8 @@ const languageDefinitions = {
   zephir,
 }
 
-const languagesToExcludeFromAutoDetection = Set.of(
-  // TypeScriptのコードに対して誤検出された
-  'qml',
-  // TypeScriptのコードに対して誤検出された
-  'reasonml',
-  // TypeScriptのコードに対して誤検出された
-  'stylus'
-)
+// 誤検出されがちなマイナー言語は自動検出から省く
+const languagesToExcludeFromAutoDetection = Set.of('qml', 'reasonml', 'stylus', 'zephir')
 
 export const autoDetectionLanguages = Set(Object.keys(languageDefinitions)).subtract(
   languagesToExcludeFromAutoDetection
