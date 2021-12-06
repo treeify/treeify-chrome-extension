@@ -1,5 +1,6 @@
 <script lang="ts">
   import { List } from 'immutable'
+  import { External } from 'src/TreeifyTab/External/External'
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { State } from 'src/TreeifyTab/Internal/State'
@@ -20,17 +21,21 @@
     aElement.download = fileName
     aElement.click()
 
+    assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
+    assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
     assert(State.isValid(Internal.instance.state))
   }
 
   function onClickStateValidation() {
+    assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
+    assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
     assert(State.isValid(Internal.instance.state))
   }
 </script>
 
 <div class="toolbar">
   <button on:click={onClickOpmlExport}>OPMLエクスポート</button>
-  <button on:click={onClickStateValidation}>Stateバリデーション</button>
+  <button on:click={onClickStateValidation}>バリデーション</button>
   <DataFolderButton props={props.dataFolderButtonProps} />
   <ItemAdditionButton />
   <PreferenceButton />
