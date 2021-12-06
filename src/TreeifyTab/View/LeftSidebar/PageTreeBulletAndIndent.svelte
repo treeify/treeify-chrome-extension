@@ -7,7 +7,10 @@
   export let props: PageTreeBulletAndIndentProps
 </script>
 
-<div class="page-tree-bullet-and-indent_root" on:mousedown={props.onClick}>
+<div
+  class={props.cssClasses.unshift('page-tree-bullet-and-indent_root').join(' ')}
+  on:mousedown={props.onClick}
+>
   {#if props.bulletState === PageTreeBulletState.UNFOLDED}
     <div class="page-tree-bullet-and-indent_indent-area">
       <div class="page-tree-bullet-and-indent_indent-guide" />
@@ -103,6 +106,14 @@
       .page-tree-bullet-and-indent_root:hover & {
         border-color: var(--page-tree-bullet-hover-color) transparent transparent transparent;
       }
+
+      .highlighted & {
+        border-color: var(--highlighted-item-bullet-color) transparent transparent transparent;
+      }
+
+      .highlighted.page-tree-bullet-and-indent_root:hover & {
+        border-color: var(--highlighted-item-bullet-hover-color) transparent transparent transparent;
+      }
     }
 
     // 折りたたみ済み状態のバレット
@@ -117,6 +128,14 @@
       .page-tree-bullet-and-indent_root:hover & {
         border-color: transparent transparent transparent var(--page-tree-bullet-hover-color);
       }
+
+      .highlighted & {
+        border-color: transparent transparent transparent var(--highlighted-item-bullet-color);
+      }
+
+      .highlighted.page-tree-bullet-and-indent_root:hover & {
+        border-color: transparent transparent transparent var(--highlighted-item-bullet-hover-color);
+      }
     }
 
     // 子を持たないノードのバレット
@@ -127,6 +146,14 @@
 
       .page-tree-bullet-and-indent_root:hover & {
         background: var(--page-tree-bullet-hover-color);
+      }
+
+      .highlighted & {
+        background-color: var(--highlighted-item-bullet-color);
+      }
+
+      .highlighted.page-tree-bullet-and-indent_root:hover & {
+        background: var(--highlighted-item-bullet-hover-color);
       }
     }
   }
