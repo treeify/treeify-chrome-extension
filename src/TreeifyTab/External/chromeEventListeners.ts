@@ -132,14 +132,7 @@ export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: 
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
     if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
 
-    const url = tab.url ?? ''
-    if (External.instance.forceClosingTabUrls.has(url)) {
-      if (!changeInfo.discarded) return
-
-      External.instance.forceClosingTabUrls.remove(url)
-      chrome.tabs.remove(tabId)
-      return
-    }
+    if (External.instance.forceClosingTabUrls.has(tab.url ?? '')) return
 
     if (changeInfo.discarded) {
       // discardされたらタブIDが変わるので項目IDとの対応関係を修正する
