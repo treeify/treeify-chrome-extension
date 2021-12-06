@@ -179,32 +179,22 @@ export namespace DomishObject {
 
   /** 改行（br要素）を含む文字数を返す */
   export function countCharacters(value: DomishObject | List<DomishObject>): integer {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.map(countCharacters).reduce((a: integer, x) => a + x, 0)
-    } else {
-      const domishObject = value as DomishObject
-      switch (domishObject.type) {
-        case 'b':
-        case 'u':
-        case 'i':
-        case 'strike':
-          return countCharacters(domishObject.children)
-        case 'br':
-          return 1
-        case 'text':
-          return domishObject.textContent.length
-        default:
-          return assertNeverType(domishObject)
-      }
-    }
+    return toPlainText(value).length
   }
 
-  /** プレーンテキストに変換する。改行は維持される。 */
+  /**
+   * プレーンテキストに変換する。改行は維持される。
+   * ただし末尾の無駄な（すなわちHTMLへの描画時に改行として扱われない）br要素は除去するので要注意。
+   */
   export function toPlainText(value: DomishObject | List<DomishObject>): string {
+    const plainText = _toPlainText(value)
+    return plainText.replace(/\r?\n$/, '')
+  }
+
+  function _toPlainText(value: DomishObject | List<DomishObject>): string {
     if (value instanceof List) {
       const domishObjects = value as List<DomishObject>
-      return domishObjects.map(toPlainText).join('')
+      return domishObjects.map(_toPlainText).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
@@ -212,7 +202,7 @@ export namespace DomishObject {
         case 'u':
         case 'i':
         case 'strike':
-          return toPlainText(domishObject.children)
+          return _toPlainText(domishObject.children)
         case 'br':
           return '\n'
         case 'text':
