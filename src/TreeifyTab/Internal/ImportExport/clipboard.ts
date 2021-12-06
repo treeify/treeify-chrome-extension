@@ -92,6 +92,8 @@ export function onPaste(event: ClipboardEvent) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
             const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
             CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+
+            CurrentState.updateItemTimestamp(selectedItemId)
           }
         }
 
