@@ -78,7 +78,7 @@ export async function cleanup() {
   Internal.cleanup()
   External.cleanup()
 
-  const spaRoot = document.querySelector('.spa-root')
+  const spaRoot = document.querySelector('#spa-root')
   assertNonNull(spaRoot)
   spaRoot.innerHTML = ''
 }

@@ -3,7 +3,7 @@
   export let onClickCancelButton = () => {}
 </script>
 
-<div class="finish-and-cancel-buttons">
+<div class="finish-and-cancel-buttons_root">
   <button class="finish-and-cancel-buttons_finish-button" on:click={onClickFinishButton}>
     完了
   </button>

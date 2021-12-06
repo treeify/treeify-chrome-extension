@@ -5,12 +5,12 @@
   export let props: OtherParentsDialogItemProps
 </script>
 
-<div class="other-parents-dialog-item" on:click={props.onClick}>
+<div class="other-parents-dialog-item_root" on:click={props.onClick}>
   <ItemContent props={props.itemContentProps} />
 </div>
 
 <style global lang="scss">
-  .other-parents-dialog-item {
+  .other-parents-dialog-item_root {
     cursor: pointer;
 
     &:hover {

@@ -38,7 +38,7 @@
 </script>
 
 <div
-  class="dropdown-menu-dialog"
+  class="dropdown-menu-dialog_root"
   {style}
   on:mousedown={onClickBackdrop}
   on:keydown={onKeyDown}
@@ -53,7 +53,7 @@
 </div>
 
 <style global lang="scss">
-  .dropdown-menu-dialog {
+  .dropdown-menu-dialog_root {
     position: fixed;
     top: 0;
     left: 0;

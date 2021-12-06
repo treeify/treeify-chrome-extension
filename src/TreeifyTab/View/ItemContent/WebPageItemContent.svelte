@@ -4,7 +4,7 @@
   export let props: WebPageItemContentProps
 </script>
 
-<div class="web-page-item-content">
+<div class="web-page-item-content_root">
   {#if props.faviconUrl.length > 0}
     <img
       class="web-page-item-content_favicon"
@@ -37,7 +37,7 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
-  .web-page-item-content {
+  .web-page-item-content_root {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;

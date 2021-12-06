@@ -33,7 +33,7 @@
   `
 </script>
 
-<div class="page-tree-node" {style}>
+<div class="page-tree-node_root" {style}>
   {#if props.isRoot}
     <div class="grid-empty-cell" />
   {:else}
@@ -101,7 +101,7 @@
     --page-tree-close-button-size: 1.45em;
   }
 
-  .page-tree-node {
+  .page-tree-node_root {
     // バレット&インデント領域とボディ&子リスト領域を横に並べる
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);

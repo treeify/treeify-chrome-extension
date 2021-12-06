@@ -6,7 +6,7 @@
   export let props: TexItemContentProps
 </script>
 
-<div class="tex-item-content">
+<div class="tex-item-content_root">
   <div class="tex-item-content_rendered-tex">
     {@html katex.renderToString(props.code, { throwOnError: false })}
   </div>
@@ -19,8 +19,8 @@
 </div>
 
 <style global lang="scss">
-  .completed .tex-item-content,
-  .completed-children .tex-item-content {
+  .completed .tex-item-content_root,
+  .completed-children .tex-item-content_root {
     filter: opacity(50%);
   }
 

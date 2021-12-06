@@ -67,7 +67,7 @@
 </script>
 
 <div
-  class="web-page-item-title-setting-dialog"
+  class="web-page-item-title-setting-dialog_root"
   {style}
   on:mousedown={onClickBackdrop}
   on:contextmenu={onContextMenu}
@@ -84,7 +84,7 @@
 </div>
 
 <style global lang="scss">
-  .web-page-item-title-setting-dialog {
+  .web-page-item-title-setting-dialog_root {
     position: fixed;
     top: 0;
     left: 0;

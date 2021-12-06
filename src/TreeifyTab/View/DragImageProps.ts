@@ -26,7 +26,7 @@ export function createDragImageProps(): DragImageProps | undefined {
 }
 
 function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemPath): string {
-  const leftSidebar = document.querySelector('.left-sidebar')
+  const leftSidebar = document.querySelector('.left-sidebar_root')
   assertNonNull(leftSidebar)
   if (leftSidebar.getBoundingClientRect().right < event.clientX) {
     // 左サイドバーより右の領域の場合
@@ -48,7 +48,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 
       const rollElement = document
         .getElementById(JSON.stringify(rollDroppedItemPath))
-        ?.querySelector('.main-area-roll')
+        ?.querySelector('.main-area-roll_root')
       assertNonNull(rollElement)
       assertNonUndefined(rollElement)
       const rollRect = rollElement.getBoundingClientRect()
@@ -132,7 +132,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 }
 
 function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
-  const leftSidebar = document.querySelector('.left-sidebar')
+  const leftSidebar = document.querySelector('.left-sidebar_root')
   assertNonNull(leftSidebar)
   if (leftSidebar.getBoundingClientRect().right < event.clientX) {
     // 左サイドバーより右の領域にドロップされた場合

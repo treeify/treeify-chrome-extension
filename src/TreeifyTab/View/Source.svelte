@@ -5,15 +5,15 @@
 </script>
 
 {#if props.title !== '' && props.url !== ''}
-  <cite class="source">
+  <cite class="source_root">
     <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
       {props.title}
     </a>
   </cite>
 {:else if props.title !== '' && props.url === ''}
-  <cite class="source">{props.title}</cite>
+  <cite class="source_root">{props.title}</cite>
 {:else if props.title === '' && props.url !== ''}
-  <cite class="source">
+  <cite class="source_root">
     <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
       {props.url}
     </a>
@@ -21,7 +21,7 @@
 {/if}
 
 <style global lang="scss">
-  .source {
+  .source_root {
     font-size: 50%;
     // lch(60.0%, 0.0, 0.0)相当
     color: #919191;

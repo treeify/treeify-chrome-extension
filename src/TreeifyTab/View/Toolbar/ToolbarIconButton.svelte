@@ -2,7 +2,7 @@
   export let title = ''
 </script>
 
-<div class="toolbar-icon-button" {title} on:click>
+<div class="toolbar-icon-button_root" {title} on:click>
   <slot />
 </div>
 
@@ -15,7 +15,7 @@
   }
 
   // ツールバーのアイコンボタンの共通クラス
-  .toolbar-icon-button {
+  .toolbar-icon-button_root {
     @include common.circle(32px);
     @include common.pseudo-ripple-effect(var(--toolbar-icon-button-hover-background));
   }

@@ -9,10 +9,10 @@
   `
 </script>
 
-<img class="image-item-content" {style} src={props.url} />
+<img class="image-item-content_root" {style} src={props.url} />
 
 <style global lang="scss">
-  .image-item-content {
+  .image-item-content_root {
     width: var(--width);
     max-width: 100%;
     min-width: 30px;

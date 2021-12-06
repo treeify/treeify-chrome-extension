@@ -8,7 +8,7 @@
 </script>
 
 <main
-  class="main-area"
+  class="main-area_root"
   tabindex="0"
   on:keydown={props.onKeyDown}
   on:copy={onCopy}
@@ -37,7 +37,7 @@
     --main-area-max-width: 1200px;
   }
 
-  .main-area {
+  .main-area_root {
     overflow-y: auto;
 
     line-height: var(--main-area-line-height);

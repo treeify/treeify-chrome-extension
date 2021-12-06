@@ -9,7 +9,7 @@
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
-<div class="main-area-text-content">
+<div class="main-area-text-content_root">
   <div
     class="main-area-text-content_content-editable"
     {id}

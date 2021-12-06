@@ -9,7 +9,7 @@
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
-<div class="main-area-web-page-content" {id} tabindex="0" on:focus={props.onFocus}>
+<div class="main-area-web-page-content_root" {id} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-web-page-content_body">
     <div
       class="main-area-web-page-content_favicon-area"
@@ -64,7 +64,7 @@
   }
 
   // ウェブページ項目のコンテンツ領域のルート
-  .main-area-web-page-content {
+  .main-area-web-page-content_root {
     // フォーカス時の枠線を非表示
     outline: none;
   }

@@ -8,7 +8,7 @@
   export let props: SearchResultItemProps
 </script>
 
-<div class="search-result-item">
+<div class="search-result-item_root">
   <div class="search-result-item_roll">
     {#if !props.children.isEmpty()}
       <div class="search-result-item_indent-guide" />
@@ -40,7 +40,7 @@
     --search-result-bullet-size: 0.38em;
   }
 
-  .search-result-item {
+  .search-result-item_root {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
 

@@ -90,7 +90,7 @@ export class Rerenderer {
     // Treeifyタブのタイトルを更新する
     document.title = CurrentState.deriveTreeifyTabTitle()
 
-    const spaRoot = document.querySelector('.spa-root')
+    const spaRoot = document.querySelector('#spa-root')
     assertNonNull(spaRoot)
     if (spaRoot instanceof HTMLElement) {
       new Root({
