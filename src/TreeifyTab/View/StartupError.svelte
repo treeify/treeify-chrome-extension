@@ -1,7 +1,7 @@
-<div class="startup-error">Treeifyは多重起動をサポートしていません。</div>
+<div class="startup-error_root">Treeifyは多重起動をサポートしていません。</div>
 
 <style global lang="scss">
-  .startup-error {
+  .startup-error_root {
     margin-top: 20vh;
     text-align: center;
 

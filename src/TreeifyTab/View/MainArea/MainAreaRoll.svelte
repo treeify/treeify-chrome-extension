@@ -11,7 +11,12 @@
   `
 </script>
 
-<div class="main-area-roll" {style} on:click={props.onClick} on:contextmenu={props.onContextMenu}>
+<div
+  class="main-area-roll_root"
+  {style}
+  on:click={props.onClick}
+  on:contextmenu={props.onContextMenu}
+>
   {#if props.bulletState === MainAreaBulletState.UNFOLDED}
     <div class="main-area-roll_indent-area">
       <div class="main-area-roll_indent-guide" />
@@ -73,7 +78,7 @@
       background: var(--transcluded-item-bullet-color);
     }
 
-    .main-area-roll:hover .main-area-roll_inner-circle {
+    .main-area-roll_root:hover .main-area-roll_inner-circle {
       background: var(--transcluded-item-bullet-hover-color);
     }
 
@@ -81,7 +86,7 @@
       background: var(--transcluded-item-bullet-color);
     }
 
-    .main-area-roll:hover .main-area-roll_page-icon {
+    .main-area-roll_root:hover .main-area-roll_page-icon {
       background: var(--transcluded-item-bullet-hover-color);
     }
   }
@@ -92,7 +97,7 @@
       background: var(--highlighted-item-bullet-color);
     }
 
-    .main-area-roll:hover .main-area-roll_inner-circle {
+    .main-area-roll_root:hover .main-area-roll_inner-circle {
       background: var(--highlighted-item-bullet-hover-color);
     }
 
@@ -100,7 +105,7 @@
       background: var(--highlighted-item-bullet-color);
     }
 
-    .main-area-roll:hover .main-area-roll_page-icon {
+    .main-area-roll_root:hover .main-area-roll_page-icon {
       background: var(--highlighted-item-bullet-hover-color);
     }
   }
@@ -114,7 +119,7 @@
       );
     }
 
-    .main-area-roll:hover .main-area-roll_inner-circle {
+    .main-area-roll_root:hover .main-area-roll_inner-circle {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-hover-color) 50%,
@@ -130,7 +135,7 @@
       );
     }
 
-    .main-area-roll:hover .main-area-roll_page-icon {
+    .main-area-roll_root:hover .main-area-roll_page-icon {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-hover-color) 50%,
@@ -140,7 +145,7 @@
   }
 
   // メインエリアのバレットとインデントのルート要素
-  .main-area-roll {
+  .main-area-roll_root {
     width: var(--main-area-calculated-line-height);
     height: 100%;
     // インデントガイドをバレットの裏まで描画するための設定
@@ -163,7 +168,7 @@
 
     background: var(--main-area-bullet-outer-circle-color);
 
-    .main-area-roll:hover & {
+    .main-area-roll_root:hover & {
       background: var(--main-area-bullet-outer-circle-hover-color);
     }
   }
@@ -175,7 +180,7 @@
 
     background: var(--main-area-bullet-inner-circle-color);
 
-    .main-area-roll:hover & {
+    .main-area-roll_root:hover & {
       background: var(--main-area-bullet-inner-circle-hover-color);
     }
   }
@@ -186,7 +191,7 @@
     @include common.absolute-center;
     @include common.icon(var(--main-area-bullet-page-icon-color), url('page-icon.svg'));
 
-    .main-area-roll:hover & {
+    .main-area-roll_root:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);
     }
   }
@@ -208,7 +213,7 @@
     margin: 0 auto;
 
     // バレットとインデントの領域のホバー時のインデントガイド
-    .main-area-roll:hover & {
+    .main-area-roll_root:hover & {
       background: var(--main-area-indent-guide-hover-color);
     }
   }

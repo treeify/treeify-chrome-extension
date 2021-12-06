@@ -38,7 +38,7 @@
 </script>
 
 <div
-  class="main-area-node"
+  class="main-area-node_root"
   class:multi-selected={props.selected === 'multi'}
   id={JSON.stringify(props.itemPath)}
   {style}
@@ -128,7 +128,7 @@
     --main-area-font-size-inheritance-rate: 100%;
   }
 
-  .main-area-node {
+  .main-area-node_root {
     // バレット&インデント領域とボディ&子リスト領域を横に並べる
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
@@ -236,7 +236,7 @@
   // 複数選択された項目の背景色設定。
   // 他の背景色設定（足跡やマウスホバーなど）を上書きするために、いくつものセレクターに対して設定する必要がある。
   // CSSの優先順位のためにファイルの下の方で定義する。
-  .multi-selected.main-area-node,
+  .multi-selected.main-area-node_root,
   .multi-selected .main-area-node_content-area,
   .multi-selected .main-area-node_body-area {
     background: var(--main-area-selected-item-background-color);

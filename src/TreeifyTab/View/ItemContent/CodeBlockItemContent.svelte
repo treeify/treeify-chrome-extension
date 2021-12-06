@@ -6,7 +6,7 @@
   export let props: CodeBlockItemContentProps
 </script>
 
-<div class="code-block-item-content">
+<div class="code-block-item-content_root">
   {#if props.language !== ''}
     <pre
       class="code-block-item-content_code">{@html getHighlightedHtml(props.code.replace(/\r?\n$/, ""), props.language)}</pre>
@@ -22,7 +22,7 @@
 </div>
 
 <style global lang="scss">
-  .code-block-item-content {
+  .code-block-item-content_root {
     overflow-x: auto;
 
     // 完了状態のコードブロック項目

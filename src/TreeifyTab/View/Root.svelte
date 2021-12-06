@@ -15,7 +15,7 @@
   })
 </script>
 
-<div class="root" data-workspace-id={$propsStream.currentWorkspaceId} use:dragStateResetter>
+<div class="root_root" data-workspace-id={$propsStream.currentWorkspaceId} use:dragStateResetter>
   <!--
   カスタムCSSを埋め込む。
   Svelteは動的にstyle要素をhead要素の子リスト末尾に追加するので、尋常な方法ではCSSの優先度で負けてしまう。
@@ -64,7 +64,7 @@
     height: 100%;
   }
 
-  .root {
+  .root_root {
     height: 100%;
     // ダイアログなどを他の表示物に重ねて表示するための設定
     position: relative;

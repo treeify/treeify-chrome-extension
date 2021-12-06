@@ -6,7 +6,7 @@
   export let props: OtherParentsDialogPageProps
 </script>
 
-<div class="other-parents-dialog-page">
+<div class="other-parents-dialog-page_root">
   <div class="other-parents-dialog-page_page">
     <div class="other-parents-dialog-page_page-icon" />
     <ItemContent props={props.pageContentProps} />

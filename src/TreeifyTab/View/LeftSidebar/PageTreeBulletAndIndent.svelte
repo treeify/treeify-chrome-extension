@@ -7,7 +7,7 @@
   export let props: PageTreeBulletAndIndentProps
 </script>
 
-<div class="page-tree-bullet-and-indent" on:mousedown={props.onClick}>
+<div class="page-tree-bullet-and-indent_root" on:mousedown={props.onClick}>
   {#if props.bulletState === PageTreeBulletState.UNFOLDED}
     <div class="page-tree-bullet-and-indent_indent-area">
       <div class="page-tree-bullet-and-indent_indent-guide" />
@@ -49,7 +49,7 @@
     --page-tree-bullet-hover-color: #5e5e5e;
   }
 
-  .page-tree-bullet-and-indent {
+  .page-tree-bullet-and-indent_root {
     // インデント領域の位置指定のため
     position: relative;
 
@@ -76,7 +76,7 @@
     margin: 0 auto;
 
     // ホバー時のインデントガイド
-    .page-tree-bullet-and-indent:hover & {
+    .page-tree-bullet-and-indent_root:hover & {
       background: var(--page-tree-indent-guide-hover-color);
     }
   }
@@ -100,7 +100,7 @@
         calc(var(--page-tree-bullet-unfolded-width) / 2);
       border-color: var(--page-tree-bullet-color) transparent transparent transparent;
 
-      .page-tree-bullet-and-indent:hover & {
+      .page-tree-bullet-and-indent_root:hover & {
         border-color: var(--page-tree-bullet-hover-color) transparent transparent transparent;
       }
     }
@@ -114,7 +114,7 @@
         calc(var(--page-tree-bullet-folded-width) / 2) var(--page-tree-bullet-folded-height);
       border-color: transparent transparent transparent var(--page-tree-bullet-color);
 
-      .page-tree-bullet-and-indent:hover & {
+      .page-tree-bullet-and-indent_root:hover & {
         border-color: transparent transparent transparent var(--page-tree-bullet-hover-color);
       }
     }
@@ -125,7 +125,7 @@
 
       background: var(--page-tree-bullet-color);
 
-      .page-tree-bullet-and-indent:hover & {
+      .page-tree-bullet-and-indent_root:hover & {
         background: var(--page-tree-bullet-hover-color);
       }
     }

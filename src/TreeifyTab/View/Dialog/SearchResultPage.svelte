@@ -6,7 +6,7 @@
   export let props: SearchResultPageProps
 </script>
 
-<div class="search-result-page">
+<div class="search-result-page_root">
   <div class="search-result-page_page">
     <div class="search-result-page_page-icon" />
     <ItemContent props={props.pageContent} />

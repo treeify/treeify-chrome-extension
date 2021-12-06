@@ -5,12 +5,12 @@
   export let props: LeftSidebarProps
 </script>
 
-<aside class="left-sidebar">
+<aside class="left-sidebar_root">
   <PageTree props={props.pageTreeProps} />
 </aside>
 
 <style global lang="scss">
-  .left-sidebar {
+  .left-sidebar_root {
     width: 260px;
     min-width: 10vw;
     max-width: 30vw;

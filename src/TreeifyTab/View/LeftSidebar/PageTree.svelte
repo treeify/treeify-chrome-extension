@@ -5,7 +5,7 @@
   export let props: PageTreeProps
 </script>
 
-<div class="page-tree">
+<div class="page-tree_root">
   <PageTreeNode props={props.pageTreeRootNodeProps} />
 </div>
 
@@ -18,7 +18,7 @@
     --page-tree-calculated-line-height: calc(1em * var(--page-tree-line-height));
   }
 
-  .page-tree {
+  .page-tree_root {
     line-height: var(--page-tree-line-height);
 
     padding: 10px 5px 150px 10px;
