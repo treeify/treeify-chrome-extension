@@ -18,9 +18,9 @@ export type MainAreaWebPageContentProps = {
   isUnread: boolean
   isAudible: boolean
   sourceProps: SourceProps | undefined
-  onFocus: (event: FocusEvent) => void
-  onClickTitle: (event: MouseEvent) => void
-  onClickFavicon: (event: MouseEvent) => void
+  onFocus(event: FocusEvent): void
+  onClickTitle(event: MouseEvent): void
+  onClickFavicon(event: MouseEvent): void
 }
 
 export function createMainAreaWebPageContentProps(
@@ -46,13 +46,13 @@ export function createMainAreaWebPageContentProps(
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     sourceProps: createSourceProps(itemId),
-    onFocus: (event) => {
+    onFocus(event) {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {
         getSelection()?.setPosition(event.target)
       }
     },
-    onClickTitle: (event) => {
+    onClickTitle(event) {
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
           event.preventDefault()
@@ -62,7 +62,7 @@ export function createMainAreaWebPageContentProps(
           break
       }
     },
-    onClickFavicon: (event) => {
+    onClickFavicon(event) {
       event.stopPropagation()
       event.preventDefault()
 

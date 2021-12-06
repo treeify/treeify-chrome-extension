@@ -16,8 +16,8 @@ export type MainAreaRollProps = {
    */
   hiddenItemsCount: integer
   outerCircleRadiusEm: integer
-  onClick: (event: MouseEvent) => void
-  onContextMenu: (event: Event) => void
+  onClick(event: MouseEvent): void
+  onContextMenu(event: Event): void
 }
 
 export enum MainAreaBulletState {
@@ -42,7 +42,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
     bulletState: deriveBulletState(state, itemPath),
     hiddenItemsCount,
     outerCircleRadiusEm,
-    onClick: (event: MouseEvent) => {
+    onClick(event: MouseEvent) {
       Internal.instance.saveCurrentStateToUndoStack()
       CurrentState.setTargetItemPath(itemPath)
 
@@ -92,7 +92,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
       }
       Rerenderer.instance.rerender()
     },
-    onContextMenu: (event: Event) => {
+    onContextMenu(event: Event) {
       event.preventDefault()
       CurrentState.setTargetItemPath(itemPath)
       Command.showOtherParentsDialog()

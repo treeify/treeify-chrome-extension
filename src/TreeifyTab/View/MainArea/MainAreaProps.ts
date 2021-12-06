@@ -31,8 +31,8 @@ import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps
-  onKeyDown: (event: KeyboardEvent) => void
-  onResizeImage: (event: MouseEvent, itemId: ItemId, imageRectRight: integer) => void
+  onKeyDown(event: KeyboardEvent): void
+  onResizeImage(event: MouseEvent, itemId: ItemId, imageRectRight: integer): void
 }
 
 export function createMainAreaProps(state: State): MainAreaProps {

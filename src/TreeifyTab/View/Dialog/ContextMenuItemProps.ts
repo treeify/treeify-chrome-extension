@@ -8,7 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 
 export type ContextMenuItemProps = {
   title: string
-  onClick: () => void
+  onClick(): void
 }
 
 export function createContextMenuItemPropses(): List<ContextMenuItemProps> {

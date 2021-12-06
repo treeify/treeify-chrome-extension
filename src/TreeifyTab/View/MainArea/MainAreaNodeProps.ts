@@ -40,10 +40,10 @@ export type MainAreaNodeProps = {
   contentProps: MainAreaContentProps
   childItemPropses: List<MainAreaNodeProps>
   rollProps: MainAreaRollProps
-  onMouseDownContentArea: (event: MouseEvent) => void
-  onContextMenu: (event: Event) => void
-  onClickDeleteButton: (event: MouseEvent) => void
-  onClickHiddenTabsCount: (event: MouseEvent) => void
+  onMouseDownContentArea(event: MouseEvent): void
+  onContextMenu(event: Event): void
+  onClickDeleteButton(event: MouseEvent): void
+  onClickHiddenTabsCount(event: MouseEvent): void
 }
 
 export function createMainAreaNodeProps(
@@ -76,7 +76,7 @@ export function createMainAreaNodeProps(
         itemPath.push(childItemId)
       )
     }),
-    onMouseDownContentArea: (event: MouseEvent) => {
+    onMouseDownContentArea(event: MouseEvent) {
       switch (InputId.fromMouseEvent(event)) {
         case '0100MouseButton0':
           const targetItemPath = CurrentState.getTargetItemPath()
@@ -126,7 +126,7 @@ export function createMainAreaNodeProps(
           break
       }
     },
-    onContextMenu: (event: Event) => {
+    onContextMenu(event: Event) {
       // テキスト選択中はブラウザ標準のコンテキストメニューを表示する
       if (getSelection()?.isCollapsed === false) return
 
@@ -143,7 +143,7 @@ export function createMainAreaNodeProps(
         Rerenderer.instance.rerender()
       }
     },
-    onClickDeleteButton: (event) => {
+    onClickDeleteButton(event) {
       Internal.instance.saveCurrentStateToUndoStack()
 
       CurrentState.setTargetItemPath(itemPath)
@@ -162,7 +162,7 @@ export function createMainAreaNodeProps(
           break
       }
     },
-    onClickHiddenTabsCount: (event: MouseEvent) => {
+    onClickHiddenTabsCount(event: MouseEvent) {
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
           CurrentState.setTargetItemPath(itemPath)

@@ -30,10 +30,10 @@ export type PageTreeNodeProps = {
   footprintRank: integer | undefined
   footprintCount: integer
   tabsCount: integer
-  onClickContentArea: (event: MouseEvent) => void
-  onClickCloseButton: () => void
-  onClickTabsCount: (event: MouseEvent) => void
-  onTabsCountContextMenu: (event: Event) => void
+  onClickContentArea(event: MouseEvent): void
+  onClickCloseButton(): void
+  onClickTabsCount(event: MouseEvent): void
+  onTabsCountContextMenu(event: Event): void
 }
 
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
@@ -64,7 +64,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       footprintRank: rank < footprintCount ? rank : undefined,
       footprintCount,
       tabsCount: CurrentState.countTabsInSubtree(state, itemId),
-      onClickContentArea: (event: MouseEvent) => {
+      onClickContentArea(event: MouseEvent) {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             event.preventDefault()
@@ -90,10 +90,10 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
             break
         }
       },
-      onClickCloseButton: () => {
+      onClickCloseButton() {
         unmountPage(itemId, activePageId)
       },
-      onClickTabsCount: (event) => {
+      onClickTabsCount(event) {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
             // ページ全体のタブを閉じる
@@ -110,7 +110,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
             break
         }
       },
-      onTabsCountContextMenu: (event: Event) => {
+      onTabsCountContextMenu(event: Event) {
         event.preventDefault()
 
         External.instance.dialogState = { type: 'TabsDialog', targetItemId: itemId }

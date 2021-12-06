@@ -13,8 +13,8 @@ export type MainAreaTextContentProps = {
   itemPath: ItemPath
   domishObjects: List<DomishObject>
   sourceProps: SourceProps | undefined
-  onInput: (event: Event) => void
-  onCompositionEnd: (event: CompositionEvent) => void
+  onInput(event: Event): void
+  onCompositionEnd(event: CompositionEvent): void
 }
 
 export function createMainAreaTextContentProps(
@@ -27,7 +27,7 @@ export function createMainAreaTextContentProps(
     type: 'MainAreaTextContentProps',
     domishObjects: state.textItems[itemId].domishObjects,
     sourceProps: createSourceProps(itemId),
-    onInput: (event: Event) => {
+    onInput(event: Event) {
       if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
         Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
 
@@ -41,7 +41,7 @@ export function createMainAreaTextContentProps(
         Rerenderer.instance.rerender()
       }
     },
-    onCompositionEnd: (event) => {
+    onCompositionEnd(event) {
       if (event.target instanceof Node) {
         Internal.instance.saveCurrentStateToUndoStack()
 

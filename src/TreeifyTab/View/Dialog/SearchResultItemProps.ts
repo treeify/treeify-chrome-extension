@@ -9,8 +9,8 @@ import { assertNonUndefined } from 'src/Utility/Debug/assert'
 export type SearchResultItemProps = {
   itemPath: ItemPath
   children: List<SearchResultItemProps>
-  onClick: (event: MouseEvent) => void
-  onKeyDown: (event: KeyboardEvent) => void
+  onClick(event: MouseEvent): void
+  onKeyDown(event: KeyboardEvent): void
 }
 
 export function createSearchResultItemPropses(

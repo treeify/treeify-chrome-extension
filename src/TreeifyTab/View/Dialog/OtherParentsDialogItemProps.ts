@@ -10,7 +10,7 @@ import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export type OtherParentsDialogItemProps = {
   itemContentProps: ItemContentProps
-  onClick: () => void
+  onClick(): void
 }
 
 export function createOtherParentsDialogItemProps(itemPath: ItemPath): OtherParentsDialogItemProps {

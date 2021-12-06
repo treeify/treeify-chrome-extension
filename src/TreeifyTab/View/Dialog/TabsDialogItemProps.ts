@@ -7,7 +7,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 export type TabsDialogItemProps = {
   itemPath: ItemPath
   children: List<TabsDialogItemProps>
-  onClick: (event: MouseEvent) => void
+  onClick(event: MouseEvent): void
 }
 
 export function createTabsDialogItemProps(

@@ -10,8 +10,8 @@ import { Coordinate, integer } from 'src/Utility/integer'
 export type DragImageProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
-  calculateDropDestinationStyle: (event: MouseEvent, draggedItemPath: ItemPath) => string
-  onDrop: (event: MouseEvent, itemPath: ItemPath) => void
+  calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemPath): string
+  onDrop(event: MouseEvent, itemPath: ItemPath): void
 }
 
 export function createDragImageProps(): DragImageProps | undefined {

@@ -1,4 +1,4 @@
 export type DropdownMenuItemProps = {
   title: string
-  onClick: () => void
+  onClick(): void
 }

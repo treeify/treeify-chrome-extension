@@ -11,7 +11,7 @@ export type MainAreaImageContentProps = {
   widthPx: integer | null
   originalSize: SizePx | null
   sourceProps: SourceProps | undefined
-  onFocus: (event: FocusEvent) => void
+  onFocus(event: FocusEvent): void
 }
 
 export function createMainAreaImageContentProps(
@@ -28,7 +28,7 @@ export function createMainAreaImageContentProps(
     widthPx: imageItem.widthPx,
     originalSize: imageItem.originalSize,
     sourceProps: createSourceProps(itemId),
-    onFocus: (event) => {
+    onFocus(event) {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {
         getSelection()?.setPosition(event.target)

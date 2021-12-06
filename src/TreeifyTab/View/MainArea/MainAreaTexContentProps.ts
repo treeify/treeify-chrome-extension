@@ -7,7 +7,7 @@ import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaConte
 export type MainAreaTexContentProps = {
   itemPath: ItemPath
   contentProps: ItemContentProps
-  onFocus: (event: FocusEvent) => void
+  onFocus(event: FocusEvent): void
 }
 
 export function createMainAreaTexContentProps(
@@ -18,7 +18,7 @@ export function createMainAreaTexContentProps(
     itemPath,
     type: 'MainAreaTexContentProps',
     contentProps: createTexItemContentProps(ItemPath.getItemId(itemPath)),
-    onFocus: (event) => {
+    onFocus(event) {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {
         getSelection()?.setPosition(event.target)

@@ -7,7 +7,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 export type PageTreeBulletAndIndentProps = {
   bulletState: PageTreeBulletState
   cssClasses: List<string>
-  onClick: () => void
+  onClick(): void
 }
 
 export enum PageTreeBulletState {

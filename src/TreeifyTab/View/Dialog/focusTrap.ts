@@ -11,7 +11,7 @@ export function setupFocusTrap(domElement: HTMLElement) {
   focusTrap.activate()
 
   return {
-    destroy: () => {
+    destroy() {
       // フォーカストラップを消す
       focusTrap.deactivate()
     },
