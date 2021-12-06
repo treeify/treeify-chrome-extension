@@ -60,7 +60,7 @@
     vertical-align: top;
   }
 
-  .spa-root {
+  #spa-root {
     height: 100%;
   }
 

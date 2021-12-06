@@ -12,7 +12,7 @@ doAsync(async () => {
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
   if (tabs.filter((tab) => tab.url?.startsWith(treeifyTabUrl)).length > 1) {
-    const spaRoot = document.querySelector('.spa-root')
+    const spaRoot = document.querySelector('#spa-root')
     if (spaRoot instanceof HTMLElement) {
       new StartupError({
         target: spaRoot,
