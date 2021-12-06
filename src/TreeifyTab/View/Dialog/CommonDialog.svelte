@@ -41,7 +41,7 @@
 </script>
 
 <div
-  class="common-dialog"
+  class="common-dialog_root"
   on:mousedown={onMouseDownBackdrop}
   on:keydown={onKeyDown}
   on:contextmenu={onContextMenu}
@@ -68,7 +68,7 @@
     --common-dialog-title-bar-background: #3b3b3b;
   }
 
-  .common-dialog {
+  .common-dialog_root {
     position: fixed;
     top: 0;
     left: 0;

@@ -60,7 +60,7 @@
 </script>
 
 <div
-  class="context-menu-dialog"
+  class="context-menu-dialog_root"
   {style}
   on:mousedown={onMouseDownBackdrop}
   on:keydown={onKeyDown}
@@ -75,7 +75,7 @@
 </div>
 
 <style global lang="scss">
-  .context-menu-dialog {
+  .context-menu-dialog_root {
     position: fixed;
     top: 0;
     left: 0;

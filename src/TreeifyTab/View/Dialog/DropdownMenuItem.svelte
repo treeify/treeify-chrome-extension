@@ -18,7 +18,7 @@
     if (inputId === '0000ArrowDown') {
       // フォーカスを次の要素に移す
       const focusableElements = List(
-        document.querySelectorAll('.dropdown-menu-item')
+        document.querySelectorAll('.dropdown-menu-item_root')
       ) as List<HTMLElement>
       const index = focusableElements.findIndex((element) => document.activeElement === element)
       if (index === -1) return
@@ -28,7 +28,7 @@
     } else if (inputId === '0000ArrowUp') {
       // フォーカスを前の要素に移す
       const focusableElements = List(
-        document.querySelectorAll('.dropdown-menu-item')
+        document.querySelectorAll('.dropdown-menu-item_root')
       ) as List<HTMLElement>
       const index = focusableElements.findIndex((element) => document.activeElement === element)
       if (index === -1) return
@@ -49,7 +49,7 @@
 </script>
 
 <div
-  class="dropdown-menu-item"
+  class="dropdown-menu-item_root"
   tabindex="0"
   on:mousedown|preventDefault={onClick}
   on:mouseenter={onMouseEnter}
@@ -59,7 +59,7 @@
 </div>
 
 <style global lang="scss">
-  .dropdown-menu-item {
+  .dropdown-menu-item_root {
     outline: none;
 
     font-size: 0.9rem;

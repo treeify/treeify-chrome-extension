@@ -35,7 +35,7 @@
 </script>
 
 <CommonDialog title="コマンドパレット" showCloseButton>
-  <div class="command-palette-dialog" on:keydown={onKeydown}>
+  <div class="command-palette-dialog_root" on:keydown={onKeydown}>
     <input
       type="text"
       class="command-palette-dialog_command-id"
@@ -51,7 +51,7 @@
 </CommonDialog>
 
 <style lang="scss">
-  .command-palette-dialog {
+  .command-palette-dialog_root {
     padding: 1em;
   }
 </style>
