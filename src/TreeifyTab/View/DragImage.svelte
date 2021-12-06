@@ -29,7 +29,7 @@
 
 <svelte:body on:mousemove={onMouseMove} />
 
-<div class="drag-image" {style} use:onItemDrop={props.onDrop} use:setupFocusTrap>
+<div class="drag-image_root" {style} use:onItemDrop={props.onDrop} use:setupFocusTrap>
   <div class="drag-image_drop-destination" style={dropDestinationStyle} />
   <div class="drag-image_item-image" tabindex="0">
     <ItemContent props={createItemContentProps(itemId)} />
@@ -42,7 +42,7 @@
     --drop-destination-color: #919191;
   }
 
-  .drag-image {
+  .drag-image_root {
     position: fixed;
     top: 0;
     left: 0;

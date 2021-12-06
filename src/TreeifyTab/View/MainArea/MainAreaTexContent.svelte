@@ -8,13 +8,13 @@
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 </script>
 
-<div class="main-area-tex-content" {id} tabindex="0" on:focus={props.onFocus}>
+<div class="main-area-tex-content_root" {id} tabindex="0" on:focus={props.onFocus}>
   <ItemContent props={props.contentProps} />
 </div>
 
 <style global lang="scss">
   // コードブロック項目のコンテンツ領域のルート
-  .main-area-tex-content {
+  .main-area-tex-content_root {
     // フォーカス時の枠線を非表示
     outline: none;
   }

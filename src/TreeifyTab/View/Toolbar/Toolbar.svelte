@@ -33,7 +33,7 @@
   }
 </script>
 
-<div class="toolbar">
+<div class="toolbar_root">
   <button on:click={onClickOpmlExport}>OPMLエクスポート</button>
   <button on:click={onClickStateValidation}>バリデーション</button>
   <DataFolderButton props={props.dataFolderButtonProps} />
@@ -47,7 +47,7 @@
     --toolbar-background: #f9f9f9;
   }
 
-  .toolbar {
+  .toolbar_root {
     height: 36px;
     padding-inline: 2em;
 

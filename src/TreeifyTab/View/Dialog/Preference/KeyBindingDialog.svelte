@@ -171,10 +171,10 @@
       <table class="key-binding-dialog_table">
         {#each Object.entries(clonedKeyBindings) as [inputId, commandIds] (inputId)}
           <tr class="key-binding_binding-row">
-            <td class="key-binding_input-id">{InputId.toReadableText(inputId)}</td>
-            <td class="key-binding_commands">
+            <td class="key-binding-dialog_input-id">{InputId.toReadableText(inputId)}</td>
+            <td class="key-binding-dialog_commands">
               {#each commandIds.toArray() as selectedCommandId, index}
-                <div class="key-binding_command-row">
+                <div class="key-binding-dialog_command-row">
                   <select on:change={(event) => onChange(event, index, inputId)}>
                     {#each commandGroups.toArray() as commandGroup}
                       <optgroup label={commandGroup.name}>
@@ -187,12 +187,12 @@
                     {/each}
                   </select>
                   <div
-                    class="delete-button"
+                    class="key-binding-dialog_delete-button"
                     tabindex="-1"
                     on:click={() => onClickDeleteButton(index, inputId)}
                   />
                   <div
-                    class="add-command-button"
+                    class="key-binding-dialog_add-command-button"
                     tabindex="-1"
                     on:click={() => onClickAddCommandButton(index, inputId)}
                   />
@@ -258,23 +258,23 @@
     }
   }
 
-  .key-binding_input-id {
+  .key-binding-dialog_input-id {
     text-align: right;
     padding-left: 3em;
   }
 
-  .key-binding_commands {
+  .key-binding-dialog_commands {
     padding-block: 0.3em;
   }
 
-  .key-binding_command-row {
+  .key-binding-dialog_command-row {
     display: flex;
     align-items: center;
 
     padding-left: 2em;
   }
 
-  .delete-button {
+  .key-binding-dialog_delete-button {
     @include common.circle(var(--key-binding-dialog-command-button-size));
     // lch(90.0%, 0.0, 0.0)相当
     @include common.pseudo-ripple-effect(#e2e2e2);
@@ -292,12 +292,12 @@
       @include common.icon(#5e5e5e, url('./trash-can-icon.svg'));
     }
 
-    .key-binding_command-row:hover & {
+    .key-binding-dialog_command-row:hover & {
       visibility: visible;
     }
   }
 
-  .add-command-button {
+  .key-binding-dialog_add-command-button {
     @include common.circle(var(--key-binding-dialog-command-button-size));
     // lch(90.0%, 0.0, 0.0)相当
     @include common.pseudo-ripple-effect(#e2e2e2);
@@ -315,7 +315,7 @@
       @include common.icon(#5e5e5e, url('./plus-icon.svg'));
     }
 
-    .key-binding_command-row:hover & {
+    .key-binding-dialog_command-row:hover & {
       visibility: visible;
     }
   }

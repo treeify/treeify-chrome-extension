@@ -1,4 +1,4 @@
-<div class="resize-handle">
+<div class="resize-handle_root">
   <div class="resize-handle_inner" />
 </div>
 
@@ -9,7 +9,7 @@
   $aspectRatio: 0.16;
 
   // 角丸のストローク役
-  .resize-handle {
+  .resize-handle_root {
     position: relative;
 
     // ラッパー要素に高さを指定してもらうイメージ
