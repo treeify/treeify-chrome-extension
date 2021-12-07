@@ -343,7 +343,18 @@ function onArrowDown(event: KeyboardEvent) {
     assertNonUndefined(selectionRect)
 
     if (selectionRect.bottom === 0) {
-      // どういうわけかキャレットが先頭に居るときにselectionRectの値が全て0になってしまう問題への対処
+      // キャレットが先頭または空行に居るときにどういうわけかselectionRectの値が全て0になることがある問題への対処
+
+      // キャレットが末尾にいるかどうかを文字数計算によって判定し、もし末尾なら下の項目をフォーカスして終了
+      const textItemSelection = getTextItemSelectionFromDom()
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      const characterCount = DomishObject.countCharacters(domishObjects)
+      if (textItemSelection !== undefined && textItemSelection.focusDistance === characterCount) {
+        event.preventDefault()
+        CurrentState.setTargetItemPath(belowItemPath)
+        Rerenderer.instance.rerender()
+        return
+      }
 
       const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
       if (activeElementRect.height >= parseFloat(fontSize) * 2) {
