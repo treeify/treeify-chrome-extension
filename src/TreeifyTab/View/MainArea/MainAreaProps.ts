@@ -241,6 +241,12 @@ function onArrowUp(event: KeyboardEvent) {
     const selectionRect = getSelection()?.getRangeAt(0)?.getBoundingClientRect()
     assertNonUndefined(selectionRect)
 
+    // キャレットが先頭または空行に居るときにどういうわけかselectionRectの値が全て0になることがある問題への対処
+    const focusDistance = getTextItemSelectionFromDom()?.focusDistance
+    if (selectionRect.bottom === 0 && focusDistance !== undefined && focusDistance > 0) {
+      return
+    }
+
     // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
     const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
     if (selectionRect.top - activeElementRect.top > parseFloat(fontSize) / 2) {
@@ -343,7 +349,18 @@ function onArrowDown(event: KeyboardEvent) {
     assertNonUndefined(selectionRect)
 
     if (selectionRect.bottom === 0) {
-      // どういうわけかキャレットが先頭に居るときにselectionRectの値が全て0になってしまう問題への対処
+      // キャレットが先頭または空行に居るときにどういうわけかselectionRectの値が全て0になることがある問題への対処
+
+      // キャレットが末尾にいるかどうかを文字数計算によって判定し、もし末尾なら下の項目をフォーカスして終了
+      const textItemSelection = getTextItemSelectionFromDom()
+      const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+      const characterCount = DomishObject.countCharacters(domishObjects)
+      if (textItemSelection !== undefined && textItemSelection.focusDistance === characterCount) {
+        event.preventDefault()
+        CurrentState.setTargetItemPath(belowItemPath)
+        Rerenderer.instance.rerender()
+        return
+      }
 
       const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
       if (activeElementRect.height >= parseFloat(fontSize) * 2) {
