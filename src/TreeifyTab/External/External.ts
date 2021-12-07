@@ -78,6 +78,7 @@ export class External {
   async forceCloseTab(tabId: TabId) {
     const tab = this.tabItemCorrespondence.getTab(tabId)
     assertNonUndefined(tab)
+    this.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
     if (!tab.discarded) {
       // タブを強制的に閉じる処理を開始する
       const url = tab.url ?? ''
@@ -87,7 +88,6 @@ export class External {
       await chrome.tabs.remove(discardedTab.id)
       this.forceClosingTabUrls.remove(url)
     } else {
-      this.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
       await chrome.tabs.remove(tabId)
     }
   }
