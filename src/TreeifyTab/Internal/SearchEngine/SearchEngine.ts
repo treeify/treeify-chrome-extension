@@ -29,10 +29,10 @@ export class SearchEngine {
     if (positiveSearchWords.isEmpty()) return Set.of()
 
     // 検索ワードごとに、ヒットする項目の全ItemPathの集合を生成する
-    const wordHitItemIdSets = positiveSearchWords.map((andSearchWord) => {
-      const normalizedAndSearchWord = UnigramSearchIndex.normalize(andSearchWord)
+    const wordHitItemIdSets = positiveSearchWords.map((positiveSearchWord) => {
+      const normalizedAndSearchWord = UnigramSearchIndex.normalize(positiveSearchWord)
 
-      return Set(this.unigramSearchIndex.search(andSearchWord)).filter((itemId) => {
+      return Set(this.unigramSearchIndex.search(positiveSearchWord)).filter((itemId) => {
         // 除外項目で検索結果をフィルタリングする
         if (CurrentState.shouldBeHidden(itemId)) return false
 
