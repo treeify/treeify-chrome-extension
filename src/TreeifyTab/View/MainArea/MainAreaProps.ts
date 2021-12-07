@@ -241,6 +241,12 @@ function onArrowUp(event: KeyboardEvent) {
     const selectionRect = getSelection()?.getRangeAt(0)?.getBoundingClientRect()
     assertNonUndefined(selectionRect)
 
+    // キャレットが先頭または空行に居るときにどういうわけかselectionRectの値が全て0になることがある問題への対処
+    const focusDistance = getTextItemSelectionFromDom()?.focusDistance
+    if (selectionRect.bottom === 0 && focusDistance !== undefined && focusDistance > 0) {
+      return
+    }
+
     // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
     const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
     if (selectionRect.top - activeElementRect.top > parseFloat(fontSize) / 2) {
