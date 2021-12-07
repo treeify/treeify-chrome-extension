@@ -23,6 +23,7 @@ export default {
     dir: 'dist',
     // デフォルトは'[name]-[hash].js'なので、ビルドごとにファイルが増えてしまう
     chunkFileNames: '[name].js',
+    sourcemap: 'inline',
   },
   plugins: [
     alias({
