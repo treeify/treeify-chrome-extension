@@ -49,11 +49,7 @@ export class SearchEngine {
     for (let i = 0; i < wordHitItemIdSets.size; i++) {
       const otherWordsHitItemIdSets = wordHitItemIdSets.remove(i)
       for (const wordHitItemId of wordHitItemIdSets.get(i)!) {
-        const upperItemIds = Set(CurrentState.yieldAncestorItemIds(wordHitItemId)).add(
-          wordHitItemId
-        )
-        const intersections = otherWordsHitItemIdSets.map((set) => set.intersect(upperItemIds))
-        if (intersections.every((set) => !set.isEmpty())) {
+        if (SearchEngine.containedByAll(otherWordsHitItemIdSets, wordHitItemId)) {
           // あるワードヒット項目の先祖集合（自身含む）に他の全てのワードのヒット項目が含まれる場合
 
           const textTracks = SearchEngine.getTextTracks(wordHitItemId, Internal.instance.state)
@@ -69,6 +65,28 @@ export class SearchEngine {
       }
     }
     return Set(result)
+  }
+
+  // AND検索用のヘルパー関数。
+  // 言葉での説明が難しい。
+  private static containedByAll(otherWordsHitItemIdSets: List<Set<ItemId>>, itemId: ItemId) {
+    for (const itemIdSet of otherWordsHitItemIdSets) {
+      if (!this.contains(itemIdSet, itemId)) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  // itemIdがitemIdSet内のいずれかに包含されるかどうかを判定する。
+  // すなわちitemIdの先祖項目がitemIdSetに含まれるかどうかを判定する。
+  private static contains(itemIdSet: Set<ItemId>, itemId: ItemId): boolean {
+    if (itemIdSet.contains(itemId)) return true
+
+    return CurrentState.getParentItemIds(itemId).some((parentItemId) =>
+      SearchEngine.contains(itemIdSet, parentItemId)
+    )
   }
 
   /**
