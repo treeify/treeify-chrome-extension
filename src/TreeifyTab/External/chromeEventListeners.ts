@@ -25,7 +25,7 @@ export const onMessage = (message: any, sender: MessageSender) => {
         if (!Internal.instance.state.leftEndMouseGestureEnabled) break
 
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
-        if (message.clientY < height * 0.15 || height * 0.85 < message.clientY) break
+        if (message.screenY < height * 0.15 || height * 0.85 < message.screenY) break
 
         // Treeifyタブを最前面化する
         // TODO: 誤差だろうけれど最適化の余地が一応ある
@@ -35,7 +35,7 @@ export const onMessage = (message: any, sender: MessageSender) => {
         if (!Internal.instance.state.rightEndMouseGestureEnabled) break
 
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
-        if (message.clientY < height * 0.15 || height * 0.85 < message.clientY) break
+        if (message.screenY < height * 0.15 || height * 0.85 < message.screenY) break
 
         await TreeifyTab.open()
         if (sender.tab?.id !== undefined) {

@@ -6,15 +6,15 @@ window.addEventListener(
     if (event.clientX === 0 && event.screenX === 0 && event.movementX < 0) {
       chrome.runtime.sendMessage({
         type: 'OnMouseMoveToLeftEnd',
-        clientY: event.clientY,
+        screenY: event.screenY,
       })
     }
 
     const rightEnd = screen.width - 1
-    if (event.clientX === rightEnd && event.screenX === rightEnd && event.movementX > 0) {
+    if (event.screenX === rightEnd && event.movementX > 0) {
       chrome.runtime.sendMessage({
         type: 'OnMouseMoveToRightEnd',
-        clientY: event.clientY,
+        screenY: event.screenY,
       })
     }
   },
