@@ -10,11 +10,11 @@ export async function compress(text: string): Promise<Uint8Array[]> {
 }
 
 /** ブラウザのAPIを用いてテキストを解凍する（JavaScriptライブラリでは低速すぎたのでこちらを採用） */
-export async function decompress(compressedData: Uint8Array[]): Promise<string> {
+export async function decompress(compressedData: ArrayBuffer): Promise<string> {
   const ds = new DecompressionStream('deflate')
   const readPromise = readStream(ds.readable)
   const writer = ds.writable.getWriter()
-  await writer.write(await new Blob(compressedData).arrayBuffer())
+  await writer.write(compressedData)
   await writer.close()
 
   const readResult = await readPromise

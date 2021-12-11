@@ -1,6 +1,7 @@
 import { List } from 'immutable'
 import { Instance, InstanceId } from 'src/TreeifyTab/Instance'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { compress, decompress } from 'src/Utility/compress'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -19,10 +20,10 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   private static getInstanceFileName(instanceId: InstanceId = Instance.getId()) {
-    return `Instance ID = ${instanceId}.json`
+    return `Instance ID = ${instanceId}.deflate`
   }
 
-  private static INSTANCE_FILE_NAME_PATTERN: RegExp = /Instance ID = (.+)\.json/
+  private static INSTANCE_FILE_NAME_PATTERN: RegExp = /Instance ID = (.+)\.deflate/
 
   static async isDataFolder(folderHandle: FileSystemDirectoryHandle): Promise<boolean> {
     for await (const key of folderHandle.keys()) {
@@ -132,7 +133,7 @@ export class DataFolder {
     try {
       const fileHandle = await this.dataFolderHandle.getFileHandle(fileName)
       const file = await fileHandle.getFile()
-      const text = await file.text()
+      const text = await decompress(await file.arrayBuffer())
       return JSON.parse(text, State.jsonReviver)
     } catch (e) {
       return undefined
@@ -145,7 +146,8 @@ export class DataFolder {
     const fileName = DataFolder.getInstanceFileName()
     const fileHandle = await this.dataFolderHandle.getFileHandle(fileName, { create: true })
     const writableFileStream = await fileHandle.createWritable()
-    await writableFileStream.write(text)
+    const content = await compress(text)
+    await writableFileStream.write(new Blob(content))
     await writableFileStream.close()
   }
 }
