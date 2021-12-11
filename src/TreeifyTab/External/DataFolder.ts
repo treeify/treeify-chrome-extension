@@ -1,8 +1,8 @@
 import { List } from 'immutable'
 import { Instance, InstanceId } from 'src/TreeifyTab/Instance'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { compress, decompress } from 'src/Utility/compress'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { compress, decompress } from 'src/Utility/gzip'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 export const CURRENT_SCHEMA_VERSION = 1 as const
@@ -20,10 +20,10 @@ export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 
   private static getInstanceFileName(instanceId: InstanceId = Instance.getId()) {
-    return `Instance ID = ${instanceId}.deflate`
+    return `Instance ID = ${instanceId}.json.gz`
   }
 
-  private static INSTANCE_FILE_NAME_PATTERN: RegExp = /Instance ID = (.+)\.deflate/
+  private static INSTANCE_FILE_NAME_PATTERN: RegExp = /Instance ID = (.+)\.json\.gz/
 
   static async isDataFolder(folderHandle: FileSystemDirectoryHandle): Promise<boolean> {
     for await (const key of folderHandle.keys()) {

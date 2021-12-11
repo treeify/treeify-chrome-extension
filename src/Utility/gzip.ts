@@ -1,6 +1,9 @@
-/** ブラウザのAPIを用いてテキストを圧縮する（JavaScriptライブラリでは低速すぎたのでこちらを採用） */
+/**
+ * 一部のブラウザで実装されているCompression Streams APIを用いてテキストをgzip圧縮する。
+ * クロスブラウザの圧縮ライブラリでは低速すぎたのでこちらを採用した。
+ */
 export async function compress(text: string): Promise<Uint8Array[]> {
-  const cs = new CompressionStream('deflate')
+  const cs = new CompressionStream('gzip')
   const readPromise = readStream(cs.readable)
   const writer = cs.writable.getWriter()
   await writer.write(await new Blob([text]).arrayBuffer())
@@ -9,9 +12,12 @@ export async function compress(text: string): Promise<Uint8Array[]> {
   return await readPromise
 }
 
-/** ブラウザのAPIを用いてテキストを解凍する（JavaScriptライブラリでは低速すぎたのでこちらを採用） */
+/**
+ * 一部のブラウザで実装されているCompression Streams APIを用いてテキストをgzip解凍する。
+ * クロスブラウザの圧縮ライブラリでは低速すぎたのでこちらを採用した。
+ */
 export async function decompress(compressedData: ArrayBuffer): Promise<string> {
-  const ds = new DecompressionStream('deflate')
+  const ds = new DecompressionStream('gzip')
   const readPromise = readStream(ds.readable)
   const writer = ds.writable.getWriter()
   await writer.write(compressedData)
