@@ -8,7 +8,6 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { dump } from 'src/Utility/Debug/logger'
 
 /**
  * オンメモリのStateとデータフォルダ内のStateを同期する（状況に応じて読み込みや書き込みを行う）。
@@ -56,14 +55,6 @@ export async function syncWithDataFolder() {
       }
     }
   } catch (e) {
-    // TODO: デバッグ用の仕込みなのでリリースまでに削除すべき
-    alert('データフォルダ同期時の例外のキャッチに成功\n' + e)
-    if (e instanceof Error) {
-      dump(e.stack)
-    } else {
-      dump(e)
-    }
-
     // 何も選ばずピッカーを閉じた際、エラーアラートを出さないようにする
     if (e instanceof Error && e.name === 'AbortError') return
 
