@@ -38,10 +38,10 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --outer-circle-min-diameter: 1.05;
-    --outer-circle-max-diameter: 1.3;
+    --main-area-bullet-outer-circle-min-diameter: 1.05;
+    --main-area-bullet-outer-circle-max-diameter: 1.3;
     // 外側の円が最大サイズになる子孫項目数
-    --outer-circle-item-count-limit: 20;
+    --main-area-bullet-outer-circle-item-count-limit: 20;
 
     // バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当
     --main-area-bullet-outer-circle-color: #e2e2e2;

@@ -30,10 +30,12 @@ export enum MainAreaBulletState {
 export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainAreaRollProps {
   const hiddenItemsCount = countHiddenItems(state, itemPath)
 
-  const outerCircleMinDiameter = CssCustomProperty.getNumber('--outer-circle-min-diameter') ?? 1.1
-  const outerCircleMaxDiameter = CssCustomProperty.getNumber('--outer-circle-max-diameter') ?? 1.35
+  const outerCircleMinDiameter =
+    CssCustomProperty.getNumber('--main-area-bullet-outer-circle-min-diameter') ?? 1.05
+  const outerCircleMaxDiameter =
+    CssCustomProperty.getNumber('--main-area-bullet-outer-circle-max-diameter') ?? 1.3
   const outerCircleItemCountLimit =
-    CssCustomProperty.getNumber('--outer-circle-item-count-limit') ?? 20
+    CssCustomProperty.getNumber('--main-area-bullet-outer-circle-item-count-limit') ?? 20
   const step = (outerCircleMaxDiameter - outerCircleMinDiameter) / outerCircleItemCountLimit
   const limitedHiddenItemsCount = Math.min(hiddenItemsCount, outerCircleItemCountLimit)
   const outerCircleRadiusEm = outerCircleMinDiameter + limitedHiddenItemsCount * step
