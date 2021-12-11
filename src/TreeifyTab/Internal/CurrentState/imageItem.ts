@@ -8,10 +8,7 @@ import { ImageItem, Item, SizePx } from 'src/TreeifyTab/Internal/State'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
-/**
- * 新しい空の画像項目を作成し、CurrentStateに登録する。
- * ただし項目の配置（親子関係の設定）は行わない。
- */
+/** 新しい空の画像項目を作成する。ただし項目の配置（親子関係の設定）は行わない */
 export function createImageItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 

@@ -18,10 +18,7 @@ export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List
   })
 }
 
-/**
- * 新しい空のテキスト項目を作成し、CurrentStateに登録する。
- * ただし項目の配置（親子関係の設定）は行わない。
- */
+/** 新しい空のテキスト項目を作成する。ただし項目の配置（親子関係の設定）は行わない */
 export function createTextItem(): ItemId {
   const newItemId = CurrentState.obtainNewItemId()
 
