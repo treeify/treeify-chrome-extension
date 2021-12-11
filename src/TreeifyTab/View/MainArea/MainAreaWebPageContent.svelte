@@ -18,7 +18,7 @@
       on:mousedown={props.onClickFavicon}
     >
       {#if props.faviconUrl.length > 0}
-        <img class="main-area-web-page-content_favicon" src={props.faviconUrl} />
+        <img class="main-area-web-page-content_favicon" src={props.faviconUrl} alt="" />
       {:else if !props.isLoading}
         <div class="default-favicon" />
       {/if}

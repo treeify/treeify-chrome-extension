@@ -11,6 +11,7 @@
       class:discarded={props.isDiscarded}
       class:tab-closed={props.isTabClosed}
       src={props.faviconUrl}
+      alt=""
     />
   {:else}
     <div

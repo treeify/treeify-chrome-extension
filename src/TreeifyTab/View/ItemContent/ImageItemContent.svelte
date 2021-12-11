@@ -9,7 +9,7 @@
   `
 </script>
 
-<img class="image-item-content_root" {style} src={props.url} />
+<img class="image-item-content_root" {style} src={props.url} alt="" />
 
 <style global lang="scss">
   .image-item-content_root {

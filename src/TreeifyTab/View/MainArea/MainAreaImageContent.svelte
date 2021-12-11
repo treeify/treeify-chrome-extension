@@ -55,7 +55,13 @@
 
 <div class="main-area-image-content_root" {id} {style} tabindex="0" on:focus={props.onFocus}>
   <div class="main-area-image-content_image-with-resize-handle">
-    <img class="main-area-image-content_image" src={props.url} draggable="false" on:load={onLoad} />
+    <img
+      class="main-area-image-content_image"
+      src={props.url}
+      alt=""
+      draggable="false"
+      on:load={onLoad}
+    />
     <div
       class="main-area-image-content_resize-handle"
       use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
