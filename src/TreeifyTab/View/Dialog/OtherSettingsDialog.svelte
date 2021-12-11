@@ -5,8 +5,11 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
 
+  let syncWith = Internal.instance.state.syncWith
   let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
   let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
+
+  $: Internal.instance.mutate(syncWith, PropertyPath.of('syncWith'))
 
   $: Internal.instance.mutate(
     leftEndMouseGestureEnabled,
@@ -26,6 +29,20 @@
 
 <CommonDialog title="その他の設定">
   <div class="other-settings-dialog_content" tabindex="0">
+    <fieldset class="other-settings-dialog_sync-with-area">
+      <legend>データの同期先</legend>
+      <div class="other-settings-dialog_sync-with-options">
+        <label class="other-settings-dialog_radio-button-label">
+          <input type="radio" bind:group={syncWith} value="Google Drive" />
+          Google Drive
+        </label>
+        <label class="other-settings-dialog_radio-button-label">
+          <input type="radio" bind:group={syncWith} value="Local" />
+          ローカル（データフォルダ）
+        </label>
+      </div>
+    </fieldset>
+    <div class="other-settings-dialog_spacer" />
     <label class="other-settings-dialog_checkbox-label">
       <input type="checkbox" bind:checked={leftEndMouseGestureEnabled} />
       マウスを画面左端まで動かすとTreeifyタブを表示
@@ -50,11 +67,34 @@
     overflow-y: auto;
   }
 
+  .other-settings-dialog_sync-with-area {
+    // lch(80.0%, 0.0, 0.0)相当
+    border: #c6c6c6 1px solid;
+  }
+
+  .other-settings-dialog_sync-with-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
+  }
+
+  .other-settings-dialog_radio-button-label {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+
+    input[type='radio'] {
+      margin: 0;
+    }
+  }
+
   .other-settings-dialog_checkbox-label {
     display: flex;
     align-items: center;
+  }
 
-    cursor: pointer;
+  .other-settings-dialog_spacer {
+    height: 1em;
   }
 
   .other-settings-dialog_button-area {

@@ -230,6 +230,7 @@ export class Internal {
       },
       leftEndMouseGestureEnabled: true,
       rightEndMouseGestureEnabled: false,
+      syncWith: 'Google Drive',
     }
   }
 }
