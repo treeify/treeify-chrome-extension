@@ -5,13 +5,13 @@ import { State } from 'src/TreeifyTab/Internal/State'
 export type SyncButtonProps = {
   syncWith: State['syncWith']
   hasUpdatedSinceSync: boolean
-  isAlreadyOpen: boolean
+  isDataFolderAlreadyOpened: boolean
 }
 
 export function createSyncButtonProps(): SyncButtonProps {
   return {
     syncWith: Internal.instance.state.syncWith,
     hasUpdatedSinceSync: External.instance.hasUpdatedSinceSync,
-    isAlreadyOpen: External.instance.dataFolder !== undefined,
+    isDataFolderAlreadyOpened: External.instance.dataFolder !== undefined,
   }
 }

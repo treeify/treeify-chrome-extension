@@ -21,13 +21,15 @@
   </ToolbarIconButton>
 {:else}
   <ToolbarIconButton
-    title={props.isAlreadyOpen ? '現在のデータをデータフォルダと同期する' : 'データフォルダを開く'}
+    title={props.isDataFolderAlreadyOpened
+      ? '現在のデータをデータフォルダと同期する'
+      : 'データフォルダを開く'}
     on:click={onClick}
   >
     <div
       class="sync-button_data-folder-icon"
-      class:already-open={props.isAlreadyOpen}
-      class:completed={props.isAlreadyOpen && props.hasUpdatedSinceSync}
+      class:already-opened={props.isDataFolderAlreadyOpened}
+      class:checked={props.isDataFolderAlreadyOpened && props.hasUpdatedSinceSync}
     />
   </ToolbarIconButton>
 {/if}
@@ -55,11 +57,11 @@
     @include common.absolute-center;
     @include common.icon(var(--sync-button-icon-color), url('folder-open.svg'));
 
-    &.already-open {
+    &.already-opened {
       -webkit-mask: url('folder-sync.svg');
     }
 
-    &.completed {
+    &.checked {
       -webkit-mask: url('folder-check.svg');
     }
   }
