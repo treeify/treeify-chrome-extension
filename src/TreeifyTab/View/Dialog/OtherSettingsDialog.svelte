@@ -9,6 +9,7 @@
   let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
   let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
 
+  // TODO: hasUpdatedSinceSyncフラグを更新しないと変な表示になりうる
   $: Internal.instance.mutate(syncWith, PropertyPath.of('syncWith'))
 
   $: Internal.instance.mutate(
