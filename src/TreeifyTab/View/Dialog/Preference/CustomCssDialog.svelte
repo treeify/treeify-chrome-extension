@@ -33,7 +33,7 @@
   }
 </script>
 
-<CommonDialog title="カスタムCSS">
+<CommonDialog class="custom-css-dialog_root" title="カスタムCSS">
   <div class="custom-css-dialog_content">
     <div
       class="custom-css-dialog_code"

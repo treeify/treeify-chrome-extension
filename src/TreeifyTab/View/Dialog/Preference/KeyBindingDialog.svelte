@@ -165,7 +165,7 @@
   )
 </script>
 
-<CommonDialog title="キーボード操作設定">
+<CommonDialog class="key-binding-dialog_root" title="キーボード操作設定">
   <div class="key-binding-dialog_content" {style} on:keydown={onKeyDown}>
     <div class="key-binding-dialog_scroll-area">
       <table class="key-binding-dialog_table">

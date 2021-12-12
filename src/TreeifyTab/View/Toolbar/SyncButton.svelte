@@ -16,11 +16,12 @@
 </script>
 
 {#if props.syncWith === 'Google Drive'}
-  <ToolbarIconButton title="Google Driveと同期する">
+  <ToolbarIconButton class="sync-button_root" title="Google Driveと同期する">
     <div class="sync-button_cloud-icon" class:checked={!props.hasUpdatedSinceSync} />
   </ToolbarIconButton>
 {:else}
   <ToolbarIconButton
+    class="sync-button_root"
     title={props.isDataFolderAlreadyOpened
       ? '現在のデータをデータフォルダと同期する'
       : 'データフォルダを開く'}

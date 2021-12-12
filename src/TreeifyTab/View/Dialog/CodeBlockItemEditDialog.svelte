@@ -93,7 +93,7 @@
   }
 </script>
 
-<CommonDialog title={dialogTitle} onClose={onCloseDialog}>
+<CommonDialog class="code-block-edit-dialog_root" title={dialogTitle} onClose={onCloseDialog}>
   <div class="code-block-edit-dialog_content" on:keydown={onKeyDown}>
     <div
       class="code-block-edit-dialog_code"

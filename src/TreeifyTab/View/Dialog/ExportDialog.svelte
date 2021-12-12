@@ -128,7 +128,7 @@
   }
 </script>
 
-<CommonDialog title="エクスポート" showCloseButton>
+<CommonDialog class="export-dialog_root" title="エクスポート" showCloseButton>
   <div class="export-dialog_content" tabindex="0">
     <div class="export-dialog_format-select-button-area">
       <label

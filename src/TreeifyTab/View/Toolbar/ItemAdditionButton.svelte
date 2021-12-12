@@ -9,7 +9,7 @@
   }
 </script>
 
-<ToolbarIconButton title="項目を追加" on:click={onClick}>
+<ToolbarIconButton class="item-addition-button_root" title="項目を追加" on:click={onClick}>
   <div class="item-addition-button_icon" />
 </ToolbarIconButton>
 

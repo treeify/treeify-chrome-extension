@@ -20,7 +20,7 @@
     .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList()))
 </script>
 
-<CommonDialog title="他のトランスクルード元" showCloseButton>
+<CommonDialog class="other-parents-dialog_root" title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
     {#each pagePropses.toArray() as pageProps}
       <OtherParentsDialogPage props={pageProps} />

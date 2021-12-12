@@ -47,7 +47,7 @@
   }
 </script>
 
-<CommonDialog title="出典設定">
+<CommonDialog class="source-setting-dialog_root" title="出典設定">
   <div class="source-setting-dialog_content" on:keydown={onKeyDown}>
     <div class="source-setting-dialog_input-area">
       <label class="source-setting-dialog_label">

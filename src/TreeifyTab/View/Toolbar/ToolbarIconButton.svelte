@@ -1,8 +1,10 @@
 <script lang="ts">
+  let klass = ''
+  export { klass as class }
   export let title = ''
 </script>
 
-<div class="toolbar-icon-button_root" {title} on:click>
+<div class="toolbar-icon-button_root {klass}" {title} on:click>
   <slot />
 </div>
 

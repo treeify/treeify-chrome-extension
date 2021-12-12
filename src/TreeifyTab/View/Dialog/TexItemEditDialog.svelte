@@ -51,7 +51,7 @@
   }
 </script>
 
-<CommonDialog title={dialogTitle} onClose={onCloseDialog}>
+<CommonDialog class="tex-edit-dialog_root" title={dialogTitle} onClose={onCloseDialog}>
   <div class="tex-edit-dialog_content" on:keydown={onKeyDown}>
     <div class="tex-edit-dialog_scroll-area">
       <div

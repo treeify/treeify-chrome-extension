@@ -54,7 +54,7 @@
   }
 </script>
 
-<CommonDialog title={dialogTitle} onClose={onCloseDialog}>
+<CommonDialog class="image-item-edit-dialog_root" title={dialogTitle} onClose={onCloseDialog}>
   <div class="image-item-edit-dialog_content" on:keydown={onKeyDown}>
     <input
       type="text"

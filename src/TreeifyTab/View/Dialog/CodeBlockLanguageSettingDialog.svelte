@@ -54,7 +54,7 @@
   }
 </script>
 
-<CommonDialog title="コードブロック言語設定">
+<CommonDialog class="language-setting-dialog_root" title="コードブロック言語設定">
   <div class="language-setting-dialog_content" on:keydown={onKeyDown}>
     <input
       type="text"

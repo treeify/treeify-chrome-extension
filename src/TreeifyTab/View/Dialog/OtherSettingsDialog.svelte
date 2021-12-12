@@ -28,7 +28,7 @@
   }
 </script>
 
-<CommonDialog title="その他の設定">
+<CommonDialog class="other-settings-dialog_root" title="その他の設定">
   <div class="other-settings-dialog_content" tabindex="0">
     <fieldset class="other-settings-dialog_sync-with-area">
       <legend>データの同期先</legend>

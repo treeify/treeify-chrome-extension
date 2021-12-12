@@ -45,7 +45,7 @@
   }
 </script>
 
-<CommonDialog title="キャプション設定">
+<CommonDialog class="caption-setting-dialog_root" title="キャプション設定">
   <div class="caption-setting-dialog_content" on:keydown={onKeyDown}>
     <input type="text" class="caption-setting-dialog_caption" bind:value={captionValue} />
     <div class="caption-setting-dialog_button-area">

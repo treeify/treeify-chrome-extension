@@ -92,7 +92,7 @@
   }
 </script>
 
-<CommonDialog title="検索" showCloseButton>
+<CommonDialog class="search-dialog_root" title="検索" showCloseButton>
   <div class="search-dialog_content" on:keydown={onContentAreaKeyDown}>
     <input
       type="text"

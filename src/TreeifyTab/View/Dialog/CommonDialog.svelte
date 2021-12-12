@@ -4,6 +4,8 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
 
+  let klass = ''
+  export { klass as class }
   export let title: string
   export let onClose = () => {}
   export let showCloseButton: boolean = false
@@ -47,7 +49,7 @@
   on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
-  <div class="common-dialog_frame">
+  <div class="common-dialog_frame {klass}">
     <div class="common-dialog_title-bar">
       <div class="common-dialog_title">{title}</div>
       {#if showCloseButton}

@@ -27,7 +27,7 @@
   })
 </script>
 
-<CommonDialog title="タブ一覧" showCloseButton>
+<CommonDialog class="tabs-dialog_root" title="タブ一覧" showCloseButton>
   <div class="tabs-dialog_content" tabindex="0">
     {#each items.toArray() as tabsDialogItemProps}
       <TabsDialogItem props={tabsDialogItemProps} />

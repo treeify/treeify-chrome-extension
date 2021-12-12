@@ -48,7 +48,7 @@
   }
 </script>
 
-<CommonDialog title="ワークスペース" showCloseButton>
+<CommonDialog class="workspace-dialog_root" title="ワークスペース" showCloseButton>
   <div class="workspace-dialog_content" tabindex="0">
     {#each workspaceArray as workspace (workspace.id)}
       <div class="workspace-dialog_existing-workspace" transition:fly|local>
