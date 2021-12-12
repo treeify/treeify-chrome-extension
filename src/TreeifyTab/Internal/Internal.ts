@@ -200,7 +200,7 @@ export class Internal {
         '0010KeyC': List.of('copyForTransclude'),
         '1100KeyX': List.of('copyForMove'),
         '1100KeyV': List.of('pasteAsPlainText'),
-        '1000KeyS': List.of('syncWithDataFolder'),
+        '1000KeyS': List.of('syncTreeifyData'),
         '1100KeyF': List.of('showSearchDialog'),
         '1100KeyR': List.of('showReplaceDialog'),
         '1000Slash': List.of('showCommandPaletteDialog'),

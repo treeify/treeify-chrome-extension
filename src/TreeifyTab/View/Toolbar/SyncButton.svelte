@@ -9,7 +9,7 @@
 
   function onClick() {
     doAsync(async () => {
-      await Command.syncWithDataFolder()
+      await Command.syncTreeifyData()
       Rerenderer.instance.rerender()
     })
   }

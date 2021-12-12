@@ -9,11 +9,22 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
+export async function syncTreeifyData() {
+  switch (Internal.instance.state.syncWith) {
+    case 'Google Drive':
+      // TODO: 実装
+      break
+    case 'Local':
+      await syncWithDataFolder()
+      break
+  }
+}
+
 /**
  * オンメモリのStateとデータフォルダ内のStateを同期する（状況に応じて読み込みや書き込みを行う）。
  * もしデータフォルダがまだ開かれていない場合はデータフォルダを開くプロセスを開始する。
  */
-export async function syncWithDataFolder() {
+async function syncWithDataFolder() {
   try {
     const hadNotOpenedDataFolder = External.instance.dataFolder === undefined
     if (hadNotOpenedDataFolder) {
@@ -130,4 +141,9 @@ export function toggleExcluded() {
   CurrentState.setExcludedItemIds(union.subtract(intersection).toList())
 }
 
+/**
+ * 役割は2つ。
+ * ・特定のキー入力でのブラウザのデフォルト動作を阻止するために割り当てる（preventDefaultが呼ばれるので）
+ * ・キーボード操作設定ダイアログでキーバインドを追加した際の無難な初期値
+ */
 export function doNothing() {}
