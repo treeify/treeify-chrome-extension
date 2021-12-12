@@ -17,7 +17,7 @@
 
 {#if props.type === 'GoogleDrive'}
   <ToolbarIconButton>
-    <div class="sync-button_cloud-icon" />
+    <div class="sync-button_cloud-icon" class:checked={!props.hasUpdatedSinceSync} />
   </ToolbarIconButton>
 {:else}
   <ToolbarIconButton
@@ -27,7 +27,7 @@
     <div
       class="sync-button_data-folder-icon"
       class:already-open={props.isAlreadyOpen}
-      class:completed={props.isCompleted}
+      class:completed={props.isAlreadyOpen && props.hasUpdatedSinceSync}
     />
   </ToolbarIconButton>
 {/if}
@@ -44,6 +44,10 @@
     @include common.square(24px);
     @include common.absolute-center;
     @include common.icon(var(--sync-button-icon-color), url('cloud-sync.svg'));
+
+    &.checked {
+      -webkit-mask: url('cloud-check.svg');
+    }
   }
 
   .sync-button_data-folder-icon {
