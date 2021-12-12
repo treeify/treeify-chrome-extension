@@ -15,16 +15,22 @@
   }
 </script>
 
-<ToolbarIconButton
-  title={props.isAlreadyOpen ? '現在のデータをデータフォルダと同期する' : 'データフォルダを開く'}
-  on:click={onClick}
->
-  <div
-    class="sync-button_icon"
-    class:already-open={props.isAlreadyOpen}
-    class:completed={props.isCompleted}
-  />
-</ToolbarIconButton>
+{#if props.type === 'GoogleDrive'}
+  <ToolbarIconButton>
+    <div class="sync-button_cloud-icon" />
+  </ToolbarIconButton>
+{:else}
+  <ToolbarIconButton
+    title={props.isAlreadyOpen ? '現在のデータをデータフォルダと同期する' : 'データフォルダを開く'}
+    on:click={onClick}
+  >
+    <div
+      class="sync-button_data-folder-icon"
+      class:already-open={props.isAlreadyOpen}
+      class:completed={props.isCompleted}
+    />
+  </ToolbarIconButton>
+{/if}
 
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
@@ -34,8 +40,13 @@
     --sync-button-icon-color: #6a6a6a;
   }
 
-  // データフォルダアイコン
-  .sync-button_icon {
+  .sync-button_cloud-icon {
+    @include common.square(24px);
+    @include common.absolute-center;
+    @include common.icon(var(--sync-button-icon-color), url('cloud-sync.svg'));
+  }
+
+  .sync-button_data-folder-icon {
     @include common.square(24px);
     @include common.absolute-center;
     @include common.icon(var(--sync-button-icon-color), url('folder-open.svg'));
