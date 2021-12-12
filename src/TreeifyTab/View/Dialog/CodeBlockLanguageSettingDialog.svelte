@@ -54,32 +54,32 @@
   }
 </script>
 
-<CommonDialog class="language-setting-dialog_root" title="コードブロック言語設定">
-  <div class="language-setting-dialog_content" on:keydown={onKeyDown}>
+<CommonDialog class="code-block-language-setting-dialog_root" title="コードブロック言語設定">
+  <div class="code-block-language-setting-dialog_content" on:keydown={onKeyDown}>
     <input
       type="text"
-      class="language-setting-dialog_language"
-      list="language-setting-dialog_language-list"
+      class="code-block-language-setting-dialog_language"
+      list="code-block-language-setting-dialog_language-list"
       placeholder={codeBlockItem.language}
       bind:value={languageValue}
     />
-    <datalist id="language-setting-dialog_language-list">
+    <datalist id="code-block-language-setting-dialog_language-list">
       {#each allLanguages.toArray() as language}
         <option value={language} />
       {/each}
     </datalist>
-    <div class="language-setting-dialog_button-area">
+    <div class="code-block-language-setting-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
   </div>
 </CommonDialog>
 
 <style global lang="scss">
-  .language-setting-dialog_content {
+  .code-block-language-setting-dialog_content {
     padding: 1em;
   }
 
-  .language-setting-dialog_button-area {
+  .code-block-language-setting-dialog_button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;
