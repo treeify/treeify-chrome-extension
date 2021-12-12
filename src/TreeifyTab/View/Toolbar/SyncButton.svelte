@@ -29,7 +29,7 @@
     <div
       class="sync-button_data-folder-icon"
       class:already-opened={props.isDataFolderAlreadyOpened}
-      class:checked={props.isDataFolderAlreadyOpened && props.hasUpdatedSinceSync}
+      class:checked={props.isDataFolderAlreadyOpened && !props.hasUpdatedSinceSync}
     />
   </ToolbarIconButton>
 {/if}
