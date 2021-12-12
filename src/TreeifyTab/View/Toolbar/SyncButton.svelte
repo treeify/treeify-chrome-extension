@@ -16,7 +16,7 @@
 </script>
 
 {#if props.syncWith === 'Google Drive'}
-  <ToolbarIconButton>
+  <ToolbarIconButton title="Google Driveと同期する">
     <div class="sync-button_cloud-icon" class:checked={!props.hasUpdatedSinceSync} />
   </ToolbarIconButton>
 {:else}
