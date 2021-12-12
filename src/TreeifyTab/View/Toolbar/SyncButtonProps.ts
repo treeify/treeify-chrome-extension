@@ -1,11 +1,11 @@
 import { External } from 'src/TreeifyTab/External/External'
 
-export type DataFolderButtonProps = {
+export type SyncButtonProps = {
   isAlreadyOpen: boolean
   isCompleted: boolean
 }
 
-export function createDataFolderButtonProps(): DataFolderButtonProps {
+export function createSyncButtonProps(): SyncButtonProps {
   return {
     isAlreadyOpen: External.instance.dataFolder !== undefined,
     isCompleted:

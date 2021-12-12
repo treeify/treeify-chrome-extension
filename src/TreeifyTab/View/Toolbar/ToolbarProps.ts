@@ -1,14 +1,11 @@
-import {
-  createDataFolderButtonProps,
-  DataFolderButtonProps,
-} from 'src/TreeifyTab/View/Toolbar/DataFolderButtonProps'
+import { createSyncButtonProps, SyncButtonProps } from 'src/TreeifyTab/View/Toolbar/SyncButtonProps'
 
 export type ToolbarProps = {
-  dataFolderButtonProps: DataFolderButtonProps
+  syncButtonProps: SyncButtonProps
 }
 
 export function createToolbarProps(): ToolbarProps {
   return {
-    dataFolderButtonProps: createDataFolderButtonProps(),
+    syncButtonProps: createSyncButtonProps(),
   }
 }

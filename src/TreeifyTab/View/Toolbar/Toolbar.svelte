@@ -4,9 +4,9 @@
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { State } from 'src/TreeifyTab/Internal/State'
-  import DataFolderButton from 'src/TreeifyTab/View/Toolbar/DataFolderButton.svelte'
   import ItemAdditionButton from 'src/TreeifyTab/View/Toolbar/ItemAdditionButton.svelte'
   import PreferenceButton from 'src/TreeifyTab/View/Toolbar/PreferenceButton.svelte'
+  import SyncButton from 'src/TreeifyTab/View/Toolbar/SyncButton.svelte'
   import { ToolbarProps } from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
   import { assert } from 'src/Utility/Debug/assert'
 
@@ -38,7 +38,7 @@
 <div class="toolbar_root">
   <button on:click={onClickOpmlExport}>OPMLエクスポート</button>
   <button on:click={onClickStateValidation}>バリデーション</button>
-  <DataFolderButton props={props.dataFolderButtonProps} />
+  <SyncButton props={props.syncButtonProps} />
   <ItemAdditionButton />
   <PreferenceButton />
 </div>

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-  import { DataFolderButtonProps } from 'src/TreeifyTab/View/Toolbar/DataFolderButtonProps'
+  import { SyncButtonProps } from 'src/TreeifyTab/View/Toolbar/SyncButtonProps'
   import ToolbarIconButton from 'src/TreeifyTab/View/Toolbar/ToolbarIconButton.svelte'
   import { doAsync } from 'src/Utility/doAsync'
 
-  export let props: DataFolderButtonProps
+  export let props: SyncButtonProps
 
   function onClick() {
     doAsync(async () => {
@@ -20,7 +20,7 @@
   on:click={onClick}
 >
   <div
-    class="data-folder-button_icon"
+    class="sync-button_icon"
     class:already-open={props.isAlreadyOpen}
     class:completed={props.isCompleted}
   />
@@ -31,14 +31,14 @@
 
   :root {
     // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
-    --data-folder-button-icon-color: #6a6a6a;
+    --sync-button-icon-color: #6a6a6a;
   }
 
   // データフォルダアイコン
-  .data-folder-button_icon {
+  .sync-button_icon {
     @include common.square(24px);
     @include common.absolute-center;
-    @include common.icon(var(--data-folder-button-icon-color), url('folder-open.svg'));
+    @include common.icon(var(--sync-button-icon-color), url('folder-open.svg'));
 
     &.already-open {
       -webkit-mask: url('folder-sync.svg');
