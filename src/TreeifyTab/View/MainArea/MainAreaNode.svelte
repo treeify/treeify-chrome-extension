@@ -225,7 +225,7 @@
     @include common.absolute-center;
 
     // lch(30.0%, 0.0, 0.0)相当
-    @include common.icon(#474747, url('close-icon.svg'));
+    @include common.icon(#474747, url('close.svg'));
   }
 
   .main-area-node_children-area {

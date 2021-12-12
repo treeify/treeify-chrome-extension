@@ -21,6 +21,6 @@
     @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当
-    @include common.icon(#6a6a6a, url('gear-icon.svg'));
+    @include common.icon(#6a6a6a, url('gear.svg'));
   }
 </style>

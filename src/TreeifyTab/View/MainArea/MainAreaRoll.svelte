@@ -189,7 +189,7 @@
   .main-area-roll_page-icon {
     @include common.square(1em);
     @include common.absolute-center;
-    @include common.icon(var(--main-area-bullet-page-icon-color), url('page-icon.svg'));
+    @include common.icon(var(--main-area-bullet-page-icon-color), url('page.svg'));
 
     .main-area-roll_root:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);

@@ -278,7 +278,7 @@
     @include common.square(1.5em);
 
     // lch(45.0%, 0.0, 0.0)相当
-    @include common.icon(#6a6a6a, url('clipboard-icon.svg'));
+    @include common.icon(#6a6a6a, url('clipboard.svg'));
   }
 
   .export-dialog_save-button {
@@ -290,6 +290,6 @@
     @include common.square(1.5em);
 
     // lch(45.0%, 0.0, 0.0)相当
-    @include common.icon(#6a6a6a, url('file-download-icon.svg'));
+    @include common.icon(#6a6a6a, url('file-download.svg'));
   }
 </style>

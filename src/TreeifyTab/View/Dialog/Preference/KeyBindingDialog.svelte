@@ -289,7 +289,7 @@
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      @include common.icon(#5e5e5e, url('./trash-can-icon.svg'));
+      @include common.icon(#5e5e5e, url('./trash-can.svg'));
     }
 
     .key-binding-dialog_command-row:hover & {
@@ -312,7 +312,7 @@
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      @include common.icon(#5e5e5e, url('./plus-icon.svg'));
+      @include common.icon(#5e5e5e, url('./plus.svg'));
     }
 
     .key-binding-dialog_command-row:hover & {

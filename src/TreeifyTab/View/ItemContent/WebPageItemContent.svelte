@@ -88,6 +88,6 @@
 
   .web-page-item-content_audible-icon {
     @include common.square(1em);
-    @include common.icon(var(--main-area-audible-icon-color), url('./audible-icon.svg'));
+    @include common.icon(var(--main-area-audible-icon-color), url('./audible.svg'));
   }
 </style>

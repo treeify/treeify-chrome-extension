@@ -30,7 +30,7 @@
     @include common.square(1.1em);
 
     // lch(30.0%, 0.0, 0.0)相当
-    @include common.icon(#474747, url('page-icon.svg'));
+    @include common.icon(#474747, url('page.svg'));
   }
 
   .other-parents-dialog-page_item-list {
