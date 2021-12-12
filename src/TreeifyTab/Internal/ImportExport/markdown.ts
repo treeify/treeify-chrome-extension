@@ -10,9 +10,9 @@ import { integer } from 'src/Utility/integer'
 export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
   // TODO: 循環参照があると無限ループになる
   const state = Internal.instance.state
-  const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].ignoreInvisibleItems
-    ? CurrentState.getDisplayingChildItemIds(itemPath)
-    : state.items[ItemPath.getItemId(itemPath)].childItemIds
+  const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].includeInvisibleItems
+    ? state.items[ItemPath.getItemId(itemPath)].childItemIds
+    : CurrentState.getDisplayingChildItemIds(itemPath)
   if (childItemIds.isEmpty()) {
     return toMultiLineMarkdownContent(itemPath) + '  \n'
   } else {

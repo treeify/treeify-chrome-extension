@@ -35,15 +35,15 @@ export type State = {
     selectedFormat: ExportFormat
     options: {
       [ExportFormat.PLAIN_TEXT]: {
-        ignoreInvisibleItems: boolean
+        includeInvisibleItems: boolean
         indentationExpression: string
       }
       [ExportFormat.MARKDOWN]: {
-        ignoreInvisibleItems: boolean
+        includeInvisibleItems: boolean
         minimumHeaderLevel: integer
       }
       [ExportFormat.OPML]: {
-        ignoreInvisibleItems: boolean
+        includeInvisibleItems: boolean
       }
     }
   }

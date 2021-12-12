@@ -19,17 +19,17 @@
   const plainTextOptions = Internal.instance.state.exportSettings.options[ExportFormat.PLAIN_TEXT]
   const markdownOptions = Internal.instance.state.exportSettings.options[ExportFormat.MARKDOWN]
   const opmlOptions = Internal.instance.state.exportSettings.options[ExportFormat.OPML]
-  let plainTextIgnoreInvisibleItems = plainTextOptions.ignoreInvisibleItems
+  let plainTextIncludeInvisibleItems = plainTextOptions.includeInvisibleItems
   let indentationExpression = plainTextOptions.indentationExpression
   let minimumHeaderLevel: integer = markdownOptions.minimumHeaderLevel
-  let markdownIgnoreInvisibleItems = markdownOptions.ignoreInvisibleItems
-  let opmlIgnoreInvisibleItems = opmlOptions.ignoreInvisibleItems
+  let markdownIncludeInvisibleItems = markdownOptions.includeInvisibleItems
+  let opmlIncludeInvisibleItems = opmlOptions.includeInvisibleItems
 
   $: Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
 
   $: Internal.instance.mutate(
-    plainTextIgnoreInvisibleItems,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'ignoreInvisibleItems')
+    plainTextIncludeInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'includeInvisibleItems')
   )
 
   $: Internal.instance.mutate(
@@ -43,13 +43,13 @@
   )
 
   $: Internal.instance.mutate(
-    markdownIgnoreInvisibleItems,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'ignoreInvisibleItems')
+    markdownIncludeInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'includeInvisibleItems')
   )
 
   $: Internal.instance.mutate(
-    opmlIgnoreInvisibleItems,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'ignoreInvisibleItems')
+    opmlIncludeInvisibleItems,
+    PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'includeInvisibleItems')
   )
 
   function onClickCopyButton() {
@@ -79,8 +79,9 @@
           .map((selectedItemPath) => toMarkdownText(selectedItemPath, minimumHeaderLevel))
           .join('')
       case ExportFormat.OPML:
-        const ignoreInvisibleItems = exportSettings.options[ExportFormat.OPML].ignoreInvisibleItems
-        return toOpmlString(CurrentState.getSelectedItemPaths(), ignoreInvisibleItems)
+        const includeInvisibleItems =
+          exportSettings.options[ExportFormat.OPML].includeInvisibleItems
+        return toOpmlString(CurrentState.getSelectedItemPaths(), includeInvisibleItems)
     }
   }
 
@@ -164,8 +165,8 @@
           />
         </label>
         <label class="export-dialog_checkbox-label">
-          <input type="checkbox" bind:checked={plainTextIgnoreInvisibleItems} />
-          不可視の項目を無視する
+          <input type="checkbox" bind:checked={plainTextIncludeInvisibleItems} />
+          折りたたまれた項目も出力する
         </label>
       {:else if selectedFormat === ExportFormat.MARKDOWN}
         <label>
@@ -179,13 +180,13 @@
           />
         </label>
         <label class="export-dialog_checkbox-label">
-          <input type="checkbox" bind:checked={markdownIgnoreInvisibleItems} />
-          不可視の項目を無視する
+          <input type="checkbox" bind:checked={markdownIncludeInvisibleItems} />
+          折りたたまれた項目も出力する
         </label>
       {:else if selectedFormat === ExportFormat.OPML}
         <label class="export-dialog_checkbox-label">
-          <input type="checkbox" bind:checked={opmlIgnoreInvisibleItems} />
-          不可視の項目を無視する
+          <input type="checkbox" bind:checked={opmlIncludeInvisibleItems} />
+          折りたたまれた項目も出力する
         </label>
       {/if}
     </div>

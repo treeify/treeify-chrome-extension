@@ -216,15 +216,15 @@ export class Internal {
         selectedFormat: ExportFormat.PLAIN_TEXT,
         options: {
           [ExportFormat.PLAIN_TEXT]: {
-            ignoreInvisibleItems: true,
+            includeInvisibleItems: false,
             indentationExpression: '  ',
           },
           [ExportFormat.MARKDOWN]: {
-            ignoreInvisibleItems: false,
+            includeInvisibleItems: true,
             minimumHeaderLevel: 1,
           },
           [ExportFormat.OPML]: {
-            ignoreInvisibleItems: false,
+            includeInvisibleItems: true,
           },
         },
       },

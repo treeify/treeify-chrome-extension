@@ -10,7 +10,7 @@ import { assertNeverType, assertNonNull } from 'src/Utility/Debug/assert'
 function toOpmlOutlineElement(
   itemPath: ItemPath,
   xmlDocument: XMLDocument,
-  ignoreInvisibleItems: boolean
+  includeInvisibleItems: boolean
 ): Element {
   const outlineElement = xmlDocument.createElement('outline')
 
@@ -19,11 +19,11 @@ function toOpmlOutlineElement(
     outlineElement.setAttribute(attrName, attributes[attrName])
   }
 
-  const childItemIds = ignoreInvisibleItems
-    ? CurrentState.getDisplayingChildItemIds(itemPath)
-    : Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
+  const childItemIds = includeInvisibleItems
+    ? Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
+    : CurrentState.getDisplayingChildItemIds(itemPath)
   const children = childItemIds.map((childItemId) =>
-    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument, ignoreInvisibleItems)
+    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument, includeInvisibleItems)
   )
   outlineElement.append(...children)
 
@@ -110,7 +110,7 @@ function toOpmlAttributes(itemPath: ItemPath): { [T in string]: string } {
 /** 指定された項目とその子孫をOPML 2.0形式に変換する */
 export function toOpmlString(
   itemPaths: List<ItemPath>,
-  ignoreInvisibleItems: boolean = false
+  includeInvisibleItems: boolean = true
 ): string {
   const xmlDocument = document.implementation.createDocument(null, 'opml')
   const opmlElement = xmlDocument.documentElement
@@ -122,7 +122,7 @@ export function toOpmlString(
   const bodyElement = xmlDocument.createElement('body')
   bodyElement.append(
     ...itemPaths.map((itemPath) =>
-      toOpmlOutlineElement(itemPath, xmlDocument, ignoreInvisibleItems)
+      toOpmlOutlineElement(itemPath, xmlDocument, includeInvisibleItems)
     )
   )
   opmlElement.append(bodyElement)
