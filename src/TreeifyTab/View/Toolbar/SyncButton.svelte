@@ -48,7 +48,7 @@
     @include common.icon(var(--sync-button-icon-color), url('cloud-sync.svg'));
 
     &.checked {
-      -webkit-mask: url('cloud-check.svg');
+      @include common.icon-url(url('cloud-check.svg'));
     }
   }
 
@@ -58,11 +58,11 @@
     @include common.icon(var(--sync-button-icon-color), url('folder-open.svg'));
 
     &.already-opened {
-      -webkit-mask: url('folder-sync.svg');
+      @include common.icon-url(url('folder-sync.svg'));
     }
 
     &.checked {
-      -webkit-mask: url('folder-check.svg');
+      @include common.icon-url(url('folder-check.svg'));
     }
   }
 </style>
