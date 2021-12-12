@@ -19,9 +19,13 @@ export class External {
 
   dialogState: Dialog | undefined
 
-  /** データフォルダ */
   dataFolder: DataFolder | undefined
-  alreadyWrittenToDataFolder = false
+
+  /**
+   * 前回の同期以降にStateが更新されたかどうか
+   * TODO: この変数は本来は永続化されるべき。再起動時点で同期済みかどうかは状況次第なので。
+   */
+  hasUpdatedSinceSync = false
 
   /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
@@ -59,9 +63,7 @@ export class External {
   }
 
   onMutateState(propertyPath: PropertyPath) {
-    if (this.dataFolder !== undefined) {
-      this.alreadyWrittenToDataFolder = false
-    }
+    this.hasUpdatedSinceSync = true
   }
 
   getTreeifyClipboardHash(): string | undefined {

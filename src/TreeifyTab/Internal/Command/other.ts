@@ -30,12 +30,12 @@ export async function syncWithDataFolder() {
       if (hadNotOpenedDataFolder) {
         // メモリ上のStateを自インスタンスフォルダに書き込む
         await External.instance.dataFolder.writeState(Internal.instance.state)
-        External.instance.alreadyWrittenToDataFolder = true
+        External.instance.hasUpdatedSinceSync = false
         Rerenderer.instance.rerender()
       } else {
         // 自インスタンスフォルダ上書き更新のケース
 
-        External.instance.alreadyWrittenToDataFolder = true
+        External.instance.hasUpdatedSinceSync = false
         await External.instance.dataFolder.writeState(Internal.instance.state)
         Rerenderer.instance.rerender()
       }

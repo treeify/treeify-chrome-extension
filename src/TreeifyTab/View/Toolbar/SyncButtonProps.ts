@@ -21,8 +21,7 @@ export function createSyncButtonProps(): SyncButtonProps {
         type: 'DataFolder',
         isAlreadyOpen: External.instance.dataFolder !== undefined,
         isCompleted:
-          External.instance.dataFolder !== undefined &&
-          External.instance.alreadyWrittenToDataFolder,
+          External.instance.dataFolder !== undefined && External.instance.hasUpdatedSinceSync,
       }
   }
 }
