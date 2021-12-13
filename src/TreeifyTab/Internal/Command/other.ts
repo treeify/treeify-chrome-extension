@@ -1,22 +1,106 @@
+import { List } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION, DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
+import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { getSyncedAt, setSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { compress, decompress } from 'src/Utility/gzip'
 
 export async function syncTreeifyData() {
   switch (Internal.instance.state.syncWith) {
     case 'Google Drive':
-      // TODO: 実装
+      await syncWithGoogleDrive()
       break
     case 'Local':
       await syncWithDataFolder()
       break
+  }
+}
+
+async function syncWithGoogleDrive() {
+  const DATA_FILE_NAME = 'Treeify data.json.gz'
+
+  const dataFiles = await GoogleDrive.searchFile(DATA_FILE_NAME)
+  // タイムスタンプが最新のデータファイルを選ぶ。
+  // 複数が該当する場合はIDのソート順で先頭のものを選ぶ。
+  const dataFile = List(dataFiles)
+    .sortBy((dataFile) => dataFile.id)
+    .maxBy((dataFile) => dataFile.modifiedTime)
+  if (dataFiles.length >= 2) {
+    // データファイルが複数ある（同時作成などにより重複してしまった）場合
+    // TODO: 先頭以外のファイルは削除する。その際のAPIのエラーは無視する（二重削除の可能性があるため）
+  }
+  if (dataFile === undefined) {
+    // データファイルがない場合
+
+    // create APIを呼んでファイル更新日時を記録して終了
+    const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
+    const response = await GoogleDrive.createFileWithMultipart(DATA_FILE_NAME, new Blob(gzipped))
+    const responseJson = await response.json()
+    setSyncedAt(Internal.instance.state.syncWith, responseJson.modifiedTime)
+    External.instance.hasUpdatedSinceSync = false
+    Rerenderer.instance.rerender()
+  } else {
+    // データファイルがある場合
+
+    const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
+    const knownTimestamp = syncedAt !== undefined ? new Date(syncedAt).getTime() : -1
+    const dataFileTimestamp = new Date(dataFile.modifiedTime).getTime()
+    if (knownTimestamp < dataFileTimestamp) {
+      // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
+
+      // get APIでファイル内容をダウンロードする
+      const response = await GoogleDrive.readFile(dataFile.id)
+      const gzipped = await response.blob()
+      const text = await decompress(await gzipped.arrayBuffer())
+      const state: State = JSON.parse(text, State.jsonReviver)
+
+      // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
+      if (state.maxItemId < Internal.instance.state.maxItemId) {
+        const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
+        const response = await GoogleDrive.updateFileWithMultipart(dataFile.id, new Blob(gzipped))
+        const responseJson = await response.json()
+        setSyncedAt(Internal.instance.state.syncWith, responseJson.modifiedTime)
+        External.instance.hasUpdatedSinceSync = false
+        Rerenderer.instance.rerender()
+      } else {
+        setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
+        restart(state)
+      }
+    } else if (knownTimestamp > dataFileTimestamp) {
+      // 例外的な状況でしか到達できない特殊なケース。
+      // 起こるとしたら下記の2パターンか。
+      // (1) ユーザーが履歴機能を使ってデータファイルをロールバックさせた
+      // (2) 複数のオンラインストレージを併用しており、過去に使っていたオンラインストレージと同期した
+      // データファイルが壊れたユーザーが復元を試みるとパターン(1)になる。
+
+      const response = await GoogleDrive.readFile(dataFile.id)
+      const blob = await response.blob()
+      const text = await decompress(await blob.arrayBuffer())
+      const state: State = JSON.parse(text, State.jsonReviver)
+      setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
+      restart(state)
+    } else {
+      // データファイルの更新日時がsyncedAtと等しければ
+
+      // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
+      if (!External.instance.hasUpdatedSinceSync) return
+
+      const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
+      const response = await GoogleDrive.updateFileWithMultipart(dataFile.id, new Blob(gzipped))
+      const responseJson = await response.json()
+      setSyncedAt(Internal.instance.state.syncWith, responseJson.modifiedTime)
+      External.instance.hasUpdatedSinceSync = false
+      Rerenderer.instance.rerender()
+    }
   }
 }
 
