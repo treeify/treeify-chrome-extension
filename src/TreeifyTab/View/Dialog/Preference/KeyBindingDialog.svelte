@@ -157,7 +157,7 @@
       name: 'その他',
       commandIds: List.of(
         'doNothing',
-        'syncWithDataFolder',
+        'syncTreeifyData',
         'toggleExcluded',
         'convertSpaceToNewline'
       ),
