@@ -1,34 +1,19 @@
 <script lang="ts">
-  import Color from 'color'
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
+  import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
   import MainAreaContent from 'src/TreeifyTab/View/MainArea/MainAreaContent.svelte'
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
   import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
-  import { CssCustomProperty } from 'src/Utility/browser'
-  import { integer } from 'src/Utility/integer'
 
   export let props: MainAreaNodeProps
 
-  function calculateFootprintColor(
-    footprintRank: integer | undefined,
-    footprintCount: integer
-  ): Color | undefined {
-    if (footprintRank === undefined) return undefined
-
-    const strongestColor = CssCustomProperty.getColor('--main-area-strongest-footprint-color')
-    const weakestColor = CssCustomProperty.getColor('--main-area-weakest-footprint-color')
-
-    if (footprintCount === 1) {
-      return strongestColor
-    }
-
-    // 線形補間する
-    const ratio = footprintRank / (footprintCount - 1)
-    return strongestColor.mix(weakestColor, ratio)
-  }
-
-  $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
+  $: footprintColor = calculateFootprintColor(
+    props.footprintRank,
+    props.footprintCount,
+    '--main-area-strongest-footprint-color',
+    '--main-area-weakest-footprint-color'
+  )
   $: style = `
     --footprint-color: ${footprintColor ?? 'transparent'};
   `

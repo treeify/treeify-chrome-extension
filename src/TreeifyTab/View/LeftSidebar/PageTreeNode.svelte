@@ -1,33 +1,18 @@
 <script lang="ts">
-  import Color from 'color'
+  import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndent.svelte'
   import PageTreeNode from 'src/TreeifyTab/View/LeftSidebar/PageTreeNode.svelte'
   import { PageTreeNodeProps } from 'src/TreeifyTab/View/LeftSidebar/PageTreeNodeProps'
-  import { CssCustomProperty } from 'src/Utility/browser'
-  import { integer } from 'src/Utility/integer'
 
   export let props: PageTreeNodeProps
 
-  function calculateFootprintColor(
-    footprintRank: integer | undefined,
-    footprintCount: integer
-  ): Color | undefined {
-    if (footprintRank === undefined) return undefined
-
-    const strongestColor = CssCustomProperty.getColor('--page-tree-strongest-footprint-color')
-    const weakestColor = CssCustomProperty.getColor('--page-tree-weakest-footprint-color')
-
-    if (footprintCount === 1) {
-      return strongestColor
-    }
-
-    // 線形補間する
-    const ratio = footprintRank / (footprintCount - 1)
-    return strongestColor.mix(weakestColor, ratio)
-  }
-
-  $: footprintColor = calculateFootprintColor(props.footprintRank, props.footprintCount)
+  $: footprintColor = calculateFootprintColor(
+    props.footprintRank,
+    props.footprintCount,
+    '--page-tree-strongest-footprint-color',
+    '--page-tree-weakest-footprint-color'
+  )
   $: style = `
     --footprint-color: ${footprintColor ?? 'transparent'};
   `
