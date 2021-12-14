@@ -2,13 +2,24 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath.js'
   import SearchResultItem from 'src/TreeifyTab/View/Dialog/SearchResultItem.svelte'
   import { SearchResultItemProps } from 'src/TreeifyTab/View/Dialog/SearchResultItemProps'
+  import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps.js'
 
   export let props: SearchResultItemProps
+
+  $: footprintColor = calculateFootprintColor(
+    props.footprintRank,
+    props.footprintCount,
+    '--page-tree-strongest-footprint-color',
+    '--page-tree-weakest-footprint-color'
+  )
+  $: style = `
+    --footprint-color: ${footprintColor ?? 'transparent'};
+  `
 </script>
 
-<div class="search-result-item_root">
+<div class="search-result-item_root" {style}>
   <div class="search-result-item_roll">
     {#if !props.children.isEmpty()}
       <div class="search-result-item_indent-guide" />
@@ -38,6 +49,12 @@
   :root {
     --search-result-line-height: 1.3em;
     --search-result-bullet-size: 0.38em;
+
+    // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
+    --search-result-page-tree-strongest-footprint-color: #fff6f3;
+    // 最も古い足跡の色（線形補間の一端）
+    --search-result-page-tree-weakest-footprint-color: #ffffff;
+    --search-result-footprint-count-exponent: 0.5;
   }
 
   .search-result-item_root {
@@ -79,6 +96,7 @@
 
   .search-result-item_content-area {
     cursor: pointer;
+    background-color: var(--footprint-color);
 
     &:focus {
       outline: none;
