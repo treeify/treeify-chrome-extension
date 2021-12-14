@@ -15,6 +15,7 @@ export type SearchResultItemProps = {
   children: List<SearchResultItemProps>
   footprintRank: integer | undefined
   footprintCount: integer
+  outerCircleRadiusEm: integer
   onClick(event: MouseEvent): void
   onKeyDown(event: KeyboardEvent): void
 }
@@ -51,12 +52,14 @@ export function createSearchResultItemPropses(
 
   // 足跡順位の計算結果にアクセスするためにクロージャーとして定義する
   function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultItemProps[]) {
-    const footprintRank = footprintRankMap.get(ItemPath.getItemId(itemPath))
+    const itemId = ItemPath.getItemId(itemPath)
+
     return {
       itemPath,
       children: List(children),
-      footprintRank,
+      footprintRank: footprintRankMap.get(itemId),
       footprintCount,
+      outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
       onClick(event: MouseEvent) {
         // 横スクロールバーをクリックした場合は何もしないようにする
         if (event.target instanceof HTMLElement) {
@@ -70,7 +73,7 @@ export function createSearchResultItemPropses(
         if (inputId === '0000MouseButton0') {
           event.preventDefault()
           CurrentState.jumpTo(itemPath)
-          CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
+          CurrentState.updateItemTimestamp(itemId)
 
           // 検索ダイアログを閉じる
           External.instance.dialogState = undefined
@@ -78,7 +81,7 @@ export function createSearchResultItemPropses(
         } else if (inputId === '0010MouseButton0') {
           event.preventDefault()
           transclude(itemPath)
-          CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
+          CurrentState.updateItemTimestamp(itemId)
 
           // 検索ダイアログを閉じる
           External.instance.dialogState = undefined
@@ -91,7 +94,7 @@ export function createSearchResultItemPropses(
           case '0000Space':
             event.preventDefault()
             CurrentState.jumpTo(itemPath)
-            CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
+            CurrentState.updateItemTimestamp(itemId)
 
             // 検索ダイアログを閉じる
             External.instance.dialogState = undefined
@@ -101,7 +104,7 @@ export function createSearchResultItemPropses(
           case '0010Space':
             event.preventDefault()
             transclude(itemPath)
-            CurrentState.updateItemTimestamp(ItemPath.getItemId(itemPath))
+            CurrentState.updateItemTimestamp(itemId)
 
             // 検索ダイアログを閉じる
             External.instance.dialogState = undefined
@@ -111,6 +114,21 @@ export function createSearchResultItemPropses(
       },
     }
   }
+}
+
+function calculateOuterCircleRadiusEm(itemId: ItemId): number {
+  const childItemCount = Internal.instance.state.items[itemId].childItemIds.size
+  if (childItemCount === 0) return 0
+
+  const outerCircleMinDiameter =
+    CssCustomProperty.getNumber('--search-result-bullet-outer-circle-min-diameter') ?? 1.05
+  const outerCircleMaxDiameter =
+    CssCustomProperty.getNumber('--search-result-bullet-outer-circle-max-diameter') ?? 1.3
+  const outerCircleItemCountLimit =
+    CssCustomProperty.getNumber('--search-result-bullet-outer-circle-item-count-limit') ?? 10
+  const step = (outerCircleMaxDiameter - outerCircleMinDiameter) / outerCircleItemCountLimit
+  const limitedHiddenItemsCount = Math.min(childItemCount, outerCircleItemCountLimit)
+  return outerCircleMinDiameter + limitedHiddenItemsCount * step
 }
 
 function transclude(itemPath: ItemPath) {
