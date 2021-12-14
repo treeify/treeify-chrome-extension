@@ -34,10 +34,6 @@ async function syncWithGoogleDrive() {
   const dataFile = List(dataFiles)
     .sortBy((dataFile) => dataFile.id)
     .maxBy((dataFile) => dataFile.modifiedTime)
-  if (dataFiles.length >= 2) {
-    // データファイルが複数ある（同時作成などにより重複してしまった）場合
-    // TODO: 先頭以外のファイルは削除する。その際のAPIのエラーは無視する（二重削除の可能性があるため）
-  }
   if (dataFile === undefined) {
     // データファイルがない場合
 
