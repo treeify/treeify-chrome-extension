@@ -1,5 +1,6 @@
 import { is, List, Set } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
+import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -11,6 +12,7 @@ import { Timestamp } from 'src/Utility/Timestamp'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
+  schemaVersion: typeof CURRENT_SCHEMA_VERSION
   items: Record<ItemId, Item>
   textItems: Record<ItemId, TextItem>
   webPageItems: Record<ItemId, WebPageItem>
