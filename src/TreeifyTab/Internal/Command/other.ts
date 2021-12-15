@@ -76,7 +76,7 @@ async function syncWithGoogleDrive() {
         Rerenderer.instance.rerender()
       } else {
         setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
-        await restart(state)
+        await restart(state, syncedAt === undefined)
       }
     } else if (knownTimestamp > dataFileTimestamp) {
       // 例外的な状況でしか到達できない特殊なケース。
