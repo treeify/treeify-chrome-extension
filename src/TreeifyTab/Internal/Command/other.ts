@@ -55,8 +55,7 @@ async function syncWithGoogleDrive() {
 
       // get APIでファイル内容をダウンロードする
       const response = await GoogleDrive.readFile(dataFile.id)
-      const gzipped = await response.blob()
-      const text = await decompress(await gzipped.arrayBuffer())
+      const text = await decompress(await response.arrayBuffer())
       const state: State = JSON.parse(text, State.jsonReviver)
 
       // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
@@ -79,8 +78,7 @@ async function syncWithGoogleDrive() {
       // データファイルが壊れたユーザーが復元を試みるとパターン(1)になる。
 
       const response = await GoogleDrive.readFile(dataFile.id)
-      const blob = await response.blob()
-      const text = await decompress(await blob.arrayBuffer())
+      const text = await decompress(await response.arrayBuffer())
       const state: State = JSON.parse(text, State.jsonReviver)
       setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
       restart(state)
