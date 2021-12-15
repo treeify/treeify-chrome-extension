@@ -80,7 +80,7 @@ export function unindent() {
     CurrentState.setTargetItemPath(siblingItemPath)
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -89,6 +89,7 @@ export function unindent() {
     )
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(ItemPath.createSiblingItemPath(parentItemPath, anchorItemId)!)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
