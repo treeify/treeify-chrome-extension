@@ -178,12 +178,11 @@ function onArrowRight(event: KeyboardEvent) {
   // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  const belowItemId = ItemPath.getItemId(belowItemPath)
-
   const textItemSelection = getTextItemSelectionFromDom()
   if (textItemSelection === undefined) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
   } else {
     const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -198,18 +197,12 @@ function onArrowRight(event: KeyboardEvent) {
       return
     }
 
-    const belowItemType = Internal.instance.state.items[belowItemId].type
-    if (belowItemType === ItemType.TEXT) {
-      // 下の項目がテキスト項目の場合、キャレットをその先頭に移動する
-      event.preventDefault()
-      CurrentState.setTargetItemPath(belowItemPath)
-      Rerenderer.instance.rerender()
-    } else {
-      // 下の項目がテキスト項目以外の場合、それをフォーカスする
-      event.preventDefault()
-      CurrentState.setTargetItemPath(belowItemPath)
-      Rerenderer.instance.rerender()
-    }
+    // 下の項目をフォーカスする。
+    // （下の項目がテキスト項目の場合、キャレットはその先頭に移動する）
+    event.preventDefault()
+    CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.rerender()
   }
 }
 
