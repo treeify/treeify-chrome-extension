@@ -228,6 +228,7 @@ function onArrowUp(event: KeyboardEvent) {
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
     CurrentState.setTargetItemPath(aboveItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -286,7 +287,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
       const caretXCoordinate = getCaretXCoordinate()!
       if (caretXCoordinate === originalXCoordinate) {
         CurrentState.setTargetItemPath(aboveItemPath)
-        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+        Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
         Rerenderer.instance.rerender()
         return
       }
@@ -297,7 +298,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     // もしi < 0なら既にsetCaretPosition(0)が実行済みなので、このままreturnしていい
     if (i < 0) {
       CurrentState.setTargetItemPath(aboveItemPath)
-      Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+      Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
       Rerenderer.instance.rerender()
       return
     }
@@ -316,7 +317,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   }
 
   CurrentState.setTargetItemPath(aboveItemPath)
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   Rerenderer.instance.rerender()
 }
 
