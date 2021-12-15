@@ -165,9 +165,6 @@ export function moveItemToBelow() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  // キャレット位置、テキスト選択範囲を維持する
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
   if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下の項目が子を表示していない場合
 
@@ -183,6 +180,7 @@ export function moveItemToBelow() {
     )
     assertNonUndefined(newAnchorItemPath)
     CurrentState.setAnchorItemPath(newAnchorItemPath)
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 1つ下の項目が子を表示している場合
 
@@ -194,6 +192,7 @@ export function moveItemToBelow() {
       ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   }
 }
 
