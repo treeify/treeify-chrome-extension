@@ -335,6 +335,7 @@ function onArrowDown(event: KeyboardEvent) {
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -358,6 +359,7 @@ function onArrowDown(event: KeyboardEvent) {
       if (textItemSelection !== undefined && textItemSelection.focusDistance === characterCount) {
         event.preventDefault()
         CurrentState.setTargetItemPath(belowItemPath)
+        Rerenderer.instance.requestToFocusTargetItem()
         Rerenderer.instance.rerender()
         return
       }
@@ -420,7 +422,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
     }
   }
   CurrentState.setTargetItemPath(belowItemPath)
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   Rerenderer.instance.rerender()
 }
 
