@@ -218,7 +218,7 @@ export function moveItemToPrevSibling() {
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 次のようなツリーの中でDを上に動かす際、Aの弟ではなくBの弟にする。
     // A
@@ -250,7 +250,7 @@ export function moveItemToPrevSibling() {
           CurrentState.setAnchorItemPath(knightItemPath.push(anchorItemId))
 
           // キャレット位置、テキスト選択範囲を維持する
-          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+          Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
           return
         }
       }
