@@ -135,7 +135,7 @@ export function moveItemToAbove() {
   CurrentState.setAnchorItemPath(newAnchorItemPath)
 
   // キャレット位置、テキスト選択範囲を維持する
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
 }
 
 /**
