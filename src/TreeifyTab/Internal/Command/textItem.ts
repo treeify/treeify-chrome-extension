@@ -48,7 +48,7 @@ function execTextEditCommand(commandName: string) {
     document.execCommand(commandName)
 
     // 元のキャレット位置に戻す
-    Rerenderer.instance.requestSelectAfterRendering(textItemSelection)
+    Rerenderer.instance.requestToFocusTargetItem(textItemSelection)
   } else {
     document.execCommand(commandName)
   }
