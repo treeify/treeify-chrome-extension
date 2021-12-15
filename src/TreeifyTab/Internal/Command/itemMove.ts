@@ -282,7 +282,7 @@ export function moveItemToNextSibling() {
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     moveItemToBelow()
   }
