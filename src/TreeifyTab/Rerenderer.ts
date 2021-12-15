@@ -37,8 +37,8 @@ export class Rerenderer {
 
   readonly mutatedPropertyPaths = new Set<PropertyPath>()
 
-  // 次の描画が完了した際に設定すべきテキスト選択範囲
-  private pendingTextItemSelection: TextItemSelection | undefined
+  // 次の描画が完了した際に実行される関数。フォーカスなどの設定に用いられる
+  private pendingFocusAndTextSelectionSetting: (() => void) | undefined
 
   /**
    * 画面を再描画すべきタイミングで更新イベントが起こるストアを返す。
@@ -65,23 +65,8 @@ export class Rerenderer {
 
     // DOM更新完了後に実行される
     tick().then(() => {
-      // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().size === 1) {
-        const targetItemPath = CurrentState.getTargetItemPath()
-        const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-        const focusableElement = document.getElementById(targetElementId)
-        focusableElement?.focus()
-      } else {
-        // 複数選択の場合
-        focusMainAreaBackground()
-      }
-
-      if (this.pendingTextItemSelection !== undefined && document.activeElement !== null) {
-        // キャレット位置、テキスト選択範囲を設定する
-        setDomSelection(document.activeElement, this.pendingTextItemSelection)
-      }
-
-      this.pendingTextItemSelection = undefined
+      this.pendingFocusAndTextSelectionSetting?.()
+      this.pendingFocusAndTextSelectionSetting = undefined
     })
   }
 
@@ -113,15 +98,55 @@ export class Rerenderer {
     })
   }
 
+  requestToFocusTargetItem(textItemSelection?: TextItemSelection | undefined) {
+    this.pendingFocusAndTextSelectionSetting = () => {
+      // フォーカスを設定する
+      if (CurrentState.getSelectedItemPaths().size === 1) {
+        const targetItemPath = CurrentState.getTargetItemPath()
+        const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+        const focusableElement = document.getElementById(targetElementId)
+        focusableElement?.focus()
+      } else {
+        // 複数選択の場合
+        focusMainAreaBackground()
+      }
+
+      if (textItemSelection !== undefined && document.activeElement !== null) {
+        // キャレット位置、テキスト選択範囲を設定する
+        setDomSelection(document.activeElement, textItemSelection)
+      }
+    }
+  }
+
+  requestToSetCaretPosition(position: integer) {
+    this.pendingFocusAndTextSelectionSetting = () => {
+      // フォーカスを設定する
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const focusableElement = document.getElementById(targetElementId)
+      focusableElement?.focus()
+
+      if (document.activeElement !== null) {
+        // キャレット位置、テキスト選択範囲を設定する
+        setDomSelection(document.activeElement, {
+          focusDistance: position,
+          anchorDistance: position,
+        })
+      }
+    }
+  }
+
   /**
    * 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する。
    * undefinedを指定されても何もしない。
+   * @deprecated
    */
-  requestSelectAfterRendering(textItemSelection: TextItemSelection | undefined) {
-    this.pendingTextItemSelection = textItemSelection
-  }
+  requestSelectAfterRendering(textItemSelection: TextItemSelection | undefined) {}
 
-  /** 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する */
+  /**
+   * 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する
+   * @deprecated
+   */
   requestSetCaretDistanceAfterRendering(distance: integer) {
     this.requestSelectAfterRendering({ focusDistance: distance, anchorDistance: distance })
   }
