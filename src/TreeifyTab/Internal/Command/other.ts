@@ -76,7 +76,7 @@ async function syncWithGoogleDrive() {
         Rerenderer.instance.rerender()
       } else {
         setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
-        restart(state)
+        await restart(state)
       }
     } else if (knownTimestamp > dataFileTimestamp) {
       // 例外的な状況でしか到達できない特殊なケース。
@@ -90,7 +90,7 @@ async function syncWithGoogleDrive() {
       const text = await decompress(await response.arrayBuffer())
       const state: State = JSON.parse(text, State.jsonReviver)
       setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
-      restart(state)
+      await restart(state)
     } else {
       // データファイルの更新日時がsyncedAtと等しければ
       console.log('データファイルの更新日時がsyncedAtと等しければ')
