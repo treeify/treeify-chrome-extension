@@ -39,13 +39,14 @@ export function indent() {
     CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
