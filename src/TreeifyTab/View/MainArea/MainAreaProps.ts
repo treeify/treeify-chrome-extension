@@ -143,7 +143,7 @@ function onArrowLeft(event: KeyboardEvent) {
       // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+      Rerenderer.instance.requestToSetCaretPosition(characterCount)
     }
 
     Rerenderer.instance.rerender()
@@ -161,7 +161,7 @@ function onArrowLeft(event: KeyboardEvent) {
       // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+      Rerenderer.instance.requestToSetCaretPosition(characterCount)
     }
 
     Rerenderer.instance.rerender()
