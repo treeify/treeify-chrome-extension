@@ -171,7 +171,9 @@ export function deleteItem() {
   if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const characterCount = DomishObject.countCharacters(domishObjects)
-    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+    Rerenderer.instance.requestToSetCaretPosition(characterCount)
+  } else {
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 
   for (const selectedItemPath of selectedItemPaths) {
