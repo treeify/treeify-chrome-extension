@@ -645,6 +645,7 @@ function onDelete(event: KeyboardEvent) {
       if (belowItemPath !== undefined) {
         CurrentState.setTargetItemPath(belowItemPath)
       }
+      Rerenderer.instance.requestToFocusTargetItem()
       Rerenderer.instance.rerender()
       return
     }
@@ -685,7 +686,7 @@ function onDelete(event: KeyboardEvent) {
       CurrentState.deleteItem(belowItemId)
 
       // 元のキャレット位置を維持する
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(
+      Rerenderer.instance.requestToSetCaretPosition(
         DomishObject.countCharacters(focusedItemDomishObjects)
       )
 
@@ -704,6 +705,7 @@ function onDelete(event: KeyboardEvent) {
     if (belowItemPath !== undefined) {
       CurrentState.setTargetItemPath(belowItemPath)
     }
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
   }
 }

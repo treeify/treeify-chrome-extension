@@ -136,21 +136,6 @@ export class Rerenderer {
     }
   }
 
-  /**
-   * 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する。
-   * undefinedを指定されても何もしない。
-   * @deprecated
-   */
-  requestSelectAfterRendering(textItemSelection: TextItemSelection | undefined) {}
-
-  /**
-   * 次の描画が完了した際に設定してほしいテキスト選択範囲を指定する
-   * @deprecated
-   */
-  requestSetCaretDistanceAfterRendering(distance: integer) {
-    this.requestSelectAfterRendering({ focusDistance: distance, anchorDistance: distance })
-  }
-
   onMutateState(propertyPath: PropertyPath) {
     this.mutatedPropertyPaths.add(propertyPath)
   }
