@@ -1,5 +1,6 @@
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 /**
  * ターゲット項目がページなら非ページ化する。
@@ -26,6 +27,7 @@ export function switchPage() {
 
   if (CurrentState.isPage(targetItemId)) {
     CurrentState.switchActivePage(targetItemId)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 

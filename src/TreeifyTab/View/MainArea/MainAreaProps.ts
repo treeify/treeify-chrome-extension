@@ -143,7 +143,7 @@ function onArrowLeft(event: KeyboardEvent) {
       // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+      Rerenderer.instance.requestToSetCaretPosition(characterCount)
     }
 
     Rerenderer.instance.rerender()
@@ -161,7 +161,7 @@ function onArrowLeft(event: KeyboardEvent) {
       // 上の項目がテキスト項目の場合、キャレットをその末尾に移動する
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const characterCount = DomishObject.countCharacters(domishObjects)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+      Rerenderer.instance.requestToSetCaretPosition(characterCount)
     }
 
     Rerenderer.instance.rerender()
@@ -178,12 +178,11 @@ function onArrowRight(event: KeyboardEvent) {
   // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
-  const belowItemId = ItemPath.getItemId(belowItemPath)
-
   const textItemSelection = getTextItemSelectionFromDom()
   if (textItemSelection === undefined) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
   } else {
     const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -198,18 +197,12 @@ function onArrowRight(event: KeyboardEvent) {
       return
     }
 
-    const belowItemType = Internal.instance.state.items[belowItemId].type
-    if (belowItemType === ItemType.TEXT) {
-      // 下の項目がテキスト項目の場合、キャレットをその先頭に移動する
-      event.preventDefault()
-      CurrentState.setTargetItemPath(belowItemPath)
-      Rerenderer.instance.rerender()
-    } else {
-      // 下の項目がテキスト項目以外の場合、それをフォーカスする
-      event.preventDefault()
-      CurrentState.setTargetItemPath(belowItemPath)
-      Rerenderer.instance.rerender()
-    }
+    // 下の項目をフォーカスする。
+    // （下の項目がテキスト項目の場合、キャレットはその先頭に移動する）
+    event.preventDefault()
+    CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.rerender()
   }
 }
 
@@ -228,6 +221,7 @@ function onArrowUp(event: KeyboardEvent) {
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
     CurrentState.setTargetItemPath(aboveItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -286,7 +280,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
       const caretXCoordinate = getCaretXCoordinate()!
       if (caretXCoordinate === originalXCoordinate) {
         CurrentState.setTargetItemPath(aboveItemPath)
-        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+        Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
         Rerenderer.instance.rerender()
         return
       }
@@ -297,7 +291,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     // もしi < 0なら既にsetCaretPosition(0)が実行済みなので、このままreturnしていい
     if (i < 0) {
       CurrentState.setTargetItemPath(aboveItemPath)
-      Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+      Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
       Rerenderer.instance.rerender()
       return
     }
@@ -316,7 +310,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
   }
 
   CurrentState.setTargetItemPath(aboveItemPath)
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   Rerenderer.instance.rerender()
 }
 
@@ -335,6 +329,7 @@ function onArrowDown(event: KeyboardEvent) {
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -358,6 +353,7 @@ function onArrowDown(event: KeyboardEvent) {
       if (textItemSelection !== undefined && textItemSelection.focusDistance === characterCount) {
         event.preventDefault()
         CurrentState.setTargetItemPath(belowItemPath)
+        Rerenderer.instance.requestToFocusTargetItem()
         Rerenderer.instance.rerender()
         return
       }
@@ -420,7 +416,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
     }
   }
   CurrentState.setTargetItemPath(belowItemPath)
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   Rerenderer.instance.rerender()
 }
 
@@ -512,6 +508,7 @@ function onBackspace(event: KeyboardEvent) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     Command.removeItem()
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -539,13 +536,6 @@ function onBackspace(event: KeyboardEvent) {
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
-
-      // 上の項目がテキスト項目ならキャレットを末尾に移す
-      if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
-        const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-        const characterCount = DomishObject.countCharacters(domishObjects)
-        Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
-      }
 
       // ターゲット項目を削除して終了
       Command.removeItem()
@@ -589,7 +579,7 @@ function onBackspace(event: KeyboardEvent) {
 
       // 上の項目の元の末尾にキャレットを移動する
       CurrentState.setTargetItemPath(aboveItemPath)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(
+      Rerenderer.instance.requestToSetCaretPosition(
         DomishObject.countCharacters(aboveItemDomishObjects)
       )
 
@@ -655,6 +645,7 @@ function onDelete(event: KeyboardEvent) {
       if (belowItemPath !== undefined) {
         CurrentState.setTargetItemPath(belowItemPath)
       }
+      Rerenderer.instance.requestToFocusTargetItem()
       Rerenderer.instance.rerender()
       return
     }
@@ -695,7 +686,7 @@ function onDelete(event: KeyboardEvent) {
       CurrentState.deleteItem(belowItemId)
 
       // 元のキャレット位置を維持する
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(
+      Rerenderer.instance.requestToSetCaretPosition(
         DomishObject.countCharacters(focusedItemDomishObjects)
       )
 
@@ -714,6 +705,7 @@ function onDelete(event: KeyboardEvent) {
     if (belowItemPath !== undefined) {
       CurrentState.setTargetItemPath(belowItemPath)
     }
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
   }
 }

@@ -39,13 +39,14 @@ export function indent() {
     CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
@@ -79,7 +80,7 @@ export function unindent() {
     CurrentState.setTargetItemPath(siblingItemPath)
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -88,6 +89,7 @@ export function unindent() {
     )
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
     CurrentState.setAnchorItemPath(ItemPath.createSiblingItemPath(parentItemPath, anchorItemId)!)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
@@ -133,7 +135,7 @@ export function moveItemToAbove() {
   CurrentState.setAnchorItemPath(newAnchorItemPath)
 
   // キャレット位置、テキスト選択範囲を維持する
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
 }
 
 /**
@@ -163,9 +165,6 @@ export function moveItemToBelow() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  // キャレット位置、テキスト選択範囲を維持する
-  Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
   if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
     // 1つ下の項目が子を表示していない場合
 
@@ -181,6 +180,7 @@ export function moveItemToBelow() {
     )
     assertNonUndefined(newAnchorItemPath)
     CurrentState.setAnchorItemPath(newAnchorItemPath)
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 1つ下の項目が子を表示している場合
 
@@ -192,6 +192,7 @@ export function moveItemToBelow() {
       ItemPath.getItemId(CurrentState.getAnchorItemPath())
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   }
 }
 
@@ -217,7 +218,7 @@ export function moveItemToPrevSibling() {
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 次のようなツリーの中でDを上に動かす際、Aの弟ではなくBの弟にする。
     // A
@@ -249,7 +250,7 @@ export function moveItemToPrevSibling() {
           CurrentState.setAnchorItemPath(knightItemPath.push(anchorItemId))
 
           // キャレット位置、テキスト選択範囲を維持する
-          Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+          Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
           return
         }
       }
@@ -281,7 +282,7 @@ export function moveItemToNextSibling() {
     // 兄弟リスト内での移動なのでfocusItemPathやanchorItemPathの更新は不要
 
     // キャレット位置、テキスト選択範囲を維持する
-    Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
+    Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     moveItemToBelow()
   }

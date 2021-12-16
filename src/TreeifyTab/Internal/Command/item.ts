@@ -71,6 +71,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      Rerenderer.instance.requestToFocusTargetItem()
       return
     }
 
@@ -87,6 +88,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
 
@@ -109,6 +111,7 @@ export function enterKeyDefault() {
       if (textItemSelection.focusDistance === 0) {
         CurrentState.setTargetItemPath(newItemPath)
       }
+      Rerenderer.instance.requestToFocusTargetItem()
     } else {
       // キャレット位置が後半なら
 
@@ -128,6 +131,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
     }
   } else {
     // ターゲット項目がテキスト項目以外の場合
@@ -140,6 +144,7 @@ export function enterKeyDefault() {
 
       // フォーカスを移す
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      Rerenderer.instance.requestToFocusTargetItem()
       return
     }
 
@@ -149,6 +154,7 @@ export function enterKeyDefault() {
 
     // フォーカスを移す
     CurrentState.setTargetItemPath(newItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
@@ -171,7 +177,9 @@ export function deleteItem() {
   if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const characterCount = DomishObject.countCharacters(domishObjects)
-    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+    Rerenderer.instance.requestToSetCaretPosition(characterCount)
+  } else {
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 
   for (const selectedItemPath of selectedItemPaths) {
@@ -201,7 +209,9 @@ export function removeItem() {
   if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
     const characterCount = DomishObject.countCharacters(domishObjects)
-    Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
+    Rerenderer.instance.requestToSetCaretPosition(characterCount)
+  } else {
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 
   for (const selectedItemPath of selectedItemPaths) {
@@ -232,11 +242,13 @@ export function deleteJustOneItem() {
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
     CurrentState.setTargetItemPath(aboveItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
   } else {
     // 子がいる場合は最初の子をフォーカス
     const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds.first())
     assertNonUndefined(newItemPath)
     CurrentState.setTargetItemPath(newItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 
   CurrentState.deleteItem(targetItemId, true)

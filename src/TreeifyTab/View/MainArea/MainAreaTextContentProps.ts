@@ -29,15 +29,13 @@ export function createMainAreaTextContentProps(
     sourceProps: createSourceProps(itemId),
     onInput(event: Event) {
       if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
-        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
-
         Internal.instance.saveCurrentStateToUndoStack()
 
         // contenteditableな要素のinnerHTMLをModelに反映する
         const domishObjects = DomishObject.fromChildren(event.target)
         CurrentState.setTextItemDomishObjects(itemId, domishObjects)
-
         CurrentState.updateItemTimestamp(itemId)
+        Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
         Rerenderer.instance.rerender()
       }
     },
@@ -48,8 +46,8 @@ export function createMainAreaTextContentProps(
         // contenteditableな要素のinnerHTMLをModelに反映する
         const domishObjects = DomishObject.fromChildren(event.target)
         CurrentState.setTextItemDomishObjects(itemId, domishObjects)
-        Rerenderer.instance.requestSelectAfterRendering(getTextItemSelectionFromDom())
         CurrentState.updateItemTimestamp(itemId)
+        Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
         Rerenderer.instance.rerender()
       }
     },
