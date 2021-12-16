@@ -5,6 +5,7 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 /**
@@ -35,6 +36,7 @@ export function selectAll() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setAnchorItemPath(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
+  Rerenderer.instance.requestToFocusTargetItem()
 }
 
 export function setCaption(itemId: ItemId, caption: string) {
