@@ -31,7 +31,7 @@ export type PageTreeNodeProps = {
   footprintCount: integer
   tabsCount: integer
   onClickContentArea(event: MouseEvent): void
-  onClickCloseButton(): void
+  onClickCloseButton(event: Event): void
   onClickTabsCount(event: MouseEvent): void
   onTabsCountContextMenu(event: Event): void
 }
@@ -69,6 +69,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
           case '0000MouseButton0':
             event.preventDefault()
             CurrentState.switchActivePage(itemId)
+            Rerenderer.instance.requestToFocusTargetItem()
             Rerenderer.instance.rerender()
             break
           case '0000MouseButton1':
@@ -90,7 +91,8 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
             break
         }
       },
-      onClickCloseButton() {
+      onClickCloseButton(event) {
+        event.preventDefault()
         unmountPage(itemId, activePageId)
       },
       onClickTabsCount(event) {
@@ -140,6 +142,7 @@ function unmountPage(itemId: number, activePageId: number) {
     const lastPageId = CurrentState.getFilteredMountedPageIds().last(undefined)
     assertNonUndefined(lastPageId)
     CurrentState.switchActivePage(lastPageId)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 
   Rerenderer.instance.rerender()

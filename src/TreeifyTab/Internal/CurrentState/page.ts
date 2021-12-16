@@ -6,6 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Page } from 'src/TreeifyTab/Internal/State'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { assertNonNull } from 'src/Utility/Debug/assert'
 import { tick } from 'svelte'
@@ -114,6 +115,7 @@ export function jumpTo(itemPath: ItemPath) {
 
   // ページを切り替える
   CurrentState.switchActivePage(containerPageId)
+  Rerenderer.instance.requestToFocusTargetItem()
 
   // 再描画完了後に対象項目に自動スクロールする
   tick().then(() => {
