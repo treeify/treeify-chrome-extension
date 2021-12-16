@@ -132,12 +132,19 @@ function calculateOuterCircleRadiusEm(itemId: ItemId): number {
 }
 
 function transclude(itemPath: ItemPath) {
+  const targetItemPath = CurrentState.getTargetItemPath()
+  const targetItemId = ItemPath.getItemId(targetItemPath)
+
   // TODO: トランスクルード時の親子関係、エッジ不整合対策
-  const newItemPath = CurrentState.insertBelowItem(
-    CurrentState.getTargetItemPath(),
-    ItemPath.getItemId(itemPath),
-    { isFolded: true }
-  )
+  const newItemPath = CurrentState.insertBelowItem(targetItemPath, ItemPath.getItemId(itemPath), {
+    isFolded: true,
+  })
+
+  if (CurrentState.isEmptyTextItem(targetItemId)) {
+    // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
+    CurrentState.deleteItem(targetItemId)
+  }
+
   CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)
 }
