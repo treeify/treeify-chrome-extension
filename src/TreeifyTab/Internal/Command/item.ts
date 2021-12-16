@@ -71,6 +71,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      Rerenderer.instance.requestToFocusTargetItem()
       return
     }
 
@@ -87,6 +88,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
     } else if (textItemSelection.focusDistance < characterCount / 2) {
       // キャレット位置が前半なら
 
@@ -109,6 +111,7 @@ export function enterKeyDefault() {
       if (textItemSelection.focusDistance === 0) {
         CurrentState.setTargetItemPath(newItemPath)
       }
+      Rerenderer.instance.requestToFocusTargetItem()
     } else {
       // キャレット位置が後半なら
 
@@ -128,6 +131,7 @@ export function enterKeyDefault() {
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
     }
   } else {
     // ターゲット項目がテキスト項目以外の場合
@@ -140,6 +144,7 @@ export function enterKeyDefault() {
 
       // フォーカスを移す
       CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      Rerenderer.instance.requestToFocusTargetItem()
       return
     }
 
@@ -149,6 +154,7 @@ export function enterKeyDefault() {
 
     // フォーカスを移す
     CurrentState.setTargetItemPath(newItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
