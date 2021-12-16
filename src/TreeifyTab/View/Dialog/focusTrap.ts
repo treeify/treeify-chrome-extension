@@ -1,4 +1,5 @@
 import { createFocusTrap } from 'focus-trap'
+import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 
 /** モーダルダイアログを実現するためフォーカストラップを作るディレクティブ用の関数 */
 export function setupFocusTrap(domElement: HTMLElement) {
@@ -14,6 +15,8 @@ export function setupFocusTrap(domElement: HTMLElement) {
     destroy() {
       // フォーカストラップを消す
       focusTrap.deactivate()
+
+      Rerenderer.instance.requestToFocusTargetItem()
     },
   }
 }
