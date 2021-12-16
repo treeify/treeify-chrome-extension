@@ -242,11 +242,13 @@ export function deleteJustOneItem() {
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
     CurrentState.setTargetItemPath(aboveItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
   } else {
     // 子がいる場合は最初の子をフォーカス
     const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds.first())
     assertNonUndefined(newItemPath)
     CurrentState.setTargetItemPath(newItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 
   CurrentState.deleteItem(targetItemId, true)
