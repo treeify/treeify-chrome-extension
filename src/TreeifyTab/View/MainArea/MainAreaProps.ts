@@ -508,6 +508,7 @@ function onBackspace(event: KeyboardEvent) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     Command.removeItem()
+    Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
@@ -535,13 +536,6 @@ function onBackspace(event: KeyboardEvent) {
     if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
-
-      // 上の項目がテキスト項目ならキャレットを末尾に移す
-      if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
-        const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-        const characterCount = DomishObject.countCharacters(domishObjects)
-        Rerenderer.instance.requestSetCaretDistanceAfterRendering(characterCount)
-      }
 
       // ターゲット項目を削除して終了
       Command.removeItem()
@@ -585,7 +579,7 @@ function onBackspace(event: KeyboardEvent) {
 
       // 上の項目の元の末尾にキャレットを移動する
       CurrentState.setTargetItemPath(aboveItemPath)
-      Rerenderer.instance.requestSetCaretDistanceAfterRendering(
+      Rerenderer.instance.requestToSetCaretPosition(
         DomishObject.countCharacters(aboveItemDomishObjects)
       )
 
