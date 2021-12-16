@@ -92,6 +92,7 @@ export function createMainAreaNodeProps(
           if (targetCandidate.size === anchorCandidate.size) {
             CurrentState.setTargetItemPathOnly(targetCandidate)
             CurrentState.setAnchorItemPath(anchorCandidate)
+            Rerenderer.instance.requestToFocusTargetItem()
             Rerenderer.instance.rerender()
           }
           break
