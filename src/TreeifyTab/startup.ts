@@ -9,6 +9,7 @@ import {
   onWindowFocusChanged,
 } from 'src/TreeifyTab/External/chromeEventListeners'
 import { External } from 'src/TreeifyTab/External/External'
+import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -18,12 +19,15 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { doAsync } from 'src/Utility/doAsync'
+import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
 import OnClickData = chrome.contextMenus.OnClickData
+import IdleState = chrome.idle.IdleState
 
 export async function startup(initialState: State) {
   External.instance.lastFocusedWindowId = await getLastFocusedWindowId()
@@ -49,20 +53,18 @@ export async function startup(initialState: State) {
   chrome.tabs.onActivated.addListener(onActivated)
 
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
-
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
-
   chrome.commands.onCommand.addListener(onCommand)
+  chrome.idle.onStateChanged.addListener(callback)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
 
+  chrome.idle.onStateChanged.removeListener(callback)
   chrome.commands.onCommand.removeListener(onCommand)
-
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
-
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
 
   chrome.tabs.onActivated.removeListener(onActivated)
@@ -218,6 +220,27 @@ async function onCommand(commandName: string) {
         break
     }
   })
+}
+
+// データファイルをバックグラウンドで自動ダウンロードするための仕組み
+async function callback(idleState: IdleState) {
+  if (idleState !== 'active') return
+
+  const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
+  if (syncedAt === undefined) return
+
+  const metaData = await GoogleDrive.fetchDataFileMetaData()
+  if (metaData === undefined) return
+
+  External.instance.backgroundDownload = {
+    modifiedTime: metaData.modifiedTime,
+    promise: doAsync(async () => {
+      const response = await GoogleDrive.readFile(metaData.id)
+      const text = await decompress(await response.arrayBuffer())
+      const state: State = JSON.parse(text, State.jsonReviver)
+      return state
+    }),
+  }
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {

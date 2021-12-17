@@ -58,7 +58,8 @@
     "scripting",
     "contextMenus",
     "bookmarks",
-    "identity"
+    "identity",
+    "idle"
   ],
   "oauth2": {
     "client_id": "667317919702-aj4t3ucad1295d5gdpv0rjm9j13ol132.apps.googleusercontent.com",
