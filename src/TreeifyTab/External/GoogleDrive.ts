@@ -1,19 +1,31 @@
+import { List } from 'immutable'
 import { assertNonNull } from 'src/Utility/Debug/assert'
 
 export namespace GoogleDrive {
+  const DATA_FILE_NAME = 'Treeify data.json.gz'
+
   async function getAccessToken(): Promise<string> {
     return new Promise<string>((resolve) => {
       chrome.identity.getAuthToken({ interactive: true }, resolve)
     })
   }
 
-  export async function searchFile(fileName: string): Promise<
-    {
-      id: string
-      name: string
-      modifiedTime: string
-    }[]
-  > {
+  export type DataFileMataData = {
+    id: string
+    name: string
+    modifiedTime: string
+  }
+
+  export async function fetchDataFileMetaData(): Promise<DataFileMataData | undefined> {
+    const dataFiles = await GoogleDrive.searchFile(DATA_FILE_NAME)
+    // タイムスタンプが最新のデータファイルを選ぶ。
+    // 複数が該当する場合はIDのソート順で先頭のものを選ぶ。
+    return List(dataFiles)
+      .sortBy((dataFile) => dataFile.id)
+      .maxBy((dataFile) => dataFile.modifiedTime)
+  }
+
+  export async function searchFile(fileName: string): Promise<DataFileMataData[]> {
     const params = new URLSearchParams({
       fields: 'files/id,files/name,files/modifiedTime',
       q: `name = '${fileName}' and trashed = false`,

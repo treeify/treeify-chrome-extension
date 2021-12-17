@@ -27,6 +27,12 @@ export class External {
    */
   hasUpdatedSinceSync = true
 
+  /**
+   * バックグラウンドでダウンロードしているデータファイルの情報。
+   * 現在はGoogle Driveのみを想定した設計になっている。
+   */
+  backgroundDownload: { modifiedTime: string; promise: Promise<State> } | undefined
+
   /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 

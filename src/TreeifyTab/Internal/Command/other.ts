@@ -14,6 +14,7 @@ import { restart } from 'src/TreeifyTab/startup'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
 import { compress, decompress } from 'src/Utility/gzip'
+import DataFileMataData = GoogleDrive.DataFileMataData
 
 export async function syncTreeifyData() {
   switch (Internal.instance.state.syncWith) {
@@ -61,9 +62,7 @@ async function syncWithGoogleDrive() {
       console.log('syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ')
 
       // get APIでファイル内容をダウンロードする
-      const response = await GoogleDrive.readFile(dataFile.id)
-      const text = await decompress(await response.arrayBuffer())
-      const state: State = JSON.parse(text, State.jsonReviver)
+      const state: State = await getState(dataFile)
 
       // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
       dump(state.maxItemId, Internal.instance.state.maxItemId)
@@ -86,9 +85,7 @@ async function syncWithGoogleDrive() {
       // データファイルが壊れたユーザーが復元を試みるとパターン(1)になる。
       console.log('例外的な状況でしか到達できない特殊なケース')
 
-      const response = await GoogleDrive.readFile(dataFile.id)
-      const text = await decompress(await response.arrayBuffer())
-      const state: State = JSON.parse(text, State.jsonReviver)
+      const state: State = await getState(dataFile)
       setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
       await restart(state)
     } else {
@@ -106,6 +103,19 @@ async function syncWithGoogleDrive() {
       Rerenderer.instance.rerender()
     }
   }
+}
+
+async function getState(metaData: DataFileMataData): Promise<State> {
+  if (External.instance.backgroundDownload?.modifiedTime === metaData.modifiedTime) {
+    const promise = External.instance.backgroundDownload.promise
+    External.instance.backgroundDownload = undefined
+    return await promise
+  }
+
+  const response = await GoogleDrive.readFile(metaData.id)
+  const text = await decompress(await response.arrayBuffer())
+  const state: State = JSON.parse(text, State.jsonReviver)
+  return state
 }
 
 /**
