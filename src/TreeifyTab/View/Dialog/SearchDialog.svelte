@@ -1,6 +1,7 @@
 <script lang="ts">
   import { List, Set } from 'immutable'
-  import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+  import { MultiSet } from 'mnemonist'
+  import { ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -12,10 +13,12 @@
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
 
+  type SearchResult = { pages: List<List<ItemPath>>; counts: MultiSet<ItemType> }
+
   let searchQueryValue = ''
   let hitItemIds: Set<ItemId> | undefined
-  let searchResult: List<List<ItemPath>> | undefined
-  let itemTypes: ItemType[] = Object.values(ItemType as any)
+  let itemTypes: ItemType[] = Object.values(ItemType) as any
+  let searchResult: SearchResult | undefined
   $: searchResult = makeSearchResult(hitItemIds, Set(itemTypes))
 
   const workspaceId = CurrentState.getCurrentWorkspaceId()
@@ -87,7 +90,7 @@
   function makeSearchResult(
     hitItemIds: Set<ItemId> | undefined,
     itemTypes: Set<ItemType>
-  ): List<List<ItemPath>> | undefined {
+  ): SearchResult | undefined {
     if (hitItemIds === undefined) return undefined
 
     const filteredItemIds = hitItemIds.filter((itemId) =>
@@ -97,15 +100,20 @@
     // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
     const allItemPaths = filteredItemIds.flatMap((itemId) => CurrentState.yieldItemPaths(itemId))
 
-    return (
-      allItemPaths
-        // ItemPathをページIDでグループ化する
-        .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
-        .toList()
-        .map((itemPaths) => itemPaths.toList())
-        // ヒットした項目数によってページの並びをソートする
-        .sortBy((itemPaths) => -itemPaths.size)
-    )
+    const pages = allItemPaths
+      // ItemPathをページIDでグループ化する
+      .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
+      .toList()
+      .map((itemPaths) => itemPaths.toList())
+      // ヒットした項目数によってページの並びをソートする
+      .sortBy((itemPaths) => -itemPaths.size)
+
+    const counts = new MultiSet<ItemType>()
+    for (const hitItemId of hitItemIds) {
+      const itemType = Internal.instance.state.items[hitItemId].type
+      counts.add(itemType)
+    }
+    return { pages, counts }
   }
 </script>
 
@@ -129,39 +137,27 @@
       {/if}
     </div>
     <div class="search-dialog_result-area">
-      {#if searchResult?.size > 0}
-        <div class="search-dialog_filter-area">
-          表示する項目:
-          <label class="search-dialog_checkbox-label">
-            <input type="checkbox" bind:group={itemTypes} value={ItemType.TEXT} />
-            テキスト
-          </label>
-          <label class="search-dialog_checkbox-label">
-            <input type="checkbox" bind:group={itemTypes} value={ItemType.WEB_PAGE} />
-            ウェブページ
-          </label>
-          <label class="search-dialog_checkbox-label">
-            <input type="checkbox" bind:group={itemTypes} value={ItemType.IMAGE} />
-            画像
-          </label>
-          <label class="search-dialog_checkbox-label">
-            <input type="checkbox" bind:group={itemTypes} value={ItemType.CODE_BLOCK} />
-            コードブロック
-          </label>
-          <label class="search-dialog_checkbox-label">
-            <input type="checkbox" bind:group={itemTypes} value={ItemType.TEX} />
-            TeX
-          </label>
-        </div>
-      {/if}
       {#if searchResult !== undefined}
-        <div class="search-dialog_result">
-          {#each searchResult.toArray() as itemPaths}
-            <SearchResultPage props={createSearchResultPageProps(itemPaths)} />
-          {:else}
-            <div>検索結果はありません</div>
-          {/each}
-        </div>
+        {#if searchResult.pages.size > 0}
+          <div class="search-dialog_filter-area">
+            表示する項目:
+            {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
+              {#if searchResult.counts.get(itemType) > 0}
+                <label class="search-dialog_checkbox-label">
+                  <input type="checkbox" bind:group={itemTypes} value={itemType} />
+                  {name}({searchResult.counts.get(itemType)}件)
+                </label>
+              {/if}
+            {/each}
+          </div>
+          <div class="search-dialog_result">
+            {#each searchResult.pages.toArray() as itemPaths}
+              <SearchResultPage props={createSearchResultPageProps(itemPaths)} />
+            {/each}
+          </div>
+        {:else}
+          <div class="search-dialog_empty-message">検索結果はありません</div>
+        {/if}
       {/if}
     </div>
   </div>
@@ -192,6 +188,7 @@
   .search-dialog_filter-area {
     display: flex;
     align-items: center;
+    gap: 0.3em;
     padding: 0.5em;
   }
 

@@ -28,4 +28,12 @@ export enum ItemType {
   TEX = 'TeX',
 }
 
+export const itemTypeDisplayNames = {
+  [ItemType.TEXT]: 'テキスト',
+  [ItemType.WEB_PAGE]: 'ウェブページ',
+  [ItemType.IMAGE]: '画像',
+  [ItemType.CODE_BLOCK]: 'コードブロック',
+  [ItemType.TEX]: 'TeX',
+} as const
+
 export type WorkspaceId = Timestamp
