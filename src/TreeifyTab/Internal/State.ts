@@ -11,14 +11,14 @@ import { Timestamp } from 'src/Utility/Timestamp'
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
-  items: { [K in ItemId]: Item }
-  textItems: { [K in ItemId]: TextItem }
-  webPageItems: { [K in ItemId]: WebPageItem }
-  imageItems: { [K in ItemId]: ImageItem }
-  codeBlockItems: { [K in ItemId]: CodeBlockItem }
-  texItems: { [K in ItemId]: TexItem }
-  pages: { [K in ItemId]: Page }
-  workspaces: { [K in WorkspaceId]: Workspace }
+  items: Record<ItemId, Item>
+  textItems: Record<ItemId, TextItem>
+  webPageItems: Record<ItemId, WebPageItem>
+  imageItems: Record<ItemId, ImageItem>
+  codeBlockItems: Record<ItemId, CodeBlockItem>
+  texItems: Record<ItemId, TexItem>
+  pages: Record<ItemId, Page>
+  workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
@@ -28,9 +28,9 @@ export type State = {
   availableItemIds: List<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyBindings: { [K in InputId]: List<CommandId> }
+  mainAreaKeyBindings: Record<InputId, List<CommandId>>
   customCss: string
-  preferredLanguages: { [K in string]: number }
+  preferredLanguages: Record<string, number>
   exportSettings: {
     selectedFormat: ExportFormat
     options: {
@@ -60,7 +60,7 @@ export type Item = {
   type: ItemType
   globalItemId: GlobalItemId
   childItemIds: List<ItemId>
-  parents: { [K in ItemId]: Edge }
+  parents: Record<ItemId, Edge>
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
   /**

@@ -73,7 +73,7 @@ export namespace InputId {
   }
 
   function simplify(code: string): string {
-    const map: { [T in string]: string | undefined } = {
+    const map: Record<string, string | undefined> = {
       ArrowUp: '↑',
       ArrowDown: '↓',
       ArrowRight: '→',

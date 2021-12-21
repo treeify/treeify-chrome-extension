@@ -30,11 +30,11 @@ function toOpmlOutlineElement(
   return outlineElement
 }
 
-function toOpmlAttributes(itemPath: ItemPath): { [T in string]: string } {
+function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
-  const baseAttributes: { [T in string]: string } = {}
+  const baseAttributes: Record<string, string> = {}
   if (CurrentState.countParents(itemId) > 1) {
     baseAttributes.id = itemId.toString()
   }
@@ -183,7 +183,7 @@ function isValidOutlineElement(possiblyOutlineElement: Element): boolean {
 type ItemAndEdge = { itemId: ItemId; edge: Edge }
 // トランスクルージョンを復元するために、OPML内に出現した項目IDを記録しておくオブジェクト。
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応する項目ID。
-type ItemIdMap = { [K in string | number]: ItemId }
+type ItemIdMap = Record<string | number, ItemId>
 
 export function createItemsBasedOnOpml(outlineElements: List<Element>): List<ItemAndEdge> {
   const itemIdMap = {}

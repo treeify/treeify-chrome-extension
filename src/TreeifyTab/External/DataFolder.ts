@@ -12,7 +12,7 @@ type InstanceFile = {
   lastModified: Timestamp
   // 「このインスタンスフォルダは他インスタンスの更新をどの範囲まで把握しているか？」を表すためのデータ。
   // Keyは存在を把握している他インスタンスID、Valueは把握している最新の更新タイムスタンプ。
-  known: { [K in InstanceId]: Timestamp }
+  known: Record<InstanceId, Timestamp>
   state: State
 }
 
@@ -80,7 +80,7 @@ export class DataFolder {
     return instanceIds.filter((instanceId) => instanceId !== Instance.getId())
   }
 
-  private async getAllOtherInstanceTimestamps(): Promise<{ [K in InstanceId]: Timestamp }> {
+  private async getAllOtherInstanceTimestamps(): Promise<Record<InstanceId, Timestamp>> {
     const instanceIds = await this.getAllOtherInstanceIds()
     const timestampPromises = instanceIds.map(async (instanceId) => {
       const instanceFile = await this.readInstanceFile(instanceId)
