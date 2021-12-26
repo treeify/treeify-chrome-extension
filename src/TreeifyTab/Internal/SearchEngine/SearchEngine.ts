@@ -28,6 +28,8 @@ export class SearchEngine {
     const { positiveSearchWords, negativeSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
     if (positiveSearchWords.isEmpty()) return Set.of()
 
+    const normalizedNegativeSearchWords = negativeSearchWords.map(UnigramSearchIndex.normalize)
+
     // 検索ワードごとに、ヒットする項目の全ItemPathの集合を生成する
     const wordHitItemIdSets = positiveSearchWords.map((positiveSearchWord) => {
       const normalizedAndSearchWord = UnigramSearchIndex.normalize(positiveSearchWord)
@@ -56,7 +58,9 @@ export class SearchEngine {
           // 全てのテキストトラックにどのNOT検索ワードも含まれない
           const success = textTracks.every((textTrack) => {
             // どのNOT検索ワードもtextTrackに含まれない
-            return negativeSearchWords.every((word) => !textTrack.includes(word))
+            return normalizedNegativeSearchWords.every(
+              (word) => !UnigramSearchIndex.normalize(textTrack).includes(word)
+            )
           })
           if (success) {
             result.push(wordHitItemId)
