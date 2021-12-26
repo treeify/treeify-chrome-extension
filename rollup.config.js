@@ -51,7 +51,10 @@ export default {
     builtins(),
     globals(),
     copy({
-      targets: [{ src: 'static/*', dest: 'dist' }],
+      targets: [
+        { src: 'static/common/*', dest: 'dist' },
+        { src: `static/${process.env.NODE_ENV}/*`, dest: 'dist' },
+      ],
     }),
   ],
 }

@@ -28,6 +28,7 @@
     "@types/power-radix": "^2.5.0",
     "@types/ua-parser-js": "^0.7.36",
     "@types/wicg-file-system-access": "^2020.9.4",
+    "cross-env": "^7.0.3",
     "postcss": "^8.3.11",
     "prettier": "^2.4.1",
     "prettier-plugin-svelte": "^2.5.0",
@@ -45,9 +46,11 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "build": "rollup -c",
+    "build-dev": "cross-env NODE_ENV=dev rollup -c",
+    "build-prod": "cross-env NODE_ENV=prod rollup -c",
     "format": "prettier --write \"src/**/*.{ts,tsx,svelte}\"",
     "svelte-check": "svelte-check",
-    "watch": "rollup -c -w"
+    "watch-dev": "cross-env NODE_ENV=dev rollup -c -w",
+    "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
   }
 }
