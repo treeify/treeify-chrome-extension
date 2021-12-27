@@ -8,7 +8,8 @@ export class DataFolder {
 
   private static readonly FILE_NAME = `Treeify data.json.gz`
 
-  async writeState(state: State) {
+  /** データファイルにStateを書き込み、完了後のファイルのタイムスタンプを返す */
+  async writeState(state: State): Promise<number> {
     const text = JSON.stringify(state, State.jsonReplacer)
     const content = await compress(text)
 
@@ -18,6 +19,9 @@ export class DataFolder {
     const writableFileStream = await fileHandle.createWritable()
     await writableFileStream.write(new Blob(content))
     await writableFileStream.close()
+
+    const file = await fileHandle.getFile()
+    return file.lastModified
   }
 
   async fetchLastModified(): Promise<number | undefined> {

@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
@@ -30,15 +29,10 @@ export async function syncTreeifyData() {
 async function syncWithGoogleDrive() {
   const DATA_FILE_NAME = 'Treeify data.json.gz'
 
-  const dataFiles = await GoogleDrive.searchFile(DATA_FILE_NAME)
-  // タイムスタンプが最新のデータファイルを選ぶ。
-  // 複数が該当する場合はIDのソート順で先頭のものを選ぶ。
-  const dataFile = List(dataFiles)
-    .sortBy((dataFile) => dataFile.id)
-    .maxBy((dataFile) => dataFile.modifiedTime)
+  const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
   // TODO: リリースする前にログ出力を削除する
-  dump(dataFile)
-  if (dataFile === undefined) {
+  dump(dataFileMetaData)
+  if (dataFileMetaData === undefined) {
     // データファイルがない場合
     console.log('データファイルがない場合')
 
@@ -56,33 +50,36 @@ async function syncWithGoogleDrive() {
 
     const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
     const knownTimestamp = syncedAt !== undefined ? new Date(syncedAt).getTime() : -1
-    const dataFileTimestamp = new Date(dataFile.modifiedTime).getTime()
+    const dataFileTimestamp = new Date(dataFileMetaData.modifiedTime).getTime()
     if (knownTimestamp < dataFileTimestamp) {
       // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
       console.log('syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ')
 
       // get APIでファイル内容をダウンロードする
-      const state: State = await getState(dataFile)
+      const state: State = await getState(dataFileMetaData)
 
       // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
       dump(state.maxItemId, Internal.instance.state.maxItemId)
       if (state.maxItemId < Internal.instance.state.maxItemId) {
         const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
-        const response = await GoogleDrive.updateFileWithMultipart(dataFile.id, new Blob(gzipped))
+        const response = await GoogleDrive.updateFileWithMultipart(
+          dataFileMetaData.id,
+          new Blob(gzipped)
+        )
         const responseJson = await response.json()
         setSyncedAt(Internal.instance.state.syncWith, responseJson.modifiedTime)
         External.instance.hasUpdatedSinceSync = false
         Rerenderer.instance.rerender()
       } else {
-        setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
+        setSyncedAt(Internal.instance.state.syncWith, dataFileMetaData.modifiedTime)
         await restart(state, syncedAt === undefined)
       }
     } else if (knownTimestamp > dataFileTimestamp) {
       // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
       console.log('例外的な状況でしか到達できない特殊なケース')
 
-      const state: State = await getState(dataFile)
-      setSyncedAt(Internal.instance.state.syncWith, dataFile.modifiedTime)
+      const state: State = await getState(dataFileMetaData)
+      setSyncedAt(Internal.instance.state.syncWith, dataFileMetaData.modifiedTime)
       await restart(state)
     } else {
       // データファイルの更新日時がsyncedAtと等しければ
@@ -92,7 +89,10 @@ async function syncWithGoogleDrive() {
       if (!External.instance.hasUpdatedSinceSync) return
 
       const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
-      const response = await GoogleDrive.updateFileWithMultipart(dataFile.id, new Blob(gzipped))
+      const response = await GoogleDrive.updateFileWithMultipart(
+        dataFileMetaData.id,
+        new Blob(gzipped)
+      )
       const responseJson = await response.json()
       setSyncedAt(Internal.instance.state.syncWith, responseJson.modifiedTime)
       External.instance.hasUpdatedSinceSync = false
@@ -132,9 +132,7 @@ async function syncWithDataFolder() {
     if (lastModified === undefined) {
       // データファイルがない場合
 
-      await External.instance.dataFolder.writeState(Internal.instance.state)
-      const lastModified = await External.instance.dataFolder.fetchLastModified()
-      assertNonUndefined(lastModified)
+      const lastModified = await External.instance.dataFolder.writeState(Internal.instance.state)
       setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
       External.instance.hasUpdatedSinceSync = false
       Rerenderer.instance.rerender()
@@ -153,9 +151,9 @@ async function syncWithDataFolder() {
         // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
         dump(state.maxItemId, Internal.instance.state.maxItemId)
         if (state.maxItemId < Internal.instance.state.maxItemId) {
-          await External.instance.dataFolder.writeState(Internal.instance.state)
-          const lastModified = await External.instance.dataFolder.fetchLastModified()
-          assertNonUndefined(lastModified)
+          const lastModified = await External.instance.dataFolder.writeState(
+            Internal.instance.state
+          )
           setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
           External.instance.hasUpdatedSinceSync = false
           Rerenderer.instance.rerender()
@@ -178,9 +176,7 @@ async function syncWithDataFolder() {
         // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
         if (!External.instance.hasUpdatedSinceSync) return
 
-        await External.instance.dataFolder.writeState(Internal.instance.state)
-        const lastModified = await External.instance.dataFolder.fetchLastModified()
-        assertNonUndefined(lastModified)
+        const lastModified = await External.instance.dataFolder.writeState(Internal.instance.state)
         setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
         External.instance.hasUpdatedSinceSync = false
         Rerenderer.instance.rerender()
