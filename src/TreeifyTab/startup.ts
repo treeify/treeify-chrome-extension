@@ -55,14 +55,17 @@ export async function startup(initialState: State) {
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
   chrome.commands.onCommand.addListener(onCommand)
-  chrome.idle.onStateChanged.addListener(callback)
+  chrome.idle.onStateChanged.addListener(onIdleStateChanged)
+  // idle状態と判定するまでの時間を60分に設定する。
+  // デフォルトは1分なので無駄なAPI呼び出しが起こる懸念がある。
+  chrome.idle.setDetectionInterval(60 * 60)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
 
-  chrome.idle.onStateChanged.removeListener(callback)
+  chrome.idle.onStateChanged.removeListener(onIdleStateChanged)
   chrome.commands.onCommand.removeListener(onCommand)
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
@@ -223,7 +226,7 @@ async function onCommand(commandName: string) {
 }
 
 // データファイルをバックグラウンドで自動ダウンロードするための仕組み
-async function callback(idleState: IdleState) {
+async function onIdleStateChanged(idleState: IdleState) {
   if (idleState !== 'active') return
 
   const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
