@@ -158,7 +158,7 @@ async function syncWithDataFolder() {
           External.instance.hasUpdatedSinceSync = false
           Rerenderer.instance.rerender()
         } else {
-          setSyncedAt(Internal.instance.state.syncWith, knownTimestamp.toString())
+          setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
           await restart(state, syncedAt === undefined)
         }
       } else if (knownTimestamp > lastModified) {
@@ -167,7 +167,7 @@ async function syncWithDataFolder() {
 
         const state = await External.instance.dataFolder.readState()
         assertNonUndefined(state)
-        setSyncedAt(Internal.instance.state.syncWith, knownTimestamp.toString())
+        setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
         await restart(state)
       } else {
         // データファイルの更新日時がsyncedAtと等しければ
