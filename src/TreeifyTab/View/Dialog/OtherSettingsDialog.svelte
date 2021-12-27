@@ -39,7 +39,7 @@
         </label>
         <label class="other-settings-dialog_radio-button-label">
           <input type="radio" bind:group={syncWith} value="Local" />
-          ローカル（データフォルダ）
+          ローカル
         </label>
       </div>
     </fieldset>

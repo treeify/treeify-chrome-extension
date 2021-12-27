@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
-import { CURRENT_SCHEMA_VERSION, DataFolder } from 'src/TreeifyTab/External/DataFolder'
+import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
 import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
@@ -78,11 +78,7 @@ async function syncWithGoogleDrive() {
         await restart(state, syncedAt === undefined)
       }
     } else if (knownTimestamp > dataFileTimestamp) {
-      // 例外的な状況でしか到達できない特殊なケース。
-      // 起こるとしたら下記の2パターンか。
-      // (1) ユーザーが履歴機能を使ってデータファイルをロールバックさせた
-      // (2) 複数のオンラインストレージを併用しており、過去に使っていたオンラインストレージと同期した
-      // データファイルが壊れたユーザーが復元を試みるとパターン(1)になる。
+      // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
       console.log('例外的な状況でしか到達できない特殊なケース')
 
       const state: State = await getState(dataFile)
@@ -126,41 +122,68 @@ async function syncWithDataFolder() {
   try {
     const hadNotOpenedDataFolder = External.instance.dataFolder === undefined
     if (hadNotOpenedDataFolder) {
-      const folderHandle = await pickDataFolder()
+      const folderHandle = await showDirectoryPicker()
+      await folderHandle.requestPermission({ mode: 'readwrite' })
       External.instance.dataFolder = new DataFolder(folderHandle)
     }
     assertNonUndefined(External.instance.dataFolder)
 
-    const unknownUpdatedInstanceId = await External.instance.dataFolder.findUnknownUpdatedInstance()
+    const lastModified = await External.instance.dataFolder.fetchLastModified()
+    if (lastModified === undefined) {
+      // データファイルがない場合
 
-    if (unknownUpdatedInstanceId === undefined) {
-      // もし自身の知らない他インスタンスの更新がなければ
-
-      if (hadNotOpenedDataFolder) {
-        // メモリ上のStateを自インスタンスフォルダに書き込む
-        await External.instance.dataFolder.writeState(Internal.instance.state)
-        External.instance.hasUpdatedSinceSync = false
-        Rerenderer.instance.rerender()
-      } else {
-        // 自インスタンスフォルダ上書き更新のケース
-
-        External.instance.hasUpdatedSinceSync = false
-        await External.instance.dataFolder.writeState(Internal.instance.state)
-        Rerenderer.instance.rerender()
-      }
+      await External.instance.dataFolder.writeState(Internal.instance.state)
+      const lastModified = await External.instance.dataFolder.fetchLastModified()
+      assertNonUndefined(lastModified)
+      setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
+      External.instance.hasUpdatedSinceSync = false
+      Rerenderer.instance.rerender()
     } else {
-      // もし自身の知らない他インスタンスの更新があれば
+      // データファイルがある場合
 
-      const instanceFile = await External.instance.dataFolder.readInstanceFile(
-        unknownUpdatedInstanceId
-      )
-      assertNonUndefined(instanceFile)
+      const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
+      const knownTimestamp = syncedAt !== undefined ? parseInt(syncedAt) : -1
+      if (knownTimestamp < lastModified) {
+        // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
+        console.log('syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ')
 
-      if (instanceFile.schemaVersion > CURRENT_SCHEMA_VERSION) {
-        alert('拡張機能をバージョンアップしてください')
+        const state = await External.instance.dataFolder.readState()
+        assertNonUndefined(state)
+
+        // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
+        dump(state.maxItemId, Internal.instance.state.maxItemId)
+        if (state.maxItemId < Internal.instance.state.maxItemId) {
+          await External.instance.dataFolder.writeState(Internal.instance.state)
+          const lastModified = await External.instance.dataFolder.fetchLastModified()
+          assertNonUndefined(lastModified)
+          setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
+          External.instance.hasUpdatedSinceSync = false
+          Rerenderer.instance.rerender()
+        } else {
+          setSyncedAt(Internal.instance.state.syncWith, knownTimestamp.toString())
+          await restart(state, syncedAt === undefined)
+        }
+      } else if (knownTimestamp > lastModified) {
+        // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
+        console.log('例外的な状況でしか到達できない特殊なケース')
+
+        const state = await External.instance.dataFolder.readState()
+        assertNonUndefined(state)
+        setSyncedAt(Internal.instance.state.syncWith, knownTimestamp.toString())
+        await restart(state)
       } else {
-        await External.instance.dataFolder.copyFrom(instanceFile)
-        await restart(instanceFile.state, hadNotOpenedDataFolder)
+        // データファイルの更新日時がsyncedAtと等しければ
+        console.log('データファイルの更新日時がsyncedAtと等しければ')
+
+        // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
+        if (!External.instance.hasUpdatedSinceSync) return
+
+        await External.instance.dataFolder.writeState(Internal.instance.state)
+        const lastModified = await External.instance.dataFolder.fetchLastModified()
+        assertNonUndefined(lastModified)
+        setSyncedAt(Internal.instance.state.syncWith, lastModified.toString())
+        External.instance.hasUpdatedSinceSync = false
+        Rerenderer.instance.rerender()
       }
     }
   } catch (e) {
@@ -169,22 +192,6 @@ async function syncWithDataFolder() {
 
     throw e
   }
-}
-
-/**
- * ユーザーにデータフォルダを選択させ、そのハンドルを返す。
- * ただしユーザーが選択したフォルダにTreeifyとは無関係なファイルなどが入っている場合は「Treeify data」というフォルダを作り、そのハンドルを返す。
- * Treeify dataフォルダが既に存在する場合、そのフォルダを返す。
- */
-async function pickDataFolder(): Promise<FileSystemDirectoryHandle> {
-  const folderHandle = await showDirectoryPicker()
-  await folderHandle.requestPermission({ mode: 'readwrite' })
-
-  if (await DataFolder.isDataFolder(folderHandle)) {
-    return folderHandle
-  }
-
-  return await folderHandle.getDirectoryHandle('Treeify data', { create: true })
 }
 
 /**

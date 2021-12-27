@@ -1,5 +1,6 @@
 import { List } from 'immutable'
 import { ItemType } from 'src/TreeifyTab/basicType'
+import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
@@ -135,6 +136,7 @@ export class Internal {
 
   static createInitialState(): State {
     return {
+      schemaVersion: CURRENT_SCHEMA_VERSION,
       items: {
         0: {
           type: ItemType.TEXT,
