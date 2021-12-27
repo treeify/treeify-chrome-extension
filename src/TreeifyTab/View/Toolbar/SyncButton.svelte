@@ -6,18 +6,28 @@
   import { doAsync } from 'src/Utility/doAsync'
 
   export let props: SyncButtonProps
+  let isLoading = false
 
   function onClick() {
+    if (isLoading) return
+
+    isLoading = true
     doAsync(async () => {
       await Command.syncTreeifyData()
       Rerenderer.instance.rerender()
+    }).finally(() => {
+      isLoading = false
     })
   }
 </script>
 
 {#if props.syncWith === 'Google Drive'}
   <ToolbarIconButton class="sync-button_root" title="Google Driveと同期する" on:click={onClick}>
-    <div class="sync-button_cloud-icon" class:checked={!props.hasUpdatedSinceSync} />
+    <div
+      class="sync-button_cloud-icon"
+      class:checked={!props.hasUpdatedSinceSync}
+      class:disabled={isLoading}
+    />
   </ToolbarIconButton>
 {:else}
   <ToolbarIconButton
@@ -31,6 +41,7 @@
       class="sync-button_data-folder-icon"
       class:already-opened={props.isDataFolderAlreadyOpened}
       class:checked={props.isDataFolderAlreadyOpened && !props.hasUpdatedSinceSync}
+      class:disabled={isLoading}
     />
   </ToolbarIconButton>
 {/if}
@@ -41,6 +52,8 @@
   :root {
     // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
     --sync-button-icon-color: #6a6a6a;
+
+    --sync-button-icon-disabled-color: #ababab;
   }
 
   .sync-button_cloud-icon {
@@ -50,6 +63,10 @@
 
     &.checked {
       @include common.icon-url(url('cloud-check.svg'));
+    }
+
+    &.disabled {
+      @include common.icon-color(var(--sync-button-icon-disabled-color));
     }
   }
 
@@ -64,6 +81,10 @@
 
     &.checked {
       @include common.icon-url(url('folder-check.svg'));
+    }
+
+    &.disabled {
+      @include common.icon-color(var(--sync-button-icon-disabled-color));
     }
   }
 </style>

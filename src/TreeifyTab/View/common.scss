@@ -26,6 +26,10 @@
   -webkit-mask-image: $url;
 }
 
+@mixin icon-color($color) {
+  background: $color;
+}
+
 @mixin pseudo-ripple-effect($hover-color) {
   cursor: pointer;
   
