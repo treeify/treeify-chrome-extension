@@ -263,7 +263,6 @@ function onUnhandledRejection(event: PromiseRejectionEvent) {
 }
 
 function handleError(error: Error) {
-  // TODO: リリースビルドではalertは出さない方が良いだろう
   if (error.stack !== undefined) {
     alert(error.stack)
   } else {

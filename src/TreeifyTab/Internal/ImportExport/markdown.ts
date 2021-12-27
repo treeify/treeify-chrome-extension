@@ -8,7 +8,6 @@ import { assertNeverType } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 
 export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
-  // TODO: 循環参照があると無限ループになる
   const state = Internal.instance.state
   const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].includeInvisibleItems
     ? state.items[ItemPath.getItemId(itemPath)].childItemIds
