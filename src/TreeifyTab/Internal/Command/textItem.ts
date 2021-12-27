@@ -14,6 +14,7 @@ export function createTextItem() {
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
   // 作った項目をフォーカスする
   CurrentState.setTargetItemPath(newItemPath)
+  Rerenderer.instance.requestToFocusTargetItem()
 }
 
 /** 太字のトグルコマンド */
@@ -90,6 +91,7 @@ export function grouping() {
   }
 
   CurrentState.setTargetItemPath(newItemPath)
+  Rerenderer.instance.requestToFocusTargetItem()
 }
 
 export function convertSpaceToNewline() {
