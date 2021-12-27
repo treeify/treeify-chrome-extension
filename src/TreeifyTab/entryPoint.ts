@@ -1,24 +1,31 @@
+import { List } from 'immutable'
 import { registerLanguages } from 'src/TreeifyTab/highlightJs'
 import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { startup } from 'src/TreeifyTab/startup'
-import StartupError from 'src/TreeifyTab/View/StartupError.svelte'
 import { doAsync } from 'src/Utility/doAsync'
 
 doAsync(async () => {
-  // Treeifyウィンドウが多重起動された場合はエラー画面を映す
+  // Treeifyウィンドウが多重起動された場合はタブIDでソートし、先頭以外のタブを閉じる
   const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
-  if (tabs.filter((tab) => tab.url?.startsWith(treeifyTabUrl)).length > 1) {
-    const spaRoot = document.querySelector('#spa-root')
-    if (spaRoot instanceof HTMLElement) {
-      new StartupError({
-        target: spaRoot,
-      })
+  const duplicatedTabs = List(tabs)
+    .filter((tab) => tab.url?.startsWith(treeifyTabUrl))
+    .sortBy((tab) => tab.id)
+    .shift()
+  for (const duplicatedTab of duplicatedTabs) {
+    if (duplicatedTab.id !== undefined) {
+      // 大した理由はないが、あえて並列化しない。
+      // 三重起動されることはほぼありえないし、
+      // 同時に閉じると何かの処理がインターリーブしてデータが不整合になる懸念もある。
+      try {
+        await chrome.tabs.remove(duplicatedTab.id)
+      } catch {
+        // タブを同時に閉じようとするとエラーが起きるはず。そのエラーは握りつぶす
+      }
     }
-    return
   }
 
   console.log('インスタンスID = ' + Instance.getId())
