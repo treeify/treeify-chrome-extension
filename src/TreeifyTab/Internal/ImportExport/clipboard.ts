@@ -82,11 +82,18 @@ export function onPaste(event: ClipboardEvent) {
 
   // 独自クリップボードを優先して貼り付ける
   if (External.instance.treeifyClipboard !== undefined) {
+    const selectedItemPaths = External.instance.treeifyClipboard.selectedItemPaths
+
+    // 独自クリップボードへのコピー後にグラフ構造が変わってしまった場合のガード
+    if (!selectedItemPaths.every(CurrentState.isValidItemPath)) {
+      External.instance.treeifyClipboard = undefined
+      return
+    }
+
     // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
     if (text === External.instance.getTreeifyClipboardHash()) {
       if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
-        // TODO: selectedItemPathsは削除や移動された項目を指している可能性がある
-        for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+        for (const selectedItemPath of selectedItemPaths.reverse()) {
           // 兄弟リスト内に同一項目を入れてしまわないようガード
           if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -110,8 +117,7 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
-        // TODO: selectedItemPathsは削除や移動された項目を指している可能性がある
-        for (const selectedItemPath of External.instance.treeifyClipboard.selectedItemPaths.reverse()) {
+        for (const selectedItemPath of selectedItemPaths.reverse()) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const parentItemId = ItemPath.getParentItemId(selectedItemPath)
           if (parentItemId !== undefined) {

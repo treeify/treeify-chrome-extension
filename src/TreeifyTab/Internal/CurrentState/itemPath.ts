@@ -204,6 +204,30 @@ export function moses(itemPath: ItemPath) {
   }
 }
 
+/**
+ * 与えられたItemPathが不正でないかどうか判定する。
+ * 具体的には次の全てを満たすかどうかを判定する。
+ * - 長さが1以上であること
+ * - 各項目が実在すること
+ * - ItemPath内で隣り合う項目間が親子であること（ただしparentsプロパティまでは調べない）
+ */
+export function isValidItemPath(itemPath: ItemPath): boolean {
+  if (itemPath.size === 0) return false
+
+  const itemId = ItemPath.getItemId(itemPath)
+  const item = Internal.instance.state.items[itemId]
+
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  if (parentItemId === undefined) {
+    return item !== undefined
+  }
+
+  if (item === undefined) return false
+  if (!item.childItemIds.contains(parentItemId)) return false
+
+  return isValidItemPath(itemPath.pop())
+}
+
 /** 2つのItemPathが兄弟かどうか判定する */
 export function isSibling(lhs: ItemPath, rhs: ItemPath): boolean {
   if (lhs.size !== rhs.size || !is(lhs.pop(), rhs.pop())) return false
