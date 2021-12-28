@@ -60,6 +60,31 @@
     vertical-align: top;
   }
 
+  button {
+    padding-inline: 1.1em;
+    padding-block: 0.3em;
+    border-radius: 0.3em;
+    // lch(70.0%, 0.0, 0.0)相当
+    border: 1px #ababab solid;
+    // lch(95.0%, 0.0, 0.0)相当
+    background: #f1f1f1;
+    // lch(32.5%, 0.0, 0.0)相当
+    color: #4c4c4c;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    &:hover {
+      // lch(92.5%, 0.0, 0.0)相当
+      background: #e9e9e9;
+    }
+
+    &:active {
+      // lch(90.0%, 0.0, 0.0)相当
+      background: #e2e2e2;
+    }
+  }
+
   #spa-root {
     height: 100%;
   }
