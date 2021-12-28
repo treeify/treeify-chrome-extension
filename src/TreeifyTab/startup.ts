@@ -59,11 +59,15 @@ export async function startup(initialState: State) {
   // idle状態と判定するまでの時間を60分に設定する。
   // デフォルトは1分なので無駄なAPI呼び出しが起こる懸念がある。
   chrome.idle.setDetectionInterval(60 * 60)
+
+  window.addEventListener('online', onOnline)
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
 export async function cleanup() {
   // セオリーに則り、初期化時とは逆の順番で処理する
+
+  window.removeEventListener('online', onOnline)
 
   chrome.idle.onStateChanged.removeListener(onIdleStateChanged)
   chrome.commands.onCommand.removeListener(onCommand)
@@ -225,25 +229,10 @@ async function onCommand(commandName: string) {
   })
 }
 
-// データファイルをバックグラウンドで自動ダウンロードするための仕組み
 async function onIdleStateChanged(idleState: IdleState) {
   if (idleState !== 'active') return
 
-  const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
-  if (syncedAt === undefined) return
-
-  const metaData = await GoogleDrive.fetchDataFileMetaData()
-  if (metaData === undefined) return
-
-  External.instance.backgroundDownload = {
-    modifiedTime: metaData.modifiedTime,
-    promise: doAsync(async () => {
-      const response = await GoogleDrive.readFile(metaData.id)
-      const text = await decompress(await response.arrayBuffer())
-      const state: State = JSON.parse(text, State.jsonReviver)
-      return state
-    }),
-  }
+  await prefetchDataFile()
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {
@@ -270,5 +259,30 @@ function handleError(error: Error) {
     alert(error.stack)
   } else {
     alert(error)
+  }
+}
+
+async function onOnline() {
+  console.log('onOnline', new Date().toLocaleDateString(), new Date().toLocaleTimeString())
+
+  await prefetchDataFile()
+}
+
+// データファイルをバックグラウンドで自動ダウンロードするための仕組み
+async function prefetchDataFile() {
+  const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
+  if (syncedAt === undefined) return
+
+  const metaData = await GoogleDrive.fetchDataFileMetaData()
+  if (metaData === undefined) return
+
+  External.instance.backgroundDownload = {
+    modifiedTime: metaData.modifiedTime,
+    promise: doAsync(async () => {
+      const response = await GoogleDrive.readFile(metaData.id)
+      const text = await decompress(await response.arrayBuffer())
+      const state: State = JSON.parse(text, State.jsonReviver)
+      return state
+    }),
   }
 }
