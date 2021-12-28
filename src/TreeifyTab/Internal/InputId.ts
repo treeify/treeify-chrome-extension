@@ -63,13 +63,14 @@ export namespace InputId {
   }
 
   export function toReadableText(inputId: InputId): string {
-    const modifiers = []
-    if (inputId[0] === '1') modifiers.push(getFirstModifierName() + '+')
-    if (inputId[1] === '1') modifiers.push('Shift+')
-    if (inputId[2] === '1') modifiers.push(getThirdModifierName() + '+')
-    if (inputId[3] === '1') modifiers.push(getFourthModifierName() + '+')
+    const parts = []
+    if (inputId[0] === '1') parts.push(getFirstModifierName())
+    if (inputId[1] === '1') parts.push('Shift')
+    if (inputId[2] === '1') parts.push(getThirdModifierName())
+    if (inputId[3] === '1') parts.push(getFourthModifierName())
 
-    return modifiers.join('') + simplify(inputId.substring(4))
+    parts.push(simplify(inputId.substring(4)))
+    return parts.join(' + ')
   }
 
   function simplify(code: string): string {
