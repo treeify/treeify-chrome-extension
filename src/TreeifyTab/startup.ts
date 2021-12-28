@@ -232,6 +232,8 @@ async function onCommand(commandName: string) {
 async function onIdleStateChanged(idleState: IdleState) {
   if (idleState !== 'active') return
 
+  if (!window.navigator.onLine) return
+
   await prefetchDataFile()
 }
 
@@ -270,19 +272,21 @@ async function onOnline() {
 
 // データファイルをバックグラウンドで自動ダウンロードするための仕組み
 async function prefetchDataFile() {
-  const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
-  if (syncedAt === undefined) return
+  if (Internal.instance.state.syncWith === 'Google Drive') {
+    const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
+    if (syncedAt === undefined) return
 
-  const metaData = await GoogleDrive.fetchDataFileMetaData()
-  if (metaData === undefined) return
+    const metaData = await GoogleDrive.fetchDataFileMetaData()
+    if (metaData === undefined) return
 
-  External.instance.backgroundDownload = {
-    modifiedTime: metaData.modifiedTime,
-    promise: doAsync(async () => {
-      const response = await GoogleDrive.readFile(metaData.id)
-      const text = await decompress(await response.arrayBuffer())
-      const state: State = JSON.parse(text, State.jsonReviver)
-      return state
-    }),
+    External.instance.backgroundDownload = {
+      modifiedTime: metaData.modifiedTime,
+      promise: doAsync(async () => {
+        const response = await GoogleDrive.readFile(metaData.id)
+        const text = await decompress(await response.arrayBuffer())
+        const state: State = JSON.parse(text, State.jsonReviver)
+        return state
+      }),
+    }
   }
 }
