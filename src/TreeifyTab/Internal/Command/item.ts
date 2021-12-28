@@ -282,6 +282,7 @@ export function toggleCompleted() {
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
     if (firstFollowingItemPath !== undefined) {
       CurrentState.setTargetItemPath(firstFollowingItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
     }
   } else {
     // 選択された項目が全て完了状態の場合

@@ -73,6 +73,7 @@ export function onCreated(tab: Tab) {
       const newItemPath = CurrentState.insertBelowItem(targetItemPath, newWebPageItemId)
       if (tab.active) {
         CurrentState.setTargetItemPath(newItemPath)
+        Rerenderer.instance.requestToFocusTargetItem()
 
         // 空のテキスト項目上で新しいタブを開いた場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -92,6 +93,7 @@ export function onCreated(tab: Tab) {
         if (tab.active) {
           const newItemPath = targetItemPath.push(newWebPageItemId)
           CurrentState.setTargetItemPath(newItemPath)
+          Rerenderer.instance.requestToFocusTargetItem()
         }
       }
     }
@@ -198,6 +200,7 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
   for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
     if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
       CurrentState.setTargetItemPath(itemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
       break
     }
   }

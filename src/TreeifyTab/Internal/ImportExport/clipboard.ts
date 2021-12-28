@@ -108,6 +108,7 @@ export function onPaste(event: ClipboardEvent) {
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
         assertNonUndefined(belowItemPath)
         CurrentState.setTargetItemPath(belowItemPath)
+        Rerenderer.instance.requestToFocusTargetItem()
 
         // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -132,6 +133,7 @@ export function onPaste(event: ClipboardEvent) {
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
         assertNonUndefined(belowItemPath)
         CurrentState.setTargetItemPath(belowItemPath)
+        Rerenderer.instance.requestToFocusTargetItem()
 
         // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -157,6 +159,7 @@ export function onPaste(event: ClipboardEvent) {
     const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
     assertNonUndefined(belowItemPath)
     CurrentState.setTargetItemPath(belowItemPath)
+    Rerenderer.instance.requestToFocusTargetItem()
 
     // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
     if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -181,6 +184,7 @@ export function onPaste(event: ClipboardEvent) {
 
       // ターゲットを更新する
       CurrentState.setTargetItemPath(belowItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
       if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -198,6 +202,7 @@ export function onPaste(event: ClipboardEvent) {
 
       // ターゲットを更新する
       CurrentState.setTargetItemPath(belowItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
       if (CurrentState.isEmptyTextItem(targetItemId)) {

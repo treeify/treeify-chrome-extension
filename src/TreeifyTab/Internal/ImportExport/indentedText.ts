@@ -128,6 +128,7 @@ export function pasteMultilineText(text: string) {
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
       assertNonUndefined(belowItemPath)
       CurrentState.setTargetItemPath(belowItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
       if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -148,6 +149,7 @@ export function pasteMultilineText(text: string) {
   const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
   assertNonUndefined(belowItemPath)
   CurrentState.setTargetItemPath(belowItemPath)
+  Rerenderer.instance.requestToFocusTargetItem()
 
   // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
   if (CurrentState.isEmptyTextItem(targetItemId)) {

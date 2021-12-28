@@ -49,7 +49,7 @@
 
           const targetItemPath = List.of(CurrentState.getActivePageId(), bookmarkContainerItemId)
           CurrentState.setTargetItemPath(targetItemPath)
-
+          Rerenderer.instance.requestToFocusTargetItem()
           Rerenderer.instance.rerender()
         },
       },

@@ -67,6 +67,7 @@ export function createMainAreaWebPageContentProps(
       event.preventDefault()
 
       CurrentState.setTargetItemPath(itemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
 
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
