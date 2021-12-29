@@ -92,6 +92,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
           }
           break
       }
+      Rerenderer.instance.requestToFocusTargetItem()
       Rerenderer.instance.rerender()
     },
     onContextMenu(event: Event) {
