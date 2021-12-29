@@ -223,7 +223,7 @@ export function isValidItemPath(itemPath: ItemPath): boolean {
   }
 
   if (item === undefined) return false
-  if (!item.childItemIds.contains(parentItemId)) return false
+  if (item.parents[parentItemId] === undefined) return false
 
   return isValidItemPath(itemPath.pop())
 }
