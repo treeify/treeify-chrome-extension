@@ -2,6 +2,7 @@ import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import resolve from '@rollup/plugin-node-resolve'
+import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
 import path from 'path'
 import copy from 'rollup-plugin-copy'
@@ -55,6 +56,9 @@ export default {
         { src: 'static/common/*', dest: 'dist' },
         { src: `static/${process.env.NODE_ENV}/*`, dest: 'dist' },
       ],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     }),
   ],
 }
