@@ -236,9 +236,17 @@ async function onCommand(commandName: string) {
 }
 
 function onAlarm(alarm: Alarm) {
-  const [itemId, reminderId] = alarm.name.split('@')
+  const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
+
+  const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
+  switch (reminderSetting.type) {
+    case 'when':
+      Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
+      break
+  }
+
   // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
-  const itemPath = List(CurrentState.yieldItemPaths(parseInt(itemId))).first()
+  const itemPath = List(CurrentState.yieldItemPaths(itemId)).first()
   assertNonUndefined(itemPath)
   CurrentState.jumpTo(itemPath)
   Rerenderer.instance.rerender()
