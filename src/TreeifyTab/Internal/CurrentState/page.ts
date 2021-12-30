@@ -107,14 +107,13 @@ export function deriveTreeifyTabTitle(): string {
 export function jumpTo(itemPath: ItemPath) {
   const containerPageId = ItemPath.getRootItemId(itemPath)
 
-  // ジャンプ先のページのtargetItemPathを更新する
-  Internal.instance.mutate(itemPath, PropertyPath.of('pages', containerPageId, 'targetItemPath'))
-  Internal.instance.mutate(itemPath, PropertyPath.of('pages', containerPageId, 'anchorItemPath'))
+  // ページを切り替える
+  CurrentState.switchActivePage(containerPageId)
 
   CurrentState.moses(itemPath)
 
-  // ページを切り替える
-  CurrentState.switchActivePage(containerPageId)
+  // ジャンプ先のページのtargetItemPathを更新する
+  CurrentState.setTargetItemPath(itemPath)
   Rerenderer.instance.requestToFocusTargetItem()
 
   // 再描画完了後に対象項目に自動スクロールする
