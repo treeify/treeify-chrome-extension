@@ -1,3 +1,4 @@
+import { List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import {
   matchTabsAndWebPageItems,
@@ -26,6 +27,7 @@ import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { doAsync } from 'src/Utility/doAsync'
 import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
+import Alarm = chrome.alarms.Alarm
 import OnClickData = chrome.contextMenus.OnClickData
 import IdleState = chrome.idle.IdleState
 
@@ -55,12 +57,15 @@ export async function startup(initialState: State) {
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
   chrome.commands.onCommand.addListener(onCommand)
+  chrome.alarms.onAlarm.addListener(onAlarm)
   chrome.idle.onStateChanged.addListener(onIdleStateChanged)
   // idle状態と判定するまでの時間を60分に設定する。
   // デフォルトは1分なので無駄なAPI呼び出しが起こる懸念がある。
   chrome.idle.setDetectionInterval(60 * 60)
 
   window.addEventListener('online', onOnline)
+
+  await CurrentState.setupAllAlarms()
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
@@ -70,6 +75,7 @@ export async function cleanup() {
   window.removeEventListener('online', onOnline)
 
   chrome.idle.onStateChanged.removeListener(onIdleStateChanged)
+  chrome.alarms.onAlarm.removeListener(onAlarm)
   chrome.commands.onCommand.removeListener(onCommand)
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
@@ -227,6 +233,25 @@ async function onCommand(commandName: string) {
         break
     }
   })
+}
+
+function onAlarm(alarm: Alarm) {
+  const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
+
+  const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
+  switch (reminderSetting.type) {
+    case 'once':
+      Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
+      break
+  }
+
+  // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
+  const itemPath = List(CurrentState.yieldItemPaths(itemId)).first()
+  assertNonUndefined(itemPath)
+  CurrentState.jumpTo(itemPath)
+  Rerenderer.instance.rerender()
+  // TODO: 文言を改善する
+  alert('リマインダー')
 }
 
 async function onIdleStateChanged(idleState: IdleState) {

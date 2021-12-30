@@ -104,6 +104,15 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
+  if (isSingleSelect) {
+    result.push({
+      title: 'リマインダーを設定…',
+      onClick: () => {
+        External.instance.dialogState = { type: 'ReminderSettingDialog' }
+      },
+    })
+  }
+
   if (
     isSingleSelect &&
     List.of(ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX).contains(item.type)

@@ -164,6 +164,7 @@ export class Internal {
           anchorItemPath: List.of(0),
         },
       },
+      reminders: {},
       workspaces: {
         [Timestamp.now()]: {
           name: 'ワークスペース1',

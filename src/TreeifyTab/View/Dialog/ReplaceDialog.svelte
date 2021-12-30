@@ -29,7 +29,7 @@
         break
       case '1100KeyR':
         event.preventDefault()
-        document.querySelector<HTMLElement>('.text-replace-dialog_before-replace')?.focus()
+        document.querySelector<HTMLElement>('.replace-dialog_before-replace')?.focus()
         document.execCommand('selectAll')
         break
     }
@@ -100,41 +100,41 @@
   }
 </script>
 
-<CommonDialog class="text-replace-dialog_root" title="置換" showCloseButton>
-  <div class="text-replace-dialog_content" on:keydown={onKeydown}>
-    <div class="text-replace-dialog_input-area">
-      <label class="text-replace-dialog_label">
+<CommonDialog class="replace-dialog_root" title="置換" showCloseButton>
+  <div class="replace-dialog_content" on:keydown={onKeydown}>
+    <div class="replace-dialog_input-area">
+      <label class="replace-dialog_label">
         置換前
-        <input type="text" class="text-replace-dialog_before-replace" bind:value={beforeReplace} />
+        <input type="text" class="replace-dialog_before-replace" bind:value={beforeReplace} />
       </label>
-      <label class="text-replace-dialog_label">
+      <label class="replace-dialog_label">
         置換後
-        <input type="text" class="text-replace-dialog_after-replace" bind:value={afterReplace} />
+        <input type="text" class="replace-dialog_after-replace" bind:value={afterReplace} />
       </label>
     </div>
-    <div class="text-replace-dialog_button-area">
-      <button class="text-replace-dialog_submit-button" on:click={onSubmit}>全て置換</button>
+    <div class="replace-dialog_button-area">
+      <button class="replace-dialog_submit-button" on:click={onSubmit}>全て置換</button>
     </div>
   </div>
 </CommonDialog>
 
 <style global lang="scss">
-  .text-replace-dialog_content {
+  .replace-dialog_content {
     min-width: 25em;
     padding: 1em;
   }
 
-  .text-replace-dialog_input-area {
+  .replace-dialog_input-area {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-gap: 0.5em;
   }
 
-  .text-replace-dialog_label {
+  .replace-dialog_label {
     display: contents;
   }
 
-  .text-replace-dialog_button-area {
+  .replace-dialog_button-area {
     margin: 1em 0 0 auto;
     width: max-content;
   }
