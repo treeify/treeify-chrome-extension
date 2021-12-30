@@ -104,13 +104,15 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  if (isSingleSelect) {
-    result.push({
-      title: 'リマインダーを設定…',
-      onClick: () => {
-        External.instance.dialogState = { type: 'ReminderSettingDialog' }
-      },
-    })
+  if (process.env.NODE_ENV !== 'prod') {
+    if (isSingleSelect) {
+      result.push({
+        title: 'リマインダーを設定…',
+        onClick: () => {
+          External.instance.dialogState = { type: 'ReminderSettingDialog' }
+        },
+      })
+    }
   }
 
   if (
