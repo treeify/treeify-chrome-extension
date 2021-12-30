@@ -722,6 +722,7 @@ function onSpace(event: KeyboardEvent) {
 }
 
 async function undo() {
+  // TODO: リリースまでに削除するかビルド設定で分岐する
   if (External.instance.tabIdsToBeClosedForUnloading.size > 0) {
     console.log('=============================================')
     console.log('External.instance.tabIdsToBeClosedForUnloading.size > 0')
