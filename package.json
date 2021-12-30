@@ -48,10 +48,12 @@
   "private": true,
   "scripts": {
     "build-dev": "cross-env NODE_ENV=dev rollup -c",
+    "build-dog": "cross-env NODE_ENV=dog rollup -c",
     "build-prod": "cross-env NODE_ENV=prod rollup -c",
     "format": "prettier --write \"src/**/*.{ts,tsx,svelte}\"",
     "svelte-check": "svelte-check",
     "watch-dev": "cross-env NODE_ENV=dev rollup -c -w",
+    "watch-dog": "cross-env NODE_ENV=dog rollup -c -w",
     "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
   }
 }
