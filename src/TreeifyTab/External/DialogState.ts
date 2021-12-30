@@ -11,7 +11,7 @@ export type TabsDialog = {
   targetItemId: ItemId
 }
 
-export type Dialog = DiscriminatedUnion<{
+export type DialogState = DiscriminatedUnion<{
   CaptionSettingDialog: {}
   SourceSettingDialog: {}
   CodeBlockItemEditDialog: {}

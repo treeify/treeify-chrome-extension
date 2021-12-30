@@ -3,7 +3,7 @@ import md5 from 'md5'
 import { MultiSet } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
-import { Dialog } from 'src/TreeifyTab/External/DialogState'
+import { DialogState } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
@@ -17,7 +17,7 @@ import { integer } from 'src/Utility/integer'
 export class External {
   static #instance: External | undefined
 
-  dialogState: Dialog | undefined
+  dialogState: DialogState | undefined
 
   dataFolder: DataFolder | undefined
 
