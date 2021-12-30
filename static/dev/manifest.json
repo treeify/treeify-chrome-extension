@@ -59,7 +59,8 @@
     "contextMenus",
     "bookmarks",
     "identity",
-    "idle"
+    "idle",
+    "alarms"
   ],
   "oauth2": {
     "client_id": "863550933415-v5flb9d0ejdretgo8elds207c15p2p21.apps.googleusercontent.com",

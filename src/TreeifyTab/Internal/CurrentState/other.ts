@@ -72,3 +72,16 @@ export function getCaption(itemId: ItemId): string | undefined {
       return undefined
   }
 }
+
+export async function setupAllAlarms() {
+  await chrome.alarms.clearAll()
+  for (const [itemId, record] of Object.entries(Internal.instance.state.reminders)) {
+    for (const [reminderId, reminderSetting] of Object.entries(record)) {
+      switch (reminderSetting.type) {
+        case 'when':
+          chrome.alarms.create(`${itemId}@${reminderId}`, { when: reminderSetting.timestamp })
+          break
+      }
+    }
+  }
+}
