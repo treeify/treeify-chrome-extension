@@ -78,7 +78,7 @@ export async function setupAllAlarms() {
   for (const [itemId, record] of Object.entries(Internal.instance.state.reminders)) {
     for (const [reminderId, reminderSetting] of Object.entries(record)) {
       switch (reminderSetting.type) {
-        case 'when':
+        case 'once':
           chrome.alarms.create(`${itemId}@${reminderId}`, { when: reminderSetting.timestamp })
           break
       }

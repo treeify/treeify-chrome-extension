@@ -33,7 +33,7 @@
     if (Number.isNaN(timestamp)) return
 
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    const reminderSetting: ReminderSetting = { type: 'when', timestamp }
+    const reminderSetting: ReminderSetting = { type: 'once', timestamp }
     const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
     Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
 

@@ -240,7 +240,7 @@ function onAlarm(alarm: Alarm) {
 
   const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
   switch (reminderSetting.type) {
-    case 'when':
+    case 'once':
       Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
       break
   }
