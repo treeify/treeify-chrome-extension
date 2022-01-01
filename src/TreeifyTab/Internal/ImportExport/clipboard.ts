@@ -175,7 +175,7 @@ export function onPaste(event: ClipboardEvent) {
 
     // GyazoのスクリーンショットのURLを判定する。
     // 'https://gyazo.com/'に続けてMD5の32文字が来る形式になっている模様。
-    const gyazoUrlPattern = /https:\/\/gyazo\.com\/\w{32}/
+    const gyazoUrlPattern = /^https:\/\/gyazo\.com\/\w{32}$/
     if (gyazoUrlPattern.test(text)) {
       // GyazoのスクリーンショットのURLなら画像項目を作る
       const newItemId = CurrentState.createImageItem()
