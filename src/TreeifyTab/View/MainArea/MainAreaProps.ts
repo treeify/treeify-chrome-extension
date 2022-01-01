@@ -571,7 +571,8 @@ function onBackspace(event: KeyboardEvent) {
       // 子リストを連結するため、子を全て弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
       for (const childItemId of targetItem.childItemIds) {
-        CurrentState.insertLastChildItem(aboveItemId, childItemId)
+        const edge = Internal.instance.state.items[childItemId].parents[targetItemId]
+        CurrentState.insertLastChildItem(aboveItemId, childItemId, edge)
       }
 
       // ↑の元のエッジごと削除
@@ -679,7 +680,8 @@ function onDelete(event: KeyboardEvent) {
       // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
       for (const childItemId of belowItem.childItemIds) {
-        CurrentState.insertLastChildItem(targetItemId, childItemId)
+        const edge = Internal.instance.state.items[childItemId].parents[belowItemId]
+        CurrentState.insertLastChildItem(targetItemId, childItemId, edge)
       }
 
       // ↑の元のエッジごと削除
