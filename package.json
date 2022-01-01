@@ -55,5 +55,8 @@
     "watch-dev": "cross-env NODE_ENV=dev rollup -c -w",
     "watch-dog": "cross-env NODE_ENV=dog rollup -c -w",
     "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
+  },
+  "volta": {
+    "node": "16.13.1"
   }
 }
