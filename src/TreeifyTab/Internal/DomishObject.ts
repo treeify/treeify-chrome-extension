@@ -39,6 +39,9 @@ export namespace DomishObject {
     textContent: string
   }
 
+  // いわゆる「&nbsp;」
+  const nbsp = String.fromCharCode(160)
+
   /** 等価性判定 */
   export function equals(lhs: List<DomishObject>, rhs: List<DomishObject>): boolean {
     return toDocumentFragment(lhs).isEqualNode(toDocumentFragment(rhs))
@@ -145,7 +148,6 @@ export namespace DomishObject {
     }
     if (node.nodeType === Node.TEXT_NODE) {
       // 通常の半角スペースをいわゆる「&nbsp;」に変換してからテキストノード化する
-      const nbsp = String.fromCharCode(160)
       const textContent = node.textContent ?? ''
       return { type: 'text', textContent: textContent.replaceAll(' ', nbsp) }
     }
@@ -183,7 +185,9 @@ export namespace DomishObject {
   }
 
   /**
-   * プレーンテキストに変換する。改行は維持される。
+   * プレーンテキストに変換する。
+   * br要素は改行コードに変換する。
+   * nbspは半角スペースに変換する。
    * ただし末尾の無駄な（すなわちHTMLへの描画時に改行として扱われない）br要素は除去するので要注意。
    */
   export function toPlainText(value: DomishObject | List<DomishObject>): string {
@@ -206,7 +210,7 @@ export namespace DomishObject {
         case 'br':
           return '\n'
         case 'text':
-          return domishObject.textContent
+          return domishObject.textContent.replaceAll(nbsp, ' ')
         default:
           assertNeverType(domishObject)
       }
@@ -218,7 +222,6 @@ export namespace DomishObject {
     const lines = text.split(/\r?\n/)
     for (let i = 0; i < lines.length; i++) {
       // 通常の半角スペースをいわゆる「&nbsp;」に変換してからテキストノード化する
-      const nbsp = String.fromCharCode(160)
       const line = lines[i].replaceAll(' ', nbsp)
       domishObjectArray.push({ type: 'text', textContent: line })
       if (i !== lines.length - 1) {
@@ -250,7 +253,7 @@ export namespace DomishObject {
         case 'br':
           return '  \n'
         case 'text':
-          return domishObject.textContent
+          return domishObject.textContent.replaceAll(nbsp, ' ')
         default:
           assertNeverType(domishObject)
       }
@@ -279,7 +282,7 @@ export namespace DomishObject {
         case 'br':
           return ' '
         case 'text':
-          return domishObject.textContent
+          return domishObject.textContent.replaceAll(nbsp, ' ')
         default:
           assertNeverType(domishObject)
       }
