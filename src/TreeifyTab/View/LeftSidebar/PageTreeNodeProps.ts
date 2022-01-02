@@ -39,7 +39,11 @@ export type PageTreeNodeProps = {
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   const filteredPageIds = CurrentState.getFilteredMountedPageIds()
 
-  const tree = CurrentState.treeify(CurrentState.getFilteredMountedPageIds().toSet(), TOP_ITEM_ID)
+  const tree = CurrentState.treeify(
+    CurrentState.getFilteredMountedPageIds().toSet(),
+    TOP_ITEM_ID,
+    true
+  )
   return tree.fold((itemPath, children) => {
     const itemId = ItemPath.getItemId(itemPath)
     const activePageId = CurrentState.getActivePageId()

@@ -28,7 +28,7 @@ export function createSearchResultItemPropses(
   const pageId = ItemPath.getRootItemId(firstItemPath)
 
   const itemIdSet = itemPaths.map(ItemPath.getItemId).toSet()
-  const tree = CurrentState.treeify(itemIdSet.add(pageId), pageId)
+  const tree = CurrentState.treeify(itemIdSet.add(pageId), pageId, false)
 
   // 足跡を表示するためにタイムスタンプのランキングを計算する
   const items = Internal.instance.state.items

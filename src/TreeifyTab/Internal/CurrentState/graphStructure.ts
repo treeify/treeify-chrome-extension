@@ -153,9 +153,13 @@ function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
  * 項目群をグラフ構造に従って順序ツリー化する。
  * トランスクルードによって同一項目が複数箇所に出現する場合がある。
  */
-export function treeify(itemIdSet: Set<ItemId>, rootItemId: ItemId): MutableOrderedTree<ItemPath> {
+export function treeify(
+  itemIdSet: Set<ItemId>,
+  rootItemId: ItemId,
+  passThroughPage: boolean
+): MutableOrderedTree<ItemPath> {
   const childrenMap = itemIdSet
-    .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet))
+    .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet, passThroughPage))
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
       const sortedItemPaths = CurrentState.sortByDocumentOrder(collection.toList())
@@ -174,8 +178,13 @@ export function treeify(itemIdSet: Set<ItemId>, rootItemId: ItemId): MutableOrde
  * 第1引数を先祖方向に探索し、第2引数に含まれる項目に到達したら、スタート地点からその項目までのItemPathを返す。
  * @param itemIds アキュムレーター引数。長さは必ず1以上。
  * @param itemIdSet 探索の終端となる項目ID群
+ * @param passThroughPage ページを貫通して探索するかどうか
  */
-function* yieldItemPathsFor(itemIds: List<ItemId>, itemIdSet: Set<ItemId>): Generator<ItemPath> {
+function* yieldItemPathsFor(
+  itemIds: List<ItemId>,
+  itemIdSet: Set<ItemId>,
+  passThroughPage: boolean
+): Generator<ItemPath> {
   const itemId = itemIds.first(undefined)
   assertNonUndefined(itemId)
 
@@ -184,8 +193,13 @@ function* yieldItemPathsFor(itemIds: List<ItemId>, itemIdSet: Set<ItemId>): Gene
     return
   }
 
+  // ページを貫通しない設定の場合はページの親を探索せず終了する
+  if (!passThroughPage && CurrentState.isPage(itemId)) {
+    return
+  }
+
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    yield* yieldItemPathsFor(itemIds.unshift(parentItemId), itemIdSet)
+    yield* yieldItemPathsFor(itemIds.unshift(parentItemId), itemIdSet, passThroughPage)
   }
 }
 

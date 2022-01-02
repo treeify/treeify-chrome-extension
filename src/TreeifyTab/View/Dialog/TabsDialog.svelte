@@ -17,7 +17,8 @@
   )
   const rootNode = CurrentState.treeify(
     webPageItemIds.add(dialog.targetItemId),
-    dialog.targetItemId
+    dialog.targetItemId,
+    false
   )
 
   const items = List(rootNode.children).map((tree) => {
