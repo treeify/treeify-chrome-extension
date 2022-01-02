@@ -5,6 +5,7 @@
   "author": "ootidea",
   "dependencies": {
     "color": "^4.0.1",
+    "dayjs": "^1.10.7",
     "focus-trap": "^6.7.1",
     "highlight.js": "^11.3.1",
     "immutable": "^4.0.0",

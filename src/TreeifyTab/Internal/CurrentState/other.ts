@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -79,7 +80,13 @@ export async function setupAllAlarms() {
     for (const [reminderId, reminderSetting] of Object.entries(record)) {
       switch (reminderSetting.type) {
         case 'once':
-          chrome.alarms.create(`${itemId}@${reminderId}`, { when: reminderSetting.timestamp })
+          const date = dayjs()
+            .set('year', reminderSetting.year)
+            .set('month', reminderSetting.month)
+            .set('date', reminderSetting.date)
+            .set('hour', reminderSetting.hour)
+            .set('minute', reminderSetting.minute)
+          chrome.alarms.create(`${itemId}@${reminderId}`, { when: date.valueOf() })
           break
       }
     }

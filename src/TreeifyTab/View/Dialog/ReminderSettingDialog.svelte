@@ -1,4 +1,5 @@
 <script lang="ts">
+  import dayjs from 'dayjs'
   import { ItemId } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -12,7 +13,8 @@
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
   import { Timestamp } from 'src/Utility/Timestamp'
 
-  let value = ''
+  let date = dayjs().format('YYYY-MM-DD')
+  let time = '00:00'
 
   function onKeydown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -27,13 +29,19 @@
   }
 
   function onClickFinishButton() {
+    const parsed = dayjs(`${date} ${time}`)
+    if (!parsed.isValid()) return
+
     Internal.instance.saveCurrentStateToUndoStack()
-
-    const timestamp = Date.parse(value)
-    if (Number.isNaN(timestamp)) return
-
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    const reminderSetting: ReminderSetting = { type: 'once', timestamp }
+    const reminderSetting: ReminderSetting = {
+      type: 'once',
+      year: parsed.year(),
+      month: parsed.month(),
+      date: parsed.date(),
+      hour: parsed.hour(),
+      minute: parsed.minute(),
+    }
     const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
     Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
 
@@ -51,7 +59,8 @@
 
 <CommonDialog class="reminder-setting-dialog_root" title="リマインダー設定">
   <div class="reminder-setting-dialog_content" on:keydown={onKeydown}>
-    <input type="datetime-local" bind:value />
+    <input type="date" bind:value={date} />
+    <input type="time" bind:value={time} />
     <div class="reminder-setting-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
