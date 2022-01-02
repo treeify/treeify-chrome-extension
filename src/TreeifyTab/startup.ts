@@ -57,7 +57,9 @@ export async function startup(initialState: State) {
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
   chrome.commands.onCommand.addListener(onCommand)
-  chrome.alarms.onAlarm.addListener(onAlarm)
+  if (process.env.NODE_ENV !== 'prod') {
+    chrome.alarms.onAlarm.addListener(onAlarm)
+  }
   chrome.idle.onStateChanged.addListener(onIdleStateChanged)
   // idle状態と判定するまでの時間を60分に設定する。
   // デフォルトは1分なので無駄なAPI呼び出しが起こる懸念がある。
@@ -65,7 +67,9 @@ export async function startup(initialState: State) {
 
   window.addEventListener('online', onOnline)
 
-  await CurrentState.setupAllAlarms()
+  if (process.env.NODE_ENV !== 'prod') {
+    await CurrentState.setupAllAlarms()
+  }
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
@@ -75,7 +79,9 @@ export async function cleanup() {
   window.removeEventListener('online', onOnline)
 
   chrome.idle.onStateChanged.removeListener(onIdleStateChanged)
-  chrome.alarms.onAlarm.removeListener(onAlarm)
+  if (process.env.NODE_ENV !== 'prod') {
+    chrome.alarms.onAlarm.removeListener(onAlarm)
+  }
   chrome.commands.onCommand.removeListener(onCommand)
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
