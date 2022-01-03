@@ -734,9 +734,7 @@ async function undo() {
       const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
       dump(itemId)
       if (itemId !== undefined) {
-        for (let itemPath of CurrentState.yieldItemPaths(itemId)) {
-          dump(extractPlainText(itemPath))
-        }
+        dump(extractPlainText(itemId))
       }
     }
     console.log('=============================================')

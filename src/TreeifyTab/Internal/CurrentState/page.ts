@@ -98,9 +98,9 @@ export function deriveTreeifyTabTitle(): string {
   const parentPageIds = CurrentState.getParentPageIds(activePageId)
   const parentPageId = parentPageIds.first(undefined)
   if (parentPageId !== undefined) {
-    return `${extractPlainText(List.of(activePageId))} - ${extractPlainText(List.of(parentPageId))}`
+    return `${extractPlainText(activePageId)} - ${extractPlainText(parentPageId)}`
   } else {
-    return extractPlainText(List.of(activePageId))
+    return extractPlainText(activePageId)
   }
 }
 

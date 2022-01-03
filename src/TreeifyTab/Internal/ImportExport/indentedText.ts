@@ -48,13 +48,14 @@ function* yieldIndentedLines(
   depth: integer = 0
 ): Generator<string> {
   const indent = indentUnit.repeat(depth)
-  for (const contentLine of extractPlainText(itemPath).split(/\r?\n/)) {
+  const itemId = ItemPath.getItemId(itemPath)
+  for (const contentLine of extractPlainText(itemId).split(/\r?\n/)) {
     yield indent + contentLine
   }
 
   const state = Internal.instance.state
   const childItemIds = state.exportSettings.options[ExportFormat.PLAIN_TEXT].includeInvisibleItems
-    ? state.items[ItemPath.getItemId(itemPath)].childItemIds
+    ? state.items[itemId].childItemIds
     : CurrentState.getDisplayingChildItemIds(itemPath)
   for (const childItemId of childItemIds) {
     const childItemPath = itemPath.push(childItemId)
@@ -63,8 +64,7 @@ function* yieldIndentedLines(
 }
 
 /** 指定された項目単体のプレーンテキスト表現を生成する */
-export function extractPlainText(itemPath: ItemPath): string {
-  const itemId = ItemPath.getItemId(itemPath)
+export function extractPlainText(itemId: ItemId): string {
   const itemType = Internal.instance.state.items[itemId].type
   switch (itemType) {
     case ItemType.TEXT:
