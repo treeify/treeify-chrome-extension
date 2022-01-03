@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import {
@@ -16,10 +17,11 @@ import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
-import { State } from 'src/TreeifyTab/Internal/State'
+import { ReminderSetting, State } from 'src/TreeifyTab/Internal/State'
 import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
@@ -251,7 +253,10 @@ async function onAlarm(alarm: Alarm) {
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') return
 
-  const notification = new Notification('Treeifyリマインダー')
+  const notification = new Notification(
+    `Treeifyリマインダー（${createDateTimeText(reminderSetting)}）`,
+    { body: extractPlainText(itemId) }
+  )
   // 通知のクリック時は該当項目にジャンプする
   notification.onclick = async () => {
     // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
@@ -260,6 +265,19 @@ async function onAlarm(alarm: Alarm) {
     CurrentState.jumpTo(itemPath)
     Rerenderer.instance.rerender()
     await TreeifyTab.open()
+  }
+}
+
+function createDateTimeText(reminderSetting: ReminderSetting): string {
+  switch (reminderSetting.type) {
+    case 'once':
+      return dayjs()
+        .year(reminderSetting.year)
+        .month(reminderSetting.month)
+        .date(reminderSetting.date)
+        .hour(reminderSetting.hour)
+        .minute(reminderSetting.minute)
+        .format('YYYY-MM-DD HH:mm')
   }
 }
 
@@ -273,7 +291,6 @@ async function onIdleStateChanged(idleState: IdleState) {
 
 async function getLastFocusedWindowId(): Promise<integer> {
   const window = await chrome.windows.getLastFocused()
-  // TODO: assertしていい理由が特にない
   assertNonUndefined(window.id)
   return window.id
 }

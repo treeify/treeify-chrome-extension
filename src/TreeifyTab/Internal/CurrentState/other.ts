@@ -81,11 +81,11 @@ export async function setupAllAlarms() {
       switch (reminderSetting.type) {
         case 'once':
           const date = dayjs()
-            .set('year', reminderSetting.year)
-            .set('month', reminderSetting.month)
-            .set('date', reminderSetting.date)
-            .set('hour', reminderSetting.hour)
-            .set('minute', reminderSetting.minute)
+            .year(reminderSetting.year)
+            .month(reminderSetting.month)
+            .date(reminderSetting.date)
+            .hour(reminderSetting.hour)
+            .minute(reminderSetting.minute)
           chrome.alarms.create(`${itemId}@${reminderId}`, { when: date.valueOf() })
           break
       }
