@@ -241,7 +241,7 @@ async function onCommand(commandName: string) {
   })
 }
 
-function onAlarm(alarm: Alarm) {
+async function onAlarm(alarm: Alarm) {
   const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
 
   const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
@@ -250,6 +250,7 @@ function onAlarm(alarm: Alarm) {
       Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
       break
   }
+  await TreeifyTab.open()
 
   // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
   const itemPath = List(CurrentState.yieldItemPaths(itemId)).first()
