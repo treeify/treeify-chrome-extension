@@ -80,13 +80,17 @@ export async function setupAllAlarms() {
     for (const [reminderId, reminderSetting] of Object.entries(record)) {
       switch (reminderSetting.type) {
         case 'once':
-          const date = dayjs()
+          const timestamp = dayjs()
             .year(reminderSetting.year)
             .month(reminderSetting.month)
             .date(reminderSetting.date)
             .hour(reminderSetting.hour)
             .minute(reminderSetting.minute)
-          chrome.alarms.create(`${itemId}@${reminderId}`, { when: date.valueOf() })
+            .startOf('minute')
+            .valueOf()
+          if (reminderSetting.notifiedAt === undefined || reminderSetting.notifiedAt < timestamp) {
+            chrome.alarms.create(`${itemId}@${reminderId}`, { when: timestamp })
+          }
           break
       }
     }

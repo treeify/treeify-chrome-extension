@@ -167,7 +167,14 @@ export type Page = {
 export type ReminderId = Timestamp
 
 export type ReminderSetting = DiscriminatedUnion<{
-  once: { year: integer; month: integer; date: integer; hour: integer; minute: integer }
+  once: {
+    notifiedAt?: Timestamp
+    year: integer
+    month: integer
+    date: integer
+    hour: integer
+    minute: integer
+  }
 }>
 
 export type Workspace = {

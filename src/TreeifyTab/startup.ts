@@ -247,7 +247,10 @@ async function onAlarm(alarm: Alarm) {
   const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
   const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
   if (reminderSetting.type === 'once') {
-    Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
+    Internal.instance.mutate(
+      alarm.scheduledTime,
+      PropertyPath.of('reminders', itemId, reminderId, 'notifiedAt')
+    )
   }
 
   const permission = await Notification.requestPermission()
