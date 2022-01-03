@@ -120,7 +120,7 @@
     }
 
     &:hover {
-      background: var(--main-area-mouse-hover-item-background-color);
+      background: var(--main-area-hover-item-background-color);
     }
   }
 </style>

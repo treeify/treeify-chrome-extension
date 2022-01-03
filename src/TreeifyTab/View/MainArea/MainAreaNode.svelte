@@ -86,8 +86,8 @@
 
     // フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当
     --main-area-focused-item-background-color: #ecf0ff;
-    // マウスホバー項目の背景色。lch(97.5%, 134.0, 280.4)相当
-    --main-area-mouse-hover-item-background-color: #f6f8ff;
+    // マウスホバー項目の背景色。lch(98%, 134.0, 280.4)相当
+    --main-area-hover-item-background-color: #f7f9ff;
 
     // 複数選択された項目の背景色。lch(93.0%, 134.0, 280.4)相当
     --main-area-selected-item-background-color: #e5ebff;
@@ -148,7 +148,7 @@
     // マウスホバー時のコンテンツ領域
     &:hover {
       // マウスホバー項目の強調表示
-      background: var(--main-area-mouse-hover-item-background-color);
+      background: var(--main-area-hover-item-background-color);
       @media print {
         background-color: transparent;
       }

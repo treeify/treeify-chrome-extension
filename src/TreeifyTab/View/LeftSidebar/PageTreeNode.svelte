@@ -67,8 +67,8 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    // ページツリーの項目のマウスホバー時の背景色。lch(97.5%, 134.0, 280.4)相当
-    --page-tree-hover-item-background-color: #f6f8ff;
+    // ページツリーの項目のマウスホバー時の背景色。lch(98%, 134.0, 280.4)相当
+    --page-tree-hover-item-background-color: #f7f9ff;
 
     // ページツリーのアクティブページの背景色。lch(95.0%, 134.0, 280.4)相当
     --page-tree-active-page-background-color: #ecf0ff;
