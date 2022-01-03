@@ -243,22 +243,24 @@ async function onCommand(commandName: string) {
 
 async function onAlarm(alarm: Alarm) {
   const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
-
   const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
-  switch (reminderSetting.type) {
-    case 'once':
-      Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
-      break
+  if (reminderSetting.type === 'once') {
+    Internal.instance.delete(PropertyPath.of('reminders', itemId, reminderId))
   }
-  await TreeifyTab.open()
 
-  // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
-  const itemPath = List(CurrentState.yieldItemPaths(itemId)).first()
-  assertNonUndefined(itemPath)
-  CurrentState.jumpTo(itemPath)
-  Rerenderer.instance.rerender()
-  // TODO: 文言を改善する
-  alert('リマインダー')
+  const permission = await Notification.requestPermission()
+  if (permission !== 'granted') return
+
+  const notification = new Notification('Treeifyリマインダー')
+  // 通知のクリック時は該当項目にジャンプする
+  notification.onclick = async () => {
+    // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
+    const itemPath = List(CurrentState.yieldItemPaths(itemId)).first()
+    assertNonUndefined(itemPath)
+    CurrentState.jumpTo(itemPath)
+    Rerenderer.instance.rerender()
+    await TreeifyTab.open()
+  }
 }
 
 async function onIdleStateChanged(idleState: IdleState) {
