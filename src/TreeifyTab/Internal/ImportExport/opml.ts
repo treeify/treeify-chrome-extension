@@ -52,6 +52,11 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
     baseAttributes.sourceUrl = item.source.url
   }
 
+  const reminders = Internal.instance.state.reminders[itemId]
+  if (reminders !== undefined) {
+    baseAttributes.reminders = JSON.stringify(Object.values(reminders))
+  }
+
   switch (item.type) {
     case ItemType.TEXT:
       const textItem = Internal.instance.state.textItems[itemId]
