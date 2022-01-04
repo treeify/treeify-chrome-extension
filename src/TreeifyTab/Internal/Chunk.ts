@@ -35,6 +35,7 @@ export namespace Chunk {
     'codeBlockItems',
     'texItems',
     'pages',
+    'reminders',
   ])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
