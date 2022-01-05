@@ -15,6 +15,7 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
+import { Rist } from 'src/Utility/array'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
@@ -23,7 +24,7 @@ export type PageTreeNodeProps = {
   itemId: ItemId
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: ItemContentProps
-  childNodePropses: List<PageTreeNodeProps>
+  childNodePropses: Rist<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   isAudible: boolean
@@ -59,9 +60,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       bulletAndIndentProps: createPageTreeBulletAndIndentProps(children.length > 0, itemPath),
       contentProps: createItemContentProps(itemId),
       childNodePropses:
-        ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath)
-          ? List()
-          : List(children),
+        ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath) ? [] : children,
       isActivePage: activePageId === itemId,
       isRoot: itemId === TOP_ITEM_ID,
       isAudible: getAudiblePageIds().contains(itemId),

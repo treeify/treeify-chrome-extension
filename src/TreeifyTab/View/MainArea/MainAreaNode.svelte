@@ -71,7 +71,7 @@
     </div>
     <!-- 子リスト領域 -->
     <div class={childrenCssClasses.unshift('main-area-node_children-area').join(' ')}>
-      {#each props.childItemPropses.toArray() as itemProps (itemProps.itemPath.toString())}
+      {#each props.childItemPropses as itemProps (itemProps.itemPath.toString())}
         <MainAreaNode props={itemProps} />
       {/each}
     </div>

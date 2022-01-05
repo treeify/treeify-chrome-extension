@@ -18,6 +18,7 @@ import {
   MainAreaBulletState,
   MainAreaRollProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
+import { Rist } from 'src/Utility/array'
 import { assertNeverType } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 
@@ -38,7 +39,7 @@ export type MainAreaNodeProps = {
   footprintCount: integer
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
-  childItemPropses: List<MainAreaNodeProps>
+  childItemPropses: Rist<MainAreaNodeProps>
   rollProps: MainAreaRollProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenu(event: Event): void
@@ -54,7 +55,7 @@ export function createMainAreaNodeProps(
 ): MainAreaNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
-  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
+  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath).toArray()
 
   return {
     itemPath,
