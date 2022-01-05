@@ -6,8 +6,11 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { call } from 'src/Utility/function'
+import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * ターゲットテキスト項目のテキストが全選択状態でなければテキストを全選択する。
@@ -78,20 +81,48 @@ export async function setupAllAlarms() {
   await chrome.alarms.clearAll()
   for (const [itemId, record] of Object.entries(Internal.instance.state.reminders)) {
     for (const [reminderId, reminderSetting] of Object.entries(record)) {
-      switch (reminderSetting.type) {
-        case 'once':
-          const timestamp = dayjs()
-            .year(reminderSetting.year)
-            .month(reminderSetting.month)
-            .date(reminderSetting.date)
-            .hour(reminderSetting.hour)
-            .minute(reminderSetting.minute)
-            .startOf('minute')
-            .valueOf()
-          if (reminderSetting.notifiedAt === undefined || reminderSetting.notifiedAt < timestamp) {
-            chrome.alarms.create(`${itemId}@${reminderId}`, { when: timestamp })
-          }
-          break
+      const timestamp = calculateNextReminderTimestamp(reminderSetting)
+      if (timestamp !== undefined) {
+        chrome.alarms.create(`${itemId}@${reminderId}`, { when: timestamp })
+      }
+    }
+  }
+}
+
+/** 次に通知すべきタイムスタンプを計算する */
+function calculateNextReminderTimestamp(reminderSetting: ReminderSetting): Timestamp | undefined {
+  switch (reminderSetting.type) {
+    case 'once':
+      const timestamp = dayjs()
+        .year(reminderSetting.year)
+        .month(reminderSetting.month)
+        .date(reminderSetting.date)
+        .hour(reminderSetting.hour)
+        .minute(reminderSetting.minute)
+        .startOf('minute')
+        .valueOf()
+      if (reminderSetting.notifiedAt === undefined || reminderSetting.notifiedAt < timestamp) {
+        return timestamp
+      } else {
+        return undefined
+      }
+    case 'every month': {
+      const baseDate = call(() => {
+        if (reminderSetting.notifiedAt === undefined) {
+          return dayjs()
+        } else {
+          return dayjs(reminderSetting.notifiedAt)
+        }
+      })
+      const date = baseDate
+        .date(reminderSetting.date)
+        .hour(reminderSetting.hour)
+        .minute(reminderSetting.minute)
+        .startOf('minute')
+      if (date.isBefore(dayjs())) {
+        return date.add(1, 'month').valueOf()
+      } else {
+        return date.valueOf()
       }
     }
   }

@@ -13,8 +13,10 @@
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
   import { Timestamp } from 'src/Utility/Timestamp'
 
-  let date = dayjs().format('YYYY-MM-DD')
+  let lastSelectedReminderType: ReminderSetting['type']
+  let pickedDate = dayjs().format('YYYY-MM-DD')
   let time = '00:00'
+  let date = dayjs().date()
 
   function onKeydown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -29,22 +31,40 @@
   }
 
   function onClickFinishButton() {
-    const parsed = dayjs(`${date} ${time}`)
-    if (!parsed.isValid()) return
+    switch (lastSelectedReminderType) {
+      case 'once': {
+        const parsed = dayjs(`${pickedDate} ${time}`)
+        if (!parsed.isValid()) return
 
-    Internal.instance.saveCurrentStateToUndoStack()
-    const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    const reminderSetting: ReminderSetting = {
-      type: 'once',
-      year: parsed.year(),
-      month: parsed.month(),
-      date: parsed.date(),
-      hour: parsed.hour(),
-      minute: parsed.minute(),
+        Internal.instance.saveCurrentStateToUndoStack()
+        const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+        const reminderSetting: ReminderSetting = {
+          type: 'once',
+          year: parsed.year(),
+          month: parsed.month(),
+          date: parsed.date(),
+          hour: parsed.hour(),
+          minute: parsed.minute(),
+        }
+        const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
+        Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
+
+        break
+      }
+      case 'every month':
+        const [hour, minute] = time.split(':').map((string) => parseInt(string))
+        Internal.instance.saveCurrentStateToUndoStack()
+        const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+        const reminderSetting: ReminderSetting = {
+          type: 'every month',
+          date,
+          hour,
+          minute,
+        }
+        const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
+        Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
+        break
     }
-    const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
-    Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
-
     CurrentState.setupAllAlarms()
 
     External.instance.dialogState = undefined
@@ -59,8 +79,18 @@
 
 <CommonDialog class="reminder-setting-dialog_root" title="リマインダー設定">
   <div class="reminder-setting-dialog_content" on:keydown={onKeydown}>
-    <input type="date" bind:value={date} />
-    <input type="time" bind:value={time} />
+    <select bind:value={lastSelectedReminderType} class="reminder-setting-dialog_select">
+      <option value="once">繰り返さない</option>
+      <option value="every month">毎月</option>
+    </select>
+    {#if lastSelectedReminderType === 'once'}
+      <input type="date" bind:value={pickedDate} />
+      <input type="time" bind:value={time} />
+    {:else if lastSelectedReminderType === 'every month'}
+      <input type="number" min="1" max="31" bind:value={date} />
+      日
+      <input type="time" bind:value={time} />
+    {/if}
     <div class="reminder-setting-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>

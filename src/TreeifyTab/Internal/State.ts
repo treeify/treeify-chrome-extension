@@ -175,6 +175,12 @@ export type ReminderSetting = DiscriminatedUnion<{
     hour: integer
     minute: integer
   }
+  ['every month']: {
+    notifiedAt?: Timestamp
+    date: integer
+    hour: integer
+    minute: integer
+  }
 }>
 
 export type Workspace = {

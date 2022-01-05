@@ -246,12 +246,11 @@ async function onCommand(commandName: string) {
 async function onAlarm(alarm: Alarm) {
   const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
   const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
-  if (reminderSetting.type === 'once') {
-    Internal.instance.mutate(
-      alarm.scheduledTime,
-      PropertyPath.of('reminders', itemId, reminderId, 'notifiedAt')
-    )
-  }
+  Internal.instance.mutate(
+    alarm.scheduledTime,
+    PropertyPath.of('reminders', itemId, reminderId, 'notifiedAt')
+  )
+  await CurrentState.setupAllAlarms()
 
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') return
@@ -281,6 +280,12 @@ function createDateTimeText(reminderSetting: ReminderSetting): string {
         .hour(reminderSetting.hour)
         .minute(reminderSetting.minute)
         .format('YYYY-MM-DD HH:mm')
+    case 'every month':
+      return dayjs()
+        .date(reminderSetting.date)
+        .hour(reminderSetting.hour)
+        .minute(reminderSetting.minute)
+        .format('毎月D日 HH:mm')
   }
 }
 
