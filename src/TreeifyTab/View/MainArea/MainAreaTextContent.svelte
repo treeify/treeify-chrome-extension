@@ -30,7 +30,7 @@
     // contenteditableな要素のフォーカス時の枠線を非表示
     outline: none;
 
-    padding-block: var(--main-area-content-area-vertical-padding);
+    padding-block: var(--main-area-node-content-area-vertical-padding);
 
     .has-source & {
       // lch(80.0%, 0.0, 0.0)相当

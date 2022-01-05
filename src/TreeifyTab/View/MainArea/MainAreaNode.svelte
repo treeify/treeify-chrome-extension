@@ -82,7 +82,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --main-area-content-area-vertical-padding: 0.11em;
+    --main-area-node-content-area-vertical-padding: 0.11em;
 
     // フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当
     --main-area-focused-item-background-color: #ecf0ff;

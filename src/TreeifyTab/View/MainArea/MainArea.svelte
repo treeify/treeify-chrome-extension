@@ -31,7 +31,7 @@
 
     // フォントサイズをline-height（比率指定）を乗算して、行の高さを算出する
     --main-area-calculated-line-height: calc(
-      1em * var(--main-area-line-height) + 2 * var(--main-area-content-area-vertical-padding)
+      1em * var(--main-area-line-height) + 2 * var(--main-area-node-content-area-vertical-padding)
     );
 
     --main-area-max-width: 1200px;
