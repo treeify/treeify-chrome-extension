@@ -4,6 +4,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
+import { Rist } from 'src/Utility/array'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -21,7 +22,7 @@ export function getCurrentWorkspaceId(): Timestamp {
 
   // 既存のワークスペースを適当に選んでIDを返す。
   // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-  const currentWorkspaceId = getWorkspaceIds().first() as WorkspaceId
+  const currentWorkspaceId = getWorkspaceIds()[0]
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
   return currentWorkspaceId
 }
@@ -32,8 +33,8 @@ export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
 }
 
 /** Stateに登録されている全てのワークスペースIDを返す */
-export function getWorkspaceIds(): List<WorkspaceId> {
-  return List(Object.keys(Internal.instance.state.workspaces)).map((key) => parseInt(key))
+export function getWorkspaceIds(): Rist<WorkspaceId> {
+  return Object.keys(Internal.instance.state.workspaces).map((key) => parseInt(key))
 }
 
 /** 現在のワークスペースの除外項目リストを返す */
@@ -59,7 +60,7 @@ export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
 export function createWorkspace(): WorkspaceId {
   const workspaceId = Timestamp.now()
   const workspace: Workspace = {
-    name: `ワークスペース${CurrentState.getWorkspaceIds().count() + 1}`,
+    name: `ワークスペース${CurrentState.getWorkspaceIds().length + 1}`,
     activePageId: CurrentState.getActivePageId(),
     excludedItemIds: List(),
     searchHistory: List(),

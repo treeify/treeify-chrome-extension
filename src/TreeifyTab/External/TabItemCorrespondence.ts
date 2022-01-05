@@ -1,6 +1,7 @@
 import { List } from 'immutable'
 import { BiMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
+import { Rist } from 'src/Utility/array'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import Tab = chrome.tabs.Tab
@@ -57,8 +58,8 @@ export class TabItemCorrespondence {
     return tabId === undefined || this.getTab(tabId)?.discarded === true
   }
 
-  getAllItemIds(): List<ItemId> {
-    return List(this.bimap.values())
+  getAllItemIds(): Rist<ItemId> {
+    return [...this.bimap.values()]
   }
 
   /** 全てのaudibleなタブのIDを返す */
@@ -71,8 +72,8 @@ export class TabItemCorrespondence {
   }
 
   /** 指定されたURLを持つタブを返す */
-  getTabsByUrl(url: string): List<Tab> {
-    return List(this.tabIdToTab.values()).filter((tab) => tab.url === url)
+  getTabsByUrl(url: string): Rist<Tab> {
+    return [...this.tabIdToTab.values()].filter((tab) => tab.url === url)
   }
 
   dumpCurrentState() {

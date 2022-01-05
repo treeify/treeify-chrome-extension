@@ -219,7 +219,7 @@ function findCorrespondWebPageItem(url: string): ItemId | undefined {
     .filter((tab) => tab.id !== undefined)
     .map((tab) => External.instance.tabItemCorrespondence.getItemIdBy(tab.id!))
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  if (itemIds.contains(targetItemId)) {
+  if (itemIds.includes(targetItemId)) {
     return targetItemId
   }
 
