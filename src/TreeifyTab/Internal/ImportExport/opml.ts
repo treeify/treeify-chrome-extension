@@ -54,7 +54,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
 
   const reminders = Internal.instance.state.reminders[itemId]
   if (reminders !== undefined) {
-    baseAttributes.reminders = JSON.stringify(Object.values(reminders))
+    baseAttributes.reminders = JSON.stringify(reminders.toArray())
   }
 
   switch (item.type) {

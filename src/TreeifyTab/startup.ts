@@ -244,11 +244,13 @@ async function onCommand(commandName: string) {
 }
 
 async function onAlarm(alarm: Alarm) {
-  const [itemId, reminderId] = alarm.name.split('@').map((value) => parseInt(value))
-  const reminderSetting = Internal.instance.state.reminders[itemId][reminderId]
+  const [itemId, index] = alarm.name.split('#').map((value) => parseInt(value))
+  const reminderSettings = Internal.instance.state.reminders[itemId]
+  const reminderSetting = reminderSettings.get(index)
+  assertNonUndefined(reminderSetting)
   Internal.instance.mutate(
-    alarm.scheduledTime,
-    PropertyPath.of('reminders', itemId, reminderId, 'notifiedAt')
+    reminderSettings.set(index, { ...reminderSetting, notifiedAt: alarm.scheduledTime }),
+    PropertyPath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()
 
