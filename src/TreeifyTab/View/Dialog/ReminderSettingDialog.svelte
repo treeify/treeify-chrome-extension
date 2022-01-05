@@ -1,17 +1,16 @@
 <script lang="ts">
   import dayjs from 'dayjs'
-  import { ItemId } from 'src/TreeifyTab/basicType'
+  import { List } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
-  import { ReminderSetting, State } from 'src/TreeifyTab/Internal/State'
+  import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
-  import { Timestamp } from 'src/Utility/Timestamp'
 
   let lastSelectedReminderType: ReminderSetting['type']
   let pickedDate = dayjs().format('YYYY-MM-DD')
@@ -46,8 +45,10 @@
           hour: parsed.hour(),
           minute: parsed.minute(),
         }
-        const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
-        Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
+        Internal.instance.mutate(
+          List.of(reminderSetting),
+          PropertyPath.of('reminders', targetItemId)
+        )
 
         break
       }
@@ -61,8 +62,10 @@
           hour,
           minute,
         }
-        const newReminderRecord: State['reminders'][ItemId] = { [Timestamp.now()]: reminderSetting }
-        Internal.instance.mutate(newReminderRecord, PropertyPath.of('reminders', targetItemId))
+        Internal.instance.mutate(
+          List.of(reminderSetting),
+          PropertyPath.of('reminders', targetItemId)
+        )
         break
     }
     CurrentState.setupAllAlarms()
