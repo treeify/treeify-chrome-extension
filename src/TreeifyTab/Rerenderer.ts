@@ -60,7 +60,7 @@ export class Rerenderer {
       .map((propertyPath) => Chunk.convertToChunkId(propertyPath))
       .toSet()
       .map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
-    Database.writeChunks(chunks.toList())
+    Database.writeChunks(chunks.toArray())
     this.mutatedPropertyPaths.clear()
 
     // DOM更新完了後に実行される
