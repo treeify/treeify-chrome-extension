@@ -26,7 +26,7 @@ import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { doAsync } from 'src/Utility/doAsync'
+import { call } from 'src/Utility/function'
 import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
 import Alarm = chrome.alarms.Alarm
@@ -227,7 +227,7 @@ function findCorrespondWebPageItem(url: string): ItemId | undefined {
 }
 
 async function onCommand(commandName: string) {
-  doAsync(async () => {
+  call(async () => {
     switch (commandName) {
       case 'show-treeify-tab':
         TreeifyTab.open()
@@ -335,7 +335,7 @@ async function prefetchDataFile() {
 
     External.instance.backgroundDownload = {
       modifiedTime: metaData.modifiedTime,
-      promise: doAsync(async () => {
+      promise: call(async () => {
         const response = await GoogleDrive.readFile(metaData.id)
         const text = await decompress(await response.arrayBuffer())
         const state: State = JSON.parse(text, State.jsonReviver)
