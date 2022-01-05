@@ -17,7 +17,7 @@
     const rect = itemAdditionButton?.getBoundingClientRect()
     assertNonUndefined(rect)
 
-    const a = [
+    const itemPropses = [
       {
         title: '画像項目を作成…',
         onClick: () => Command.createImageItem(),
@@ -57,7 +57,7 @@
     return {
       top: rect.bottom,
       right: rect.right,
-      itemPropses: List(a),
+      itemPropses,
     }
   }
 

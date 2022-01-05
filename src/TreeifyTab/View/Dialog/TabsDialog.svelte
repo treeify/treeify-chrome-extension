@@ -23,7 +23,7 @@
 
   const items = List(rootNode.children).map((tree) => {
     return tree.fold((itemPath, children: TabsDialogItemProps[]) =>
-      createTabsDialogItemProps(itemPath, List(children))
+      createTabsDialogItemProps(itemPath, children)
     )
   })
 </script>

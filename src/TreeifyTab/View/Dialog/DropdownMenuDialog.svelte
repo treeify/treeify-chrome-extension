@@ -46,7 +46,7 @@
   use:setupFocusTrap
 >
   <div class="dropdown-menu-dialog_frame">
-    {#each props.itemPropses.toArray() as itemProps}
+    {#each props.itemPropses as itemProps}
       <DropdownMenuItem props={itemProps} />
     {/each}
   </div>

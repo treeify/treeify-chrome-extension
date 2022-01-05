@@ -15,7 +15,7 @@
   <div class="tabs-dialog-item_indent-and-children-area">
     <div class="tabs-dialog-item_indent-area" />
     <div class="tabs-dialog-item_children-area">
-      {#each props.children.toArray() as child}
+      {#each props.children as child}
         <TabsDialogItem props={child} />
       {/each}
     </div>
