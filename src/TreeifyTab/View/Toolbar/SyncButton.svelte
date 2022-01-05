@@ -11,7 +11,7 @@
   import ToolbarIconButton from 'src/TreeifyTab/View/Toolbar/ToolbarIconButton.svelte'
   import { assertNonUndefined } from 'src/Utility/Debug/assert'
   import { dump } from 'src/Utility/Debug/logger'
-  import { doAsync } from 'src/Utility/doAsync'
+  import { call } from 'src/Utility/function'
   import { compress, decompress } from 'src/Utility/gzip'
   import DataFileMataData = GoogleDrive.DataFileMataData
 
@@ -22,7 +22,7 @@
     if (isLoading) return
 
     isLoading = true
-    doAsync(async () => {
+    call(async () => {
       switch (Internal.instance.state.syncWith) {
         case 'Google Drive':
           await syncWithGoogleDrive()

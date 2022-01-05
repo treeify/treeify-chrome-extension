@@ -4,9 +4,9 @@ import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { startup } from 'src/TreeifyTab/startup'
-import { doAsync } from 'src/Utility/doAsync'
+import { call } from 'src/Utility/function'
 
-doAsync(async () => {
+call(async () => {
   // Treeifyウィンドウが多重起動された場合はタブIDでソートし、先頭以外のタブを閉じる
   const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])

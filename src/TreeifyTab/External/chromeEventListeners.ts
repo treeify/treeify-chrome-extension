@@ -14,11 +14,11 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { doAsync } from 'src/Utility/doAsync'
+import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
 export const onMessage = (message: any, sender: MessageSender) => {
-  doAsync(async () => {
+  call(async () => {
     const height = window.innerHeight
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
@@ -129,7 +129,7 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
 }
 
 export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  doAsync(async () => {
+  call(async () => {
     // Treeifyタブだった場合は何もしない。
     // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
     if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
