@@ -174,7 +174,7 @@ export class Internal {
         },
       },
       mountedPageIds: List.of(0),
-      availableItemIds: List(),
+      availableItemIds: [],
       maxItemId: 0,
       mainAreaKeyBindings: {
         '0000Enter': List.of('enterKeyDefault'),

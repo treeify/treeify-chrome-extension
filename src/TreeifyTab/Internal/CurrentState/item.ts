@@ -1,4 +1,5 @@
 import { List } from 'immutable'
+import _ from 'lodash'
 import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -6,6 +7,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
+import { Rist } from 'src/Utility/array'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
@@ -322,10 +324,9 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 /** 新しい未使用の項目IDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds
-  if (!availableItemIds.isEmpty()) {
-    const last = availableItemIds.last(undefined)
-    assertNonUndefined(last)
-    Internal.instance.mutate(availableItemIds.pop(), PropertyPath.of('availableItemIds'))
+  const last = _.last(availableItemIds)
+  if (last !== undefined) {
+    Internal.instance.mutate(_.initial(availableItemIds), PropertyPath.of('availableItemIds'))
     return last
   } else {
     const maxItemId = Internal.instance.state.maxItemId
@@ -337,7 +338,7 @@ export function obtainNewItemId(): ItemId {
 /** 使われなくなった項目IDを登録する */
 export function recycleItemId(itemId: ItemId) {
   const availableItemIds = Internal.instance.state.availableItemIds
-  Internal.instance.mutate(availableItemIds.push(itemId), PropertyPath.of('availableItemIds'))
+  Internal.instance.mutate(Rist.push(availableItemIds, itemId), PropertyPath.of('availableItemIds'))
 }
 
 /** 指定された項目のCSSクラスリストを上書き設定する */
