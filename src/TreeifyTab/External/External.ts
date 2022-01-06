@@ -8,6 +8,7 @@ import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespond
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { Rist } from 'src/Utility/array'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
@@ -75,7 +76,7 @@ export class External {
   getTreeifyClipboardHash(): string | undefined {
     if (this.treeifyClipboard === undefined) return undefined
 
-    const jsonString = JSON.stringify(this.treeifyClipboard, State.jsonReplacer)
+    const jsonString = JSON.stringify(this.treeifyClipboard)
     return md5(jsonString)
   }
 
@@ -107,9 +108,9 @@ export class External {
 
 type TreeifyClipboard = DiscriminatedUnion<{
   CopyForTransclude: {
-    selectedItemPaths: List<ItemPath>
+    selectedItemPaths: Rist<ItemPath>
   }
   CopyForMove: {
-    selectedItemPaths: List<ItemPath>
+    selectedItemPaths: Rist<ItemPath>
   }
 }>

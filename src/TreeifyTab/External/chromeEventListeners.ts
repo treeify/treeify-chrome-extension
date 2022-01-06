@@ -4,6 +4,7 @@ import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
 import { List } from 'immutable'
+import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -213,21 +214,21 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
  */
 export async function matchTabsAndWebPageItems() {
   // KeyはURL、ValueはそのURLを持つ項目ID
-  const urlToItemIds = new Map<string, List<ItemId>>()
+  const urlToItemIds = new DefaultMap<string, ItemId[]>(() => [])
 
   const webPageItems = Internal.instance.state.webPageItems
   for (const key in webPageItems) {
     const itemId = parseInt(key)
     const url = webPageItems[itemId].url
-    urlToItemIds.set(url, (urlToItemIds.get(url) ?? List()).push(itemId))
+    urlToItemIds.get(url).push(itemId)
   }
 
   for (const tab of await getAllNonTreeifyTabs()) {
     assertNonUndefined(tab.id)
 
     const url = tab.pendingUrl ?? tab.url ?? ''
-    const webPageItemIds = urlToItemIds.get(url)
-    if (webPageItemIds === undefined) {
+    const itemId = urlToItemIds.get(url).pop()
+    if (itemId === undefined) {
       // URLの一致するウェブページ項目がない場合、
       // ウェブページ項目を作る
       const newWebPageItemId = CurrentState.createWebPageItem()
@@ -239,13 +240,6 @@ export async function matchTabsAndWebPageItems() {
       CurrentState.insertFirstChildItem(activePageId, newWebPageItemId)
     } else {
       // URLの一致するウェブページ項目がある場合
-      const itemId: ItemId = webPageItemIds.last()
-
-      if (webPageItemIds.size === 1) {
-        urlToItemIds.delete(url)
-      } else {
-        urlToItemIds.set(url, webPageItemIds.pop())
-      }
 
       reflectInWebPageItem(itemId, tab)
       External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
