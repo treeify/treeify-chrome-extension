@@ -18,8 +18,8 @@ import {
   MainAreaBulletState,
   MainAreaRollProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
-import { Rist } from 'src/Utility/array'
 import { assertNeverType } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaNodeProps = {
@@ -39,7 +39,7 @@ export type MainAreaNodeProps = {
   footprintCount: integer
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
-  childItemPropses: Rist<MainAreaNodeProps>
+  childItemPropses: Rist.T<MainAreaNodeProps>
   rollProps: MainAreaRollProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenu(event: Event): void

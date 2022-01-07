@@ -4,7 +4,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
-import { Rist } from 'src/Utility/array'
+import { Rist } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -33,7 +33,7 @@ export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
 }
 
 /** Stateに登録されている全てのワークスペースIDを返す */
-export function getWorkspaceIds(): Rist<WorkspaceId> {
+export function getWorkspaceIds(): Rist.T<WorkspaceId> {
   return Object.keys(Internal.instance.state.workspaces).map((key) => parseInt(key))
 }
 

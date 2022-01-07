@@ -1,5 +1,4 @@
 import { is, List, Set } from 'immutable'
-import _ from 'lodash'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
@@ -7,9 +6,9 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
-import { Rist } from 'src/Utility/array'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
+import { Option, Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -31,7 +30,7 @@ export type State = {
    */
   mountedPageIds: List<ItemId>
   /** 削除され再利用される項目ID群 */
-  availableItemIds: Rist<ItemId>
+  availableItemIds: Rist.T<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
   mainAreaKeyBindings: Record<InputId, List<CommandId>>
@@ -315,7 +314,7 @@ export namespace State {
       }
 
       assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)
-      const maxItemId = _.max(itemIds.concat(state.availableItemIds)) ?? TOP_ITEM_ID
+      const maxItemId = Option.get(TOP_ITEM_ID)(Rist.max(itemIds.concat(state.availableItemIds)))
       assert(maxItemId === state.maxItemId, `maxItemIdが実際の最大itemId ${maxItemId}と異なる`)
 
       for (const availableItemId of state.availableItemIds) {

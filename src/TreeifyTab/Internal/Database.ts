@@ -1,8 +1,8 @@
 import { List } from 'immutable'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { Rist } from 'src/Utility/array'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -115,7 +115,7 @@ export namespace Database {
     })
   }
 
-  export async function writeChunks(chunks: Rist<Chunk>, givenObjectStore?: IDBObjectStore) {
+  export async function writeChunks(chunks: Rist.T<Chunk>, givenObjectStore?: IDBObjectStore) {
     const objectStore =
       givenObjectStore ??
       getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)

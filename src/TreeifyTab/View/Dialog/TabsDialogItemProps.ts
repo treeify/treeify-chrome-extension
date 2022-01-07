@@ -2,17 +2,17 @@ import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { Rist } from 'src/Utility/array'
+import { Rist } from 'src/Utility/fp-ts'
 
 export type TabsDialogItemProps = {
   itemPath: ItemPath
-  children: Rist<TabsDialogItemProps>
+  children: Rist.T<TabsDialogItemProps>
   onClick(event: MouseEvent): void
 }
 
 export function createTabsDialogItemProps(
   itemPath: ItemPath,
-  children: Rist<TabsDialogItemProps>
+  children: Rist.T<TabsDialogItemProps>
 ): TabsDialogItemProps {
   return {
     itemPath,

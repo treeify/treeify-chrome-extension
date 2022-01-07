@@ -2,7 +2,7 @@ import { List } from 'immutable'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { Rist } from 'src/Utility/array'
+import { Rist } from 'src/Utility/fp-ts'
 
 /**
  * データ型の実体としてはPropertyPathと同じだが、
@@ -40,7 +40,7 @@ export namespace Chunk {
   ])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
-  export function createAllChunks(state: State): Rist<Chunk> {
+  export function createAllChunks(state: State): Rist.T<Chunk> {
     return [...yieldAllChunkIds(state)].map((chunkId) => {
       return create(state, chunkId)
     })

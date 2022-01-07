@@ -15,16 +15,16 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-import { Rist } from 'src/Utility/array'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
   itemId: ItemId
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: ItemContentProps
-  childNodePropses: Rist<PageTreeNodeProps>
+  childNodePropses: Rist.T<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   isAudible: boolean

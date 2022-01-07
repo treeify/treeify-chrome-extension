@@ -8,10 +8,10 @@ import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespond
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { Rist } from 'src/Utility/array'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /** TODO: コメント */
@@ -108,9 +108,9 @@ export class External {
 
 type TreeifyClipboard = DiscriminatedUnion<{
   CopyForTransclude: {
-    selectedItemPaths: Rist<ItemPath>
+    selectedItemPaths: Rist.T<ItemPath>
   }
   CopyForMove: {
-    selectedItemPaths: Rist<ItemPath>
+    selectedItemPaths: Rist.T<ItemPath>
   }
 }>
