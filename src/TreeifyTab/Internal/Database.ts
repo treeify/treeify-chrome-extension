@@ -65,13 +65,13 @@ export namespace Database {
   }
 
   /** チャンクストア内の全チャンクを読み込む */
-  export async function getAllChunks(): Promise<List<Chunk>> {
+  export async function getAllChunks(): Promise<Rist.T<Chunk>> {
     return new Promise((resolve, reject) => {
       const objectStore = getDatabase().transaction(chunkStoreName).objectStore(chunkStoreName)
       const request = objectStore.getAll()
       // 読み込みリクエスト成功時
       request.onsuccess = () => {
-        const chunks: List<Chunk> = List(request.result).map(({ id, data }) => {
+        const chunks = request.result.map(({ id, data }) => {
           return { id, data: convertArrayToList(data) }
         })
         resolve(chunks)

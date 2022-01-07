@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
@@ -85,7 +84,7 @@ export namespace Chunk {
   }
 
   /** チャンクリストからStateオブジェクトを作る */
-  export function inflateStateFromChunks(chunks: List<Chunk>): State {
+  export function inflateStateFromChunks(chunks: Rist.T<Chunk>): State {
     const result = Internal.createInitialState()
     for (const chunk of chunks) {
       setProperty(result, chunk.id, chunk.data)
