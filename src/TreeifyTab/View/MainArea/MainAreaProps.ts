@@ -504,7 +504,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
 /** メインエリア上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
-  if (CurrentState.getSelectedItemPaths().size > 1) {
+  if (CurrentState.getSelectedItemPaths().length > 1) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     Command.removeItem()
@@ -601,7 +601,7 @@ function onBackspace(event: KeyboardEvent) {
 /** メインエリア上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
-  if (CurrentState.getSelectedItemPaths().size > 1) {
+  if (CurrentState.getSelectedItemPaths().length > 1) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     Command.removeItem()

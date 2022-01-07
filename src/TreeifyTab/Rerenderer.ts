@@ -86,7 +86,7 @@ export class Rerenderer {
     // DOM更新完了後に実行される
     tick().then(() => {
       // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().size === 1) {
+      if (CurrentState.getSelectedItemPaths().length === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
@@ -101,7 +101,7 @@ export class Rerenderer {
   requestToFocusTargetItem(textItemSelection?: TextItemSelection | undefined) {
     this.pendingFocusAndTextSelectionSetting = () => {
       // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().size === 1) {
+      if (CurrentState.getSelectedItemPaths().length === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)

@@ -37,7 +37,7 @@ export function toggleFolded() {
 /** メインエリア上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
   // 複数選択時は何もしない
-  if (CurrentState.getSelectedItemPaths().size > 1) return
+  if (CurrentState.getSelectedItemPaths().length > 1) return
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)

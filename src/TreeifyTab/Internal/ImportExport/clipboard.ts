@@ -1,4 +1,5 @@
 import { reverse } from 'fp-ts/ReadonlyArray'
+import { List } from 'immutable'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -36,7 +37,7 @@ export function onCopy(event: ClipboardEvent) {
     event.clipboardData.setData('text/plain', contentText)
 
     // OPML形式のテキストをクリップボードに入れる
-    event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
+    event.clipboardData.setData('application/xml', toOpmlString(List(selectedItemPaths)))
   }
 }
 
@@ -62,7 +63,7 @@ export function onCut(event: ClipboardEvent) {
     event.clipboardData.setData('text/plain', contentText)
 
     // OPML形式のテキストをクリップボードに入れる
-    event.clipboardData.setData('application/xml', toOpmlString(selectedItemPaths))
+    event.clipboardData.setData('application/xml', toOpmlString(List(selectedItemPaths)))
 
     Command.removeItem()
     Rerenderer.instance.rerender()

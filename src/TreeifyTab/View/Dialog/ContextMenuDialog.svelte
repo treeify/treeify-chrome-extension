@@ -8,7 +8,8 @@
   import { createContextMenuItemPropses } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-  import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+  import { assertNonNull } from 'src/Utility/Debug/assert'
+  import { Option, Rist } from 'src/Utility/fp-ts'
 
   export let dialog: ContextMenuDialog
 
@@ -46,9 +47,8 @@
       `
     }
 
-    const itemPath = CurrentState.getSelectedItemPaths().last(undefined)
-    assertNonUndefined(itemPath)
-    const domElementId = MainAreaContentView.focusableDomElementId(itemPath)
+    const itemPath = Rist.last(CurrentState.getSelectedItemPaths())
+    const domElementId = MainAreaContentView.focusableDomElementId(Option.getOrThrow(itemPath))
     const domElement = document.getElementById(domElementId)
     assertNonNull(domElement)
     const rect = domElement.getBoundingClientRect()
