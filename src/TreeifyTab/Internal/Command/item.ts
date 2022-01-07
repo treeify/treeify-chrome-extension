@@ -9,6 +9,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Source } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { NERist } from 'src/Utility/fp-ts'
 
 /** 選択された項目を折りたたむコマンド */
 export function fold() {
@@ -166,9 +167,9 @@ export function deleteItem() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(selectedItemPaths.first())) return
+  if (!ItemPath.hasParent(selectedItemPaths[0])) return
 
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
@@ -195,12 +196,12 @@ export function deleteItem() {
  */
 export function removeItem() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const parentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
+  const parentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
 
   // アクティブページを削除しようとしている場合、何もしない
   if (parentItemId === undefined) return
 
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
@@ -279,7 +280,8 @@ export function toggleCompleted() {
     Command.fold()
     Command.closeTreeTabs()
     // フォーカスを下の項目に移動する
-    const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
+    const bottomSelectedItemPath = NERist.last(selectedItemPaths)
+    const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(bottomSelectedItemPath)
     if (firstFollowingItemPath !== undefined) {
       CurrentState.setTargetItemPath(firstFollowingItemPath)
       Rerenderer.instance.requestToFocusTargetItem()

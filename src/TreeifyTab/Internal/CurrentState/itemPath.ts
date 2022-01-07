@@ -5,7 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { NERist } from 'src/Utility/fp-ts'
 
 /** ターゲットItemPathを返す */
 export function getTargetItemPath(): ItemPath {
@@ -43,7 +43,7 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  * 複数選択されていなければターゲットItemPathだけの単一要素リストを返す。
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
-export function getSelectedItemPaths(): Rist.T<ItemPath> {
+export function getSelectedItemPaths(): NERist.T<ItemPath> {
   const targetItemPath = CurrentState.getTargetItemPath()
   const anchorItemPath = CurrentState.getAnchorItemPath()
   if (is(targetItemPath, anchorItemPath)) {
@@ -59,7 +59,9 @@ export function getSelectedItemPaths(): Rist.T<ItemPath> {
   const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
   const upperIndex = Math.max(targetItemIndex, anchorItemIndex)
   const sliced = childItemIds.toArray().slice(lowerIndex, upperIndex + 1)
-  return sliced.map((itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!)
+  return sliced.map(
+    (itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!
+  ) as unknown as NERist.T<ItemPath>
 }
 
 export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {

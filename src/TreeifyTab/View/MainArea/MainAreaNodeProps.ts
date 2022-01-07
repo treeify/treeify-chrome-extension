@@ -116,7 +116,7 @@ export function createMainAreaNodeProps(
           // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
           // その複数選択された項目をコンテキストメニューの操作対象にする。
           if (
-            CurrentState.getSelectedItemPaths().size === 1 ||
+            CurrentState.getSelectedItemPaths().length === 1 ||
             !CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)
           ) {
             CurrentState.setTargetItemPath(itemPath)

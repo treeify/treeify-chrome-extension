@@ -27,6 +27,7 @@ import {
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
+import { NERist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
@@ -212,7 +213,7 @@ function onArrowRight(event: KeyboardEvent) {
  */
 function onArrowUp(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   // 上の項目が存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
@@ -320,7 +321,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  */
 function onArrowDown(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
+  const belowItemPath = CurrentState.findBelowItemPath(NERist.last(selectedItemPaths))
   // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
@@ -451,7 +452,7 @@ function onShiftArrowUp(event: KeyboardEvent) {
   // 兄項目が存在しない場合はブラウザの挙動に任せる
   if (prevSiblingItemPath === undefined) return
 
-  if (CurrentState.getSelectedItemPaths().size === 1) {
+  if (CurrentState.getSelectedItemPaths().length === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
       // ターゲット項目がテキスト項目の場合
@@ -480,7 +481,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
   // 弟項目が存在しない場合はブラウザの挙動に任せる
   if (nextSiblingItemPath === undefined) return
 
-  if (CurrentState.getSelectedItemPaths().size === 1) {
+  if (CurrentState.getSelectedItemPaths().length === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
       // ターゲット項目がテキスト項目の場合

@@ -1,3 +1,4 @@
+import { Set } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -55,7 +56,7 @@ export function selectToStartOfList() {
  */
 export function toggleExcluded() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
+  const selectedItemIds = Set(selectedItemPaths.map(ItemPath.getItemId)).delete(TOP_ITEM_ID)
   const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
 
   // いわゆるxorのメソッドが見当たらないので同等の処理をする
