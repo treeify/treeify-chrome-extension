@@ -6,6 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {
@@ -140,22 +141,22 @@ export class SearchEngine {
   }
 
   /** 指定された項目が持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
-  static getTextTracks(itemId: ItemId, state: State): List<string> {
+  static getTextTracks(itemId: ItemId, state: State): Rist.T<string> {
     const itemType = state.items[itemId].type
     switch (itemType) {
       case ItemType.TEXT:
-        return List.of(DomishObject.toPlainText(state.textItems[itemId].domishObjects))
+        return [DomishObject.toPlainText(state.textItems[itemId].domishObjects)]
       case ItemType.WEB_PAGE:
         const webPageItem = state.webPageItems[itemId]
-        return List.of(webPageItem.tabTitle, webPageItem.title ?? '')
+        return [webPageItem.tabTitle, webPageItem.title ?? '']
       case ItemType.IMAGE:
-        return List.of(state.imageItems[itemId].caption)
+        return [state.imageItems[itemId].caption]
       case ItemType.CODE_BLOCK:
         const codeBlockItem = state.codeBlockItems[itemId]
-        return List.of(codeBlockItem.code, codeBlockItem.caption)
+        return [codeBlockItem.code, codeBlockItem.caption]
       case ItemType.TEX:
         const texItem = state.texItems[itemId]
-        return List.of(texItem.code, texItem.caption)
+        return [texItem.code, texItem.caption]
       default:
         assertNeverType(itemType)
     }
