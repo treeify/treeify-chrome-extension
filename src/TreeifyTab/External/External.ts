@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import md5 from 'md5'
 import { MultiSet } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
@@ -40,7 +39,7 @@ export class External {
   lastFocusedWindowId: integer = undefined as any
 
   /** 既存のウェブページ項目に対応するタブを開いた際、タブ作成イベントリスナーで項目IDと紐付けるためのMap */
-  readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+  readonly urlToItemIdsForTabCreation = new Map<string, Rist.T<ItemId>>()
 
   /** アンロードのために閉じられる途中のタブのIDの集合 */
   readonly tabIdsToBeClosedForUnloading = new Set<TabId>()

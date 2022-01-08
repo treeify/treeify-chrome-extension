@@ -3,7 +3,6 @@ import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
-import { List } from 'immutable'
 import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -15,6 +14,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
@@ -52,8 +52,8 @@ export function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
   const url = tab.url || tab.pendingUrl || ''
-  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
-  if (itemIdsForTabCreation.isEmpty()) {
+  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? []
+  if (itemIdsForTabCreation.length === 0) {
     // タブに対応するウェブページ項目がない時
 
     // ウェブページ項目を作る
@@ -105,11 +105,10 @@ export function onCreated(tab: Tab) {
   } else {
     // 既存のウェブページ項目に対応するタブが開かれた時
 
-    const itemId = itemIdsForTabCreation.first(undefined)
-    assertNonUndefined(itemId)
+    const itemId = itemIdsForTabCreation[0]
     reflectInWebPageItem(itemId, tab)
     External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
-    External.instance.urlToItemIdsForTabCreation.set(url, itemIdsForTabCreation.shift())
+    External.instance.urlToItemIdsForTabCreation.set(url, Rist.shift(itemIdsForTabCreation))
 
     // タブがバックグラウンドで開かれたら未読フラグを立てる
     if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {
