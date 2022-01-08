@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -17,24 +16,24 @@
     const inputId = InputId.fromKeyboardEvent(event)
     if (inputId === '0000ArrowDown') {
       // フォーカスを次の要素に移す
-      const focusableElements = List(
-        document.querySelectorAll('.dropdown-menu-item_root')
-      ) as List<HTMLElement>
+      const focusableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('.dropdown-menu-item_root')
+      )
       const index = focusableElements.findIndex((element) => document.activeElement === element)
       if (index === -1) return
 
-      const nextIndex = (index + 1) % focusableElements.size
-      focusableElements.get(nextIndex)!.focus()
+      const nextIndex = (index + 1) % focusableElements.length
+      focusableElements[nextIndex].focus()
     } else if (inputId === '0000ArrowUp') {
       // フォーカスを前の要素に移す
-      const focusableElements = List(
-        document.querySelectorAll('.dropdown-menu-item_root')
-      ) as List<HTMLElement>
+      const focusableElements = Array.from(
+        document.querySelectorAll<HTMLElement>('.dropdown-menu-item_root')
+      )
       const index = focusableElements.findIndex((element) => document.activeElement === element)
       if (index === -1) return
 
-      const prevIndex = (index - 1) % focusableElements.size
-      focusableElements.get(prevIndex)!.focus()
+      const prevIndex = (index - 1) % focusableElements.length
+      focusableElements[prevIndex].focus()
     } else if (inputId === '0000Enter' || inputId === '0000Space') {
       event.preventDefault()
       onClick()

@@ -6,6 +6,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { currentDragData, ItemDragData } from 'src/TreeifyTab/View/dragAndDrop'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { Coordinate, integer } from 'src/Utility/integer'
 
 export type DragImageProps = {
@@ -237,12 +238,12 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 // メインエリア内で指定されたY座標に表示されている項目のコンテンツエリアのDOM要素を返す
 function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined {
   // メインエリア内の全項目をリスト化し、Y座標でソート
-  const elements = document.getElementsByClassName('main-area-node_content-area')
-  const sortedElements = List(elements).sortBy((element) => {
+  const elements = document.querySelectorAll<HTMLElement>('.main-area-node_content-area')
+  const sortedElements = Rist.sortByNumber((element: HTMLElement) => {
     return element.getBoundingClientRect().bottom
-  }) as List<HTMLElement>
+  })(Array.from(elements))
 
-  for (const element of sortedElements.reverse()) {
+  for (const element of Rist.reverse(sortedElements)) {
     const rect = element.getBoundingClientRect()
     if (rect.top <= y) {
       return element
@@ -302,10 +303,10 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
 // 左サイドバー内で指定されたY座標に表示されている項目のコンテンツエリアのDOM要素を返す
 function searchLeftSidebarElementByYCoordinate(y: integer): HTMLElement | undefined {
   // メインエリア内の全項目をリスト化し、Y座標でソート
-  const elements = document.getElementsByClassName('page-tree-node_content-area')
-  const sortedElements = List(elements).sortBy((element) => {
+  const elements = document.querySelectorAll<HTMLElement>('.page-tree-node_content-area')
+  const sortedElements = Rist.sortByNumber((element: HTMLElement) => {
     return element.getBoundingClientRect().bottom
-  }) as List<HTMLElement>
+  })(Array.from(elements))
 
   for (const element of sortedElements) {
     const rect = element.getBoundingClientRect()
