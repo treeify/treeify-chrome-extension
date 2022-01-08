@@ -1,3 +1,4 @@
+import { pipe } from 'fp-ts/function'
 import { List } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -9,6 +10,7 @@ import { Page } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { assertNonNull } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { tick } from 'svelte'
 
 /** アクティブページを切り替える */
@@ -19,11 +21,11 @@ export function switchActivePage(itemId: ItemId) {
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
     Internal.instance.mutate(
-      mountedPageIds.remove(index).push(itemId),
+      pipe(mountedPageIds, Rist.removeAt(index), Rist.append(itemId)),
       PropertyPath.of('mountedPageIds')
     )
   } else {
-    Internal.instance.mutate(mountedPageIds.push(itemId), PropertyPath.of('mountedPageIds'))
+    Internal.instance.mutate(Rist.append(itemId)(mountedPageIds), PropertyPath.of('mountedPageIds'))
   }
 
   CurrentState.setActivePageId(itemId)
@@ -51,7 +53,10 @@ export function unmountPage(itemId: ItemId) {
   const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
-    Internal.instance.mutate(mountedPageIds.remove(index), PropertyPath.of('mountedPageIds'))
+    Internal.instance.mutate(
+      Rist.removeAt(index)(mountedPageIds),
+      PropertyPath.of('mountedPageIds')
+    )
   }
 }
 

@@ -1,10 +1,11 @@
+import { pipe } from 'fp-ts/function'
 import { List, Set } from 'immutable'
 import { ItemId, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
-import { Rist } from 'src/Utility/fp-ts'
+import { NERist, Option, Rist } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -75,10 +76,13 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 }
 
 /** mountedPageIdsを除外項目でフィルタリングした結果を返す */
-export function getFilteredMountedPageIds(): List<ItemId> {
-  return Internal.instance.state.mountedPageIds.filterNot((pageId) => {
-    return shouldBeHidden(pageId)
-  })
+export function getFilteredMountedPageIds(): NERist.T<ItemId> {
+  return pipe(
+    Internal.instance.state.mountedPageIds,
+    Rist.filter((pageId: ItemId) => !shouldBeHidden(pageId)),
+    NERist.fromReadonlyArray,
+    Option.getOrThrow
+  )
 }
 
 /**

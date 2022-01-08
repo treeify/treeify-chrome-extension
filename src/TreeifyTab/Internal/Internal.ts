@@ -173,7 +173,7 @@ export class Internal {
           searchHistory: List(),
         },
       },
-      mountedPageIds: List.of(0),
+      mountedPageIds: [0],
       availableItemIds: [],
       maxItemId: 0,
       mainAreaKeyBindings: {

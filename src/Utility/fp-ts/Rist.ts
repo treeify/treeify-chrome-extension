@@ -1,8 +1,10 @@
 import * as FpNumber from 'fp-ts/number'
 import * as Ord from 'fp-ts/Ord'
+import * as RA from 'fp-ts/ReadonlyArray'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import { Option } from 'src/Utility/fp-ts'
 import { Arrow } from 'src/Utility/function'
+import { integer } from 'src/Utility/integer'
 
 export * from 'fp-ts/ReadonlyArray'
 
@@ -17,6 +19,11 @@ export const shift = <A>(rist: T<A>): T<A> => {
   cloned.shift()
   return cloned
 }
+
+export const removeAt =
+  <A>(index: integer) =>
+  (rist: T<A>): T<A> =>
+    RA.unsafeDeleteAt(index, rist)
 
 export function max(rist: T<number>): Option.T<number> {
   return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rist))

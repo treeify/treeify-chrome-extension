@@ -68,7 +68,7 @@
   use:setupFocusTrap
 >
   <div class="context-menu-dialog_frame">
-    {#each contextMenuItemPropses.toArray() as contextMenuItemProps}
+    {#each contextMenuItemPropses as contextMenuItemProps}
       <ContextMenuItem props={contextMenuItemProps} />
     {/each}
   </div>

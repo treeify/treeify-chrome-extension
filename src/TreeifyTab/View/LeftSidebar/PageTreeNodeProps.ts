@@ -17,7 +17,7 @@ import {
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { NERist, Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
@@ -40,20 +40,16 @@ export type PageTreeNodeProps = {
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   const filteredPageIds = CurrentState.getFilteredMountedPageIds()
 
-  const tree = CurrentState.treeify(
-    CurrentState.getFilteredMountedPageIds().toSet(),
-    TOP_ITEM_ID,
-    true
-  )
+  const tree = CurrentState.treeify(Set(filteredPageIds), TOP_ITEM_ID, true)
   return tree.fold((itemPath, children) => {
     const itemId = ItemPath.getItemId(itemPath)
     const activePageId = CurrentState.getActivePageId()
 
     const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
     const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.7
-    const footprintCount = Math.floor(nonActivePageIds.size ** exponent)
+    const footprintCount = Math.floor(nonActivePageIds.length ** exponent)
     const index = nonActivePageIds.indexOf(itemId)
-    const rank = index !== -1 ? nonActivePageIds.size - index - 1 : 0
+    const rank = index !== -1 ? nonActivePageIds.length - index - 1 : 0
 
     return {
       itemId,
@@ -142,7 +138,7 @@ function unmountPage(itemId: number, activePageId: number) {
 
   // もしアクティブページなら、最も新しいページを新たなアクティブページとする
   if (itemId === activePageId) {
-    const lastPageId = CurrentState.getFilteredMountedPageIds().last(undefined)
+    const lastPageId = NERist.last(CurrentState.getFilteredMountedPageIds())
     assertNonUndefined(lastPageId)
     CurrentState.switchActivePage(lastPageId)
     Rerenderer.instance.requestToFocusTargetItem()

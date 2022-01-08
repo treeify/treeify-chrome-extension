@@ -5,13 +5,14 @@ import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { Rist } from 'src/Utility/fp-ts'
 
 export type ContextMenuItemProps = {
   title: string
   onClick(): void
 }
 
-export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
+export function createContextMenuItemPropses(): Rist.T<ContextMenuItemProps> {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
   const subtreeItemIds = selectedItemIds.flatMap((itemId) => [
@@ -172,5 +173,5 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  return List(result)
+  return result
 }

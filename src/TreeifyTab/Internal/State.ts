@@ -8,7 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { Option, Rist } from 'src/Utility/fp-ts'
+import { NERist, Option, Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -28,7 +28,7 @@ export type State = {
    * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: List<ItemId>
+  mountedPageIds: NERist.T<ItemId>
   /** 削除され再利用される項目ID群 */
   availableItemIds: Rist.T<ItemId>
   maxItemId: ItemId
@@ -346,10 +346,10 @@ export namespace State {
         )
       }
       assert(
-        state.mountedPageIds.toSet().size === state.mountedPageIds.size,
+        Set(state.mountedPageIds).size === state.mountedPageIds.length,
         `mountedPageIdsに重複がある`
       )
-      assert(!state.mountedPageIds.isEmpty(), `mountedPageIdsが空である`)
+      assert(state.mountedPageIds.length === 0, `mountedPageIdsが空である`)
 
       // TODO: ダイアログなど、残りのプロパティのチェック
 
