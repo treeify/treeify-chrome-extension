@@ -8,11 +8,12 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type SearchResultItemProps = {
   itemPath: ItemPath
-  children: List<SearchResultItemProps>
+  children: Rist.T<SearchResultItemProps>
   footprintRank: integer | undefined
   footprintCount: integer
   outerCircleRadiusEm: integer
@@ -22,7 +23,7 @@ export type SearchResultItemProps = {
 
 export function createSearchResultItemPropses(
   itemPaths: List<ItemPath>
-): List<SearchResultItemProps> {
+): Rist.T<SearchResultItemProps> {
   const firstItemPath = itemPaths.first(undefined)
   assertNonUndefined(firstItemPath)
   const pageId = ItemPath.getRootItemId(firstItemPath)
@@ -45,7 +46,7 @@ export function createSearchResultItemPropses(
 
   const rootItemProps = tree.fold(createSearchResultItemProps)
   if (itemIdSet.has(pageId)) {
-    return List.of(rootItemProps)
+    return [rootItemProps]
   } else {
     return rootItemProps.children
   }
@@ -56,7 +57,7 @@ export function createSearchResultItemPropses(
 
     return {
       itemPath,
-      children: List(children),
+      children,
       footprintRank: footprintRankMap.get(itemId),
       footprintCount,
       outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),

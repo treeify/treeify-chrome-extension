@@ -12,7 +12,7 @@
     <ItemContent props={props.pageContent} />
   </div>
   <div class="search-result-page_tree">
-    {#each props.searchResultItemPropses.toArray() as searchResultItemProps (searchResultItemProps.itemPath.toString())}
+    {#each props.searchResultItemPropses as searchResultItemProps (searchResultItemProps.itemPath.toString())}
       <SearchResultItem props={searchResultItemProps} />
     {/each}
   </div>
