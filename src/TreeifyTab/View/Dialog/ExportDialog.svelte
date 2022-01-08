@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { ItemType } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -82,7 +81,7 @@
       case ExportFormat.OPML:
         const includeInvisibleItems =
           exportSettings.options[ExportFormat.OPML].includeInvisibleItems
-        return toOpmlString(List(CurrentState.getSelectedItemPaths()), includeInvisibleItems)
+        return toOpmlString(CurrentState.getSelectedItemPaths(), includeInvisibleItems)
     }
   }
 

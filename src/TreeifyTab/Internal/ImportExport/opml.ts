@@ -6,6 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType, assertNonNull } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 
 function toOpmlOutlineElement(
   itemPath: ItemPath,
@@ -114,7 +115,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
 
 /** 指定された項目とその子孫をOPML 2.0形式に変換する */
 export function toOpmlString(
-  itemPaths: List<ItemPath>,
+  itemPaths: Rist.T<ItemPath>,
   includeInvisibleItems: boolean = true
 ): string {
   const xmlDocument = document.implementation.createDocument(null, 'opml')
