@@ -147,7 +147,7 @@ export function toOpmlString(
  * head要素を要求せず、さらにopml要素のversion属性が2.0であることを要求しないので、
  * OPML 1.0文書でもパースに成功する場合がある（意図通り）。
  */
-export function tryParseAsOpml(possiblyOpml: string): List<Element> | undefined {
+export function tryParseAsOpml(possiblyOpml: string): Rist.T<Element> | undefined {
   const doc = new DOMParser().parseFromString(possiblyOpml, 'text/xml')
 
   // 以下、OPMLフォーマットバリデーション
@@ -169,7 +169,7 @@ export function tryParseAsOpml(possiblyOpml: string): List<Element> | undefined 
     if (!isValidOutlineElement(Element)) return undefined
   }
 
-  return List(topLevelElements)
+  return Array.from(topLevelElements)
 }
 
 function isValidOutlineElement(possiblyOutlineElement: Element): boolean {
@@ -191,7 +191,7 @@ type ItemAndEdge = { itemId: ItemId; edge: Edge }
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応する項目ID。
 type ItemIdMap = Record<string | number, ItemId>
 
-export function createItemsBasedOnOpml(outlineElements: List<Element>): List<ItemAndEdge> {
+export function createItemsBasedOnOpml(outlineElements: Rist.T<Element>): Rist.T<ItemAndEdge> {
   const itemIdMap = {}
   return outlineElements.map((element) => createItemBasedOnOpml(element, itemIdMap))
 }

@@ -81,7 +81,7 @@
 
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  const commandGroups: List<{ name: string; commandIds: List<CommandId> }> = List.of(
+  const commandGroups: Rist.T<{ name: string; commandIds: List<CommandId> }> = [
     {
       name: '基本操作',
       commandIds: List.of(
@@ -167,8 +167,8 @@
         'toggleExcluded',
         'convertSpaceToNewline'
       ),
-    }
-  )
+    },
+  ]
 </script>
 
 <CommonDialog class="key-binding-dialog_root" title="キーボード操作設定">
@@ -182,7 +182,7 @@
               {#each commandIds as selectedCommandId, index}
                 <div class="key-binding-dialog_command-row">
                   <select on:change={(event) => onChange(event, index, inputId)}>
-                    {#each commandGroups.toArray() as commandGroup}
+                    {#each commandGroups as commandGroup}
                       <optgroup label={commandGroup.name}>
                         {#each commandGroup.commandIds.toArray() as commandId}
                           <option value={commandId} selected={selectedCommandId === commandId}>
