@@ -9,12 +9,13 @@
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const parentItemIds = CurrentState.getParentItemIds(targetItemId)
+
   const itemPaths = parentItemIds
-    .map((parentItemId) => Set(CurrentState.yieldItemPaths(parentItemId)))
-    .flatMap((x) => x)
+    .flatMap((parentItemId) => [...CurrentState.yieldItemPaths(parentItemId)])
     .map((itemPath) => itemPath.push(targetItemId))
+    // TODO: fp-tsならもっと良い書き方にできる気がする
     .filter((itemPath) => !is(itemPath, targetItemPath))
-  const pagePropses = itemPaths
+  const pagePropses = Set(itemPaths)
     .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
     .toList()
     .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList()))

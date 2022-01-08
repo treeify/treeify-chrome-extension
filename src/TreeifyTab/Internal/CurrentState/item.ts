@@ -169,10 +169,8 @@ export function updateItemTimestamp(itemId: ItemId) {
 }
 
 /** 指定された項目の親項目IDのリストを返す */
-export function getParentItemIds(itemId: ItemId): List<ItemId> {
-  return List(Object.keys(Internal.instance.state.items[itemId].parents)).map((key) =>
-    parseInt(key)
-  )
+export function getParentItemIds(itemId: ItemId): Rist.T<ItemId> {
+  return Object.keys(Internal.instance.state.items[itemId].parents).map((key) => parseInt(key))
 }
 
 /** 指定された項目の親の数を返す */

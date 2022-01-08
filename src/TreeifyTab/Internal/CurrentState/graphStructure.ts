@@ -64,9 +64,9 @@ export function getPageIdsBelongingTo(itemId: ItemId): Set<ItemId> {
 
 /** 指定されたページが所属するページIDの集合を返す */
 export function getParentPageIds(pageId: ItemId): Set<ItemId> {
-  return CurrentState.getParentItemIds(pageId)
-    .flatMap((parentItemId) => CurrentState.getPageIdsBelongingTo(parentItemId))
-    .toSet()
+  return Set(CurrentState.getParentItemIds(pageId)).flatMap((parentItemId) =>
+    CurrentState.getPageIdsBelongingTo(parentItemId)
+  )
 }
 
 /**
