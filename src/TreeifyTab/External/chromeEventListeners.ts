@@ -52,7 +52,7 @@ export function onCreated(tab: Tab) {
   assertNonUndefined(tab.id)
 
   const url = tab.url || tab.pendingUrl || ''
-  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url) ?? []
+  const itemIdsForTabCreation = External.instance.urlToItemIdsForTabCreation.get(url)
   if (itemIdsForTabCreation.length === 0) {
     // タブに対応するウェブページ項目がない時
 
