@@ -101,7 +101,7 @@ export type Source = {
 
 /** テキスト項目が固有で持つデータの型 */
 export type TextItem = {
-  domishObjects: List<DomishObject>
+  domishObjects: Rist.T<DomishObject>
 }
 
 /** ウェブページ項目が固有で持つデータの型 */

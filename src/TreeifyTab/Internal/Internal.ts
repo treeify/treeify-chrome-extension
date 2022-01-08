@@ -151,7 +151,7 @@ export class Internal {
       },
       textItems: {
         0: {
-          domishObjects: List.of({ type: 'text', textContent: 'Top' }),
+          domishObjects: [{ type: 'text', textContent: 'Top' }],
         },
       },
       webPageItems: {},

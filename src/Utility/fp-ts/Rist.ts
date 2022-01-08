@@ -29,6 +29,9 @@ export function max(rist: T<number>): Option.T<number> {
   return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rist))
 }
 
+export const filterUndefined = <A>(rist: T<A | undefined>): T<A> =>
+  RA.filter((element: A | undefined) => element !== undefined)(rist) as T<A>
+
 /**
  * 配列の要素からnumber値を計算し、その値が最大になる要素を返す。
  * 空配列の場合はnoneを返す。
@@ -67,3 +70,17 @@ export const sortByNumber =
     })
     return cloned
   }
+
+/**
+ * TODO: カリー化する
+ */
+export function join<A>(rist: T<A>, delimiter: A): T<A> {
+  const result: A[] = []
+  for (let i = 0; i < rist.length; i++) {
+    result.push(rist[i])
+    if (i !== rist.length - 1) {
+      result.push(delimiter)
+    }
+  }
+  return result
+}

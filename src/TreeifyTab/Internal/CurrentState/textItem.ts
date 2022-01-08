@@ -6,10 +6,11 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Item, TextItem } from 'src/TreeifyTab/Internal/State'
+import { Rist } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** 指定されたテキスト項目のdomishObjectsを更新する */
-export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
+export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: Rist.T<DomishObject>) {
   Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
     Internal.instance.mutate(
       domishObjects,
@@ -33,7 +34,7 @@ export function createTextItem(): ItemId {
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
-  const newTextItem: TextItem = { domishObjects: List() }
+  const newTextItem: TextItem = { domishObjects: [] }
   Internal.instance.mutate(newTextItem, PropertyPath.of('textItems', newItemId))
 
   return newItemId
