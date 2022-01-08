@@ -64,7 +64,7 @@ export function createWorkspace(): WorkspaceId {
     name: `ワークスペース${CurrentState.getWorkspaceIds().length + 1}`,
     activePageId: CurrentState.getActivePageId(),
     excludedItemIds: List(),
-    searchHistory: List(),
+    searchHistory: [],
   }
   Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
   return workspaceId

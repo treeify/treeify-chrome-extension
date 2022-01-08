@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { pipe } from 'fp-ts/function'
   import { List, Set } from 'immutable'
   import { MultiSet } from 'mnemonist'
   import { ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
@@ -12,6 +13,7 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
+  import { Rist } from 'src/Utility/fp-ts'
 
   type SearchResult = { pages: List<List<ItemPath>>; counts: MultiSet<ItemType> }
 
@@ -74,12 +76,13 @@
       // 検索履歴に保存
       const workspaceId = CurrentState.getCurrentWorkspaceId()
       const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
-      const newHistory = searchHistory
-        .filter((searchQuery) => searchQuery !== searchQueryValue)
-        .push(searchQueryValue)
-        .takeLast(10)
+      const newHistory = pipe(
+        searchHistory,
+        Rist.filter((searchQuery: string) => searchQuery !== searchQueryValue),
+        Rist.append(searchQueryValue)
+      )
       Internal.instance.mutate(
-        newHistory,
+        Rist.takeRight(10)(newHistory),
         PropertyPath.of('workspaces', workspaceId, 'searchHistory')
       )
 
@@ -130,7 +133,7 @@
       />
       {#if searchResult === undefined}
         <datalist id="search-dialog_search-history-list">
-          {#each searchHistory.reverse().toArray() as searchQuery}
+          {#each Rist.reverse(searchHistory) as searchQuery}
             <option value={searchQuery} />
           {/each}
         </datalist>

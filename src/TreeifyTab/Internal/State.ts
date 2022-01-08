@@ -190,7 +190,7 @@ export type Workspace = {
    * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
   excludedItemIds: List<ItemId>
-  searchHistory: List<string>
+  searchHistory: Rist.T<string>
 }
 
 export type CommandId = keyof typeof commandNames

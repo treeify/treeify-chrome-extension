@@ -170,7 +170,7 @@ export class Internal {
           name: 'ワークスペース1',
           activePageId: 0,
           excludedItemIds: List(),
-          searchHistory: List(),
+          searchHistory: [],
         },
       },
       mountedPageIds: [0],
