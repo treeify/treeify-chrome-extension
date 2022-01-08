@@ -8,6 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -108,7 +109,7 @@ export function pasteMultilineText(text: string) {
   if (indentUnit !== '') {
     const trees = parseIndentedText(lines, indentUnit)
     // ※インデントされていない行が8割ある場合はインデント形式として認識しない
-    if (trees !== undefined && trees.size / lines.length < 0.8) {
+    if (trees !== undefined && trees.length / lines.length < 0.8) {
       // インデント形式のテキストとして認識できた場合
 
       const rootItemIds = trees.map((tree) =>
@@ -241,7 +242,7 @@ function analyzeIndentation(
 function parseIndentedText(
   lines: string[],
   indentUnit: string
-): List<MutableOrderedTree<string>> | undefined {
+): Rist.T<MutableOrderedTree<string>> | undefined {
   if (lines.length === 0) return undefined
 
   const analyzedLines = lines.map((line) => analyzeIndentation(line, indentUnit))
@@ -286,7 +287,7 @@ function parseIndentedText(
     }
   }
 
-  return List(rootNodes)
+  return rootNodes
 }
 
 function createItemFromSingleLineText(line: string): ItemId {
