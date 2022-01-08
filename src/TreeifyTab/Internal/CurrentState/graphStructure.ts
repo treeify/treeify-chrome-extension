@@ -6,6 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -159,7 +160,7 @@ export function treeify(
   passThroughPage: boolean
 ): MutableOrderedTree<ItemPath> {
   const childrenMap = itemIdSet
-    .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet, passThroughPage))
+    .flatMap((itemId) => yieldItemPathsFor([itemId], itemIdSet, passThroughPage))
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
       const sortedItemPaths = CurrentState.sortByDocumentOrder(collection.toList())
@@ -181,15 +182,15 @@ export function treeify(
  * @param passThroughPage ページを貫通して探索するかどうか
  */
 function* yieldItemPathsFor(
-  itemIds: List<ItemId>,
+  itemIds: Rist.T<ItemId>,
   itemIdSet: Set<ItemId>,
   passThroughPage: boolean
 ): Generator<ItemPath> {
-  const itemId = itemIds.first(undefined)
+  const itemId = itemIds[0]
   assertNonUndefined(itemId)
 
-  if (itemIds.size > 1 && itemIdSet.contains(itemId)) {
-    yield itemIds
+  if (itemIds.length > 1 && itemIdSet.contains(itemId)) {
+    yield List(itemIds)
     return
   }
 
@@ -199,7 +200,7 @@ function* yieldItemPathsFor(
   }
 
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    yield* yieldItemPathsFor(itemIds.unshift(parentItemId), itemIdSet, passThroughPage)
+    yield* yieldItemPathsFor(Rist.prepend(parentItemId)(itemIds), itemIdSet, passThroughPage)
   }
 }
 
