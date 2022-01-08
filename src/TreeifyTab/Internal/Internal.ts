@@ -169,7 +169,7 @@ export class Internal {
         [Timestamp.now()]: {
           name: 'ワークスペース1',
           activePageId: 0,
-          excludedItemIds: List(),
+          excludedItemIds: [],
           searchHistory: [],
         },
       },

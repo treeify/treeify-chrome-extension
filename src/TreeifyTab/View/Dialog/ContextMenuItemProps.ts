@@ -149,7 +149,7 @@ export function createContextMenuItemPropses(): Rist.T<ContextMenuItemProps> {
   }
 
   if (isSingleSelect) {
-    if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
+    if (CurrentState.getExcludedItemIds().includes(targetItemId)) {
       result.push({
         title: '現在のワークスペースからの除外を解除',
         onClick: () => Command.toggleExcluded(),

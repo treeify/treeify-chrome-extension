@@ -1,5 +1,5 @@
 import { pipe } from 'fp-ts/function'
-import { List, Set } from 'immutable'
+import { Set } from 'immutable'
 import { ItemId, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -39,12 +39,12 @@ export function getWorkspaceIds(): Rist.T<WorkspaceId> {
 }
 
 /** 現在のワークスペースの除外項目リストを返す */
-export function getExcludedItemIds(): List<ItemId> {
+export function getExcludedItemIds(): Rist.T<ItemId> {
   return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
 }
 
 /** 現在のワークスペースの除外項目リストを設定する */
-export function setExcludedItemIds(itemIds: List<ItemId>) {
+export function setExcludedItemIds(itemIds: Rist.T<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.mutate(
     itemIds,
@@ -63,7 +63,7 @@ export function createWorkspace(): WorkspaceId {
   const workspace: Workspace = {
     name: `ワークスペース${CurrentState.getWorkspaceIds().length + 1}`,
     activePageId: CurrentState.getActivePageId(),
-    excludedItemIds: List(),
+    excludedItemIds: [],
     searchHistory: [],
   }
   Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
@@ -93,7 +93,7 @@ export function shouldBeHidden(itemId: ItemId) {
   const excludedItemIds = CurrentState.getExcludedItemIds()
 
   // 与えられた項目が除外項目そのものの場合
-  if (excludedItemIds.contains(itemId)) return true
+  if (excludedItemIds.includes(itemId)) return true
 
   // 与えられた項目の先祖項目に除外項目が含まれているかどうか
   return !Set(CurrentState.yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()

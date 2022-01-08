@@ -57,12 +57,12 @@ export function selectToStartOfList() {
 export function toggleExcluded() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = Set(selectedItemPaths.map(ItemPath.getItemId)).delete(TOP_ITEM_ID)
-  const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
+  const excludedItemIds = Set(CurrentState.getExcludedItemIds())
 
   // いわゆるxorのメソッドが見当たらないので同等の処理をする
   const union = selectedItemIds.union(excludedItemIds)
   const intersection = selectedItemIds.intersect(excludedItemIds)
-  CurrentState.setExcludedItemIds(union.subtract(intersection).toList())
+  CurrentState.setExcludedItemIds(union.subtract(intersection).toArray())
 }
 
 /**

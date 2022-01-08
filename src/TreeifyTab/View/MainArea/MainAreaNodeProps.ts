@@ -62,7 +62,7 @@ export function createMainAreaNodeProps(
     isActivePage: !ItemPath.hasParent(itemPath),
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
-    isExcluded: CurrentState.getExcludedItemIds().contains(itemId),
+    isExcluded: CurrentState.getExcludedItemIds().includes(itemId),
     cssClasses: item.source === null ? item.cssClasses : Rist.append('has-source')(item.cssClasses),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,

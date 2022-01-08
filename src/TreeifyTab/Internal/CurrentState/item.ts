@@ -68,7 +68,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   // 除外リストから削除する
   for (const key in Internal.instance.state.workspaces) {
     const workspace = Internal.instance.state.workspaces[key]
-    if (workspace.excludedItemIds.contains(itemId)) {
+    if (workspace.excludedItemIds.includes(itemId)) {
       Internal.instance.mutate(
         workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
         PropertyPath.of('workspaces', key, 'excludedItemIds')

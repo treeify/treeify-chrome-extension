@@ -189,7 +189,7 @@ export type Workspace = {
    * このワークスペースでページツリーや検索結果から除外したい項目群。
    * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
-  excludedItemIds: List<ItemId>
+  excludedItemIds: Rist.T<ItemId>
   searchHistory: Rist.T<string>
 }
 
