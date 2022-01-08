@@ -17,7 +17,7 @@ export function createWebPageItem(): ItemId {
     childItemIds: List(),
     parents: {},
     timestamp: Timestamp.now(),
-    cssClasses: List(),
+    cssClasses: [],
     source: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))

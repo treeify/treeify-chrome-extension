@@ -8,7 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option } from 'src/Utility/fp-ts'
+import { Option, Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -344,7 +344,7 @@ export function recycleItemId(itemId: ItemId) {
 }
 
 /** 指定された項目のCSSクラスリストを上書き設定する */
-export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
+export function setCssClasses(itemId: ItemId, cssClasses: Rist.T<string>) {
   Internal.instance.mutate(cssClasses, PropertyPath.of('items', itemId, 'cssClasses'))
 }
 
@@ -359,12 +359,12 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   const index = cssClasses.indexOf(cssClass)
   if (index === -1) {
     Internal.instance.mutate(
-      cssClasses.push(cssClass),
+      Rist.append(cssClass)(cssClasses),
       PropertyPath.of('items', itemId, 'cssClasses')
     )
   } else {
     Internal.instance.mutate(
-      cssClasses.remove(index),
+      Rist.unsafeDeleteAt(index, cssClasses),
       PropertyPath.of('items', itemId, 'cssClasses')
     )
   }
@@ -376,9 +376,9 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
  */
 export function addCssClass(itemId: ItemId, cssClass: string) {
   const cssClasses = Internal.instance.state.items[itemId].cssClasses
-  if (!cssClasses.contains(cssClass)) {
+  if (!cssClasses.includes(cssClass)) {
     Internal.instance.mutate(
-      cssClasses.push(cssClass),
+      Rist.append(cssClass)(cssClasses),
       PropertyPath.of('items', itemId, 'cssClasses')
     )
   }

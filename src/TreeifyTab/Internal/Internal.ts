@@ -145,7 +145,7 @@ export class Internal {
           childItemIds: List(),
           parents: {},
           timestamp: Timestamp.now(),
-          cssClasses: List(),
+          cssClasses: [],
           source: null,
         },
       },

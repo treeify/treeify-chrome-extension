@@ -44,7 +44,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isFolded = CurrentState.getIsFolded(itemPath).toString()
   }
-  if (!item.cssClasses.isEmpty()) {
+  if (item.cssClasses.length > 0) {
     baseAttributes.cssClass = item.cssClasses.join(' ')
   }
   if (item.source !== null) {
@@ -220,8 +220,7 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
 
   const attrCssClass = outlineElement.getAttribute('cssClass')
   if (attrCssClass !== null) {
-    const cssClasses = List(attrCssClass.split(' '))
-    CurrentState.setCssClasses(itemId, cssClasses)
+    CurrentState.setCssClasses(itemId, attrCssClass.split(' '))
   }
 
   if (outlineElement.getAttribute('isPage') === 'true') {

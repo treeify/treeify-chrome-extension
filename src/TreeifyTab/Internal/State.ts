@@ -73,7 +73,7 @@ export type Item = {
    * 付与された項目本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
-  cssClasses: List<string>
+  cssClasses: Rist.T<string>
   source: Source | null
 }
 
@@ -289,8 +289,6 @@ export namespace State {
 
         // 残りのプロパティの型チェック（存在チェックを兼ねる）
         assert(typeof item.timestamp === 'number', `items[${itemId}]のtimestampの型エラー`)
-        // TODO: 各要素の型チェックまではしていない
-        assert(item.cssClasses instanceof List, `items[${itemId}]のcssClassesの型エラー`)
       }
 
       // 循環参照が存在しないことの確認

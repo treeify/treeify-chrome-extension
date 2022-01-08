@@ -1,4 +1,4 @@
-import { is, List } from 'immutable'
+import { is } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -34,7 +34,7 @@ export type MainAreaNodeProps = {
   selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
   isExcluded: boolean
-  cssClasses: List<string>
+  cssClasses: Rist.T<string>
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
@@ -63,7 +63,7 @@ export function createMainAreaNodeProps(
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
     isExcluded: CurrentState.getExcludedItemIds().contains(itemId),
-    cssClasses: item.source === null ? item.cssClasses : item.cssClasses.push('has-source'),
+    cssClasses: item.source === null ? item.cssClasses : Rist.append('has-source')(item.cssClasses),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),

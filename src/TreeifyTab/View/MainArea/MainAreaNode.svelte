@@ -5,6 +5,7 @@
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
   import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
+  import { Rist } from 'src/Utility/fp-ts/index.js'
 
   export let props: MainAreaNodeProps
 
@@ -43,7 +44,7 @@
   <div class="main-area-node_body-and-children-area">
     <!-- ボディ領域 -->
     <div
-      class={props.cssClasses.unshift('main-area-node_body-area').join(' ')}
+      class={Rist.prepend('main-area-node_body-area')(props.cssClasses).join(' ')}
       class:excluded={props.isExcluded}
       data-depth={depth}
     >
@@ -70,7 +71,7 @@
       {/if}
     </div>
     <!-- 子リスト領域 -->
-    <div class={childrenCssClasses.unshift('main-area-node_children-area').join(' ')}>
+    <div class={Rist.prepend('main-area-node_children-area')(childrenCssClasses).join(' ')}>
       {#each props.childItemPropses as itemProps (itemProps.itemPath.toString())}
         <MainAreaNode props={itemProps} />
       {/each}

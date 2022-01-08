@@ -264,7 +264,7 @@ export function toggleCompleted() {
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
   const existsNonCompletedItem = selectedItemIds.some((itemId) => {
-    return !Internal.instance.state.items[itemId].cssClasses.contains('completed')
+    return !Internal.instance.state.items[itemId].cssClasses.includes('completed')
   })
   if (existsNonCompletedItem) {
     // 選択された項目の中に非完了状態のものが含まれる場合
@@ -319,7 +319,7 @@ function toggleCssClass(cssClass: string) {
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
   const everyoneContainsTheCssClass = selectedItemIds.every((itemId) => {
-    return Internal.instance.state.items[itemId].cssClasses.contains(cssClass)
+    return Internal.instance.state.items[itemId].cssClasses.includes(cssClass)
   })
   if (!everyoneContainsTheCssClass) {
     // 選択された項目の中に該当状態ではない項目が含まれる場合
