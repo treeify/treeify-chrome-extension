@@ -9,6 +9,7 @@
   import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { Rist } from 'src/Utility/fp-ts'
   import { integer } from 'src/Utility/integer'
 
   let clonedKeyBindings = State.clone(Internal.instance.state.mainAreaKeyBindings)
@@ -36,7 +37,7 @@
 
     isAddBindingMode = false
 
-    clonedKeyBindings[inputId] = List.of('doNothing')
+    clonedKeyBindings[inputId] = ['doNothing']
   }
 
   function onClickFinishButton() {
@@ -52,25 +53,30 @@
 
   function onChange(event: Event, index: integer, inputId: InputId) {
     if (event.target instanceof HTMLSelectElement) {
-      clonedKeyBindings[inputId] = clonedKeyBindings[inputId].set(
+      clonedKeyBindings[inputId] = Rist.unsafeUpdateAt(
         index,
-        event.target.value as CommandId
+        event.target.value as CommandId,
+        clonedKeyBindings[inputId]
       )
     }
   }
 
   function onClickDeleteButton(index: integer, inputId: InputId) {
-    if (clonedKeyBindings[inputId].size === 1) {
+    if (clonedKeyBindings[inputId].length === 1) {
       // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
       delete clonedKeyBindings[inputId]
       clonedKeyBindings = clonedKeyBindings
     } else {
-      clonedKeyBindings[inputId] = clonedKeyBindings[inputId].remove(index)
+      clonedKeyBindings[inputId] = Rist.unsafeDeleteAt(index, clonedKeyBindings[inputId])
     }
   }
 
   function onClickAddCommandButton(index: integer, inputId: InputId) {
-    clonedKeyBindings[inputId] = clonedKeyBindings[inputId].insert(index + 1, 'doNothing')
+    clonedKeyBindings[inputId] = Rist.unsafeInsertAt<CommandId>(
+      index + 1,
+      'doNothing',
+      clonedKeyBindings[inputId]
+    )
   }
 
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
@@ -173,7 +179,7 @@
           <tr class="key-binding_binding-row">
             <td class="key-binding-dialog_input-id">{InputId.toReadableText(inputId)}</td>
             <td class="key-binding-dialog_commands">
-              {#each commandIds.toArray() as selectedCommandId, index}
+              {#each commandIds as selectedCommandId, index}
                 <div class="key-binding-dialog_command-row">
                   <select on:change={(event) => onChange(event, index, inputId)}>
                     {#each commandGroups.toArray() as commandGroup}

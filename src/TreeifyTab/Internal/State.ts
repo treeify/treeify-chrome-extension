@@ -33,7 +33,7 @@ export type State = {
   availableItemIds: Rist.T<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyBindings: Record<InputId, List<CommandId>>
+  mainAreaKeyBindings: Record<InputId, Rist.T<CommandId>>
   customCss: string
   preferredLanguages: Record<string, number>
   exportSettings: {

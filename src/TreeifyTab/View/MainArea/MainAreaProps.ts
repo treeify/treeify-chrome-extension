@@ -27,7 +27,7 @@ import {
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
-import { NERist } from 'src/Utility/fp-ts'
+import { NERist, Rist } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
@@ -106,7 +106,7 @@ function onKeyDown(event: KeyboardEvent) {
       return
   }
 
-  const commandIds: List<CommandId> | undefined =
+  const commandIds: Rist.T<CommandId> | undefined =
     Internal.instance.state.mainAreaKeyBindings[inputId]
   if (commandIds !== undefined) {
     event.preventDefault()
