@@ -8,6 +8,16 @@ export * from 'fp-ts/ReadonlyArray'
 
 export type T<A> = readonly A[]
 
+/**
+ * 先頭の要素を削除する。
+ * 空の配列に対しては何もしない。
+ */
+export const shift = <A>(rist: T<A>): T<A> => {
+  const cloned = rist.slice()
+  cloned.shift()
+  return cloned
+}
+
 export function max(rist: T<number>): Option.T<number> {
   return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rist))
 }
