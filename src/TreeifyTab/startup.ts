@@ -26,7 +26,7 @@ import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
@@ -187,7 +187,7 @@ function onClickContextMenu(info: OnClickData) {
 
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
-      const newItemPath = Rist.append(newItemId)(targetItemPath)
+      const newItemPath = RArray$.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
       CurrentState.moses(newItemPath)
     }
@@ -203,7 +203,7 @@ function onClickContextMenu(info: OnClickData) {
 
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
-      const newItemPath = Rist.append(newItemId)(targetItemPath)
+      const newItemPath = RArray$.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
       CurrentState.moses(newItemPath)
     }
@@ -250,9 +250,10 @@ async function onAlarm(alarm: Alarm) {
   const reminderSetting = reminderSettings[index]
   assertNonUndefined(reminderSetting)
   Internal.instance.mutate(
-    Rist.updateAt<ReminderSetting>(index, { ...reminderSetting, notifiedAt: alarm.scheduledTime })(
-      reminderSettings
-    ),
+    RArray$.updateAt<ReminderSetting>(index, {
+      ...reminderSetting,
+      notifiedAt: alarm.scheduledTime,
+    })(reminderSettings),
     PropertyPath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()

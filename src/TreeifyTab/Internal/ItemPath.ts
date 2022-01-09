@@ -1,9 +1,9 @@
 import { pipe } from 'fp-ts/function'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { assert } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
-export type ItemPath = Rist.T<ItemId>
+export type ItemPath = RArray$.T<ItemId>
 
 export namespace ItemPath {
   export function getRootItemId(itemPath: ItemPath): ItemId {
@@ -14,7 +14,7 @@ export namespace ItemPath {
   /** パスの終点項目のIDを返す */
   export function getItemId(itemPath: ItemPath): ItemId {
     assert(itemPath.length > 0)
-    return Rist.lastOrThrow(itemPath)
+    return RArray$.lastOrThrow(itemPath)
   }
 
   /** パスの終点より1つ前の項目のIDを返す */
@@ -32,7 +32,7 @@ export namespace ItemPath {
    */
   export function getParent(itemPath: ItemPath): ItemPath | undefined {
     if (hasParent(itemPath)) {
-      return Rist.pop(itemPath)
+      return RArray$.pop(itemPath)
     } else {
       return undefined
     }
@@ -45,7 +45,7 @@ export namespace ItemPath {
   ): ItemPath | undefined {
     if (!hasParent(itemPath)) return undefined
 
-    return Rist.updateAt(itemPath.length - 1, siblingItemId)(itemPath)
+    return RArray$.updateAt(itemPath.length - 1, siblingItemId)(itemPath)
   }
 
   /**
@@ -58,6 +58,6 @@ export namespace ItemPath {
     if (first1 === undefined || first2 === undefined) return []
     if (first1 !== first2) return []
 
-    return pipe(getCommonPrefix(Rist.shift(lhs), Rist.shift(rhs)), Rist.prepend(first1))
+    return pipe(getCommonPrefix(RArray$.shift(lhs), RArray$.shift(rhs)), RArray$.prepend(first1))
   }
 }

@@ -18,7 +18,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 export function onCopy(event: ClipboardEvent) {
   if (event.clipboardData === null) return
@@ -153,7 +153,7 @@ export function onPaste(event: ClipboardEvent) {
   const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
-    for (const itemAndEdge of Rist.reverse(createItemsBasedOnOpml(opmlParseResult))) {
+    for (const itemAndEdge of RArray$.reverse(createItemsBasedOnOpml(opmlParseResult))) {
       CurrentState.insertBelowItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
     }
 

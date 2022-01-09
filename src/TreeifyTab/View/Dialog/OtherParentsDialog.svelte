@@ -5,7 +5,7 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import OtherParentsDialogPage from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPage.svelte'
   import { createOtherParentsDialogPageProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPageProps'
-  import { Rist } from 'src/Utility/fp-ts'
+  import { RArray$ } from 'src/Utility/fp-ts'
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -13,8 +13,8 @@
 
   const itemPaths = parentItemIds
     .flatMap((parentItemId) => [...CurrentState.yieldItemPaths(parentItemId)])
-    .map(Rist.append(targetItemId))
-    .filter((itemPath) => !Rist.shallowEqual(itemPath, targetItemPath))
+    .map(RArray$.append(targetItemId))
+    .filter((itemPath) => !RArray$.shallowEqual(itemPath, targetItemPath))
   const pagePropses = Set(itemPaths)
     .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
     .toList()

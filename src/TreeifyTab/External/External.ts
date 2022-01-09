@@ -10,7 +10,7 @@ import { State } from 'src/TreeifyTab/Internal/State'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /** TODO: コメント */
@@ -39,7 +39,7 @@ export class External {
   lastFocusedWindowId: integer = undefined as any
 
   /** 既存のウェブページ項目に対応するタブを開いた際、タブ作成イベントリスナーで項目IDと紐付けるためのMap */
-  readonly urlToItemIdsForTabCreation = new DefaultMap<string, Rist.T<ItemId>>(() => [])
+  readonly urlToItemIdsForTabCreation = new DefaultMap<string, RArray$.T<ItemId>>(() => [])
 
   /** アンロードのために閉じられる途中のタブのIDの集合 */
   readonly tabIdsToBeClosedForUnloading = new Set<TabId>()
@@ -107,9 +107,9 @@ export class External {
 
 type TreeifyClipboard = DiscriminatedUnion<{
   CopyForTransclude: {
-    selectedItemPaths: Rist.T<ItemPath>
+    selectedItemPaths: RArray$.T<ItemPath>
   }
   CopyForMove: {
-    selectedItemPaths: Rist.T<ItemPath>
+    selectedItemPaths: RArray$.T<ItemPath>
   }
 }>

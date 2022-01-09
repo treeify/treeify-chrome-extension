@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { Rist, RSet } from 'src/Utility/fp-ts'
+import { RArray$, RSet } from 'src/Utility/fp-ts'
 
 /**
  * 全文検索用のunigram転置インデックス。
@@ -43,7 +43,7 @@ export class UnigramSearchIndex {
     return pipe(
       RSet.from(UnigramSearchIndex.normalize(text)),
       RSet.map((unigram: string) => this.getItemIds(unigram)),
-      Rist.from,
+      RArray$.from,
       UnigramSearchIndex.intersection
     )
   }
@@ -54,13 +54,13 @@ export class UnigramSearchIndex {
   }
 
   // 積集合を計算する
-  private static intersection(sets: Rist.T<RSet.T<ItemId>>): RSet.T<ItemId> {
+  private static intersection(sets: RArray$.T<RSet.T<ItemId>>): RSet.T<ItemId> {
     if (sets.length === 0) return new Set<ItemId>()
     if (sets.length === 1) return sets[0]
 
     // パフォーマンスのためサイズの小さい集合から順に並べる
-    const sortedSets = Rist.sortByNumber((set: RSet.T<ItemId>) => set.size)(sets)
-    const restSets = Rist.shift(sortedSets)
+    const sortedSets = RArray$.sortByNumber((set: RSet.T<ItemId>) => set.size)(sets)
+    const restSets = RArray$.shift(sortedSets)
     const result = new Set<ItemId>()
     for (const itemId of sortedSets[0]) {
       if (restSets.every((set) => set.has(itemId))) {

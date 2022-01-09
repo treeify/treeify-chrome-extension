@@ -7,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { NERist, Option, Rist, RSet } from 'src/Utility/fp-ts'
+import { NERArray$, Option, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -21,18 +21,18 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, Rist.T<ReminderSetting>>
+  reminders: Record<ItemId, RArray$.T<ReminderSetting>>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: NERist.T<ItemId>
+  mountedPageIds: NERArray$.T<ItemId>
   /** 削除され再利用される項目ID群 */
-  availableItemIds: Rist.T<ItemId>
+  availableItemIds: RArray$.T<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyBindings: Record<InputId, Rist.T<CommandId>>
+  mainAreaKeyBindings: Record<InputId, RArray$.T<CommandId>>
   customCss: string
   preferredLanguages: Record<string, number>
   exportSettings: {
@@ -63,7 +63,7 @@ export type State = {
 export type Item = {
   type: ItemType
   globalItemId: GlobalItemId
-  childItemIds: Rist.T<ItemId>
+  childItemIds: RArray$.T<ItemId>
   parents: Record<ItemId, Edge>
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
@@ -72,7 +72,7 @@ export type Item = {
    * 付与された項目本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
-  cssClasses: Rist.T<string>
+  cssClasses: RArray$.T<string>
   source: Source | null
 }
 
@@ -100,7 +100,7 @@ export type Source = {
 
 /** テキスト項目が固有で持つデータの型 */
 export type TextItem = {
-  domishObjects: Rist.T<DomishObject>
+  domishObjects: RArray$.T<DomishObject>
 }
 
 /** ウェブページ項目が固有で持つデータの型 */
@@ -188,8 +188,8 @@ export type Workspace = {
    * このワークスペースでページツリーや検索結果から除外したい項目群。
    * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
-  excludedItemIds: Rist.T<ItemId>
-  searchHistory: Rist.T<string>
+  excludedItemIds: RArray$.T<ItemId>
+  searchHistory: RArray$.T<string>
 }
 
 export type CommandId = keyof typeof commandNames
@@ -289,7 +289,7 @@ export namespace State {
 
         const page = state.pages[pageId]
         assert(
-          Rist.shallowEqual(Rist.pop(page.targetItemPath), Rist.pop(page.anchorItemPath)),
+          RArray$.shallowEqual(RArray$.pop(page.targetItemPath), RArray$.pop(page.anchorItemPath)),
           `pages[${pageId}]のtargetItemPathとanchorItemPathが兄弟でない`
         )
         // TODO: targetItemPath, anchorItemPathがvalidなItemPathであることのチェック
@@ -297,7 +297,7 @@ export namespace State {
       }
 
       assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)
-      const maxItemId = Option.get(TOP_ITEM_ID)(Rist.max(itemIds.concat(state.availableItemIds)))
+      const maxItemId = Option.get(TOP_ITEM_ID)(RArray$.max(itemIds.concat(state.availableItemIds)))
       assert(maxItemId === state.maxItemId, `maxItemIdが実際の最大itemId ${maxItemId}と異なる`)
 
       for (const availableItemId of state.availableItemIds) {

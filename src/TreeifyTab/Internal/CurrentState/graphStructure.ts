@@ -7,7 +7,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist, RSet } from 'src/Utility/fp-ts'
+import { RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -18,7 +18,7 @@ import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
   yield ItemPath.getItemId(itemPath)
   for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
-    yield* getAllDisplayingItemIds(state, Rist.append(childItemId)(itemPath))
+    yield* getAllDisplayingItemIds(state, RArray$.append(childItemId)(itemPath))
   }
 }
 
@@ -27,7 +27,7 @@ export function isVisible(itemPath: ItemPath): boolean {
   for (let i = 1; i < itemPath.length - 1; i++) {
     const displayingChildItemIds = pipe(
       itemPath,
-      Rist.takeLeft(i),
+      RArray$.takeLeft(i),
       CurrentState.getDisplayingChildItemIds
     )
     const nextItemId = itemPath[i + 1]
@@ -55,7 +55,7 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
   }
 
   for (const parentItemId of CurrentState.getParentItemIds(rootItemId)) {
-    yield* _yieldItemPaths(Rist.prepend(parentItemId)(itemPath))
+    yield* _yieldItemPaths(RArray$.prepend(parentItemId)(itemPath))
   }
 }
 
@@ -192,7 +192,7 @@ export function treeify(
  * @param passThroughPage ページを貫通して探索するかどうか
  */
 function* yieldItemPathsFor(
-  itemIds: Rist.T<ItemId>,
+  itemIds: RArray$.T<ItemId>,
   itemIdSet: Set<ItemId>,
   passThroughPage: boolean
 ): Generator<ItemPath> {
@@ -210,7 +210,7 @@ function* yieldItemPathsFor(
   }
 
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    yield* yieldItemPathsFor(Rist.prepend(parentItemId)(itemIds), itemIdSet, passThroughPage)
+    yield* yieldItemPathsFor(RArray$.prepend(parentItemId)(itemIds), itemIdSet, passThroughPage)
   }
 }
 
@@ -221,6 +221,6 @@ function _treeify(
   const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List()
   return new MutableOrderedTree(
     itemPath,
-    children.map((child) => _treeify(childrenMap, itemPath.concat(Rist.shift(child)))).toArray()
+    children.map((child) => _treeify(childrenMap, itemPath.concat(RArray$.shift(child)))).toArray()
   )
 }

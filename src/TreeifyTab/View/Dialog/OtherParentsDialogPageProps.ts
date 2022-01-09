@@ -7,15 +7,15 @@ import {
   createItemContentProps,
   ItemContentProps,
 } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 export type OtherParentsDialogPageProps = {
   pageContentProps: ItemContentProps
-  itemPropses: Rist.T<OtherParentsDialogItemProps>
+  itemPropses: RArray$.T<OtherParentsDialogItemProps>
 }
 
 export function createOtherParentsDialogPageProps(
-  itemPaths: Rist.T<ItemPath>
+  itemPaths: RArray$.T<ItemPath>
 ): OtherParentsDialogPageProps {
   return {
     pageContentProps: createItemContentProps(ItemPath.getRootItemId(itemPaths[0])),

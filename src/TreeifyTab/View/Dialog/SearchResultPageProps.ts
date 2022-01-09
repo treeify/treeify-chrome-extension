@@ -8,11 +8,11 @@ import {
   createItemContentProps,
   ItemContentProps,
 } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 export type SearchResultPageProps = {
   pageContent: ItemContentProps
-  searchResultItemPropses: Rist.T<SearchResultItemProps>
+  searchResultItemPropses: RArray$.T<SearchResultItemProps>
 }
 
 export function createSearchResultPageProps(itemPaths: List<ItemPath>) {

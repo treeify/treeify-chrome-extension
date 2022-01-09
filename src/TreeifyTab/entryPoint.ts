@@ -4,7 +4,7 @@ import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { startup } from 'src/TreeifyTab/startup'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import Tab = chrome.tabs.Tab
 
@@ -15,9 +15,9 @@ call(async () => {
   const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
   const duplicatedTabs = pipe(
     tabs,
-    Rist.filter((tab: Tab) => tab.url?.startsWith(treeifyTabUrl) === true),
-    Rist.sortByNumber((tab: Tab) => tab.id!),
-    Rist.shift
+    RArray$.filter((tab: Tab) => tab.url?.startsWith(treeifyTabUrl) === true),
+    RArray$.sortByNumber((tab: Tab) => tab.id!),
+    RArray$.shift
   )
   for (const duplicatedTab of duplicatedTabs) {
     if (duplicatedTab.id !== undefined) {

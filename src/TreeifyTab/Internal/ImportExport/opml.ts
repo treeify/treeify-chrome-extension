@@ -5,7 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType, assertNonNull } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 function toOpmlOutlineElement(
   itemPath: ItemPath,
@@ -23,7 +23,7 @@ function toOpmlOutlineElement(
     ? Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
     : CurrentState.getDisplayingChildItemIds(itemPath)
   const children = childItemIds.map((childItemId) =>
-    toOpmlOutlineElement(Rist.append(childItemId)(itemPath), xmlDocument, includeInvisibleItems)
+    toOpmlOutlineElement(RArray$.append(childItemId)(itemPath), xmlDocument, includeInvisibleItems)
   )
   outlineElement.append(...children)
 
@@ -114,7 +114,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
 
 /** 指定された項目とその子孫をOPML 2.0形式に変換する */
 export function toOpmlString(
-  itemPaths: Rist.T<ItemPath>,
+  itemPaths: RArray$.T<ItemPath>,
   includeInvisibleItems: boolean = true
 ): string {
   const xmlDocument = document.implementation.createDocument(null, 'opml')
@@ -146,7 +146,7 @@ export function toOpmlString(
  * head要素を要求せず、さらにopml要素のversion属性が2.0であることを要求しないので、
  * OPML 1.0文書でもパースに成功する場合がある（意図通り）。
  */
-export function tryParseAsOpml(possiblyOpml: string): Rist.T<Element> | undefined {
+export function tryParseAsOpml(possiblyOpml: string): RArray$.T<Element> | undefined {
   const doc = new DOMParser().parseFromString(possiblyOpml, 'text/xml')
 
   // 以下、OPMLフォーマットバリデーション
@@ -190,7 +190,9 @@ type ItemAndEdge = { itemId: ItemId; edge: Edge }
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応する項目ID。
 type ItemIdMap = Record<string | number, ItemId>
 
-export function createItemsBasedOnOpml(outlineElements: Rist.T<Element>): Rist.T<ItemAndEdge> {
+export function createItemsBasedOnOpml(
+  outlineElements: RArray$.T<Element>
+): RArray$.T<ItemAndEdge> {
   const itemIdMap = {}
   return outlineElements.map((element) => createItemBasedOnOpml(element, itemIdMap))
 }

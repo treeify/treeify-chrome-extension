@@ -18,14 +18,14 @@ import {
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
 import { CssCustomProperty, TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERist, Rist, RSet } from 'src/Utility/fp-ts'
+import { NERArray$, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
   itemId: ItemId
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: ItemContentProps
-  childNodePropses: Rist.T<PageTreeNodeProps>
+  childNodePropses: RArray$.T<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   isAudible: boolean
@@ -126,8 +126,8 @@ function getAudiblePageIds(): RSet.T<ItemId> {
   const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
   const audibleItemIds = pipe(
     audibleTabIds,
-    Rist.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId)),
-    Rist.filterUndefined,
+    RArray$.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId)),
+    RArray$.filterUndefined,
     RSet.from
   )
   return RSet.flatMap(CurrentState.getPageIdsBelongingTo)(audibleItemIds)
@@ -141,7 +141,7 @@ function unmountPage(itemId: number, activePageId: number) {
 
   // もしアクティブページなら、最も新しいページを新たなアクティブページとする
   if (itemId === activePageId) {
-    const lastPageId = NERist.last(CurrentState.getFilteredMountedPageIds())
+    const lastPageId = NERArray$.last(CurrentState.getFilteredMountedPageIds())
     assertNonUndefined(lastPageId)
     CurrentState.switchActivePage(lastPageId)
     Rerenderer.instance.requestToFocusTargetItem()

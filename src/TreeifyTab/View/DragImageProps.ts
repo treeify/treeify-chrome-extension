@@ -5,7 +5,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { currentDragData, ItemDragData } from 'src/TreeifyTab/View/dragAndDrop'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { Coordinate, integer } from 'src/Utility/integer'
 
 export type DragImageProps = {
@@ -73,7 +73,9 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
     } else {
       // Roll以外の場所の場合
 
-      if (Rist.shallowEqual(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
+      if (
+        RArray$.shallowEqual(RArray$.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)
+      ) {
         // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
         // 下記の2パターンが該当する。
         // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -170,7 +172,10 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
 
     if (
-      Rist.shallowEqual(Rist.takeLeft(draggedItemPath.length)(rollDroppedItemPath), draggedItemPath)
+      RArray$.shallowEqual(
+        RArray$.takeLeft(draggedItemPath.length)(rollDroppedItemPath),
+        draggedItemPath
+      )
     ) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
@@ -188,7 +193,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       CurrentState.setTargetItemPath(rollDroppedItemPath)
     } else {
       CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
-      CurrentState.setTargetItemPath(Rist.append(draggedItemId)(rollDroppedItemPath))
+      CurrentState.setTargetItemPath(RArray$.append(draggedItemId)(rollDroppedItemPath))
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
@@ -196,7 +201,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   } else {
     // Roll以外の場所へのドロップの場合
 
-    if (Rist.shallowEqual(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
+    if (RArray$.shallowEqual(RArray$.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
       // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -240,11 +245,11 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined {
   // メインエリア内の全項目をリスト化し、Y座標でソート
   const elements = document.querySelectorAll<HTMLElement>('.main-area-node_content-area')
-  const sortedElements = Rist.sortByNumber((element: HTMLElement) => {
+  const sortedElements = RArray$.sortByNumber((element: HTMLElement) => {
     return element.getBoundingClientRect().bottom
   })(Array.from(elements))
 
-  for (const element of Rist.reverse(sortedElements)) {
+  for (const element of RArray$.reverse(sortedElements)) {
     const rect = element.getBoundingClientRect()
     if (rect.top <= y) {
       return element
@@ -264,7 +269,7 @@ function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath | 
     return itemPath
   }
 
-  return searchElementByXCoordinate(Rist.pop(itemPath), x)
+  return searchElementByXCoordinate(RArray$.pop(itemPath), x)
 }
 
 function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
@@ -305,7 +310,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
 function searchLeftSidebarElementByYCoordinate(y: integer): HTMLElement | undefined {
   // メインエリア内の全項目をリスト化し、Y座標でソート
   const elements = document.querySelectorAll<HTMLElement>('.page-tree-node_content-area')
-  const sortedElements = Rist.sortByNumber((element: HTMLElement) => {
+  const sortedElements = RArray$.sortByNumber((element: HTMLElement) => {
     return element.getBoundingClientRect().bottom
   })(Array.from(elements))
 

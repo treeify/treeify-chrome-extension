@@ -5,11 +5,14 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Item, TextItem } from 'src/TreeifyTab/Internal/State'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** 指定されたテキスト項目のdomishObjectsを更新する */
-export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: Rist.T<DomishObject>) {
+export function setTextItemDomishObjects(
+  textItemId: ItemId,
+  domishObjects: RArray$.T<DomishObject>
+) {
   Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
     Internal.instance.mutate(
       domishObjects,

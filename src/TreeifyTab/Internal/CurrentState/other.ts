@@ -9,7 +9,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option, Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -34,7 +34,7 @@ export function selectAll() {
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
   const firstSiblingItemId = siblingItemIds[0]
-  const lastSiblingItemId = Option.getOrThrow(Rist.last(siblingItemIds))
+  const lastSiblingItemId = RArray$.lastOrThrow(siblingItemIds)
   const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(firstSiblingItemPath)

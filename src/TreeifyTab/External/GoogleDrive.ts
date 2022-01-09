@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { pipe } from 'fp-ts/function'
 import { assertNonNull } from 'src/Utility/Debug/assert'
-import { Option, Rist } from 'src/Utility/fp-ts'
+import { Option, RArray$ } from 'src/Utility/fp-ts'
 
 export namespace GoogleDrive {
   const DATA_FILE_NAME = 'Treeify data.json.gz'
@@ -24,8 +24,8 @@ export namespace GoogleDrive {
     // 複数が該当する場合はIDのソート順で先頭のものを選ぶ。
     return pipe(
       dataFiles,
-      Rist.sortBy((dataFile: DataFileMataData) => dataFile.id),
-      Rist.maxBy((dataFile: DataFileMataData) => dayjs(dataFile.modifiedTime).valueOf()),
+      RArray$.sortBy((dataFile: DataFileMataData) => dataFile.id),
+      RArray$.maxBy((dataFile: DataFileMataData) => dayjs(dataFile.modifiedTime).valueOf()),
       Option.toUndefined
     )
   }

@@ -1,7 +1,7 @@
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 /**
  * データ型の実体としてはPropertyPathと同じだが、
@@ -39,7 +39,7 @@ export namespace Chunk {
   ])
 
   /** Stateオブジェクト全体をチャンクリストに変換する */
-  export function createAllChunks(state: State): Rist.T<Chunk> {
+  export function createAllChunks(state: State): RArray$.T<Chunk> {
     return [...yieldAllChunkIds(state)].map((chunkId) => {
       return create(state, chunkId)
     })
@@ -84,7 +84,7 @@ export namespace Chunk {
   }
 
   /** チャンクリストからStateオブジェクトを作る */
-  export function inflateStateFromChunks(chunks: Rist.T<Chunk>): State {
+  export function inflateStateFromChunks(chunks: RArray$.T<Chunk>): State {
     const result = Internal.createInitialState()
     for (const chunk of chunks) {
       setProperty(result, chunk.id, chunk.data)

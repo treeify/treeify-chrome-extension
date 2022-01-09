@@ -8,7 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -59,7 +59,7 @@ function* yieldIndentedLines(
     ? state.items[itemId].childItemIds
     : CurrentState.getDisplayingChildItemIds(itemPath)
   for (const childItemId of childItemIds) {
-    const childItemPath = Rist.append(childItemId)(itemPath)
+    const childItemPath = RArray$.append(childItemId)(itemPath)
     yield* yieldIndentedLines(childItemPath, indentUnit, depth + 1)
   }
 }
@@ -242,7 +242,7 @@ function analyzeIndentation(
 function parseIndentedText(
   lines: string[],
   indentUnit: string
-): Rist.T<MutableOrderedTree<string>> | undefined {
+): RArray$.T<MutableOrderedTree<string>> | undefined {
   if (lines.length === 0) return undefined
 
   const analyzedLines = lines.map((line) => analyzeIndentation(line, indentUnit))

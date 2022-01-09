@@ -5,7 +5,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option, Rist, RSet } from 'src/Utility/fp-ts'
+import { RArray$, RSet } from 'src/Utility/fp-ts'
 
 export function syncTreeifyData() {
   const syncButton = document.querySelector<HTMLElement>('.sync-button_root')
@@ -23,7 +23,7 @@ export function selectToEndOfList() {
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const lastSiblingItemId = Option.getOrThrow(Rist.last(siblingItemIds))
+  const lastSiblingItemId = RArray$.lastOrThrow(siblingItemIds)
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
@@ -65,7 +65,7 @@ export function toggleExcluded() {
   // いわゆるxorのメソッドが見当たらないので同等の処理をする
   const union = RSet.union(selectedItemIds, excludedItemIds)
   const intersection = RSet.intersection(selectedItemIds, excludedItemIds)
-  CurrentState.setExcludedItemIds(Rist.from(RSet.difference(union, intersection)))
+  CurrentState.setExcludedItemIds(RArray$.from(RSet.difference(union, intersection)))
 }
 
 /**

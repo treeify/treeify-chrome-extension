@@ -13,7 +13,7 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
-  import { Rist, RSet } from 'src/Utility/fp-ts'
+  import { RArray$, RSet } from 'src/Utility/fp-ts'
 
   type SearchResult = { pages: List<List<ItemPath>>; counts: MultiSet<ItemType> }
 
@@ -78,11 +78,11 @@
       const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
       const newHistory = pipe(
         searchHistory,
-        Rist.filter((searchQuery: string) => searchQuery !== searchQueryValue),
-        Rist.append(searchQueryValue)
+        RArray$.filter((searchQuery: string) => searchQuery !== searchQueryValue),
+        RArray$.append(searchQueryValue)
       )
       Internal.instance.mutate(
-        Rist.takeRight(10)(newHistory),
+        RArray$.takeRight(10)(newHistory),
         PropertyPath.of('workspaces', workspaceId, 'searchHistory')
       )
 
@@ -136,7 +136,7 @@
       />
       {#if searchResult === undefined}
         <datalist id="search-dialog_search-history-list">
-          {#each Rist.reverse(searchHistory) as searchQuery}
+          {#each RArray$.reverse(searchHistory) as searchQuery}
             <option value={searchQuery} />
           {/each}
         </datalist>

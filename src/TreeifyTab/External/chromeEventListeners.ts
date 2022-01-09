@@ -14,7 +14,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
@@ -92,7 +92,7 @@ export function onCreated(tab: Tab) {
 
         // フォーカスを移す
         if (tab.active) {
-          const newItemPath = Rist.append(newWebPageItemId)(targetItemPath)
+          const newItemPath = RArray$.append(newWebPageItemId)(targetItemPath)
           CurrentState.setTargetItemPath(newItemPath)
           Rerenderer.instance.requestToFocusTargetItem()
         }
@@ -108,7 +108,7 @@ export function onCreated(tab: Tab) {
     const itemId = itemIdsForTabCreation[0]
     reflectInWebPageItem(itemId, tab)
     External.instance.tabItemCorrespondence.tieTabAndItem(tab.id, itemId)
-    External.instance.urlToItemIdsForTabCreation.set(url, Rist.shift(itemIdsForTabCreation))
+    External.instance.urlToItemIdsForTabCreation.set(url, RArray$.shift(itemIdsForTabCreation))
 
     // タブがバックグラウンドで開かれたら未読フラグを立てる
     if (!tab.active || tab.windowId !== External.instance.lastFocusedWindowId) {

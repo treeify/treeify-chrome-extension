@@ -16,8 +16,8 @@ export type T<A> = readonly A[]
  * 先頭の要素を削除する。
  * 空の配列に対しては何もしない。
  */
-export const shift = <A>(rist: T<A>): T<A> => {
-  const cloned = rist.slice()
+export const shift = <A>(rarray: T<A>): T<A> => {
+  const cloned = rarray.slice()
   cloned.shift()
   return cloned
 }
@@ -26,8 +26,8 @@ export const shift = <A>(rist: T<A>): T<A> => {
  * 末尾の要素を削除する。
  * 空の配列に対しては何もしない。
  */
-export const pop = <A>(rist: T<A>): T<A> => {
-  const cloned = rist.slice()
+export const pop = <A>(rarray: T<A>): T<A> => {
+  const cloned = rarray.slice()
   cloned.pop()
   return cloned
 }
@@ -37,38 +37,38 @@ export const remove = <A>(value: A) => RA.filter((a: A) => a !== value)
 
 export const removeAt =
   (index: integer) =>
-  <A>(rist: T<A>): T<A> =>
-    RA.unsafeDeleteAt(index, rist)
+  <A>(rarray: T<A>): T<A> =>
+    RA.unsafeDeleteAt(index, rarray)
 
 export const insertAt =
   <A>(index: integer, value: A) =>
-  (rist: T<A>): T<A> =>
-    RA.unsafeInsertAt(index, value, rist)
+  (rarray: T<A>): T<A> =>
+    RA.unsafeInsertAt(index, value, rarray)
 
 export const insertAll =
-  <A>(index: integer, newRist: T<A>) =>
-  (rist: T<A>): T<A> => {
-    const cloned = rist.slice()
-    cloned.splice(index, 0, ...newRist)
+  <A>(index: integer, newRarray: T<A>) =>
+  (rarray: T<A>): T<A> => {
+    const cloned = rarray.slice()
+    cloned.splice(index, 0, ...newRarray)
     return cloned
   }
 
 export const updateAt =
   <A>(index: integer, value: A) =>
-  (rist: T<A>): T<A> =>
-    RA.unsafeUpdateAt(index, value, rist)
+  (rarray: T<A>): T<A> =>
+    RA.unsafeUpdateAt(index, value, rarray)
 
-export const lastOrThrow = <A>(rist: T<A>) => {
-  assert(rist.length > 0)
-  return rist[rist.length - 1]
+export const lastOrThrow = <A>(rarray: T<A>) => {
+  assert(rarray.length > 0)
+  return rarray[rarray.length - 1]
 }
 
-export function max(rist: T<number>): Option.T<number> {
-  return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rist))
+export function max(rarray: T<number>): Option.T<number> {
+  return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
 }
 
-export const filterUndefined = <A>(rist: T<A | undefined>): T<A> =>
-  RA.filter((element: A | undefined) => element !== undefined)(rist) as T<A>
+export const filterUndefined = <A>(rarray: T<A | undefined>): T<A> =>
+  RA.filter((element: A | undefined) => element !== undefined)(rarray) as T<A>
 
 /**
  * 配列の要素からnumber値を計算し、その値が最大になる要素を返す。
@@ -76,16 +76,16 @@ export const filterUndefined = <A>(rist: T<A | undefined>): T<A> =>
  */
 export const maxBy =
   <A>(toNumber: Arrow<A, number>) =>
-  (rist: T<A>): Option.T<A> => {
+  (rarray: T<A>): Option.T<A> => {
     const ord = Ord.contramap(toNumber)(FpNumber.Ord)
-    return Option.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rist))
+    return Option.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rarray))
   }
 
 /** 配列の要素から計算した値をstring型に変換し、その昇順でソートする */
 export const sortBy =
   <A>(f: Arrow<A, any>) =>
-  (rist: T<A>): T<A> => {
-    const cloned = rist.slice()
+  (rarray: T<A>): T<A> => {
+    const cloned = rarray.slice()
     cloned.sort((a, b) => {
       return String(f(a)).localeCompare(String(f(b)))
     })
@@ -101,8 +101,8 @@ export const sortBy =
  */
 export const sortByNumber =
   <A>(toNumber: Arrow<A, number>) =>
-  (rist: T<A>): T<A> => {
-    const cloned = rist.slice()
+  (rarray: T<A>): T<A> => {
+    const cloned = rarray.slice()
     cloned.sort((a, b) => {
       return toNumber(a) - toNumber(b)
     })
@@ -114,11 +114,11 @@ export const from = <A>(iterable: Iterable<A>): T<A> => [...iterable]
 /**
  * TODO: カリー化する
  */
-export function join<A>(rist: T<A>, delimiter: A): T<A> {
+export function join<A>(rarray: T<A>, delimiter: A): T<A> {
   const result: A[] = []
-  for (let i = 0; i < rist.length; i++) {
-    result.push(rist[i])
-    if (i !== rist.length - 1) {
+  for (let i = 0; i < rarray.length; i++) {
+    result.push(rarray[i])
+    if (i !== rarray.length - 1) {
       result.push(delimiter)
     }
   }
@@ -132,5 +132,5 @@ export function join<A>(rist: T<A>, delimiter: A): T<A> {
  * shallowEquals([1, [2]], [1, [2]]) === false
  * shallowEquals([{}], [{}]) === false
  */
-export const shallowEqual = <A>(rist1: T<A>, rist2: T<A>) =>
-  RA.getEq<A>(eqStrict).equals(rist1, rist2)
+export const shallowEqual = <A>(rarray1: T<A>, rarray2: T<A>) =>
+  RA.getEq<A>(eqStrict).equals(rarray1, rarray2)

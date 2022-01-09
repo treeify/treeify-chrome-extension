@@ -9,7 +9,7 @@ import { Page } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { assertNonNull } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { tick } from 'svelte'
 
 /** アクティブページを切り替える */
@@ -20,11 +20,14 @@ export function switchActivePage(itemId: ItemId) {
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
     Internal.instance.mutate(
-      pipe(mountedPageIds, Rist.removeAt(index), Rist.append(itemId)),
+      pipe(mountedPageIds, RArray$.removeAt(index), RArray$.append(itemId)),
       PropertyPath.of('mountedPageIds')
     )
   } else {
-    Internal.instance.mutate(Rist.append(itemId)(mountedPageIds), PropertyPath.of('mountedPageIds'))
+    Internal.instance.mutate(
+      RArray$.append(itemId)(mountedPageIds),
+      PropertyPath.of('mountedPageIds')
+    )
   }
 
   CurrentState.setActivePageId(itemId)
@@ -53,7 +56,7 @@ export function unmountPage(itemId: ItemId) {
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
     Internal.instance.mutate(
-      Rist.removeAt(index)(mountedPageIds),
+      RArray$.removeAt(index)(mountedPageIds),
       PropertyPath.of('mountedPageIds')
     )
   }

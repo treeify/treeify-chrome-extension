@@ -9,7 +9,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Source } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERist, Rist } from 'src/Utility/fp-ts'
+import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
 
 /** 選択された項目を折りたたむコマンド */
 export function fold() {
@@ -71,7 +71,7 @@ export function enterKeyDefault() {
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      CurrentState.setTargetItemPath(Rist.append(newItemId)(targetItemPath))
+      CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
       return
     }
@@ -144,7 +144,7 @@ export function enterKeyDefault() {
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
-      CurrentState.setTargetItemPath(Rist.append(newItemId)(targetItemPath))
+      CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
       return
     }
@@ -280,7 +280,7 @@ export function toggleCompleted() {
     Command.fold()
     Command.closeTreeTabs()
     // フォーカスを下の項目に移動する
-    const bottomSelectedItemPath = NERist.last(selectedItemPaths)
+    const bottomSelectedItemPath = NERArray$.last(selectedItemPaths)
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(bottomSelectedItemPath)
     if (firstFollowingItemPath !== undefined) {
       CurrentState.setTargetItemPath(firstFollowingItemPath)

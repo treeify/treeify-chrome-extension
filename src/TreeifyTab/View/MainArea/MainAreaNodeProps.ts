@@ -18,7 +18,7 @@ import {
   MainAreaRollProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaNodeProps = {
@@ -33,12 +33,12 @@ export type MainAreaNodeProps = {
   selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
   isExcluded: boolean
-  cssClasses: Rist.T<string>
+  cssClasses: RArray$.T<string>
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
-  childItemPropses: Rist.T<MainAreaNodeProps>
+  childItemPropses: RArray$.T<MainAreaNodeProps>
   rollProps: MainAreaRollProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenu(event: Event): void
@@ -62,7 +62,8 @@ export function createMainAreaNodeProps(
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
     isExcluded: CurrentState.getExcludedItemIds().includes(itemId),
-    cssClasses: item.source === null ? item.cssClasses : Rist.append('has-source')(item.cssClasses),
+    cssClasses:
+      item.source === null ? item.cssClasses : RArray$.append('has-source')(item.cssClasses),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),
@@ -73,7 +74,7 @@ export function createMainAreaNodeProps(
         state,
         footprintRankMap,
         footprintCount,
-        Rist.append(childItemId)(itemPath)
+        RArray$.append(childItemId)(itemPath)
       )
     }),
     onMouseDownContentArea(event: MouseEvent) {
@@ -81,14 +82,14 @@ export function createMainAreaNodeProps(
         case '0100MouseButton0':
           const targetItemPath = CurrentState.getTargetItemPath()
           // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
-          if (Rist.shallowEqual(itemPath, targetItemPath)) break
+          if (RArray$.shallowEqual(itemPath, targetItemPath)) break
 
           event.preventDefault()
 
           // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
           const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
-          const targetCandidate = Rist.takeLeft(commonPrefix.length + 1)(itemPath)
-          const anchorCandidate = Rist.takeLeft(commonPrefix.length + 1)(targetItemPath)
+          const targetCandidate = RArray$.takeLeft(commonPrefix.length + 1)(itemPath)
+          const anchorCandidate = RArray$.takeLeft(commonPrefix.length + 1)(targetItemPath)
           if (targetCandidate.length === anchorCandidate.length) {
             CurrentState.setTargetItemPathOnly(targetCandidate)
             CurrentState.setAnchorItemPath(anchorCandidate)
@@ -203,13 +204,13 @@ function countTabsInDescendants(state: State, itemId: ItemId): integer {
 function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
   const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
   const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
-  if (Rist.shallowEqual(targetItemPath, anchorItemPath)) {
+  if (RArray$.shallowEqual(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
-    if (Rist.shallowEqual(itemPath, targetItemPath)) return 'single'
+    if (RArray$.shallowEqual(itemPath, targetItemPath)) return 'single'
     else return 'non'
   }
 
-  if (!Rist.shallowEqual(Rist.pop(itemPath), Rist.pop(targetItemPath))) {
+  if (!RArray$.shallowEqual(RArray$.pop(itemPath), RArray$.pop(targetItemPath))) {
     // 選択されたItemPath群がこのItemPathと異なる子リスト上に存在する場合
     return 'non'
   }

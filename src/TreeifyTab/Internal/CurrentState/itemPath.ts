@@ -4,7 +4,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERist, Option, Rist } from 'src/Utility/fp-ts'
+import { NERArray$, Option, RArray$ } from 'src/Utility/fp-ts'
 
 /** ターゲットItemPathを返す */
 export function getTargetItemPath(): ItemPath {
@@ -42,10 +42,10 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  * 複数選択されていなければターゲットItemPathだけの単一要素リストを返す。
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
-export function getSelectedItemPaths(): NERist.T<ItemPath> {
+export function getSelectedItemPaths(): NERArray$.T<ItemPath> {
   const targetItemPath = CurrentState.getTargetItemPath()
   const anchorItemPath = CurrentState.getAnchorItemPath()
-  if (Rist.shallowEqual(targetItemPath, anchorItemPath)) {
+  if (RArray$.shallowEqual(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
     return [targetItemPath]
   }
@@ -60,13 +60,15 @@ export function getSelectedItemPaths(): NERist.T<ItemPath> {
   const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
   return sliced.map(
     (itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!
-  ) as unknown as NERist.T<ItemPath>
+  ) as unknown as NERArray$.T<ItemPath>
 }
 
 export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {
-  const prefix = Rist.takeLeft(CurrentState.getTargetItemPath().length)(itemPath)
+  const prefix = RArray$.takeLeft(CurrentState.getTargetItemPath().length)(itemPath)
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  return selectedItemPaths.some((selectedItemPath) => Rist.shallowEqual(prefix, selectedItemPath))
+  return selectedItemPaths.some((selectedItemPath) =>
+    RArray$.shallowEqual(prefix, selectedItemPath)
+  )
 }
 
 /**
@@ -111,7 +113,7 @@ export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   // 表示されている項目が存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子項目が該当項目である
-    return Rist.append(firstChildItemId)(itemPath)
+    return RArray$.append(firstChildItemId)(itemPath)
   }
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当する項目を返す
@@ -150,7 +152,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が長男の場合
   if (index === 0) return undefined
 
-  return Rist.append(siblingItemIds[index - 1])(parentItemPath)
+  return RArray$.append(siblingItemIds[index - 1])(parentItemPath)
 }
 
 /**
@@ -168,7 +170,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が末弟の場合
   if (index === siblingItemIds.length - 1) return undefined
 
-  return Rist.append(siblingItemIds[index + 1])(parentItemPath)
+  return RArray$.append(siblingItemIds[index + 1])(parentItemPath)
 }
 
 /**
@@ -189,8 +191,8 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子項目に対して再帰呼び出しすることで、最も下に表示される項目を探索する
-  const last = Option.getOrThrow(Rist.last(childItemIds))
-  return getLowerEndItemPath(Rist.append(last)(itemPath))
+  const last = Option.getOrThrow(RArray$.last(childItemIds))
+  return getLowerEndItemPath(RArray$.append(last)(itemPath))
 }
 
 /**
@@ -228,12 +230,13 @@ export function isValidItemPath(itemPath: ItemPath): boolean {
   if (item === undefined) return false
   if (item.parents[parentItemId] === undefined) return false
 
-  return isValidItemPath(Rist.pop(itemPath))
+  return isValidItemPath(RArray$.pop(itemPath))
 }
 
 /** 2つのItemPathが兄弟かどうか判定する */
 export function isSibling(lhs: ItemPath, rhs: ItemPath): boolean {
-  if (lhs.length !== rhs.length || !Rist.shallowEqual(Rist.pop(lhs), Rist.pop(rhs))) return false
+  if (lhs.length !== rhs.length || !RArray$.shallowEqual(RArray$.pop(lhs), RArray$.pop(rhs)))
+    return false
 
   const parentItemId = ItemPath.getParentItemId(lhs)
   if (parentItemId === undefined) return false

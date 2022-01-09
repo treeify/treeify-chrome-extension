@@ -9,7 +9,7 @@
   import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
-  import { Rist } from 'src/Utility/fp-ts'
+  import { RArray$ } from 'src/Utility/fp-ts'
   import { integer } from 'src/Utility/integer'
 
   let clonedKeyBindings = State.clone(Internal.instance.state.mainAreaKeyBindings)
@@ -53,7 +53,7 @@
 
   function onChange(event: Event, index: integer, inputId: InputId) {
     if (event.target instanceof HTMLSelectElement) {
-      clonedKeyBindings[inputId] = Rist.unsafeUpdateAt(
+      clonedKeyBindings[inputId] = RArray$.unsafeUpdateAt(
         index,
         event.target.value as CommandId,
         clonedKeyBindings[inputId]
@@ -67,12 +67,12 @@
       delete clonedKeyBindings[inputId]
       clonedKeyBindings = clonedKeyBindings
     } else {
-      clonedKeyBindings[inputId] = Rist.unsafeDeleteAt(index, clonedKeyBindings[inputId])
+      clonedKeyBindings[inputId] = RArray$.unsafeDeleteAt(index, clonedKeyBindings[inputId])
     }
   }
 
   function onClickAddCommandButton(index: integer, inputId: InputId) {
-    clonedKeyBindings[inputId] = Rist.unsafeInsertAt<CommandId>(
+    clonedKeyBindings[inputId] = RArray$.unsafeInsertAt<CommandId>(
       index + 1,
       'doNothing',
       clonedKeyBindings[inputId]
@@ -80,7 +80,7 @@
   }
 
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  const commandGroups: Rist.T<{ name: string; commandIds: Rist.T<CommandId> }> = [
+  const commandGroups: RArray$.T<{ name: string; commandIds: RArray$.T<CommandId> }> = [
     {
       name: '基本操作',
       commandIds: [

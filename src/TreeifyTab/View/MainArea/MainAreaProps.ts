@@ -27,7 +27,7 @@ import {
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
-import { NERist, Rist } from 'src/Utility/fp-ts'
+import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
@@ -106,7 +106,7 @@ function onKeyDown(event: KeyboardEvent) {
       return
   }
 
-  const commandIds: Rist.T<CommandId> | undefined =
+  const commandIds: RArray$.T<CommandId> | undefined =
     Internal.instance.state.mainAreaKeyBindings[inputId]
   if (commandIds !== undefined) {
     event.preventDefault()
@@ -321,7 +321,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  */
 function onArrowDown(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const belowItemPath = CurrentState.findBelowItemPath(NERist.last(selectedItemPaths))
+  const belowItemPath = CurrentState.findBelowItemPath(NERArray$.last(selectedItemPaths))
   // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 

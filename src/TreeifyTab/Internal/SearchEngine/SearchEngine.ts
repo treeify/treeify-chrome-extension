@@ -6,7 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { Rist, RSet } from 'src/Utility/fp-ts'
+import { RArray$, RSet } from 'src/Utility/fp-ts'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {
@@ -141,7 +141,7 @@ export class SearchEngine {
   }
 
   /** 指定された項目が持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
-  static getTextTracks(itemId: ItemId, state: State): Rist.T<string> {
+  static getTextTracks(itemId: ItemId, state: State): RArray$.T<string> {
     const itemType = state.items[itemId].type
     switch (itemType) {
       case ItemType.TEXT:

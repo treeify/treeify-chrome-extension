@@ -3,13 +3,13 @@
     PageTreeBulletAndIndentProps,
     PageTreeBulletState,
   } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-  import { Rist } from 'src/Utility/fp-ts/index.js'
+  import { RArray$ } from 'src/Utility/fp-ts/index.js'
 
   export let props: PageTreeBulletAndIndentProps
 </script>
 
 <div
-  class={Rist.prepend('page-tree-bullet-and-indent_root')(props.cssClasses).join(' ')}
+  class={RArray$.prepend('page-tree-bullet-and-indent_root')(props.cssClasses).join(' ')}
   on:mousedown={props.onClick}
 >
   {#if props.bulletState === PageTreeBulletState.UNFOLDED}

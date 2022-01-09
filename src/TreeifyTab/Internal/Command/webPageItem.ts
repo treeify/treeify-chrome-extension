@@ -4,7 +4,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
 export function discardJustOneTab() {
@@ -70,7 +70,7 @@ export function openJustOneTab() {
     if (tabId === undefined) {
       const url = Internal.instance.state.webPageItems[selectedItemId].url
       const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
-      External.instance.urlToItemIdsForTabCreation.set(url, Rist.append(selectedItemId)(itemIds))
+      External.instance.urlToItemIdsForTabCreation.set(url, RArray$.append(selectedItemId)(itemIds))
       chrome.tabs.create({ url, active: false })
     }
   }
@@ -88,7 +88,10 @@ export function openTreeTabs() {
       if (tabId === undefined) {
         const url = Internal.instance.state.webPageItems[subtreeItemId].url
         const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
-        External.instance.urlToItemIdsForTabCreation.set(url, Rist.append(subtreeItemId)(itemIds))
+        External.instance.urlToItemIdsForTabCreation.set(
+          url,
+          RArray$.append(subtreeItemId)(itemIds)
+        )
         chrome.tabs.create({ url, active: false })
       }
     }
@@ -115,7 +118,7 @@ export function browseTab() {
     // 対応するタブがなければ開く
     const url = Internal.instance.state.webPageItems[targetItemId].url
     const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
-    External.instance.urlToItemIdsForTabCreation.set(url, Rist.append(targetItemId)(itemIds))
+    External.instance.urlToItemIdsForTabCreation.set(url, RArray$.append(targetItemId)(itemIds))
     chrome.tabs.create({ url, active: true }, (tab) => {
       chrome.windows.update(tab.windowId, { focused: true })
     })

@@ -1,6 +1,6 @@
-import * as NERist from 'src/Utility/fp-ts/NERist'
+import * as NERArray$ from 'src/Utility/fp-ts/NERArray'
 import * as Option from 'src/Utility/fp-ts/Option'
-import * as Rist from 'src/Utility/fp-ts/Rist'
+import * as RArray$ from 'src/Utility/fp-ts/RArray'
 import * as RSet from 'src/Utility/fp-ts/RSet'
 
-export { Option, Rist, NERist, RSet }
+export { Option, RArray$, NERArray$, RSet }

@@ -5,7 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
@@ -18,7 +18,7 @@ export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
   } else {
     const headline = `${'#'.repeat(level)} ${toSingleLineMarkdownContent(itemPath)}\n`
     const childrenContents = childItemIds.map((childItemId) => {
-      return toMarkdownText(Rist.append(childItemId)(itemPath), level + 1)
+      return toMarkdownText(RArray$.append(childItemId)(itemPath), level + 1)
     })
     // 子リストの末尾に空行を付けて段落化させている。
     // 理由は次のような状況でBとCの切れ目を作るため。
