@@ -6,6 +6,12 @@ export * from 'fp-ts/ReadonlySet'
 
 export type T<A> = ReadonlySet<A>
 
+export const add =
+  <A>(value: A) =>
+  (rset: T<A>): T<A> => {
+    return new Set(rset).add(value)
+  }
+
 export const remove = <A>(value: A) => FpReadonlySet.remove<A>(eqStrict)(value)
 
 export const union = <A>(rset1: T<A>, rset2: T<A>) => FpReadonlySet.union<A>(eqStrict)(rset1, rset2)

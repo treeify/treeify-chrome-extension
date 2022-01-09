@@ -1,4 +1,4 @@
-import { is, List, Set } from 'immutable'
+import { is, List } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
@@ -292,7 +292,10 @@ export namespace State {
       }
 
       // 循環参照が存在しないことの確認
-      assert(!hasCycle(state, TOP_ITEM_ID, Set()), 'トランスクルードによって循環参照が発生している')
+      assert(
+        !hasCycle(state, TOP_ITEM_ID, new Set()),
+        'トランスクルードによって循環参照が発生している'
+      )
 
       for (const pagesKey in state.pages) {
         const pageId = parseInt(pagesKey)
@@ -362,13 +365,13 @@ export namespace State {
 
   // 親子関係のグラフ構造が循環を持っているかどうか判定する。
   // トップページからの深さ優先探索を行う。
-  function hasCycle(state: State, itemId: ItemId, stackLike: Set<ItemId>): boolean {
+  function hasCycle(state: State, itemId: ItemId, stackLike: RSet.T<ItemId>): boolean {
     if (stackLike.has(itemId)) {
       return true
     }
 
     for (const childItemId of state.items[itemId].childItemIds) {
-      if (hasCycle(state, childItemId, stackLike.add(itemId))) {
+      if (hasCycle(state, childItemId, RSet.add(itemId)(stackLike))) {
         return true
       }
     }
