@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { is, Set } from 'immutable'
+  import { Set } from 'immutable'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
@@ -14,8 +14,7 @@
   const itemPaths = parentItemIds
     .flatMap((parentItemId) => [...CurrentState.yieldItemPaths(parentItemId)])
     .map(Rist.append(targetItemId))
-    // TODO: fp-tsならもっと良い書き方にできる気がする
-    .filter((itemPath) => !is(itemPath, targetItemPath))
+    .filter((itemPath) => !Rist.shallowEqual(itemPath, targetItemPath))
   const pagePropses = Set(itemPaths)
     .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
     .toList()

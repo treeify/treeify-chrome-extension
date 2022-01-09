@@ -1,3 +1,4 @@
+import { eqStrict } from 'fp-ts/Eq'
 import * as FpNumber from 'fp-ts/number'
 import * as Ord from 'fp-ts/Ord'
 import * as RA from 'fp-ts/ReadonlyArray'
@@ -123,3 +124,13 @@ export function join<A>(rist: T<A>, delimiter: A): T<A> {
   }
   return result
 }
+
+/**
+ * 全要素を === で比較する。
+ * @example
+ * shallowEquals([1, 2], [1, 2]) === true
+ * shallowEquals([1, [2]], [1, [2]]) === false
+ * shallowEquals([{}], [{}]) === false
+ */
+export const shallowEqual = <A>(rist1: T<A>, rist2: T<A>) =>
+  RA.getEq<A>(eqStrict).equals(rist1, rist2)

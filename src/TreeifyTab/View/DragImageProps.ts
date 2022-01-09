@@ -1,4 +1,3 @@
-import { is } from 'immutable'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -74,7 +73,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
     } else {
       // Roll以外の場所の場合
 
-      if (is(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
+      if (Rist.shallowEqual(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
         // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
         // 下記の2パターンが該当する。
         // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -170,7 +169,9 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     const isPageOrFolded =
       CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
 
-    if (is(Rist.takeLeft(draggedItemPath.length)(rollDroppedItemPath), draggedItemPath)) {
+    if (
+      Rist.shallowEqual(Rist.takeLeft(draggedItemPath.length)(rollDroppedItemPath), draggedItemPath)
+    ) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
       // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -195,7 +196,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   } else {
     // Roll以外の場所へのドロップの場合
 
-    if (is(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
+    if (Rist.shallowEqual(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
       // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）

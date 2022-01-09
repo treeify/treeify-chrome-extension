@@ -1,4 +1,3 @@
-import { is } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -82,7 +81,7 @@ export function createMainAreaNodeProps(
         case '0100MouseButton0':
           const targetItemPath = CurrentState.getTargetItemPath()
           // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
-          if (is(itemPath, targetItemPath)) break
+          if (Rist.shallowEqual(itemPath, targetItemPath)) break
 
           event.preventDefault()
 
@@ -204,13 +203,13 @@ function countTabsInDescendants(state: State, itemId: ItemId): integer {
 function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
   const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
   const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
-  if (is(targetItemPath, anchorItemPath)) {
+  if (Rist.shallowEqual(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
-    if (is(itemPath, targetItemPath)) return 'single'
+    if (Rist.shallowEqual(itemPath, targetItemPath)) return 'single'
     else return 'non'
   }
 
-  if (!is(Rist.pop(itemPath), Rist.pop(targetItemPath))) {
+  if (!Rist.shallowEqual(Rist.pop(itemPath), Rist.pop(targetItemPath))) {
     // 選択されたItemPath群がこのItemPathと異なる子リスト上に存在する場合
     return 'non'
   }

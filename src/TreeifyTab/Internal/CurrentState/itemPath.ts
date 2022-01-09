@@ -1,4 +1,3 @@
-import { is } from 'immutable'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -46,7 +45,7 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
 export function getSelectedItemPaths(): NERist.T<ItemPath> {
   const targetItemPath = CurrentState.getTargetItemPath()
   const anchorItemPath = CurrentState.getAnchorItemPath()
-  if (is(targetItemPath, anchorItemPath)) {
+  if (Rist.shallowEqual(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
     return [targetItemPath]
   }
@@ -67,7 +66,7 @@ export function getSelectedItemPaths(): NERist.T<ItemPath> {
 export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {
   const prefix = Rist.takeLeft(CurrentState.getTargetItemPath().length)(itemPath)
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  return selectedItemPaths.some((selectedItemPath) => is(prefix, selectedItemPath))
+  return selectedItemPaths.some((selectedItemPath) => Rist.shallowEqual(prefix, selectedItemPath))
 }
 
 /**
@@ -234,7 +233,7 @@ export function isValidItemPath(itemPath: ItemPath): boolean {
 
 /** 2つのItemPathが兄弟かどうか判定する */
 export function isSibling(lhs: ItemPath, rhs: ItemPath): boolean {
-  if (lhs.length !== rhs.length || !is(Rist.pop(lhs), Rist.pop(rhs))) return false
+  if (lhs.length !== rhs.length || !Rist.shallowEqual(Rist.pop(lhs), Rist.pop(rhs))) return false
 
   const parentItemId = ItemPath.getParentItemId(lhs)
   if (parentItemId === undefined) return false

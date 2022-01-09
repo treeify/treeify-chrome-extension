@@ -1,4 +1,3 @@
-import { is } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
@@ -290,7 +289,7 @@ export namespace State {
 
         const page = state.pages[pageId]
         assert(
-          is(Rist.pop(page.targetItemPath), Rist.pop(page.anchorItemPath)),
+          Rist.shallowEqual(Rist.pop(page.targetItemPath), Rist.pop(page.anchorItemPath)),
           `pages[${pageId}]のtargetItemPathとanchorItemPathが兄弟でない`
         )
         // TODO: targetItemPath, anchorItemPathがvalidなItemPathであることのチェック
