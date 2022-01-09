@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Set } from 'immutable'
+  import { pipe } from 'fp-ts/function'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
@@ -15,15 +15,18 @@
     .flatMap((parentItemId) => [...CurrentState.yieldItemPaths(parentItemId)])
     .map(RArray$.append(targetItemId))
     .filter((itemPath) => !RArray$.shallowEqual(itemPath, targetItemPath))
-  const pagePropses = Set(itemPaths)
-    .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
-    .toList()
-    .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList().toArray()))
+
+  const pagePropses = pipe(
+    itemPaths,
+    RArray$.groupBy((itemPath: ItemPath) => String(ItemPath.getRootItemId(itemPath))),
+    Object.values,
+    RArray$.map(createOtherParentsDialogPageProps)
+  )
 </script>
 
 <CommonDialog class="other-parents-dialog_root" title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
-    {#each pagePropses.toArray() as pageProps}
+    {#each pagePropses as pageProps}
       <OtherParentsDialogPage props={pageProps} />
     {/each}
   </div>
