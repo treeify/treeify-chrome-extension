@@ -1,4 +1,4 @@
-import { Set } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -27,7 +27,7 @@ export class SearchEngine {
   /** 全文検索を行う */
   search(searchQuery: string): RSet<ItemId> {
     const { positiveSearchWords, negativeSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
-    if (positiveSearchWords.length === 0) return Set.of()
+    if (positiveSearchWords.length === 0) return new Set()
 
     const normalizedNegativeSearchWords = negativeSearchWords.map(UnigramSearchIndex.normalize)
 
@@ -35,17 +35,20 @@ export class SearchEngine {
     const wordHitItemIdSets = positiveSearchWords.map((positiveSearchWord) => {
       const normalizedAndSearchWord = UnigramSearchIndex.normalize(positiveSearchWord)
 
-      return Set(this.unigramSearchIndex.search(positiveSearchWord)).filter((itemId) => {
-        // 除外項目で検索結果をフィルタリングする
-        if (CurrentState.shouldBeHidden(itemId)) return false
+      return pipe(
+        this.unigramSearchIndex.search(positiveSearchWord),
+        RSet$.filter((itemId: ItemId) => {
+          // 除外項目で検索結果をフィルタリングする
+          if (CurrentState.shouldBeHidden(itemId)) return false
 
-        const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
-        return textTracks.some((textTrack) => {
-          // 大文字・小文字を区別せず検索する
-          const normalizedTextTrack = UnigramSearchIndex.normalize(textTrack)
-          return normalizedTextTrack.includes(normalizedAndSearchWord)
+          const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
+          return textTracks.some((textTrack) => {
+            // 大文字・小文字を区別せず検索する
+            const normalizedTextTrack = UnigramSearchIndex.normalize(textTrack)
+            return normalizedTextTrack.includes(normalizedAndSearchWord)
+          })
         })
-      })
+      )
     })
 
     const result: ItemId[] = []
@@ -74,7 +77,7 @@ export class SearchEngine {
 
   // AND検索用のヘルパー関数。
   // 言葉での説明が難しい。
-  private static containedByAll(otherWordsHitItemIdSets: RArray<Set<ItemId>>, itemId: ItemId) {
+  private static containedByAll(otherWordsHitItemIdSets: RArray<RSet<ItemId>>, itemId: ItemId) {
     for (const itemIdSet of otherWordsHitItemIdSets) {
       if (!this.contains(itemIdSet, itemId)) {
         return false
@@ -86,8 +89,8 @@ export class SearchEngine {
 
   // itemIdがitemIdSet内のいずれかに包含されるかどうかを判定する。
   // すなわちitemIdの先祖項目がitemIdSetに含まれるかどうかを判定する。
-  private static contains(itemIdSet: Set<ItemId>, itemId: ItemId): boolean {
-    if (itemIdSet.contains(itemId)) return true
+  private static contains(itemIdSet: RSet<ItemId>, itemId: ItemId): boolean {
+    if (itemIdSet.has(itemId)) return true
 
     return CurrentState.getParentItemIds(itemId).some((parentItemId) =>
       SearchEngine.contains(itemIdSet, parentItemId)
@@ -100,17 +103,20 @@ export class SearchEngine {
    * - AND検索やNOT検索などは行わず、与えられた文字列全体をそのまま検索ワードとして用いる
    * - 大文字・小文字を区別する
    */
-  searchToReplace(searchWord: string): Set<ItemId> {
-    return Set(this.unigramSearchIndex.search(searchWord)).filter((itemId) => {
-      // 除外項目で検索結果をフィルタリングする
-      if (CurrentState.shouldBeHidden(itemId)) return false
+  searchToReplace(searchWord: string): RSet<ItemId> {
+    return pipe(
+      this.unigramSearchIndex.search(searchWord),
+      RSet$.filter((itemId) => {
+        // 除外項目で検索結果をフィルタリングする
+        if (CurrentState.shouldBeHidden(itemId)) return false
 
-      // 出典付き項目は置換対象から外す
-      if (Internal.instance.state.items[itemId].source !== null) return false
+        // 出典付き項目は置換対象から外す
+        if (Internal.instance.state.items[itemId].source !== null) return false
 
-      const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
-      return textTracks.some((textTrack) => textTrack.includes(searchWord))
-    })
+        const textTracks = SearchEngine.getTextTracks(itemId, Internal.instance.state)
+        return textTracks.some((textTrack) => textTrack.includes(searchWord))
+      })
+    )
   }
 
   /**
@@ -122,10 +128,10 @@ export class SearchEngine {
     f()
     const newUnigrams = SearchEngine.appearingUnigrams(itemId, Internal.instance.state)
 
-    for (const unigram of oldUnigrams.subtract(newUnigrams)) {
+    for (const unigram of RSet$.difference(oldUnigrams, newUnigrams)) {
       this.unigramSearchIndex.removeItemId(unigram, itemId)
     }
-    for (const unigram of newUnigrams.subtract(oldUnigrams)) {
+    for (const unigram of RSet$.difference(newUnigrams, oldUnigrams)) {
       this.unigramSearchIndex.addItemId(unigram, itemId)
     }
   }
@@ -163,8 +169,8 @@ export class SearchEngine {
   }
 
   /** 指定された項目のテキストトラックに含まれる文字の集合を返す */
-  static appearingUnigrams(itemId: ItemId, state: State): Set<string> {
-    return Set(this.getTextTracks(itemId, state).join(''))
+  static appearingUnigrams(itemId: ItemId, state: State): RSet<string> {
+    return RSet$.from(this.getTextTracks(itemId, state).join(''))
   }
 
   static parseSearchQuery(searchQuery: string): {
