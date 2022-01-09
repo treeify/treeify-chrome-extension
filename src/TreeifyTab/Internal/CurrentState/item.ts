@@ -9,7 +9,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option, RArray$ } from 'src/Utility/fp-ts'
+import { Option, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -170,7 +170,7 @@ export function updateItemTimestamp(itemId: ItemId) {
 }
 
 /** 指定された項目の親項目IDのリストを返す */
-export function getParentItemIds(itemId: ItemId): RArray$.T<ItemId> {
+export function getParentItemIds(itemId: ItemId): RArray<ItemId> {
   return Object.keys(Internal.instance.state.items[itemId].parents).map((key) => parseInt(key))
 }
 
@@ -192,10 +192,7 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  * @param itemId この項目の子項目リストを修正する
  * @param f 子項目リストを受け取って新しい子項目リストを返す関数
  */
-export function modifyChildItems(
-  itemId: ItemId,
-  f: (itemIds: RArray$.T<ItemId>) => RArray$.T<ItemId>
-) {
+export function modifyChildItems(itemId: ItemId, f: (itemIds: RArray<ItemId>) => RArray<ItemId>) {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   Internal.instance.mutate(f(childItemIds), PropertyPath.of('items', itemId, 'childItemIds'))
 }
@@ -346,7 +343,7 @@ export function recycleItemId(itemId: ItemId) {
 }
 
 /** 指定された項目のCSSクラスリストを上書き設定する */
-export function setCssClasses(itemId: ItemId, cssClasses: RArray$.T<string>) {
+export function setCssClasses(itemId: ItemId, cssClasses: RArray<string>) {
   Internal.instance.mutate(cssClasses, PropertyPath.of('items', itemId, 'cssClasses'))
 }
 

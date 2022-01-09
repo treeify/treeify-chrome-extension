@@ -7,7 +7,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray$, RSet } from 'src/Utility/fp-ts'
+import { RArray, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -192,7 +192,7 @@ export function treeify(
  * @param passThroughPage ページを貫通して探索するかどうか
  */
 function* yieldItemPathsFor(
-  itemIds: RArray$.T<ItemId>,
+  itemIds: RArray<ItemId>,
   itemIdSet: Set<ItemId>,
   passThroughPage: boolean
 ): Generator<ItemPath> {

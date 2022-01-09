@@ -1,7 +1,7 @@
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -64,7 +64,7 @@ export namespace Database {
   }
 
   /** チャンクストア内の全チャンクを読み込む */
-  export async function getAllChunks(): Promise<RArray$.T<Chunk>> {
+  export async function getAllChunks(): Promise<RArray<Chunk>> {
     return new Promise((resolve, reject) => {
       const objectStore = getDatabase().transaction(chunkStoreName).objectStore(chunkStoreName)
       const request = objectStore.getAll()
@@ -108,7 +108,7 @@ export namespace Database {
     })
   }
 
-  export async function writeChunks(chunks: RArray$.T<Chunk>, givenObjectStore?: IDBObjectStore) {
+  export async function writeChunks(chunks: RArray<Chunk>, givenObjectStore?: IDBObjectStore) {
     const objectStore =
       givenObjectStore ??
       getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)

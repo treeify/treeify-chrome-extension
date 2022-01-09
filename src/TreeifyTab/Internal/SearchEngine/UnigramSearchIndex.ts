@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { RArray$, RSet } from 'src/Utility/fp-ts'
+import { RArray, RArray$, RSet } from 'src/Utility/fp-ts'
 
 /**
  * 全文検索用のunigram転置インデックス。
@@ -54,7 +54,7 @@ export class UnigramSearchIndex {
   }
 
   // 積集合を計算する
-  private static intersection(sets: RArray$.T<RSet.T<ItemId>>): RSet.T<ItemId> {
+  private static intersection(sets: RArray<RSet.T<ItemId>>): RSet.T<ItemId> {
     if (sets.length === 0) return new Set<ItemId>()
     if (sets.length === 1) return sets[0]
 

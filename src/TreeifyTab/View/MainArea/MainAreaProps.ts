@@ -27,7 +27,7 @@ import {
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
-import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
+import { NERArray$, RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
@@ -106,7 +106,7 @@ function onKeyDown(event: KeyboardEvent) {
       return
   }
 
-  const commandIds: RArray$.T<CommandId> | undefined =
+  const commandIds: RArray<CommandId> | undefined =
     Internal.instance.state.mainAreaKeyBindings[inputId]
   if (commandIds !== undefined) {
     event.preventDefault()

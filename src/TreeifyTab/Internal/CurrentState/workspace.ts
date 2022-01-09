@@ -5,7 +5,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
-import { NERArray$, Option, RArray$ } from 'src/Utility/fp-ts'
+import { NERArray$, Option, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -34,17 +34,17 @@ export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
 }
 
 /** Stateに登録されている全てのワークスペースIDを返す */
-export function getWorkspaceIds(): RArray$.T<WorkspaceId> {
+export function getWorkspaceIds(): RArray<WorkspaceId> {
   return Object.keys(Internal.instance.state.workspaces).map((key) => parseInt(key))
 }
 
 /** 現在のワークスペースの除外項目リストを返す */
-export function getExcludedItemIds(): RArray$.T<ItemId> {
+export function getExcludedItemIds(): RArray<ItemId> {
   return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
 }
 
 /** 現在のワークスペースの除外項目リストを設定する */
-export function setExcludedItemIds(itemIds: RArray$.T<ItemId>) {
+export function setExcludedItemIds(itemIds: RArray<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.mutate(
     itemIds,

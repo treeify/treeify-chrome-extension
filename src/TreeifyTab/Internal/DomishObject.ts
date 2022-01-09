@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -15,19 +15,19 @@ export namespace DomishObject {
 
   export type BElement = {
     type: 'b'
-    children: RArray$.T<DomishObject>
+    children: RArray<DomishObject>
   }
   export type UElement = {
     type: 'u'
-    children: RArray$.T<DomishObject>
+    children: RArray<DomishObject>
   }
   export type IElement = {
     type: 'i'
-    children: RArray$.T<DomishObject>
+    children: RArray<DomishObject>
   }
   export type StrikeElement = {
     type: 'strike'
-    children: RArray$.T<DomishObject>
+    children: RArray<DomishObject>
   }
 
   export type BRElement = {
@@ -43,7 +43,7 @@ export namespace DomishObject {
   const nbsp = String.fromCharCode(160)
 
   /** DomishObjectをHTML文字列に変換する */
-  export function toHtml(value: DomishObject | RArray$.T<DomishObject>): string {
+  export function toHtml(value: DomishObject | RArray<DomishObject>): string {
     if (value instanceof Array) {
       return value.map(toHtml).join('')
     } else {
@@ -68,7 +68,7 @@ export namespace DomishObject {
   }
 
   /** HTML文字列をDomishObjectに変換する */
-  export function fromHtml(html: string): RArray$.T<DomishObject> {
+  export function fromHtml(html: string): RArray<DomishObject> {
     const templateElement = document.createElement('template')
     templateElement.innerHTML = html
     return DomishObject.fromChildren(templateElement.content)
@@ -78,7 +78,7 @@ export namespace DomishObject {
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
    */
-  export function fromChildren(node: Node): RArray$.T<DomishObject> {
+  export function fromChildren(node: Node): RArray<DomishObject> {
     return pipe(Array.from(node.childNodes), RArray$.map(from), RArray$.filterUndefined)
   }
 
@@ -124,7 +124,7 @@ export namespace DomishObject {
   }
 
   /** 改行（br要素）を含む文字数を返す */
-  export function countCharacters(value: DomishObject | RArray$.T<DomishObject>): integer {
+  export function countCharacters(value: DomishObject | RArray<DomishObject>): integer {
     return toPlainText(value).length
   }
 
@@ -134,12 +134,12 @@ export namespace DomishObject {
    * nbspは半角スペースに変換する。
    * ただし末尾の無駄な（すなわちHTMLへの描画時に改行として扱われない）br要素は除去するので要注意。
    */
-  export function toPlainText(value: DomishObject | RArray$.T<DomishObject>): string {
+  export function toPlainText(value: DomishObject | RArray<DomishObject>): string {
     const plainText = _toPlainText(value)
     return plainText.replace(/\r?\n$/, '')
   }
 
-  function _toPlainText(value: DomishObject | RArray$.T<DomishObject>): string {
+  function _toPlainText(value: DomishObject | RArray<DomishObject>): string {
     if (value instanceof Array) {
       return value.map(_toPlainText).join('')
     } else {
@@ -160,7 +160,7 @@ export namespace DomishObject {
     }
   }
 
-  export function fromPlainText(text: string): RArray$.T<DomishObject> {
+  export function fromPlainText(text: string): RArray<DomishObject> {
     const domishObjectArray: DomishObject[] = []
     const lines = text.split(/\r?\n/)
     for (let i = 0; i < lines.length; i++) {
@@ -178,7 +178,7 @@ export namespace DomishObject {
    * Markdown形式のテキストを生成する。
    * テキスト項目内の改行は空白スペース2つ+改行に変換する。
    */
-  export function toMultiLineMarkdownText(value: DomishObject | RArray$.T<DomishObject>): string {
+  export function toMultiLineMarkdownText(value: DomishObject | RArray<DomishObject>): string {
     if (value instanceof Array) {
       return value.map(toMultiLineMarkdownText).join('')
     } else {
@@ -206,7 +206,7 @@ export namespace DomishObject {
    * Markdown形式のテキストを生成する。
    * テキスト項目内の改行は半角スペース1つに置換する。
    */
-  export function toSingleLineMarkdownText(value: DomishObject | RArray$.T<DomishObject>): string {
+  export function toSingleLineMarkdownText(value: DomishObject | RArray<DomishObject>): string {
     if (value instanceof Array) {
       return value.map(toSingleLineMarkdownText).join('')
     } else {
@@ -234,7 +234,7 @@ export namespace DomishObject {
    * プレーンテキストかどうかを判定する。
    * 改行はプレーンテキストとして扱う。
    */
-  export function isPlainText(domishObjects: RArray$.T<DomishObject>): boolean {
+  export function isPlainText(domishObjects: RArray<DomishObject>): boolean {
     for (const domishObject of domishObjects) {
       switch (domishObject.type) {
         case 'b':
@@ -286,8 +286,8 @@ export namespace DomishObject {
 
   /** 半角スペースまたはnbspをbrに変換する */
   export function convertSpaceToNewline(
-    value: DomishObject | RArray$.T<DomishObject>
-  ): RArray$.T<DomishObject> {
+    value: DomishObject | RArray<DomishObject>
+  ): RArray<DomishObject> {
     if (value instanceof Array) {
       return value.flatMap(convertSpaceToNewline)
     } else {

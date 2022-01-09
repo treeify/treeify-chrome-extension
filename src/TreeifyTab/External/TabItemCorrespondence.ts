@@ -2,7 +2,7 @@ import { BiMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 import Tab = chrome.tabs.Tab
 
 /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのクラス */
@@ -57,12 +57,12 @@ export class TabItemCorrespondence {
     return tabId === undefined || this.getTab(tabId)?.discarded === true
   }
 
-  getAllItemIds(): RArray$.T<ItemId> {
+  getAllItemIds(): RArray<ItemId> {
     return [...this.bimap.values()]
   }
 
   /** 全てのaudibleなタブのIDを返す */
-  getAllAudibleTabIds(): RArray$.T<TabId> {
+  getAllAudibleTabIds(): RArray<TabId> {
     const audibleTabs = Array.from(this.tabIdToTab.values()).filter((tab) => tab.audible === true)
     return audibleTabs.map((tab) => {
       assertNonUndefined(tab.id)
@@ -71,7 +71,7 @@ export class TabItemCorrespondence {
   }
 
   /** 指定されたURLを持つタブを返す */
-  getTabsByUrl(url: string): RArray$.T<Tab> {
+  getTabsByUrl(url: string): RArray<Tab> {
     return [...this.tabIdToTab.values()].filter((tab) => tab.url === url)
   }
 

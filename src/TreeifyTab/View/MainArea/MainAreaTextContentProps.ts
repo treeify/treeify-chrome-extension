@@ -7,11 +7,11 @@ import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { createSourceProps, SourceProps } from 'src/TreeifyTab/View/SourceProps'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 
 export type MainAreaTextContentProps = {
   itemPath: ItemPath
-  domishObjects: RArray$.T<DomishObject>
+  domishObjects: RArray<DomishObject>
   sourceProps: SourceProps | undefined
   onInput(event: Event): void
   onCompositionEnd(event: CompositionEvent): void

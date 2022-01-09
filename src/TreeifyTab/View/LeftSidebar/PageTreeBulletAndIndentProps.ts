@@ -2,11 +2,11 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 
 export type PageTreeBulletAndIndentProps = {
   bulletState: PageTreeBulletState
-  cssClasses: RArray$.T<string>
+  cssClasses: RArray<string>
   onClick(): void
 }
 

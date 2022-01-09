@@ -2,10 +2,10 @@ import { ItemId } from 'src/TreeifyTab/basicType'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 
 export type TextItemContentProps = {
-  domishObjects: RArray$.T<DomishObject>
+  domishObjects: RArray<DomishObject>
   hasSource: boolean
 }
 

@@ -5,14 +5,14 @@ import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 
 export type ContextMenuItemProps = {
   title: string
   onClick(): void
 }
 
-export function createContextMenuItemPropses(): RArray$.T<ContextMenuItemProps> {
+export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
   const subtreeItemIds = selectedItemIds.flatMap((itemId) => [

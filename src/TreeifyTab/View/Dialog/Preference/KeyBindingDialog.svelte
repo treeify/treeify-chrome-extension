@@ -9,7 +9,7 @@
   import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
-  import { RArray$ } from 'src/Utility/fp-ts'
+  import { RArray, RArray$ } from 'src/Utility/fp-ts'
   import { integer } from 'src/Utility/integer'
 
   let clonedKeyBindings = State.clone(Internal.instance.state.mainAreaKeyBindings)
@@ -80,7 +80,7 @@
   }
 
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  const commandGroups: RArray$.T<{ name: string; commandIds: RArray$.T<CommandId> }> = [
+  const commandGroups: RArray<{ name: string; commandIds: RArray<CommandId> }> = [
     {
       name: '基本操作',
       commandIds: [

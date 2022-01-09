@@ -4,19 +4,17 @@ import * as Ord from 'fp-ts/Ord'
 import * as RA from 'fp-ts/ReadonlyArray'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import { assert } from 'src/Utility/Debug/assert'
-import { Option } from 'src/Utility/fp-ts'
+import { Option, RArray } from 'src/Utility/fp-ts'
 import { Arrow } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
 export * from 'fp-ts/ReadonlyArray'
 
-export type T<A> = readonly A[]
-
 /**
  * 先頭の要素を削除する。
  * 空の配列に対しては何もしない。
  */
-export const shift = <A>(rarray: T<A>): T<A> => {
+export const shift = <A>(rarray: RArray<A>): RArray<A> => {
   const cloned = rarray.slice()
   cloned.shift()
   return cloned
@@ -26,7 +24,7 @@ export const shift = <A>(rarray: T<A>): T<A> => {
  * 末尾の要素を削除する。
  * 空の配列に対しては何もしない。
  */
-export const pop = <A>(rarray: T<A>): T<A> => {
+export const pop = <A>(rarray: RArray<A>): RArray<A> => {
   const cloned = rarray.slice()
   cloned.pop()
   return cloned
@@ -37,17 +35,17 @@ export const remove = <A>(value: A) => RA.filter((a: A) => a !== value)
 
 export const removeAt =
   (index: integer) =>
-  <A>(rarray: T<A>): T<A> =>
+  <A>(rarray: RArray<A>): RArray<A> =>
     RA.unsafeDeleteAt(index, rarray)
 
 export const insertAt =
   <A>(index: integer, value: A) =>
-  (rarray: T<A>): T<A> =>
+  (rarray: RArray<A>): RArray<A> =>
     RA.unsafeInsertAt(index, value, rarray)
 
 export const insertAll =
-  <A>(index: integer, newRarray: T<A>) =>
-  (rarray: T<A>): T<A> => {
+  <A>(index: integer, newRarray: RArray<A>) =>
+  (rarray: RArray<A>): RArray<A> => {
     const cloned = rarray.slice()
     cloned.splice(index, 0, ...newRarray)
     return cloned
@@ -55,20 +53,20 @@ export const insertAll =
 
 export const updateAt =
   <A>(index: integer, value: A) =>
-  (rarray: T<A>): T<A> =>
+  (rarray: RArray<A>): RArray<A> =>
     RA.unsafeUpdateAt(index, value, rarray)
 
-export const lastOrThrow = <A>(rarray: T<A>) => {
+export const lastOrThrow = <A>(rarray: RArray<A>) => {
   assert(rarray.length > 0)
   return rarray[rarray.length - 1]
 }
 
-export function max(rarray: T<number>): Option.T<number> {
+export function max(rarray: RArray<number>): Option.T<number> {
   return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
 }
 
-export const filterUndefined = <A>(rarray: T<A | undefined>): T<A> =>
-  RA.filter((element: A | undefined) => element !== undefined)(rarray) as T<A>
+export const filterUndefined = <A>(rarray: RArray<A | undefined>): RArray<A> =>
+  RA.filter((element: A | undefined) => element !== undefined)(rarray) as RArray<A>
 
 /**
  * 配列の要素からnumber値を計算し、その値が最大になる要素を返す。
@@ -76,7 +74,7 @@ export const filterUndefined = <A>(rarray: T<A | undefined>): T<A> =>
  */
 export const maxBy =
   <A>(toNumber: Arrow<A, number>) =>
-  (rarray: T<A>): Option.T<A> => {
+  (rarray: RArray<A>): Option.T<A> => {
     const ord = Ord.contramap(toNumber)(FpNumber.Ord)
     return Option.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rarray))
   }
@@ -84,7 +82,7 @@ export const maxBy =
 /** 配列の要素から計算した値をstring型に変換し、その昇順でソートする */
 export const sortBy =
   <A>(f: Arrow<A, any>) =>
-  (rarray: T<A>): T<A> => {
+  (rarray: RArray<A>): RArray<A> => {
     const cloned = rarray.slice()
     cloned.sort((a, b) => {
       return String(f(a)).localeCompare(String(f(b)))
@@ -101,7 +99,7 @@ export const sortBy =
  */
 export const sortByNumber =
   <A>(toNumber: Arrow<A, number>) =>
-  (rarray: T<A>): T<A> => {
+  (rarray: RArray<A>): RArray<A> => {
     const cloned = rarray.slice()
     cloned.sort((a, b) => {
       return toNumber(a) - toNumber(b)
@@ -109,12 +107,12 @@ export const sortByNumber =
     return cloned
   }
 
-export const from = <A>(iterable: Iterable<A>): T<A> => [...iterable]
+export const from = <A>(iterable: Iterable<A>): RArray<A> => [...iterable]
 
 /**
  * TODO: カリー化する
  */
-export function join<A>(rarray: T<A>, delimiter: A): T<A> {
+export function join<A>(rarray: RArray<A>, delimiter: A): RArray<A> {
   const result: A[] = []
   for (let i = 0; i < rarray.length; i++) {
     result.push(rarray[i])
@@ -132,5 +130,5 @@ export function join<A>(rarray: T<A>, delimiter: A): T<A> {
  * shallowEquals([1, [2]], [1, [2]]) === false
  * shallowEquals([{}], [{}]) === false
  */
-export const shallowEqual = <A>(rarray1: T<A>, rarray2: T<A>) =>
+export const shallowEqual = <A>(rarray1: RArray<A>, rarray2: RArray<A>) =>
   RA.getEq<A>(eqStrict).equals(rarray1, rarray2)

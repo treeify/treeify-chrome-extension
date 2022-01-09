@@ -18,14 +18,14 @@ import {
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
 import { CssCustomProperty, TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERArray$, RArray$, RSet } from 'src/Utility/fp-ts'
+import { NERArray$, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
   itemId: ItemId
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: ItemContentProps
-  childNodePropses: RArray$.T<PageTreeNodeProps>
+  childNodePropses: RArray<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   isAudible: boolean

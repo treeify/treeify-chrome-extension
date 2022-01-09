@@ -18,7 +18,7 @@ import {
   MainAreaRollProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaNodeProps = {
@@ -33,12 +33,12 @@ export type MainAreaNodeProps = {
   selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
   isExcluded: boolean
-  cssClasses: RArray$.T<string>
+  cssClasses: RArray<string>
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
-  childItemPropses: RArray$.T<MainAreaNodeProps>
+  childItemPropses: RArray<MainAreaNodeProps>
   rollProps: MainAreaRollProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenu(event: Event): void

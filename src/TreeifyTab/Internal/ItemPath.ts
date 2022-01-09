@@ -1,9 +1,9 @@
 import { pipe } from 'fp-ts/function'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { assert } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 
-export type ItemPath = RArray$.T<ItemId>
+export type ItemPath = RArray<ItemId>
 
 export namespace ItemPath {
   export function getRootItemId(itemPath: ItemPath): ItemId {

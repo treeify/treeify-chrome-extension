@@ -8,12 +8,12 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type SearchResultItemProps = {
   itemPath: ItemPath
-  children: RArray$.T<SearchResultItemProps>
+  children: RArray<SearchResultItemProps>
   footprintRank: integer | undefined
   footprintCount: integer
   outerCircleRadiusEm: integer
@@ -23,7 +23,7 @@ export type SearchResultItemProps = {
 
 export function createSearchResultItemPropses(
   itemPaths: List<ItemPath>
-): RArray$.T<SearchResultItemProps> {
+): RArray<SearchResultItemProps> {
   const firstItemPath = itemPaths.first(undefined)
   assertNonUndefined(firstItemPath)
   const pageId = ItemPath.getRootItemId(firstItemPath)

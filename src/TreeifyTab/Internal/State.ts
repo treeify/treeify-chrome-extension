@@ -7,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { NERArray$, Option, RArray$, RSet } from 'src/Utility/fp-ts'
+import { NERArray$, Option, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -21,7 +21,7 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, RArray$.T<ReminderSetting>>
+  reminders: Record<ItemId, RArray<ReminderSetting>>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
@@ -29,10 +29,10 @@ export type State = {
    */
   mountedPageIds: NERArray$.T<ItemId>
   /** 削除され再利用される項目ID群 */
-  availableItemIds: RArray$.T<ItemId>
+  availableItemIds: RArray<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyBindings: Record<InputId, RArray$.T<CommandId>>
+  mainAreaKeyBindings: Record<InputId, RArray<CommandId>>
   customCss: string
   preferredLanguages: Record<string, number>
   exportSettings: {
@@ -63,7 +63,7 @@ export type State = {
 export type Item = {
   type: ItemType
   globalItemId: GlobalItemId
-  childItemIds: RArray$.T<ItemId>
+  childItemIds: RArray<ItemId>
   parents: Record<ItemId, Edge>
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
@@ -72,7 +72,7 @@ export type Item = {
    * 付与された項目本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
-  cssClasses: RArray$.T<string>
+  cssClasses: RArray<string>
   source: Source | null
 }
 
@@ -100,7 +100,7 @@ export type Source = {
 
 /** テキスト項目が固有で持つデータの型 */
 export type TextItem = {
-  domishObjects: RArray$.T<DomishObject>
+  domishObjects: RArray<DomishObject>
 }
 
 /** ウェブページ項目が固有で持つデータの型 */
@@ -188,8 +188,8 @@ export type Workspace = {
    * このワークスペースでページツリーや検索結果から除外したい項目群。
    * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
-  excludedItemIds: RArray$.T<ItemId>
-  searchHistory: RArray$.T<string>
+  excludedItemIds: RArray<ItemId>
+  searchHistory: RArray<string>
 }
 
 export type CommandId = keyof typeof commandNames
