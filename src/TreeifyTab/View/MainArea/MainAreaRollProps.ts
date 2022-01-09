@@ -110,7 +110,7 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   if (bulletState !== MainAreaBulletState.FOLDED) return 0
 
   const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
-    return CurrentState.getDisplayingChildItemIds(RArray$.append(childItemId)(itemPath)).size
+    return CurrentState.getDisplayingChildItemIds(RArray$.append(childItemId)(itemPath)).length
   })
   return counts.length + counts.reduce((a: integer, x) => a + x, 0)
 }

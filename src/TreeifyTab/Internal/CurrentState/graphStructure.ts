@@ -33,7 +33,7 @@ export function isVisible(itemPath: ItemPath): boolean {
     )
     const nextItemId = itemPath[i + 1]
     assertNonUndefined(nextItemId)
-    if (!displayingChildItemIds.contains(nextItemId)) {
+    if (!displayingChildItemIds.includes(nextItemId)) {
       return false
     }
   }

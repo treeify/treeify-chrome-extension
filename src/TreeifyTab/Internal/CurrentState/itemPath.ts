@@ -109,7 +109,7 @@ export function findAboveItemPath(itemPath: ItemPath): ItemPath | undefined {
  * 該当項目が存在しない場合はundefinedを返す。
  */
 export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
-  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemPath).first(undefined)
+  const firstChildItemId = CurrentState.getDisplayingChildItemIds(itemPath)[0]
   // 表示されている項目が存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子項目が該当項目である
@@ -183,7 +183,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
  * というツリーではDが該当する。
  */
 export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
-  if (CurrentState.getDisplayingChildItemIds(itemPath).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(itemPath).length === 0) {
     // 子を表示していない場合、この項目こそが最も下の項目である
     return itemPath
   }

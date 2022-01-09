@@ -54,7 +54,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       assertNonUndefined(rollElement)
       const rollRect = rollElement.getBoundingClientRect()
 
-      if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).size > 0) {
+      if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).length > 0) {
         return `
           top: ${rollRect.bottom}px;
           left: ${rollRect.right}px;
@@ -100,7 +100,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       } else {
         // 座標が要素の下の方の場合
 
-        if (CurrentState.getDisplayingChildItemIds(itemPath).size > 0) {
+        if (CurrentState.getDisplayingChildItemIds(itemPath).length > 0) {
           return `
             top: ${rect.bottom}px;
             left: ${rect.left}px;

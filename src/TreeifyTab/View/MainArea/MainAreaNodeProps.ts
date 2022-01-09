@@ -54,7 +54,7 @@ export function createMainAreaNodeProps(
 ): MainAreaNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
-  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath).toArray()
+  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
 
   return {
     itemPath,

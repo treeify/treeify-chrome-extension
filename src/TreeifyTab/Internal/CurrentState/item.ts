@@ -1,6 +1,5 @@
 import { pipe } from 'fp-ts/function'
 import { append, init, last } from 'fp-ts/ReadonlyArray'
-import { List } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -126,19 +125,19 @@ export function isItem(itemId: ItemId): boolean {
 }
 
 /** 与えられた項目がメインエリア上で表示する子項目のリストを返す */
-export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
+export function getDisplayingChildItemIds(itemPath: ItemPath): RArray<ItemId> {
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
 
   // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
   if (itemPath.length === 1) {
-    return List(item.childItemIds)
+    return item.childItemIds
   }
 
   if (CurrentState.getIsFolded(itemPath) || CurrentState.isPage(itemId)) {
-    return List()
+    return []
   } else {
-    return List(item.childItemIds)
+    return item.childItemIds
   }
 }
 
@@ -296,7 +295,7 @@ export function insertNextSiblingItem(
  * 指定されたItemPathが子を表示している場合は最初の子になるよう配置する。
  */
 export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge): ItemPath {
-  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.length === 1) {
+  if (CurrentState.getDisplayingChildItemIds(itemPath).length > 0 || itemPath.length === 1) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
     return RArray$.append(newItemId)(itemPath)
   } else {
