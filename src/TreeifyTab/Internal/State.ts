@@ -7,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { NERArray, Option$, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
+import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -222,7 +222,7 @@ export namespace State {
 
         // 子リストに重複がないことのチェック
         assert(
-          item.childItemIds.length === RSet.from(item.childItemIds).size,
+          item.childItemIds.length === RSet$.from(item.childItemIds).size,
           `items[${itemId}]のchildItemIdsに重複がある`
         )
 
@@ -333,7 +333,7 @@ export namespace State {
         )
       }
       assert(
-        RSet.from(state.mountedPageIds).size === state.mountedPageIds.length,
+        RSet$.from(state.mountedPageIds).size === state.mountedPageIds.length,
         `mountedPageIdsに重複がある`
       )
       assert(state.mountedPageIds.length === 0, `mountedPageIdsが空である`)
@@ -349,13 +349,13 @@ export namespace State {
 
   // 親子関係のグラフ構造が循環を持っているかどうか判定する。
   // トップページからの深さ優先探索を行う。
-  function hasCycle(state: State, itemId: ItemId, stackLike: RSet.T<ItemId>): boolean {
+  function hasCycle(state: State, itemId: ItemId, stackLike: RSet<ItemId>): boolean {
     if (stackLike.has(itemId)) {
       return true
     }
 
     for (const childItemId of state.items[itemId].childItemIds) {
-      if (hasCycle(state, childItemId, RSet.add(itemId)(stackLike))) {
+      if (hasCycle(state, childItemId, RSet$.add(itemId)(stackLike))) {
         return true
       }
     }

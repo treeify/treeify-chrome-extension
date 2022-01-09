@@ -4,27 +4,28 @@ import { Arrow } from 'src/Utility/function'
 
 export * from 'fp-ts/ReadonlySet'
 
-export type T<A> = ReadonlySet<A>
+type RSet<A> = ReadonlySet<A>
 
 export const add =
   <A>(value: A) =>
-  (rset: T<A>): T<A> => {
+  (rset: RSet<A>): RSet<A> => {
     return new Set(rset).add(value)
   }
 
 export const remove = <A>(value: A) => FpReadonlySet.remove<A>(eqStrict)(value)
 
-export const union = <A>(rset1: T<A>, rset2: T<A>) => FpReadonlySet.union<A>(eqStrict)(rset1, rset2)
-export const intersection = <A>(rset1: T<A>, rset2: T<A>) =>
+export const union = <A>(rset1: RSet<A>, rset2: RSet<A>) =>
+  FpReadonlySet.union<A>(eqStrict)(rset1, rset2)
+export const intersection = <A>(rset1: RSet<A>, rset2: RSet<A>) =>
   FpReadonlySet.intersection<A>(eqStrict)(rset1, rset2)
-export const difference = <A>(rset1: T<A>, rset2: T<A>) =>
+export const difference = <A>(rset1: RSet<A>, rset2: RSet<A>) =>
   FpReadonlySet.difference<A>(eqStrict)(rset1, rset2)
 
 export const map = <A, B>(f: Arrow<A, B>) => FpReadonlySet.map<B>(eqStrict)(f)
 
 export const flatMap =
-  <A, B>(f: Arrow<A, T<B>>) =>
-  (rset: T<A>): T<B> => {
+  <A, B>(f: Arrow<A, RSet<B>>) =>
+  (rset: RSet<A>): RSet<B> => {
     const result = new Set<B>()
     for (const a of rset) {
       for (const b of f(a)) {
@@ -42,5 +43,5 @@ export const from = <A>(iterable: Iterable<A>) => {
   }
 }
 
-export const filterUndefined = <A>(rset: T<A | undefined>): T<A> =>
-  FpReadonlySet.filter((element: A | undefined) => element !== undefined)(rset) as T<A>
+export const filterUndefined = <A>(rset: RSet<A | undefined>): RSet<A> =>
+  FpReadonlySet.filter((element: A | undefined) => element !== undefined)(rset) as RSet<A>

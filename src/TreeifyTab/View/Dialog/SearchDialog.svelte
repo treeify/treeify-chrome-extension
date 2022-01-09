@@ -13,15 +13,15 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
-  import { RArray$, RSet } from 'src/Utility/fp-ts'
+  import { RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
   type SearchResult = { pages: List<List<ItemPath>>; counts: MultiSet<ItemType> }
 
   let searchQueryValue = ''
-  let hitItemIds: RSet.T<ItemId> | undefined
+  let hitItemIds: RSet<ItemId> | undefined
   let itemTypes: ItemType[] = Object.values(ItemType) as any
   let searchResult: SearchResult | undefined
-  $: searchResult = makeSearchResult(hitItemIds, RSet.from(itemTypes))
+  $: searchResult = makeSearchResult(hitItemIds, RSet$.from(itemTypes))
 
   const workspaceId = CurrentState.getCurrentWorkspaceId()
   const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
@@ -91,19 +91,19 @@
   }
 
   function makeSearchResult(
-    hitItemIds: RSet.T<ItemId> | undefined,
-    itemTypes: RSet.T<ItemType>
+    hitItemIds: RSet<ItemId> | undefined,
+    itemTypes: RSet<ItemType>
   ): SearchResult | undefined {
     if (hitItemIds === undefined) return undefined
 
-    const filteredItemIds = RSet.filter((itemId: ItemId) =>
+    const filteredItemIds = RSet$.filter((itemId: ItemId) =>
       itemTypes.has(Internal.instance.state.items[itemId].type)
     )(hitItemIds)
 
     // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
     const allItemPaths = pipe(
       filteredItemIds,
-      RSet.flatMap((itemId: ItemId) => RSet.from(CurrentState.yieldItemPaths(itemId)))
+      RSet$.flatMap((itemId: ItemId) => RSet$.from(CurrentState.yieldItemPaths(itemId)))
     )
 
     const pages = Set(allItemPaths)

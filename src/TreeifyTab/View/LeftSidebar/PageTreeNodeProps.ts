@@ -18,7 +18,7 @@ import {
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
 import { CssCustomProperty, TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERArray$, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
+import { NERArray$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
@@ -122,15 +122,15 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   })
 }
 
-function getAudiblePageIds(): RSet.T<ItemId> {
+function getAudiblePageIds(): RSet<ItemId> {
   const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
   const audibleItemIds = pipe(
     audibleTabIds,
     RArray$.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId)),
     RArray$.filterUndefined,
-    RSet.from
+    RSet$.from
   )
-  return RSet.flatMap(CurrentState.getPageIdsBelongingTo)(audibleItemIds)
+  return RSet$.flatMap(CurrentState.getPageIdsBelongingTo)(audibleItemIds)
 }
 
 function unmountPage(itemId: number, activePageId: number) {

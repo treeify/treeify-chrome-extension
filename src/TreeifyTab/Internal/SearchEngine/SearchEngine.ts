@@ -6,7 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { RArray, RSet } from 'src/Utility/fp-ts'
+import { RArray, RSet, RSet$ } from 'src/Utility/fp-ts'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {
@@ -25,7 +25,7 @@ export class SearchEngine {
   }
 
   /** 全文検索を行う */
-  search(searchQuery: string): RSet.T<ItemId> {
+  search(searchQuery: string): RSet<ItemId> {
     const { positiveSearchWords, negativeSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
     if (positiveSearchWords.isEmpty()) return Set.of()
 
@@ -69,7 +69,7 @@ export class SearchEngine {
         }
       }
     }
-    return RSet.from(result)
+    return RSet$.from(result)
   }
 
   // AND検索用のヘルパー関数。

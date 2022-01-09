@@ -12,7 +12,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import Root from 'src/TreeifyTab/View/Root.svelte'
 import { assertNonNull } from 'src/Utility/Debug/assert'
-import { RSet } from 'src/Utility/fp-ts'
+import { RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { tick } from 'svelte'
 import { Readable, writable } from 'svelte/store'
@@ -59,8 +59,8 @@ export class Rerenderer {
     // IndexedDBを更新
     const chunks = pipe(
       this.mutatedPropertyPaths,
-      RSet.map(Chunk.convertToChunkId),
-      RSet.map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
+      RSet$.map(Chunk.convertToChunkId),
+      RSet$.map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
     )
     Database.writeChunks(Array.from(chunks))
     this.mutatedPropertyPaths.clear()

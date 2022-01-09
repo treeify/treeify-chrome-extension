@@ -7,7 +7,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray, RArray$, RSet } from 'src/Utility/fp-ts'
+import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -63,10 +63,10 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
  * 指定された項目が所属するページIDの集合を返す。
  * 自身がページの場合は自身のみを返す。
  */
-export function getPageIdsBelongingTo(itemId: ItemId): RSet.T<ItemId> {
+export function getPageIdsBelongingTo(itemId: ItemId): RSet<ItemId> {
   return pipe(
-    RSet.from(yieldItemPaths(itemId)),
-    RSet.map((itemPath) => ItemPath.getRootItemId(itemPath))
+    RSet$.from(yieldItemPaths(itemId)),
+    RSet$.map((itemPath) => ItemPath.getRootItemId(itemPath))
   )
 }
 
@@ -112,9 +112,9 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
  */
 export function countTabsInSubtree(state: State, itemId: ItemId): integer {
   return pipe(
-    RSet.from(CurrentState.yieldSubtreeItemIdsShallowly(itemId)),
-    RSet.map((itemId: ItemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId)),
-    RSet.filterUndefined
+    RSet$.from(CurrentState.yieldSubtreeItemIdsShallowly(itemId)),
+    RSet$.map((itemId: ItemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId)),
+    RSet$.filterUndefined
   ).size
 }
 
