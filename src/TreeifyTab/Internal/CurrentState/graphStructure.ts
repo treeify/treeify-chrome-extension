@@ -1,4 +1,5 @@
 import { pipe } from 'fp-ts/function'
+import { Ord as NumberOrd } from 'fp-ts/number'
 import { List, Seq, Set } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -125,41 +126,20 @@ export function countTabsInSubtree(state: State, itemId: ItemId): integer {
  * 全てのItemPathのルート項目が同じでなければ正しく計算できない。
  */
 export function sortByDocumentOrder(itemPaths: List<ItemPath>): List<ItemPath> {
+  const lexicographicalOrder = RArray$.getOrd(NumberOrd).compare
   return itemPaths.sortBy((itemPath) => {
     return toSiblingRankList(itemPath)
   }, lexicographicalOrder)
 }
 
 // ItemPathを兄弟順位リストに変換する
-function toSiblingRankList(itemPath: ItemPath): List<integer> {
+function toSiblingRankList(itemPath: ItemPath): RArray<integer> {
   const siblingRankArray = []
   for (let i = 1; i < itemPath.length; i++) {
     const childItemIds = Internal.instance.state.items[itemPath[i - 1]].childItemIds
     siblingRankArray.push(childItemIds.indexOf(itemPath[i]))
   }
-  return List(siblingRankArray)
-}
-
-// 辞書式順序のcomparator
-function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
-  const min = Math.min(lhs.size, rhs.size)
-
-  for (let i = 0; i < min; i++) {
-    const r = rhs.get(i)!
-    const l = lhs.get(i)!
-    if (l > r) {
-      return 1
-    } else if (l < r) {
-      return -1
-    }
-  }
-  if (lhs.size === rhs.size) {
-    return 0
-  } else if (lhs.size > rhs.size) {
-    return 1
-  } else {
-    return -1
-  }
+  return siblingRankArray
 }
 
 /**
