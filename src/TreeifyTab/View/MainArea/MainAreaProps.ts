@@ -37,7 +37,7 @@ export type MainAreaProps = {
 }
 
 export function createMainAreaProps(state: State): MainAreaProps {
-  const rootItemPath = List.of(CurrentState.getActivePageId())
+  const rootItemPath = [CurrentState.getActivePageId()]
 
   const allDisplayingItemIds = [...CurrentState.getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算

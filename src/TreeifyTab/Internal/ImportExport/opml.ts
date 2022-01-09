@@ -23,7 +23,7 @@ function toOpmlOutlineElement(
     ? Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
     : CurrentState.getDisplayingChildItemIds(itemPath)
   const children = childItemIds.map((childItemId) =>
-    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument, includeInvisibleItems)
+    toOpmlOutlineElement(Rist.append(childItemId)(itemPath), xmlDocument, includeInvisibleItems)
   )
   outlineElement.append(...children)
 

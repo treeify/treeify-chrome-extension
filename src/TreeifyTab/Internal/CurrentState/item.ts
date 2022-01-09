@@ -131,7 +131,7 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   const item = Internal.instance.state.items[itemId]
 
   // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
-  if (itemPath.size === 1) {
+  if (itemPath.length === 1) {
     return List(item.childItemIds)
   }
 
@@ -296,9 +296,9 @@ export function insertNextSiblingItem(
  * 指定されたItemPathが子を表示している場合は最初の子になるよう配置する。
  */
 export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge): ItemPath {
-  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.size === 1) {
+  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.length === 1) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
-    return itemPath.push(newItemId)
+    return Rist.append(newItemId)(itemPath)
   } else {
     return insertNextSiblingItem(itemPath, newItemId, edge)
   }

@@ -2,6 +2,7 @@ import * as FpNumber from 'fp-ts/number'
 import * as Ord from 'fp-ts/Ord'
 import * as RA from 'fp-ts/ReadonlyArray'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
+import { assert } from 'src/Utility/Debug/assert'
 import { Option } from 'src/Utility/fp-ts'
 import { Arrow } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
@@ -17,6 +18,16 @@ export type T<A> = readonly A[]
 export const shift = <A>(rist: T<A>): T<A> => {
   const cloned = rist.slice()
   cloned.shift()
+  return cloned
+}
+
+/**
+ * 末尾の要素を削除する。
+ * 空の配列に対しては何もしない。
+ */
+export const pop = <A>(rist: T<A>): T<A> => {
+  const cloned = rist.slice()
+  cloned.pop()
   return cloned
 }
 
@@ -40,6 +51,16 @@ export const insertAll =
     cloned.splice(index, 0, ...newRist)
     return cloned
   }
+
+export const updateAt =
+  <A>(index: integer, value: A) =>
+  (rist: T<A>): T<A> =>
+    RA.unsafeUpdateAt(index, value, rist)
+
+export const lastOrThrow = <A>(rist: T<A>) => {
+  assert(rist.length > 0)
+  return rist[rist.length - 1]
+}
 
 export function max(rist: T<number>): Option.T<number> {
   return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rist))

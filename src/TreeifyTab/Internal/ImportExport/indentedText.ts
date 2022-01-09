@@ -59,7 +59,7 @@ function* yieldIndentedLines(
     ? state.items[itemId].childItemIds
     : CurrentState.getDisplayingChildItemIds(itemPath)
   for (const childItemId of childItemIds) {
-    const childItemPath = itemPath.push(childItemId)
+    const childItemPath = Rist.append(childItemId)(itemPath)
     yield* yieldIndentedLines(childItemPath, indentUnit, depth + 1)
   }
 }

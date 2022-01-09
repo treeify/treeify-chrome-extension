@@ -290,7 +290,7 @@ export namespace State {
 
         const page = state.pages[pageId]
         assert(
-          is(page.targetItemPath.pop(), page.anchorItemPath.pop()),
+          is(Rist.pop(page.targetItemPath), Rist.pop(page.anchorItemPath)),
           `pages[${pageId}]のtargetItemPathとanchorItemPathが兄弟でない`
         )
         // TODO: targetItemPath, anchorItemPathがvalidなItemPathであることのチェック

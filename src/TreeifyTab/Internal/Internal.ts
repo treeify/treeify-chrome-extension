@@ -160,8 +160,8 @@ export class Internal {
       texItems: {},
       pages: {
         0: {
-          targetItemPath: List.of(0),
-          anchorItemPath: List.of(0),
+          targetItemPath: [0],
+          anchorItemPath: [0],
         },
       },
       reminders: {},

@@ -92,7 +92,7 @@ export function onCreated(tab: Tab) {
 
         // フォーカスを移す
         if (tab.active) {
-          const newItemPath = targetItemPath.push(newWebPageItemId)
+          const newItemPath = Rist.append(newWebPageItemId)(targetItemPath)
           CurrentState.setTargetItemPath(newItemPath)
           Rerenderer.instance.requestToFocusTargetItem()
         }

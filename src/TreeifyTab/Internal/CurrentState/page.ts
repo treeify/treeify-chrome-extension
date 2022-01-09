@@ -1,5 +1,4 @@
 import { pipe } from 'fp-ts/function'
-import { List } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -71,8 +70,8 @@ export function turnIntoPage(itemId: ItemId) {
   if (isPage(itemId)) return
 
   const page: Page = {
-    targetItemPath: List.of(itemId),
-    anchorItemPath: List.of(itemId),
+    targetItemPath: [itemId],
+    anchorItemPath: [itemId],
   }
   Internal.instance.mutate(page, PropertyPath.of('pages', itemId))
 }

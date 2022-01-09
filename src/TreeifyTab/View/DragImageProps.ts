@@ -1,4 +1,4 @@
-import { is, List } from 'immutable'
+import { is } from 'immutable'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -39,7 +39,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
     const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
     if (itemElement === undefined) return ''
 
-    const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
+    const itemPath: ItemPath = JSON.parse(itemElement.dataset.itemPath!)
 
     const rect = itemElement.getBoundingClientRect()
     if (event.clientX < rect.x) {
@@ -74,7 +74,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
     } else {
       // Roll以外の場所の場合
 
-      if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+      if (is(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
         // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
         // 下記の2パターンが該当する。
         // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -155,7 +155,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
   if (itemElement === undefined) return
 
-  const itemPath: ItemPath = List(JSON.parse(itemElement.dataset.itemPath!))
+  const itemPath: ItemPath = JSON.parse(itemElement.dataset.itemPath!)
 
   const rect = itemElement.getBoundingClientRect()
   if (event.clientX < rect.x) {
@@ -170,7 +170,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     const isPageOrFolded =
       CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
 
-    if (is(rollDroppedItemPath.take(draggedItemPath.size), draggedItemPath)) {
+    if (is(Rist.takeLeft(draggedItemPath.length)(rollDroppedItemPath), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
       // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -187,7 +187,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       CurrentState.setTargetItemPath(rollDroppedItemPath)
     } else {
       CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
-      CurrentState.setTargetItemPath(rollDroppedItemPath.push(draggedItemId))
+      CurrentState.setTargetItemPath(Rist.append(draggedItemId)(rollDroppedItemPath))
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
@@ -195,7 +195,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
   } else {
     // Roll以外の場所へのドロップの場合
 
-    if (is(itemPath.take(draggedItemPath.size), draggedItemPath)) {
+    if (is(Rist.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
       // 下記の2パターンが該当する。
       // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
@@ -254,7 +254,7 @@ function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined
 
 // ItemPathの親を辿り、指定されたX座標にRollを表示しているItemPathを探索する
 function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath | undefined {
-  if (itemPath.isEmpty()) return undefined
+  if (itemPath.length === 0) return undefined
 
   const element = document.getElementById(JSON.stringify(itemPath))
   if (element === null) return undefined
@@ -263,7 +263,7 @@ function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath | 
     return itemPath
   }
 
-  return searchElementByXCoordinate(itemPath.pop(), x)
+  return searchElementByXCoordinate(Rist.pop(itemPath), x)
 }
 
 function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
@@ -292,7 +292,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
     draggedItemId
   )
   CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
-  const newTargetItemPath = List.of(itemId, draggedItemId)
+  const newTargetItemPath = [itemId, draggedItemId]
   Internal.instance.mutate(newTargetItemPath, PropertyPath.of('pages', itemId, 'targetItemPath'))
   Internal.instance.mutate(newTargetItemPath, PropertyPath.of('pages', itemId, 'anchorItemPath'))
 

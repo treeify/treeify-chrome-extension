@@ -74,7 +74,7 @@ export function createMainAreaNodeProps(
         state,
         footprintRankMap,
         footprintCount,
-        itemPath.push(childItemId)
+        Rist.append(childItemId)(itemPath)
       )
     }),
     onMouseDownContentArea(event: MouseEvent) {
@@ -88,9 +88,9 @@ export function createMainAreaNodeProps(
 
           // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
           const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
-          const targetCandidate = itemPath.take(commonPrefix.size + 1)
-          const anchorCandidate = targetItemPath.take(commonPrefix.size + 1)
-          if (targetCandidate.size === anchorCandidate.size) {
+          const targetCandidate = Rist.takeLeft(commonPrefix.length + 1)(itemPath)
+          const anchorCandidate = Rist.takeLeft(commonPrefix.length + 1)(targetItemPath)
+          if (targetCandidate.length === anchorCandidate.length) {
             CurrentState.setTargetItemPathOnly(targetCandidate)
             CurrentState.setAnchorItemPath(anchorCandidate)
             Rerenderer.instance.requestToFocusTargetItem()
@@ -210,7 +210,7 @@ function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 
     else return 'non'
   }
 
-  if (!is(itemPath.pop(), targetItemPath.pop())) {
+  if (!is(Rist.pop(itemPath), Rist.pop(targetItemPath))) {
     // 選択されたItemPath群がこのItemPathと異なる子リスト上に存在する場合
     return 'non'
   }

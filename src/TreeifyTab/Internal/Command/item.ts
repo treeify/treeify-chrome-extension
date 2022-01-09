@@ -9,7 +9,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Source } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERist } from 'src/Utility/fp-ts'
+import { NERist, Rist } from 'src/Utility/fp-ts'
 
 /** 選択された項目を折りたたむコマンド */
 export function fold() {
@@ -71,7 +71,7 @@ export function enterKeyDefault() {
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      CurrentState.setTargetItemPath(Rist.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
       return
     }
@@ -144,7 +144,7 @@ export function enterKeyDefault() {
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
-      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      CurrentState.setTargetItemPath(Rist.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
       return
     }

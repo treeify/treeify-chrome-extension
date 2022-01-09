@@ -26,6 +26,7 @@ import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
@@ -186,7 +187,7 @@ function onClickContextMenu(info: OnClickData) {
 
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
-      const newItemPath = targetItemPath.push(newItemId)
+      const newItemPath = Rist.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
       CurrentState.moses(newItemPath)
     }
@@ -202,7 +203,7 @@ function onClickContextMenu(info: OnClickData) {
 
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
-      const newItemPath = targetItemPath.push(newItemId)
+      const newItemPath = Rist.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
       CurrentState.moses(newItemPath)
     }

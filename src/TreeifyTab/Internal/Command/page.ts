@@ -9,7 +9,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 export function togglePaged() {
   const targetItemPath = CurrentState.getTargetItemPath()
   // アクティブページに対しては何もしない
-  if (targetItemPath.size === 1) return
+  if (targetItemPath.length === 1) return
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -41,7 +41,7 @@ export function turnIntoPage() {
 export function turnIntoNonPage() {
   const targetItemPath = CurrentState.getTargetItemPath()
   // アクティブページに対しては何もしない
-  if (targetItemPath.size === 1) return
+  if (targetItemPath.length === 1) return
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
 

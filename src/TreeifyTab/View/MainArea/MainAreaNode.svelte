@@ -20,7 +20,7 @@
   `
 
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
-  $: depth = props.itemPath.size - 1
+  $: depth = props.itemPath.length - 1
 </script>
 
 <div
@@ -50,7 +50,7 @@
     >
       <!-- コンテンツ領域 -->
       <div
-        data-item-path={JSON.stringify(props.itemPath.toArray())}
+        data-item-path={JSON.stringify(props.itemPath)}
         class="main-area-node_content-area"
         class:single-selected={props.selected === 'single'}
         on:mousedown={props.onMouseDownContentArea}

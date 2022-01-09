@@ -18,15 +18,19 @@ import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
   yield ItemPath.getItemId(itemPath)
   for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
-    yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
+    yield* getAllDisplayingItemIds(state, Rist.append(childItemId)(itemPath))
   }
 }
 
 /** 与えられたItemPathがメインエリア上で表示されるべきものかどうかを判定する */
 export function isVisible(itemPath: ItemPath): boolean {
-  for (let i = 1; i < itemPath.size - 1; i++) {
-    const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath.take(i))
-    const nextItemId = itemPath.get(i + 1)
+  for (let i = 1; i < itemPath.length - 1; i++) {
+    const displayingChildItemIds = pipe(
+      itemPath,
+      Rist.takeLeft(i),
+      CurrentState.getDisplayingChildItemIds
+    )
+    const nextItemId = itemPath[i + 1]
     assertNonUndefined(nextItemId)
     if (!displayingChildItemIds.contains(nextItemId)) {
       return false
@@ -40,7 +44,7 @@ export function isVisible(itemPath: ItemPath): boolean {
  * 自身がページの場合は自身のItemPathを返す。
  */
 export function yieldItemPaths(itemId: ItemId): Generator<ItemPath> {
-  return _yieldItemPaths(List.of(itemId))
+  return _yieldItemPaths([itemId])
 }
 
 function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
@@ -51,7 +55,7 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
   }
 
   for (const parentItemId of CurrentState.getParentItemIds(rootItemId)) {
-    yield* _yieldItemPaths(itemPath.unshift(parentItemId))
+    yield* _yieldItemPaths(Rist.prepend(parentItemId)(itemPath))
   }
 }
 
@@ -124,9 +128,9 @@ export function sortByDocumentOrder(itemPaths: List<ItemPath>): List<ItemPath> {
 // ItemPathを兄弟順位リストに変換する
 function toSiblingRankList(itemPath: ItemPath): List<integer> {
   const siblingRankArray = []
-  for (let i = 1; i < itemPath.size; i++) {
-    const childItemIds = Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds
-    siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
+  for (let i = 1; i < itemPath.length; i++) {
+    const childItemIds = Internal.instance.state.items[itemPath[i - 1]].childItemIds
+    siblingRankArray.push(childItemIds.indexOf(itemPath[i]))
   }
   return List(siblingRankArray)
 }
@@ -174,7 +178,7 @@ export function treeify(
       })
     })
 
-  return _treeify(childrenMap, List.of(rootItemId))
+  return _treeify(childrenMap, [rootItemId])
 }
 
 /**
@@ -193,7 +197,7 @@ function* yieldItemPathsFor(
   assertNonUndefined(itemId)
 
   if (itemIds.length > 1 && itemIdSet.contains(itemId)) {
-    yield List(itemIds)
+    yield itemIds
     return
   }
 
@@ -214,6 +218,6 @@ function _treeify(
   const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List()
   return new MutableOrderedTree(
     itemPath,
-    children.map((child) => _treeify(childrenMap, itemPath.concat(child.shift()))).toArray()
+    children.map((child) => _treeify(childrenMap, itemPath.concat(Rist.shift(child)))).toArray()
   )
 }

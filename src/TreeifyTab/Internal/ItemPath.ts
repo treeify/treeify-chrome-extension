@@ -1,28 +1,29 @@
-import { List } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { assert } from 'src/Utility/Debug/assert'
+import { Rist } from 'src/Utility/fp-ts'
 
-export type ItemPath = List<ItemId>
+export type ItemPath = Rist.T<ItemId>
 
 export namespace ItemPath {
   export function getRootItemId(itemPath: ItemPath): ItemId {
-    assert(!itemPath.isEmpty())
-    return itemPath.first()
+    assert(itemPath.length > 0)
+    return itemPath[0]
   }
 
   /** パスの終点項目のIDを返す */
   export function getItemId(itemPath: ItemPath): ItemId {
-    assert(!itemPath.isEmpty())
-    return itemPath.last()
+    assert(itemPath.length > 0)
+    return Rist.lastOrThrow(itemPath)
   }
 
   /** パスの終点より1つ前の項目のIDを返す */
   export function getParentItemId(itemPath: ItemPath): ItemId | undefined {
-    return itemPath.get(-2)
+    return itemPath[itemPath.length - 2]
   }
 
   export function hasParent(itemPath: ItemPath): boolean {
-    return itemPath.size >= 2
+    return itemPath.length >= 2
   }
 
   /**
@@ -31,7 +32,7 @@ export namespace ItemPath {
    */
   export function getParent(itemPath: ItemPath): ItemPath | undefined {
     if (hasParent(itemPath)) {
-      return itemPath.pop()
+      return Rist.pop(itemPath)
     } else {
       return undefined
     }
@@ -44,7 +45,7 @@ export namespace ItemPath {
   ): ItemPath | undefined {
     if (!hasParent(itemPath)) return undefined
 
-    return itemPath.set(-1, siblingItemId)
+    return Rist.updateAt(itemPath.length - 1, siblingItemId)(itemPath)
   }
 
   /**
@@ -52,11 +53,11 @@ export namespace ItemPath {
    * 空リストを返す可能性もあるので注意。
    */
   export function getCommonPrefix(lhs: ItemPath, rhs: ItemPath): ItemPath {
-    const first1 = lhs.first(undefined)
-    const first2 = rhs.first(undefined)
-    if (first1 === undefined || first2 === undefined) return List()
-    if (first1 !== first2) return List()
+    const first1 = lhs[0]
+    const first2 = rhs[0]
+    if (first1 === undefined || first2 === undefined) return []
+    if (first1 !== first2) return []
 
-    return getCommonPrefix(lhs.shift(), rhs.shift()).unshift(first1)
+    return pipe(getCommonPrefix(Rist.shift(lhs), Rist.shift(rhs)), Rist.prepend(first1))
   }
 }

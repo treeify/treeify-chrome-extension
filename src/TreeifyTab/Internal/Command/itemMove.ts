@@ -37,16 +37,16 @@ export function indent() {
   if (selectedItemPaths.length === 1) {
     // ターゲット項目を移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
+    CurrentState.setTargetItemPath(Rist.append(targetItemId)(prevSiblingItemPath))
 
     // キャレット位置、テキスト選択範囲を維持する
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
+    CurrentState.setTargetItemPathOnly(Rist.append(targetItemId)(prevSiblingItemPath))
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
-    CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
+    CurrentState.setAnchorItemPath(Rist.append(anchorItemId)(prevSiblingItemPath))
     Rerenderer.instance.requestToFocusTargetItem()
   }
 }
@@ -188,11 +188,11 @@ export function moveItemToBelow() {
     // 1つ下の項目が子を表示している場合
 
     // ターゲットItemPathを更新
-    const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
+    const newTargetItemPath = Rist.append(targetItemId)(firstFollowingItemPath)
     CurrentState.setTargetItemPathOnly(newTargetItemPath)
     // アンカーItemPathを更新
-    const newAnchorItemPath = firstFollowingItemPath.push(
-      ItemPath.getItemId(CurrentState.getAnchorItemPath())
+    const newAnchorItemPath = Rist.append(ItemPath.getItemId(CurrentState.getAnchorItemPath()))(
+      firstFollowingItemPath
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
@@ -248,9 +248,9 @@ export function moveItemToPrevSibling() {
 
           // focusItemPathとanchorItemPathを更新
           const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-          CurrentState.setTargetItemPathOnly(knightItemPath.push(targetItemId))
+          CurrentState.setTargetItemPathOnly(Rist.append(targetItemId)(knightItemPath))
           const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
-          CurrentState.setAnchorItemPath(knightItemPath.push(anchorItemId))
+          CurrentState.setAnchorItemPath(Rist.append(anchorItemId)(knightItemPath))
 
           // キャレット位置、テキスト選択範囲を維持する
           Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())

@@ -65,7 +65,7 @@ export function getSelectedItemPaths(): NERist.T<ItemPath> {
 }
 
 export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {
-  const prefix = itemPath.take(CurrentState.getTargetItemPath().size)
+  const prefix = Rist.takeLeft(CurrentState.getTargetItemPath().length)(itemPath)
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   return selectedItemPaths.some((selectedItemPath) => is(prefix, selectedItemPath))
 }
@@ -112,7 +112,7 @@ export function findBelowItemPath(itemPath: ItemPath): ItemPath | undefined {
   // 表示されている項目が存在するなら
   if (firstChildItemId !== undefined) {
     // 最初の子項目が該当項目である
-    return itemPath.push(firstChildItemId)
+    return Rist.append(firstChildItemId)(itemPath)
   }
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当する項目を返す
@@ -151,7 +151,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が長男の場合
   if (index === 0) return undefined
 
-  return parentItemPath.push(siblingItemIds[index - 1])
+  return Rist.append(siblingItemIds[index - 1])(parentItemPath)
 }
 
 /**
@@ -169,7 +169,7 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が末弟の場合
   if (index === siblingItemIds.length - 1) return undefined
 
-  return parentItemPath.push(siblingItemIds[index + 1])
+  return Rist.append(siblingItemIds[index + 1])(parentItemPath)
 }
 
 /**
@@ -191,7 +191,7 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子項目に対して再帰呼び出しすることで、最も下に表示される項目を探索する
   const last = Option.getOrThrow(Rist.last(childItemIds))
-  return getLowerEndItemPath(itemPath.push(last))
+  return getLowerEndItemPath(Rist.append(last)(itemPath))
 }
 
 /**
@@ -216,7 +216,7 @@ export function moses(itemPath: ItemPath) {
  * - ItemPath内で隣り合う項目間が親子であること（ただしparentsプロパティまでは調べない）
  */
 export function isValidItemPath(itemPath: ItemPath): boolean {
-  if (itemPath.size === 0) return false
+  if (itemPath.length === 0) return false
 
   const itemId = ItemPath.getItemId(itemPath)
   const item = Internal.instance.state.items[itemId]
@@ -229,12 +229,12 @@ export function isValidItemPath(itemPath: ItemPath): boolean {
   if (item === undefined) return false
   if (item.parents[parentItemId] === undefined) return false
 
-  return isValidItemPath(itemPath.pop())
+  return isValidItemPath(Rist.pop(itemPath))
 }
 
 /** 2つのItemPathが兄弟かどうか判定する */
 export function isSibling(lhs: ItemPath, rhs: ItemPath): boolean {
-  if (lhs.size !== rhs.size || !is(lhs.pop(), rhs.pop())) return false
+  if (lhs.length !== rhs.length || !is(Rist.pop(lhs), Rist.pop(rhs))) return false
 
   const parentItemId = ItemPath.getParentItemId(lhs)
   if (parentItemId === undefined) return false

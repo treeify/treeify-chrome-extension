@@ -5,6 +5,7 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import OtherParentsDialogPage from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPage.svelte'
   import { createOtherParentsDialogPageProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPageProps'
+  import { Rist } from 'src/Utility/fp-ts'
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -12,7 +13,7 @@
 
   const itemPaths = parentItemIds
     .flatMap((parentItemId) => [...CurrentState.yieldItemPaths(parentItemId)])
-    .map((itemPath) => itemPath.push(targetItemId))
+    .map(Rist.append(targetItemId))
     // TODO: fp-tsならもっと良い書き方にできる気がする
     .filter((itemPath) => !is(itemPath, targetItemPath))
   const pagePropses = Set(itemPaths)

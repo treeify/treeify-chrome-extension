@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { ItemId } from 'src/TreeifyTab/basicType'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -47,7 +46,7 @@
             CurrentState.insertLastChildItem(bookmarkContainerItemId, bookmarkRootItemId)
           }
 
-          const targetItemPath = List.of(CurrentState.getActivePageId(), bookmarkContainerItemId)
+          const targetItemPath = [CurrentState.getActivePageId(), bookmarkContainerItemId]
           CurrentState.setTargetItemPath(targetItemPath)
           Rerenderer.instance.requestToFocusTargetItem()
           Rerenderer.instance.rerender()
