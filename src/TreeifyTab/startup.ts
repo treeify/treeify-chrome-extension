@@ -247,10 +247,12 @@ async function onCommand(commandName: string) {
 async function onAlarm(alarm: Alarm) {
   const [itemId, index] = alarm.name.split('#').map((value) => parseInt(value))
   const reminderSettings = Internal.instance.state.reminders[itemId]
-  const reminderSetting = reminderSettings.get(index)
+  const reminderSetting = reminderSettings[index]
   assertNonUndefined(reminderSetting)
   Internal.instance.mutate(
-    reminderSettings.set(index, { ...reminderSetting, notifiedAt: alarm.scheduledTime }),
+    Rist.updateAt<ReminderSetting>(index, { ...reminderSetting, notifiedAt: alarm.scheduledTime })(
+      reminderSettings
+    ),
     PropertyPath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()

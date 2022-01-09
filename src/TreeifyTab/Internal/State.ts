@@ -1,4 +1,4 @@
-import { is, List } from 'immutable'
+import { is } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
@@ -22,7 +22,7 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, List<ReminderSetting>>
+  reminders: Record<ItemId, Rist.T<ReminderSetting>>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
