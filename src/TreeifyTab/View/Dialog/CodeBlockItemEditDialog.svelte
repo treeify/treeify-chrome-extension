@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { List, Set } from 'immutable'
+  import { List } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
   import { autoDetectionLanguages, detectLanguage } from 'src/TreeifyTab/highlightJs'
   import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -11,6 +11,7 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { RSet$ } from 'src/Utility/fp-ts'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(targetItemId)
@@ -24,12 +25,13 @@
     const preferredLanguages = Internal.instance.state.preferredLanguages
     const preferredLanguageNames = Object.keys(preferredLanguages)
     const preferredResults = preferredLanguageNames.map((language) => {
-      const score = detectLanguage(code, Set.of(language)).score + preferredLanguages[language]
+      const score =
+        detectLanguage(code, RSet$.singleton(language)).score + preferredLanguages[language]
       return { language, score }
     })
     const originalResult = detectLanguage(
       code,
-      autoDetectionLanguages.subtract(preferredLanguageNames)
+      RSet$.difference(autoDetectionLanguages, RSet$.from(preferredLanguageNames))
     )
     const language = List(preferredResults)
       .push(originalResult)

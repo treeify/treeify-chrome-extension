@@ -99,8 +99,7 @@ import xml from 'highlight.js/lib/languages/xml'
 import xquery from 'highlight.js/lib/languages/xquery'
 import yaml from 'highlight.js/lib/languages/yaml'
 import zephir from 'highlight.js/lib/languages/zephir'
-import { Set } from 'immutable'
-import { RArray } from 'src/Utility/fp-ts'
+import { RArray, RSet, RSet$ } from 'src/Utility/fp-ts'
 
 /** シンタックスハイライトした結果のHTML文字列を返す */
 export function getHighlightedHtml(code: string, language: string): string {
@@ -122,9 +121,9 @@ export function getHighlightedHtml(code: string, language: string): string {
  */
 export function detectLanguage(
   code: string,
-  languages: Set<string> = autoDetectionLanguages
+  languages: RSet<string> = autoDetectionLanguages
 ): { language: string; score: number } {
-  const { language, relevance } = hljs.highlightAuto(code, languages.toArray())
+  const { language, relevance } = hljs.highlightAuto(code, Array.from(languages))
   return {
     language: language ?? '',
     score: relevance,
@@ -341,9 +340,10 @@ const languageDefinitions = {
 } as const
 
 // 誤検出されがちなマイナー言語は自動検出から省く
-const languagesToExcludeFromAutoDetection = Set.of('qml', 'reasonml', 'stylus', 'zephir')
+const languagesToExcludeFromAutoDetection = RSet$.from(['qml', 'reasonml', 'stylus', 'zephir'])
 
-export const autoDetectionLanguages = Set(Object.keys(languageDefinitions)).subtract(
+export const autoDetectionLanguages = RSet$.difference(
+  RSet$.from(Object.keys(languageDefinitions)),
   languagesToExcludeFromAutoDetection
 )
 
