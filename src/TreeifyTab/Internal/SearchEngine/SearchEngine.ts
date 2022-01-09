@@ -1,4 +1,4 @@
-import { List, Set } from 'immutable'
+import { Set } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -6,7 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { RArray, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {
@@ -27,7 +27,7 @@ export class SearchEngine {
   /** 全文検索を行う */
   search(searchQuery: string): RSet<ItemId> {
     const { positiveSearchWords, negativeSearchWords } = SearchEngine.parseSearchQuery(searchQuery)
-    if (positiveSearchWords.isEmpty()) return Set.of()
+    if (positiveSearchWords.length === 0) return Set.of()
 
     const normalizedNegativeSearchWords = negativeSearchWords.map(UnigramSearchIndex.normalize)
 
@@ -49,9 +49,9 @@ export class SearchEngine {
     })
 
     const result: ItemId[] = []
-    for (let i = 0; i < wordHitItemIdSets.size; i++) {
-      const otherWordsHitItemIdSets = wordHitItemIdSets.remove(i)
-      for (const wordHitItemId of wordHitItemIdSets.get(i)!) {
+    for (let i = 0; i < wordHitItemIdSets.length; i++) {
+      const otherWordsHitItemIdSets = RArray$.removeAt(i)(wordHitItemIdSets)
+      for (const wordHitItemId of wordHitItemIdSets[i]) {
         if (SearchEngine.containedByAll(otherWordsHitItemIdSets, wordHitItemId)) {
           // あるワードヒット項目の先祖集合（自身含む）に他の全てのワードのヒット項目が含まれる場合
 
@@ -74,7 +74,7 @@ export class SearchEngine {
 
   // AND検索用のヘルパー関数。
   // 言葉での説明が難しい。
-  private static containedByAll(otherWordsHitItemIdSets: List<Set<ItemId>>, itemId: ItemId) {
+  private static containedByAll(otherWordsHitItemIdSets: RArray<Set<ItemId>>, itemId: ItemId) {
     for (const itemIdSet of otherWordsHitItemIdSets) {
       if (!this.contains(itemIdSet, itemId)) {
         return false
@@ -168,10 +168,10 @@ export class SearchEngine {
   }
 
   static parseSearchQuery(searchQuery: string): {
-    positiveSearchWords: List<string>
-    negativeSearchWords: List<string>
+    positiveSearchWords: RArray<string>
+    negativeSearchWords: RArray<string>
   } {
-    const searchWords = List(searchQuery.split(/\s/).filter((str) => str !== ''))
+    const searchWords = searchQuery.split(/\s/).filter((str) => str !== '')
     const positiveSearchWords = []
     const negativeSearchWords = []
     for (const searchWord of searchWords) {
@@ -181,9 +181,6 @@ export class SearchEngine {
         positiveSearchWords.push(searchWord)
       }
     }
-    return {
-      positiveSearchWords: List(positiveSearchWords),
-      negativeSearchWords: List(negativeSearchWords),
-    }
+    return { positiveSearchWords, negativeSearchWords }
   }
 }
