@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
   createOtherParentsDialogItemProps,
@@ -8,17 +7,18 @@ import {
   createItemContentProps,
   ItemContentProps,
 } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
+import { Rist } from 'src/Utility/fp-ts'
 
 export type OtherParentsDialogPageProps = {
   pageContentProps: ItemContentProps
-  itemPropses: List<OtherParentsDialogItemProps>
+  itemPropses: Rist.T<OtherParentsDialogItemProps>
 }
 
 export function createOtherParentsDialogPageProps(
-  itemPaths: List<ItemPath>
+  itemPaths: Rist.T<ItemPath>
 ): OtherParentsDialogPageProps {
   return {
-    pageContentProps: createItemContentProps(ItemPath.getRootItemId(itemPaths.first())),
+    pageContentProps: createItemContentProps(ItemPath.getRootItemId(itemPaths[0])),
     itemPropses: itemPaths.map(createOtherParentsDialogItemProps),
   }
 }

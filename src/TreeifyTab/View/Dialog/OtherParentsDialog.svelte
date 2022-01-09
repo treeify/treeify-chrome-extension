@@ -19,7 +19,7 @@
   const pagePropses = Set(itemPaths)
     .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
     .toList()
-    .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList()))
+    .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList().toArray()))
 </script>
 
 <CommonDialog class="other-parents-dialog_root" title="他のトランスクルード元" showCloseButton>
