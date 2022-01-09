@@ -147,11 +147,11 @@ function toSiblingRankList(itemPath: ItemPath): RArray<integer> {
  * トランスクルードによって同一項目が複数箇所に出現する場合がある。
  */
 export function treeify(
-  itemIdSet: Set<ItemId>,
+  itemIdSet: RSet<ItemId>,
   rootItemId: ItemId,
   passThroughPage: boolean
 ): MutableOrderedTree<ItemPath> {
-  const childrenMap = itemIdSet
+  const childrenMap = Set(itemIdSet)
     .flatMap((itemId) => yieldItemPathsFor([itemId], itemIdSet, passThroughPage))
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
@@ -175,13 +175,13 @@ export function treeify(
  */
 function* yieldItemPathsFor(
   itemIds: RArray<ItemId>,
-  itemIdSet: Set<ItemId>,
+  itemIdSet: RSet<ItemId>,
   passThroughPage: boolean
 ): Generator<ItemPath> {
   const itemId = itemIds[0]
   assertNonUndefined(itemId)
 
-  if (itemIds.length > 1 && itemIdSet.contains(itemId)) {
+  if (itemIds.length > 1 && itemIdSet.has(itemId)) {
     yield itemIds
     return
   }
