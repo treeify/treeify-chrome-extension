@@ -7,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { NERArray, Option, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
+import { NERArray, Option$, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -297,7 +297,9 @@ export namespace State {
       }
 
       assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)
-      const maxItemId = Option.get(TOP_ITEM_ID)(RArray$.max(itemIds.concat(state.availableItemIds)))
+      const maxItemId = Option$.get(TOP_ITEM_ID)(
+        RArray$.max(itemIds.concat(state.availableItemIds))
+      )
       assert(maxItemId === state.maxItemId, `maxItemIdが実際の最大itemId ${maxItemId}と異なる`)
 
       for (const availableItemId of state.availableItemIds) {

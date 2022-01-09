@@ -4,7 +4,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERArray, Option, RArray$ } from 'src/Utility/fp-ts'
+import { NERArray, Option$, RArray$ } from 'src/Utility/fp-ts'
 
 /** ターゲットItemPathを返す */
 export function getTargetItemPath(): ItemPath {
@@ -191,7 +191,7 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子項目に対して再帰呼び出しすることで、最も下に表示される項目を探索する
-  const last = Option.getOrThrow(RArray$.last(childItemIds))
+  const last = Option$.getOrThrow(RArray$.last(childItemIds))
   return getLowerEndItemPath(RArray$.append(last)(itemPath))
 }
 

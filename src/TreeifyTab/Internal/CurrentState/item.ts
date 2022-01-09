@@ -9,7 +9,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option, RArray, RArray$ } from 'src/Utility/fp-ts'
+import { Option$, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -323,7 +323,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 /** 新しい未使用の項目IDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds
-  return Option.match(
+  return Option$.match(
     () => {
       const maxItemId = Internal.instance.state.maxItemId
       Internal.instance.mutate(maxItemId + 1, PropertyPath.of('maxItemId'))

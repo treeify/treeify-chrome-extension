@@ -1,10 +1,11 @@
 import { eqStrict } from 'fp-ts/Eq'
 import * as FpNumber from 'fp-ts/number'
+import { Option } from 'fp-ts/Option'
 import * as Ord from 'fp-ts/Ord'
 import * as RA from 'fp-ts/ReadonlyArray'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import { assert } from 'src/Utility/Debug/assert'
-import { Option, RArray } from 'src/Utility/fp-ts'
+import { Option$, RArray } from 'src/Utility/fp-ts'
 import { Arrow } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
@@ -61,8 +62,8 @@ export const lastOrThrow = <A>(rarray: RArray<A>) => {
   return rarray[rarray.length - 1]
 }
 
-export function max(rarray: RArray<number>): Option.T<number> {
-  return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
+export function max(rarray: RArray<number>): Option<number> {
+  return Option$.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
 }
 
 export const filterUndefined = <A>(rarray: RArray<A | undefined>): RArray<A> =>
@@ -74,9 +75,9 @@ export const filterUndefined = <A>(rarray: RArray<A | undefined>): RArray<A> =>
  */
 export const maxBy =
   <A>(toNumber: Arrow<A, number>) =>
-  (rarray: RArray<A>): Option.T<A> => {
+  (rarray: RArray<A>): Option<A> => {
     const ord = Ord.contramap(toNumber)(FpNumber.Ord)
-    return Option.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rarray))
+    return Option$.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rarray))
   }
 
 /** 配列の要素から計算した値をstring型に変換し、その昇順でソートする */
