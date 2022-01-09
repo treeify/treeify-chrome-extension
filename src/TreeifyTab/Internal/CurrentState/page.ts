@@ -103,7 +103,7 @@ export function turnIntoNonPage(itemId: ItemId) {
 export function deriveTreeifyTabTitle(): string {
   const activePageId = CurrentState.getActivePageId()
   const parentPageIds = CurrentState.getParentPageIds(activePageId)
-  const parentPageId = parentPageIds.first(undefined)
+  const parentPageId = parentPageIds[0]
   if (parentPageId !== undefined) {
     return `${extractPlainText(activePageId)} - ${extractPlainText(parentPageId)}`
   } else {

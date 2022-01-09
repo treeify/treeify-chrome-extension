@@ -70,10 +70,12 @@ export function getPageIdsBelongingTo(itemId: ItemId): RSet<ItemId> {
   )
 }
 
-/** 指定されたページが所属するページIDの集合を返す */
-export function getParentPageIds(pageId: ItemId): Set<ItemId> {
-  return Set(CurrentState.getParentItemIds(pageId)).flatMap((parentItemId) =>
-    CurrentState.getPageIdsBelongingTo(parentItemId)
+/** 指定されたページが所属するページIDを返す */
+export function getParentPageIds(pageId: ItemId): RArray<ItemId> {
+  return pipe(
+    RSet$.from(CurrentState.getParentItemIds(pageId)),
+    RSet$.flatMap((parentItemId: ItemId) => CurrentState.getPageIdsBelongingTo(parentItemId)),
+    RArray$.from
   )
 }
 
