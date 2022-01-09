@@ -99,7 +99,8 @@ import xml from 'highlight.js/lib/languages/xml'
 import xquery from 'highlight.js/lib/languages/xquery'
 import yaml from 'highlight.js/lib/languages/yaml'
 import zephir from 'highlight.js/lib/languages/zephir'
-import { List, Set } from 'immutable'
+import { Set } from 'immutable'
+import { RArray } from 'src/Utility/fp-ts'
 
 /** シンタックスハイライトした結果のHTML文字列を返す */
 export function getHighlightedHtml(code: string, language: string): string {
@@ -337,7 +338,7 @@ const languageDefinitions = {
   xquery,
   yaml,
   zephir,
-}
+} as const
 
 // 誤検出されがちなマイナー言語は自動検出から省く
 const languagesToExcludeFromAutoDetection = Set.of('qml', 'reasonml', 'stylus', 'zephir')
@@ -346,4 +347,4 @@ export const autoDetectionLanguages = Set(Object.keys(languageDefinitions)).subt
   languagesToExcludeFromAutoDetection
 )
 
-export const allLanguages = List(Object.keys(languageDefinitions))
+export const allLanguages: RArray<string> = Object.keys(languageDefinitions)
