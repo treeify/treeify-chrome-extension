@@ -8,7 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { NERist, Option, Rist } from 'src/Utility/fp-ts'
+import { NERist, Option, Rist, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -240,7 +240,7 @@ export namespace State {
 
         // 子リストに重複がないことのチェック
         assert(
-          item.childItemIds.length === Set(item.childItemIds).size,
+          item.childItemIds.length === RSet.from(item.childItemIds).size,
           `items[${itemId}]のchildItemIdsに重複がある`
         )
 
@@ -346,7 +346,7 @@ export namespace State {
         )
       }
       assert(
-        Set(state.mountedPageIds).size === state.mountedPageIds.length,
+        RSet.from(state.mountedPageIds).size === state.mountedPageIds.length,
         `mountedPageIdsに重複がある`
       )
       assert(state.mountedPageIds.length === 0, `mountedPageIdsが空である`)

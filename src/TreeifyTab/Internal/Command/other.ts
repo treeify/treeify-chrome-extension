@@ -1,11 +1,11 @@
-import { Set } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option, Rist } from 'src/Utility/fp-ts'
+import { Option, Rist, RSet } from 'src/Utility/fp-ts'
 
 export function syncTreeifyData() {
   const syncButton = document.querySelector<HTMLElement>('.sync-button_root')
@@ -56,13 +56,16 @@ export function selectToStartOfList() {
  */
 export function toggleExcluded() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const selectedItemIds = Set(selectedItemPaths.map(ItemPath.getItemId)).delete(TOP_ITEM_ID)
-  const excludedItemIds = Set(CurrentState.getExcludedItemIds())
+  const selectedItemIds = pipe(
+    RSet.from(selectedItemPaths.map(ItemPath.getItemId)),
+    RSet.remove(TOP_ITEM_ID)
+  )
+  const excludedItemIds = RSet.from(CurrentState.getExcludedItemIds())
 
   // いわゆるxorのメソッドが見当たらないので同等の処理をする
-  const union = selectedItemIds.union(excludedItemIds)
-  const intersection = selectedItemIds.intersect(excludedItemIds)
-  CurrentState.setExcludedItemIds(union.subtract(intersection).toArray())
+  const union = RSet.union(selectedItemIds, excludedItemIds)
+  const intersection = RSet.intersection(selectedItemIds, excludedItemIds)
+  CurrentState.setExcludedItemIds(Rist.from(RSet.difference(union, intersection)))
 }
 
 /**

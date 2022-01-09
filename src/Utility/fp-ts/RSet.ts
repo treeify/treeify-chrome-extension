@@ -6,6 +6,14 @@ export * from 'fp-ts/ReadonlySet'
 
 export type T<A> = ReadonlySet<A>
 
+export const remove = <A>(value: A) => FpReadonlySet.remove<A>(eqStrict)(value)
+
+export const union = <A>(rset1: T<A>, rset2: T<A>) => FpReadonlySet.union<A>(eqStrict)(rset1, rset2)
+export const intersection = <A>(rset1: T<A>, rset2: T<A>) =>
+  FpReadonlySet.intersection<A>(eqStrict)(rset1, rset2)
+export const difference = <A>(rset1: T<A>, rset2: T<A>) =>
+  FpReadonlySet.difference<A>(eqStrict)(rset1, rset2)
+
 export const map = <A, B>(f: Arrow<A, B>) => FpReadonlySet.map<B>(eqStrict)(f)
 
 export const flatMap =
@@ -19,3 +27,14 @@ export const flatMap =
     }
     return result
   }
+
+export const from = <A>(iterable: Iterable<A>) => {
+  if (iterable instanceof Array) {
+    return FpReadonlySet.fromReadonlyArray<A>(eqStrict)(iterable)
+  } else {
+    return FpReadonlySet.fromReadonlyArray<A>(eqStrict)([...iterable])
+  }
+}
+
+export const filterUndefined = <A>(rset: T<A | undefined>): T<A> =>
+  FpReadonlySet.filter((element: A | undefined) => element !== undefined)(rset) as T<A>

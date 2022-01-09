@@ -87,6 +87,8 @@ export const sortByNumber =
     return cloned
   }
 
+export const from = <A>(iterable: Iterable<A>): T<A> => [...iterable]
+
 /**
  * TODO: カリー化する
  */

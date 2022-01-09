@@ -1,3 +1,4 @@
+import { pipe } from 'fp-ts/function'
 import { List, Seq, Set } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -6,7 +7,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Rist } from 'src/Utility/fp-ts'
+import { Rist, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -103,8 +104,10 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
  * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
  */
 export function countTabsInSubtree(state: State, itemId: ItemId): integer {
-  return Set(CurrentState.yieldSubtreeItemIdsShallowly(itemId)).filter(
-    (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+  return pipe(
+    RSet.from(CurrentState.yieldSubtreeItemIdsShallowly(itemId)),
+    RSet.map(External.instance.tabItemCorrespondence.getTabIdBy),
+    RSet.filterUndefined
   ).size
 }
 
