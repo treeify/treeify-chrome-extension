@@ -1,7 +1,6 @@
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
+import { NERArray } from 'src/Utility/fp-ts/index'
 
 export * from 'fp-ts/ReadonlyNonEmptyArray'
 
-export type T<A> = RNEA.ReadonlyNonEmptyArray<A>
-
-export const last = <A>(nerarray: T<A>): A => RNEA.last(nerarray)
+export const last = <A>(nerarray: NERArray<A>): A => RNEA.last(nerarray)

@@ -5,7 +5,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
-import { NERArray$, Option, RArray, RArray$ } from 'src/Utility/fp-ts'
+import { NERArray, NERArray$, Option, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -76,7 +76,7 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 }
 
 /** mountedPageIdsを除外項目でフィルタリングした結果を返す */
-export function getFilteredMountedPageIds(): NERArray$.T<ItemId> {
+export function getFilteredMountedPageIds(): NERArray<ItemId> {
   return pipe(
     Internal.instance.state.mountedPageIds,
     RArray$.filter((pageId: ItemId) => !shouldBeHidden(pageId)),

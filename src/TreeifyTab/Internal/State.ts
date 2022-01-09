@@ -7,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
-import { NERArray$, Option, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
+import { NERArray, Option, RArray, RArray$, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -27,7 +27,7 @@ export type State = {
    * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: NERArray$.T<ItemId>
+  mountedPageIds: NERArray<ItemId>
   /** 削除され再利用される項目ID群 */
   availableItemIds: RArray<ItemId>
   maxItemId: ItemId

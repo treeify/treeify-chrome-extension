@@ -4,7 +4,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERArray$, Option, RArray$ } from 'src/Utility/fp-ts'
+import { NERArray, Option, RArray$ } from 'src/Utility/fp-ts'
 
 /** ターゲットItemPathを返す */
 export function getTargetItemPath(): ItemPath {
@@ -42,7 +42,7 @@ export function setTargetItemPathOnly(itemPath: ItemPath) {
  * 複数選択されていなければターゲットItemPathだけの単一要素リストを返す。
  * 並び順は元の兄弟リスト内での並び順と同じ。
  */
-export function getSelectedItemPaths(): NERArray$.T<ItemPath> {
+export function getSelectedItemPaths(): NERArray<ItemPath> {
   const targetItemPath = CurrentState.getTargetItemPath()
   const anchorItemPath = CurrentState.getAnchorItemPath()
   if (RArray$.shallowEqual(targetItemPath, anchorItemPath)) {
@@ -60,7 +60,7 @@ export function getSelectedItemPaths(): NERArray$.T<ItemPath> {
   const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
   return sliced.map(
     (itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!
-  ) as unknown as NERArray$.T<ItemPath>
+  ) as unknown as NERArray<ItemPath>
 }
 
 export function isInSubtreeOfSelectedItemPaths(itemPath: ItemPath): boolean {
