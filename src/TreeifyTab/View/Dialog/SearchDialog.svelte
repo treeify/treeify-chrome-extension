@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { pipe } from 'fp-ts/function'
   import { List, Set } from 'immutable'
   import { MultiSet } from 'mnemonist'
   import { ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
@@ -12,14 +13,15 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
+  import { RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
   type SearchResult = { pages: List<List<ItemPath>>; counts: MultiSet<ItemType> }
 
   let searchQueryValue = ''
-  let hitItemIds: Set<ItemId> | undefined
+  let hitItemIds: RSet<ItemId> | undefined
   let itemTypes: ItemType[] = Object.values(ItemType) as any
   let searchResult: SearchResult | undefined
-  $: searchResult = makeSearchResult(hitItemIds, Set(itemTypes))
+  $: searchResult = makeSearchResult(hitItemIds, RSet$.from(itemTypes))
 
   const workspaceId = CurrentState.getCurrentWorkspaceId()
   const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
@@ -33,22 +35,22 @@
       case '0000ArrowUp':
         event.preventDefault()
 
-        const focusableElements = List(
-          document.querySelectorAll(
+        const focusableElements = Array.from(
+          document.querySelectorAll<HTMLElement>(
             '.search-dialog_content input, .search-dialog_content [tabindex]'
           )
-        ) as List<HTMLElement>
+        )
         const index = focusableElements.findIndex((element) => document.activeElement === element)
         if (index === -1) return
 
         if (inputId === '0000ArrowDown') {
           // フォーカスを次の要素に移す
-          const nextIndex = (index + 1) % focusableElements.size
-          focusableElements.get(nextIndex)!.focus()
+          const nextIndex = (index + 1) % focusableElements.length
+          focusableElements[nextIndex].focus()
         } else {
           // フォーカスを前の要素に移す
-          const prevIndex = (index - 1) % focusableElements.size
-          focusableElements.get(prevIndex)!.focus()
+          const prevIndex = (index - 1) % focusableElements.length
+          focusableElements[prevIndex].focus()
         }
         break
       case '1100KeyR':
@@ -74,12 +76,13 @@
       // 検索履歴に保存
       const workspaceId = CurrentState.getCurrentWorkspaceId()
       const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
-      const newHistory = searchHistory
-        .filter((searchQuery) => searchQuery !== searchQueryValue)
-        .push(searchQueryValue)
-        .takeLast(10)
+      const newHistory = pipe(
+        searchHistory,
+        RArray$.filter((searchQuery: string) => searchQuery !== searchQueryValue),
+        RArray$.append(searchQueryValue)
+      )
       Internal.instance.mutate(
-        newHistory,
+        RArray$.takeRight(10)(newHistory),
         PropertyPath.of('workspaces', workspaceId, 'searchHistory')
       )
 
@@ -88,19 +91,22 @@
   }
 
   function makeSearchResult(
-    hitItemIds: Set<ItemId> | undefined,
-    itemTypes: Set<ItemType>
+    hitItemIds: RSet<ItemId> | undefined,
+    itemTypes: RSet<ItemType>
   ): SearchResult | undefined {
     if (hitItemIds === undefined) return undefined
 
-    const filteredItemIds = hitItemIds.filter((itemId) =>
-      itemTypes.contains(Internal.instance.state.items[itemId].type)
-    )
+    const filteredItemIds = RSet$.filter((itemId: ItemId) =>
+      itemTypes.has(Internal.instance.state.items[itemId].type)
+    )(hitItemIds)
 
     // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
-    const allItemPaths = filteredItemIds.flatMap((itemId) => CurrentState.yieldItemPaths(itemId))
+    const allItemPaths = pipe(
+      filteredItemIds,
+      RSet$.flatMap((itemId: ItemId) => RSet$.from(CurrentState.yieldItemPaths(itemId)))
+    )
 
-    const pages = allItemPaths
+    const pages = Set(allItemPaths)
       // ItemPathをページIDでグループ化する
       .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
       .toList()
@@ -130,7 +136,7 @@
       />
       {#if searchResult === undefined}
         <datalist id="search-dialog_search-history-list">
-          {#each searchHistory.reverse().toArray() as searchQuery}
+          {#each RArray$.reverse(searchHistory) as searchQuery}
             <option value={searchQuery} />
           {/each}
         </datalist>

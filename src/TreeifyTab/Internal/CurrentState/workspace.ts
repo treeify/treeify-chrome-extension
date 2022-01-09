@@ -1,9 +1,10 @@
-import { List, Set } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { ItemId, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
+import { NERArray, NERArray$, Option$, RArray, RArray$, RSet$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -21,7 +22,7 @@ export function getCurrentWorkspaceId(): Timestamp {
 
   // 既存のワークスペースを適当に選んでIDを返す。
   // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-  const currentWorkspaceId = getWorkspaceIds().first() as WorkspaceId
+  const currentWorkspaceId = getWorkspaceIds()[0]
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
   return currentWorkspaceId
 }
@@ -32,17 +33,17 @@ export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
 }
 
 /** Stateに登録されている全てのワークスペースIDを返す */
-export function getWorkspaceIds(): List<WorkspaceId> {
-  return List(Object.keys(Internal.instance.state.workspaces)).map((key) => parseInt(key))
+export function getWorkspaceIds(): RArray<WorkspaceId> {
+  return Object.keys(Internal.instance.state.workspaces).map((key) => parseInt(key))
 }
 
 /** 現在のワークスペースの除外項目リストを返す */
-export function getExcludedItemIds(): List<ItemId> {
+export function getExcludedItemIds(): RArray<ItemId> {
   return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].excludedItemIds
 }
 
 /** 現在のワークスペースの除外項目リストを設定する */
-export function setExcludedItemIds(itemIds: List<ItemId>) {
+export function setExcludedItemIds(itemIds: RArray<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.mutate(
     itemIds,
@@ -59,10 +60,10 @@ export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
 export function createWorkspace(): WorkspaceId {
   const workspaceId = Timestamp.now()
   const workspace: Workspace = {
-    name: `ワークスペース${CurrentState.getWorkspaceIds().count() + 1}`,
+    name: `ワークスペース${CurrentState.getWorkspaceIds().length + 1}`,
     activePageId: CurrentState.getActivePageId(),
-    excludedItemIds: List(),
-    searchHistory: List(),
+    excludedItemIds: [],
+    searchHistory: [],
   }
   Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
   return workspaceId
@@ -74,10 +75,13 @@ export function deleteWorkspace(workspaceId: WorkspaceId) {
 }
 
 /** mountedPageIdsを除外項目でフィルタリングした結果を返す */
-export function getFilteredMountedPageIds(): List<ItemId> {
-  return Internal.instance.state.mountedPageIds.filterNot((pageId) => {
-    return shouldBeHidden(pageId)
-  })
+export function getFilteredMountedPageIds(): NERArray<ItemId> {
+  return pipe(
+    Internal.instance.state.mountedPageIds,
+    RArray$.filter((pageId: ItemId) => !shouldBeHidden(pageId)),
+    NERArray$.fromReadonlyArray,
+    Option$.getOrThrow
+  )
 }
 
 /**
@@ -88,8 +92,11 @@ export function shouldBeHidden(itemId: ItemId) {
   const excludedItemIds = CurrentState.getExcludedItemIds()
 
   // 与えられた項目が除外項目そのものの場合
-  if (excludedItemIds.contains(itemId)) return true
+  if (excludedItemIds.includes(itemId)) return true
 
   // 与えられた項目の先祖項目に除外項目が含まれているかどうか
-  return !Set(CurrentState.yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()
+  return !RSet$.isDisjoint(
+    RSet$.from(CurrentState.yieldAncestorItemIds(itemId)),
+    RSet$.from(excludedItemIds)
+  )
 }

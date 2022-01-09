@@ -26,6 +26,7 @@ import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
@@ -186,7 +187,7 @@ function onClickContextMenu(info: OnClickData) {
 
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
-      const newItemPath = targetItemPath.push(newItemId)
+      const newItemPath = RArray$.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
       CurrentState.moses(newItemPath)
     }
@@ -202,7 +203,7 @@ function onClickContextMenu(info: OnClickData) {
 
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
-      const newItemPath = targetItemPath.push(newItemId)
+      const newItemPath = RArray$.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
       CurrentState.moses(newItemPath)
     }
@@ -219,7 +220,7 @@ function findCorrespondWebPageItem(url: string): ItemId | undefined {
     .filter((tab) => tab.id !== undefined)
     .map((tab) => External.instance.tabItemCorrespondence.getItemIdBy(tab.id!))
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  if (itemIds.contains(targetItemId)) {
+  if (itemIds.includes(targetItemId)) {
     return targetItemId
   }
 
@@ -246,10 +247,13 @@ async function onCommand(commandName: string) {
 async function onAlarm(alarm: Alarm) {
   const [itemId, index] = alarm.name.split('#').map((value) => parseInt(value))
   const reminderSettings = Internal.instance.state.reminders[itemId]
-  const reminderSetting = reminderSettings.get(index)
+  const reminderSetting = reminderSettings[index]
   assertNonUndefined(reminderSetting)
   Internal.instance.mutate(
-    reminderSettings.set(index, { ...reminderSetting, notifiedAt: alarm.scheduledTime }),
+    RArray$.updateAt<ReminderSetting>(index, {
+      ...reminderSetting,
+      notifiedAt: alarm.scheduledTime,
+    })(reminderSettings),
     PropertyPath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()
@@ -345,7 +349,7 @@ async function prefetchDataFile() {
       promise: call(async () => {
         const response = await GoogleDrive.readFile(metaData.id)
         const text = await decompress(await response.arrayBuffer())
-        const state: State = JSON.parse(text, State.jsonReviver)
+        const state: State = JSON.parse(text)
         return state
       }),
     }

@@ -64,7 +64,7 @@
       bind:value={languageValue}
     />
     <datalist id="code-block-language-setting-dialog_language-list">
-      {#each allLanguages.toArray() as language}
+      {#each allLanguages as language}
         <option value={language} />
       {/each}
     </datalist>

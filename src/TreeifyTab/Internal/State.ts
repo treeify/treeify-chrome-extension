@@ -1,4 +1,3 @@
-import { is, List, Set } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
@@ -8,6 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
+import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -21,18 +21,18 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, List<ReminderSetting>>
+  reminders: Record<ItemId, RArray<ReminderSetting>>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
    * 並び順はアクティブ化された順（アクティブページが末尾）
    */
-  mountedPageIds: List<ItemId>
+  mountedPageIds: NERArray<ItemId>
   /** 削除され再利用される項目ID群 */
-  availableItemIds: List<ItemId>
+  availableItemIds: RArray<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
-  mainAreaKeyBindings: Record<InputId, List<CommandId>>
+  mainAreaKeyBindings: Record<InputId, RArray<CommandId>>
   customCss: string
   preferredLanguages: Record<string, number>
   exportSettings: {
@@ -63,7 +63,7 @@ export type State = {
 export type Item = {
   type: ItemType
   globalItemId: GlobalItemId
-  childItemIds: List<ItemId>
+  childItemIds: RArray<ItemId>
   parents: Record<ItemId, Edge>
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
@@ -72,7 +72,7 @@ export type Item = {
    * 付与された項目本体とその子孫に別々のスタイルを適用できるよう、
    * 子孫側には末尾に"-children"を追加したCSSクラスを付与する。
    */
-  cssClasses: List<string>
+  cssClasses: RArray<string>
   source: Source | null
 }
 
@@ -100,7 +100,7 @@ export type Source = {
 
 /** テキスト項目が固有で持つデータの型 */
 export type TextItem = {
-  domishObjects: List<DomishObject>
+  domishObjects: RArray<DomishObject>
 }
 
 /** ウェブページ項目が固有で持つデータの型 */
@@ -188,8 +188,8 @@ export type Workspace = {
    * このワークスペースでページツリーや検索結果から除外したい項目群。
    * これに含まれる項目またはその子孫項目はページツリーや検索結果から除外される。
    */
-  excludedItemIds: List<ItemId>
-  searchHistory: List<string>
+  excludedItemIds: RArray<ItemId>
+  searchHistory: RArray<string>
 }
 
 export type CommandId = keyof typeof commandNames
@@ -202,29 +202,12 @@ export enum ExportFormat {
 }
 
 export namespace State {
-  /** Stateに対してJSON.stringifyする際に用いるreplacer */
-  export function jsonReplacer(this: any, key: string, value: any): any {
-    if (value instanceof List) {
-      return (value as List<unknown>).toArray()
-    }
-    return value
-  }
-
-  /** Stateに対してJSON.parseする際に用いるreplacer */
-  export function jsonReviver(key: any, value: any) {
-    if (value instanceof Array) {
-      return List(value as Array<unknown>)
-    }
-    return value
-  }
-
   /** Stateオブジェクトまたはそのサブオブジェクトを複製する。Undo機能のために必要 */
   export function clone<T>(state: T): T {
     if (state === undefined) return undefined as unknown as T
 
     // 最適化の余地ありかも
-    const json = JSON.stringify(state, jsonReplacer)
-    return JSON.parse(json, jsonReviver)
+    return JSON.parse(JSON.stringify(state))
   }
 
   /**
@@ -239,7 +222,7 @@ export namespace State {
 
         // 子リストに重複がないことのチェック
         assert(
-          item.childItemIds.size === item.childItemIds.toSet().size,
+          item.childItemIds.length === RSet$.from(item.childItemIds).size,
           `items[${itemId}]のchildItemIdsに重複がある`
         )
 
@@ -255,7 +238,7 @@ export namespace State {
         for (const parentsKey in item.parents) {
           const parentItemId = parseInt(parentsKey)
           assert(
-            state.items[parentItemId]?.childItemIds?.contains(itemId),
+            state.items[parentItemId]?.childItemIds?.includes(itemId),
             `items[${parentItemId}]のchildItemIdsに${itemId}が含まれていない`
           )
 
@@ -288,12 +271,13 @@ export namespace State {
 
         // 残りのプロパティの型チェック（存在チェックを兼ねる）
         assert(typeof item.timestamp === 'number', `items[${itemId}]のtimestampの型エラー`)
-        // TODO: 各要素の型チェックまではしていない
-        assert(item.cssClasses instanceof List, `items[${itemId}]のcssClassesの型エラー`)
       }
 
       // 循環参照が存在しないことの確認
-      assert(!hasCycle(state, TOP_ITEM_ID, Set()), 'トランスクルードによって循環参照が発生している')
+      assert(
+        !hasCycle(state, TOP_ITEM_ID, new Set()),
+        'トランスクルードによって循環参照が発生している'
+      )
 
       for (const pagesKey in state.pages) {
         const pageId = parseInt(pagesKey)
@@ -305,7 +289,7 @@ export namespace State {
 
         const page = state.pages[pageId]
         assert(
-          is(page.targetItemPath.pop(), page.anchorItemPath.pop()),
+          RArray$.shallowEqual(RArray$.pop(page.targetItemPath), RArray$.pop(page.anchorItemPath)),
           `pages[${pageId}]のtargetItemPathとanchorItemPathが兄弟でない`
         )
         // TODO: targetItemPath, anchorItemPathがvalidなItemPathであることのチェック
@@ -313,7 +297,9 @@ export namespace State {
       }
 
       assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)
-      const maxItemId = List(itemIds).concat(state.availableItemIds).max() ?? TOP_ITEM_ID
+      const maxItemId = Option$.get(TOP_ITEM_ID)(
+        RArray$.max(itemIds.concat(state.availableItemIds))
+      )
       assert(maxItemId === state.maxItemId, `maxItemIdが実際の最大itemId ${maxItemId}と異なる`)
 
       for (const availableItemId of state.availableItemIds) {
@@ -347,10 +333,10 @@ export namespace State {
         )
       }
       assert(
-        state.mountedPageIds.toSet().size === state.mountedPageIds.size,
+        RSet$.from(state.mountedPageIds).size === state.mountedPageIds.length,
         `mountedPageIdsに重複がある`
       )
-      assert(!state.mountedPageIds.isEmpty(), `mountedPageIdsが空である`)
+      assert(state.mountedPageIds.length === 0, `mountedPageIdsが空である`)
 
       // TODO: ダイアログなど、残りのプロパティのチェック
 
@@ -363,13 +349,13 @@ export namespace State {
 
   // 親子関係のグラフ構造が循環を持っているかどうか判定する。
   // トップページからの深さ優先探索を行う。
-  function hasCycle(state: State, itemId: ItemId, stackLike: Set<ItemId>): boolean {
+  function hasCycle(state: State, itemId: ItemId, stackLike: RSet<ItemId>): boolean {
     if (stackLike.has(itemId)) {
       return true
     }
 
     for (const childItemId of state.items[itemId].childItemIds) {
-      if (hasCycle(state, childItemId, stackLike.add(itemId))) {
+      if (hasCycle(state, childItemId, RSet$.add(itemId)(stackLike))) {
         return true
       }
     }

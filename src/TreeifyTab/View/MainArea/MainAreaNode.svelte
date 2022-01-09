@@ -5,6 +5,7 @@
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
   import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
+  import { RArray$ } from 'src/Utility/fp-ts/index.js'
 
   export let props: MainAreaNodeProps
 
@@ -19,7 +20,7 @@
   `
 
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
-  $: depth = props.itemPath.size - 1
+  $: depth = props.itemPath.length - 1
 </script>
 
 <div
@@ -43,13 +44,13 @@
   <div class="main-area-node_body-and-children-area">
     <!-- ボディ領域 -->
     <div
-      class={props.cssClasses.unshift('main-area-node_body-area').join(' ')}
+      class={RArray$.prepend('main-area-node_body-area')(props.cssClasses).join(' ')}
       class:excluded={props.isExcluded}
       data-depth={depth}
     >
       <!-- コンテンツ領域 -->
       <div
-        data-item-path={JSON.stringify(props.itemPath.toArray())}
+        data-item-path={JSON.stringify(props.itemPath)}
         class="main-area-node_content-area"
         class:single-selected={props.selected === 'single'}
         on:mousedown={props.onMouseDownContentArea}
@@ -70,8 +71,8 @@
       {/if}
     </div>
     <!-- 子リスト領域 -->
-    <div class={childrenCssClasses.unshift('main-area-node_children-area').join(' ')}>
-      {#each props.childItemPropses.toArray() as itemProps (itemProps.itemPath.toString())}
+    <div class={RArray$.prepend('main-area-node_children-area')(childrenCssClasses).join(' ')}>
+      {#each props.childItemPropses as itemProps (itemProps.itemPath.toString())}
         <MainAreaNode props={itemProps} />
       {/each}
     </div>

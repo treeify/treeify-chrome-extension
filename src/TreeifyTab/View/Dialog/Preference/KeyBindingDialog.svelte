@@ -9,6 +9,7 @@
   import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import { RArray, RArray$ } from 'src/Utility/fp-ts'
   import { integer } from 'src/Utility/integer'
 
   let clonedKeyBindings = State.clone(Internal.instance.state.mainAreaKeyBindings)
@@ -36,7 +37,7 @@
 
     isAddBindingMode = false
 
-    clonedKeyBindings[inputId] = List.of('doNothing')
+    clonedKeyBindings[inputId] = ['doNothing']
   }
 
   function onClickFinishButton() {
@@ -52,33 +53,37 @@
 
   function onChange(event: Event, index: integer, inputId: InputId) {
     if (event.target instanceof HTMLSelectElement) {
-      clonedKeyBindings[inputId] = clonedKeyBindings[inputId].set(
+      clonedKeyBindings[inputId] = RArray$.unsafeUpdateAt(
         index,
-        event.target.value as CommandId
+        event.target.value as CommandId,
+        clonedKeyBindings[inputId]
       )
     }
   }
 
   function onClickDeleteButton(index: integer, inputId: InputId) {
-    if (clonedKeyBindings[inputId].size === 1) {
+    if (clonedKeyBindings[inputId].length === 1) {
       // 残り1個のコマンドを削除する際は、空リストにする代わりにバインディングそのものを削除する
       delete clonedKeyBindings[inputId]
       clonedKeyBindings = clonedKeyBindings
     } else {
-      clonedKeyBindings[inputId] = clonedKeyBindings[inputId].remove(index)
+      clonedKeyBindings[inputId] = RArray$.unsafeDeleteAt(index, clonedKeyBindings[inputId])
     }
   }
 
   function onClickAddCommandButton(index: integer, inputId: InputId) {
-    clonedKeyBindings[inputId] = clonedKeyBindings[inputId].insert(index + 1, 'doNothing')
+    clonedKeyBindings[inputId] = RArray$.unsafeInsertAt<CommandId>(
+      index + 1,
+      'doNothing',
+      clonedKeyBindings[inputId]
+    )
   }
 
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  const commandGroups: List<{ name: string; commandIds: List<CommandId> }> = List.of(
+  const commandGroups: RArray<{ name: string; commandIds: RArray<CommandId> }> = [
     {
       name: '基本操作',
-      commandIds: List.of(
+      commandIds: [
         'enterKeyDefault',
         'deleteItem',
         'removeItem',
@@ -92,55 +97,50 @@
         'grouping',
         'fold',
         'unfold',
-        'toggleFolded'
-      ),
+        'toggleFolded',
+      ],
     },
     {
       name: 'テキスト項目操作',
-      commandIds: List.of(
+      commandIds: [
         'insertNewline',
         'toggleBold',
         'toggleUnderline',
         'toggleItalic',
-        'toggleStrikethrough'
-      ),
+        'toggleStrikethrough',
+      ],
     },
     {
       name: 'ウェブページ項目操作',
-      commandIds: List.of(
+      commandIds: [
         'browseTab',
         'closeTreeTabs',
         'closeJustOneTab',
         'discardTreeTabs',
         'discardJustOneTab',
         'openTreeTabs',
-        'openJustOneTab'
-      ),
+        'openJustOneTab',
+      ],
     },
     {
       name: 'ページ関連',
-      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'),
+      commandIds: ['turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'],
     },
     {
       name: '項目装飾',
-      commandIds: List.of('toggleCompleted', 'toggleHighlighted', 'toggleDoubtful', 'toggleSource'),
+      commandIds: ['toggleCompleted', 'toggleHighlighted', 'toggleDoubtful', 'toggleSource'],
     },
     {
       name: '空の項目作成',
-      commandIds: List.of(
-        'createImageItem',
-        'createCodeBlockItem',
-        'createTexItem',
-        'createTextItem'
-      ),
+      commandIds: ['createImageItem', 'createCodeBlockItem', 'createTexItem', 'createTextItem'],
     },
     {
       name: 'クリップボード',
-      commandIds: List.of('copyForTransclude', 'copyForMove', 'pasteAsPlainText'),
+      commandIds: ['copyForTransclude', 'copyForMove', 'pasteAsPlainText'],
     },
     {
       name: 'ダイアログ表示',
-      commandIds: List.of(
+      commandIds: [
         'showEditDialog',
         'showSearchDialog',
         'showReplaceDialog',
@@ -149,20 +149,15 @@
         'showExportDialog',
         'showWorkspaceDialog',
         'showOtherParentsDialog',
-        'showCommandPaletteDialog'
-      ),
+        'showCommandPaletteDialog',
+      ],
     },
-    { name: '複数選択', commandIds: List.of('selectToStartOfList', 'selectToEndOfList') },
+    { name: '複数選択', commandIds: ['selectToStartOfList', 'selectToEndOfList'] },
     {
       name: 'その他',
-      commandIds: List.of(
-        'doNothing',
-        'syncTreeifyData',
-        'toggleExcluded',
-        'convertSpaceToNewline'
-      ),
-    }
-  )
+      commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded', 'convertSpaceToNewline'],
+    },
+  ]
 </script>
 
 <CommonDialog class="key-binding-dialog_root" title="キーボード操作設定">
@@ -173,12 +168,12 @@
           <tr class="key-binding_binding-row">
             <td class="key-binding-dialog_input-id">{InputId.toReadableText(inputId)}</td>
             <td class="key-binding-dialog_commands">
-              {#each commandIds.toArray() as selectedCommandId, index}
+              {#each commandIds as selectedCommandId, index}
                 <div class="key-binding-dialog_command-row">
                   <select on:change={(event) => onChange(event, index, inputId)}>
-                    {#each commandGroups.toArray() as commandGroup}
+                    {#each commandGroups as commandGroup}
                       <optgroup label={commandGroup.name}>
-                        {#each commandGroup.commandIds.toArray() as commandId}
+                        {#each commandGroup.commandIds as commandId}
                           <option value={commandId} selected={selectedCommandId === commandId}>
                             {commandNames[commandId]}
                           </option>

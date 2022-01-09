@@ -1,3 +1,4 @@
+import { reverse } from 'fp-ts/ReadonlyArray'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -17,6 +18,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 export function onCopy(event: ClipboardEvent) {
   if (event.clipboardData === null) return
@@ -93,7 +95,7 @@ export function onPaste(event: ClipboardEvent) {
     // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
     if (text === External.instance.getTreeifyClipboardHash()) {
       if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
-        for (const selectedItemPath of selectedItemPaths.reverse()) {
+        for (const selectedItemPath of reverse(selectedItemPaths)) {
           // 兄弟リスト内に同一項目を入れてしまわないようガード
           if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -118,7 +120,7 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
-        for (const selectedItemPath of selectedItemPaths.reverse()) {
+        for (const selectedItemPath of reverse(selectedItemPaths)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const parentItemId = ItemPath.getParentItemId(selectedItemPath)
           if (parentItemId !== undefined) {
@@ -151,7 +153,7 @@ export function onPaste(event: ClipboardEvent) {
   const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
-    for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult).reverse()) {
+    for (const itemAndEdge of RArray$.reverse(createItemsBasedOnOpml(opmlParseResult))) {
       CurrentState.insertBelowItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
     }
 

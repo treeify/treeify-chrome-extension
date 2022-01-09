@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -6,6 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType, assertNonNull } from 'src/Utility/Debug/assert'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 
 function toOpmlOutlineElement(
   itemPath: ItemPath,
@@ -23,7 +23,7 @@ function toOpmlOutlineElement(
     ? Internal.instance.state.items[ItemPath.getItemId(itemPath)].childItemIds
     : CurrentState.getDisplayingChildItemIds(itemPath)
   const children = childItemIds.map((childItemId) =>
-    toOpmlOutlineElement(itemPath.push(childItemId), xmlDocument, includeInvisibleItems)
+    toOpmlOutlineElement(RArray$.append(childItemId)(itemPath), xmlDocument, includeInvisibleItems)
   )
   outlineElement.append(...children)
 
@@ -44,7 +44,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
   if (ItemPath.hasParent(itemPath)) {
     baseAttributes.isFolded = CurrentState.getIsFolded(itemPath).toString()
   }
-  if (!item.cssClasses.isEmpty()) {
+  if (item.cssClasses.length > 0) {
     baseAttributes.cssClass = item.cssClasses.join(' ')
   }
   if (item.source !== null) {
@@ -54,7 +54,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
 
   const reminders = Internal.instance.state.reminders[itemId]
   if (reminders !== undefined) {
-    baseAttributes.reminders = JSON.stringify(reminders.toArray())
+    baseAttributes.reminders = JSON.stringify(reminders)
   }
 
   switch (item.type) {
@@ -114,7 +114,7 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
 
 /** 指定された項目とその子孫をOPML 2.0形式に変換する */
 export function toOpmlString(
-  itemPaths: List<ItemPath>,
+  itemPaths: RArray<ItemPath>,
   includeInvisibleItems: boolean = true
 ): string {
   const xmlDocument = document.implementation.createDocument(null, 'opml')
@@ -146,7 +146,7 @@ export function toOpmlString(
  * head要素を要求せず、さらにopml要素のversion属性が2.0であることを要求しないので、
  * OPML 1.0文書でもパースに成功する場合がある（意図通り）。
  */
-export function tryParseAsOpml(possiblyOpml: string): List<Element> | undefined {
+export function tryParseAsOpml(possiblyOpml: string): RArray<Element> | undefined {
   const doc = new DOMParser().parseFromString(possiblyOpml, 'text/xml')
 
   // 以下、OPMLフォーマットバリデーション
@@ -168,7 +168,7 @@ export function tryParseAsOpml(possiblyOpml: string): List<Element> | undefined 
     if (!isValidOutlineElement(Element)) return undefined
   }
 
-  return List(topLevelElements)
+  return Array.from(topLevelElements)
 }
 
 function isValidOutlineElement(possiblyOutlineElement: Element): boolean {
@@ -190,7 +190,7 @@ type ItemAndEdge = { itemId: ItemId; edge: Edge }
 // KeyはOutlineElement要素のitemId属性の値。ValueはState内の実際に対応する項目ID。
 type ItemIdMap = Record<string | number, ItemId>
 
-export function createItemsBasedOnOpml(outlineElements: List<Element>): List<ItemAndEdge> {
+export function createItemsBasedOnOpml(outlineElements: RArray<Element>): RArray<ItemAndEdge> {
   const itemIdMap = {}
   return outlineElements.map((element) => createItemBasedOnOpml(element, itemIdMap))
 }
@@ -210,7 +210,7 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
     itemIdMap[attrItemId] = itemId
   }
 
-  const children = List(outlineElement.children).map((child) =>
+  const children = Array.from(outlineElement.children).map((child) =>
     createItemBasedOnOpml(child, itemIdMap)
   )
   CurrentState.modifyChildItems(itemId, () => children.map((child) => child.itemId))
@@ -220,8 +220,7 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
 
   const attrCssClass = outlineElement.getAttribute('cssClass')
   if (attrCssClass !== null) {
-    const cssClasses = List(attrCssClass.split(' '))
-    CurrentState.setCssClasses(itemId, cssClasses)
+    CurrentState.setCssClasses(itemId, attrCssClass.split(' '))
   }
 
   if (outlineElement.getAttribute('isPage') === 'true') {

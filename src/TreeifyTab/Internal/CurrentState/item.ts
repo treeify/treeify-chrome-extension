@@ -1,3 +1,5 @@
+import { pipe } from 'fp-ts/function'
+import { append, init, last } from 'fp-ts/ReadonlyArray'
 import { List } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -7,6 +9,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Option$, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -43,7 +46,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
       modifyChildItems(parentItemId, (itemIds) => {
         const index = itemIds.indexOf(itemId)
         assert(index !== -1)
-        return itemIds.splice(index, 1, ...item.childItemIds)
+        return pipe(itemIds, RArray$.removeAt(index), RArray$.insertAll(index, item.childItemIds))
       })
     }
   } else {
@@ -59,14 +62,14 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
 
     // 削除される項目を親項目の子リストから削除する
     for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-      modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+      modifyChildItems(parentItemId, RArray$.remove(itemId))
     }
   }
 
   // 除外リストから削除する
   for (const key in Internal.instance.state.workspaces) {
     const workspace = Internal.instance.state.workspaces[key]
-    if (workspace.excludedItemIds.contains(itemId)) {
+    if (workspace.excludedItemIds.includes(itemId)) {
       Internal.instance.mutate(
         workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
         PropertyPath.of('workspaces', key, 'excludedItemIds')
@@ -128,14 +131,14 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
   const item = Internal.instance.state.items[itemId]
 
   // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
-  if (itemPath.size === 1) {
-    return item.childItemIds
+  if (itemPath.length === 1) {
+    return List(item.childItemIds)
   }
 
   if (CurrentState.getIsFolded(itemPath) || CurrentState.isPage(itemId)) {
     return List()
   } else {
-    return item.childItemIds
+    return List(item.childItemIds)
   }
 }
 
@@ -167,10 +170,8 @@ export function updateItemTimestamp(itemId: ItemId) {
 }
 
 /** 指定された項目の親項目IDのリストを返す */
-export function getParentItemIds(itemId: ItemId): List<ItemId> {
-  return List(Object.keys(Internal.instance.state.items[itemId].parents)).map((key) =>
-    parseInt(key)
-  )
+export function getParentItemIds(itemId: ItemId): RArray<ItemId> {
+  return Object.keys(Internal.instance.state.items[itemId].parents).map((key) => parseInt(key))
 }
 
 /** 指定された項目の親の数を返す */
@@ -191,7 +192,7 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  * @param itemId この項目の子項目リストを修正する
  * @param f 子項目リストを受け取って新しい子項目リストを返す関数
  */
-export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
+export function modifyChildItems(itemId: ItemId, f: (itemIds: RArray<ItemId>) => RArray<ItemId>) {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   Internal.instance.mutate(f(childItemIds), PropertyPath.of('items', itemId, 'childItemIds'))
 }
@@ -205,7 +206,7 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
  */
 export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
   // 子リストの先頭に追加する
-  modifyChildItems(itemId, (itemIds) => itemIds.unshift(newItemId))
+  modifyChildItems(itemId, RArray$.prepend(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, itemId, edge)
@@ -220,7 +221,7 @@ export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: E
  */
 export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
   // 子リストの末尾に追加する
-  modifyChildItems(itemId, (itemIds) => itemIds.push(newItemId))
+  modifyChildItems(itemId, RArray$.append(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, itemId, edge)
@@ -245,11 +246,11 @@ export function insertPrevSiblingItem(
   assertNonUndefined(parentItemId)
 
   const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  assert(childItemIds.contains(itemId))
+  assert(childItemIds.includes(itemId))
 
   // 兄として追加する
   modifyChildItems(parentItemId, (itemIds) => {
-    return itemIds.insert(itemIds.indexOf(itemId), newItemId)
+    return RArray$.insertAt(itemIds.indexOf(itemId), newItemId)(itemIds)
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
@@ -276,11 +277,11 @@ export function insertNextSiblingItem(
   assertNonUndefined(parentItemId)
 
   const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  assert(childItemIds.contains(itemId))
+  assert(childItemIds.includes(itemId))
 
   // 弟として追加する
   modifyChildItems(parentItemId, (itemIds) => {
-    return itemIds.insert(itemIds.indexOf(itemId) + 1, newItemId)
+    return RArray$.insertAt(itemIds.indexOf(itemId) + 1, newItemId)(itemIds)
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
@@ -295,9 +296,9 @@ export function insertNextSiblingItem(
  * 指定されたItemPathが子を表示している場合は最初の子になるよう配置する。
  */
 export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Edge): ItemPath {
-  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.size === 1) {
+  if (!CurrentState.getDisplayingChildItemIds(itemPath).isEmpty() || itemPath.length === 1) {
     insertFirstChildItem(ItemPath.getItemId(itemPath), newItemId, edge)
-    return itemPath.push(newItemId)
+    return RArray$.append(newItemId)(itemPath)
   } else {
     return insertNextSiblingItem(itemPath, newItemId, edge)
   }
@@ -311,7 +312,7 @@ export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Ed
  */
 export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge {
   // 親項目の子項目リストから項目を削除する
-  modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+  modifyChildItems(parentItemId, RArray$.remove(itemId))
 
   const edge = Internal.instance.state.items[itemId].parents[parentItemId]
   // 項目の親リストから親項目を削除する
@@ -322,26 +323,27 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 /** 新しい未使用の項目IDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
   const availableItemIds = Internal.instance.state.availableItemIds
-  if (!availableItemIds.isEmpty()) {
-    const last = availableItemIds.last(undefined)
-    assertNonUndefined(last)
-    Internal.instance.mutate(availableItemIds.pop(), PropertyPath.of('availableItemIds'))
-    return last
-  } else {
-    const maxItemId = Internal.instance.state.maxItemId
-    Internal.instance.mutate(maxItemId + 1, PropertyPath.of('maxItemId'))
-    return maxItemId + 1
-  }
+  return Option$.match(
+    () => {
+      const maxItemId = Internal.instance.state.maxItemId
+      Internal.instance.mutate(maxItemId + 1, PropertyPath.of('maxItemId'))
+      return maxItemId + 1
+    },
+    (last: ItemId) => {
+      Internal.instance.mutate(init(availableItemIds), PropertyPath.of('availableItemIds'))
+      return last
+    }
+  )(last(availableItemIds))
 }
 
 /** 使われなくなった項目IDを登録する */
 export function recycleItemId(itemId: ItemId) {
   const availableItemIds = Internal.instance.state.availableItemIds
-  Internal.instance.mutate(availableItemIds.push(itemId), PropertyPath.of('availableItemIds'))
+  Internal.instance.mutate(append(itemId)(availableItemIds), PropertyPath.of('availableItemIds'))
 }
 
 /** 指定された項目のCSSクラスリストを上書き設定する */
-export function setCssClasses(itemId: ItemId, cssClasses: List<string>) {
+export function setCssClasses(itemId: ItemId, cssClasses: RArray<string>) {
   Internal.instance.mutate(cssClasses, PropertyPath.of('items', itemId, 'cssClasses'))
 }
 
@@ -356,12 +358,12 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   const index = cssClasses.indexOf(cssClass)
   if (index === -1) {
     Internal.instance.mutate(
-      cssClasses.push(cssClass),
+      RArray$.append(cssClass)(cssClasses),
       PropertyPath.of('items', itemId, 'cssClasses')
     )
   } else {
     Internal.instance.mutate(
-      cssClasses.remove(index),
+      RArray$.unsafeDeleteAt(index, cssClasses),
       PropertyPath.of('items', itemId, 'cssClasses')
     )
   }
@@ -373,9 +375,9 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
  */
 export function addCssClass(itemId: ItemId, cssClass: string) {
   const cssClasses = Internal.instance.state.items[itemId].cssClasses
-  if (!cssClasses.contains(cssClass)) {
+  if (!cssClasses.includes(cssClass)) {
     Internal.instance.mutate(
-      cssClasses.push(cssClass),
+      RArray$.append(cssClass)(cssClasses),
       PropertyPath.of('items', itemId, 'cssClasses')
     )
   }

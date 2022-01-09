@@ -1,23 +1,24 @@
 <script lang="ts">
-  import { is, Set } from 'immutable'
+  import { Set } from 'immutable'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import OtherParentsDialogPage from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPage.svelte'
   import { createOtherParentsDialogPageProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPageProps'
+  import { RArray$ } from 'src/Utility/fp-ts'
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const parentItemIds = CurrentState.getParentItemIds(targetItemId)
+
   const itemPaths = parentItemIds
-    .map((parentItemId) => Set(CurrentState.yieldItemPaths(parentItemId)))
-    .flatMap((x) => x)
-    .map((itemPath) => itemPath.push(targetItemId))
-    .filter((itemPath) => !is(itemPath, targetItemPath))
-  const pagePropses = itemPaths
+    .flatMap((parentItemId) => [...CurrentState.yieldItemPaths(parentItemId)])
+    .map(RArray$.append(targetItemId))
+    .filter((itemPath) => !RArray$.shallowEqual(itemPath, targetItemPath))
+  const pagePropses = Set(itemPaths)
     .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
     .toList()
-    .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList()))
+    .map((itemPaths) => createOtherParentsDialogPageProps(itemPaths.toList().toArray()))
 </script>
 
 <CommonDialog class="other-parents-dialog_root" title="他のトランスクルード元" showCloseButton>

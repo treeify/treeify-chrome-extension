@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import DropdownMenuDialog from 'src/TreeifyTab/View/Dialog/DropdownMenuDialog.svelte'
@@ -14,7 +13,7 @@
     return {
       top: rect.bottom,
       right: rect.right,
-      itemPropses: List.of(
+      itemPropses: [
         {
           title: 'キーボード操作設定',
           onClick: () => {
@@ -42,8 +41,8 @@
           onClick: () => {
             External.instance.dialogState = { type: 'OtherSettingsDialog' }
           },
-        }
-      ),
+        },
+      ],
     }
   }
 </script>

@@ -1,4 +1,3 @@
-import { is, List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -19,6 +18,7 @@ import {
   MainAreaRollProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 import { assertNeverType } from 'src/Utility/Debug/assert'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaNodeProps = {
@@ -33,12 +33,12 @@ export type MainAreaNodeProps = {
   selected: 'single' | 'multi' | 'non'
   isTranscluded: boolean
   isExcluded: boolean
-  cssClasses: List<string>
+  cssClasses: RArray<string>
   footprintRank: integer | undefined
   footprintCount: integer
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
-  childItemPropses: List<MainAreaNodeProps>
+  childItemPropses: RArray<MainAreaNodeProps>
   rollProps: MainAreaRollProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenu(event: Event): void
@@ -54,15 +54,16 @@ export function createMainAreaNodeProps(
 ): MainAreaNodeProps {
   const itemId = ItemPath.getItemId(itemPath)
   const item = state.items[itemId]
-  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath)
+  const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath).toArray()
 
   return {
     itemPath,
     isActivePage: !ItemPath.hasParent(itemPath),
     selected: deriveSelected(state, itemPath),
     isTranscluded: Object.keys(item.parents).length > 1,
-    isExcluded: CurrentState.getExcludedItemIds().contains(itemId),
-    cssClasses: item.source === null ? item.cssClasses : item.cssClasses.push('has-source'),
+    isExcluded: CurrentState.getExcludedItemIds().includes(itemId),
+    cssClasses:
+      item.source === null ? item.cssClasses : RArray$.append('has-source')(item.cssClasses),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),
@@ -73,7 +74,7 @@ export function createMainAreaNodeProps(
         state,
         footprintRankMap,
         footprintCount,
-        itemPath.push(childItemId)
+        RArray$.append(childItemId)(itemPath)
       )
     }),
     onMouseDownContentArea(event: MouseEvent) {
@@ -81,15 +82,15 @@ export function createMainAreaNodeProps(
         case '0100MouseButton0':
           const targetItemPath = CurrentState.getTargetItemPath()
           // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
-          if (is(itemPath, targetItemPath)) break
+          if (RArray$.shallowEqual(itemPath, targetItemPath)) break
 
           event.preventDefault()
 
           // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
           const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
-          const targetCandidate = itemPath.take(commonPrefix.size + 1)
-          const anchorCandidate = targetItemPath.take(commonPrefix.size + 1)
-          if (targetCandidate.size === anchorCandidate.size) {
+          const targetCandidate = RArray$.takeLeft(commonPrefix.length + 1)(itemPath)
+          const anchorCandidate = RArray$.takeLeft(commonPrefix.length + 1)(targetItemPath)
+          if (targetCandidate.length === anchorCandidate.length) {
             CurrentState.setTargetItemPathOnly(targetCandidate)
             CurrentState.setAnchorItemPath(anchorCandidate)
             Rerenderer.instance.requestToFocusTargetItem()
@@ -115,7 +116,7 @@ export function createMainAreaNodeProps(
           // 複数選択中に選択範囲内を右クリックした場合はtargetItemPathを更新せず、
           // その複数選択された項目をコンテキストメニューの操作対象にする。
           if (
-            CurrentState.getSelectedItemPaths().size === 1 ||
+            CurrentState.getSelectedItemPaths().length === 1 ||
             !CurrentState.isInSubtreeOfSelectedItemPaths(itemPath)
           ) {
             CurrentState.setTargetItemPath(itemPath)
@@ -203,13 +204,13 @@ function countTabsInDescendants(state: State, itemId: ItemId): integer {
 function deriveSelected(state: State, itemPath: ItemPath): 'single' | 'multi' | 'non' {
   const targetItemPath = state.pages[CurrentState.getActivePageId()].targetItemPath
   const anchorItemPath = state.pages[CurrentState.getActivePageId()].anchorItemPath
-  if (is(targetItemPath, anchorItemPath)) {
+  if (RArray$.shallowEqual(targetItemPath, anchorItemPath)) {
     // そもそも複数範囲されていない場合
-    if (is(itemPath, targetItemPath)) return 'single'
+    if (RArray$.shallowEqual(itemPath, targetItemPath)) return 'single'
     else return 'non'
   }
 
-  if (!is(itemPath.pop(), targetItemPath.pop())) {
+  if (!RArray$.shallowEqual(RArray$.pop(itemPath), RArray$.pop(targetItemPath))) {
     // 選択されたItemPath群がこのItemPathと異なる子リスト上に存在する場合
     return 'non'
   }

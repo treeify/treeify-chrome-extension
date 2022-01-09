@@ -1,4 +1,5 @@
-import { List, Set } from 'immutable'
+import { pipe } from 'fp-ts/function'
+import { Set } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -15,15 +16,16 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-import { CssCustomProperty } from 'src/Utility/browser'
+import { CssCustomProperty, TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { NERArray$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
   itemId: ItemId
   bulletAndIndentProps: PageTreeBulletAndIndentProps
   contentProps: ItemContentProps
-  childNodePropses: List<PageTreeNodeProps>
+  childNodePropses: RArray<PageTreeNodeProps>
   isActivePage: boolean
   isRoot: boolean
   isAudible: boolean
@@ -39,32 +41,26 @@ export type PageTreeNodeProps = {
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   const filteredPageIds = CurrentState.getFilteredMountedPageIds()
 
-  const tree = CurrentState.treeify(
-    CurrentState.getFilteredMountedPageIds().toSet(),
-    TOP_ITEM_ID,
-    true
-  )
+  const tree = CurrentState.treeify(Set(filteredPageIds), TOP_ITEM_ID, true)
   return tree.fold((itemPath, children) => {
     const itemId = ItemPath.getItemId(itemPath)
     const activePageId = CurrentState.getActivePageId()
 
     const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
     const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.7
-    const footprintCount = Math.floor(nonActivePageIds.size ** exponent)
+    const footprintCount = Math.floor(nonActivePageIds.length ** exponent)
     const index = nonActivePageIds.indexOf(itemId)
-    const rank = index !== -1 ? nonActivePageIds.size - index - 1 : 0
+    const rank = index !== -1 ? nonActivePageIds.length - index - 1 : 0
 
     return {
       itemId,
       bulletAndIndentProps: createPageTreeBulletAndIndentProps(children.length > 0, itemPath),
       contentProps: createItemContentProps(itemId),
       childNodePropses:
-        ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath)
-          ? List()
-          : List(children),
+        ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath) ? [] : children,
       isActivePage: activePageId === itemId,
       isRoot: itemId === TOP_ITEM_ID,
-      isAudible: getAudiblePageIds().contains(itemId),
+      isAudible: getAudiblePageIds().has(itemId),
       footprintRank: rank < footprintCount ? rank : undefined,
       footprintCount,
       tabsCount: CurrentState.countTabsInSubtree(state, itemId),
@@ -126,13 +122,15 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   })
 }
 
-function getAudiblePageIds(): Set<ItemId> {
+function getAudiblePageIds(): RSet<ItemId> {
   const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
-  const audibleItemIds = audibleTabIds
-    .map((tabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId))
-    .filter((itemId) => itemId !== undefined) as List<ItemId>
-
-  return Set(audibleItemIds.flatMap(CurrentState.getPageIdsBelongingTo))
+  const audibleItemIds = pipe(
+    audibleTabIds,
+    RArray$.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId)),
+    RArray$.filterUndefined,
+    RSet$.from
+  )
+  return RSet$.flatMap(CurrentState.getPageIdsBelongingTo)(audibleItemIds)
 }
 
 function unmountPage(itemId: number, activePageId: number) {
@@ -143,7 +141,7 @@ function unmountPage(itemId: number, activePageId: number) {
 
   // もしアクティブページなら、最も新しいページを新たなアクティブページとする
   if (itemId === activePageId) {
-    const lastPageId = CurrentState.getFilteredMountedPageIds().last(undefined)
+    const lastPageId = NERArray$.last(CurrentState.getFilteredMountedPageIds())
     assertNonUndefined(lastPageId)
     CurrentState.switchActivePage(lastPageId)
     Rerenderer.instance.requestToFocusTargetItem()

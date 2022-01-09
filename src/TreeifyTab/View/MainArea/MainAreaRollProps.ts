@@ -6,6 +6,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CssCustomProperty } from 'src/Utility/browser'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaRollProps = {
@@ -109,16 +110,16 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   if (bulletState !== MainAreaBulletState.FOLDED) return 0
 
   const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
-    return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
+    return CurrentState.getDisplayingChildItemIds(RArray$.append(childItemId)(itemPath)).size
   })
-  return counts.size + counts.reduce((a: integer, x) => a + x, 0)
+  return counts.length + counts.reduce((a: integer, x) => a + x, 0)
 }
 
 export function deriveBulletState(state: State, itemPath: ItemPath): MainAreaBulletState {
   const itemId = ItemPath.getItemId(itemPath)
   if (state.pages[itemId] !== undefined) {
     return MainAreaBulletState.PAGE
-  } else if (state.items[itemId].childItemIds.size === 0) {
+  } else if (state.items[itemId].childItemIds.length === 0) {
     return MainAreaBulletState.NO_CHILDREN
   } else {
     CurrentState.getIsFolded(itemPath)

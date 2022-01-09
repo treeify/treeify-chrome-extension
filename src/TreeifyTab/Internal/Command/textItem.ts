@@ -78,7 +78,7 @@ export function grouping() {
   // 空のテキスト項目を作って配置する
   const newItemId = CurrentState.createTextItem()
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const newItemPath = CurrentState.insertPrevSiblingItem(selectedItemPaths.first(), newItemId)
+  const newItemPath = CurrentState.insertPrevSiblingItem(selectedItemPaths[0], newItemId)
 
   // 選択された項目を移動する
   for (const selectedItemPath of selectedItemPaths) {

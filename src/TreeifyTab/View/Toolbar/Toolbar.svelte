@@ -1,5 +1,6 @@
 <script lang="ts">
   import { List } from 'immutable'
+  import { TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -15,7 +16,7 @@
   function onClickOpmlExport() {
     const fileName = 'treeify.opml'
 
-    const content = toOpmlString(List.of(List.of(0)))
+    const content = toOpmlString([[TOP_ITEM_ID]])
     const aElement = document.createElement('a')
     aElement.href = window.URL.createObjectURL(new Blob([content], { type: 'application/xml' }))
     aElement.download = fileName

@@ -49,7 +49,7 @@
 
       console.log('create APIを呼んでファイル更新日時を記録して終了')
       // create APIを呼んでファイル更新日時を記録して終了
-      const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
+      const gzipped = await compress(JSON.stringify(Internal.instance.state))
       const response = await GoogleDrive.createFileWithMultipart(DATA_FILE_NAME, new Blob(gzipped))
       const responseJson = await response.json()
       setSyncedAt(Internal.instance.state.syncWith, responseJson.modifiedTime)
@@ -72,9 +72,7 @@
         // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
         dump(state.maxItemId, Internal.instance.state.maxItemId)
         if (state.maxItemId < Internal.instance.state.maxItemId) {
-          const gzipped = await compress(
-            JSON.stringify(Internal.instance.state, State.jsonReplacer)
-          )
+          const gzipped = await compress(JSON.stringify(Internal.instance.state))
           const response = await GoogleDrive.updateFileWithMultipart(
             dataFileMetaData.id,
             new Blob(gzipped)
@@ -101,7 +99,7 @@
         // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
         if (!External.instance.hasUpdatedSinceSync) return
 
-        const gzipped = await compress(JSON.stringify(Internal.instance.state, State.jsonReplacer))
+        const gzipped = await compress(JSON.stringify(Internal.instance.state))
         const response = await GoogleDrive.updateFileWithMultipart(
           dataFileMetaData.id,
           new Blob(gzipped)
@@ -123,7 +121,7 @@
 
     const response = await GoogleDrive.readFile(metaData.id)
     const text = await decompress(await response.arrayBuffer())
-    return JSON.parse(text, State.jsonReviver)
+    return JSON.parse(text)
   }
 
   /**

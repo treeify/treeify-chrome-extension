@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -15,10 +14,10 @@ export function createImageItem(): ItemId {
   const newItem: Item = {
     type: ItemType.IMAGE,
     globalItemId: GlobalItemId.generate(),
-    childItemIds: List(),
+    childItemIds: [],
     parents: {},
     timestamp: Timestamp.now(),
-    cssClasses: List(),
+    cssClasses: [],
     source: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))

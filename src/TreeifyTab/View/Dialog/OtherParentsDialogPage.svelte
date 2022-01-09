@@ -12,7 +12,7 @@
     <ItemContent props={props.pageContentProps} />
   </div>
   <div class="other-parents-dialog-page_item-list">
-    {#each props.itemPropses.toArray() as itemProps}
+    {#each props.itemPropses as itemProps}
       <OtherParentsDialogItem props={itemProps} />
     {/each}
   </div>

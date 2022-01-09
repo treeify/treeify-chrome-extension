@@ -1,3 +1,5 @@
+import { pipe } from 'fp-ts/function'
+import { Ord as NumberOrd } from 'fp-ts/number'
 import { List, Seq, Set } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -6,6 +8,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -16,15 +19,19 @@ import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Generator<ItemId> {
   yield ItemPath.getItemId(itemPath)
   for (const childItemId of CurrentState.getDisplayingChildItemIds(itemPath)) {
-    yield* getAllDisplayingItemIds(state, itemPath.push(childItemId))
+    yield* getAllDisplayingItemIds(state, RArray$.append(childItemId)(itemPath))
   }
 }
 
 /** 与えられたItemPathがメインエリア上で表示されるべきものかどうかを判定する */
 export function isVisible(itemPath: ItemPath): boolean {
-  for (let i = 1; i < itemPath.size - 1; i++) {
-    const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath.take(i))
-    const nextItemId = itemPath.get(i + 1)
+  for (let i = 1; i < itemPath.length - 1; i++) {
+    const displayingChildItemIds = pipe(
+      itemPath,
+      RArray$.takeLeft(i),
+      CurrentState.getDisplayingChildItemIds
+    )
+    const nextItemId = itemPath[i + 1]
     assertNonUndefined(nextItemId)
     if (!displayingChildItemIds.contains(nextItemId)) {
       return false
@@ -38,7 +45,7 @@ export function isVisible(itemPath: ItemPath): boolean {
  * 自身がページの場合は自身のItemPathを返す。
  */
 export function yieldItemPaths(itemId: ItemId): Generator<ItemPath> {
-  return _yieldItemPaths(List.of(itemId))
+  return _yieldItemPaths([itemId])
 }
 
 function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
@@ -49,7 +56,7 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
   }
 
   for (const parentItemId of CurrentState.getParentItemIds(rootItemId)) {
-    yield* _yieldItemPaths(itemPath.unshift(parentItemId))
+    yield* _yieldItemPaths(RArray$.prepend(parentItemId)(itemPath))
   }
 }
 
@@ -57,15 +64,20 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
  * 指定された項目が所属するページIDの集合を返す。
  * 自身がページの場合は自身のみを返す。
  */
-export function getPageIdsBelongingTo(itemId: ItemId): Set<ItemId> {
-  return Set(yieldItemPaths(itemId)).map((itemPath) => ItemPath.getRootItemId(itemPath))
+export function getPageIdsBelongingTo(itemId: ItemId): RSet<ItemId> {
+  return pipe(
+    RSet$.from(yieldItemPaths(itemId)),
+    RSet$.map((itemPath) => ItemPath.getRootItemId(itemPath))
+  )
 }
 
-/** 指定されたページが所属するページIDの集合を返す */
-export function getParentPageIds(pageId: ItemId): Set<ItemId> {
-  return CurrentState.getParentItemIds(pageId)
-    .flatMap((parentItemId) => CurrentState.getPageIdsBelongingTo(parentItemId))
-    .toSet()
+/** 指定されたページが所属するページIDを返す */
+export function getParentPageIds(pageId: ItemId): RArray<ItemId> {
+  return pipe(
+    RSet$.from(CurrentState.getParentItemIds(pageId)),
+    RSet$.flatMap((parentItemId: ItemId) => CurrentState.getPageIdsBelongingTo(parentItemId)),
+    RArray$.from
+  )
 }
 
 /**
@@ -102,8 +114,10 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
  * ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
  */
 export function countTabsInSubtree(state: State, itemId: ItemId): integer {
-  return Set(CurrentState.yieldSubtreeItemIdsShallowly(itemId)).filter(
-    (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+  return pipe(
+    RSet$.from(CurrentState.yieldSubtreeItemIdsShallowly(itemId)),
+    RSet$.map((itemId: ItemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId)),
+    RSet$.filterUndefined
   ).size
 }
 
@@ -112,41 +126,20 @@ export function countTabsInSubtree(state: State, itemId: ItemId): integer {
  * 全てのItemPathのルート項目が同じでなければ正しく計算できない。
  */
 export function sortByDocumentOrder(itemPaths: List<ItemPath>): List<ItemPath> {
+  const lexicographicalOrder = RArray$.getOrd(NumberOrd).compare
   return itemPaths.sortBy((itemPath) => {
     return toSiblingRankList(itemPath)
   }, lexicographicalOrder)
 }
 
 // ItemPathを兄弟順位リストに変換する
-function toSiblingRankList(itemPath: ItemPath): List<integer> {
+function toSiblingRankList(itemPath: ItemPath): RArray<integer> {
   const siblingRankArray = []
-  for (let i = 1; i < itemPath.size; i++) {
-    const childItemIds = Internal.instance.state.items[itemPath.get(i - 1)!].childItemIds
-    siblingRankArray.push(childItemIds.indexOf(itemPath.get(i)!))
+  for (let i = 1; i < itemPath.length; i++) {
+    const childItemIds = Internal.instance.state.items[itemPath[i - 1]].childItemIds
+    siblingRankArray.push(childItemIds.indexOf(itemPath[i]))
   }
-  return List(siblingRankArray)
-}
-
-// 辞書式順序のcomparator
-function lexicographicalOrder(lhs: List<integer>, rhs: List<integer>): integer {
-  const min = Math.min(lhs.size, rhs.size)
-
-  for (let i = 0; i < min; i++) {
-    const r = rhs.get(i)!
-    const l = lhs.get(i)!
-    if (l > r) {
-      return 1
-    } else if (l < r) {
-      return -1
-    }
-  }
-  if (lhs.size === rhs.size) {
-    return 0
-  } else if (lhs.size > rhs.size) {
-    return 1
-  } else {
-    return -1
-  }
+  return siblingRankArray
 }
 
 /**
@@ -159,7 +152,7 @@ export function treeify(
   passThroughPage: boolean
 ): MutableOrderedTree<ItemPath> {
   const childrenMap = itemIdSet
-    .flatMap((itemId) => yieldItemPathsFor(List.of(itemId), itemIdSet, passThroughPage))
+    .flatMap((itemId) => yieldItemPathsFor([itemId], itemIdSet, passThroughPage))
     .groupBy((value) => ItemPath.getRootItemId(value))
     .map((collection) => {
       const sortedItemPaths = CurrentState.sortByDocumentOrder(collection.toList())
@@ -170,7 +163,7 @@ export function treeify(
       })
     })
 
-  return _treeify(childrenMap, List.of(rootItemId))
+  return _treeify(childrenMap, [rootItemId])
 }
 
 /**
@@ -181,14 +174,14 @@ export function treeify(
  * @param passThroughPage ページを貫通して探索するかどうか
  */
 function* yieldItemPathsFor(
-  itemIds: List<ItemId>,
+  itemIds: RArray<ItemId>,
   itemIdSet: Set<ItemId>,
   passThroughPage: boolean
 ): Generator<ItemPath> {
-  const itemId = itemIds.first(undefined)
+  const itemId = itemIds[0]
   assertNonUndefined(itemId)
 
-  if (itemIds.size > 1 && itemIdSet.contains(itemId)) {
+  if (itemIds.length > 1 && itemIdSet.contains(itemId)) {
     yield itemIds
     return
   }
@@ -199,7 +192,7 @@ function* yieldItemPathsFor(
   }
 
   for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-    yield* yieldItemPathsFor(itemIds.unshift(parentItemId), itemIdSet, passThroughPage)
+    yield* yieldItemPathsFor(RArray$.prepend(parentItemId)(itemIds), itemIdSet, passThroughPage)
   }
 }
 
@@ -210,6 +203,6 @@ function _treeify(
   const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List()
   return new MutableOrderedTree(
     itemPath,
-    children.map((child) => _treeify(childrenMap, itemPath.concat(child.shift()))).toArray()
+    children.map((child) => _treeify(childrenMap, itemPath.concat(RArray$.shift(child)))).toArray()
   )
 }

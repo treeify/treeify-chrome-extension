@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -6,10 +5,11 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Item, TextItem } from 'src/TreeifyTab/Internal/State'
+import { RArray } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** 指定されたテキスト項目のdomishObjectsを更新する */
-export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: List<DomishObject>) {
+export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: RArray<DomishObject>) {
   Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
     Internal.instance.mutate(
       domishObjects,
@@ -25,15 +25,15 @@ export function createTextItem(): ItemId {
   const newItem: Item = {
     type: ItemType.TEXT,
     globalItemId: GlobalItemId.generate(),
-    childItemIds: List(),
+    childItemIds: [],
     parents: {},
     timestamp: Timestamp.now(),
-    cssClasses: List(),
+    cssClasses: [],
     source: null,
   }
   Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
 
-  const newTextItem: TextItem = { domishObjects: List() }
+  const newTextItem: TextItem = { domishObjects: [] }
   Internal.instance.mutate(newTextItem, PropertyPath.of('textItems', newItemId))
 
   return newItemId
@@ -54,7 +54,7 @@ export function isEmptyTextItem(itemId: ItemId): boolean {
   const item = Internal.instance.state.items[itemId]
   if (item.type !== ItemType.TEXT) return false
 
-  if (!item.childItemIds.isEmpty()) return false
+  if (item.childItemIds.length > 0) return false
 
   if (CurrentState.countParents(itemId) >= 2) return false
 

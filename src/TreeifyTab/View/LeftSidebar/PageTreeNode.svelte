@@ -56,7 +56,7 @@
       </div>
     </div>
     <div class="page-tree-node_children-area">
-      {#each props.childNodePropses.toArray() as childNodeProps}
+      {#each props.childNodePropses as childNodeProps}
         <PageTreeNode props={childNodeProps} />
       {/each}
     </div>

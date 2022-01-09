@@ -9,6 +9,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Source } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
 
 /** 選択された項目を折りたたむコマンド */
 export function fold() {
@@ -37,7 +38,7 @@ export function toggleFolded() {
 /** メインエリア上でEnterキーを押したときのデフォルトの挙動 */
 export function enterKeyDefault() {
   // 複数選択時は何もしない
-  if (CurrentState.getSelectedItemPaths().size > 1) return
+  if (CurrentState.getSelectedItemPaths().length > 1) return
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -70,7 +71,7 @@ export function enterKeyDefault() {
       CurrentState.setTextItemDomishObjects(newItemId, domishObjects)
 
       // キャレット位置を更新する
-      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
       return
     }
@@ -143,7 +144,7 @@ export function enterKeyDefault() {
       CurrentState.insertFirstChildItem(targetItemId, newItemId)
 
       // フォーカスを移す
-      CurrentState.setTargetItemPath(targetItemPath.push(newItemId))
+      CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
       return
     }
@@ -166,9 +167,9 @@ export function deleteItem() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(selectedItemPaths.first())) return
+  if (!ItemPath.hasParent(selectedItemPaths[0])) return
 
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
@@ -195,12 +196,12 @@ export function deleteItem() {
  */
 export function removeItem() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const parentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
+  const parentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
 
   // アクティブページを削除しようとしている場合、何もしない
   if (parentItemId === undefined) return
 
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
 
@@ -237,7 +238,7 @@ export function deleteJustOneItem() {
   if (!ItemPath.hasParent(targetItemPath)) return
 
   const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
-  if (childItemIds.isEmpty()) {
+  if (childItemIds.length === 0) {
     // 上の項目をフォーカス
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
@@ -245,7 +246,7 @@ export function deleteJustOneItem() {
     Rerenderer.instance.requestToFocusTargetItem()
   } else {
     // 子がいる場合は最初の子をフォーカス
-    const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds.first())
+    const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds[0])
     assertNonUndefined(newItemPath)
     CurrentState.setTargetItemPath(newItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
@@ -263,7 +264,7 @@ export function toggleCompleted() {
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
   const existsNonCompletedItem = selectedItemIds.some((itemId) => {
-    return !Internal.instance.state.items[itemId].cssClasses.contains('completed')
+    return !Internal.instance.state.items[itemId].cssClasses.includes('completed')
   })
   if (existsNonCompletedItem) {
     // 選択された項目の中に非完了状態のものが含まれる場合
@@ -279,7 +280,8 @@ export function toggleCompleted() {
     Command.fold()
     Command.closeTreeTabs()
     // フォーカスを下の項目に移動する
-    const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
+    const bottomSelectedItemPath = NERArray$.last(selectedItemPaths)
+    const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(bottomSelectedItemPath)
     if (firstFollowingItemPath !== undefined) {
       CurrentState.setTargetItemPath(firstFollowingItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
@@ -317,7 +319,7 @@ function toggleCssClass(cssClass: string) {
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
 
   const everyoneContainsTheCssClass = selectedItemIds.every((itemId) => {
-    return Internal.instance.state.items[itemId].cssClasses.contains(cssClass)
+    return Internal.instance.state.items[itemId].cssClasses.includes(cssClass)
   })
   if (!everyoneContainsTheCssClass) {
     // 選択された項目の中に該当状態ではない項目が含まれる場合

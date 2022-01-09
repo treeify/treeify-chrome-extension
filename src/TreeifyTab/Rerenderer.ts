@@ -1,4 +1,4 @@
-import { List } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import {
   focusMainAreaBackground,
   setDomSelection,
@@ -12,6 +12,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import Root from 'src/TreeifyTab/View/Root.svelte'
 import { assertNonNull } from 'src/Utility/Debug/assert'
+import { RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { tick } from 'svelte'
 import { Readable, writable } from 'svelte/store'
@@ -56,11 +57,12 @@ export class Rerenderer {
     this.#rerenderingPulse.set({})
 
     // IndexedDBを更新
-    const chunks = List(this.mutatedPropertyPaths)
-      .map((propertyPath) => Chunk.convertToChunkId(propertyPath))
-      .toSet()
-      .map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
-    Database.writeChunks(chunks.toList())
+    const chunks = pipe(
+      this.mutatedPropertyPaths,
+      RSet$.map(Chunk.convertToChunkId),
+      RSet$.map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
+    )
+    Database.writeChunks(Array.from(chunks))
     this.mutatedPropertyPaths.clear()
 
     // DOM更新完了後に実行される
@@ -86,7 +88,7 @@ export class Rerenderer {
     // DOM更新完了後に実行される
     tick().then(() => {
       // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().size === 1) {
+      if (CurrentState.getSelectedItemPaths().length === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
@@ -101,7 +103,7 @@ export class Rerenderer {
   requestToFocusTargetItem(textItemSelection?: TextItemSelection | undefined) {
     this.pendingFocusAndTextSelectionSetting = () => {
       // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().size === 1) {
+      if (CurrentState.getSelectedItemPaths().length === 1) {
         const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)

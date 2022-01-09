@@ -22,7 +22,7 @@
 
 <div class="search-result-item_root" {style}>
   <div class="search-result-item_roll">
-    {#if !props.children.isEmpty()}
+    {#if props.children.length > 0}
       <div class="search-result-item_indent-guide" />
     {/if}
     <div class="search-result-item_roll-outer-circle" />
@@ -38,7 +38,7 @@
       <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
     </div>
     <div class="search-result-item_children-area">
-      {#each props.children.toArray() as child (child.itemPath.toString())}
+      {#each props.children as child (child.itemPath.toString())}
         <SearchResultItem props={child} />
       {/each}
     </div>

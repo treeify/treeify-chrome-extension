@@ -1,4 +1,4 @@
-import { List } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -9,6 +9,7 @@ import { Page } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { assertNonNull } from 'src/Utility/Debug/assert'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { tick } from 'svelte'
 
 /** アクティブページを切り替える */
@@ -19,11 +20,14 @@ export function switchActivePage(itemId: ItemId) {
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
     Internal.instance.mutate(
-      mountedPageIds.remove(index).push(itemId),
+      pipe(mountedPageIds, RArray$.removeAt(index), RArray$.append(itemId)),
       PropertyPath.of('mountedPageIds')
     )
   } else {
-    Internal.instance.mutate(mountedPageIds.push(itemId), PropertyPath.of('mountedPageIds'))
+    Internal.instance.mutate(
+      RArray$.append(itemId)(mountedPageIds),
+      PropertyPath.of('mountedPageIds')
+    )
   }
 
   CurrentState.setActivePageId(itemId)
@@ -51,7 +55,10 @@ export function unmountPage(itemId: ItemId) {
   const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
-    Internal.instance.mutate(mountedPageIds.remove(index), PropertyPath.of('mountedPageIds'))
+    Internal.instance.mutate(
+      RArray$.removeAt(index)(mountedPageIds),
+      PropertyPath.of('mountedPageIds')
+    )
   }
 }
 
@@ -66,8 +73,8 @@ export function turnIntoPage(itemId: ItemId) {
   if (isPage(itemId)) return
 
   const page: Page = {
-    targetItemPath: List.of(itemId),
-    anchorItemPath: List.of(itemId),
+    targetItemPath: [itemId],
+    anchorItemPath: [itemId],
   }
   Internal.instance.mutate(page, PropertyPath.of('pages', itemId))
 }
@@ -96,7 +103,7 @@ export function turnIntoNonPage(itemId: ItemId) {
 export function deriveTreeifyTabTitle(): string {
   const activePageId = CurrentState.getActivePageId()
   const parentPageIds = CurrentState.getParentPageIds(activePageId)
-  const parentPageId = parentPageIds.first(undefined)
+  const parentPageId = parentPageIds[0]
   if (parentPageId !== undefined) {
     return `${extractPlainText(activePageId)} - ${extractPlainText(parentPageId)}`
   } else {

@@ -1,10 +1,10 @@
-import { List } from 'immutable'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 /** 対象ウェブページ項目に対応するタブをdiscardする */
 export function discardJustOneTab() {
@@ -69,8 +69,8 @@ export function openJustOneTab() {
     const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
     if (tabId === undefined) {
       const url = Internal.instance.state.webPageItems[selectedItemId].url
-      const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
-      External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(selectedItemId))
+      const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
+      External.instance.urlToItemIdsForTabCreation.set(url, RArray$.append(selectedItemId)(itemIds))
       chrome.tabs.create({ url, active: false })
     }
   }
@@ -87,8 +87,11 @@ export function openTreeTabs() {
       const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
       if (tabId === undefined) {
         const url = Internal.instance.state.webPageItems[subtreeItemId].url
-        const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
-        External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(subtreeItemId))
+        const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
+        External.instance.urlToItemIdsForTabCreation.set(
+          url,
+          RArray$.append(subtreeItemId)(itemIds)
+        )
         chrome.tabs.create({ url, active: false })
       }
     }
@@ -114,8 +117,8 @@ export function browseTab() {
   } else {
     // 対応するタブがなければ開く
     const url = Internal.instance.state.webPageItems[targetItemId].url
-    const itemIds = External.instance.urlToItemIdsForTabCreation.get(url) ?? List()
-    External.instance.urlToItemIdsForTabCreation.set(url, itemIds.push(targetItemId))
+    const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
+    External.instance.urlToItemIdsForTabCreation.set(url, RArray$.append(targetItemId)(itemIds))
     chrome.tabs.create({ url, active: true }, (tab) => {
       chrome.windows.update(tab.windowId, { focused: true })
     })

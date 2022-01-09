@@ -1,6 +1,5 @@
-import { List } from 'immutable'
 import md5 from 'md5'
-import { MultiSet } from 'mnemonist'
+import { DefaultMap, MultiSet } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { DialogState } from 'src/TreeifyTab/External/DialogState'
@@ -11,6 +10,7 @@ import { State } from 'src/TreeifyTab/Internal/State'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
+import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /** TODO: コメント */
@@ -39,7 +39,7 @@ export class External {
   lastFocusedWindowId: integer = undefined as any
 
   /** 既存のウェブページ項目に対応するタブを開いた際、タブ作成イベントリスナーで項目IDと紐付けるためのMap */
-  readonly urlToItemIdsForTabCreation = new Map<string, List<ItemId>>()
+  readonly urlToItemIdsForTabCreation = new DefaultMap<string, RArray<ItemId>>(() => [])
 
   /** アンロードのために閉じられる途中のタブのIDの集合 */
   readonly tabIdsToBeClosedForUnloading = new Set<TabId>()
@@ -75,7 +75,7 @@ export class External {
   getTreeifyClipboardHash(): string | undefined {
     if (this.treeifyClipboard === undefined) return undefined
 
-    const jsonString = JSON.stringify(this.treeifyClipboard, State.jsonReplacer)
+    const jsonString = JSON.stringify(this.treeifyClipboard)
     return md5(jsonString)
   }
 
@@ -107,9 +107,9 @@ export class External {
 
 type TreeifyClipboard = DiscriminatedUnion<{
   CopyForTransclude: {
-    selectedItemPaths: List<ItemPath>
+    selectedItemPaths: RArray<ItemPath>
   }
   CopyForMove: {
-    selectedItemPaths: List<ItemPath>
+    selectedItemPaths: RArray<ItemPath>
   }
 }>

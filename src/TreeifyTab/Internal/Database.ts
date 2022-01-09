@@ -1,7 +1,7 @@
-import { List } from 'immutable'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -64,16 +64,13 @@ export namespace Database {
   }
 
   /** チャンクストア内の全チャンクを読み込む */
-  export async function getAllChunks(): Promise<List<Chunk>> {
+  export async function getAllChunks(): Promise<RArray<Chunk>> {
     return new Promise((resolve, reject) => {
       const objectStore = getDatabase().transaction(chunkStoreName).objectStore(chunkStoreName)
       const request = objectStore.getAll()
       // 読み込みリクエスト成功時
       request.onsuccess = () => {
-        const chunks: List<Chunk> = List(request.result).map(({ id, data }) => {
-          return { id, data: convertArrayToList(data) }
-        })
-        resolve(chunks)
+        resolve(request.result)
       }
       // 読み込みリクエスト失敗時
       request.onerror = () => {
@@ -92,10 +89,7 @@ export namespace Database {
         givenObjectStore ??
         getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
       if (chunk.data !== undefined) {
-        const request = objectStore.put({
-          id: chunk.id,
-          data: convertListToArray(chunk.data),
-        })
+        const request = objectStore.put(chunk)
         request.onsuccess = () => {
           resolve(request.result)
         }
@@ -114,44 +108,11 @@ export namespace Database {
     })
   }
 
-  export async function writeChunks(chunks: List<Chunk>, givenObjectStore?: IDBObjectStore) {
+  export async function writeChunks(chunks: RArray<Chunk>, givenObjectStore?: IDBObjectStore) {
     const objectStore =
       givenObjectStore ??
       getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
     await Promise.all(chunks.map((chunk) => writeChunk(chunk, objectStore)))
-  }
-
-  // IndexedDBではImmutable.jsのList型をそのまま保存できないので一旦配列に変換する
-  function convertListToArray(value: any): any {
-    if (value instanceof List) {
-      const list = value as List<any>
-      return list.map(convertListToArray).toArray()
-    }
-
-    if (value === null) return value
-
-    if (typeof value === 'object') {
-      const mapped = Object.entries(value).map(([key, value]) => [key, convertListToArray(value)])
-      return Object.fromEntries(mapped)
-    }
-
-    return value
-  }
-
-  // 与えられたJSONライクオブジェクトに含まれる配列をImmutable.jsのList型に変換する
-  function convertArrayToList(value: any): any {
-    if (value instanceof Array) {
-      return List(value.map(convertArrayToList))
-    }
-
-    if (value === null) return value
-
-    if (typeof value === 'object') {
-      const mapped = Object.entries(value).map(([key, value]) => [key, convertArrayToList(value)])
-      return Object.fromEntries(mapped)
-    }
-
-    return value
   }
 
   /** チャンクストアの全チャンクを削除する */

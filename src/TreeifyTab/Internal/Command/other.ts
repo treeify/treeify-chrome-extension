@@ -1,9 +1,11 @@
-import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
+import { pipe } from 'fp-ts/function'
+import { TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray$, RSet$ } from 'src/Utility/fp-ts'
 
 export function syncTreeifyData() {
   const syncButton = document.querySelector<HTMLElement>('.sync-button_root')
@@ -21,7 +23,7 @@ export function selectToEndOfList() {
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const lastSiblingItemId: ItemId = siblingItemIds.last()
+  const lastSiblingItemId = RArray$.lastOrThrow(siblingItemIds)
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
@@ -39,8 +41,7 @@ export function selectToStartOfList() {
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const firstSiblingItemId: ItemId = siblingItemIds.first()
-  const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
+  const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, siblingItemIds[0])
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 
@@ -55,13 +56,16 @@ export function selectToStartOfList() {
  */
 export function toggleExcluded() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId).toSet().delete(TOP_ITEM_ID)
-  const excludedItemIds = CurrentState.getExcludedItemIds().toSet()
+  const selectedItemIds = pipe(
+    RSet$.from(selectedItemPaths.map(ItemPath.getItemId)),
+    RSet$.remove(TOP_ITEM_ID)
+  )
+  const excludedItemIds = RSet$.from(CurrentState.getExcludedItemIds())
 
   // いわゆるxorのメソッドが見当たらないので同等の処理をする
-  const union = selectedItemIds.union(excludedItemIds)
-  const intersection = selectedItemIds.intersect(excludedItemIds)
-  CurrentState.setExcludedItemIds(union.subtract(intersection).toList())
+  const union = RSet$.union(selectedItemIds, excludedItemIds)
+  const intersection = RSet$.intersection(selectedItemIds, excludedItemIds)
+  CurrentState.setExcludedItemIds(RArray$.from(RSet$.difference(union, intersection)))
 }
 
 /**

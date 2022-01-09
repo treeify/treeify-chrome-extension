@@ -5,17 +5,20 @@ import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+import { RArray } from 'src/Utility/fp-ts'
 
 export type ContextMenuItemProps = {
   title: string
   onClick(): void
 }
 
-export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
+export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
-  const subtreeItemIds = selectedItemIds.flatMap(CurrentState.yieldSubtreeItemIdsShallowly)
-  const isSingleSelect = selectedItemPaths.size === 1
+  const subtreeItemIds = selectedItemIds.flatMap((itemId) => [
+    ...CurrentState.yieldSubtreeItemIdsShallowly(itemId),
+  ])
+  const isSingleSelect = selectedItemPaths.length === 1
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
   const item = Internal.instance.state.items[targetItemId]
@@ -146,7 +149,7 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
   }
 
   if (isSingleSelect) {
-    if (CurrentState.getExcludedItemIds().contains(targetItemId)) {
+    if (CurrentState.getExcludedItemIds().includes(targetItemId)) {
       result.push({
         title: '現在のワークスペースからの除外を解除',
         onClick: () => Command.toggleExcluded(),
@@ -170,5 +173,5 @@ export function createContextMenuItemPropses(): List<ContextMenuItemProps> {
     })
   }
 
-  return List(result)
+  return result
 }

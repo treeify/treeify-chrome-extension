@@ -3,12 +3,13 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
 
 /** アウトライナーのいわゆるインデント操作を実行するコマンド。 */
 export function indent() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
-  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
+  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths[0])
   // 兄が居ない場合、何もしない
   if (prevSiblingItemPath === undefined) return
 
@@ -33,19 +34,19 @@ export function indent() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  if (selectedItemPaths.size === 1) {
+  if (selectedItemPaths.length === 1) {
     // ターゲット項目を移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    CurrentState.setTargetItemPath(prevSiblingItemPath.push(targetItemId))
+    CurrentState.setTargetItemPath(RArray$.append(targetItemId)(prevSiblingItemPath))
 
     // キャレット位置、テキスト選択範囲を維持する
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   } else {
     // 移動先を引き続き選択中にする
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-    CurrentState.setTargetItemPathOnly(prevSiblingItemPath.push(targetItemId))
+    CurrentState.setTargetItemPathOnly(RArray$.append(targetItemId)(prevSiblingItemPath))
     const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
-    CurrentState.setAnchorItemPath(prevSiblingItemPath.push(anchorItemId))
+    CurrentState.setAnchorItemPath(RArray$.append(anchorItemId)(prevSiblingItemPath))
     Rerenderer.instance.requestToFocusTargetItem()
   }
 }
@@ -53,13 +54,13 @@ export function indent() {
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
 export function unindent() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const parentItemPath = ItemPath.getParent(selectedItemPaths.first())
+  const parentItemPath = ItemPath.getParent(selectedItemPaths[0])
 
   // 親または親の親が居ない場合は何もしない
   if (parentItemPath === undefined) return
   if (!ItemPath.hasParent(parentItemPath)) return
 
-  for (const selectedItemPath of selectedItemPaths.reverse()) {
+  for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
     // 既存の親子関係を削除
@@ -73,7 +74,7 @@ export function unindent() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  if (selectedItemPaths.size === 1) {
+  if (selectedItemPaths.length === 1) {
     // ターゲット項目を移動先に更新する
     const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
     const siblingItemPath = ItemPath.createSiblingItemPath(parentItemPath, targetItemId)!
@@ -102,7 +103,7 @@ export function moveItemToAbove() {
   const targetItemParentItemId = ItemPath.getParentItemId(targetItemPath)
 
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   // 1つ上の項目が存在しない場合は何もしない
   if (aboveItemPath === undefined) return
 
@@ -150,12 +151,14 @@ export function moveItemToBelow() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
 
   // 「弟、または親の弟、または親の親の弟、または…」に該当する項目を探索する
-  const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(selectedItemPaths.last())
+  const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(
+    NERArray$.last(selectedItemPaths)
+  )
   // 該当項目がない場合（メインエリアの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
   // 1つ下の項目の下に項目を移動する
-  for (const selectedItemPath of selectedItemPaths.reverse()) {
+  for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     // 既存の親子関係を削除
     const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
@@ -185,11 +188,11 @@ export function moveItemToBelow() {
     // 1つ下の項目が子を表示している場合
 
     // ターゲットItemPathを更新
-    const newTargetItemPath = firstFollowingItemPath.push(targetItemId)
+    const newTargetItemPath = RArray$.append(targetItemId)(firstFollowingItemPath)
     CurrentState.setTargetItemPathOnly(newTargetItemPath)
     // アンカーItemPathを更新
-    const newAnchorItemPath = firstFollowingItemPath.push(
-      ItemPath.getItemId(CurrentState.getAnchorItemPath())
+    const newAnchorItemPath = RArray$.append(ItemPath.getItemId(CurrentState.getAnchorItemPath()))(
+      firstFollowingItemPath
     )
     CurrentState.setAnchorItemPath(newAnchorItemPath)
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
@@ -199,9 +202,9 @@ export function moveItemToBelow() {
 /** 兄弟指向で項目を上に移動するコマンド */
 export function moveItemToPrevSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths.first())
+  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths[0])
   if (prevSiblingItemPath !== undefined) {
-    const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
+    const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
 
@@ -225,7 +228,7 @@ export function moveItemToPrevSibling() {
     //   B
     // C
     //   D
-    const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+    const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
     if (aboveItemPath !== undefined) {
       const knightItemPath = CurrentState.findPrevSiblingItemPath(aboveItemPath)
       if (knightItemPath !== undefined) {
@@ -245,9 +248,9 @@ export function moveItemToPrevSibling() {
 
           // focusItemPathとanchorItemPathを更新
           const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-          CurrentState.setTargetItemPathOnly(knightItemPath.push(targetItemId))
+          CurrentState.setTargetItemPathOnly(RArray$.append(targetItemId)(knightItemPath))
           const anchorItemId = ItemPath.getItemId(CurrentState.getAnchorItemPath())
-          CurrentState.setAnchorItemPath(knightItemPath.push(anchorItemId))
+          CurrentState.setAnchorItemPath(RArray$.append(anchorItemId)(knightItemPath))
 
           // キャレット位置、テキスト選択範囲を維持する
           Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
@@ -263,13 +266,15 @@ export function moveItemToPrevSibling() {
 /** 兄弟指向で項目を下に移動するコマンド */
 export function moveItemToNextSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(selectedItemPaths.last())
+  const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(
+    NERArray$.last(selectedItemPaths)
+  )
   if (nextSiblingItemPath !== undefined) {
-    const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths.first())
+    const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
 
-    for (const selectedItemPath of selectedItemPaths.reverse()) {
+    for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
       // 既存の親子関係を削除
       const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId, selectedItemId)

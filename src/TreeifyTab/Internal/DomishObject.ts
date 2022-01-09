@@ -1,6 +1,6 @@
-import { List } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { join } from 'src/Utility/immutable'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -15,19 +15,19 @@ export namespace DomishObject {
 
   export type BElement = {
     type: 'b'
-    children: List<DomishObject>
+    children: RArray<DomishObject>
   }
   export type UElement = {
     type: 'u'
-    children: List<DomishObject>
+    children: RArray<DomishObject>
   }
   export type IElement = {
     type: 'i'
-    children: List<DomishObject>
+    children: RArray<DomishObject>
   }
   export type StrikeElement = {
     type: 'strike'
-    children: List<DomishObject>
+    children: RArray<DomishObject>
   }
 
   export type BRElement = {
@@ -42,66 +42,12 @@ export namespace DomishObject {
   // いわゆる「&nbsp;」
   const nbsp = String.fromCharCode(160)
 
-  /** 等価性判定 */
-  export function equals(lhs: List<DomishObject>, rhs: List<DomishObject>): boolean {
-    return toDocumentFragment(lhs).isEqualNode(toDocumentFragment(rhs))
-  }
-
-  /** DomishObjectをDOM要素に変換する */
-  export function toDocumentFragment(value: DomishObject | List<DomishObject>): DocumentFragment {
-    const templateElement = document.createElement('template')
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      for (const node of domishObjects.map(toDomNode)) {
-        templateElement.content.appendChild(node)
-      }
-    } else {
-      const domishObject = value as DomishObject
-      templateElement.content.appendChild(toDomNode(domishObject))
-    }
-    return templateElement.content
-  }
-
-  function toDomNode(domishObject: DomishObject): Node {
-    switch (domishObject.type) {
-      case 'b':
-        const bElement = document.createElement('b')
-        for (const child of domishObject.children) {
-          bElement.appendChild(toDomNode(child))
-        }
-        return bElement
-      case 'u':
-        const uElement = document.createElement('u')
-        for (const child of domishObject.children) {
-          uElement.appendChild(toDomNode(child))
-        }
-        return uElement
-      case 'i':
-        const iElement = document.createElement('i')
-        for (const child of domishObject.children) {
-          iElement.appendChild(toDomNode(child))
-        }
-        return iElement
-      case 'strike':
-        const strikeElement = document.createElement('strike')
-        for (const child of domishObject.children) {
-          strikeElement.appendChild(toDomNode(child))
-        }
-        return strikeElement
-      case 'br':
-        return document.createElement('br')
-      case 'text':
-        return document.createTextNode(domishObject.textContent)
-    }
-  }
-
   /** DomishObjectをHTML文字列に変換する */
-  export function toHtml(value: DomishObject | List<DomishObject>): string {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.map(toHtml).join('')
+  export function toHtml(value: DomishObject | RArray<DomishObject>): string {
+    if (value instanceof Array) {
+      return value.map(toHtml).join('')
     } else {
-      const domishObject = value as DomishObject
+      const domishObject = value
       switch (domishObject.type) {
         case 'b':
           return `<b>${toHtml(domishObject.children)}</b>`
@@ -122,7 +68,7 @@ export namespace DomishObject {
   }
 
   /** HTML文字列をDomishObjectに変換する */
-  export function fromHtml(html: string): List<DomishObject> {
+  export function fromHtml(html: string): RArray<DomishObject> {
     const templateElement = document.createElement('template')
     templateElement.innerHTML = html
     return DomishObject.fromChildren(templateElement.content)
@@ -132,10 +78,8 @@ export namespace DomishObject {
    * 与えられたNodeの子リストをDomishObjectのリストに変換する。
    * DomishObjectとして表せない子Nodeは無視される。
    */
-  export function fromChildren(node: Node): List<DomishObject> {
-    return List(Array.from(node.childNodes))
-      .map(from)
-      .filter((value) => value !== undefined) as List<DomishObject>
+  export function fromChildren(node: Node): RArray<DomishObject> {
+    return pipe(Array.from(node.childNodes), RArray$.map(from), RArray$.filterUndefined)
   }
 
   /**
@@ -180,7 +124,7 @@ export namespace DomishObject {
   }
 
   /** 改行（br要素）を含む文字数を返す */
-  export function countCharacters(value: DomishObject | List<DomishObject>): integer {
+  export function countCharacters(value: DomishObject | RArray<DomishObject>): integer {
     return toPlainText(value).length
   }
 
@@ -190,17 +134,16 @@ export namespace DomishObject {
    * nbspは半角スペースに変換する。
    * ただし末尾の無駄な（すなわちHTMLへの描画時に改行として扱われない）br要素は除去するので要注意。
    */
-  export function toPlainText(value: DomishObject | List<DomishObject>): string {
+  export function toPlainText(value: DomishObject | RArray<DomishObject>): string {
     const plainText = _toPlainText(value)
     return plainText.replace(/\r?\n$/, '')
   }
 
-  function _toPlainText(value: DomishObject | List<DomishObject>): string {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.map(_toPlainText).join('')
+  function _toPlainText(value: DomishObject | RArray<DomishObject>): string {
+    if (value instanceof Array) {
+      return value.map(_toPlainText).join('')
     } else {
-      const domishObject = value as DomishObject
+      const domishObject = value
       switch (domishObject.type) {
         case 'b':
         case 'u':
@@ -217,7 +160,7 @@ export namespace DomishObject {
     }
   }
 
-  export function fromPlainText(text: string): List<DomishObject> {
+  export function fromPlainText(text: string): RArray<DomishObject> {
     const domishObjectArray: DomishObject[] = []
     const lines = text.split(/\r?\n/)
     for (let i = 0; i < lines.length; i++) {
@@ -228,17 +171,16 @@ export namespace DomishObject {
         domishObjectArray.push({ type: 'br' })
       }
     }
-    return List(domishObjectArray)
+    return domishObjectArray
   }
 
   /**
    * Markdown形式のテキストを生成する。
    * テキスト項目内の改行は空白スペース2つ+改行に変換する。
    */
-  export function toMultiLineMarkdownText(value: DomishObject | List<DomishObject>): string {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.map(toMultiLineMarkdownText).join('')
+  export function toMultiLineMarkdownText(value: DomishObject | RArray<DomishObject>): string {
+    if (value instanceof Array) {
+      return value.map(toMultiLineMarkdownText).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
@@ -264,10 +206,9 @@ export namespace DomishObject {
    * Markdown形式のテキストを生成する。
    * テキスト項目内の改行は半角スペース1つに置換する。
    */
-  export function toSingleLineMarkdownText(value: DomishObject | List<DomishObject>): string {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.map(toSingleLineMarkdownText).join('')
+  export function toSingleLineMarkdownText(value: DomishObject | RArray<DomishObject>): string {
+    if (value instanceof Array) {
+      return value.map(toSingleLineMarkdownText).join('')
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
@@ -293,7 +234,7 @@ export namespace DomishObject {
    * プレーンテキストかどうかを判定する。
    * 改行はプレーンテキストとして扱う。
    */
-  export function isPlainText(domishObjects: List<DomishObject>): boolean {
+  export function isPlainText(domishObjects: RArray<DomishObject>): boolean {
     for (const domishObject of domishObjects) {
       switch (domishObject.type) {
         case 'b':
@@ -345,16 +286,15 @@ export namespace DomishObject {
 
   /** 半角スペースまたはnbspをbrに変換する */
   export function convertSpaceToNewline(
-    value: DomishObject | List<DomishObject>
-  ): List<DomishObject> {
-    if (value instanceof List) {
-      const domishObjects = value as List<DomishObject>
-      return domishObjects.flatMap(convertSpaceToNewline)
+    value: DomishObject | RArray<DomishObject>
+  ): RArray<DomishObject> {
+    if (value instanceof Array) {
+      return value.flatMap(convertSpaceToNewline)
     } else {
       const domishObject = value as DomishObject
       switch (domishObject.type) {
         case 'br':
-          return List.of(domishObject)
+          return [domishObject]
         case 'b':
         case 'u':
         case 'i':
@@ -363,17 +303,17 @@ export namespace DomishObject {
             type: domishObject.type,
             children: domishObject.children.flatMap(convertSpaceToNewline),
           }
-          return List.of(newDomishObject)
+          return [newDomishObject]
         case 'text':
           // 半角スペースまたはnbspでsplit
-          const lines = List(domishObject.textContent.split(/[ \u00A0]/))
-          const list: List<DomishObject> = lines.map((text) => {
+          const lines = domishObject.textContent.split(/[ \u00A0]/)
+          const rarray = lines.map((text) => {
             return {
               type: 'text',
               textContent: text,
-            }
+            } as DomishObject
           })
-          return join(list, { type: 'br' })
+          return RArray$.join(rarray, { type: 'br' })
       }
     }
   }

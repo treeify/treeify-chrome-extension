@@ -27,6 +27,7 @@ import {
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
+import { NERArray$, RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaProps = {
@@ -36,7 +37,7 @@ export type MainAreaProps = {
 }
 
 export function createMainAreaProps(state: State): MainAreaProps {
-  const rootItemPath = List.of(CurrentState.getActivePageId())
+  const rootItemPath = [CurrentState.getActivePageId()]
 
   const allDisplayingItemIds = [...CurrentState.getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算
@@ -105,7 +106,7 @@ function onKeyDown(event: KeyboardEvent) {
       return
   }
 
-  const commandIds: List<CommandId> | undefined =
+  const commandIds: RArray<CommandId> | undefined =
     Internal.instance.state.mainAreaKeyBindings[inputId]
   if (commandIds !== undefined) {
     event.preventDefault()
@@ -212,7 +213,7 @@ function onArrowRight(event: KeyboardEvent) {
  */
 function onArrowUp(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths.first())
+  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   // 上の項目が存在しない場合はブラウザの挙動に任せる
   if (aboveItemPath === undefined) return
 
@@ -320,7 +321,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  */
 function onArrowDown(event: KeyboardEvent) {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const belowItemPath = CurrentState.findBelowItemPath(selectedItemPaths.last())
+  const belowItemPath = CurrentState.findBelowItemPath(NERArray$.last(selectedItemPaths))
   // 下の項目が存在しない場合はブラウザの挙動に任せる
   if (belowItemPath === undefined) return
 
@@ -451,7 +452,7 @@ function onShiftArrowUp(event: KeyboardEvent) {
   // 兄項目が存在しない場合はブラウザの挙動に任せる
   if (prevSiblingItemPath === undefined) return
 
-  if (CurrentState.getSelectedItemPaths().size === 1) {
+  if (CurrentState.getSelectedItemPaths().length === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
       // ターゲット項目がテキスト項目の場合
@@ -480,7 +481,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
   // 弟項目が存在しない場合はブラウザの挙動に任せる
   if (nextSiblingItemPath === undefined) return
 
-  if (CurrentState.getSelectedItemPaths().size === 1) {
+  if (CurrentState.getSelectedItemPaths().length === 1) {
     const targetItemId = ItemPath.getItemId(targetItemPath)
     if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
       // ターゲット項目がテキスト項目の場合
@@ -504,7 +505,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
 /** メインエリア上でBackspaceキーを押したときのデフォルトの挙動 */
 function onBackspace(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
-  if (CurrentState.getSelectedItemPaths().size > 1) {
+  if (CurrentState.getSelectedItemPaths().length > 1) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     Command.removeItem()
@@ -533,7 +534,7 @@ function onBackspace(event: KeyboardEvent) {
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
-    if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+    if (targetItem.childItemIds.length === 0 && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
 
@@ -545,8 +546,8 @@ function onBackspace(event: KeyboardEvent) {
 
     // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
     if (
-      !targetItem.childItemIds.isEmpty() &&
-      !Internal.instance.state.items[aboveItemId].childItemIds.isEmpty()
+      targetItem.childItemIds.length > 0 &&
+      Internal.instance.state.items[aboveItemId].childItemIds.length > 0
     ) {
       return
     }
@@ -601,7 +602,7 @@ function onBackspace(event: KeyboardEvent) {
 /** メインエリア上でDeleteキーを押したときのデフォルトの挙動 */
 function onDelete(event: KeyboardEvent) {
   // 複数選択中は選択された項目を削除して終了
-  if (CurrentState.getSelectedItemPaths().size > 1) {
+  if (CurrentState.getSelectedItemPaths().length > 1) {
     event.preventDefault()
     Internal.instance.saveCurrentStateToUndoStack()
     Command.removeItem()
@@ -636,7 +637,7 @@ function onDelete(event: KeyboardEvent) {
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
-    if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+    if (targetItem.childItemIds.length === 0 && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
       // ターゲット項目を削除して終了
@@ -654,8 +655,8 @@ function onDelete(event: KeyboardEvent) {
     const belowItemId = ItemPath.getItemId(belowItemPath)
     // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
     if (
-      !targetItem.childItemIds.isEmpty() &&
-      !Internal.instance.state.items[belowItemId].childItemIds.isEmpty()
+      targetItem.childItemIds.length > 0 &&
+      Internal.instance.state.items[belowItemId].childItemIds.length > 0
     ) {
       return
     }

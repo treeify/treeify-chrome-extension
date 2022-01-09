@@ -9,6 +9,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -32,8 +33,8 @@ export function selectAll() {
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const firstSiblingItemId: ItemId = siblingItemIds.first()
-  const lastSiblingItemId: ItemId = siblingItemIds.last()
+  const firstSiblingItemId = siblingItemIds[0]
+  const lastSiblingItemId = RArray$.lastOrThrow(siblingItemIds)
   const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(firstSiblingItemPath)
@@ -80,8 +81,8 @@ export function getCaption(itemId: ItemId): string | undefined {
 export async function setupAllAlarms() {
   await chrome.alarms.clearAll()
   for (const [itemId, reminderSettings] of Object.entries(Internal.instance.state.reminders)) {
-    for (let i = 0; i < reminderSettings.size; i++) {
-      const timestamp = calculateNextReminderTimestamp(reminderSettings.get(i)!)
+    for (let i = 0; i < reminderSettings.length; i++) {
+      const timestamp = calculateNextReminderTimestamp(reminderSettings[i])
       if (timestamp !== undefined) {
         chrome.alarms.create(`${itemId}#${i}`, { when: timestamp })
       }
