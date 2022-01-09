@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import { Ord as NumberOrd } from 'fp-ts/number'
-import { List } from 'immutable'
+import { contramap } from 'fp-ts/Ord'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -125,11 +125,10 @@ export function countTabsInSubtree(state: State, itemId: ItemId): integer {
  * 与えられたItemPath群をドキュメント順でソートする。
  * 全てのItemPathのルート項目が同じでなければ正しく計算できない。
  */
-export function sortByDocumentOrder(itemPaths: List<ItemPath>): List<ItemPath> {
-  const lexicographicalOrder = RArray$.getOrd(NumberOrd).compare
-  return itemPaths.sortBy((itemPath) => {
-    return toSiblingRankList(itemPath)
-  }, lexicographicalOrder)
+export function sortByDocumentOrder(itemPaths: RArray<ItemPath>): RArray<ItemPath> {
+  const lexicographicalOrder = RArray$.getOrd(NumberOrd)
+  const documentOrder = contramap(toSiblingRankList)(lexicographicalOrder)
+  return RArray$.sort(documentOrder)(itemPaths)
 }
 
 // ItemPathを兄弟順位リストに変換する
@@ -158,11 +157,15 @@ export function treeify(
     ),
     RArray$.groupBy((value: ItemPath) => String(ItemPath.getRootItemId(value))),
     RRecord$.map((collection) => {
-      const sortedItemPaths = CurrentState.sortByDocumentOrder(List(collection))
+      const sortedItemPaths = CurrentState.sortByDocumentOrder(collection)
       // 同じ兄弟リスト内での重複を排除する
       return sortedItemPaths.filter((itemPath, index) => {
-        const appearedItemIds = sortedItemPaths.take(index).map(ItemPath.getItemId)
-        return !appearedItemIds.contains(ItemPath.getItemId(itemPath))
+        const appearedItemIds = pipe(
+          sortedItemPaths,
+          RArray$.takeLeft(index),
+          RArray$.map(ItemPath.getItemId)
+        )
+        return !appearedItemIds.includes(ItemPath.getItemId(itemPath))
       })
     })
   )
@@ -201,12 +204,12 @@ function* yieldItemPathsFor(
 }
 
 function _treeify(
-  childrenMap: RRecord<string, List<ItemPath>>,
+  childrenMap: RRecord<string, RArray<ItemPath>>,
   itemPath: ItemPath
 ): MutableOrderedTree<ItemPath> {
-  const children = childrenMap[ItemPath.getItemId(itemPath)] ?? List()
+  const children = childrenMap[ItemPath.getItemId(itemPath)] ?? []
   return new MutableOrderedTree(
     itemPath,
-    children.map((child) => _treeify(childrenMap, itemPath.concat(RArray$.shift(child)))).toArray()
+    children.map((child) => _treeify(childrenMap, itemPath.concat(RArray$.shift(child))))
   )
 }
