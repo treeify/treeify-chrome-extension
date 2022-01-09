@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -14,7 +13,7 @@ export function createCodeBlockItem(): ItemId {
   const newItem: Item = {
     type: ItemType.CODE_BLOCK,
     globalItemId: GlobalItemId.generate(),
-    childItemIds: List(),
+    childItemIds: [],
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: [],

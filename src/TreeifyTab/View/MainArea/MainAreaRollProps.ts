@@ -111,14 +111,14 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
     return CurrentState.getDisplayingChildItemIds(itemPath.push(childItemId)).size
   })
-  return counts.size + counts.reduce((a: integer, x) => a + x, 0)
+  return counts.length + counts.reduce((a: integer, x) => a + x, 0)
 }
 
 export function deriveBulletState(state: State, itemPath: ItemPath): MainAreaBulletState {
   const itemId = ItemPath.getItemId(itemPath)
   if (state.pages[itemId] !== undefined) {
     return MainAreaBulletState.PAGE
-  } else if (state.items[itemId].childItemIds.size === 0) {
+  } else if (state.items[itemId].childItemIds.length === 0) {
     return MainAreaBulletState.NO_CHILDREN
   } else {
     CurrentState.getIsFolded(itemPath)

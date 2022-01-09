@@ -5,7 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERist } from 'src/Utility/fp-ts'
+import { NERist, Option, Rist } from 'src/Utility/fp-ts'
 
 /** ターゲットItemPathを返す */
 export function getTargetItemPath(): ItemPath {
@@ -58,7 +58,7 @@ export function getSelectedItemPaths(): NERist.T<ItemPath> {
   const anchorItemIndex = childItemIds.indexOf(ItemPath.getItemId(anchorItemPath))
   const lowerIndex = Math.min(targetItemIndex, anchorItemIndex)
   const upperIndex = Math.max(targetItemIndex, anchorItemIndex)
-  const sliced = childItemIds.toArray().slice(lowerIndex, upperIndex + 1)
+  const sliced = childItemIds.slice(lowerIndex, upperIndex + 1)
   return sliced.map(
     (itemId) => ItemPath.createSiblingItemPath(targetItemPath, itemId)!
   ) as unknown as NERist.T<ItemPath>
@@ -151,7 +151,7 @@ export function findPrevSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
   // 自身が長男の場合
   if (index === 0) return undefined
 
-  return parentItemPath.push(siblingItemIds.get(index - 1)!)
+  return parentItemPath.push(siblingItemIds[index - 1])
 }
 
 /**
@@ -167,9 +167,9 @@ export function findNextSiblingItemPath(itemPath: ItemPath): ItemPath | undefine
 
   const index = siblingItemIds.indexOf(ItemPath.getItemId(itemPath))
   // 自身が末弟の場合
-  if (index === siblingItemIds.size - 1) return undefined
+  if (index === siblingItemIds.length - 1) return undefined
 
-  return parentItemPath.push(siblingItemIds.get(index + 1)!)
+  return parentItemPath.push(siblingItemIds[index + 1])
 }
 
 /**
@@ -190,7 +190,8 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
   const itemId = ItemPath.getItemId(itemPath)
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   // 末尾の子項目に対して再帰呼び出しすることで、最も下に表示される項目を探索する
-  return getLowerEndItemPath(itemPath.push(childItemIds.last()))
+  const last = Option.getOrThrow(Rist.last(childItemIds))
+  return getLowerEndItemPath(itemPath.push(last))
 }
 
 /**
@@ -238,5 +239,5 @@ export function isSibling(lhs: ItemPath, rhs: ItemPath): boolean {
   const parentItemId = ItemPath.getParentItemId(lhs)
   if (parentItemId === undefined) return false
 
-  return Internal.instance.state.items[parentItemId].childItemIds.contains(ItemPath.getItemId(rhs))
+  return Internal.instance.state.items[parentItemId].childItemIds.includes(ItemPath.getItemId(rhs))
 }

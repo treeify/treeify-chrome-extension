@@ -118,7 +118,7 @@ export function createSearchResultItemPropses(
 }
 
 function calculateOuterCircleRadiusEm(itemId: ItemId): number {
-  const childItemCount = Internal.instance.state.items[itemId].childItemIds.size
+  const childItemCount = Internal.instance.state.items[itemId].childItemIds.length
   if (childItemCount === 0) return 0
 
   const outerCircleMinDiameter =

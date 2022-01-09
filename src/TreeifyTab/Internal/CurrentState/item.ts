@@ -1,3 +1,4 @@
+import { pipe } from 'fp-ts/function'
 import { append, init, last } from 'fp-ts/ReadonlyArray'
 import { List } from 'immutable'
 import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
@@ -45,7 +46,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
       modifyChildItems(parentItemId, (itemIds) => {
         const index = itemIds.indexOf(itemId)
         assert(index !== -1)
-        return itemIds.splice(index, 1, ...item.childItemIds)
+        return pipe(itemIds, Rist.removeAt(index), Rist.insertAll(index, item.childItemIds))
       })
     }
   } else {
@@ -61,7 +62,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
 
     // 削除される項目を親項目の子リストから削除する
     for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
-      modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+      modifyChildItems(parentItemId, Rist.remove(itemId))
     }
   }
 
@@ -131,13 +132,13 @@ export function getDisplayingChildItemIds(itemPath: ItemPath): List<ItemId> {
 
   // アクティブページはisFoldedフラグの状態によらず子を強制的に表示する
   if (itemPath.size === 1) {
-    return item.childItemIds
+    return List(item.childItemIds)
   }
 
   if (CurrentState.getIsFolded(itemPath) || CurrentState.isPage(itemId)) {
     return List()
   } else {
-    return item.childItemIds
+    return List(item.childItemIds)
   }
 }
 
@@ -191,7 +192,7 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  * @param itemId この項目の子項目リストを修正する
  * @param f 子項目リストを受け取って新しい子項目リストを返す関数
  */
-export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => List<ItemId>) {
+export function modifyChildItems(itemId: ItemId, f: (itemIds: Rist.T<ItemId>) => Rist.T<ItemId>) {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
   Internal.instance.mutate(f(childItemIds), PropertyPath.of('items', itemId, 'childItemIds'))
 }
@@ -205,7 +206,7 @@ export function modifyChildItems(itemId: ItemId, f: (itemIds: List<ItemId>) => L
  */
 export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
   // 子リストの先頭に追加する
-  modifyChildItems(itemId, (itemIds) => itemIds.unshift(newItemId))
+  modifyChildItems(itemId, Rist.prepend(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, itemId, edge)
@@ -220,7 +221,7 @@ export function insertFirstChildItem(itemId: ItemId, newItemId: ItemId, edge?: E
  */
 export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Edge) {
   // 子リストの末尾に追加する
-  modifyChildItems(itemId, (itemIds) => itemIds.push(newItemId))
+  modifyChildItems(itemId, Rist.append(newItemId))
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
   CurrentState.addParent(newItemId, itemId, edge)
@@ -245,11 +246,11 @@ export function insertPrevSiblingItem(
   assertNonUndefined(parentItemId)
 
   const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  assert(childItemIds.contains(itemId))
+  assert(childItemIds.includes(itemId))
 
   // 兄として追加する
   modifyChildItems(parentItemId, (itemIds) => {
-    return itemIds.insert(itemIds.indexOf(itemId), newItemId)
+    return Rist.insertAt(itemIds.indexOf(itemId), newItemId)(itemIds)
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
@@ -276,11 +277,11 @@ export function insertNextSiblingItem(
   assertNonUndefined(parentItemId)
 
   const childItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  assert(childItemIds.contains(itemId))
+  assert(childItemIds.includes(itemId))
 
   // 弟として追加する
   modifyChildItems(parentItemId, (itemIds) => {
-    return itemIds.insert(itemIds.indexOf(itemId) + 1, newItemId)
+    return Rist.insertAt(itemIds.indexOf(itemId) + 1, newItemId)(itemIds)
   })
 
   // 子リストへの追加に対して整合性が取れるように親リストにも追加する
@@ -311,7 +312,7 @@ export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Ed
  */
 export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge {
   // 親項目の子項目リストから項目を削除する
-  modifyChildItems(parentItemId, (itemIds) => itemIds.remove(itemIds.indexOf(itemId)))
+  modifyChildItems(parentItemId, Rist.remove(itemId))
 
   const edge = Internal.instance.state.items[itemId].parents[parentItemId]
   // 項目の親リストから親項目を削除する

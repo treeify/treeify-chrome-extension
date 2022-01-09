@@ -20,10 +20,26 @@ export const shift = <A>(rist: T<A>): T<A> => {
   return cloned
 }
 
+/** 指定された値と等しい要素を全て削除する */
+export const remove = <A>(value: A) => RA.filter((a: A) => a !== value)
+
 export const removeAt =
-  <A>(index: integer) =>
-  (rist: T<A>): T<A> =>
+  (index: integer) =>
+  <A>(rist: T<A>): T<A> =>
     RA.unsafeDeleteAt(index, rist)
+
+export const insertAt =
+  <A>(index: integer, value: A) =>
+  (rist: T<A>): T<A> =>
+    RA.unsafeInsertAt(index, value, rist)
+
+export const insertAll =
+  <A>(index: integer, newRist: T<A>) =>
+  (rist: T<A>): T<A> => {
+    const cloned = rist.slice()
+    cloned.splice(index, 0, ...newRist)
+    return cloned
+  }
 
 export function max(rist: T<number>): Option.T<number> {
   return Option.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rist))

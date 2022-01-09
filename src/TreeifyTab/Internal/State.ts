@@ -64,7 +64,7 @@ export type State = {
 export type Item = {
   type: ItemType
   globalItemId: GlobalItemId
-  childItemIds: List<ItemId>
+  childItemIds: Rist.T<ItemId>
   parents: Record<ItemId, Edge>
   /** 足跡表示機能で使われるタイムスタンプ */
   timestamp: Timestamp
@@ -240,7 +240,7 @@ export namespace State {
 
         // 子リストに重複がないことのチェック
         assert(
-          item.childItemIds.size === item.childItemIds.toSet().size,
+          item.childItemIds.length === Set(item.childItemIds).size,
           `items[${itemId}]のchildItemIdsに重複がある`
         )
 
@@ -256,7 +256,7 @@ export namespace State {
         for (const parentsKey in item.parents) {
           const parentItemId = parseInt(parentsKey)
           assert(
-            state.items[parentItemId]?.childItemIds?.contains(itemId),
+            state.items[parentItemId]?.childItemIds?.includes(itemId),
             `items[${parentItemId}]のchildItemIdsに${itemId}が含まれていない`
           )
 

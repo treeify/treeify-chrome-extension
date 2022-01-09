@@ -1,10 +1,11 @@
 import { Set } from 'immutable'
-import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
+import { TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { focusMainAreaBackground } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { Option, Rist } from 'src/Utility/fp-ts'
 
 export function syncTreeifyData() {
   const syncButton = document.querySelector<HTMLElement>('.sync-button_root')
@@ -22,7 +23,7 @@ export function selectToEndOfList() {
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const lastSiblingItemId: ItemId = siblingItemIds.last()
+  const lastSiblingItemId = Option.getOrThrow(Rist.last(siblingItemIds))
   const lastSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, lastSiblingItemId)
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
@@ -40,8 +41,7 @@ export function selectToStartOfList() {
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
   const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
-  const firstSiblingItemId: ItemId = siblingItemIds.first()
-  const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, firstSiblingItemId)
+  const firstSiblingItemPath = ItemPath.createSiblingItemPath(targetItemPath, siblingItemIds[0])
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
 

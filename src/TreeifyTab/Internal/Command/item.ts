@@ -238,7 +238,7 @@ export function deleteJustOneItem() {
   if (!ItemPath.hasParent(targetItemPath)) return
 
   const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
-  if (childItemIds.isEmpty()) {
+  if (childItemIds.length === 0) {
     // 上の項目をフォーカス
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
@@ -246,7 +246,7 @@ export function deleteJustOneItem() {
     Rerenderer.instance.requestToFocusTargetItem()
   } else {
     // 子がいる場合は最初の子をフォーカス
-    const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds.first())
+    const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds[0])
     assertNonUndefined(newItemPath)
     CurrentState.setTargetItemPath(newItemPath)
     Rerenderer.instance.requestToFocusTargetItem()

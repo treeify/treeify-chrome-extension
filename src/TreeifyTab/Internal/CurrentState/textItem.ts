@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -26,7 +25,7 @@ export function createTextItem(): ItemId {
   const newItem: Item = {
     type: ItemType.TEXT,
     globalItemId: GlobalItemId.generate(),
-    childItemIds: List(),
+    childItemIds: [],
     parents: {},
     timestamp: Timestamp.now(),
     cssClasses: [],
@@ -55,7 +54,7 @@ export function isEmptyTextItem(itemId: ItemId): boolean {
   const item = Internal.instance.state.items[itemId]
   if (item.type !== ItemType.TEXT) return false
 
-  if (!item.childItemIds.isEmpty()) return false
+  if (item.childItemIds.length > 0) return false
 
   if (CurrentState.countParents(itemId) >= 2) return false
 

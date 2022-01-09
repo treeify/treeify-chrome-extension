@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -211,7 +210,7 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
     itemIdMap[attrItemId] = itemId
   }
 
-  const children = List(outlineElement.children).map((child) =>
+  const children = Array.from(outlineElement.children).map((child) =>
     createItemBasedOnOpml(child, itemIdMap)
   )
   CurrentState.modifyChildItems(itemId, () => children.map((child) => child.itemId))

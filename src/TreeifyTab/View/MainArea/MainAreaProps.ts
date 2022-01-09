@@ -534,7 +534,7 @@ function onBackspace(event: KeyboardEvent) {
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
-    if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+    if (targetItem.childItemIds.length === 0 && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
 
@@ -546,8 +546,8 @@ function onBackspace(event: KeyboardEvent) {
 
     // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
     if (
-      !targetItem.childItemIds.isEmpty() &&
-      !Internal.instance.state.items[aboveItemId].childItemIds.isEmpty()
+      targetItem.childItemIds.length > 0 &&
+      Internal.instance.state.items[aboveItemId].childItemIds.length > 0
     ) {
       return
     }
@@ -637,7 +637,7 @@ function onDelete(event: KeyboardEvent) {
 
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
-    if (targetItem.childItemIds.isEmpty() && DomishObject.countCharacters(domishObjects) === 0) {
+    if (targetItem.childItemIds.length === 0 && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
       // ターゲット項目を削除して終了
@@ -655,8 +655,8 @@ function onDelete(event: KeyboardEvent) {
     const belowItemId = ItemPath.getItemId(belowItemPath)
     // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
     if (
-      !targetItem.childItemIds.isEmpty() &&
-      !Internal.instance.state.items[belowItemId].childItemIds.isEmpty()
+      targetItem.childItemIds.length > 0 &&
+      Internal.instance.state.items[belowItemId].childItemIds.length > 0
     ) {
       return
     }
