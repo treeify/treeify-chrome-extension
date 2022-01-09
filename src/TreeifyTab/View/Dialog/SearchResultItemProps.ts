@@ -1,4 +1,4 @@
-import { List } from 'immutable'
+import { Set } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -22,13 +22,13 @@ export type SearchResultItemProps = {
 }
 
 export function createSearchResultItemPropses(
-  itemPaths: List<ItemPath>
+  itemPaths: RArray<ItemPath>
 ): RArray<SearchResultItemProps> {
-  const firstItemPath = itemPaths.first(undefined)
+  const firstItemPath = itemPaths[0]
   assertNonUndefined(firstItemPath)
   const pageId = ItemPath.getRootItemId(firstItemPath)
 
-  const itemIdSet = itemPaths.map(ItemPath.getItemId).toSet()
+  const itemIdSet = Set(itemPaths.map(ItemPath.getItemId))
   const tree = CurrentState.treeify(itemIdSet.add(pageId), pageId, false)
 
   // 足跡を表示するためにタイムスタンプのランキングを計算する

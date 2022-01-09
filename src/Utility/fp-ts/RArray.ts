@@ -5,7 +5,7 @@ import * as Ord from 'fp-ts/Ord'
 import * as RA from 'fp-ts/ReadonlyArray'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import { assert } from 'src/Utility/Debug/assert'
-import { Option$, RArray } from 'src/Utility/fp-ts'
+import { NERArray$, Option$, RArray } from 'src/Utility/fp-ts'
 import { Arrow } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
@@ -107,6 +107,8 @@ export const sortByNumber =
     })
     return cloned
   }
+
+export const groupBy = NERArray$.groupBy
 
 export const from = <A>(iterable: Iterable<A>): RArray<A> => [...iterable]
 
