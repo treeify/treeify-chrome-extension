@@ -21,6 +21,18 @@ export const intersection = <A>(rset1: RSet<A>, rset2: RSet<A>) =>
 export const difference = <A>(rset1: RSet<A>, rset2: RSet<A>) =>
   FpReadonlySet.difference<A>(eqStrict)(rset1, rset2)
 
+/**
+ * 2つの集合が互いに素かどうか調べる。
+ * intersection()の結果が空集合かどうかを調べるより最適化されている。
+ */
+export const isDisjoint = <A>(rset1: RSet<A>, rset2: RSet<A>): boolean => {
+  if (rset1.size <= rset2.size) {
+    return FpReadonlySet.every((element: A) => !rset2.has(element))(rset1)
+  } else {
+    return FpReadonlySet.every((element: A) => !rset1.has(element))(rset2)
+  }
+}
+
 export const map = <A, B>(f: Arrow<A, B>) => FpReadonlySet.map<B>(eqStrict)(f)
 
 export const flatMap =

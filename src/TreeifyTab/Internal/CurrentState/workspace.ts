@@ -1,11 +1,10 @@
 import { pipe } from 'fp-ts/function'
-import { Set } from 'immutable'
 import { ItemId, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
-import { NERArray, NERArray$, Option$, RArray, RArray$ } from 'src/Utility/fp-ts'
+import { NERArray, NERArray$, Option$, RArray, RArray$, RSet$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
@@ -96,5 +95,8 @@ export function shouldBeHidden(itemId: ItemId) {
   if (excludedItemIds.includes(itemId)) return true
 
   // 与えられた項目の先祖項目に除外項目が含まれているかどうか
-  return !Set(CurrentState.yieldAncestorItemIds(itemId)).intersect(excludedItemIds).isEmpty()
+  return !RSet$.isDisjoint(
+    RSet$.from(CurrentState.yieldAncestorItemIds(itemId)),
+    RSet$.from(excludedItemIds)
+  )
 }
