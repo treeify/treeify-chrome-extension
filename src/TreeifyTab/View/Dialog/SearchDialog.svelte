@@ -35,22 +35,22 @@
       case '0000ArrowUp':
         event.preventDefault()
 
-        const focusableElements = List(
-          document.querySelectorAll(
+        const focusableElements = Array.from(
+          document.querySelectorAll<HTMLElement>(
             '.search-dialog_content input, .search-dialog_content [tabindex]'
           )
-        ) as List<HTMLElement>
+        )
         const index = focusableElements.findIndex((element) => document.activeElement === element)
         if (index === -1) return
 
         if (inputId === '0000ArrowDown') {
           // フォーカスを次の要素に移す
-          const nextIndex = (index + 1) % focusableElements.size
-          focusableElements.get(nextIndex)!.focus()
+          const nextIndex = (index + 1) % focusableElements.length
+          focusableElements[nextIndex].focus()
         } else {
           // フォーカスを前の要素に移す
-          const prevIndex = (index - 1) % focusableElements.size
-          focusableElements.get(prevIndex)!.focus()
+          const prevIndex = (index - 1) % focusableElements.length
+          focusableElements[prevIndex].focus()
         }
         break
       case '1100KeyR':

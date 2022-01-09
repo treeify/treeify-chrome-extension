@@ -80,11 +80,10 @@
   }
 
   // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  // コマンド一覧をoptgroup要素でグルーピングするためのデータ
-  const commandGroups: Rist.T<{ name: string; commandIds: List<CommandId> }> = [
+  const commandGroups: Rist.T<{ name: string; commandIds: Rist.T<CommandId> }> = [
     {
       name: '基本操作',
-      commandIds: List.of(
+      commandIds: [
         'enterKeyDefault',
         'deleteItem',
         'removeItem',
@@ -98,55 +97,50 @@
         'grouping',
         'fold',
         'unfold',
-        'toggleFolded'
-      ),
+        'toggleFolded',
+      ],
     },
     {
       name: 'テキスト項目操作',
-      commandIds: List.of(
+      commandIds: [
         'insertNewline',
         'toggleBold',
         'toggleUnderline',
         'toggleItalic',
-        'toggleStrikethrough'
-      ),
+        'toggleStrikethrough',
+      ],
     },
     {
       name: 'ウェブページ項目操作',
-      commandIds: List.of(
+      commandIds: [
         'browseTab',
         'closeTreeTabs',
         'closeJustOneTab',
         'discardTreeTabs',
         'discardJustOneTab',
         'openTreeTabs',
-        'openJustOneTab'
-      ),
+        'openJustOneTab',
+      ],
     },
     {
       name: 'ページ関連',
-      commandIds: List.of('turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'),
+      commandIds: ['turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'],
     },
     {
       name: '項目装飾',
-      commandIds: List.of('toggleCompleted', 'toggleHighlighted', 'toggleDoubtful', 'toggleSource'),
+      commandIds: ['toggleCompleted', 'toggleHighlighted', 'toggleDoubtful', 'toggleSource'],
     },
     {
       name: '空の項目作成',
-      commandIds: List.of(
-        'createImageItem',
-        'createCodeBlockItem',
-        'createTexItem',
-        'createTextItem'
-      ),
+      commandIds: ['createImageItem', 'createCodeBlockItem', 'createTexItem', 'createTextItem'],
     },
     {
       name: 'クリップボード',
-      commandIds: List.of('copyForTransclude', 'copyForMove', 'pasteAsPlainText'),
+      commandIds: ['copyForTransclude', 'copyForMove', 'pasteAsPlainText'],
     },
     {
       name: 'ダイアログ表示',
-      commandIds: List.of(
+      commandIds: [
         'showEditDialog',
         'showSearchDialog',
         'showReplaceDialog',
@@ -155,18 +149,13 @@
         'showExportDialog',
         'showWorkspaceDialog',
         'showOtherParentsDialog',
-        'showCommandPaletteDialog'
-      ),
+        'showCommandPaletteDialog',
+      ],
     },
-    { name: '複数選択', commandIds: List.of('selectToStartOfList', 'selectToEndOfList') },
+    { name: '複数選択', commandIds: ['selectToStartOfList', 'selectToEndOfList'] },
     {
       name: 'その他',
-      commandIds: List.of(
-        'doNothing',
-        'syncTreeifyData',
-        'toggleExcluded',
-        'convertSpaceToNewline'
-      ),
+      commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded', 'convertSpaceToNewline'],
     },
   ]
 </script>
@@ -184,7 +173,7 @@
                   <select on:change={(event) => onChange(event, index, inputId)}>
                     {#each commandGroups as commandGroup}
                       <optgroup label={commandGroup.name}>
-                        {#each commandGroup.commandIds.toArray() as commandId}
+                        {#each commandGroup.commandIds as commandId}
                           <option value={commandId} selected={selectedCommandId === commandId}>
                             {commandNames[commandId]}
                           </option>
