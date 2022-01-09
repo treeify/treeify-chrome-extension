@@ -1,4 +1,5 @@
-import { List, Set } from 'immutable'
+import { pipe } from 'fp-ts/function'
+import { Set } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -15,9 +16,9 @@ import {
   createPageTreeBulletAndIndentProps,
   PageTreeBulletAndIndentProps,
 } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-import { CssCustomProperty } from 'src/Utility/browser'
+import { CssCustomProperty, TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERist, Rist } from 'src/Utility/fp-ts'
+import { NERist, Rist, RSet } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type PageTreeNodeProps = {
@@ -59,7 +60,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
         ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath) ? [] : children,
       isActivePage: activePageId === itemId,
       isRoot: itemId === TOP_ITEM_ID,
-      isAudible: getAudiblePageIds().contains(itemId),
+      isAudible: getAudiblePageIds().has(itemId),
       footprintRank: rank < footprintCount ? rank : undefined,
       footprintCount,
       tabsCount: CurrentState.countTabsInSubtree(state, itemId),
@@ -121,13 +122,15 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   })
 }
 
-function getAudiblePageIds(): Set<ItemId> {
+function getAudiblePageIds(): RSet.T<ItemId> {
   const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
-  const audibleItemIds = audibleTabIds
-    .map((tabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId))
-    .filter((itemId) => itemId !== undefined) as List<ItemId>
-
-  return Set(audibleItemIds.flatMap(CurrentState.getPageIdsBelongingTo))
+  const audibleItemIds = pipe(
+    audibleTabIds,
+    Rist.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId)),
+    Rist.filterUndefined,
+    RSet.from
+  )
+  return RSet.flatMap(CurrentState.getPageIdsBelongingTo)(audibleItemIds)
 }
 
 function unmountPage(itemId: number, activePageId: number) {

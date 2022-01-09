@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { BiMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { TabId } from 'src/Utility/browser'
@@ -63,8 +62,8 @@ export class TabItemCorrespondence {
   }
 
   /** 全てのaudibleなタブのIDを返す */
-  getAllAudibleTabIds(): List<TabId> {
-    const audibleTabs = List(this.tabIdToTab.values()).filter((tab) => tab.audible === true)
+  getAllAudibleTabIds(): Rist.T<TabId> {
+    const audibleTabs = Array.from(this.tabIdToTab.values()).filter((tab) => tab.audible === true)
     return audibleTabs.map((tab) => {
       assertNonUndefined(tab.id)
       return tab.id

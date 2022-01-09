@@ -63,8 +63,11 @@ function* _yieldItemPaths(itemPath: ItemPath): Generator<ItemPath> {
  * 指定された項目が所属するページIDの集合を返す。
  * 自身がページの場合は自身のみを返す。
  */
-export function getPageIdsBelongingTo(itemId: ItemId): Set<ItemId> {
-  return Set(yieldItemPaths(itemId)).map((itemPath) => ItemPath.getRootItemId(itemPath))
+export function getPageIdsBelongingTo(itemId: ItemId): RSet.T<ItemId> {
+  return pipe(
+    RSet.from(yieldItemPaths(itemId)),
+    RSet.map((itemPath) => ItemPath.getRootItemId(itemPath))
+  )
 }
 
 /** 指定されたページが所属するページIDの集合を返す */
