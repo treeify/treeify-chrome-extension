@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import { Ord as NumberOrd } from 'fp-ts/number'
-import { List, Seq, Set } from 'immutable'
+import { List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
@@ -8,7 +8,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { RArray, RArray$, RRecord, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -151,17 +151,21 @@ export function treeify(
   rootItemId: ItemId,
   passThroughPage: boolean
 ): MutableOrderedTree<ItemPath> {
-  const childrenMap = Set(itemIdSet)
-    .flatMap((itemId) => yieldItemPathsFor([itemId], itemIdSet, passThroughPage))
-    .groupBy((value) => ItemPath.getRootItemId(value))
-    .map((collection) => {
-      const sortedItemPaths = CurrentState.sortByDocumentOrder(collection.toList())
+  const childrenMap = pipe(
+    RArray$.from(itemIdSet),
+    RArray$.flatMap((itemId: ItemId) =>
+      Array.from(yieldItemPathsFor([itemId], itemIdSet, passThroughPage))
+    ),
+    RArray$.groupBy((value: ItemPath) => String(ItemPath.getRootItemId(value))),
+    RRecord$.map((collection) => {
+      const sortedItemPaths = CurrentState.sortByDocumentOrder(List(collection))
       // 同じ兄弟リスト内での重複を排除する
       return sortedItemPaths.filter((itemPath, index) => {
         const appearedItemIds = sortedItemPaths.take(index).map(ItemPath.getItemId)
         return !appearedItemIds.contains(ItemPath.getItemId(itemPath))
       })
     })
+  )
 
   return _treeify(childrenMap, [rootItemId])
 }
@@ -197,10 +201,10 @@ function* yieldItemPathsFor(
 }
 
 function _treeify(
-  childrenMap: Seq.Keyed<ItemId, List<ItemPath>>,
+  childrenMap: RRecord<string, List<ItemPath>>,
   itemPath: ItemPath
 ): MutableOrderedTree<ItemPath> {
-  const children = childrenMap.get(ItemPath.getItemId(itemPath)) ?? List()
+  const children = childrenMap[ItemPath.getItemId(itemPath)] ?? List()
   return new MutableOrderedTree(
     itemPath,
     children.map((child) => _treeify(childrenMap, itemPath.concat(RArray$.shift(child)))).toArray()

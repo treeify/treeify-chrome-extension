@@ -66,6 +66,11 @@ export function max(rarray: RArray<number>): Option<number> {
   return Option$.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
 }
 
+export const flatMap =
+  <A, B>(f: Arrow<A, RArray<B>>) =>
+  (rarray: RArray<A>) =>
+    rarray.flatMap(f)
+
 export const filterUndefined = <A>(rarray: RArray<A | undefined>): RArray<A> =>
   RA.filter((element: A | undefined) => element !== undefined)(rarray) as RArray<A>
 
