@@ -203,29 +203,12 @@ export enum ExportFormat {
 }
 
 export namespace State {
-  /** Stateに対してJSON.stringifyする際に用いるreplacer */
-  export function jsonReplacer(this: any, key: string, value: any): any {
-    if (value instanceof List) {
-      return (value as List<unknown>).toArray()
-    }
-    return value
-  }
-
-  /** Stateに対してJSON.parseする際に用いるreplacer */
-  export function jsonReviver(key: any, value: any) {
-    if (value instanceof Array) {
-      return List(value as Array<unknown>)
-    }
-    return value
-  }
-
   /** Stateオブジェクトまたはそのサブオブジェクトを複製する。Undo機能のために必要 */
   export function clone<T>(state: T): T {
     if (state === undefined) return undefined as unknown as T
 
     // 最適化の余地ありかも
-    const json = JSON.stringify(state, jsonReplacer)
-    return JSON.parse(json, jsonReviver)
+    return JSON.parse(JSON.stringify(state))
   }
 
   /**

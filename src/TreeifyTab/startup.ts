@@ -345,7 +345,7 @@ async function prefetchDataFile() {
       promise: call(async () => {
         const response = await GoogleDrive.readFile(metaData.id)
         const text = await decompress(await response.arrayBuffer())
-        const state: State = JSON.parse(text, State.jsonReviver)
+        const state: State = JSON.parse(text)
         return state
       }),
     }

@@ -129,7 +129,7 @@ export class Internal {
 
   dumpCurrentState() {
     console.groupCollapsed('ダンプ：Internal#state')
-    const stateString = JSON.stringify(this.state, State.jsonReplacer, 2)
+    const stateString = JSON.stringify(this.state, undefined, 2)
     console.log(stateString)
     console.groupEnd()
   }

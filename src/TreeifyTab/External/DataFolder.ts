@@ -10,8 +10,7 @@ export class DataFolder {
 
   /** データファイルにStateを書き込み、完了後のファイルのタイムスタンプを返す */
   async writeState(state: State): Promise<number> {
-    const text = JSON.stringify(state, State.jsonReplacer)
-    const content = await compress(text)
+    const content = await compress(JSON.stringify(state))
 
     const fileHandle = await this.dataFolderHandle.getFileHandle(DataFolder.FILE_NAME, {
       create: true,
@@ -39,7 +38,7 @@ export class DataFolder {
       const fileHandle = await this.dataFolderHandle.getFileHandle(DataFolder.FILE_NAME)
       const file = await fileHandle.getFile()
       const text = await decompress(await file.arrayBuffer())
-      return JSON.parse(text, State.jsonReviver)
+      return JSON.parse(text)
     } catch (e) {
       return undefined
     }
