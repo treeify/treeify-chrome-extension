@@ -1,4 +1,3 @@
-import md5 from 'md5'
 import { DefaultMap, MultiSet } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
@@ -75,8 +74,7 @@ export class External {
   getTreeifyClipboardHash(): string | undefined {
     if (this.treeifyClipboard === undefined) return undefined
 
-    const jsonString = JSON.stringify(this.treeifyClipboard)
-    return md5(jsonString)
+    return JSON.stringify(this.treeifyClipboard)
   }
 
   /**
