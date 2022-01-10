@@ -28,6 +28,7 @@ import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/ass
 import { dump } from 'src/Utility/Debug/logger'
 import { NERArray$, RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
+import { tick } from 'svelte'
 
 export type MainAreaProps = {
   rootNodeProps: MainAreaNodeProps
@@ -60,7 +61,7 @@ export function createMainAreaProps(state: State): MainAreaProps {
   }
 }
 
-function onKeyDown(event: KeyboardEvent) {
+async function onKeyDown(event: KeyboardEvent) {
   // IME入力中やIME確定時（特にEnterキー）はTreeifyの処理が暴発しないようにする。
   // 参考：https://qiita.com/ledsun/items/31e43a97413dd3c8e38e
   if (event.isComposing) return
@@ -115,8 +116,9 @@ function onKeyDown(event: KeyboardEvent) {
     for (const commandId of commandIds) {
       // @ts-ignore
       Command[commandId]?.()
+      Rerenderer.instance.rerender()
+      await tick()
     }
-    Rerenderer.instance.rerender()
   }
 }
 
