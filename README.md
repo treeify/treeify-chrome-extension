@@ -16,8 +16,9 @@ npm install
 npm run build-dev
 ```
 
-ビルドに成功するとdistフォルダに成果物が出力されます。  
-[Chromeの拡張機能画面](chrome://extensions/)で`パッケージ化されていない拡張機能を読み込む`ボタンを押下し、distフォルダを読み込むとTreeifyが起動します。  
+ビルドに成功すると`dist`フォルダに成果物が出力されます。  
+
+[Chromeの拡張機能画面](chrome://extensions/)で`パッケージ化されていない拡張機能を読み込む`ボタンを押下し、`dist`フォルダを読み込むとTreeifyが起動します。  
 このボタンはデベロッパーモード（画面右上）をONにすると表示されます。  
 
 ![デベロッパーモード](https://gyazo.com/f150bd8592d7fe774f8458dfb82d3afa.png)    
