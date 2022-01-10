@@ -1,4 +1,5 @@
 import { pipe } from 'fp-ts/function'
+import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
@@ -10,32 +11,21 @@ export class UnigramSearchIndex {
   // 文字を出現項目IDに対応付けるMap。
   // 例えばitemIdが5の項目に'あ'という文字が含まれる場合、
   // map.get('あ')が返すSetオブジェクトには5が含まれている。
-  // TODO: DefaultMapにする
-  private readonly map = new Map<string, Set<ItemId>>()
+  private readonly map = new DefaultMap<string, Set<ItemId>>(() => new Set())
 
   /** 与えられた文字が出現する項目IDの集合を返す */
   getItemIds(unigram: string): RSet<ItemId> {
-    return this.map.get(unigram) ?? new Set<ItemId>()
+    return this.map.get(unigram)
   }
 
   addItemId(unigram: string, itemId: ItemId) {
     const normalizedUnigram = UnigramSearchIndex.normalize(unigram)
-    const set = this.map.get(normalizedUnigram)
-    if (set !== undefined) {
-      set.add(itemId)
-    } else {
-      const newSet = new Set<ItemId>()
-      newSet.add(itemId)
-      this.map.set(normalizedUnigram, newSet)
-    }
+    this.map.get(normalizedUnigram).add(itemId)
   }
 
   removeItemId(unigram: string, itemId: ItemId) {
     const normalizedUnigram = UnigramSearchIndex.normalize(unigram)
-    const set = this.map.get(normalizedUnigram)
-    if (set !== undefined) {
-      set.delete(itemId)
-    }
+    this.map.get(normalizedUnigram).delete(itemId)
   }
 
   /** 与えられた文字列に含まれる全ての文字を含む項目の集合を返す */
