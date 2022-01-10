@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
@@ -6,6 +5,7 @@ import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { ExportFormat, State } from 'src/TreeifyTab/Internal/State'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** TODO: コメント */
@@ -53,8 +53,7 @@ export class Internal {
   mutate(value: any, propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
     const parentObject = Internal.getParentObject(propertyKeys, this.state)
-    const lastKey = propertyKeys.last(undefined)
-    assertNonUndefined(lastKey)
+    const lastKey = RArray$.lastOrThrow(propertyKeys)
 
     if (parentObject[lastKey] !== value) {
       // Undo用にミューテート前のデータを退避する
@@ -75,8 +74,7 @@ export class Internal {
   delete(propertyPath: PropertyPath) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
     const parentObject = Internal.getParentObject(propertyKeys, this.state)
-    const lastKey = propertyKeys.last(undefined)
-    assertNonUndefined(lastKey)
+    const lastKey = RArray$.lastOrThrow(propertyKeys)
 
     // Undo用にミューテート前のデータを退避する
     const chunkId = Chunk.convertToChunkId(propertyPath)
@@ -91,14 +89,14 @@ export class Internal {
     }
   }
 
-  private static getParentObject(propertyKeys: List<string>, state: any): any {
-    if (propertyKeys.size === 1) {
+  private static getParentObject(propertyKeys: RArray<string>, state: any): any {
+    if (propertyKeys.length === 1) {
       return state
     } else {
-      const firstKey = propertyKeys.first(undefined)
+      const firstKey = propertyKeys[0]
       assertNonUndefined(firstKey)
 
-      return this.getParentObject(propertyKeys.shift(), state[firstKey])
+      return this.getParentObject(RArray$.shift(propertyKeys), state[firstKey])
     }
   }
 
@@ -115,8 +113,7 @@ export class Internal {
     for (const [chunkId, savedData] of this.undoStack) {
       const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
       const parentObject = Internal.getParentObject(propertyKeys, this.state)
-      const lastKey = propertyKeys.last(undefined)
-      assertNonUndefined(lastKey)
+      const lastKey = RArray$.lastOrThrow(propertyKeys)
 
       if (savedData !== undefined) {
         parentObject[lastKey] = savedData

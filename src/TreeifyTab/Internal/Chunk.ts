@@ -63,7 +63,7 @@ export namespace Chunk {
   /** PropertyPathからChunkIdに変換する */
   export function convertToChunkId(propertyPath: PropertyPath): ChunkId {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-    if (collectionKeys.has(propertyKeys.get(0)!.toString())) {
+    if (collectionKeys.has(propertyKeys[0].toString())) {
       // @ts-ignore
       return PropertyPath.of(...propertyKeys.take(2))
     } else {
@@ -76,8 +76,8 @@ export namespace Chunk {
   // TODO: setPropertyみたいに再帰関数でやるべきじゃないかな？
   export function create(state: State, chunkId: ChunkId): Chunk {
     const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
-    const firstKey = propertyKeys.get(0)
-    const secondKey = propertyKeys.get(1)
+    const firstKey = propertyKeys[0]
+    const secondKey = propertyKeys[1]
     // @ts-ignore
     const rawObject = secondKey === undefined ? state[firstKey] : state[firstKey][secondKey]
     return {
@@ -98,14 +98,14 @@ export namespace Chunk {
   // a.b.cのようなネストしたプロパティアクセスでヌルポにならないよう気をつけつつ値を設定する
   function setProperty(targetObject: any, chunkId: ChunkId, value: any) {
     const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
-    if (propertyKeys.size === 1) {
-      targetObject[propertyKeys.get(0)!] = value
+    if (propertyKeys.length === 1) {
+      targetObject[propertyKeys[0]] = value
     } else {
-      if (targetObject[propertyKeys.get(0)!] === undefined) {
-        targetObject[propertyKeys.get(0)!] = {}
+      if (targetObject[propertyKeys[0]] === undefined) {
+        targetObject[propertyKeys[0]] = {}
       }
       setProperty(
-        targetObject[propertyKeys.get(0)!],
+        targetObject[propertyKeys[0]],
         // @ts-ignore
         PropertyPath.of(...propertyKeys.shift()),
         value

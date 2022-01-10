@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { Set } from 'immutable'
+  import { pipe } from 'fp-ts/function'
+  import { ItemId } from 'src/TreeifyTab/basicType'
   import { TabsDialog } from 'src/TreeifyTab/External/DialogState'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -9,14 +10,18 @@
     createTabsDialogItemProps,
     TabsDialogItemProps,
   } from 'src/TreeifyTab/View/Dialog/TabsDialogItemProps'
+  import { RSet$ } from 'src/Utility/fp-ts'
 
   export let dialog: TabsDialog
 
-  const webPageItemIds = Set(CurrentState.yieldSubtreeItemIdsShallowly(dialog.targetItemId)).filter(
-    (itemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+  const webPageItemIds = pipe(
+    RSet$.from(CurrentState.yieldSubtreeItemIdsShallowly(dialog.targetItemId)),
+    RSet$.filter(
+      (itemId: ItemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+    )
   )
   const rootNode = CurrentState.treeify(
-    webPageItemIds.add(dialog.targetItemId),
+    RSet$.add(dialog.targetItemId)(webPageItemIds),
     dialog.targetItemId,
     false
   )
