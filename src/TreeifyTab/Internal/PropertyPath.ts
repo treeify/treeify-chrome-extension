@@ -1,4 +1,7 @@
 import { List } from 'immutable'
+import { State } from 'src/TreeifyTab/Internal/State'
+import { RArray } from 'src/Utility/fp-ts'
+import { Primitive } from 'type-fest'
 
 /**
  * Stateオブジェクト内の特定の位置を示す値の型。
@@ -15,7 +18,7 @@ export namespace PropertyPath {
   // ・ファイル名として使えない'/', ':'など
   const delimiter = '~'
 
-  export function of(...args: (keyof any)[]): PropertyPath {
+  export function of(...args: PathOf<State>): PropertyPath {
     return List.of(...args)
       .map((value) => value.toString())
       .join(delimiter)
@@ -25,3 +28,9 @@ export namespace PropertyPath {
     return List(propertyPath.split(delimiter))
   }
 }
+
+type PathOf<T, K extends keyof T = keyof T> = T extends Primitive | RArray<unknown>
+  ? []
+  : K extends K
+  ? [K] | [K, ...PathOf<T[K]>]
+  : never
