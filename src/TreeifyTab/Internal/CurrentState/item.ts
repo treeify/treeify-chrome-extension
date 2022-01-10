@@ -35,7 +35,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
       for (const parentsKey in item.parents) {
         Internal.instance.mutate(
           { ...edge },
-          PropertyPath.of('items', childItemId, 'parents', parentsKey)
+          PropertyPath.of('items', childItemId, 'parents', Number(parentsKey))
         )
       }
     }
@@ -71,7 +71,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
     if (workspace.excludedItemIds.includes(itemId)) {
       Internal.instance.mutate(
         workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
-        PropertyPath.of('workspaces', key, 'excludedItemIds')
+        PropertyPath.of('workspaces', Number(key), 'excludedItemIds')
       )
     }
   }

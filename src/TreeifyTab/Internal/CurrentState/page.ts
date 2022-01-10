@@ -93,7 +93,7 @@ export function turnIntoNonPage(itemId: ItemId) {
     if (Internal.instance.state.workspaces[workspacesKey].activePageId === itemId) {
       Internal.instance.mutate(
         TOP_ITEM_ID,
-        PropertyPath.of('workspaces', workspacesKey, 'activePageId')
+        PropertyPath.of('workspaces', Number(workspacesKey), 'activePageId')
       )
     }
   }

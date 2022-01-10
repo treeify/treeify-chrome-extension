@@ -51,6 +51,7 @@ export namespace Chunk {
       if (collectionKeys.has(firstKey)) {
         // @ts-ignore
         for (const secondKey of Object.keys(state[firstKey])) {
+          // @ts-ignore
           yield PropertyPath.of(firstKey, secondKey)
         }
       } else {
@@ -63,8 +64,10 @@ export namespace Chunk {
   export function convertToChunkId(propertyPath: PropertyPath): ChunkId {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
     if (collectionKeys.has(propertyKeys.get(0)!.toString())) {
+      // @ts-ignore
       return PropertyPath.of(...propertyKeys.take(2))
     } else {
+      // @ts-ignore
       return PropertyPath.of(...propertyKeys.take(1))
     }
   }
@@ -103,6 +106,7 @@ export namespace Chunk {
       }
       setProperty(
         targetObject[propertyKeys.get(0)!],
+        // @ts-ignore
         PropertyPath.of(...propertyKeys.shift()),
         value
       )
