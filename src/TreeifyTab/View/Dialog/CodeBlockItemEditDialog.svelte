@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { List } from 'immutable'
+  import { pipe } from 'fp-ts/function'
   import { External } from 'src/TreeifyTab/External/External'
-  import { autoDetectionLanguages, detectLanguage } from 'src/TreeifyTab/highlightJs'
+  import { autoDetectionLanguages, detectLanguage, LanguageScore } from 'src/TreeifyTab/highlightJs'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { removeRedundantIndent } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
@@ -11,7 +11,7 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
-  import { RSet$ } from 'src/Utility/fp-ts'
+  import { Option$, RArray$, RSet$ } from 'src/Utility/fp-ts'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(targetItemId)
@@ -33,10 +33,13 @@
       code,
       RSet$.difference(autoDetectionLanguages, RSet$.from(preferredLanguageNames))
     )
-    const language = List(preferredResults)
-      .push(originalResult)
-      .maxBy(({ score }) => score)?.language
-    CurrentState.setCodeBlockItemLanguage(targetItemId, language ?? '')
+    const language = pipe(
+      preferredResults,
+      RArray$.append(originalResult),
+      RArray$.maxBy((object: LanguageScore) => object.score),
+      Option$.map((object: LanguageScore) => object.language)
+    )
+    CurrentState.setCodeBlockItemLanguage(targetItemId, Option$.get('')(language))
 
     // タイムスタンプを更新
     CurrentState.updateItemTimestamp(targetItemId)
