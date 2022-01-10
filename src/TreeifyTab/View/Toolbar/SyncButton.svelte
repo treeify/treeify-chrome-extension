@@ -13,7 +13,6 @@
   import { dump } from 'src/Utility/Debug/logger'
   import { call } from 'src/Utility/function'
   import { compress, decompress } from 'src/Utility/gzip'
-  import DataFileMataData = GoogleDrive.DataFileMataData
 
   export let props: SyncButtonProps
   let isLoading = false
@@ -112,7 +111,7 @@
     }
   }
 
-  async function getState(metaData: DataFileMataData): Promise<State> {
+  async function getState(metaData: GoogleDrive.DataFileMataData): Promise<State> {
     if (External.instance.backgroundDownload?.modifiedTime === metaData.modifiedTime) {
       const promise = External.instance.backgroundDownload.promise
       External.instance.backgroundDownload = undefined
