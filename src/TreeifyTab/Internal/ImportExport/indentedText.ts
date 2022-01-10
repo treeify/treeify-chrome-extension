@@ -46,7 +46,7 @@ export function removeRedundantIndent(indentedText: string): string {
     Option$.get(0)
   )
   const maxCount = Math.max(minSpaceCount, minTabCount, minFullWidthSpaceCount)
-  return lines.map((line) => line.substr(maxCount)).join('\n')
+  return lines.map((line) => line.slice(maxCount)).join('\n')
 }
 
 /** 指定された項目を頂点とするインデント形式のプレーンテキストを作る */
