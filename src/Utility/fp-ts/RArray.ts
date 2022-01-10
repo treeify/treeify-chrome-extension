@@ -5,7 +5,7 @@ import * as Ord from 'fp-ts/Ord'
 import * as RA from 'fp-ts/ReadonlyArray'
 import * as RNEA from 'fp-ts/ReadonlyNonEmptyArray'
 import { assert } from 'src/Utility/Debug/assert'
-import { Option$, RArray } from 'src/Utility/fp-ts'
+import { NERArray$, Option$, RArray } from 'src/Utility/fp-ts'
 import { Arrow } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
@@ -57,14 +57,21 @@ export const updateAt =
   (rarray: RArray<A>): RArray<A> =>
     RA.unsafeUpdateAt(index, value, rarray)
 
-export const lastOrThrow = <A>(rarray: RArray<A>) => {
+export const lastOrThrow = <A>(rarray: RArray<A>): A => {
   assert(rarray.length > 0)
   return rarray[rarray.length - 1]
 }
 
-export function max(rarray: RArray<number>): Option<number> {
-  return Option$.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
-}
+export const max = (rarray: RArray<number>): Option<number> =>
+  Option$.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
+
+export const min = (rarray: RArray<number>): Option<number> =>
+  Option$.map(RNEA.min(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
+
+export const flatMap =
+  <A, B>(f: Arrow<A, RArray<B>>) =>
+  (rarray: RArray<A>): RArray<B> =>
+    rarray.flatMap(f)
 
 export const filterUndefined = <A>(rarray: RArray<A | undefined>): RArray<A> =>
   RA.filter((element: A | undefined) => element !== undefined)(rarray) as RArray<A>
@@ -108,6 +115,8 @@ export const sortByNumber =
     return cloned
   }
 
+export const groupBy = NERArray$.groupBy
+
 export const from = <A>(iterable: Iterable<A>): RArray<A> => [...iterable]
 
 /**
@@ -131,5 +140,5 @@ export function join<A>(rarray: RArray<A>, delimiter: A): RArray<A> {
  * shallowEquals([1, [2]], [1, [2]]) === false
  * shallowEquals([{}], [{}]) === false
  */
-export const shallowEqual = <A>(rarray1: RArray<A>, rarray2: RArray<A>) =>
+export const shallowEqual = <A>(rarray1: RArray<A>, rarray2: RArray<A>): boolean =>
   RA.getEq<A>(eqStrict).equals(rarray1, rarray2)

@@ -115,6 +115,8 @@ export function getHighlightedHtml(code: string, language: string): string {
   }
 }
 
+export type LanguageScore = { language: string; score: number }
+
 /**
  * 与えられたコードの言語を自動検出して最有力な言語名とスコアを返す。
  * 候補が存在しない場合は{ language: '', score: 0 }を返す。
@@ -122,7 +124,7 @@ export function getHighlightedHtml(code: string, language: string): string {
 export function detectLanguage(
   code: string,
   languages: RSet<string> = autoDetectionLanguages
-): { language: string; score: number } {
+): LanguageScore {
   const { language, relevance } = hljs.highlightAuto(code, Array.from(languages))
   return {
     language: language ?? '',

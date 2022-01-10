@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -118,10 +117,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     }
   }
 
-  if (
-    isSingleSelect &&
-    List.of(ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX).contains(item.type)
-  ) {
+  if (isSingleSelect && [ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX].includes(item.type)) {
     result.push({
       title: 'キャプションを設定…',
       onClick: () => {

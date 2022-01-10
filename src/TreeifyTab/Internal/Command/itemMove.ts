@@ -168,7 +168,7 @@ export function moveItemToBelow() {
     CurrentState.updateItemTimestamp(selectedItemId)
   }
 
-  if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).isEmpty()) {
+  if (CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).length === 0) {
     // 1つ下の項目が子を表示していない場合
 
     // ターゲットItemPathを更新
@@ -232,7 +232,7 @@ export function moveItemToPrevSibling() {
     if (aboveItemPath !== undefined) {
       const knightItemPath = CurrentState.findPrevSiblingItemPath(aboveItemPath)
       if (knightItemPath !== undefined) {
-        if (!CurrentState.getDisplayingChildItemIds(knightItemPath).isEmpty()) {
+        if (CurrentState.getDisplayingChildItemIds(knightItemPath).length > 0) {
           const oldParentItemId = ItemPath.getItemId(aboveItemPath)
           const newParentItemId = ItemPath.getItemId(knightItemPath)
 

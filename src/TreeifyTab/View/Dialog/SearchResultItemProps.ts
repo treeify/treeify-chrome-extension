@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -8,7 +7,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray } from 'src/Utility/fp-ts'
+import { RArray, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type SearchResultItemProps = {
@@ -22,18 +21,18 @@ export type SearchResultItemProps = {
 }
 
 export function createSearchResultItemPropses(
-  itemPaths: List<ItemPath>
+  itemPaths: RArray<ItemPath>
 ): RArray<SearchResultItemProps> {
-  const firstItemPath = itemPaths.first(undefined)
+  const firstItemPath = itemPaths[0]
   assertNonUndefined(firstItemPath)
   const pageId = ItemPath.getRootItemId(firstItemPath)
 
-  const itemIdSet = itemPaths.map(ItemPath.getItemId).toSet()
-  const tree = CurrentState.treeify(itemIdSet.add(pageId), pageId, false)
+  const itemIdSet = RSet$.from(itemPaths.map(ItemPath.getItemId))
+  const tree = CurrentState.treeify(RSet$.add(pageId)(itemIdSet), pageId, false)
 
   // 足跡を表示するためにタイムスタンプのランキングを計算する
   const items = Internal.instance.state.items
-  const ranking = itemIdSet.toArray().sort((a: ItemId, b: ItemId) => {
+  const ranking = Array.from(itemIdSet).sort((a: ItemId, b: ItemId) => {
     return items[b].timestamp - items[a].timestamp
   })
   const exponent = CssCustomProperty.getNumber('--search-result-footprint-count-exponent') ?? 0.5

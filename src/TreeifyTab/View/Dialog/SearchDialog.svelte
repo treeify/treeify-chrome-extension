@@ -1,6 +1,5 @@
 <script lang="ts">
   import { pipe } from 'fp-ts/function'
-  import { List, Set } from 'immutable'
   import { MultiSet } from 'mnemonist'
   import { ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
   import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -13,9 +12,9 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps.js'
-  import { RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+  import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
-  type SearchResult = { pages: List<List<ItemPath>>; counts: MultiSet<ItemType> }
+  type SearchResult = { pages: RArray<RArray<ItemPath>>; counts: MultiSet<ItemType> }
 
   let searchQueryValue = ''
   let hitItemIds: RSet<ItemId> | undefined
@@ -106,13 +105,14 @@
       RSet$.flatMap((itemId: ItemId) => RSet$.from(CurrentState.yieldItemPaths(itemId)))
     )
 
-    const pages = Set(allItemPaths)
+    const pages = pipe(
+      RArray$.from(allItemPaths),
       // ItemPathをページIDでグループ化する
-      .groupBy((itemPath) => ItemPath.getRootItemId(itemPath))
-      .toList()
-      .map((itemPaths) => itemPaths.toList())
+      RArray$.groupBy((itemPath: ItemPath) => String(ItemPath.getRootItemId(itemPath))),
+      Object.values,
       // ヒットした項目数によってページの並びをソートする
-      .sortBy((itemPaths) => -itemPaths.size)
+      RArray$.sortByNumber((entry: RArray<ItemPath>) => -entry.length)
+    )
 
     const counts = new MultiSet<ItemType>()
     for (const hitItemId of hitItemIds) {
@@ -144,7 +144,7 @@
     </div>
     <div class="search-dialog_result-area">
       {#if searchResult !== undefined}
-        {#if searchResult.pages.size > 0}
+        {#if searchResult.pages.length > 0}
           <div class="search-dialog_filter-area">
             表示する項目:
             {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
@@ -157,7 +157,7 @@
             {/each}
           </div>
           <div class="search-dialog_result">
-            {#each searchResult.pages.toArray() as itemPaths}
+            {#each searchResult.pages as itemPaths}
               <SearchResultPage props={createSearchResultPageProps(itemPaths)} />
             {/each}
           </div>

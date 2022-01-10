@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -27,7 +26,7 @@
 
     event.preventDefault()
     event.stopPropagation()
-    if (List.of('Control', 'Shift', 'Alt', 'Meta').contains(event.key)) return
+    if (['Control', 'Shift', 'Alt', 'Meta'].includes(event.key)) return
 
     const inputId = InputId.fromKeyboardEvent(event)
     if (clonedKeyBindings[inputId] !== undefined) {

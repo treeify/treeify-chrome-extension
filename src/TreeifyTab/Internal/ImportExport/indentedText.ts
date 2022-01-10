@@ -1,4 +1,4 @@
-import { List } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { MultiSet } from 'mnemonist'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -8,7 +8,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { ExportFormat } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray, RArray$ } from 'src/Utility/fp-ts'
+import { Option$, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { MutableOrderedTree } from 'src/Utility/OrderedTree'
 
@@ -17,8 +17,9 @@ import { MutableOrderedTree } from 'src/Utility/OrderedTree'
  * インデント文字として認識するのは半角スペース、全角スペース、タブ文字のみ。
  */
 export function removeRedundantIndent(indentedText: string): string {
-  const lines = List(indentedText.split(/\r?\n/))
+  const lines = indentedText.split(/\r?\n/)
 
+  // 全体的にもっと改善できる予感がする
   const spaceCounts = lines.map((line) => {
     return line.search(/[^ ]/)
   })
@@ -29,9 +30,21 @@ export function removeRedundantIndent(indentedText: string): string {
     return line.search(/[^　]/)
   })
 
-  const minSpaceCount = spaceCounts.filter((count) => count >= 0).min() ?? 0
-  const minTabCount = tabCounts.filter((count) => count >= 0).min() ?? 0
-  const minFullWidthSpaceCount = fullWidthSpaceCounts.filter((count) => count >= 0).min() ?? 0
+  const minSpaceCount = pipe(
+    spaceCounts.filter((count) => count >= 0),
+    RArray$.min,
+    Option$.get(0)
+  )
+  const minTabCount = pipe(
+    tabCounts.filter((count) => count >= 0),
+    RArray$.min,
+    Option$.get(0)
+  )
+  const minFullWidthSpaceCount = pipe(
+    fullWidthSpaceCounts.filter((count) => count >= 0),
+    RArray$.min,
+    Option$.get(0)
+  )
   const maxCount = Math.max(minSpaceCount, minTabCount, minFullWidthSpaceCount)
   return lines.map((line) => line.substr(maxCount)).join('\n')
 }
@@ -40,7 +53,7 @@ export function removeRedundantIndent(indentedText: string): string {
 export function exportAsIndentedText(itemPath: ItemPath): string {
   const exportSettings = Internal.instance.state.exportSettings
   const indentUnit = exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression
-  return List(yieldIndentedLines(itemPath, indentUnit)).join('\n')
+  return Array.from(yieldIndentedLines(itemPath, indentUnit)).join('\n')
 }
 
 function* yieldIndentedLines(
@@ -164,13 +177,15 @@ export function pasteMultilineText(text: string) {
 // 例えばいわゆる2スペースインデントの場合は'  'を返す。
 // インデントが見つからなかった場合空文字列を返す。
 function detectIndent(lines: string[]): string {
-  const result = List.of(' ', '\t', '　')
-    .map((indentChar) => {
+  const result = pipe(
+    [' ', '\t', '　'],
+    RArray$.map((indentChar) => {
       const { size, likelihood } = detectIndentSize(lines, indentChar)
       return { indentChar, size, likelihood }
-    })
-    .maxBy((value) => value.likelihood)
-  assertNonUndefined(result)
+    }),
+    RArray$.maxBy((value) => value.likelihood),
+    Option$.getOrThrow
+  )
 
   return result.indentChar.repeat(result.size)
 }

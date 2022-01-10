@@ -12,7 +12,7 @@ export function toMarkdownText(itemPath: ItemPath, level: integer = 1): string {
   const state = Internal.instance.state
   const childItemIds = state.exportSettings.options[ExportFormat.MARKDOWN].includeInvisibleItems
     ? state.items[ItemPath.getItemId(itemPath)].childItemIds
-    : CurrentState.getDisplayingChildItemIds(itemPath).toArray()
+    : CurrentState.getDisplayingChildItemIds(itemPath)
   if (childItemIds.length === 0) {
     return toMultiLineMarkdownContent(itemPath) + '  \n'
   } else {

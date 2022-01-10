@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
   createSearchResultItemPropses,
@@ -15,9 +14,9 @@ export type SearchResultPageProps = {
   searchResultItemPropses: RArray<SearchResultItemProps>
 }
 
-export function createSearchResultPageProps(itemPaths: List<ItemPath>) {
+export function createSearchResultPageProps(itemPaths: RArray<ItemPath>) {
   return {
-    pageContent: createItemContentProps(ItemPath.getRootItemId(itemPaths.first())),
+    pageContent: createItemContentProps(ItemPath.getRootItemId(itemPaths[0])),
     searchResultItemPropses: createSearchResultItemPropses(itemPaths),
   }
 }
