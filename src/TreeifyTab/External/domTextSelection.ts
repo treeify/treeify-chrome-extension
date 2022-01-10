@@ -1,3 +1,5 @@
+import { pipe } from 'fp-ts/function'
+import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /** テキスト項目のcontenteditableにおけるキャレット位置やテキスト選択範囲を表す型 */
@@ -60,9 +62,7 @@ export function countBrElements(node: Node): integer {
     return 1
   }
 
-  return Array.from(node.childNodes)
-    .map(countBrElements)
-    .reduce((a: integer, x) => a + x, 0)
+  return pipe(Array.from(node.childNodes), RArray$.map(countBrElements), RArray$.sum)
 }
 
 /** {@link getDistance}で算出された距離をDOMのoffsetに変換する */

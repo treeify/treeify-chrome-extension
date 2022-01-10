@@ -112,7 +112,7 @@ function countHiddenItems(state: State, itemPath: ItemPath): integer {
   const counts = state.items[ItemPath.getItemId(itemPath)].childItemIds.map((childItemId) => {
     return CurrentState.getDisplayingChildItemIds(RArray$.append(childItemId)(itemPath)).length
   })
-  return counts.length + counts.reduce((a: integer, x) => a + x, 0)
+  return counts.length + RArray$.sum(counts)
 }
 
 export function deriveBulletState(state: State, itemPath: ItemPath): MainAreaBulletState {

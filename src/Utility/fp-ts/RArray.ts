@@ -62,12 +62,6 @@ export const lastOrThrow = <A>(rarray: RArray<A>): A => {
   return rarray[rarray.length - 1]
 }
 
-export const max = (rarray: RArray<number>): Option<number> =>
-  Option$.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
-
-export const min = (rarray: RArray<number>): Option<number> =>
-  Option$.map(RNEA.min(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
-
 export const flatMap =
   <A, B>(f: Arrow<A, RArray<B>>) =>
   (rarray: RArray<A>): RArray<B> =>
@@ -75,17 +69,6 @@ export const flatMap =
 
 export const filterUndefined = <A>(rarray: RArray<A | undefined>): RArray<A> =>
   RA.filter((element: A | undefined) => element !== undefined)(rarray) as RArray<A>
-
-/**
- * 配列の要素からnumber値を計算し、その値が最大になる要素を返す。
- * 空配列の場合はnoneを返す。
- */
-export const maxBy =
-  <A>(toNumber: Arrow<A, number>) =>
-  (rarray: RArray<A>): Option<A> => {
-    const ord = Ord.contramap(toNumber)(FpNumber.Ord)
-    return Option$.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rarray))
-  }
 
 /** 配列の要素から計算した値をstring型に変換し、その昇順でソートする */
 export const sortBy =
@@ -148,3 +131,22 @@ export const interpose =
  */
 export const shallowEqual = <A>(rarray1: RArray<A>, rarray2: RArray<A>): boolean =>
   RA.getEq<A>(eqStrict).equals(rarray1, rarray2)
+
+export const max = (rarray: RArray<number>): Option<number> =>
+  Option$.map(RNEA.max(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
+
+export const min = (rarray: RArray<number>): Option<number> =>
+  Option$.map(RNEA.min(FpNumber.Ord))(RNEA.fromReadonlyArray(rarray))
+
+/**
+ * 配列の要素からnumber値を計算し、その値が最大になる要素を返す。
+ * 空配列の場合はnoneを返す。
+ */
+export const maxBy =
+  <A>(toNumber: Arrow<A, number>) =>
+  (rarray: RArray<A>): Option<A> => {
+    const ord = Ord.contramap(toNumber)(FpNumber.Ord)
+    return Option$.map(RNEA.max(ord))(RNEA.fromReadonlyArray(rarray))
+  }
+
+export const sum = (rarray: RArray<number>): number => rarray.reduce((a: integer, x) => a + x, 0)
