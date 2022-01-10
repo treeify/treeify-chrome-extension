@@ -1,7 +1,8 @@
+import objectPath from 'object-path'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { RArray } from 'src/Utility/fp-ts'
+import { RArray, RArray$ } from 'src/Utility/fp-ts'
 
 /**
  * データ型の実体としてはPropertyPathと同じだが、
@@ -65,10 +66,10 @@ export namespace Chunk {
     const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
     if (collectionKeys.has(propertyKeys[0].toString())) {
       // @ts-ignore
-      return PropertyPath.of(...propertyKeys.take(2))
+      return PropertyPath.of(...RArray$.takeLeft(2)(propertyKeys))
     } else {
       // @ts-ignore
-      return PropertyPath.of(...propertyKeys.take(1))
+      return PropertyPath.of(...RArray$.takeLeft(1)(propertyKeys))
     }
   }
 
@@ -95,21 +96,8 @@ export namespace Chunk {
     return result
   }
 
-  // a.b.cのようなネストしたプロパティアクセスでヌルポにならないよう気をつけつつ値を設定する
   function setProperty(targetObject: any, chunkId: ChunkId, value: any) {
-    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
-    if (propertyKeys.length === 1) {
-      targetObject[propertyKeys[0]] = value
-    } else {
-      if (targetObject[propertyKeys[0]] === undefined) {
-        targetObject[propertyKeys[0]] = {}
-      }
-      setProperty(
-        targetObject[propertyKeys[0]],
-        // @ts-ignore
-        PropertyPath.of(...propertyKeys.shift()),
-        value
-      )
-    }
+    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId).map(String)
+    objectPath.set(targetObject, propertyKeys, value)
   }
 }
