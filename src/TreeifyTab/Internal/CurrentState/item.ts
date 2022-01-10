@@ -170,7 +170,7 @@ export function updateItemTimestamp(itemId: ItemId) {
 
 /** 指定された項目の親項目IDのリストを返す */
 export function getParentItemIds(itemId: ItemId): RArray<ItemId> {
-  return Object.keys(Internal.instance.state.items[itemId].parents).map((key) => parseInt(key))
+  return Object.keys(Internal.instance.state.items[itemId].parents).map(Number)
 }
 
 /** 指定された項目の親の数を返す */

@@ -13,7 +13,7 @@ const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 export function getCurrentWorkspaceId(): Timestamp {
   const savedCurrentWorkspaceId = localStorage.getItem(CURRENT_WORKSPACE_ID_KEY)
   if (savedCurrentWorkspaceId !== null) {
-    const currentWorkspaceId = parseInt(savedCurrentWorkspaceId)
+    const currentWorkspaceId = Number(savedCurrentWorkspaceId)
     if (Internal.instance.state.workspaces[currentWorkspaceId] !== undefined) {
       // ローカルに保存されたvalidなワークスペースIDがある場合
       return currentWorkspaceId
@@ -34,7 +34,7 @@ export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
 
 /** Stateに登録されている全てのワークスペースIDを返す */
 export function getWorkspaceIds(): RArray<WorkspaceId> {
-  return Object.keys(Internal.instance.state.workspaces).map((key) => parseInt(key))
+  return Object.keys(Internal.instance.state.workspaces).map(Number)
 }
 
 /** 現在のワークスペースの除外項目リストを返す */

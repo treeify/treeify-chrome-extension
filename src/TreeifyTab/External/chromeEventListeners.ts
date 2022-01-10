@@ -217,7 +217,7 @@ export async function matchTabsAndWebPageItems() {
 
   const webPageItems = Internal.instance.state.webPageItems
   for (const key in webPageItems) {
-    const itemId = parseInt(key)
+    const itemId = Number(key)
     const url = webPageItems[itemId].url
     urlToItemIds.get(url).push(itemId)
   }

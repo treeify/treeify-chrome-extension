@@ -139,7 +139,7 @@ async function migrateTabs(newState: State) {
   // newStateにおけるグローバル項目IDから項目IDへのMapを作る
   const globalItemIdMap = new Map<GlobalItemId, ItemId>()
   for (const itemsKey in newState.items) {
-    globalItemIdMap.set(newState.items[itemsKey].globalItemId, parseInt(itemsKey))
+    globalItemIdMap.set(newState.items[itemsKey].globalItemId, Number(itemsKey))
   }
 
   const allItemIds = External.instance.tabItemCorrespondence.getAllItemIds()
@@ -244,7 +244,7 @@ async function onCommand(commandName: string) {
 }
 
 async function onAlarm(alarm: Alarm) {
-  const [itemId, index] = alarm.name.split('#').map((value) => parseInt(value))
+  const [itemId, index] = alarm.name.split('#').map(Number)
   const reminderSettings = Internal.instance.state.reminders[itemId]
   const reminderSetting = reminderSettings[index]
   assertNonUndefined(reminderSetting)

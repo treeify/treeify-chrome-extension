@@ -277,7 +277,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   if (element === undefined) return
 
   assertNonUndefined(element.dataset.itemId)
-  const itemId = parseInt(element.dataset.itemId)
+  const itemId = Number(element.dataset.itemId)
 
   const draggedItemId = ItemPath.getItemId(draggedItemPath)
 

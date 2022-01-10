@@ -150,7 +150,7 @@
         // データファイルがある場合
 
         const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
-        const knownTimestamp = syncedAt !== undefined ? parseInt(syncedAt) : -1
+        const knownTimestamp = syncedAt !== undefined ? Number(syncedAt) : -1
         if (knownTimestamp < lastModified) {
           // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
           console.log(

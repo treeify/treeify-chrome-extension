@@ -295,7 +295,7 @@ function createBaseItemBasedOnOpml(outlineElement: Element): ItemId {
       const attrWidthPx = outlineElement.getAttribute('widthPx')
       if (attrWidthPx !== null) {
         try {
-          CurrentState.setImageItemWidthPx(imageItemId, parseInt(attrWidthPx))
+          CurrentState.setImageItemWidthPx(imageItemId, Number(attrWidthPx))
         } catch {}
       }
       return imageItemId

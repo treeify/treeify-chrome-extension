@@ -70,7 +70,7 @@ export namespace Instance {
         setMaxIisn(0)
         return 0
       } else {
-        maxIisn = parseInt(savedValue)
+        maxIisn = Number(savedValue)
       }
     }
 

@@ -16,7 +16,7 @@ export class SearchEngine {
     const unigramSearchIndex = new UnigramSearchIndex()
     // 各項目に含まれるテキストを抽出・unigram化し、検索インデックスに登録する
     for (let itemKey in state.items) {
-      const itemId = parseInt(itemKey)
+      const itemId = Number(itemKey)
       for (const unigram of SearchEngine.appearingUnigrams(itemId, state)) {
         unigramSearchIndex.addItemId(unigram, itemId)
       }

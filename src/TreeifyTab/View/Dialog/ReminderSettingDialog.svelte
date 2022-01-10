@@ -49,7 +49,7 @@
         break
       }
       case 'every month':
-        const [hour, minute] = time.split(':').map((string) => parseInt(string))
+        const [hour, minute] = time.split(':').map(Number)
         Internal.instance.saveCurrentStateToUndoStack()
         const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
         const reminderSetting: ReminderSetting = {

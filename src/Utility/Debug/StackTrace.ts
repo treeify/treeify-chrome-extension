@@ -36,8 +36,8 @@ export class StackTrace {
     const matchResult: any = linedText.match(regExp)
     let callerName: string = matchResult[1]
     const filePath: string = matchResult[2]
-    const lineNumber: integer = parseInt(matchResult[3], 10)
-    const columnNumber: integer = parseInt(matchResult[4], 10)
+    const lineNumber: integer = Number(matchResult[3])
+    const columnNumber: integer = Number(matchResult[4])
 
     if (callerName === '') {
       if (this.stackTraceLines.length - 1 === index + 2) {

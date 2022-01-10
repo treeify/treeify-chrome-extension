@@ -12,7 +12,7 @@
 
   function getStateWorkspaceArray(): WorkspaceRow[] {
     return Object.keys(Internal.instance.state.workspaces).map((key) => {
-      const workspaceId = parseInt(key)
+      const workspaceId = Number(key)
       return {
         id: workspaceId,
         ...Internal.instance.state.workspaces[workspaceId],

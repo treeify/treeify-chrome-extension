@@ -216,7 +216,7 @@ export namespace State {
    */
   export function isValid(state: State): boolean {
     try {
-      const itemIds = Object.keys(state.items).map((key) => parseInt(key))
+      const itemIds = Object.keys(state.items).map(Number)
       for (const itemId of itemIds) {
         const item = state.items[itemId]
 
@@ -236,7 +236,7 @@ export namespace State {
         }
         // 親項目の子リストに自身が含まれていることのチェック
         for (const parentsKey in item.parents) {
-          const parentItemId = parseInt(parentsKey)
+          const parentItemId = Number(parentsKey)
           assert(
             state.items[parentItemId]?.childItemIds?.includes(itemId),
             `items[${parentItemId}]のchildItemIdsに${itemId}が含まれていない`
@@ -280,7 +280,7 @@ export namespace State {
       )
 
       for (const pagesKey in state.pages) {
-        const pageId = parseInt(pagesKey)
+        const pageId = Number(pagesKey)
         // ページIDに対応する項目IDの存在チェック
         assertNonUndefined(
           state.items[pageId],
@@ -314,7 +314,7 @@ export namespace State {
       }
 
       for (const workspacesKey in state.workspaces) {
-        const workspaceId = parseInt(workspacesKey)
+        const workspaceId = Number(workspacesKey)
         const workspace = state.workspaces[workspaceId]
         assert(typeof workspace.name === 'string', `workspaces[${workspaceId}]のnameの型エラー`)
 
