@@ -313,7 +313,7 @@ export namespace DomishObject {
               textContent: text,
             } as DomishObject
           })
-          return RArray$.join(rarray, { type: 'br' })
+          return RArray$.interpose<DomishObject>({ type: 'br' })(rarray)
       }
     }
   }

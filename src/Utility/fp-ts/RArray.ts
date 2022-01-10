@@ -120,18 +120,24 @@ export const groupBy = NERArray$.groupBy
 export const from = <A>(iterable: Iterable<A>): RArray<A> => [...iterable]
 
 /**
- * TODO: カリー化する
+ * 指定された値を配列の全要素の間に挿入する。
+ * @example
+ * interpose(9, [1, 2, 3]) === [1, 9, 2, 9, 3]
+ * interpose(9, [1]) === [1]
+ * interpose(9, []) === []
  */
-export function join<A>(rarray: RArray<A>, delimiter: A): RArray<A> {
-  const result: A[] = []
-  for (let i = 0; i < rarray.length; i++) {
-    result.push(rarray[i])
-    if (i !== rarray.length - 1) {
-      result.push(delimiter)
+export const interpose =
+  <A>(delimiter: A) =>
+  (rarray: RArray<A>) => {
+    const result: A[] = []
+    for (let i = 0; i < rarray.length; i++) {
+      result.push(rarray[i])
+      if (i !== rarray.length - 1) {
+        result.push(delimiter)
+      }
     }
+    return result
   }
-  return result
-}
 
 /**
  * 全要素を === で比較する。
