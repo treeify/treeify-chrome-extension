@@ -1,5 +1,4 @@
 import { pipe } from 'fp-ts/function'
-import { List } from 'immutable'
 import { MultiSet } from 'mnemonist'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -178,13 +177,15 @@ export function pasteMultilineText(text: string) {
 // 例えばいわゆる2スペースインデントの場合は'  'を返す。
 // インデントが見つからなかった場合空文字列を返す。
 function detectIndent(lines: string[]): string {
-  const result = List.of(' ', '\t', '　')
-    .map((indentChar) => {
+  const result = pipe(
+    [' ', '\t', '　'],
+    RArray$.map((indentChar) => {
       const { size, likelihood } = detectIndentSize(lines, indentChar)
       return { indentChar, size, likelihood }
-    })
-    .maxBy((value) => value.likelihood)
-  assertNonUndefined(result)
+    }),
+    RArray$.maxBy((value) => value.likelihood),
+    Option$.getOrThrow
+  )
 
   return result.indentChar.repeat(result.size)
 }

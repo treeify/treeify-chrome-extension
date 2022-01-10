@@ -1,6 +1,5 @@
 <script lang="ts">
   import dayjs from 'dayjs'
-  import { List } from 'immutable'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -45,10 +44,7 @@
           hour: parsed.hour(),
           minute: parsed.minute(),
         }
-        Internal.instance.mutate(
-          List.of(reminderSetting),
-          PropertyPath.of('reminders', targetItemId)
-        )
+        Internal.instance.mutate([reminderSetting], PropertyPath.of('reminders', targetItemId))
 
         break
       }
@@ -62,10 +58,7 @@
           hour,
           minute,
         }
-        Internal.instance.mutate(
-          List.of(reminderSetting),
-          PropertyPath.of('reminders', targetItemId)
-        )
+        Internal.instance.mutate([reminderSetting], PropertyPath.of('reminders', targetItemId))
         break
     }
     CurrentState.setupAllAlarms()
