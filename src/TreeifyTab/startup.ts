@@ -1,5 +1,4 @@
 import dayjs from 'dayjs'
-import { List } from 'immutable'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import {
   matchTabsAndWebPageItems,
@@ -268,7 +267,7 @@ async function onAlarm(alarm: Alarm) {
   // 通知のクリック時は該当項目にジャンプする
   notification.onclick = async () => {
     // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
-    const itemPath = List(CurrentState.yieldItemPaths(itemId)).first()
+    const itemPath = Array.from(CurrentState.yieldItemPaths(itemId))[0]
     assertNonUndefined(itemPath)
     CurrentState.jumpTo(itemPath)
     Rerenderer.instance.rerender()

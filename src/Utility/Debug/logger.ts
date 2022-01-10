@@ -1,5 +1,6 @@
-import { List } from 'immutable'
+import { pipe } from 'fp-ts/function'
 import { StackFrame, StackTrace } from 'src/Utility/Debug/StackTrace'
+import { RArray$ } from 'src/Utility/fp-ts'
 
 /**
  * console.logに色々な機能を追加したユーティリティ関数。
@@ -10,14 +11,14 @@ export function dump(...args: any[]) {
   const argString = stackFrame.getArgString()
   const eachArgString = argString.split(', ')
   if (eachArgString.length === args.length) {
-    const collection = List(eachArgString)
-      .zip(List(args.map(formatForConsole)))
-      .map(([a, b]) => [a, '=', b, ', '])
-      .toArray()
-      .flat()
-    // 末尾のコンマを削除
-    collection.pop()
-    console.groupCollapsed(...collection)
+    const rarray = pipe(
+      eachArgString,
+      RArray$.zip(args.map(formatForConsole)),
+      RArray$.flatMap(([a, b]) => [a, '=', b, ', ']),
+      // 末尾のコンマを削除
+      RArray$.pop
+    )
+    console.groupCollapsed(...rarray)
   } else {
     console.groupCollapsed(argString, '=', ...args.map(formatForConsole))
   }

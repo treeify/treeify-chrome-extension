@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { List, Set } from 'immutable'
+  import { Set } from 'immutable'
   import { TabsDialog } from 'src/TreeifyTab/External/DialogState'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -21,7 +21,7 @@
     false
   )
 
-  const items = List(rootNode.children).map((tree) => {
+  const items = rootNode.children.map((tree) => {
     return tree.fold((itemPath, children: TabsDialogItemProps[]) =>
       createTabsDialogItemProps(itemPath, children)
     )
@@ -30,7 +30,7 @@
 
 <CommonDialog class="tabs-dialog_root" title="タブ一覧" showCloseButton>
   <div class="tabs-dialog_content" tabindex="0">
-    {#each items.toArray() as tabsDialogItemProps}
+    {#each items as tabsDialogItemProps}
       <TabsDialogItem props={tabsDialogItemProps} />
     {/each}
   </div>
