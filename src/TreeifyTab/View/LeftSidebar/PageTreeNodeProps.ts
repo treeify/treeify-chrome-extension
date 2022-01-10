@@ -1,5 +1,4 @@
 import { pipe } from 'fp-ts/function'
-import { Set } from 'immutable'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -41,7 +40,7 @@ export type PageTreeNodeProps = {
 export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
   const filteredPageIds = CurrentState.getFilteredMountedPageIds()
 
-  const tree = CurrentState.treeify(Set(filteredPageIds), TOP_ITEM_ID, true)
+  const tree = CurrentState.treeify(RSet$.from(filteredPageIds), TOP_ITEM_ID, true)
   return tree.fold((itemPath, children) => {
     const itemId = ItemPath.getItemId(itemPath)
     const activePageId = CurrentState.getActivePageId()

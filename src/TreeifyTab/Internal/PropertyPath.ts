@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { RArray } from 'src/Utility/fp-ts'
 import { Primitive } from 'type-fest'
@@ -19,13 +18,11 @@ export namespace PropertyPath {
   const delimiter = '~'
 
   export function of(...args: PathOf<State>): PropertyPath {
-    return List.of(...args)
-      .map((value) => value.toString())
-      .join(delimiter)
+    return args.map((value) => value.toString()).join(delimiter)
   }
 
-  export function splitToPropertyKeys(propertyPath: PropertyPath): List<string> {
-    return List(propertyPath.split(delimiter))
+  export function splitToPropertyKeys(propertyPath: PropertyPath): RArray<string> {
+    return propertyPath.split(delimiter)
   }
 }
 

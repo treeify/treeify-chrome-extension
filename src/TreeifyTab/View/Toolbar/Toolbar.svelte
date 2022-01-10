@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { List } from 'immutable'
   import { TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
@@ -22,14 +21,14 @@
     aElement.download = fileName
     aElement.click()
 
-    assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
+    assert(Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length === 0)
     assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
     assert(External.instance.forceClosingTabUrls.size === 0)
     assert(State.isValid(Internal.instance.state))
   }
 
   function onClickStateValidation() {
-    assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
+    assert(Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length === 0)
     assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
     assert(External.instance.forceClosingTabUrls.size === 0)
     assert(State.isValid(Internal.instance.state))

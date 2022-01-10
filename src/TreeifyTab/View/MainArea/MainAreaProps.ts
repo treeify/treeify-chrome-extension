@@ -1,4 +1,3 @@
-import { List } from 'immutable'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { matchTabsAndWebPageItems } from 'src/TreeifyTab/External/chromeEventListeners'
 import {
@@ -742,13 +741,13 @@ async function undo() {
     assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
     return
   }
-  if (!List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty()) {
+  if (Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length > 0) {
     console.log('=============================================')
     for (const entry of External.instance.urlToItemIdsForTabCreation) {
       dump(entry)
     }
     console.log('=============================================')
-    assert(List(External.instance.urlToItemIdsForTabCreation.values()).flatten().isEmpty())
+    assert(Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length === 0)
     return
   }
 
