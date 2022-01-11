@@ -336,7 +336,7 @@ export namespace State {
         RSet$.from(state.mountedPageIds).size === state.mountedPageIds.length,
         `mountedPageIdsに重複がある`
       )
-      assert(state.mountedPageIds.length === 0, `mountedPageIdsが空である`)
+      assert(state.mountedPageIds.length > 0, `mountedPageIdsが空である`)
 
       // TODO: ダイアログなど、残りのプロパティのチェック
 
