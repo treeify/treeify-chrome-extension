@@ -329,7 +329,10 @@ export function obtainNewItemId(): ItemId {
       return maxItemId + 1
     },
     (last: ItemId) => {
-      Internal.instance.mutate(init(availableItemIds), PropertyPath.of('availableItemIds'))
+      Internal.instance.mutate(
+        Option$.getOrThrow(init(availableItemIds)),
+        PropertyPath.of('availableItemIds')
+      )
       return last
     }
   )(last(availableItemIds))
