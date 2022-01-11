@@ -3,7 +3,7 @@
   import { External } from 'src/TreeifyTab/External/External'
   import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
-  import { State } from 'src/TreeifyTab/Internal/State'
+  import { CURRENT_SCHEMA_VERSION, State } from 'src/TreeifyTab/Internal/State'
   import { getSyncedAt, setSyncedAt } from 'src/TreeifyTab/Persistent/sync'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { restart } from 'src/TreeifyTab/startup'
@@ -68,6 +68,13 @@
         // get APIでファイル内容をダウンロードする
         const state: State = await getState(dataFileMetaData)
 
+        if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
+          alert(
+            'Treeifyのバージョンが古いためデータファイルを読み込めません。\nアップデートしてください。'
+          )
+          return
+        }
+
         // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
         dump(state.maxItemId, Internal.instance.state.maxItemId)
         if (state.maxItemId < Internal.instance.state.maxItemId) {
@@ -89,6 +96,14 @@
         console.log('例外的な状況でしか到達できない特殊なケース')
 
         const state: State = await getState(dataFileMetaData)
+
+        if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
+          alert(
+            'Treeifyのバージョンが古いためデータファイルを読み込めません。\nアップデートしてください。'
+          )
+          return
+        }
+
         setSyncedAt(Internal.instance.state.syncWith, dataFileMetaData.modifiedTime)
         await restart(state)
       } else {

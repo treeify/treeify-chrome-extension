@@ -1,8 +1,6 @@
 import { State } from 'src/TreeifyTab/Internal/State'
 import { compress, decompress } from 'src/Utility/gzip'
 
-export const CURRENT_SCHEMA_VERSION = 1 as const
-
 export class DataFolder {
   constructor(private readonly dataFolderHandle: FileSystemDirectoryHandle) {}
 

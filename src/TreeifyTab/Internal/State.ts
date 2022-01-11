@@ -1,5 +1,4 @@
 import { ItemId, ItemType, TOP_ITEM_ID, WorkspaceId } from 'src/TreeifyTab/basicType'
-import { CURRENT_SCHEMA_VERSION } from 'src/TreeifyTab/External/DataFolder'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -10,6 +9,8 @@ import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
+
+export const CURRENT_SCHEMA_VERSION = 1 as const
 
 /** Treeifyの状態全体を表すオブジェクトの型 */
 export type State = {
