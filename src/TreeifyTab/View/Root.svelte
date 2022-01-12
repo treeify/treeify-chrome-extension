@@ -16,12 +16,6 @@
 </script>
 
 <div class="root_root" data-workspace-id={$propsStream.currentWorkspaceId} use:dragStateResetter>
-  <!--
-  カスタムCSSを埋め込む。
-  Svelteは動的にstyle要素をhead要素の子リスト末尾に追加するので、尋常な方法ではCSSの優先度で負けてしまう。
-  body要素の下にstyle要素を入れることで優先度の問題を解決した。
-  またSvelteでは<style>{css}</style>のように書いても動的にCSSを設定できないので、innerHTMLの形で強引に埋め込む。
-  -->
   {@html $propsStream.customCssHtml}
   <div class="root_toolbar-and-sidebar-layout">
     <Toolbar props={$propsStream.toolbarProps} />

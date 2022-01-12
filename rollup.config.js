@@ -6,6 +6,7 @@ import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
 import path from 'path'
 import copy from 'rollup-plugin-copy'
+import css from 'rollup-plugin-css-only'
 import builtins from 'rollup-plugin-node-builtins'
 import globals from 'rollup-plugin-node-globals'
 import svelte from 'rollup-plugin-svelte'
@@ -40,8 +41,8 @@ export default {
     }),
     svelte({
       preprocess: sveltePreprocess(),
-      emitCss: false,
     }),
+    css({ output: 'TreeifyTab/bundle.css' }),
     typescript(),
     json(),
     resolve({ browser: true, preferBuiltins: false }),
