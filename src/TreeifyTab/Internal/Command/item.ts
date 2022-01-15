@@ -243,7 +243,15 @@ export function deleteJustOneItem() {
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
     CurrentState.setTargetItemPath(aboveItemPath)
-    Rerenderer.instance.requestToFocusTargetItem()
+
+    const aboveItemId = ItemPath.getItemId(aboveItemPath)
+    if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
+      const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+      const characterCount = DomishObject.countCharacters(domishObjects)
+      Rerenderer.instance.requestToSetCaretPosition(characterCount)
+    } else {
+      Rerenderer.instance.requestToFocusTargetItem()
+    }
   } else {
     // 子がいる場合は最初の子をフォーカス
     const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds[0])
