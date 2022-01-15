@@ -199,7 +199,7 @@ export function moveItemToBelow() {
   }
 }
 
-/** 兄弟指向で項目を上に移動するコマンド */
+/** 兄弟志向で項目を上に移動するコマンド */
 export function moveItemToPrevSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths[0])
@@ -263,7 +263,7 @@ export function moveItemToPrevSibling() {
   }
 }
 
-/** 兄弟指向で項目を下に移動するコマンド */
+/** 兄弟志向で項目を下に移動するコマンド */
 export function moveItemToNextSibling() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const nextSiblingItemPath = CurrentState.findNextSiblingItemPath(
