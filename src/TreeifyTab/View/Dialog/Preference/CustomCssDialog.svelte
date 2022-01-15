@@ -2,7 +2,7 @@
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
@@ -19,7 +19,7 @@
   }
 
   function onSubmit(newCode: string) {
-    Internal.instance.mutate(newCode, PropertyPath.of('customCss'))
+    Internal.instance.mutate(newCode, StatePath.of('customCss'))
 
     // ダイアログを閉じる
     External.instance.dialogState = undefined

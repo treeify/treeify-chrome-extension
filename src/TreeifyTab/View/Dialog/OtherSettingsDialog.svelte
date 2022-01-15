@@ -1,7 +1,7 @@
 <script lang="ts">
   import { External } from 'src/TreeifyTab/External/External'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
 
@@ -10,16 +10,16 @@
   let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
 
   // TODO: hasUpdatedSinceSyncフラグを更新しないと変な表示になりうる
-  $: Internal.instance.mutate(syncWith, PropertyPath.of('syncWith'))
+  $: Internal.instance.mutate(syncWith, StatePath.of('syncWith'))
 
   $: Internal.instance.mutate(
     leftEndMouseGestureEnabled,
-    PropertyPath.of('leftEndMouseGestureEnabled')
+    StatePath.of('leftEndMouseGestureEnabled')
   )
 
   $: Internal.instance.mutate(
     rightEndMouseGestureEnabled,
-    PropertyPath.of('rightEndMouseGestureEnabled')
+    StatePath.of('rightEndMouseGestureEnabled')
   )
 
   function closeDialog() {

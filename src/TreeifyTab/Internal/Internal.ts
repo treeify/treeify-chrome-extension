@@ -1,9 +1,9 @@
 import objectPath from 'object-path'
 import { ItemType } from 'src/TreeifyTab/basicType'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { CURRENT_SCHEMA_VERSION, ExportFormat, State } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
@@ -19,7 +19,7 @@ export class Internal {
   // TODO: スタック化する
   readonly undoStack = new Map<ChunkId, any>()
 
-  private readonly onMutateListeners = new Set<(propertyPath: PropertyPath) => void>()
+  private readonly onMutateListeners = new Set<(statePath: StatePath) => void>()
 
   private constructor(initialState: State) {
     this.state = initialState
@@ -50,11 +50,11 @@ export class Internal {
   }
 
   /** State内の指定されたプロパティを書き換える */
-  mutate(value: any, propertyPath: PropertyPath) {
-    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath).map(String)
+  mutate(value: any, statePath: StatePath) {
+    const propertyKeys = statePath.map(String)
     if (objectPath.get(this.state, propertyKeys) !== value) {
       // Undo用にミューテート前のデータを退避する
-      const chunkId = Chunk.convertToChunkId(propertyPath)
+      const chunkId = Chunk.convertToChunkId(statePath)
       if (!this.undoStack.has(chunkId)) {
         this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
       }
@@ -62,24 +62,24 @@ export class Internal {
       objectPath.set(this.state, propertyKeys, value)
 
       for (const onMutateListener of this.onMutateListeners) {
-        onMutateListener(propertyPath)
+        onMutateListener(statePath)
       }
     }
   }
 
   /** State内の指定されたプロパティを削除する */
-  delete(propertyPath: PropertyPath) {
+  delete(statePath: StatePath) {
     // Undo用にミューテート前のデータを退避する
-    const chunkId = Chunk.convertToChunkId(propertyPath)
+    const chunkId = Chunk.convertToChunkId(statePath)
     if (!this.undoStack.has(chunkId)) {
       this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
     }
 
-    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath).map(String)
+    const propertyKeys = statePath.map(String)
     objectPath.del(this.state, propertyKeys)
 
     for (const onMutateListener of this.onMutateListeners) {
-      onMutateListener(propertyPath)
+      onMutateListener(statePath)
     }
   }
 
@@ -94,7 +94,7 @@ export class Internal {
     }
   }
 
-  addOnMutateListener(listener: (propertyPath: PropertyPath) => void) {
+  addOnMutateListener(listener: (statePath: StatePath) => void) {
     this.onMutateListeners.add(listener)
   }
 
@@ -105,7 +105,7 @@ export class Internal {
 
   undo() {
     for (const [chunkId, savedData] of this.undoStack) {
-      const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+      const propertyKeys = chunkId.split(Chunk.delimiter)
       const parentObject = Internal.getParentObject(propertyKeys, this.state)
       const lastKey = RArray$.lastOrThrow(propertyKeys)
 

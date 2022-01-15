@@ -2,8 +2,8 @@
   import { External } from 'src/TreeifyTab/External/External'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { CommandId, State } from 'src/TreeifyTab/Internal/State'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
@@ -40,7 +40,7 @@
   }
 
   function onClickFinishButton() {
-    Internal.instance.mutate(clonedKeyBindings, PropertyPath.of('mainAreaKeyBindings'))
+    Internal.instance.mutate(clonedKeyBindings, StatePath.of('mainAreaKeyBindings'))
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }

@@ -2,8 +2,8 @@ import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { CodeBlockItem, Item } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** 新しい空のコードブロック項目を作成する。ただし項目の配置（親子関係の設定）は行わない */
@@ -19,40 +19,40 @@ export function createCodeBlockItem(): ItemId {
     cssClasses: [],
     source: null,
   }
-  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, StatePath.of('items', newItemId))
 
   const codeBlockItem: CodeBlockItem = {
     code: '',
     language: '',
     caption: '',
   }
-  Internal.instance.mutate(codeBlockItem, PropertyPath.of('codeBlockItems', newItemId))
+  Internal.instance.mutate(codeBlockItem, StatePath.of('codeBlockItems', newItemId))
 
   return newItemId
 }
 
 /** StateのcodeBlockItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteCodeBlockItemEntry(itemId: ItemId) {
-  Internal.instance.delete(PropertyPath.of('codeBlockItems', itemId))
+  Internal.instance.delete(StatePath.of('codeBlockItems', itemId))
 }
 
 /** コードブロック項目のコードを設定する */
 export function setCodeBlockItemCode(itemId: ItemId, code: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.mutate(code, PropertyPath.of('codeBlockItems', itemId, 'code'))
+    Internal.instance.mutate(code, StatePath.of('codeBlockItems', itemId, 'code'))
   })
 }
 
 /** コードブロック項目の言語を設定する */
 export function setCodeBlockItemLanguage(itemId: ItemId, language: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.mutate(language, PropertyPath.of('codeBlockItems', itemId, 'language'))
+    Internal.instance.mutate(language, StatePath.of('codeBlockItems', itemId, 'language'))
   })
 }
 
 export function setCodeBlockItemCaption(itemId: ItemId, caption: string) {
   Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-    Internal.instance.mutate(caption, PropertyPath.of('codeBlockItems', itemId, 'caption'))
+    Internal.instance.mutate(caption, StatePath.of('codeBlockItems', itemId, 'caption'))
   })
 }
 

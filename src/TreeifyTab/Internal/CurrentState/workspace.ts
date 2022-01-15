@@ -2,8 +2,8 @@ import { pipe } from 'fp-ts/function'
 import { ItemId, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { NERArray, NERArray$, Option$, RArray, RArray$, RSet$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -47,13 +47,13 @@ export function setExcludedItemIds(itemIds: RArray<ItemId>) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
   Internal.instance.mutate(
     itemIds,
-    PropertyPath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
+    StatePath.of('workspaces', currentWorkspaceId, 'excludedItemIds')
   )
 }
 
 /** ワークスペースの名前を設定する */
 export function setWorkspaceName(workspaceId: WorkspaceId, name: string) {
-  Internal.instance.mutate(name, PropertyPath.of('workspaces', workspaceId, 'name'))
+  Internal.instance.mutate(name, StatePath.of('workspaces', workspaceId, 'name'))
 }
 
 /** 空のワークスペースを作成する */
@@ -65,13 +65,13 @@ export function createWorkspace(): WorkspaceId {
     excludedItemIds: [],
     searchHistory: [],
   }
-  Internal.instance.mutate(workspace, PropertyPath.of('workspaces', workspaceId))
+  Internal.instance.mutate(workspace, StatePath.of('workspaces', workspaceId))
   return workspaceId
 }
 
 /** 指定されたワークスペースを削除する */
 export function deleteWorkspace(workspaceId: WorkspaceId) {
-  Internal.instance.delete(PropertyPath.of('workspaces', workspaceId))
+  Internal.instance.delete(StatePath.of('workspaces', workspaceId))
 }
 
 /** mountedPageIdsを除外項目でフィルタリングした結果を返す */

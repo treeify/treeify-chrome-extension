@@ -4,8 +4,8 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Page } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { assertNonNull } from 'src/Utility/Debug/assert'
@@ -21,13 +21,10 @@ export function switchActivePage(itemId: ItemId) {
   if (index !== -1) {
     Internal.instance.mutate(
       pipe(mountedPageIds, RArray$.removeAt(index), RArray$.append(itemId)),
-      PropertyPath.of('mountedPageIds')
+      StatePath.of('mountedPageIds')
     )
   } else {
-    Internal.instance.mutate(
-      RArray$.append(itemId)(mountedPageIds),
-      PropertyPath.of('mountedPageIds')
-    )
+    Internal.instance.mutate(RArray$.append(itemId)(mountedPageIds), StatePath.of('mountedPageIds'))
   }
 
   CurrentState.setActivePageId(itemId)
@@ -41,10 +38,7 @@ export function getActivePageId(): ItemId {
 /** 現在のワークスペースのactiveItemIdを設定する */
 export function setActivePageId(itemId: ItemId) {
   const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
-  Internal.instance.mutate(
-    itemId,
-    PropertyPath.of('workspaces', currentWorkspaceId, 'activePageId')
-  )
+  Internal.instance.mutate(itemId, StatePath.of('workspaces', currentWorkspaceId, 'activePageId'))
 }
 
 /**
@@ -57,7 +51,7 @@ export function unmountPage(itemId: ItemId) {
   if (index !== -1) {
     Internal.instance.mutate(
       RArray$.removeAt(index)(mountedPageIds),
-      PropertyPath.of('mountedPageIds')
+      StatePath.of('mountedPageIds')
     )
   }
 }
@@ -76,7 +70,7 @@ export function turnIntoPage(itemId: ItemId) {
     targetItemPath: [itemId],
     anchorItemPath: [itemId],
   }
-  Internal.instance.mutate(page, PropertyPath.of('pages', itemId))
+  Internal.instance.mutate(page, StatePath.of('pages', itemId))
 }
 
 /**
@@ -86,14 +80,14 @@ export function turnIntoPage(itemId: ItemId) {
 export function turnIntoNonPage(itemId: ItemId) {
   if (!isPage(itemId)) return
 
-  Internal.instance.delete(PropertyPath.of('pages', itemId))
+  Internal.instance.delete(StatePath.of('pages', itemId))
 
   // 他のワークスペースのアクティブページが不正にならないよう退避する
   for (const workspacesKey in Internal.instance.state.workspaces) {
     if (Internal.instance.state.workspaces[workspacesKey].activePageId === itemId) {
       Internal.instance.mutate(
         TOP_ITEM_ID,
-        PropertyPath.of('workspaces', Number(workspacesKey), 'activePageId')
+        StatePath.of('workspaces', Number(workspacesKey), 'activePageId')
       )
     }
   }

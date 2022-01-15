@@ -5,8 +5,8 @@ import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { Option$, RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
@@ -31,11 +31,11 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
     for (const childItemId of item.childItemIds) {
       const parents = Internal.instance.state.items[childItemId].parents
       const edge = parents[itemId]
-      Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
+      Internal.instance.delete(StatePath.of('items', childItemId, 'parents', itemId))
       for (const parentsKey in item.parents) {
         Internal.instance.mutate(
           { ...edge },
-          PropertyPath.of('items', childItemId, 'parents', Number(parentsKey))
+          StatePath.of('items', childItemId, 'parents', Number(parentsKey))
         )
       }
     }
@@ -55,7 +55,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
         deleteItem(childItemId)
       } else {
         // 親を2つ以上持つ子項目は整合性のために親リストを修正する
-        Internal.instance.delete(PropertyPath.of('items', childItemId, 'parents', itemId))
+        Internal.instance.delete(StatePath.of('items', childItemId, 'parents', itemId))
       }
     }
 
@@ -71,7 +71,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
     if (workspace.excludedItemIds.includes(itemId)) {
       Internal.instance.mutate(
         workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
-        PropertyPath.of('workspaces', Number(key), 'excludedItemIds')
+        StatePath.of('workspaces', Number(key), 'excludedItemIds')
       )
     }
   }
@@ -104,7 +104,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
       assertNeverType(itemType)
   }
 
-  Internal.instance.delete(PropertyPath.of('reminders', itemId))
+  Internal.instance.delete(StatePath.of('reminders', itemId))
   CurrentState.setupAllAlarms()
 
   CurrentState.unmountPage(itemId)
@@ -116,7 +116,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
 
 /** Stateのitemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteItemEntry(itemId: ItemId) {
-  Internal.instance.delete(PropertyPath.of('items', itemId))
+  Internal.instance.delete(StatePath.of('items', itemId))
 }
 
 /** 指定されたIDの項目が存在するかどうかを調べる */
@@ -148,7 +148,7 @@ export function setIsFolded(itemPath: ItemPath, isFolded: boolean) {
   assertNonUndefined(parentItemId)
   Internal.instance.mutate(
     isFolded,
-    PropertyPath.of('items', itemId, 'parents', parentItemId, 'isFolded')
+    StatePath.of('items', itemId, 'parents', parentItemId, 'isFolded')
   )
 }
 
@@ -165,7 +165,7 @@ export function getIsFolded(itemPath: ItemPath): boolean {
 
 /** 指定された項目のタイムスタンプを現在時刻に更新する */
 export function updateItemTimestamp(itemId: ItemId) {
-  Internal.instance.mutate(Timestamp.now(), PropertyPath.of('items', itemId, 'timestamp'))
+  Internal.instance.mutate(Timestamp.now(), StatePath.of('items', itemId, 'timestamp'))
 }
 
 /** 指定された項目の親項目IDのリストを返す */
@@ -182,7 +182,7 @@ export function countParents(itemId: ItemId): integer {
 export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
   Internal.instance.mutate(
     edge ?? createDefaultEdge(),
-    PropertyPath.of('items', itemid, 'parents', parentItemId)
+    StatePath.of('items', itemid, 'parents', parentItemId)
   )
 }
 
@@ -193,7 +193,7 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: RArray<ItemId>) => RArray<ItemId>) {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
-  Internal.instance.mutate(f(childItemIds), PropertyPath.of('items', itemId, 'childItemIds'))
+  Internal.instance.mutate(f(childItemIds), StatePath.of('items', itemId, 'childItemIds'))
 }
 
 /**
@@ -315,7 +315,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 
   const edge = Internal.instance.state.items[itemId].parents[parentItemId]
   // 項目の親リストから親項目を削除する
-  Internal.instance.delete(PropertyPath.of('items', itemId, 'parents', parentItemId))
+  Internal.instance.delete(StatePath.of('items', itemId, 'parents', parentItemId))
   return edge
 }
 
@@ -325,13 +325,13 @@ export function obtainNewItemId(): ItemId {
   return Option$.match(
     () => {
       const maxItemId = Internal.instance.state.maxItemId
-      Internal.instance.mutate(maxItemId + 1, PropertyPath.of('maxItemId'))
+      Internal.instance.mutate(maxItemId + 1, StatePath.of('maxItemId'))
       return maxItemId + 1
     },
     (last: ItemId) => {
       Internal.instance.mutate(
         Option$.getOrThrow(init(availableItemIds)),
-        PropertyPath.of('availableItemIds')
+        StatePath.of('availableItemIds')
       )
       return last
     }
@@ -341,12 +341,12 @@ export function obtainNewItemId(): ItemId {
 /** 使われなくなった項目IDを登録する */
 export function recycleItemId(itemId: ItemId) {
   const availableItemIds = Internal.instance.state.availableItemIds
-  Internal.instance.mutate(append(itemId)(availableItemIds), PropertyPath.of('availableItemIds'))
+  Internal.instance.mutate(append(itemId)(availableItemIds), StatePath.of('availableItemIds'))
 }
 
 /** 指定された項目のCSSクラスリストを上書き設定する */
 export function setCssClasses(itemId: ItemId, cssClasses: RArray<string>) {
-  Internal.instance.mutate(cssClasses, PropertyPath.of('items', itemId, 'cssClasses'))
+  Internal.instance.mutate(cssClasses, StatePath.of('items', itemId, 'cssClasses'))
 }
 
 /**
@@ -361,12 +361,12 @@ export function toggleCssClass(itemId: ItemId, cssClass: string) {
   if (index === -1) {
     Internal.instance.mutate(
       RArray$.append(cssClass)(cssClasses),
-      PropertyPath.of('items', itemId, 'cssClasses')
+      StatePath.of('items', itemId, 'cssClasses')
     )
   } else {
     Internal.instance.mutate(
       RArray$.unsafeDeleteAt(index, cssClasses),
-      PropertyPath.of('items', itemId, 'cssClasses')
+      StatePath.of('items', itemId, 'cssClasses')
     )
   }
 }
@@ -380,11 +380,11 @@ export function addCssClass(itemId: ItemId, cssClass: string) {
   if (!cssClasses.includes(cssClass)) {
     Internal.instance.mutate(
       RArray$.append(cssClass)(cssClasses),
-      PropertyPath.of('items', itemId, 'cssClasses')
+      StatePath.of('items', itemId, 'cssClasses')
     )
   }
 }
 
 export function setSource(itemId: ItemId, source: Source) {
-  Internal.instance.mutate(source, PropertyPath.of('items', itemId, 'source'))
+  Internal.instance.mutate(source, StatePath.of('items', itemId, 'source'))
 }

@@ -5,8 +5,8 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Source } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
@@ -351,9 +351,9 @@ export function toggleSource() {
 
     if (Internal.instance.state.items[selectedItemId].source === null) {
       const emptySource: Source = { title: '', url: '' }
-      Internal.instance.mutate(emptySource, PropertyPath.of('items', selectedItemId, 'source'))
+      Internal.instance.mutate(emptySource, StatePath.of('items', selectedItemId, 'source'))
     } else {
-      Internal.instance.mutate(null, PropertyPath.of('items', selectedItemId, 'source'))
+      Internal.instance.mutate(null, StatePath.of('items', selectedItemId, 'source'))
     }
 
     // タイムスタンプを更新
