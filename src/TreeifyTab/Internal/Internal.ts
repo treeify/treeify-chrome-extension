@@ -5,7 +5,6 @@ import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { CURRENT_SCHEMA_VERSION, ExportFormat, State } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** TODO: コメント */
@@ -83,17 +82,6 @@ export class Internal {
     }
   }
 
-  private static getParentObject(propertyKeys: RArray<string>, state: any): any {
-    if (propertyKeys.length === 1) {
-      return state
-    } else {
-      const firstKey = propertyKeys[0]
-      assertNonUndefined(firstKey)
-
-      return this.getParentObject(RArray$.shift(propertyKeys), state[firstKey])
-    }
-  }
-
   addOnMutateListener(listener: (statePath: StatePath) => void) {
     this.onMutateListeners.add(listener)
   }
@@ -106,13 +94,10 @@ export class Internal {
   undo() {
     for (const [chunkId, savedData] of this.undoStack) {
       const propertyKeys = chunkId.split(Chunk.delimiter)
-      const parentObject = Internal.getParentObject(propertyKeys, this.state)
-      const lastKey = RArray$.lastOrThrow(propertyKeys)
-
       if (savedData !== undefined) {
-        parentObject[lastKey] = savedData
+        objectPath.set(this.state, propertyKeys, savedData)
       } else {
-        delete parentObject[lastKey]
+        objectPath.del(this.state, propertyKeys)
       }
     }
     this.undoStack.clear()
