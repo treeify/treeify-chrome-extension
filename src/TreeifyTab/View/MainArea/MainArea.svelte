@@ -40,9 +40,9 @@
   .main-area_root {
     overflow-y: auto;
 
+    padding-top: 20px;
     line-height: var(--main-area-line-height);
 
-    // フォーカス時の枠線を非表示
     outline: none;
 
     // lch(97.0%, 0.0, 0.0)相当
@@ -56,7 +56,6 @@
     border-radius: 10px 10px 0 0;
 
     margin-inline: 40px;
-    margin-top: 20px;
 
     // アウトライン表示の横幅が長すぎると右端のaudibleアイコンやタブ数カウントボタンが遠すぎてあまり役に立たなくなるので横幅を制限
     max-width: var(--main-area-max-width);
