@@ -7,8 +7,7 @@
 
   export let props: ContextMenuItemProps
 
-  function onClick(event: MouseEvent) {
-    event.preventDefault()
+  function onClick() {
     Internal.instance.saveCurrentStateToUndoStack()
 
     // props.onClick()より先にダイアログを閉じる必要がある。
@@ -44,9 +43,7 @@
       focusableElements[prevIndex].focus()
     } else if (inputId === '0000Enter' || inputId === '0000Space') {
       event.preventDefault()
-      if (event.target instanceof HTMLElement) {
-        event.target.click()
-      }
+      onClick()
     }
   }
 
@@ -60,7 +57,7 @@
 <div
   class="context-menu-item_root"
   tabindex="0"
-  on:mousedown={onClick}
+  on:mousedown|preventDefault={onClick}
   on:mouseenter={onMouseEnter}
   on:keydown={onKeyDown}
 >
