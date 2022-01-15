@@ -47,12 +47,8 @@ export const flatMap =
     return result
   }
 
-export const from = <A>(iterable: Iterable<A>) => {
-  if (iterable instanceof Array) {
-    return FpReadonlySet.fromReadonlyArray<A>(eqStrict)(iterable)
-  } else {
-    return FpReadonlySet.fromReadonlyArray<A>(eqStrict)([...iterable])
-  }
+export const from = <A>(iterable: Iterable<A>): RSet<A> => {
+  return new Set(iterable)
 }
 
 export const filterUndefined = <A>(rset: RSet<A | undefined>): RSet<A> =>
