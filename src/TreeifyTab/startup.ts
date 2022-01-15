@@ -230,14 +230,14 @@ async function onCommand(commandName: string) {
   call(async () => {
     switch (commandName) {
       case 'show-treeify-tab':
-        TreeifyTab.open()
+        await TreeifyTab.open()
         break
       case 'close-tab-and-show-treeify-tab':
-        await TreeifyTab.open()
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true })
         if (tab.id !== undefined) {
           chrome.tabs.remove(tab.id)
         }
+        await TreeifyTab.open()
         break
     }
   })
