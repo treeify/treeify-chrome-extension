@@ -8,8 +8,8 @@
   import { toOpmlString } from 'src/TreeifyTab/Internal/ImportExport/opml'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { ExportFormat } from 'src/TreeifyTab/Internal/State'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import { integer } from 'src/Utility/integer'
@@ -25,31 +25,31 @@
   let markdownIncludeInvisibleItems = markdownOptions.includeInvisibleItems
   let opmlIncludeInvisibleItems = opmlOptions.includeInvisibleItems
 
-  $: Internal.instance.mutate(selectedFormat, PropertyPath.of('exportSettings', 'selectedFormat'))
+  $: Internal.instance.mutate(selectedFormat, StatePath.of('exportSettings', 'selectedFormat'))
 
   $: Internal.instance.mutate(
     plainTextIncludeInvisibleItems,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'includeInvisibleItems')
+    StatePath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'includeInvisibleItems')
   )
 
   $: Internal.instance.mutate(
     indentationExpression,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
+    StatePath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
   )
 
   $: Internal.instance.mutate(
     minimumHeaderLevel,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
+    StatePath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'minimumHeaderLevel')
   )
 
   $: Internal.instance.mutate(
     markdownIncludeInvisibleItems,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'includeInvisibleItems')
+    StatePath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'includeInvisibleItems')
   )
 
   $: Internal.instance.mutate(
     opmlIncludeInvisibleItems,
-    PropertyPath.of('exportSettings', 'options', ExportFormat.OPML, 'includeInvisibleItems')
+    StatePath.of('exportSettings', 'options', ExportFormat.OPML, 'includeInvisibleItems')
   )
 
   function onClickCopyButton() {

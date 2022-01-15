@@ -8,7 +8,7 @@ import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import Root from 'src/TreeifyTab/View/Root.svelte'
 import { assertNonNull } from 'src/Utility/Debug/assert'
@@ -36,7 +36,7 @@ export class Rerenderer {
   // 値の内容に意味はないが、プリミティブ値だと更新イベントが起きないので{}にした。
   readonly #rerenderingPulse = writable({})
 
-  readonly mutatedPropertyPaths = new Set<PropertyPath>()
+  readonly mutatedStatePaths = new Set<StatePath>()
 
   // 次の描画が完了した際に実行される関数。フォーカスなどの設定に用いられる
   private pendingFocusAndTextSelectionSetting: (() => void) | undefined
@@ -58,12 +58,12 @@ export class Rerenderer {
 
     // IndexedDBを更新
     const chunks = pipe(
-      this.mutatedPropertyPaths,
+      this.mutatedStatePaths,
       RSet$.map(Chunk.convertToChunkId),
       RSet$.map((chunkId) => Chunk.create(Internal.instance.state, chunkId))
     )
     Database.writeChunks(Array.from(chunks))
-    this.mutatedPropertyPaths.clear()
+    this.mutatedStatePaths.clear()
 
     // DOM更新完了後に実行される
     tick().then(() => {
@@ -138,7 +138,7 @@ export class Rerenderer {
     }
   }
 
-  onMutateState(propertyPath: PropertyPath) {
-    this.mutatedPropertyPaths.add(propertyPath)
+  onMutateState(statePath: StatePath) {
+    this.mutatedStatePaths.add(statePath)
   }
 }

@@ -1,10 +1,10 @@
 import objectPath from 'object-path'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { RArray } from 'src/Utility/fp-ts'
 
-/** PropertyPathをdelimiterで連結した型 */
+/** StatePathをdelimiterで連結した型 */
 export type ChunkId = string
 
 /**
@@ -65,12 +65,12 @@ export namespace Chunk {
     }
   }
 
-  /** PropertyPathからChunkIdに変換する */
-  export function convertToChunkId(propertyPath: PropertyPath): ChunkId {
-    if (collectionKeys.has(propertyPath[0])) {
-      return `${propertyPath[0]}${delimiter}${propertyPath[1]}`
+  /** StatePathからChunkIdに変換する */
+  export function convertToChunkId(statePath: StatePath): ChunkId {
+    if (collectionKeys.has(statePath[0])) {
+      return `${statePath[0]}${delimiter}${statePath[1]}`
     } else {
-      return propertyPath[0]
+      return statePath[0]
     }
   }
 

@@ -4,14 +4,14 @@ import { Primitive } from 'type-fest'
 
 /**
  * Stateオブジェクト内の特定の位置を示す値の型。
- * 例えばstate.items[0].childItemIdsというプロパティを指すPropertyPathは、
+ * 例えばstate.items[0].childItemIdsというプロパティを指すStatePathは、
  * ['items', 0, 'childItemIds']
  * である。
  */
-export type PropertyPath = PathOf<State>
+export type StatePath = PathOf<State>
 
-export namespace PropertyPath {
-  export function of(...args: PropertyPath): PropertyPath {
+export namespace StatePath {
+  export function of(...args: StatePath): StatePath {
     return args
   }
 }

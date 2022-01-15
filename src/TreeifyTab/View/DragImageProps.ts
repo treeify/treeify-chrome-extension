@@ -1,7 +1,7 @@
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { currentDragData, ItemDragData } from 'src/TreeifyTab/View/dragAndDrop'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
@@ -299,8 +299,8 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   )
   CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
   const newTargetItemPath = [itemId, draggedItemId]
-  Internal.instance.mutate(newTargetItemPath, PropertyPath.of('pages', itemId, 'targetItemPath'))
-  Internal.instance.mutate(newTargetItemPath, PropertyPath.of('pages', itemId, 'anchorItemPath'))
+  Internal.instance.mutate(newTargetItemPath, StatePath.of('pages', itemId, 'targetItemPath'))
+  Internal.instance.mutate(newTargetItemPath, StatePath.of('pages', itemId, 'anchorItemPath'))
 
   CurrentState.updateItemTimestamp(draggedItemId)
   Rerenderer.instance.rerender()

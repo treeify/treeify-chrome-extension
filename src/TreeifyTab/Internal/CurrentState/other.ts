@@ -5,8 +5,8 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray$ } from 'src/Utility/fp-ts'
@@ -48,17 +48,17 @@ export function setCaption(itemId: ItemId, caption: string) {
   switch (Internal.instance.state.items[itemId].type) {
     case ItemType.IMAGE:
       Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-        Internal.instance.mutate(caption, PropertyPath.of('imageItems', itemId, 'caption'))
+        Internal.instance.mutate(caption, StatePath.of('imageItems', itemId, 'caption'))
       })
       break
     case ItemType.CODE_BLOCK:
       Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-        Internal.instance.mutate(caption, PropertyPath.of('codeBlockItems', itemId, 'caption'))
+        Internal.instance.mutate(caption, StatePath.of('codeBlockItems', itemId, 'caption'))
       })
       break
     case ItemType.TEX:
       Internal.instance.searchEngine.updateSearchIndex(itemId, () => {
-        Internal.instance.mutate(caption, PropertyPath.of('texItems', itemId, 'caption'))
+        Internal.instance.mutate(caption, StatePath.of('texItems', itemId, 'caption'))
       })
       break
   }

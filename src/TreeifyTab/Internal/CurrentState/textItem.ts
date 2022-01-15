@@ -3,18 +3,15 @@ import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { Item, TextItem } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { RArray } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** 指定されたテキスト項目のdomishObjectsを更新する */
 export function setTextItemDomishObjects(textItemId: ItemId, domishObjects: RArray<DomishObject>) {
   Internal.instance.searchEngine.updateSearchIndex(textItemId, () => {
-    Internal.instance.mutate(
-      domishObjects,
-      PropertyPath.of('textItems', textItemId, 'domishObjects')
-    )
+    Internal.instance.mutate(domishObjects, StatePath.of('textItems', textItemId, 'domishObjects'))
   })
 }
 
@@ -31,17 +28,17 @@ export function createTextItem(): ItemId {
     cssClasses: [],
     source: null,
   }
-  Internal.instance.mutate(newItem, PropertyPath.of('items', newItemId))
+  Internal.instance.mutate(newItem, StatePath.of('items', newItemId))
 
   const newTextItem: TextItem = { domishObjects: [] }
-  Internal.instance.mutate(newTextItem, PropertyPath.of('textItems', newItemId))
+  Internal.instance.mutate(newTextItem, StatePath.of('textItems', newItemId))
 
   return newItemId
 }
 
 /** StateのtextItemsオブジェクトから指定された項目IDのエントリーを削除する */
 export function deleteTextItemEntry(itemId: ItemId) {
-  Internal.instance.delete(PropertyPath.of('textItems', itemId))
+  Internal.instance.delete(StatePath.of('textItems', itemId))
 }
 
 /**

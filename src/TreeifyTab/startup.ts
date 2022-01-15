@@ -19,8 +19,8 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { ReminderSetting, State } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
@@ -161,9 +161,9 @@ async function migrateTabs(newState: State) {
   await Promise.all(promises)
 }
 
-function onMutateState(propertyPath: PropertyPath) {
-  External.instance.onMutateState(propertyPath)
-  Rerenderer.instance.onMutateState(propertyPath)
+function onMutateState(statePath: StatePath) {
+  External.instance.onMutateState(statePath)
+  Rerenderer.instance.onMutateState(statePath)
 }
 
 function onClickContextMenu(info: OnClickData) {
@@ -253,7 +253,7 @@ async function onAlarm(alarm: Alarm) {
       ...reminderSetting,
       notifiedAt: alarm.scheduledTime,
     })(reminderSettings),
-    PropertyPath.of('reminders', itemId)
+    StatePath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()
 

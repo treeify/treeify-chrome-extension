@@ -5,8 +5,8 @@
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
   import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
@@ -44,7 +44,7 @@
           hour: parsed.hour(),
           minute: parsed.minute(),
         }
-        Internal.instance.mutate([reminderSetting], PropertyPath.of('reminders', targetItemId))
+        Internal.instance.mutate([reminderSetting], StatePath.of('reminders', targetItemId))
 
         break
       }
@@ -58,7 +58,7 @@
           hour,
           minute,
         }
-        Internal.instance.mutate([reminderSetting], PropertyPath.of('reminders', targetItemId))
+        Internal.instance.mutate([reminderSetting], StatePath.of('reminders', targetItemId))
         break
     }
     CurrentState.setupAllAlarms()

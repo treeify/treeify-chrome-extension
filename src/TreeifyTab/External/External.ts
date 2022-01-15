@@ -4,8 +4,8 @@ import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { DialogState } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
@@ -67,7 +67,7 @@ export class External {
     this.#instance = undefined
   }
 
-  onMutateState(propertyPath: PropertyPath) {
+  onMutateState(statePath: StatePath) {
     this.hasUpdatedSinceSync = true
   }
 

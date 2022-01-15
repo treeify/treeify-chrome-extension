@@ -7,7 +7,7 @@
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
@@ -82,7 +82,7 @@
       )
       Internal.instance.mutate(
         RArray$.takeRight(10)(newHistory),
-        PropertyPath.of('workspaces', workspaceId, 'searchHistory')
+        StatePath.of('workspaces', workspaceId, 'searchHistory')
       )
 
       hitItemIds = Internal.instance.searchEngine.search(searchQueryValue)
