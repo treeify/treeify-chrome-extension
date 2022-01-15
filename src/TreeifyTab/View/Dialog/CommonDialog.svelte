@@ -118,15 +118,12 @@
 
   .common-dialog_close-button {
     @include common.circle(1.4em);
+    // lch(40.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#5e5e5e);
 
     margin-left: auto;
 
     position: relative;
-
-    &:hover {
-      // lch(40.0%, 0.0, 0.0)相当
-      background: #5e5e5e;
-    }
 
     &::before {
       content: '';
