@@ -3,7 +3,7 @@ import { ItemType } from 'src/TreeifyTab/basicType'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { CURRENT_SCHEMA_VERSION, ExportFormat, State } from 'src/TreeifyTab/Internal/State'
-import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
+import { PathValue, StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -49,7 +49,7 @@ export class Internal {
   }
 
   /** State内の指定されたプロパティを書き換える */
-  mutate(value: any, statePath: StatePath) {
+  mutate<T extends StatePath>(value: PathValue<T>, statePath: T) {
     const propertyKeys = statePath.map(String)
     if (objectPath.get(this.state, propertyKeys) !== value) {
       // Undo用にミューテート前のデータを退避する

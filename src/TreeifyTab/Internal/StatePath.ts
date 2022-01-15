@@ -11,13 +11,20 @@ import { Primitive } from 'type-fest'
 export type StatePath = PathOf<State>
 
 export namespace StatePath {
-  export function of(...args: StatePath): StatePath {
+  export function of<T extends StatePath>(...args: T): T {
     return args
   }
 }
 
+/** 指定されたネストしたオブジェクト型のプロパティを表す型 */
 type PathOf<T, K extends keyof T = keyof T> = T extends Primitive | RArray<unknown>
-  ? []
+  ? readonly []
   : K extends K
-  ? [K] | [K, ...PathOf<T[K]>]
+  ? readonly [K] | readonly [K, ...PathOf<T[K]>]
   : never
+
+/** {@link PathOf}で表されたプロパティの値の型 */
+export type PathValue<Path, S = State> = Path extends readonly [infer First, ...infer Rest]
+  ? // @ts-ignore
+    PathValue<Rest, S[First]>
+  : S

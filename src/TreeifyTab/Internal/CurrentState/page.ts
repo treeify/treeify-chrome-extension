@@ -8,8 +8,8 @@ import { Page } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-import { assertNonNull } from 'src/Utility/Debug/assert'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { assert, assertNonNull } from 'src/Utility/Debug/assert'
+import { NERArray, RArray$ } from 'src/Utility/fp-ts'
 import { tick } from 'svelte'
 
 /** アクティブページを切り替える */
@@ -46,11 +46,12 @@ export function setActivePageId(itemId: ItemId) {
  * マウントされていない場合は何もしない。
  */
 export function unmountPage(itemId: ItemId) {
+  assert(itemId !== TOP_ITEM_ID)
   const mountedPageIds = Internal.instance.state.mountedPageIds
   const index = mountedPageIds.indexOf(itemId)
   if (index !== -1) {
     Internal.instance.mutate(
-      RArray$.removeAt(index)(mountedPageIds),
+      RArray$.removeAt(index)(mountedPageIds) as NERArray<ItemId>,
       StatePath.of('mountedPageIds')
     )
   }
