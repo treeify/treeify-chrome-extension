@@ -9,7 +9,7 @@
   }
 </script>
 
-<ToolbarIconButton class="preference-button_root" title="環境設定" on:click={onClick}>
+<ToolbarIconButton class="preference-button_root" title="環境設定" on:mousedown={onClick}>
   <div class="preference-button_icon" />
 </ToolbarIconButton>
 

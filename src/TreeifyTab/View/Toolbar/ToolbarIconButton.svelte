@@ -4,7 +4,7 @@
   export let title = ''
 </script>
 
-<div class="toolbar-icon-button_root {klass}" {title} on:click>
+<div class="toolbar-icon-button_root {klass}" {title} on:mousedown>
   <slot />
 </div>
 
