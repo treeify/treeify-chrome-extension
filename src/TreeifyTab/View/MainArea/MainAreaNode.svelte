@@ -36,6 +36,7 @@
     <div
       class={'main-area-node_roll-area ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
+      data-depth={depth}
       use:dragItem={props.itemPath}
     >
       <MainAreaRoll props={props.rollProps} />
