@@ -2,13 +2,10 @@ import objectPath from 'object-path'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { PropertyPath } from 'src/TreeifyTab/Internal/PropertyPath'
 import { State } from 'src/TreeifyTab/Internal/State'
-import { RArray, RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 
-/**
- * データ型の実体としてはPropertyPathと同じだが、
- * チャンクとして扱われるデータ単位のIDとして使われるPropertyPathを指すエイリアス型。
- */
-export type ChunkId = PropertyPath
+/** PropertyPathをdelimiterで連結した型 */
+export type ChunkId = string
 
 /**
  * Stateの断片を表すデータ型。
@@ -27,6 +24,14 @@ export type Chunk = {
 
 /** チャンク関連のコードをまとめる名前空間 */
 export namespace Chunk {
+  /**
+   * 基本的にはどんな記号でもいいはずだが予期せぬ不具合や杞憂を防ぐために次の記号を避けた。
+   * ・JavaScriptの識別子として出現しうる'_', '$'
+   * ・数値の文字列表現として一般に出現しうる'-', '+', '.', ','
+   * ・ファイル名として使えない'/', ':'など
+   */
+  export const delimiter = '~'
+
   // Stateのキーのうち、チャンクを分割するもの
   const collectionKeys = new Set([
     'items',
@@ -52,8 +57,7 @@ export namespace Chunk {
       if (collectionKeys.has(firstKey)) {
         // @ts-ignore
         for (const secondKey of Object.keys(state[firstKey])) {
-          // @ts-ignore
-          yield PropertyPath.of(firstKey, secondKey)
+          yield [firstKey, secondKey].join(delimiter)
         }
       } else {
         yield firstKey
@@ -63,20 +67,17 @@ export namespace Chunk {
 
   /** PropertyPathからChunkIdに変換する */
   export function convertToChunkId(propertyPath: PropertyPath): ChunkId {
-    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath)
-    if (collectionKeys.has(propertyKeys[0].toString())) {
-      // @ts-ignore
-      return PropertyPath.of(...RArray$.takeLeft(2)(propertyKeys))
+    if (collectionKeys.has(propertyPath[0])) {
+      return `${propertyPath[0]}${delimiter}${propertyPath[1]}`
     } else {
-      // @ts-ignore
-      return PropertyPath.of(...RArray$.takeLeft(1)(propertyKeys))
+      return propertyPath[0]
     }
   }
 
   // Chunkオブジェクトを生成する…わけだがこれは2階層しか対応していない。
   // TODO: setPropertyみたいに再帰関数でやるべきじゃないかな？
   export function create(state: State, chunkId: ChunkId): Chunk {
-    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+    const propertyKeys = chunkId.split(delimiter)
     const firstKey = propertyKeys[0]
     const secondKey = propertyKeys[1]
     // @ts-ignore
@@ -97,7 +98,6 @@ export namespace Chunk {
   }
 
   function setProperty(targetObject: any, chunkId: ChunkId, value: any) {
-    const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId).map(String)
-    objectPath.set(targetObject, propertyKeys, value)
+    objectPath.set(targetObject, chunkId.split(delimiter), value)
   }
 }

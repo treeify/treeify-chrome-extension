@@ -51,7 +51,7 @@ export class Internal {
 
   /** State内の指定されたプロパティを書き換える */
   mutate(value: any, propertyPath: PropertyPath) {
-    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath).map(String)
+    const propertyKeys = propertyPath.map(String)
     if (objectPath.get(this.state, propertyKeys) !== value) {
       // Undo用にミューテート前のデータを退避する
       const chunkId = Chunk.convertToChunkId(propertyPath)
@@ -75,7 +75,7 @@ export class Internal {
       this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
     }
 
-    const propertyKeys = PropertyPath.splitToPropertyKeys(propertyPath).map(String)
+    const propertyKeys = propertyPath.map(String)
     objectPath.del(this.state, propertyKeys)
 
     for (const onMutateListener of this.onMutateListeners) {
@@ -105,7 +105,7 @@ export class Internal {
 
   undo() {
     for (const [chunkId, savedData] of this.undoStack) {
-      const propertyKeys = PropertyPath.splitToPropertyKeys(chunkId)
+      const propertyKeys = chunkId.split(Chunk.delimiter)
       const parentObject = Internal.getParentObject(propertyKeys, this.state)
       const lastKey = RArray$.lastOrThrow(propertyKeys)
 
