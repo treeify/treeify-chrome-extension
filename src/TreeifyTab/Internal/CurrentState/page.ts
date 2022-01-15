@@ -111,7 +111,7 @@ export function jumpTo(itemPath: ItemPath) {
   // ページを切り替える
   CurrentState.switchActivePage(containerPageId)
 
-  CurrentState.moses(itemPath)
+  CurrentState.revealItemPath(itemPath)
 
   // ジャンプ先のページのtargetItemPathを更新する
   CurrentState.setTargetItemPath(itemPath)

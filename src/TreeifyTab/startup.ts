@@ -188,7 +188,7 @@ function onClickContextMenu(info: OnClickData) {
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
       const newItemPath = RArray$.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
-      CurrentState.moses(newItemPath)
+      CurrentState.revealItemPath(newItemPath)
     }
     Rerenderer.instance.rerender()
     TreeifyTab.open()
@@ -204,7 +204,7 @@ function onClickContextMenu(info: OnClickData) {
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
       const newItemPath = RArray$.append(newItemId)(targetItemPath)
       CurrentState.setTargetItemPath(newItemPath)
-      CurrentState.moses(newItemPath)
+      CurrentState.revealItemPath(newItemPath)
     }
     Rerenderer.instance.rerender()
     TreeifyTab.open()
