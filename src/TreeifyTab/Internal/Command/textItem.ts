@@ -6,6 +6,7 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
 export function createTextItem() {
@@ -39,19 +40,40 @@ export function toggleStrikethrough() {
 
 // テキスト選択範囲に太字や打ち消し線などのテキスト修飾を行う
 function execTextEditCommand(commandName: string) {
-  const textItemSelection = getTextItemSelectionFromDom()
-  // キャレット自体が無い場合（非テキスト項目がフォーカスされている場合など）は何もしない
-  if (textItemSelection === undefined) return
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  if (selectedItemPaths.length > 1) {
+    // 複数選択中は各テキスト項目のテキストを全選択してexecCommandする
 
-  if (textItemSelection.anchorDistance === textItemSelection.focusDistance) {
-    // テキストが選択されていない場合、テキスト全体を選択してから実行する
-    document.execCommand('selectAll')
-    document.execCommand(commandName)
+    for (const selectedItemPath of selectedItemPaths) {
+      const itemId = ItemPath.getItemId(selectedItemPath)
+      if (Internal.instance.state.items[itemId].type !== ItemType.TEXT) continue
 
-    // 元のキャレット位置に戻す
-    Rerenderer.instance.requestToFocusTargetItem(textItemSelection)
+      const targetElementId = MainAreaContentView.focusableDomElementId(selectedItemPath)
+      const focusableElement = document.getElementById(targetElementId)
+      if (focusableElement !== null) {
+        focusableElement.focus({ preventScroll: true })
+        document.execCommand('selectAll')
+        document.execCommand(commandName)
+      }
+    }
+
+    // フォーカスを元に戻す
+    Rerenderer.instance.requestToFocusTargetItem()
   } else {
-    document.execCommand(commandName)
+    const textItemSelection = getTextItemSelectionFromDom()
+    // キャレット自体が無い場合（非テキスト項目がフォーカスされている場合など）は何もしない
+    if (textItemSelection === undefined) return
+
+    if (textItemSelection.anchorDistance === textItemSelection.focusDistance) {
+      // テキストが選択されていない場合、テキスト全体を選択してから実行する
+      document.execCommand('selectAll')
+      document.execCommand(commandName)
+
+      // 元のキャレット位置に戻す
+      Rerenderer.instance.requestToFocusTargetItem(textItemSelection)
+    } else {
+      document.execCommand(commandName)
+    }
   }
 }
 
