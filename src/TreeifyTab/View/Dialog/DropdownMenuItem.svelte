@@ -32,7 +32,7 @@
       const index = focusableElements.findIndex((element) => document.activeElement === element)
       if (index === -1) return
 
-      const prevIndex = (index - 1) % focusableElements.length
+      const prevIndex = (index - 1 + focusableElements.length) % focusableElements.length
       focusableElements[prevIndex].focus()
     } else if (inputId === '0000Enter' || inputId === '0000Space') {
       event.preventDefault()
