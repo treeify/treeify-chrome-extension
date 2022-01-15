@@ -9,6 +9,9 @@
 
   export let props: MainAreaNodeProps
 
+  $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
+  $: depth = props.itemPath.length - 1
+
   $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
@@ -17,10 +20,8 @@
   )
   $: style = `
     --footprint-color: ${footprintColor ?? 'transparent'};
+    --depth: ${depth};
   `
-
-  $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
-  $: depth = props.itemPath.length - 1
 </script>
 
 <div
@@ -110,9 +111,6 @@
     --main-area-delete-button-size: 0.8em;
     // 削除ボタンなどのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当
     --main-area-node-button-background-hover-color: #e2e2e2;
-
-    // 階層が深くなるごとにフォントサイズを小さくする仕組みの係数
-    --main-area-font-size-inheritance-rate: 100%;
   }
 
   .main-area-node_root {
@@ -213,11 +211,6 @@
 
     // lch(30.0%, 0.0, 0.0)相当
     @include common.icon(#474747, url('close.svg'));
-  }
-
-  .main-area-node_children-area {
-    // 階層が深くなるごとにフォントサイズを小さくする
-    font-size: var(--main-area-font-size-inheritance-rate);
   }
 
   // 複数選択された項目の背景色設定。
