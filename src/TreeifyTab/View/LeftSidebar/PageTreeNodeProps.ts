@@ -88,6 +88,12 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
             }
             unmountPage(itemId, activePageId)
             break
+          case '0100MouseButton1':
+            event.preventDefault()
+            if (itemId === TOP_ITEM_ID) break
+
+            unmountPage(itemId, activePageId)
+            break
         }
       },
       onClickCloseButton(event) {
@@ -97,6 +103,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       onClickTabsCount(event) {
         switch (InputId.fromMouseEvent(event)) {
           case '0000MouseButton0':
+            event.preventDefault()
             // ページ全体のタブを閉じる
             for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(itemId)) {
               const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
@@ -108,6 +115,12 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
                 chrome.tabs.remove(tabId)
               }
             }
+            break
+          case '0100MouseButton0':
+            event.preventDefault()
+            if (itemId === TOP_ITEM_ID) break
+
+            unmountPage(itemId, activePageId)
             break
         }
       },
