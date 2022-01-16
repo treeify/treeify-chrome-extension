@@ -5,7 +5,8 @@
 
   export let props: SyncButtonProps
 
-  function onClick() {
+  function onClick(event: MouseEvent) {
+    event.preventDefault()
     Command.syncTreeifyData()
   }
 </script>

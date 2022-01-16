@@ -3,7 +3,8 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import ToolbarIconButton from 'src/TreeifyTab/View/Toolbar/ToolbarIconButton.svelte'
 
-  function onClick() {
+  function onClick(event: MouseEvent) {
+    event.preventDefault()
     External.instance.dialogState = { type: 'ItemAdditionDropdownMenuDialog' }
     Rerenderer.instance.rerender()
   }
