@@ -218,7 +218,7 @@ async function syncWithDataFolder() {
  * ターゲットItemPathの兄弟リストの中で、現在位置から下端までの項目を選択する。
  * 正確に言うと、ターゲット項目を兄弟リストの末尾に設定する。
  */
-export function selectToEndOfList() {
+export function selectToLastSibling() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return
@@ -236,7 +236,7 @@ export function selectToEndOfList() {
  * ターゲットItemPathの兄弟リストの中で、現在位置から上端までの項目を選択する。
  * 正確に言うと、ターゲット項目を兄弟リストの先頭に設定する。
  */
-export function selectToStartOfList() {
+export function selectToFirstSibling() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const parentItemId = ItemPath.getParentItemId(targetItemPath)
   if (parentItemId === undefined) return

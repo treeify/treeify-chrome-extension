@@ -151,7 +151,7 @@
         'showCommandPaletteDialog',
       ],
     },
-    { name: '複数選択', commandIds: ['selectToStartOfList', 'selectToEndOfList'] },
+    { name: '複数選択', commandIds: ['selectToFirstSibling', 'selectToLastSibling'] },
     {
       name: 'その他',
       commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded', 'convertSpaceToNewline'],
