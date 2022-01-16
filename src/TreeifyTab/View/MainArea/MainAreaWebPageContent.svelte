@@ -17,14 +17,16 @@
       class:tab-closed={props.isTabClosed}
       on:mousedown={props.onClickFavicon}
     >
-      {#if props.faviconUrl.length > 0}
-        <img class="main-area-web-page-content_favicon" src={props.faviconUrl} alt="" />
-      {:else if !props.isLoading}
-        <div class="default-favicon" />
-      {/if}
-      {#if props.isLoading}
-        <div class="loading-indicator" />
-      {/if}
+      <div class="main-area-web-page-content_favicon-wrapper">
+        {#if props.faviconUrl.length > 0}
+          <img class="main-area-web-page-content_favicon" src={props.faviconUrl} alt="" />
+        {:else if !props.isLoading}
+          <div class="main-area-web-page-content_default-favicon" />
+        {/if}
+        {#if props.isLoading}
+          <div class="loading-indicator" />
+        {/if}
+      </div>
     </div>
 
     <div
@@ -78,20 +80,47 @@
 
   // ウェブページ項目のファビコン
   .main-area-web-page-content_favicon-area {
+    // 当たり判定を上下いっぱいまで広げる
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .main-area-web-page-content_favicon-wrapper {
     @include common.square(var(--main-area-favicon-size));
     @include common.pseudo-ripple-effect(transparent);
 
-    > * {
-      @include common.square(var(--main-area-favicon-size));
-      @include common.absolute-center;
+    .discarded & {
+      filter: opacity(75%);
     }
+
+    .tab-closed & {
+      filter: opacity(55%);
+    }
+  }
+
+  .main-area-web-page-content_favicon {
+    @include common.square(100%);
+    @include common.absolute-center;
+    object-fit: contain;
+  }
+
+  .main-area-web-page-content_default-favicon {
+    @include common.square(100%);
+    @include common.absolute-center;
+
+    @include common.default-favicon;
   }
 
   // ローディングインジケータ
   .loading-indicator {
+    @include common.circle(100%);
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 
     border-radius: 50%;
     // lch(30.0%, 0.0, 0.0)相当
@@ -100,16 +129,15 @@
     border-right: 3px solid #ababab;
     border-bottom: 3px solid #ababab;
     border-left: 3px solid #ababab;
-    box-sizing: border-box;
     animation: rotation 0.8s infinite linear;
   }
 
   @keyframes rotation {
     0% {
-      transform: rotate(0deg);
+      transform: translate(-50%, -50%) rotate(0deg);
     }
     100% {
-      transform: rotate(360deg);
+      transform: translate(-50%, -50%) rotate(360deg);
     }
   }
 
@@ -159,13 +187,5 @@
     .completed-children & {
       color: var(--completed-item-text-color);
     }
-  }
-
-  .main-area-web-page-content_favicon-area.discarded > * {
-    filter: opacity(75%);
-  }
-
-  .main-area-web-page-content_favicon-area.tab-closed > * {
-    filter: opacity(55%);
   }
 </style>

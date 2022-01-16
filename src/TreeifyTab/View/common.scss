@@ -63,3 +63,8 @@
     transition: opacity 0s, width 0s, height 0s;
   }
 }
+
+@mixin default-favicon {
+  // lch(40.0%, 0.0, 0.0)相当
+  @include icon(#5e5e5e, url('./default-favicon.svg'));
+}

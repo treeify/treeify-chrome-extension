@@ -103,9 +103,4 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
   }
-
-  .default-favicon {
-    // lch(40.0%, 0.0, 0.0)相当
-    @include common.icon(#5e5e5e, url('./default-favicon.svg'));
-  }
 </style>

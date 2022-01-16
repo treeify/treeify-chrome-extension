@@ -4,28 +4,20 @@
   export let props: WebPageItemContentProps
 </script>
 
-<div class="web-page-item-content_root">
-  {#if props.faviconUrl.length > 0}
-    <img
-      class="web-page-item-content_favicon"
-      class:discarded={props.isDiscarded}
-      class:tab-closed={props.isTabClosed}
-      src={props.faviconUrl}
-      alt=""
-    />
-  {:else}
-    <div
-      class="web-page-item-content_favicon default-favicon"
-      class:discarded={props.isDiscarded}
-      class:tab-closed={props.isTabClosed}
-    />
-  {/if}
-  <div
-    class="web-page-item-content_title"
-    class:discarded={props.isDiscarded}
-    class:tab-closed={props.isTabClosed}
-    class:unread={props.isUnread}
-  >
+<div
+  class="web-page-item-content_root"
+  class:discarded={props.isDiscarded}
+  class:tab-closed={props.isTabClosed}
+  class:unread={props.isUnread}
+>
+  <div class="web-page-item-content_favicon-area">
+    {#if props.faviconUrl.length > 0}
+      <img class="web-page-item-content_favicon" src={props.faviconUrl} alt="" />
+    {:else}
+      <div class="web-page-item-content_default-favicon" />
+    {/if}
+  </div>
+  <div class="web-page-item-content_title">
     {props.title}
   </div>
   {#if props.isAudible}
@@ -44,45 +36,55 @@
     align-items: center;
   }
 
-  .web-page-item-content_favicon {
+  .web-page-item-content_favicon-area {
     @include common.square(1em);
 
-    &.discarded {
+    .discarded & {
       filter: opacity(75%);
     }
 
-    &.tab-closed {
+    .tab-closed & {
       filter: opacity(55%);
     }
+  }
+
+  .web-page-item-content_favicon {
+    @include common.square(100%);
+    object-fit: contain;
+  }
+
+  .web-page-item-content_default-favicon {
+    @include common.square(100%);
+    @include common.default-favicon;
   }
 
   .web-page-item-content_title {
     overflow-x: hidden;
     white-space: nowrap;
 
-    &.discarded {
+    .discarded & {
       // lch(35.0%, 0.0, 0.0)相当
       color: #525252;
     }
 
-    &.tab-closed {
+    .tab-closed & {
       // lch(60.0%, 0.0, 0.0)相当
       color: #919191;
     }
 
     // 未読ウェブページ項目のタイトルの強調表示
-    &.unread {
+    .unread & {
       color: var(--main-area-unread-web-page-item-title-color);
+    }
 
-      &.discarded {
-        // lch(35.0%, 30.0, 160.4)相当
-        color: #1a5d41;
-      }
+    .unread.discarded & {
+      // lch(35.0%, 30.0, 160.4)相当
+      color: #1a5d41;
+    }
 
-      &.tab-closed {
-        // lch(60.0%, 30.0, 160.4)相当
-        color: #5d9e7e;
-      }
+    .unread.tab-closed & {
+      // lch(60.0%, 30.0, 160.4)相当
+      color: #5d9e7e;
     }
   }
 
