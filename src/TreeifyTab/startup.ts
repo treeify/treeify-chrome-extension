@@ -6,6 +6,7 @@ import {
   onCreated,
   onMessage,
   onRemoved,
+  onReplaced,
   onUpdated,
   onWindowFocusChanged,
 } from 'src/TreeifyTab/External/chromeEventListeners'
@@ -55,6 +56,7 @@ export async function startup(initialState: State) {
   chrome.tabs.onUpdated.addListener(onUpdated)
   chrome.tabs.onRemoved.addListener(onRemoved)
   chrome.tabs.onActivated.addListener(onActivated)
+  chrome.tabs.onReplaced.addListener(onReplaced)
 
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
@@ -88,6 +90,7 @@ export async function cleanup() {
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
 
+  chrome.tabs.onReplaced.removeListener(onReplaced)
   chrome.tabs.onActivated.removeListener(onActivated)
   chrome.tabs.onRemoved.removeListener(onRemoved)
   chrome.tabs.onUpdated.removeListener(onUpdated)

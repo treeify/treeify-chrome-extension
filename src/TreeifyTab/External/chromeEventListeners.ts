@@ -128,26 +128,18 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
   }
 }
 
-export async function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  call(async () => {
-    // Treeifyタブだった場合は何もしない。
-    // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
-    if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
+export function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
+  // Treeifyタブだった場合は何もしない。
+  // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
+  if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
 
-    if (External.instance.forceClosingTabUrls.has(tab.url ?? '')) return
+  if (External.instance.forceClosingTabUrls.has(tab.url ?? '')) return
 
-    if (changeInfo.discarded) {
-      // discardされたらタブIDが変わるので項目IDとの対応関係を修正する
-      // TODO: ↓は手抜き実装。最適化の余地あり
-      await matchTabsAndWebPageItems()
-    }
+  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+  if (itemId === undefined) return
 
-    const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
-    if (itemId === undefined) return
-
-    reflectInWebPageItem(itemId, tab)
-    Rerenderer.instance.rerender()
-  })
+  reflectInWebPageItem(itemId, tab)
+  Rerenderer.instance.rerender()
 }
 
 // Tabの情報をウェブページ項目に転写する
@@ -205,6 +197,13 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
     }
   }
   Rerenderer.instance.rerender()
+}
+
+export function onReplaced(addedTabId: TabId, removedTabId: TabId) {
+  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(removedTabId)
+  if (itemId === undefined) return
+
+  External.instance.tabItemCorrespondence.tieTabAndItem(addedTabId, itemId)
 }
 
 /**
