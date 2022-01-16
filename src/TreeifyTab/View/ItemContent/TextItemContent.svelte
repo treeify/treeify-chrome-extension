@@ -3,10 +3,13 @@
   import { TextItemContentProps } from 'src/TreeifyTab/View/ItemContent/TextItemContentProps'
 
   export let props: TextItemContentProps
+
+  const nbsp = String.fromCharCode(160)
 </script>
 
 <div class="text-item-content_root" class:has-source={props.hasSource}>
-  {@html DomishObject.toHtml(props.domishObjects)}
+  <!-- 空のテキスト項目でのレイアウト崩れを防ぐためにnbspを入れる -->
+  {@html DomishObject.toHtml(props.domishObjects) || nbsp}
 </div>
 
 <style global lang="scss">
