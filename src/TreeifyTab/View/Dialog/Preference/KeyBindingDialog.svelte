@@ -151,7 +151,15 @@
         'showCommandPaletteDialog',
       ],
     },
-    { name: '複数選択', commandIds: ['selectToFirstSibling', 'selectToLastSibling'] },
+    {
+      name: '項目選択',
+      commandIds: [
+        'focusFirstSibling',
+        'focusLastSibling',
+        'selectToFirstSibling',
+        'selectToLastSibling',
+      ],
+    },
     {
       name: 'その他',
       commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded', 'convertSpaceToNewline'],

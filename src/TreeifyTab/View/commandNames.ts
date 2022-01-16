@@ -37,6 +37,8 @@ export const commandNames = {
   createCodeBlockItem: 'コードブロック項目を作成',
   createTexItem: 'TeX項目を作成',
   createTextItem: 'テキスト項目を作成',
+  focusFirstSibling: '長男を選択',
+  focusLastSibling: '末弟を選択',
   selectToFirstSibling: '長男まで選択',
   selectToLastSibling: '末弟まで選択',
   copyForTransclude: 'トランスクルード用コピー',
