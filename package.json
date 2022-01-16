@@ -60,6 +60,6 @@
     "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
   },
   "volta": {
-    "node": "16.13.1"
+    "node": "16.13.2"
   }
 }
