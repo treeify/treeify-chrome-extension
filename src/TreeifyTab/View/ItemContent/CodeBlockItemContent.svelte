@@ -23,7 +23,7 @@
 
 <style global lang="scss">
   .code-block-item-content_root {
-    overflow-x: auto;
+    overflow-x: hidden;
 
     // 完了状態のコードブロック項目
     .completed &,
