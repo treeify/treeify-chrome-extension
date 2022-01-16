@@ -1,4 +1,4 @@
-import { DefaultMap, MultiSet } from 'mnemonist'
+import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { DialogState } from 'src/TreeifyTab/External/DialogState'
@@ -46,12 +46,6 @@ export class External {
   /** アンロードのために閉じられる途中のタブのIDの集合 */
   readonly tabIdsToBeClosedForUnloading = new Set<TabId>()
 
-  /**
-   * 強制的にタブを閉じる処理中のタブのIDの集合。
-   * discard時とremove時の両方で使う。
-   */
-  readonly forceClosingTabUrls = new MultiSet<string>()
-
   /** 独自クリップボード */
   treeifyClipboard: TreeifyClipboard | undefined
 
@@ -90,12 +84,9 @@ export class External {
     this.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
     if (!tab.discarded) {
       // タブを強制的に閉じる処理を開始する
-      const url = tab.url ?? ''
-      this.forceClosingTabUrls.add(url)
       const discardedTab = await chrome.tabs.discard(tabId)
       assertNonUndefined(discardedTab.id)
       await chrome.tabs.remove(discardedTab.id)
-      this.forceClosingTabUrls.remove(url)
     } else {
       await chrome.tabs.remove(tabId)
     }
