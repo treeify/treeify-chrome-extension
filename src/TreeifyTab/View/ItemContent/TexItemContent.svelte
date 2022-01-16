@@ -19,9 +19,13 @@
 </div>
 
 <style global lang="scss">
-  .completed .tex-item-content_root,
-  .completed-children .tex-item-content_root {
-    filter: opacity(50%);
+  .tex-item-content_root {
+    overflow-x: hidden;
+
+    .completed &,
+    .completed-children & {
+      filter: opacity(50%);
+    }
   }
 
   .tex-item-content_caption {

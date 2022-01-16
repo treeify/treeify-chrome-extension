@@ -11,6 +11,8 @@
 
 <style global lang="scss">
   .text-item-content_root {
+    overflow-x: hidden;
+
     &.has-source {
       // lch(80.0%, 0.0, 0.0)相当
       border-left: 0.25em solid #c6c6c6;
