@@ -15,7 +15,7 @@ export type WebPageItemContentProps = {
 
 export function createWebPageItemContentProps(itemId: ItemId): ItemContentProps {
   const webPageItem = Internal.instance.state.webPageItems[itemId]
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
+  const tabId = External.instance.tabItemCorrespondence.getTabId(itemId)
   const tab =
     tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
 

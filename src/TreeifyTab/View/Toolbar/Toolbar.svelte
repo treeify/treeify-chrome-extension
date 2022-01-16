@@ -23,14 +23,12 @@
 
     assert(Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length === 0)
     assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
-    assert(External.instance.forceClosingTabUrls.size === 0)
     assert(State.isValid(Internal.instance.state))
   }
 
   function onClickStateValidation() {
     assert(Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length === 0)
     assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
-    assert(External.instance.forceClosingTabUrls.size === 0)
     assert(State.isValid(Internal.instance.state))
   }
 </script>

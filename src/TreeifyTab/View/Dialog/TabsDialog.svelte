@@ -17,7 +17,7 @@
   const webPageItemIds = pipe(
     RSet$.from(CurrentState.yieldSubtreeItemIdsShallowly(dialog.targetItemId)),
     RSet$.filter(
-      (itemId: ItemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+      (itemId: ItemId) => External.instance.tabItemCorrespondence.getTabId(itemId) !== undefined
     )
   )
   const rootNode = CurrentState.treeify(

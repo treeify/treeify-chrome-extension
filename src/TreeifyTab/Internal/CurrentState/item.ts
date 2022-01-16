@@ -77,7 +77,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   }
 
   // 対応するタブがあれば閉じる
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
+  const tabId = External.instance.tabItemCorrespondence.getTabId(itemId)
   if (tabId !== undefined) {
     External.instance.forceCloseTab(tabId)
   }
