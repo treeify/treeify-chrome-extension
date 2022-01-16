@@ -184,6 +184,8 @@ export class Internal {
         '0000F2': ['showEditDialog'],
         '0000ContextMenu': ['showContextMenuDialog'],
         '1100Period': ['toggleSource'],
+        '0010ArrowUp': ['focusFirstSibling'],
+        '0010ArrowDown': ['focusLastSibling'],
         '0110ArrowUp': ['selectToFirstSibling'],
         '0110ArrowDown': ['selectToLastSibling'],
       },
