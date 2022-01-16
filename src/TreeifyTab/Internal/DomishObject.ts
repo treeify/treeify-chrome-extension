@@ -10,7 +10,7 @@ import { integer } from 'src/Utility/integer'
 export type DomishObject = DomishObject.Element | DomishObject.TextNode
 
 export namespace DomishObject {
-  export type MarkupElement = BElement | UElement | IElement | StrikeElement
+  export type MarkupElement = BElement | UElement | IElement | SElement
   export type Element = MarkupElement | BRElement
 
   export type BElement = {
@@ -25,8 +25,8 @@ export namespace DomishObject {
     type: 'i'
     children: RArray<DomishObject>
   }
-  export type StrikeElement = {
-    type: 'strike'
+  export type SElement = {
+    type: 's'
     children: RArray<DomishObject>
   }
 
@@ -55,7 +55,7 @@ export namespace DomishObject {
           return `<u>${toHtml(domishObject.children)}</u>`
         case 'i':
           return `<i>${toHtml(domishObject.children)}</i>`
-        case 'strike':
+        case 's':
           return `<strike>${toHtml(domishObject.children)}</strike>`
         case 'br':
           return `<br>`
@@ -113,8 +113,9 @@ export namespace DomishObject {
             children: fromChildren(node),
           }
         case 'strike':
+        case 's':
           return {
-            type: 'strike',
+            type: 's',
             children: fromChildren(node),
           }
       }
@@ -148,7 +149,7 @@ export namespace DomishObject {
         case 'b':
         case 'u':
         case 'i':
-        case 'strike':
+        case 's':
           return _toPlainText(domishObject.children)
         case 'br':
           return '\n'
@@ -190,7 +191,7 @@ export namespace DomishObject {
           return `<u>${toMultiLineMarkdownText(domishObject.children)}</u>`
         case 'i':
           return `*${toMultiLineMarkdownText(domishObject.children)}*`
-        case 'strike':
+        case 's':
           return `~~${toMultiLineMarkdownText(domishObject.children)}~~`
         case 'br':
           return '  \n'
@@ -218,7 +219,7 @@ export namespace DomishObject {
           return `<u>${toSingleLineMarkdownText(domishObject.children)}</u>`
         case 'i':
           return `*${toSingleLineMarkdownText(domishObject.children)}*`
-        case 'strike':
+        case 's':
           return `~~${toSingleLineMarkdownText(domishObject.children)}~~`
         case 'br':
           return ' '
@@ -240,7 +241,7 @@ export namespace DomishObject {
         case 'b':
         case 'u':
         case 'i':
-        case 'strike':
+        case 's':
           return false
         case 'br':
         case 'text':
@@ -269,7 +270,7 @@ export namespace DomishObject {
       case 'b':
       case 'u':
       case 'i':
-      case 'strike':
+      case 's':
         return {
           type: domishObject.type,
           children: domishObject.children.map((child) =>
@@ -298,7 +299,7 @@ export namespace DomishObject {
         case 'b':
         case 'u':
         case 'i':
-        case 'strike':
+        case 's':
           const newDomishObject: DomishObject = {
             type: domishObject.type,
             children: domishObject.children.flatMap(convertSpaceToNewline),
