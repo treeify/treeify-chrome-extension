@@ -1,8 +1,20 @@
 {
   "name": "treeify",
-  "description": "",
   "version": "0.1.0",
+  "private": true,
+  "description": "",
+  "license": "Apache-2.0",
   "author": "ootidea",
+  "scripts": {
+    "build-dev": "cross-env NODE_ENV=dev rollup -c",
+    "build-dog": "cross-env NODE_ENV=dog rollup -c",
+    "build-prod": "cross-env NODE_ENV=prod rollup -c",
+    "format": "prettier --write \"src/**/*.{ts,tsx,svelte}\"",
+    "svelte-check": "svelte-check",
+    "watch-dev": "cross-env NODE_ENV=dev rollup -c -w",
+    "watch-dog": "cross-env NODE_ENV=dog rollup -c -w",
+    "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
+  },
   "dependencies": {
     "color": "^4.2.0",
     "dayjs": "^1.10.7",
@@ -46,18 +58,6 @@
     "svelte-preprocess": "^4.10.1",
     "type-fest": "^2.9.0",
     "typescript": "^4.5.4"
-  },
-  "license": "Apache-2.0",
-  "private": true,
-  "scripts": {
-    "build-dev": "cross-env NODE_ENV=dev rollup -c",
-    "build-dog": "cross-env NODE_ENV=dog rollup -c",
-    "build-prod": "cross-env NODE_ENV=prod rollup -c",
-    "format": "prettier --write \"src/**/*.{ts,tsx,svelte}\"",
-    "svelte-check": "svelte-check",
-    "watch-dev": "cross-env NODE_ENV=dev rollup -c -w",
-    "watch-dog": "cross-env NODE_ENV=dog rollup -c -w",
-    "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
   },
   "volta": {
     "node": "16.13.2"
