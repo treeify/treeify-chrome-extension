@@ -1,4 +1,4 @@
-import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
+import { ItemId, ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -144,7 +144,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     }
   }
 
-  if (isSingleSelect) {
+  if (isSingleSelect && targetItemId !== TOP_ITEM_ID) {
     if (CurrentState.getExcludedItemIds().includes(targetItemId)) {
       result.push({
         title: '現在のワークスペースからの除外を解除',
