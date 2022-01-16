@@ -36,7 +36,7 @@
 
         const focusableElements = Array.from(
           document.querySelectorAll<HTMLElement>(
-            '.search-dialog_content input, .search-dialog_content [tabindex]'
+            '.search-dialog_search-query, .search-dialog_content [tabindex]'
           )
         )
         const index = focusableElements.findIndex((element) => document.activeElement === element)
