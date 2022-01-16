@@ -167,8 +167,6 @@ export class Internal {
         '0100Tab': ['unindent'],
         '1000KeyG': ['grouping'],
         '1000KeyL': ['toggleFolded'],
-        '0010ArrowUp': ['fold'],
-        '0010ArrowDown': ['unfold'],
         '1000KeyB': ['toggleBold'],
         '1000KeyU': ['toggleUnderline'],
         '1000KeyI': ['toggleItalic'],
