@@ -6,6 +6,7 @@ export type SyncButtonProps = {
   syncWith: State['syncWith']
   hasUpdatedSinceSync: boolean
   isDataFolderAlreadyOpened: boolean
+  isInSync: boolean
 }
 
 export function createSyncButtonProps(): SyncButtonProps {
@@ -13,5 +14,6 @@ export function createSyncButtonProps(): SyncButtonProps {
     syncWith: Internal.instance.state.syncWith,
     hasUpdatedSinceSync: External.instance.hasUpdatedSinceSync,
     isDataFolderAlreadyOpened: External.instance.dataFolder !== undefined,
+    isInSync: External.instance.isInSync,
   }
 }
