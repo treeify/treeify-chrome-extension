@@ -39,6 +39,16 @@ export default {
         extensions: ['.ts', '.js', '.svelte'],
       }),
     }),
+    copy({
+      targets: [
+        { src: 'static/common/*', dest: 'dist' },
+        { src: `static/${process.env.NODE_ENV}/*`, dest: 'dist' },
+      ],
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+    }),
+
     svelte({
       preprocess: sveltePreprocess(),
     }),
@@ -52,14 +62,5 @@ export default {
     // 参考：http://psychedelicnekopunch.com/archives/790
     builtins(),
     globals(),
-    copy({
-      targets: [
-        { src: 'static/common/*', dest: 'dist' },
-        { src: `static/${process.env.NODE_ENV}/*`, dest: 'dist' },
-      ],
-    }),
-    replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-    }),
   ],
 }
