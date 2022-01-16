@@ -77,7 +77,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
 
             // ページ全体のタブを閉じる
             for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(itemId)) {
-              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+              const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
               if (tabId !== undefined) {
                 // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
                 External.instance.tabIdsToBeClosedForUnloading.add(tabId)
@@ -99,7 +99,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
           case '0000MouseButton0':
             // ページ全体のタブを閉じる
             for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(itemId)) {
-              const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+              const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
               if (tabId !== undefined) {
                 // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
                 External.instance.tabIdsToBeClosedForUnloading.add(tabId)
@@ -125,7 +125,7 @@ function getAudiblePageIds(): RSet<ItemId> {
   const audibleTabIds = External.instance.tabItemCorrespondence.getAllAudibleTabIds()
   const audibleItemIds = pipe(
     audibleTabIds,
-    RArray$.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemIdBy(tabId)),
+    RArray$.map((tabId: TabId) => External.instance.tabItemCorrespondence.getItemId(tabId)),
     RArray$.filterUndefined,
     RSet$.from
   )

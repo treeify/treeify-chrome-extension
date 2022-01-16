@@ -13,7 +13,7 @@ export class TabItemCorrespondence {
   // タブIDからTabオブジェクトへのMap
   private readonly tabIdToTab = new Map<TabId, Tab>()
 
-  getTabIdBy(itemId: ItemId): TabId | undefined {
+  getTabId(itemId: ItemId): TabId | undefined {
     return this.bimap.inverse.get(itemId)
   }
 
@@ -23,7 +23,7 @@ export class TabItemCorrespondence {
    * 項目削除からchrome.tabs.onRemovedイベント発生までにタイムラグがあるので、
    * その間はこの関数の戻り値がundefinedになることに要注意。
    */
-  getItemIdBy(tabId: TabId): ItemId | undefined {
+  getItemId(tabId: TabId): ItemId | undefined {
     return this.bimap.get(tabId)
   }
 
@@ -53,7 +53,7 @@ export class TabItemCorrespondence {
 
   /** 指定されたウェブページ項目がアンロード状態かどうかを判定する */
   isUnloaded(itemId: ItemId): boolean {
-    const tabId = this.getTabIdBy(itemId)
+    const tabId = this.getTabId(itemId)
     return tabId === undefined || this.getTab(tabId)?.discarded === true
   }
 

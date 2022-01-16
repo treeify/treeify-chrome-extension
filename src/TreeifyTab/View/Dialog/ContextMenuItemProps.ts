@@ -43,7 +43,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   }
 
   const hasTab = (itemId: ItemId) =>
-    External.instance.tabItemCorrespondence.getTabIdBy(itemId) !== undefined
+    External.instance.tabItemCorrespondence.getTabId(itemId) !== undefined
   if (subtreeItemIds.some(hasTab)) {
     result.push({
       title: 'ツリーに紐づくタブを閉じる',
@@ -53,7 +53,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
 
   const isTabClosed = (itemId: ItemId) =>
     Internal.instance.state.items[itemId].type === ItemType.WEB_PAGE &&
-    External.instance.tabItemCorrespondence.getTabIdBy(itemId) === undefined
+    External.instance.tabItemCorrespondence.getTabId(itemId) === undefined
   if (subtreeItemIds.some(isTabClosed)) {
     result.push({
       title: 'ツリーに紐づくタブをバックグラウンドで開く',

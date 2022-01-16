@@ -116,7 +116,7 @@ export function* yieldAncestorItemIds(itemId: ItemId): Generator<ItemId> {
 export function countTabsInSubtree(state: State, itemId: ItemId): integer {
   return pipe(
     RSet$.from(CurrentState.yieldSubtreeItemIdsShallowly(itemId)),
-    RSet$.map((itemId: ItemId) => External.instance.tabItemCorrespondence.getTabIdBy(itemId)),
+    RSet$.map((itemId: ItemId) => External.instance.tabItemCorrespondence.getTabId(itemId)),
     RSet$.filterUndefined
   ).size
 }

@@ -147,7 +147,7 @@ async function migrateTabs(newState: State) {
 
   const allItemIds = External.instance.tabItemCorrespondence.getAllItemIds()
   const promises = allItemIds.map(async (itemId) => {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(itemId)
+    const tabId = External.instance.tabItemCorrespondence.getTabId(itemId)
     assertNonUndefined(tabId)
     const newItemId = globalItemIdMap.get(Internal.instance.state.items[itemId].globalItemId)
     if (newItemId === undefined) {
@@ -220,7 +220,7 @@ function findCorrespondWebPageItem(url: string): ItemId | undefined {
   const tabs = External.instance.tabItemCorrespondence.getTabsByUrl(url)
   const itemIds = tabs
     .filter((tab) => tab.id !== undefined)
-    .map((tab) => External.instance.tabItemCorrespondence.getItemIdBy(tab.id!))
+    .map((tab) => External.instance.tabItemCorrespondence.getItemId(tab.id!))
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   if (itemIds.includes(targetItemId)) {
     return targetItemId

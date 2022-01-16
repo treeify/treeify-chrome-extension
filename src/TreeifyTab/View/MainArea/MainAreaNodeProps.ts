@@ -194,7 +194,7 @@ function countHiddenTabs(state: State, itemPath: ItemPath): integer {
 // 自分自身に対応するタブはカウントしない。
 // ページの子孫はサブツリーに含めない（ページそのものはサブツリーに含める）。
 function countTabsInDescendants(state: State, itemId: ItemId): integer {
-  if (External.instance.tabItemCorrespondence.getTabIdBy(itemId) === undefined) {
+  if (External.instance.tabItemCorrespondence.getTabId(itemId) === undefined) {
     return CurrentState.countTabsInSubtree(state, itemId)
   } else {
     return CurrentState.countTabsInSubtree(state, itemId) - 1

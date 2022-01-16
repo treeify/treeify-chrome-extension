@@ -10,7 +10,7 @@ import { RArray$ } from 'src/Utility/fp-ts'
 export function discardJustOneTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
+    const tabId = External.instance.tabItemCorrespondence.getTabId(selectedItemId)
     if (tabId !== undefined) {
       chrome.tabs.discard(tabId)
     }
@@ -22,7 +22,7 @@ export function discardTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(selectedItemId)) {
-      const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+      const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
       if (tabId !== undefined) {
         chrome.tabs.discard(tabId)
       }
@@ -33,7 +33,7 @@ export function discardTreeTabs() {
 /** 対象ウェブページ項目に対応するタブを閉じる */
 export function closeJustOneTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(
+    const tabId = External.instance.tabItemCorrespondence.getTabId(
       ItemPath.getItemId(selectedItemPath)
     )
 
@@ -51,7 +51,7 @@ export function closeTreeTabs() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     for (const subtreeItemId of CurrentState.yieldSubtreeItemIdsShallowly(selectedItemId)) {
-      const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+      const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
       if (tabId !== undefined) {
         // chrome.tabs.onRemovedイベントリスナー内でウェブページ項目が削除されないよう根回しする
         External.instance.tabIdsToBeClosedForUnloading.add(tabId)
@@ -66,7 +66,7 @@ export function closeTreeTabs() {
 export function openJustOneTab() {
   for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    const tabId = External.instance.tabItemCorrespondence.getTabIdBy(selectedItemId)
+    const tabId = External.instance.tabItemCorrespondence.getTabId(selectedItemId)
     if (tabId === undefined) {
       const url = Internal.instance.state.webPageItems[selectedItemId].url
       const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
@@ -84,7 +84,7 @@ export function openTreeTabs() {
         continue
       }
 
-      const tabId = External.instance.tabItemCorrespondence.getTabIdBy(subtreeItemId)
+      const tabId = External.instance.tabItemCorrespondence.getTabId(subtreeItemId)
       if (tabId === undefined) {
         const url = Internal.instance.state.webPageItems[subtreeItemId].url
         const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
@@ -106,7 +106,7 @@ export function browseTab() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  const tabId = External.instance.tabItemCorrespondence.getTabIdBy(targetItemId)
+  const tabId = External.instance.tabItemCorrespondence.getTabId(targetItemId)
   if (tabId !== undefined) {
     // ウェブページ項目に対応するタブを最前面化する
     assertNonUndefined(tabId)

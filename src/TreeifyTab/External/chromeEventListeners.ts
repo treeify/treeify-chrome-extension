@@ -124,7 +124,7 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
   if (url === 'chrome://newtab/' || openerTabId === undefined) {
     return undefined
   } else {
-    return External.instance.tabItemCorrespondence.getItemIdBy(openerTabId)
+    return External.instance.tabItemCorrespondence.getItemId(openerTabId)
   }
 }
 
@@ -133,7 +133,7 @@ export function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
   if (tab.url === chrome.runtime.getURL('TreeifyTab/index.html')) return
 
-  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+  const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   if (itemId === undefined) return
 
   reflectInWebPageItem(itemId, tab)
@@ -154,7 +154,7 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
 export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
   External.instance.tabItemCorrespondence.unregisterTab(tabId)
 
-  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+  const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   // 項目削除に伴ってTreeifyが対応タブを閉じた場合はundefinedになる。
   // 次の2パターンが存在する。
   // (1) タブを強制的に閉じる処理でdiscardによってタブIDが変わったままでremoveされた場合
@@ -179,7 +179,7 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
 }
 
 export function onActivated(tabActiveInfo: TabActiveInfo) {
-  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabActiveInfo.tabId)
+  const itemId = External.instance.tabItemCorrespondence.getItemId(tabActiveInfo.tabId)
   if (itemId === undefined) return
 
   CurrentState.updateItemTimestamp(itemId)
@@ -198,7 +198,7 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
 }
 
 export function onReplaced(addedTabId: TabId, removedTabId: TabId) {
-  const itemId = External.instance.tabItemCorrespondence.getItemIdBy(removedTabId)
+  const itemId = External.instance.tabItemCorrespondence.getItemId(removedTabId)
   if (itemId === undefined) return
 
   External.instance.tabItemCorrespondence.tieTabAndItem(addedTabId, itemId)

@@ -733,7 +733,7 @@ async function undo() {
     for (const tabId of External.instance.tabIdsToBeClosedForUnloading.values()) {
       const tab = External.instance.tabItemCorrespondence.getTab(tabId)
       dump(tab)
-      const itemId = External.instance.tabItemCorrespondence.getItemIdBy(tabId)
+      const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
       dump(itemId)
       if (itemId !== undefined) {
         dump(extractPlainText(itemId))
