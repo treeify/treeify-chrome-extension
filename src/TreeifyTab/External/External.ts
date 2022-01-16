@@ -20,6 +20,9 @@ export class External {
 
   dataFolder: DataFolder | undefined
 
+  /** データファイル同期の途中かどうか */
+  isInSync: boolean = false
+
   /**
    * 前回の同期以降にStateが更新されたかどうか
    * TODO: この変数は本来は永続化されるべき。再起動時点で同期済みかどうかは状況次第なので。

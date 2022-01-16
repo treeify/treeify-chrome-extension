@@ -48,7 +48,7 @@
           focusableElements[nextIndex].focus()
         } else {
           // フォーカスを前の要素に移す
-          const prevIndex = (index - 1) % focusableElements.length
+          const prevIndex = (index - 1 + focusableElements.length) % focusableElements.length
           focusableElements[prevIndex].focus()
         }
         break
