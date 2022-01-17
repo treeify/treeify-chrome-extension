@@ -168,26 +168,15 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
-    const isPageOrFolded =
-      CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
 
-    if (
-      RArray$.shallowEqual(
-        RArray$.takeLeft(draggedItemPath.length)(rollDroppedItemPath),
-        draggedItemPath
-      )
-    ) {
-      // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
-      // 下記の2パターンが該当する。
-      // (A) 自分自身へドロップした場合（無意味だしエッジ付け替えの都合で消えてしまうので何もしなくていい）
-      // (B) 自分の子孫へドロップした場合（変な循環参照を作る危険な操作なので認めてはならない）
-      return
-    }
+    CurrentState.throwIfCantInsertChildItem(rollDroppedItemId)(draggedItemId)
 
     Internal.instance.saveCurrentStateToUndoStack()
 
     // エッジを付け替える
     const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
+    const isPageOrFolded =
+      CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
     if (isPageOrFolded) {
       CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
       CurrentState.setTargetItemPath(rollDroppedItemPath)
@@ -283,9 +272,10 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
 
   const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
-  // TODO: 循環チェックをしないと親子間でのドロップとかで壊れるぞ
   // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
   if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
+
+  CurrentState.throwIfCantInsertChildItem(itemId)(draggedItemId)
 
   Internal.instance.saveCurrentStateToUndoStack()
 
