@@ -121,6 +121,11 @@ export function moveItemToAbove() {
   // 1つ上の項目がアクティブページである場合も何もしない
   if (aboveItemParentItemId === undefined) return
 
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertSiblingItem(aboveItemPath)(selectedItemId)
+  }
+
   // 1つ上の項目の上に項目を移動する
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -219,6 +224,11 @@ export function moveItemToPrevSibling() {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
+
+    for (const selectedItemPath of selectedItemPaths) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      CurrentState.throwIfCantInsertSiblingItem(prevSiblingItemPath)(selectedItemId)
+    }
 
     for (const selectedItemPath of selectedItemPaths) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)

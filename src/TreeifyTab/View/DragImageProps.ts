@@ -208,6 +208,8 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       // ドロップ先がアクティブページなら何もしない
       if (!ItemPath.hasParent(itemPath)) return
 
+      CurrentState.throwIfCantInsertSiblingItem(itemPath)(draggedItemId)
+
       Internal.instance.saveCurrentStateToUndoStack()
 
       // エッジを付け替える
@@ -217,9 +219,9 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     } else {
       // ドロップ先座標がドロップ先要素の下の方の場合
 
-      Internal.instance.saveCurrentStateToUndoStack()
-
       CurrentState.throwIfCantInsertBelowItem(itemPath)(draggedItemId)
+
+      Internal.instance.saveCurrentStateToUndoStack()
 
       // エッジを付け替える
       const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
