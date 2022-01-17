@@ -26,6 +26,7 @@ import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { ShowMessage } from 'src/Utility/Debug/error'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { decompress } from 'src/Utility/gzip'
@@ -313,18 +314,21 @@ async function getLastFocusedWindowId(): Promise<integer> {
 
 function onError(event: ErrorEvent) {
   if (event.error instanceof Error) {
-    handleError(event.error)
+    handleErrorEvent(event.error, event)
   }
 }
 
 function onUnhandledRejection(event: PromiseRejectionEvent) {
   if (event.reason instanceof Error) {
-    handleError(event.reason)
+    handleErrorEvent(event.reason, event)
   }
 }
 
-function handleError(error: Error) {
-  if (error.stack !== undefined) {
+function handleErrorEvent(error: Error, event: Event) {
+  if (error instanceof ShowMessage) {
+    alert(error.message)
+    event.preventDefault()
+  } else if (error.stack !== undefined) {
     alert(error.stack)
   } else {
     alert(error)

@@ -18,6 +18,11 @@ export function indent() {
   // 兄がページの場合は展開できないので何もしない
   if (CurrentState.isPage(prevSiblingItemId)) return
 
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertChildItem(prevSiblingItemId)(selectedItemId)
+  }
+
   // 兄を展開する
   CurrentState.setIsFolded(prevSiblingItemPath, false)
 
@@ -59,6 +64,11 @@ export function unindent() {
   // 親または親の親が居ない場合は何もしない
   if (parentItemPath === undefined) return
   if (!ItemPath.hasParent(parentItemPath)) return
+
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertSiblingItem(parentItemPath)(selectedItemId)
+  }
 
   for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -111,6 +121,11 @@ export function moveItemToAbove() {
   // 1つ上の項目がアクティブページである場合も何もしない
   if (aboveItemParentItemId === undefined) return
 
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertSiblingItem(aboveItemPath)(selectedItemId)
+  }
+
   // 1つ上の項目の上に項目を移動する
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -157,9 +172,11 @@ export function moveItemToBelow() {
   // 該当項目がない場合（メインエリアの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
+  const selectedItemIds = RArray$.map(ItemPath.getItemId)(selectedItemPaths)
+  CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath)
+
   // 1つ下の項目の下に項目を移動する
-  for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
-    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+  for (const selectedItemId of RArray$.reverse(selectedItemIds)) {
     // 既存の親子関係を削除
     const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
     // 項目を再配置
@@ -210,6 +227,11 @@ export function moveItemToPrevSibling() {
 
     for (const selectedItemPath of selectedItemPaths) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      CurrentState.throwIfCantInsertSiblingItem(prevSiblingItemPath)(selectedItemId)
+    }
+
+    for (const selectedItemPath of selectedItemPaths) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
       // 既存の親子関係を削除
       const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId, selectedItemId)
       // 兄の上に配置
@@ -235,6 +257,11 @@ export function moveItemToPrevSibling() {
         if (CurrentState.getDisplayingChildItemIds(knightItemPath).length > 0) {
           const oldParentItemId = ItemPath.getItemId(aboveItemPath)
           const newParentItemId = ItemPath.getItemId(knightItemPath)
+
+          for (const selectedItemPath of selectedItemPaths) {
+            const selectedItemId = ItemPath.getItemId(selectedItemPath)
+            CurrentState.throwIfCantInsertChildItem(newParentItemId)(selectedItemId)
+          }
 
           for (const selectedItemPath of selectedItemPaths) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -273,6 +300,11 @@ export function moveItemToNextSibling() {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
+
+    for (const selectedItemPath of selectedItemPaths) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      CurrentState.throwIfCantInsertSiblingItem(nextSiblingItemPath)(selectedItemId)
+    }
 
     for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)

@@ -95,15 +95,18 @@ export function onPaste(event: ClipboardEvent) {
     // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
     if (text === External.instance.getTreeifyClipboardHash()) {
       if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
-        for (const selectedItemPath of reverse(selectedItemPaths)) {
-          // 兄弟リスト内に同一項目を入れてしまわないようガード
-          if (!CurrentState.isSibling(selectedItemPath, targetItemPath)) {
-            const selectedItemId = ItemPath.getItemId(selectedItemPath)
-            const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
-            CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+        for (const selectedItemPath of selectedItemPaths) {
+          CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+            ItemPath.getItemId(selectedItemPath)
+          )
+        }
 
-            CurrentState.updateItemTimestamp(selectedItemId)
-          }
+        for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
+          const selectedItemId = ItemPath.getItemId(selectedItemPath)
+          const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
+          CurrentState.insertBelowItem(targetItemPath, selectedItemId, initialEdge)
+
+          CurrentState.updateItemTimestamp(selectedItemId)
         }
 
         // ターゲットを更新する
@@ -120,6 +123,12 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
+        for (const selectedItemPath of selectedItemPaths) {
+          CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+            ItemPath.getItemId(selectedItemPath)
+          )
+        }
+
         for (const selectedItemPath of reverse(selectedItemPaths)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const parentItemId = ItemPath.getParentItemId(selectedItemPath)

@@ -8,7 +8,8 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { Option$, RArray, RArray$ } from 'src/Utility/fp-ts'
+import { ShowMessage } from 'src/Utility/Debug/error'
+import { Option$, RArray, RArray$, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -27,6 +28,12 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
 
   const item = Internal.instance.state.items[itemId]
   if (deleteOnlyItself) {
+    for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
+      for (const childItemId of item.childItemIds) {
+        CurrentState.throwIfCantInsertChildItem(parentItemId)(childItemId)
+      }
+    }
+
     // 全ての子項目の親リストから自身を削除し、代わりに自身の親リストを挿入する
     for (const childItemId of item.childItemIds) {
       const parents = Internal.instance.state.items[childItemId].parents
@@ -226,6 +233,20 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Ed
   CurrentState.addParent(newItemId, itemId, edge)
 }
 
+export const throwIfCantInsertChildItem = (itemId: ItemId) => (newItemId: ItemId) => {
+  if (Internal.instance.state.items[itemId].childItemIds.includes(newItemId)) {
+    throw new ShowMessage('兄弟リスト内での同一項目の重複は禁止されています')
+  }
+
+  const upperItemIdSet = pipe(
+    RSet$.from(CurrentState.yieldAncestorItemIds(itemId)),
+    RSet$.add(itemId)
+  )
+  if (upperItemIdSet.has(newItemId)) {
+    throw new ShowMessage('循環参照は禁止されています')
+  }
+}
+
 /**
  * ある項目の兄になるよう項目を子リストに追加する。
  * 整合性が取れるように親項目リストも修正する。
@@ -289,6 +310,14 @@ export function insertNextSiblingItem(
   return ItemPath.createSiblingItemPath(itemPath, newItemId)!
 }
 
+export const throwIfCantInsertSiblingItem = (itemPath: ItemPath) => (newItemId: ItemId) => {
+  const parentItemId = ItemPath.getParentItemId(itemPath)
+  // 親が居ない場合はこの関数を呼んではならない
+  assertNonUndefined(parentItemId)
+
+  CurrentState.throwIfCantInsertChildItem(parentItemId)(newItemId)
+}
+
 /**
  * 指定されたItemPathの（ドキュメント順で）下に項目を配置する。
  * 基本的には弟になるよう配置するが、
@@ -300,6 +329,14 @@ export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Ed
     return RArray$.append(newItemId)(itemPath)
   } else {
     return insertNextSiblingItem(itemPath, newItemId, edge)
+  }
+}
+
+export const throwIfCantInsertBelowItem = (itemPath: ItemPath) => (newItemId: ItemId) => {
+  if (CurrentState.getDisplayingChildItemIds(itemPath).length > 0 || itemPath.length === 1) {
+    CurrentState.throwIfCantInsertChildItem(ItemPath.getItemId(itemPath))(newItemId)
+  } else {
+    CurrentState.throwIfCantInsertSiblingItem(itemPath)(newItemId)
   }
 }
 
