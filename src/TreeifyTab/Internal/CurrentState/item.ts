@@ -28,6 +28,12 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
 
   const item = Internal.instance.state.items[itemId]
   if (deleteOnlyItself) {
+    for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
+      for (const childItemId of item.childItemIds) {
+        CurrentState.throwIfCantInsertChildItem(parentItemId)(childItemId)
+      }
+    }
+
     // 全ての子項目の親リストから自身を削除し、代わりに自身の親リストを挿入する
     for (const childItemId of item.childItemIds) {
       const parents = Internal.instance.state.items[childItemId].parents
