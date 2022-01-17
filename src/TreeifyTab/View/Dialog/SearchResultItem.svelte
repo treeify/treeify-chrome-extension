@@ -21,7 +21,10 @@
 </script>
 
 <div class="search-result-item_root" {style}>
-  <div class="search-result-item_roll">
+  <div
+    class={`search-result-item_roll ${props.cssClasses.join(' ')}`}
+    class:transcluded={props.isTranscluded}
+  >
     {#if props.children.length > 0}
       <div class="search-result-item_indent-guide" />
     {/if}
@@ -108,6 +111,22 @@
     top: calc(var(--search-result-line-height) / 2 - var(--search-result-bullet-size) / 2);
 
     background: var(--main-area-bullet-inner-circle-color);
+
+    .transcluded & {
+      background: var(--transcluded-item-bullet-color);
+    }
+
+    .highlighted & {
+      background: var(--highlighted-item-bullet-color);
+    }
+
+    .transcluded.highlighted & {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
+      );
+    }
   }
 
   .search-result-item_content-area {
