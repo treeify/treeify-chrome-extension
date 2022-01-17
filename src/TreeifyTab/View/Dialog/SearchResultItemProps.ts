@@ -16,6 +16,7 @@ export type SearchResultItemProps = {
   footprintRank: integer | undefined
   footprintCount: integer
   outerCircleRadiusEm: integer
+  isTranscluded: boolean
   onClick(event: MouseEvent): void
   onKeyDown(event: KeyboardEvent): void
 }
@@ -51,7 +52,10 @@ export function createSearchResultItemPropses(
   }
 
   // 足跡順位の計算結果にアクセスするためにクロージャーとして定義する
-  function createSearchResultItemProps(itemPath: ItemPath, children: SearchResultItemProps[]) {
+  function createSearchResultItemProps(
+    itemPath: ItemPath,
+    children: SearchResultItemProps[]
+  ): SearchResultItemProps {
     const itemId = ItemPath.getItemId(itemPath)
 
     return {
@@ -60,6 +64,7 @@ export function createSearchResultItemPropses(
       footprintRank: footprintRankMap.get(itemId),
       footprintCount,
       outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
+      isTranscluded: CurrentState.countParents(itemId) > 1,
       onClick(event: MouseEvent) {
         const inputId = InputId.fromMouseEvent(event)
         if (inputId === '0000MouseButton0') {
