@@ -17,6 +17,7 @@ export type SearchResultItemProps = {
   footprintCount: integer
   outerCircleRadiusEm: integer
   isTranscluded: boolean
+  cssClasses: RArray<string>
   onClick(event: MouseEvent): void
   onKeyDown(event: KeyboardEvent): void
 }
@@ -65,6 +66,7 @@ export function createSearchResultItemPropses(
       footprintCount,
       outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
       isTranscluded: CurrentState.countParents(itemId) > 1,
+      cssClasses: Internal.instance.state.items[itemId].cssClasses,
       onClick(event: MouseEvent) {
         const inputId = InputId.fromMouseEvent(event)
         if (inputId === '0000MouseButton0') {
