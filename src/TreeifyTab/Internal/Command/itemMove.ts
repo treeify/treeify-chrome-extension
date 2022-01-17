@@ -65,6 +65,11 @@ export function unindent() {
   if (parentItemPath === undefined) return
   if (!ItemPath.hasParent(parentItemPath)) return
 
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertSiblingItem(parentItemPath)(selectedItemId)
+  }
+
   for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
@@ -285,6 +290,11 @@ export function moveItemToNextSibling() {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
+
+    for (const selectedItemPath of selectedItemPaths) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      CurrentState.throwIfCantInsertSiblingItem(nextSiblingItemPath)(selectedItemId)
+    }
 
     for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
