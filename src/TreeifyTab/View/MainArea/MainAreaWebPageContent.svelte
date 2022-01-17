@@ -86,6 +86,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    cursor: pointer;
   }
 
   .main-area-web-page-content_favicon-wrapper {
