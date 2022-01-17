@@ -95,12 +95,10 @@ export function onPaste(event: ClipboardEvent) {
     // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
     if (text === External.instance.getTreeifyClipboardHash()) {
       if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
-        if (
-          selectedItemPaths.some((itemPath) =>
-            CurrentState.cantInsertBelowItem(targetItemPath)(ItemPath.getItemId(itemPath))
+        for (const selectedItemPath of selectedItemPaths) {
+          CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+            ItemPath.getItemId(selectedItemPath)
           )
-        ) {
-          return
         }
 
         for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
@@ -125,12 +123,10 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
-        if (
-          selectedItemPaths.some((itemPath) =>
-            CurrentState.cantInsertBelowItem(targetItemPath)(ItemPath.getItemId(itemPath))
+        for (const selectedItemPath of selectedItemPaths) {
+          CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+            ItemPath.getItemId(selectedItemPath)
           )
-        ) {
-          return
         }
 
         for (const selectedItemPath of reverse(selectedItemPaths)) {

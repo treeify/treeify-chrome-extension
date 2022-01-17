@@ -230,7 +230,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
       Internal.instance.saveCurrentStateToUndoStack()
 
-      if (CurrentState.cantInsertBelowItem(itemPath)(draggedItemId)) return
+      CurrentState.throwIfCantInsertBelowItem(itemPath)(draggedItemId)
 
       // エッジを付け替える
       const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)

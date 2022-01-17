@@ -125,7 +125,7 @@ function transclude(itemPath: ItemPath) {
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
   const itemId = ItemPath.getItemId(itemPath)
-  if (CurrentState.cantInsertBelowItem(targetItemPath)(itemId)) return
+  CurrentState.throwIfCantInsertBelowItem(targetItemPath)(itemId)
 
   const newItemPath = CurrentState.insertBelowItem(targetItemPath, itemId, {
     isFolded: true,
