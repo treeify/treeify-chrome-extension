@@ -18,6 +18,11 @@ export function indent() {
   // 兄がページの場合は展開できないので何もしない
   if (CurrentState.isPage(prevSiblingItemId)) return
 
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertChildItem(prevSiblingItemId)(selectedItemId)
+  }
+
   // 兄を展開する
   CurrentState.setIsFolded(prevSiblingItemPath, false)
 
@@ -237,6 +242,11 @@ export function moveItemToPrevSibling() {
         if (CurrentState.getDisplayingChildItemIds(knightItemPath).length > 0) {
           const oldParentItemId = ItemPath.getItemId(aboveItemPath)
           const newParentItemId = ItemPath.getItemId(knightItemPath)
+
+          for (const selectedItemPath of selectedItemPaths) {
+            const selectedItemId = ItemPath.getItemId(selectedItemPath)
+            CurrentState.throwIfCantInsertChildItem(newParentItemId)(selectedItemId)
+          }
 
           for (const selectedItemPath of selectedItemPaths) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)

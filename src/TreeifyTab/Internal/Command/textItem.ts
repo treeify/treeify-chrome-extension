@@ -102,6 +102,11 @@ export function grouping() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const newItemPath = CurrentState.insertPrevSiblingItem(selectedItemPaths[0], newItemId)
 
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    CurrentState.throwIfCantInsertChildItem(newItemId)(selectedItemId)
+  }
+
   // 選択された項目を移動する
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)

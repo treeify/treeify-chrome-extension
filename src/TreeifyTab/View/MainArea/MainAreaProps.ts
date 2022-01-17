@@ -559,6 +559,10 @@ function onBackspace(event: KeyboardEvent) {
     } else {
       // ターゲット項目も上の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
+      for (const childItemId of targetItem.childItemIds) {
+        CurrentState.throwIfCantInsertChildItem(aboveItemId)(childItemId)
+      }
+
       Internal.instance.saveCurrentStateToUndoStack()
 
       // テキストを連結
@@ -668,6 +672,10 @@ function onDelete(event: KeyboardEvent) {
       // TODO: 項目削除コマンドを実行するのがいいと思う
     } else {
       // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
+
+      for (const childItemId of belowItem.childItemIds) {
+        CurrentState.throwIfCantInsertChildItem(targetItemId)(childItemId)
+      }
 
       Internal.instance.saveCurrentStateToUndoStack()
 
