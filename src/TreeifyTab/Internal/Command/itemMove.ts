@@ -157,9 +157,13 @@ export function moveItemToBelow() {
   // 該当項目がない場合（メインエリアの下端の場合）は何もしない
   if (firstFollowingItemPath === undefined) return
 
+  const selectedItemIds = RArray$.map(ItemPath.getItemId)(selectedItemPaths)
+  if (selectedItemIds.some(CurrentState.cantInsertBelowItem(firstFollowingItemPath))) {
+    return
+  }
+
   // 1つ下の項目の下に項目を移動する
-  for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
-    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+  for (const selectedItemId of RArray$.reverse(selectedItemIds)) {
     // 既存の親子関係を削除
     const edge = CurrentState.removeItemGraphEdge(targetItemParentItemId!, selectedItemId)
     // 項目を再配置

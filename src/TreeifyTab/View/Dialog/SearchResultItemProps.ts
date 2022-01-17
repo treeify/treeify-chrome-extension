@@ -80,11 +80,6 @@ export function createSearchResultItemPropses(
         } else if (inputId === '0010MouseButton0') {
           event.preventDefault()
           transclude(itemPath)
-          CurrentState.updateItemTimestamp(itemId)
-
-          // 検索ダイアログを閉じる
-          External.instance.dialogState = undefined
-          Rerenderer.instance.rerender()
         }
       },
       onKeyDown(event: KeyboardEvent) {
@@ -103,11 +98,6 @@ export function createSearchResultItemPropses(
           case '0010Space':
             event.preventDefault()
             transclude(itemPath)
-            CurrentState.updateItemTimestamp(itemId)
-
-            // 検索ダイアログを閉じる
-            External.instance.dialogState = undefined
-            Rerenderer.instance.rerender()
             break
         }
       },
@@ -134,8 +124,10 @@ function transclude(itemPath: ItemPath) {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
 
-  // TODO: トランスクルード時の親子関係、エッジ不整合対策
-  const newItemPath = CurrentState.insertBelowItem(targetItemPath, ItemPath.getItemId(itemPath), {
+  const itemId = ItemPath.getItemId(itemPath)
+  if (CurrentState.cantInsertBelowItem(targetItemPath)(itemId)) return
+
+  const newItemPath = CurrentState.insertBelowItem(targetItemPath, itemId, {
     isFolded: true,
   })
 
@@ -146,4 +138,8 @@ function transclude(itemPath: ItemPath) {
 
   CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)
+
+  // 検索ダイアログを閉じる
+  External.instance.dialogState = undefined
+  Rerenderer.instance.rerender()
 }
