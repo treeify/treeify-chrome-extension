@@ -20,6 +20,7 @@ export function syncTreeifyData() {
   if (External.instance.isInSync) return
 
   External.instance.isInSync = true
+  Rerenderer.instance.rerender()
   call(async () => {
     switch (Internal.instance.state.syncWith) {
       case 'Google Drive':
