@@ -52,7 +52,7 @@
   .main-area_paper {
     padding-inline: 30px;
     padding-top: 20px;
-    padding-bottom: 40vh;
+    padding-bottom: 25vh;
     border-radius: 10px 10px 0 0;
 
     margin-inline: 40px;
