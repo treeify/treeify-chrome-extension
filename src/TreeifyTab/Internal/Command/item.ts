@@ -58,7 +58,9 @@ export function enterKeyDefault() {
     if (!ItemPath.hasParent(targetItemPath)) {
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
-      range.setEndAfter(document.activeElement.lastChild!)
+      if (document.activeElement.lastChild !== null) {
+        range.setEndAfter(document.activeElement.lastChild)
+      }
       const domishObjects = DomishObject.fromChildren(range.extractContents())
       CurrentState.setTextItemDomishObjects(
         targetItemId,
