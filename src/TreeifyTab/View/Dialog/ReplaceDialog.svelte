@@ -97,6 +97,8 @@
       default:
         assertNeverType(type)
     }
+
+    CurrentState.updateItemTimestamp(itemId)
   }
 </script>
 
