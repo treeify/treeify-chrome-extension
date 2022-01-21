@@ -18,9 +18,9 @@
 
   let searchQueryValue = ''
   let hitItemIds: RSet<ItemId> | undefined
-  let itemTypes: ItemType[] = Object.values(ItemType) as any
+  let checkedItemTypes: ItemType[] = Object.values(ItemType) as any
   let searchResult: SearchResult | undefined
-  $: searchResult = makeSearchResult(hitItemIds, RSet$.from(itemTypes))
+  $: searchResult = makeSearchResult(hitItemIds, RSet$.from(checkedItemTypes))
 
   const workspaceId = CurrentState.getCurrentWorkspaceId()
   const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
@@ -144,18 +144,18 @@
     </div>
     <div class="search-dialog_result-area">
       {#if searchResult !== undefined}
+        <div class="search-dialog_filter-area">
+          表示する項目:
+          {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
+            {#if searchResult.counts.get(itemType) > 0}
+              <label class="search-dialog_checkbox-label">
+                <input type="checkbox" bind:group={checkedItemTypes} value={itemType} />
+                {name}({searchResult.counts.get(itemType)}件)
+              </label>
+            {/if}
+          {/each}
+        </div>
         {#if searchResult.pages.length > 0}
-          <div class="search-dialog_filter-area">
-            表示する項目:
-            {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
-              {#if searchResult.counts.get(itemType) > 0}
-                <label class="search-dialog_checkbox-label">
-                  <input type="checkbox" bind:group={itemTypes} value={itemType} />
-                  {name}({searchResult.counts.get(itemType)}件)
-                </label>
-              {/if}
-            {/each}
-          </div>
           <div class="search-dialog_result">
             {#each searchResult.pages as itemPaths}
               <SearchResultPage props={createSearchResultPageProps(itemPaths)} />
