@@ -173,7 +173,9 @@ export function moveItemToBelow() {
   if (firstFollowingItemPath === undefined) return
 
   const selectedItemIds = RArray$.map(ItemPath.getItemId)(selectedItemPaths)
-  CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath)
+  for (const selectedItemId of selectedItemIds) {
+    CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath)(selectedItemId)
+  }
 
   // 1つ下の項目の下に項目を移動する
   for (const selectedItemId of RArray$.reverse(selectedItemIds)) {
