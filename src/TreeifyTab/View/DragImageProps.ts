@@ -47,6 +47,15 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
       if (rollDroppedItemPath === undefined) return ''
 
+      // 循環参照などになるケースでは何も表示しない
+      try {
+        CurrentState.throwIfCantInsertChildItem(ItemPath.getItemId(rollDroppedItemPath))(
+          ItemPath.getItemId(itemPath)
+        )
+      } catch {
+        return ''
+      }
+
       const rollElement = document
         .getElementById(JSON.stringify(rollDroppedItemPath))
         ?.querySelector('.main-area-roll_root')
