@@ -84,11 +84,15 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
         case MainAreaBulletState.PAGE:
           switch (inputId) {
             case '0000MouseButton0':
-              Command.switchPage()
+              CurrentState.switchActivePage(ItemPath.getItemId(itemPath))
+              Rerenderer.instance.requestToFocusTargetItem()
               break
             case '1000MouseButton0':
               Command.turnIntoNonPage()
               Command.unfold()
+              break
+            case '0100MouseButton0':
+              Command.switchPage()
               break
           }
           break
