@@ -86,6 +86,7 @@
       )
 
       hitItemIds = Internal.instance.searchEngine.search(searchQueryValue)
+      checkedItemTypes = Object.values(ItemType) as any
     }
   }
 
