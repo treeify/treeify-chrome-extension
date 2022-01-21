@@ -26,7 +26,7 @@ export function switchPage() {
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
 
   if (CurrentState.isPage(targetItemId)) {
-    CurrentState.switchActivePage(targetItemId)
+    CurrentState.switchActivePage(targetItemId, true)
     Rerenderer.instance.requestToFocusTargetItem()
   }
 }
