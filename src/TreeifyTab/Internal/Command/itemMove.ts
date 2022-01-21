@@ -121,9 +121,12 @@ export function moveItemToAbove() {
   // 1つ上の項目がアクティブページである場合も何もしない
   if (aboveItemParentItemId === undefined) return
 
-  for (const selectedItemPath of selectedItemPaths) {
-    const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    CurrentState.throwIfCantInsertSiblingItem(aboveItemPath)(selectedItemId)
+  // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
+  if (targetItemParentItemId !== aboveItemParentItemId) {
+    for (const selectedItemPath of selectedItemPaths) {
+      const selectedItemId = ItemPath.getItemId(selectedItemPath)
+      CurrentState.throwIfCantInsertSiblingItem(aboveItemPath)(selectedItemId)
+    }
   }
 
   // 1つ上の項目の上に項目を移動する
@@ -173,8 +176,11 @@ export function moveItemToBelow() {
   if (firstFollowingItemPath === undefined) return
 
   const selectedItemIds = RArray$.map(ItemPath.getItemId)(selectedItemPaths)
-  for (const selectedItemId of selectedItemIds) {
-    CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath)(selectedItemId)
+  // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
+  if (targetItemParentItemId !== ItemPath.getParentItemId(firstFollowingItemPath)) {
+    for (const selectedItemId of selectedItemIds) {
+      CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath)(selectedItemId)
+    }
   }
 
   // 1つ下の項目の下に項目を移動する
@@ -226,11 +232,6 @@ export function moveItemToPrevSibling() {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
     // 兄が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
-
-    for (const selectedItemPath of selectedItemPaths) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      CurrentState.throwIfCantInsertSiblingItem(prevSiblingItemPath)(selectedItemId)
-    }
 
     for (const selectedItemPath of selectedItemPaths) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
@@ -300,13 +301,8 @@ export function moveItemToNextSibling() {
   )
   if (nextSiblingItemPath !== undefined) {
     const targetItemParentItemId = ItemPath.getParentItemId(selectedItemPaths[0])
-    // 兄が居るということは親が居るということ
+    // 弟が居るということは親が居るということ
     assertNonUndefined(targetItemParentItemId)
-
-    for (const selectedItemPath of selectedItemPaths) {
-      const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      CurrentState.throwIfCantInsertSiblingItem(nextSiblingItemPath)(selectedItemId)
-    }
 
     for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
