@@ -87,6 +87,7 @@
 
       hitItemIds = Internal.instance.searchEngine.search(searchQueryValue)
       checkedItemTypes = Object.values(ItemType) as any
+      document.querySelector<HTMLElement>('.search-dialog_result-area')?.scrollTo(0, 0)
     }
   }
 
