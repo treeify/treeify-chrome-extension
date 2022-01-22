@@ -178,7 +178,10 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
-    CurrentState.throwIfCantInsertChildItem(rollDroppedItemId)(draggedItemId)
+    // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
+    if (parentItemId !== ItemPath.getItemId(rollDroppedItemPath)) {
+      CurrentState.throwIfCantInsertChildItem(rollDroppedItemId)(draggedItemId)
+    }
 
     Internal.instance.saveCurrentStateToUndoStack()
 
@@ -217,7 +220,10 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       // ドロップ先がアクティブページなら何もしない
       if (!ItemPath.hasParent(itemPath)) return
 
-      CurrentState.throwIfCantInsertSiblingItem(itemPath)(draggedItemId)
+      // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
+      if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
+        CurrentState.throwIfCantInsertSiblingItem(itemPath)(draggedItemId)
+      }
 
       Internal.instance.saveCurrentStateToUndoStack()
 
@@ -228,7 +234,10 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     } else {
       // ドロップ先座標がドロップ先要素の下の方の場合
 
-      CurrentState.throwIfCantInsertBelowItem(itemPath)(draggedItemId)
+      // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
+      if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
+        CurrentState.throwIfCantInsertSiblingItem(itemPath)(draggedItemId)
+      }
 
       Internal.instance.saveCurrentStateToUndoStack()
 
@@ -284,9 +293,12 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
   // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
-  if (ItemPath.getParentItemId(draggedItemPath) === undefined) return
+  const draggedParentItemId = ItemPath.getParentItemId(draggedItemPath)
+  if (draggedParentItemId === undefined) return
 
-  CurrentState.throwIfCantInsertChildItem(itemId)(draggedItemId)
+  if (itemId !== draggedParentItemId) {
+    CurrentState.throwIfCantInsertChildItem(itemId)(draggedItemId)
+  }
 
   Internal.instance.saveCurrentStateToUndoStack()
 
@@ -296,10 +308,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   CurrentState.setTargetItemPath(aboveItemPath)
 
   // エッジを付け替える
-  const edge = CurrentState.removeItemGraphEdge(
-    ItemPath.getParentItemId(draggedItemPath)!,
-    draggedItemId
-  )
+  const edge = CurrentState.removeItemGraphEdge(draggedParentItemId, draggedItemId)
   CurrentState.insertFirstChildItem(itemId, draggedItemId, edge)
   const newTargetItemPath = [itemId, draggedItemId]
   Internal.instance.mutate(newTargetItemPath, StatePath.of('pages', itemId, 'targetItemPath'))
