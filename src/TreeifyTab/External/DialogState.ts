@@ -1,4 +1,5 @@
 import { ItemId } from 'src/TreeifyTab/basicType'
+import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { Coordinate } from 'src/Utility/integer'
 
@@ -8,7 +9,7 @@ export type ContextMenuDialog = {
 
 export type TabsDialog = {
   // このダイアログは他と異なり専用のターゲット項目IDを持つ
-  targetItemId: ItemId
+  targetItem: ItemId | ItemPath
 }
 
 export type DialogState = DiscriminatedUnion<{

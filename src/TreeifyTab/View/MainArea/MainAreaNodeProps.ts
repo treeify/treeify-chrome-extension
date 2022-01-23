@@ -41,9 +41,10 @@ export type MainAreaNodeProps = {
   childItemPropses: RArray<MainAreaNodeProps>
   rollProps: MainAreaRollProps
   onMouseDownContentArea(event: MouseEvent): void
-  onContextMenu(event: Event): void
+  onContextMenuContentArea(event: Event): void
   onClickDeleteButton(event: MouseEvent): void
   onClickHiddenTabsCount(event: MouseEvent): void
+  onContextMenuTabsCount(event: Event): void
 }
 
 export function createMainAreaNodeProps(
@@ -128,7 +129,7 @@ export function createMainAreaNodeProps(
           break
       }
     },
-    onContextMenu(event: Event) {
+    onContextMenuContentArea(event: Event) {
       // テキスト選択中はブラウザ標準のコンテキストメニューを表示する
       if (getSelection()?.isCollapsed === false) return
 
@@ -172,6 +173,11 @@ export function createMainAreaNodeProps(
           Rerenderer.instance.rerender()
           break
       }
+    },
+    onContextMenuTabsCount(event: Event) {
+      event.preventDefault()
+      External.instance.dialogState = { type: 'TabsDialog', targetItem: itemPath }
+      Rerenderer.instance.rerender()
     },
   }
 }
