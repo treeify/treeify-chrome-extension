@@ -553,46 +553,44 @@ function onBackspace(event: KeyboardEvent) {
       return
     }
 
-    if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) {
-      // 上の項目がテキスト項目以外の場合
-      // TODO: 項目削除コマンドを実行するのがいいと思う
-    } else {
-      // ターゲット項目も上の項目もテキスト項目の場合、テキスト項目同士のマージを行う
+    // 上の項目がテキスト項目以外の場合は何もしない
+    if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) return
 
-      for (const childItemId of targetItem.childItemIds) {
-        CurrentState.throwIfCantInsertChildItem(aboveItemId)(childItemId)
-      }
+    // テキスト項目同士のマージを行う
 
-      Internal.instance.saveCurrentStateToUndoStack()
-
-      // テキストを連結
-      const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-      const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-      // TODO: テキストノード同士が連結されないことが気がかり
-      CurrentState.setTextItemDomishObjects(
-        aboveItemId,
-        aboveItemDomishObjects.concat(focusedItemDomishObjects)
-      )
-
-      // 子リストを連結するため、子を全て弟としてエッジ追加。
-      // アンインデントに似ているが元のエッジを削除しない点が異なる。
-      for (const childItemId of targetItem.childItemIds) {
-        const edge = Internal.instance.state.items[childItemId].parents[targetItemId]
-        CurrentState.insertLastChildItem(aboveItemId, childItemId, edge)
-      }
-
-      // ↑の元のエッジごと削除
-      CurrentState.deleteItem(targetItemId)
-
-      // 上の項目の元の末尾にキャレットを移動する
-      CurrentState.setTargetItemPath(aboveItemPath)
-      Rerenderer.instance.requestToSetCaretPosition(
-        DomishObject.countCharacters(aboveItemDomishObjects)
-      )
-
-      event.preventDefault()
-      Rerenderer.instance.rerender()
+    for (const childItemId of targetItem.childItemIds) {
+      CurrentState.throwIfCantInsertChildItem(aboveItemId)(childItemId)
     }
+
+    Internal.instance.saveCurrentStateToUndoStack()
+
+    // テキストを連結
+    const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+    const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+    // TODO: テキストノード同士が連結されないことが気がかり
+    CurrentState.setTextItemDomishObjects(
+      aboveItemId,
+      aboveItemDomishObjects.concat(focusedItemDomishObjects)
+    )
+
+    // 子リストを連結するため、子を全て弟としてエッジ追加。
+    // アンインデントに似ているが元のエッジを削除しない点が異なる。
+    for (const childItemId of targetItem.childItemIds) {
+      const edge = Internal.instance.state.items[childItemId].parents[targetItemId]
+      CurrentState.insertLastChildItem(aboveItemId, childItemId, edge)
+    }
+
+    // ↑の元のエッジごと削除
+    CurrentState.deleteItem(targetItemId)
+
+    // 上の項目の元の末尾にキャレットを移動する
+    CurrentState.setTargetItemPath(aboveItemPath)
+    Rerenderer.instance.requestToSetCaretPosition(
+      DomishObject.countCharacters(aboveItemDomishObjects)
+    )
+
+    event.preventDefault()
+    Rerenderer.instance.rerender()
   } else {
     // ターゲット項目がテキスト項目以外の場合
 
