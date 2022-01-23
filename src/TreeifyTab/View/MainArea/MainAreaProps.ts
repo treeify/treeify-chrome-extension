@@ -567,27 +567,48 @@ function onBackspace(event: KeyboardEvent) {
     // テキストを連結
     const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-    // TODO: テキストノード同士が連結されないことが気がかり
-    CurrentState.setTextItemDomishObjects(
-      aboveItemId,
-      aboveItemDomishObjects.concat(focusedItemDomishObjects)
-    )
 
-    // 子リストを連結するため、子を全て弟としてエッジ追加。
-    // アンインデントに似ているが元のエッジを削除しない点が異なる。
-    for (const childItemId of targetItem.childItemIds) {
-      const edge = Internal.instance.state.items[childItemId].parents[targetItemId]
-      CurrentState.insertLastChildItem(aboveItemId, childItemId, edge)
-    }
-
-    // ↑の元のエッジごと削除
-    CurrentState.deleteItem(targetItemId)
-
-    // 上の項目の元の末尾にキャレットを移動する
-    CurrentState.setTargetItemPath(aboveItemPath)
-    Rerenderer.instance.requestToSetCaretPosition(
+    if (
+      DomishObject.countCharacters(focusedItemDomishObjects) >
       DomishObject.countCharacters(aboveItemDomishObjects)
-    )
+    ) {
+      // 下の項目の方が文字数が多い場合、上の項目を下の項目にマージする
+
+      CurrentState.setTextItemDomishObjects(
+        targetItemId,
+        aboveItemDomishObjects.concat(focusedItemDomishObjects)
+      )
+
+      CurrentState.deleteItem(aboveItemId)
+
+      // キャレットを移動する
+      Rerenderer.instance.requestToSetCaretPosition(
+        DomishObject.countCharacters(aboveItemDomishObjects)
+      )
+    } else {
+      // 上の項目の方が文字数が多い場合、下の項目を上の項目にマージする
+
+      CurrentState.setTextItemDomishObjects(
+        aboveItemId,
+        aboveItemDomishObjects.concat(focusedItemDomishObjects)
+      )
+
+      // 子リストを連結するため、子を全て弟としてエッジ追加。
+      // アンインデントに似ているが元のエッジを削除しない点が異なる。
+      for (const childItemId of targetItem.childItemIds) {
+        const edge = Internal.instance.state.items[childItemId].parents[targetItemId]
+        CurrentState.insertLastChildItem(aboveItemId, childItemId, edge)
+      }
+
+      // ↑の元のエッジごと削除
+      CurrentState.deleteItem(targetItemId)
+
+      // 上の項目の元の末尾にキャレットを移動する
+      CurrentState.setTargetItemPath(aboveItemPath)
+      Rerenderer.instance.requestToSetCaretPosition(
+        DomishObject.countCharacters(aboveItemDomishObjects)
+      )
+    }
 
     event.preventDefault()
     Rerenderer.instance.rerender()
