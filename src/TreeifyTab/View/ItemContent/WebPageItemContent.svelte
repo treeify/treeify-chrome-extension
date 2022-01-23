@@ -20,11 +20,6 @@
   <div class="web-page-item-content_title">
     {props.title}
   </div>
-  {#if props.isAudible}
-    <div class="web-page-item-content_audible-icon" />
-  {:else}
-    <div class="grid-empty-cell" />
-  {/if}
 </div>
 
 <style global lang="scss">
@@ -86,10 +81,5 @@
       // lch(60.0%, 30.0, 160.4)相当
       color: #5d9e7e;
     }
-  }
-
-  .web-page-item-content_audible-icon {
-    @include common.square(1em);
-    @include common.icon(var(--main-area-audible-icon-color), url('./audible.svg'));
   }
 </style>

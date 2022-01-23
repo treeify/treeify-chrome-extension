@@ -10,7 +10,6 @@ export type WebPageItemContentProps = {
   isDiscarded: boolean
   isTabClosed: boolean
   isUnread: boolean
-  isAudible: boolean
 }
 
 export function createWebPageItemContentProps(itemId: ItemId): ItemContentProps {
@@ -26,6 +25,5 @@ export function createWebPageItemContentProps(itemId: ItemId): ItemContentProps 
     isDiscarded: tab?.discarded === true,
     isTabClosed: tab === undefined,
     isUnread: webPageItem.isUnread,
-    isAudible: tab?.audible === true,
   }
 }
