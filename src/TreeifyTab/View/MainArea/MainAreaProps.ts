@@ -553,25 +553,42 @@ function onBackspace(event: KeyboardEvent) {
       return
     }
 
-    if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) {
-      // 上の項目がテキスト項目以外の場合
-      // TODO: 項目削除コマンドを実行するのがいいと思う
+    // 上の項目がテキスト項目以外の場合は何もしない
+    if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) return
+
+    // テキスト項目同士のマージを行う
+
+    for (const childItemId of targetItem.childItemIds) {
+      CurrentState.throwIfCantInsertChildItem(aboveItemId)(childItemId)
+    }
+
+    Internal.instance.saveCurrentStateToUndoStack()
+
+    const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+
+    if (
+      DomishObject.countCharacters(domishObjects) >
+      DomishObject.countCharacters(aboveItemDomishObjects)
+    ) {
+      // 下の項目の方が文字数が多い場合、上の項目を下の項目にマージする
+
+      CurrentState.setTextItemDomishObjects(
+        targetItemId,
+        aboveItemDomishObjects.concat(domishObjects)
+      )
+
+      CurrentState.deleteItem(aboveItemId)
+
+      // キャレットを移動する
+      Rerenderer.instance.requestToSetCaretPosition(
+        DomishObject.countCharacters(aboveItemDomishObjects)
+      )
     } else {
-      // ターゲット項目も上の項目もテキスト項目の場合、テキスト項目同士のマージを行う
+      // 上の項目の方が文字数が多い場合、下の項目を上の項目にマージする
 
-      for (const childItemId of targetItem.childItemIds) {
-        CurrentState.throwIfCantInsertChildItem(aboveItemId)(childItemId)
-      }
-
-      Internal.instance.saveCurrentStateToUndoStack()
-
-      // テキストを連結
-      const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-      const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-      // TODO: テキストノード同士が連結されないことが気がかり
       CurrentState.setTextItemDomishObjects(
         aboveItemId,
-        aboveItemDomishObjects.concat(focusedItemDomishObjects)
+        aboveItemDomishObjects.concat(domishObjects)
       )
 
       // 子リストを連結するため、子を全て弟としてエッジ追加。
@@ -589,10 +606,10 @@ function onBackspace(event: KeyboardEvent) {
       Rerenderer.instance.requestToSetCaretPosition(
         DomishObject.countCharacters(aboveItemDomishObjects)
       )
-
-      event.preventDefault()
-      Rerenderer.instance.rerender()
     }
+
+    event.preventDefault()
+    Rerenderer.instance.rerender()
   } else {
     // ターゲット項目がテキスト項目以外の場合
 
@@ -629,8 +646,8 @@ function onDelete(event: KeyboardEvent) {
     const selection = getTextItemSelectionFromDom()
     if (selection === undefined) return
 
-    const focusedItemDomishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-    const characterCount = DomishObject.countCharacters(focusedItemDomishObjects)
+    const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
+    const characterCount = DomishObject.countCharacters(domishObjects)
     // キャレットが末尾以外にあるならブラウザの標準の挙動に任せる
     if (selection.focusDistance !== characterCount || selection.anchorDistance !== characterCount) {
       return
@@ -640,7 +657,6 @@ function onDelete(event: KeyboardEvent) {
     // 一番下の項目なら何もしない
     if (belowItemPath === undefined) return
 
-    const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     // 空の子なし項目なら
     if (targetItem.childItemIds.length === 0 && DomishObject.countCharacters(domishObjects) === 0) {
       event.preventDefault()
@@ -667,24 +683,39 @@ function onDelete(event: KeyboardEvent) {
     }
 
     const belowItem = Internal.instance.state.items[belowItemId]
-    if (belowItem.type !== ItemType.TEXT) {
-      // 下の項目がテキスト項目以外の場合
-      // TODO: 項目削除コマンドを実行するのがいいと思う
+
+    // 下の項目がテキスト項目以外の場合は何もしない
+    if (belowItem.type !== ItemType.TEXT) return
+
+    // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
+
+    for (const childItemId of belowItem.childItemIds) {
+      CurrentState.throwIfCantInsertChildItem(targetItemId)(childItemId)
+    }
+
+    Internal.instance.saveCurrentStateToUndoStack()
+
+    const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
+
+    if (
+      DomishObject.countCharacters(belowItemDomishObjects) >
+      DomishObject.countCharacters(domishObjects)
+    ) {
+      CurrentState.setTextItemDomishObjects(
+        belowItemId,
+        domishObjects.concat(belowItemDomishObjects)
+      )
+
+      // ↑の元のエッジごと削除
+      CurrentState.deleteItem(targetItemId)
+
+      // キャレット位置を更新する
+      CurrentState.setTargetItemPath(belowItemPath)
+      Rerenderer.instance.requestToSetCaretPosition(DomishObject.countCharacters(domishObjects))
     } else {
-      // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
-
-      for (const childItemId of belowItem.childItemIds) {
-        CurrentState.throwIfCantInsertChildItem(targetItemId)(childItemId)
-      }
-
-      Internal.instance.saveCurrentStateToUndoStack()
-
-      // テキストを連結
-      const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
-      // TODO: テキストノード同士が連結されないことが気がかり
       CurrentState.setTextItemDomishObjects(
         targetItemId,
-        focusedItemDomishObjects.concat(belowItemDomishObjects)
+        domishObjects.concat(belowItemDomishObjects)
       )
 
       // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
@@ -698,13 +729,11 @@ function onDelete(event: KeyboardEvent) {
       CurrentState.deleteItem(belowItemId)
 
       // 元のキャレット位置を維持する
-      Rerenderer.instance.requestToSetCaretPosition(
-        DomishObject.countCharacters(focusedItemDomishObjects)
-      )
-
-      event.preventDefault()
-      Rerenderer.instance.rerender()
+      Rerenderer.instance.requestToSetCaretPosition(DomishObject.countCharacters(domishObjects))
     }
+
+    event.preventDefault()
+    Rerenderer.instance.rerender()
   } else {
     // ターゲット項目がテキスト項目以外の場合
 
