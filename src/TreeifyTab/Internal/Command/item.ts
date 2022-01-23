@@ -287,12 +287,14 @@ export function toggleCompleted() {
     }
 
     // ヒューリスティックな追加効果
-    Command.fold()
+
     Command.closeTreeTabs()
-    // フォーカスを下の項目に移動する
     const bottomSelectedItemPath = NERArray$.last(selectedItemPaths)
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(bottomSelectedItemPath)
     if (firstFollowingItemPath !== undefined) {
+      // 完了時は折りたたむ。アクティブページ（firstFollowingItemPath !== undefinedのとき）にfoldコマンドを呼ぶとエラーになるのでここで呼ぶ
+      Command.fold()
+      // フォーカスを下の項目に移動する
       CurrentState.setTargetItemPath(firstFollowingItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
     }
