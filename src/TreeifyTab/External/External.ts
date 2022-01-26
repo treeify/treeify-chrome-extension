@@ -79,7 +79,7 @@ export class External {
    * 項目削除時にそれに紐づくタブが生き残ると整合性が壊れるので強制的に閉じる。
    */
   async forceCloseTab(tabId: TabId) {
-    const tab = this.tabItemCorrespondence.getTab(tabId)
+    const tab = this.tabItemCorrespondence.getTabByTabId(tabId)
     assertNonUndefined(tab)
     this.tabItemCorrespondence.untieTabAndItemByTabId(tabId)
     if (!tab.discarded) {

@@ -7,6 +7,7 @@ import { RArray } from 'src/Utility/fp-ts'
 export type TabsDialogItemProps = {
   itemPath: ItemPath
   children: RArray<TabsDialogItemProps>
+  isAudible: boolean
   onClick(event: MouseEvent): void
 }
 
@@ -14,9 +15,12 @@ export function createTabsDialogItemProps(
   itemPath: ItemPath,
   children: RArray<TabsDialogItemProps>
 ): TabsDialogItemProps {
+  const tab = External.instance.tabItemCorrespondence.getTabByItemId(ItemPath.getItemId(itemPath))
+
   return {
     itemPath,
     children,
+    isAudible: tab?.audible === true,
     onClick(event) {
       event.preventDefault()
       CurrentState.jumpTo(itemPath)

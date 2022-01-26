@@ -111,7 +111,7 @@ export function browseTab() {
     // ウェブページ項目に対応するタブを最前面化する
     assertNonUndefined(tabId)
     chrome.tabs.update(tabId, { active: true })
-    const tab = External.instance.tabItemCorrespondence.getTab(tabId)
+    const tab = External.instance.tabItemCorrespondence.getTabByTabId(tabId)
     assertNonUndefined(tab)
     chrome.windows.update(tab.windowId, { focused: true })
   } else {

@@ -18,6 +18,11 @@
   <div class="search-result-item_content-and-children-area">
     <div class="tabs-dialog-item_content-area" on:mousedown={props.onClick}>
       <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
+      {#if props.isAudible}
+        <div class="tabs-dialog-item_audible-icon" />
+      {:else}
+        <div class="grid-empty-cell" />
+      {/if}
     </div>
     <div class="tabs-dialog-item_children-area">
       {#each props.children as child}
@@ -73,10 +78,21 @@
   }
 
   .tabs-dialog-item_content-area {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+
     cursor: pointer;
 
     &:hover {
       background: var(--main-area-hover-item-background-color);
     }
+  }
+
+  .tabs-dialog-item_audible-icon {
+    @include common.square(1em);
+
+    // lch(60.0%, 0.0, 0.0)相当
+    @include common.icon(#919191, url('./audible.svg'));
   }
 </style>

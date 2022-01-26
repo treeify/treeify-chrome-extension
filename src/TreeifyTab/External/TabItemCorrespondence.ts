@@ -27,7 +27,14 @@ export class TabItemCorrespondence {
     return this.bimap.get(tabId)
   }
 
-  getTab(tabId: TabId): Tab | undefined {
+  getTabByTabId(tabId: TabId): Tab | undefined {
+    return this.tabIdToTab.get(tabId)
+  }
+
+  getTabByItemId(itemId: ItemId): Tab | undefined {
+    const tabId = this.getTabId(itemId)
+    if (tabId === undefined) return undefined
+
     return this.tabIdToTab.get(tabId)
   }
 
@@ -49,12 +56,6 @@ export class TabItemCorrespondence {
   /** タブIDと項目IDの結びつけを解除する */
   untieTabAndItemByTabId(tabId: TabId) {
     this.bimap.delete(tabId)
-  }
-
-  /** 指定されたウェブページ項目がアンロード状態かどうかを判定する */
-  isUnloaded(itemId: ItemId): boolean {
-    const tabId = this.getTabId(itemId)
-    return tabId === undefined || this.getTab(tabId)?.discarded === true
   }
 
   getAllItemIds(): RArray<ItemId> {

@@ -29,11 +29,8 @@ export function createMainAreaWebPageContentProps(
 ): MainAreaContentProps {
   const itemId = ItemPath.getItemId(itemPath)
   const webPageItem = state.webPageItems[itemId]
-  const tabId = External.instance.tabItemCorrespondence.getTabId(itemId)
-  const tab =
-    tabId !== undefined ? External.instance.tabItemCorrespondence.getTab(tabId) : undefined
-  const isUnloaded =
-    tabId === undefined || External.instance.tabItemCorrespondence.getTab(tabId)?.discarded === true
+  const tab = External.instance.tabItemCorrespondence.getTabByItemId(itemId)
+  const isUnloaded = tab === undefined || tab.discarded
 
   return {
     itemPath,
