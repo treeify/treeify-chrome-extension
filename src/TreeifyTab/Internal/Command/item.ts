@@ -235,9 +235,10 @@ export function removeItem() {
 export function deleteJustOneItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
+  const parentItemId = ItemPath.getParentItemId(targetItemPath)
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(targetItemPath)) return
+  if (parentItemId === undefined) return
 
   const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.length === 0) {
@@ -255,7 +256,13 @@ export function deleteJustOneItem() {
       Rerenderer.instance.requestToFocusTargetItem()
     }
   } else {
-    // 子がいる場合は最初の子をフォーカス
+    // 子がいる場合
+
+    for (const childItemId of childItemIds) {
+      CurrentState.throwIfCantInsertChildItem(parentItemId)(childItemId)
+    }
+
+    // 最初の子をフォーカス
     const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds[0])
     assertNonUndefined(newItemPath)
     CurrentState.setTargetItemPath(newItemPath)
