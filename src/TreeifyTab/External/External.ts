@@ -1,6 +1,5 @@
 import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
-import { DataFolder } from 'src/TreeifyTab/External/DataFolder'
 import { DialogState } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -17,8 +16,6 @@ export class External {
   static #instance: External | undefined
 
   dialogState: DialogState | undefined
-
-  dataFolder: DataFolder | undefined
 
   /** データファイル同期の途中かどうか */
   isInSync: boolean = false

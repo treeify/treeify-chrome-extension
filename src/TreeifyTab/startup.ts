@@ -122,10 +122,7 @@ export async function restart(state: State, skipTabMigration: boolean = false) {
       await migrateTabs(state)
     }
 
-    const dataFolder = External.instance.dataFolder
     await cleanup()
-    // ↑のcleanup()によってExternal.instance.dataFolderはリセットされるので、このタイミングで設定する
-    External.instance.dataFolder = dataFolder
 
     // IndexedDBを新しいStateと一致するよう更新
     await Database.clearAllChunks()
@@ -343,21 +340,19 @@ async function onOnline() {
 
 // データファイルをバックグラウンドで自動ダウンロードするための仕組み
 async function prefetchDataFile() {
-  if (Internal.instance.state.syncWith === 'Google Drive') {
-    const syncedAt = getSyncedAt(Internal.instance.state.syncWith)
-    if (syncedAt === undefined) return
+  const syncedAt = getSyncedAt()
+  if (syncedAt === undefined) return
 
-    const metaData = await GoogleDrive.fetchDataFileMetaData()
-    if (metaData === undefined) return
+  const metaData = await GoogleDrive.fetchDataFileMetaData()
+  if (metaData === undefined) return
 
-    External.instance.backgroundDownload = {
-      modifiedTime: metaData.modifiedTime,
-      promise: call(async () => {
-        const response = await GoogleDrive.readFile(metaData.id)
-        const text = await decompress(await response.arrayBuffer())
-        const state: State = JSON.parse(text)
-        return state
-      }),
-    }
+  External.instance.backgroundDownload = {
+    modifiedTime: metaData.modifiedTime,
+    promise: call(async () => {
+      const response = await GoogleDrive.readFile(metaData.id)
+      const text = await decompress(await response.arrayBuffer())
+      const state: State = JSON.parse(text)
+      return state
+    }),
   }
 }

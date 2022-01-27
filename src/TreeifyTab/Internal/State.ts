@@ -54,7 +54,6 @@ export type State = {
   }
   leftEndMouseGestureEnabled: boolean
   rightEndMouseGestureEnabled: boolean
-  syncWith: 'Google Drive' | 'Local'
 }
 
 /**
