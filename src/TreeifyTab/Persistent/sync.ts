@@ -1,13 +1,9 @@
-import { State } from 'src/TreeifyTab/Internal/State'
+const GOOGLE_DRIVE_SYNCED_AT = 'GOOGLE_DRIVE_SYNCED_AT'
 
-export function getSyncedAt(syncWith: State['syncWith']): string | undefined {
-  return localStorage.getItem(makeSyncedAtKey(syncWith)) ?? undefined
+export function getSyncedAt(): string | undefined {
+  return localStorage.getItem(GOOGLE_DRIVE_SYNCED_AT) ?? undefined
 }
 
-export function setSyncedAt(syncWith: State['syncWith'], dateString: string) {
-  localStorage.setItem(makeSyncedAtKey(syncWith), dateString)
-}
-
-function makeSyncedAtKey(syncWith: State['syncWith']) {
-  return `syncWith/${syncWith}`
+export function setSyncedAt(dateString: string) {
+  localStorage.setItem(GOOGLE_DRIVE_SYNCED_AT, dateString)
 }
