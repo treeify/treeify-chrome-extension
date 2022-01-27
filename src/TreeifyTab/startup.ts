@@ -355,4 +355,5 @@ async function prefetchDataFile() {
       return state
     }),
   }
+  Rerenderer.instance.rerender()
 }
