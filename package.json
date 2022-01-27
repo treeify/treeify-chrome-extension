@@ -41,7 +41,6 @@
     "@types/object-path": "^0.11.1",
     "@types/power-radix": "^2.5.0",
     "@types/ua-parser-js": "^0.7.36",
-    "@types/wicg-file-system-access": "^2020.9.4",
     "cross-env": "^7.0.3",
     "postcss": "^8.4.5",
     "prettier": "^2.5.1",
