@@ -11,3 +11,10 @@
     キャンセル
   </button>
 </div>
+
+<style global lang="scss">
+  .finish-and-cancel-buttons_root {
+    display: inline-flex;
+    gap: 0.8em;
+  }
+</style>
