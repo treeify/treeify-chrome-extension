@@ -31,14 +31,14 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   if (hasParent) {
     result.push({
       title: '削除',
-      onClick: () => Command.deleteItem(),
+      onClick: () => Command.removeItem(),
     })
   }
 
   if (hasParent && includeTranscludedItem) {
     result.push({
-      title: '除去（トランスクルード先の項目自体は削除しない）',
-      onClick: () => Command.removeItem(),
+      title: '他のトランスクルードもまとめて削除',
+      onClick: () => Command.deleteItem(),
     })
   }
 
