@@ -123,10 +123,16 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
-        for (const selectedItemPath of selectedItemPaths) {
-          CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
-            ItemPath.getItemId(selectedItemPath)
-          )
+        // 兄弟リスト内の移動の場合はガード不要
+        if (
+          ItemPath.getParentItemId(targetItemPath) !==
+          ItemPath.getParentItemId(selectedItemPaths[0])
+        ) {
+          for (const selectedItemPath of selectedItemPaths) {
+            CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+              ItemPath.getItemId(selectedItemPath)
+            )
+          }
         }
 
         for (const selectedItemPath of reverse(selectedItemPaths)) {
