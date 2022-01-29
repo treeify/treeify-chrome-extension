@@ -14,6 +14,7 @@ import { External } from 'src/TreeifyTab/External/External'
 import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
+import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -346,13 +347,18 @@ async function prefetchDataFile() {
   const metaData = await GoogleDrive.fetchDataFileMetaData()
   if (metaData === undefined) return
 
-  External.instance.backgroundDownload = {
-    modifiedTime: metaData.modifiedTime,
-    promise: call(async () => {
-      const response = await GoogleDrive.readFile(metaData.id)
-      const text = await decompress(await response.arrayBuffer())
-      const state: State = JSON.parse(text)
-      return state
-    }),
+  if (Internal.instance.state.autoSyncWhenDetectSync) {
+    Command.syncTreeifyData()
+  } else {
+    External.instance.backgroundDownload = {
+      modifiedTime: metaData.modifiedTime,
+      promise: call(async () => {
+        const response = await GoogleDrive.readFile(metaData.id)
+        const text = await decompress(await response.arrayBuffer())
+        const state: State = JSON.parse(text)
+        return state
+      }),
+    }
   }
+  Rerenderer.instance.rerender()
 }
