@@ -67,9 +67,9 @@ export async function startup(initialState: State) {
     chrome.alarms.onAlarm.addListener(onAlarm)
   }
   chrome.idle.onStateChanged.addListener(onIdleStateChanged)
-  // idle状態と判定するまでの時間を60分に設定する。
-  // デフォルトは1分なので無駄なAPI呼び出しが起こる懸念がある。
-  chrome.idle.setDetectionInterval(60 * 60)
+  // idle状態と判定するまでの時間を50分に設定する。
+  // 60分休憩を早めに切り上げた場合にも確実に発動させるために50分を採用した。
+  chrome.idle.setDetectionInterval(50 * 60)
 
   window.addEventListener('online', onOnline)
 
