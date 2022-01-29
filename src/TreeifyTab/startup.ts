@@ -301,7 +301,7 @@ async function onIdleStateChanged(idleState: IdleState) {
 
   if (!window.navigator.onLine) return
 
-  await prefetchDataFile()
+  await prefetchOrAutoSyncIfDetectSync()
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {
@@ -336,11 +336,10 @@ function handleErrorEvent(error: Error, event: Event) {
 async function onOnline() {
   console.log('onOnline', new Date().toLocaleDateString(), new Date().toLocaleTimeString())
 
-  await prefetchDataFile()
+  await prefetchOrAutoSyncIfDetectSync()
 }
 
-// データファイルをバックグラウンドで自動ダウンロードするための仕組み
-async function prefetchDataFile() {
+export async function prefetchOrAutoSyncIfDetectSync() {
   const syncedAt = getSyncedAt()
   if (syncedAt === undefined) return
 

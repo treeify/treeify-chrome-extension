@@ -3,7 +3,7 @@ import { registerLanguages } from 'src/TreeifyTab/highlightJs'
 import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
-import { startup } from 'src/TreeifyTab/startup'
+import { prefetchOrAutoSyncIfDetectSync, startup } from 'src/TreeifyTab/startup'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import Tab = chrome.tabs.Tab
@@ -51,4 +51,6 @@ call(async () => {
   // データベースから読み込んでStateを初期化
   const chunks = await Database.getAllChunks()
   await startup(Chunk.inflateStateFromChunks(chunks))
+
+  await prefetchOrAutoSyncIfDetectSync()
 })
