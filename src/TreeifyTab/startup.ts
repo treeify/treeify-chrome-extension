@@ -346,6 +346,8 @@ export async function prefetchOrAutoSyncIfDetectSync() {
   const metaData = await GoogleDrive.fetchDataFileMetaData()
   if (metaData === undefined) return
 
+  if (metaData.modifiedTime === syncedAt) return
+
   if (Internal.instance.state.autoSyncWhenDetectSync) {
     Command.syncTreeifyData()
   } else {

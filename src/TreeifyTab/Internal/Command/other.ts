@@ -56,7 +56,6 @@ async function syncWithGoogleDrive() {
       // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
       console.log('syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ')
 
-      // get APIでファイル内容をダウンロードする
       const state: State = await getState(dataFileMetaData)
 
       if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
