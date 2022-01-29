@@ -321,20 +321,25 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
  * キャレット位置によってブラウザの挙動に任せるかどうか分岐する。
  */
 function onArrowDown(event: KeyboardEvent) {
-  const selectedItemPaths = CurrentState.getSelectedItemPaths()
-  const belowItemPath = CurrentState.findBelowItemPath(NERArray$.last(selectedItemPaths))
-  // 下の項目が存在しない場合はブラウザの挙動に任せる
-  if (belowItemPath === undefined) return
+  const bottomItemPath = NERArray$.last(CurrentState.getSelectedItemPaths())
+  const belowItemPath = CurrentState.findBelowItemPath(bottomItemPath)
 
   // 複数選択などの場合、下の項目をフォーカスするだけで終了
   const targetItemPath = CurrentState.getTargetItemPath()
   if (document.activeElement?.id !== MainAreaContentView.focusableDomElementId(targetItemPath)) {
     event.preventDefault()
-    CurrentState.setTargetItemPath(belowItemPath)
+    if (belowItemPath !== undefined) {
+      CurrentState.setTargetItemPath(belowItemPath)
+    } else {
+      CurrentState.setTargetItemPath(bottomItemPath)
+    }
     Rerenderer.instance.requestToFocusTargetItem()
     Rerenderer.instance.rerender()
     return
   }
+
+  // 下の項目が存在しない場合はブラウザの挙動に任せる
+  if (belowItemPath === undefined) return
 
   const targetItemId = ItemPath.getItemId(targetItemPath)
   if (Internal.instance.state.items[targetItemId].type === ItemType.TEXT) {
