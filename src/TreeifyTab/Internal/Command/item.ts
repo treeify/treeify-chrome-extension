@@ -78,11 +78,11 @@ export function enterKeyDefault() {
       return
     }
 
-    const characterCount = DomishObject.countCharacters(
+    const textLength = DomishObject.getTextLength(
       Internal.instance.state.textItems[targetItemId].domishObjects
     )
 
-    if (characterCount === 0) {
+    if (textLength === 0) {
       // 空のテキスト項目なら
 
       // 新規項目を下に追加する
@@ -92,7 +92,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
-    } else if (textItemSelection.focusDistance < characterCount / 2) {
+    } else if (textItemSelection.focusDistance < textLength / 2) {
       // キャレット位置が前半なら
 
       // キャレットより前のテキストをカットする
@@ -179,8 +179,8 @@ export function deleteItem() {
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
   if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-    const characterCount = DomishObject.countCharacters(domishObjects)
-    Rerenderer.instance.requestToSetCaretPosition(characterCount)
+    const textLength = DomishObject.getTextLength(domishObjects)
+    Rerenderer.instance.requestToSetCaretPosition(textLength)
   } else {
     Rerenderer.instance.requestToFocusTargetItem()
   }
@@ -211,8 +211,8 @@ export function removeItem() {
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
   if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
     const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-    const characterCount = DomishObject.countCharacters(domishObjects)
-    Rerenderer.instance.requestToSetCaretPosition(characterCount)
+    const textLength = DomishObject.getTextLength(domishObjects)
+    Rerenderer.instance.requestToSetCaretPosition(textLength)
   } else {
     Rerenderer.instance.requestToFocusTargetItem()
   }
@@ -250,8 +250,8 @@ export function deleteJustOneItem() {
     const aboveItemId = ItemPath.getItemId(aboveItemPath)
     if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-      const characterCount = DomishObject.countCharacters(domishObjects)
-      Rerenderer.instance.requestToSetCaretPosition(characterCount)
+      const textLength = DomishObject.getTextLength(domishObjects)
+      Rerenderer.instance.requestToSetCaretPosition(textLength)
     } else {
       Rerenderer.instance.requestToFocusTargetItem()
     }

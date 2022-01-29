@@ -56,5 +56,5 @@ export function isEmptyTextItem(itemId: ItemId): boolean {
   if (CurrentState.countParents(itemId) >= 2) return false
 
   const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
-  return DomishObject.countCharacters(domishObjects) === 0
+  return DomishObject.getTextLength(domishObjects) === 0
 }

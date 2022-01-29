@@ -124,8 +124,8 @@ export namespace DomishObject {
     return undefined
   }
 
-  /** 改行（br要素）を含む文字数を返す */
-  export function countCharacters(value: DomishObject | RArray<DomishObject>): integer {
+  /** 文字列の長さ（文字数ではなくlength） + 改行（br要素）の数を返す */
+  export function getTextLength(value: DomishObject | RArray<DomishObject>): integer {
     return toPlainText(value).length
   }
 

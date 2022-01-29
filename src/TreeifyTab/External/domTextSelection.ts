@@ -89,11 +89,11 @@ function convertToDomOffset(node: Node, distance: integer): { node: Node; offset
   // トップダウンにターゲットNodeを探す
   let remainingDistance = distance
   for (const childNode of childNodes) {
-    const characterCount = getCharacterCount(childNode)
-    if (characterCount >= remainingDistance) {
+    const textLength = getTextLength(childNode)
+    if (textLength >= remainingDistance) {
       return convertToDomOffset(childNode, remainingDistance)
     }
-    remainingDistance -= characterCount
+    remainingDistance -= textLength
   }
   throw Error('nodeのサイズを超えるdistanceが指定された')
 }
@@ -116,16 +116,15 @@ export function setDomSelection(contentEditable: Node, textItemSelection: TextIt
 }
 
 /**
- * Node内の文字数を計算する。
- * ここでいう文字数の定義は「テキストの文字数 + br要素数」である。
- * 例えば次の状況におけるdiv要素の文字数は7となる。
+ * Node内のテキストの文字数 + br要素数を返す。
+ * 例えば次のdiv要素に対しては7を返す。
  * <div>
  *   abc
  *   <br>
  *   <i>xyz</i>
  * </div>
  */
-function getCharacterCount(node: Node): integer {
+function getTextLength(node: Node): integer {
   const range = document.createRange()
   range.selectNode(node)
   return range.toString().length + countBrElements(range.cloneContents())

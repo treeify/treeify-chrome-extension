@@ -24,7 +24,7 @@ export function selectAll() {
   if (selection !== undefined) {
     const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
     const selectedCharCount = Math.abs(selection.focusDistance - selection.anchorDistance)
-    if (DomishObject.countCharacters(domishObjects) !== selectedCharCount) {
+    if (DomishObject.getTextLength(domishObjects) !== selectedCharCount) {
       document.execCommand('selectAll')
       return
     }
