@@ -165,9 +165,9 @@
 
   // ダウトフル状態の項目
   .doubtful .main-area-node_content-area {
-    // lch(60.0%, 134.0, 160.4)相当
-    text-decoration: underline dotted #00a570;
-    text-decoration-thickness: 2px;
+    // lch(60.0%, 134.0, 40.4)相当
+    text-decoration: underline dashed #ff5534;
+    text-decoration-thickness: 1px;
     text-underline-offset: 0.1em;
   }
 
