@@ -17,12 +17,10 @@
   }
 
   const onMouseDownBackdrop = (event: MouseEvent) => {
-    if (event.eventPhase === Event.AT_TARGET) {
-      event.preventDefault()
-      // ダイアログを閉じる
-      if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
-        closeDialog()
-      }
+    event.preventDefault()
+    // ダイアログを閉じる
+    if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
+      closeDialog()
     }
   }
 
@@ -44,7 +42,7 @@
 
 <div
   class="common-dialog_root"
-  on:mousedown={onMouseDownBackdrop}
+  on:mousedown|self={onMouseDownBackdrop}
   on:keydown={onKeyDown}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap

@@ -28,13 +28,11 @@
   `
 
   function onClickBackdrop(event: MouseEvent) {
-    if (event.eventPhase === Event.AT_TARGET) {
-      event.preventDefault()
-      // ダイアログを閉じる
-      if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
-        External.instance.dialogState = undefined
-        Rerenderer.instance.rerender()
-      }
+    event.preventDefault()
+    // ダイアログを閉じる
+    if (InputId.fromMouseEvent(event) === '0000MouseButton0') {
+      External.instance.dialogState = undefined
+      Rerenderer.instance.rerender()
     }
   }
 
@@ -69,7 +67,7 @@
 <div
   class="web-page-item-title-setting-dialog_root"
   {style}
-  on:mousedown={onClickBackdrop}
+  on:mousedown|self={onClickBackdrop}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
