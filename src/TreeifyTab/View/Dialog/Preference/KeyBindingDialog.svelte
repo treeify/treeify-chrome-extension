@@ -107,6 +107,7 @@
         'toggleUnderline',
         'toggleItalic',
         'toggleStrikethrough',
+        'convertSpaceToNewline',
       ],
     },
     {
@@ -162,7 +163,7 @@
     },
     {
       name: 'その他',
-      commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded', 'convertSpaceToNewline'],
+      commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded'],
     },
   ]
 </script>
