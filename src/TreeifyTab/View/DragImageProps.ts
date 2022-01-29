@@ -49,7 +49,8 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 
       // 循環参照などになるケースでは何も表示しない
       try {
-        CurrentState.throwIfCantInsertChildItem(ItemPath.getItemId(rollDroppedItemPath))(
+        CurrentState.throwIfCantInsertChildItem(
+          ItemPath.getItemId(rollDroppedItemPath),
           ItemPath.getItemId(itemPath)
         )
       } catch {
@@ -180,7 +181,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
     if (parentItemId !== ItemPath.getItemId(rollDroppedItemPath)) {
-      CurrentState.throwIfCantInsertChildItem(rollDroppedItemId)(draggedItemId)
+      CurrentState.throwIfCantInsertChildItem(rollDroppedItemId, draggedItemId)
     }
 
     Internal.instance.saveCurrentStateToUndoStack()
@@ -222,7 +223,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
       if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
-        CurrentState.throwIfCantInsertSiblingItem(itemPath)(draggedItemId)
+        CurrentState.throwIfCantInsertSiblingItem(itemPath, draggedItemId)
       }
 
       Internal.instance.saveCurrentStateToUndoStack()
@@ -236,7 +237,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
       if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
-        CurrentState.throwIfCantInsertSiblingItem(itemPath)(draggedItemId)
+        CurrentState.throwIfCantInsertSiblingItem(itemPath, draggedItemId)
       }
 
       Internal.instance.saveCurrentStateToUndoStack()
@@ -297,7 +298,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   if (draggedParentItemId === undefined) return
 
   if (itemId !== draggedParentItemId) {
-    CurrentState.throwIfCantInsertChildItem(itemId)(draggedItemId)
+    CurrentState.throwIfCantInsertChildItem(itemId, draggedItemId)
   }
 
   Internal.instance.saveCurrentStateToUndoStack()

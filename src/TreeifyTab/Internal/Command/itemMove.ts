@@ -20,7 +20,7 @@ export function indent() {
 
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    CurrentState.throwIfCantInsertChildItem(prevSiblingItemId)(selectedItemId)
+    CurrentState.throwIfCantInsertChildItem(prevSiblingItemId, selectedItemId)
   }
 
   // 兄を展開する
@@ -67,7 +67,7 @@ export function unindent() {
 
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    CurrentState.throwIfCantInsertSiblingItem(parentItemPath)(selectedItemId)
+    CurrentState.throwIfCantInsertSiblingItem(parentItemPath, selectedItemId)
   }
 
   for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
@@ -125,7 +125,7 @@ export function moveItemToAbove() {
   if (targetItemParentItemId !== aboveItemParentItemId) {
     for (const selectedItemPath of selectedItemPaths) {
       const selectedItemId = ItemPath.getItemId(selectedItemPath)
-      CurrentState.throwIfCantInsertSiblingItem(aboveItemPath)(selectedItemId)
+      CurrentState.throwIfCantInsertSiblingItem(aboveItemPath, selectedItemId)
     }
   }
 
@@ -179,7 +179,7 @@ export function moveItemToBelow() {
   // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
   if (targetItemParentItemId !== ItemPath.getParentItemId(firstFollowingItemPath)) {
     for (const selectedItemId of selectedItemIds) {
-      CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath)(selectedItemId)
+      CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath, selectedItemId)
     }
   }
 
@@ -263,7 +263,7 @@ export function moveItemToPrevSibling() {
 
           for (const selectedItemPath of selectedItemPaths) {
             const selectedItemId = ItemPath.getItemId(selectedItemPath)
-            CurrentState.throwIfCantInsertChildItem(newParentItemId)(selectedItemId)
+            CurrentState.throwIfCantInsertChildItem(newParentItemId, selectedItemId)
           }
 
           for (const selectedItemPath of selectedItemPaths) {

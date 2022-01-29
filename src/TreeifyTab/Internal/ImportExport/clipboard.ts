@@ -96,7 +96,8 @@ export function onPaste(event: ClipboardEvent) {
     if (text === External.instance.getTreeifyClipboardHash()) {
       if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
         for (const selectedItemPath of selectedItemPaths) {
-          CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+          CurrentState.throwIfCantInsertBelowItem(
+            targetItemPath,
             ItemPath.getItemId(selectedItemPath)
           )
         }
@@ -129,7 +130,8 @@ export function onPaste(event: ClipboardEvent) {
           ItemPath.getParentItemId(selectedItemPaths[0])
         ) {
           for (const selectedItemPath of selectedItemPaths) {
-            CurrentState.throwIfCantInsertBelowItem(targetItemPath)(
+            CurrentState.throwIfCantInsertBelowItem(
+              targetItemPath,
               ItemPath.getItemId(selectedItemPath)
             )
           }

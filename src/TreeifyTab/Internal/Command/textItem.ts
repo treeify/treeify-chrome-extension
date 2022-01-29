@@ -104,7 +104,7 @@ export function grouping() {
 
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
-    CurrentState.throwIfCantInsertChildItem(newItemId)(selectedItemId)
+    CurrentState.throwIfCantInsertChildItem(newItemId, selectedItemId)
   }
 
   // 選択された項目を移動する

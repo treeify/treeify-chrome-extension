@@ -30,7 +30,7 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   if (deleteOnlyItself) {
     for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
       for (const childItemId of item.childItemIds) {
-        CurrentState.throwIfCantInsertChildItem(parentItemId)(childItemId)
+        CurrentState.throwIfCantInsertChildItem(parentItemId, childItemId)
       }
     }
 
@@ -233,7 +233,7 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Ed
   CurrentState.addParent(newItemId, itemId, edge)
 }
 
-export const throwIfCantInsertChildItem = (itemId: ItemId) => (newItemId: ItemId) => {
+export function throwIfCantInsertChildItem(itemId: ItemId, newItemId: ItemId) {
   if (Internal.instance.state.items[itemId].childItemIds.includes(newItemId)) {
     throw new ShowMessage('兄弟リスト内での同一項目の重複は禁止されています')
   }
@@ -310,12 +310,12 @@ export function insertNextSiblingItem(
   return ItemPath.createSiblingItemPath(itemPath, newItemId)!
 }
 
-export const throwIfCantInsertSiblingItem = (itemPath: ItemPath) => (newItemId: ItemId) => {
+export function throwIfCantInsertSiblingItem(itemPath: ItemPath, newItemId: ItemId) {
   const parentItemId = ItemPath.getParentItemId(itemPath)
   // 親が居ない場合はこの関数を呼んではならない
   assertNonUndefined(parentItemId)
 
-  CurrentState.throwIfCantInsertChildItem(parentItemId)(newItemId)
+  CurrentState.throwIfCantInsertChildItem(parentItemId, newItemId)
 }
 
 /**
@@ -332,11 +332,11 @@ export function insertBelowItem(itemPath: ItemPath, newItemId: ItemId, edge?: Ed
   }
 }
 
-export const throwIfCantInsertBelowItem = (itemPath: ItemPath) => (newItemId: ItemId) => {
+export function throwIfCantInsertBelowItem(itemPath: ItemPath, newItemId: ItemId) {
   if (CurrentState.getDisplayingChildItemIds(itemPath).length > 0 || itemPath.length === 1) {
-    CurrentState.throwIfCantInsertChildItem(ItemPath.getItemId(itemPath))(newItemId)
+    CurrentState.throwIfCantInsertChildItem(ItemPath.getItemId(itemPath), newItemId)
   } else {
-    CurrentState.throwIfCantInsertSiblingItem(itemPath)(newItemId)
+    CurrentState.throwIfCantInsertSiblingItem(itemPath, newItemId)
   }
 }
 

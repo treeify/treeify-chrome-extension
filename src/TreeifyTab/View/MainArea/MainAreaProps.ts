@@ -564,7 +564,7 @@ function onBackspace(event: KeyboardEvent) {
     // テキスト項目同士のマージを行う
 
     for (const childItemId of targetItem.childItemIds) {
-      CurrentState.throwIfCantInsertChildItem(aboveItemId)(childItemId)
+      CurrentState.throwIfCantInsertChildItem(aboveItemId, childItemId)
     }
 
     Internal.instance.saveCurrentStateToUndoStack()
@@ -694,7 +694,7 @@ function onDelete(event: KeyboardEvent) {
     // ターゲット項目も下の項目もテキスト項目の場合、テキスト項目同士のマージを行う
 
     for (const childItemId of belowItem.childItemIds) {
-      CurrentState.throwIfCantInsertChildItem(targetItemId)(childItemId)
+      CurrentState.throwIfCantInsertChildItem(targetItemId, childItemId)
     }
 
     Internal.instance.saveCurrentStateToUndoStack()

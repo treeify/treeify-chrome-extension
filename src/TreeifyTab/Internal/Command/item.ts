@@ -259,7 +259,7 @@ export function deleteJustOneItem() {
     // 子がいる場合
 
     for (const childItemId of childItemIds) {
-      CurrentState.throwIfCantInsertChildItem(parentItemId)(childItemId)
+      CurrentState.throwIfCantInsertChildItem(parentItemId, childItemId)
     }
 
     // 最初の子をフォーカス
