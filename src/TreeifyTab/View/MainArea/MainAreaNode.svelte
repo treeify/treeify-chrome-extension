@@ -60,8 +60,10 @@
       >
         <MainAreaContent props={props.contentProps} />
       </div>
-      <!-- 隠れているタブ数 -->
-      {#if props.hiddenTabsCount > 0}
+      {#if props.itemPath.length === 1}
+        <div class="grid-empty-cell" />
+      {:else if props.hiddenTabsCount > 0}
+        <!-- 隠れているタブ数 -->
         <div class="main-area-node_hidden-tabs-count" on:mousedown={props.onClickHiddenTabsCount}>
           {Math.min(99, props.hiddenTabsCount)}
         </div>
