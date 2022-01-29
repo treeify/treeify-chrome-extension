@@ -52,6 +52,7 @@ export type State = {
       }
     }
   }
+  autoSyncWhenDetectSync: boolean
   leftEndMouseGestureEnabled: boolean
   rightEndMouseGestureEnabled: boolean
 }
