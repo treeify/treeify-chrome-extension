@@ -135,6 +135,11 @@ export function onPaste(event: ClipboardEvent) {
           }
         }
 
+        // 移動元と移動先が被っている際に起こるエラーの対策
+        if (selectedItemPaths.map(ItemPath.getItemId).includes(targetItemId)) {
+          return
+        }
+
         for (const selectedItemPath of reverse(selectedItemPaths)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const parentItemId = ItemPath.getParentItemId(selectedItemPath)
