@@ -13,25 +13,34 @@ import { NERArray$, RArray$ } from 'src/Utility/fp-ts'
 
 /** 選択された項目を折りたたむコマンド */
 export function fold() {
-  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
-    CurrentState.setIsFolded(selectedItemPath, true)
-    CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  if (ItemPath.hasParent(selectedItemPaths[0])) {
+    for (const selectedItemPath of selectedItemPaths) {
+      CurrentState.setIsFolded(selectedItemPath, true)
+      CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+    }
   }
 }
 
 /** 選択された項目を展開するコマンド */
 export function unfold() {
-  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
-    CurrentState.setIsFolded(selectedItemPath, false)
-    CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  if (ItemPath.hasParent(selectedItemPaths[0])) {
+    for (const selectedItemPath of selectedItemPaths) {
+      CurrentState.setIsFolded(selectedItemPath, false)
+      CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+    }
   }
 }
 
 /** ターゲット項目のisFoldedがtrueならfalseに、falseならtrueにするコマンド */
 export function toggleFolded() {
-  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
-    CurrentState.setIsFolded(selectedItemPath, !CurrentState.getIsFolded(selectedItemPath))
-    CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  if (ItemPath.hasParent(selectedItemPaths[0])) {
+    for (const selectedItemPath of selectedItemPaths) {
+      CurrentState.setIsFolded(selectedItemPath, !CurrentState.getIsFolded(selectedItemPath))
+      CurrentState.updateItemTimestamp(ItemPath.getItemId(selectedItemPath))
+    }
   }
 }
 
@@ -296,11 +305,10 @@ export function toggleCompleted() {
     // ヒューリスティックな追加効果
 
     Command.closeTreeTabs()
+    Command.fold()
     const bottomSelectedItemPath = NERArray$.last(selectedItemPaths)
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(bottomSelectedItemPath)
     if (firstFollowingItemPath !== undefined) {
-      // 完了時は折りたたむ。アクティブページ（firstFollowingItemPath !== undefinedのとき）にfoldコマンドを呼ぶとエラーになるのでここで呼ぶ
-      Command.fold()
       // フォーカスを下の項目に移動する
       CurrentState.setTargetItemPath(firstFollowingItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
