@@ -550,6 +550,11 @@ function onBackspace(event: KeyboardEvent) {
       return
     }
 
+    // 上の項目がテキスト項目以外の場合は何もしない
+    if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) return
+
+    // テキスト項目同士のマージを行う
+
     // ユーザー視点で何が起こったのか分かりにくいため、子項目リストの連結が必要な場合は何もしない
     if (
       targetItem.childItemIds.length > 0 &&
@@ -557,11 +562,6 @@ function onBackspace(event: KeyboardEvent) {
     ) {
       return
     }
-
-    // 上の項目がテキスト項目以外の場合は何もしない
-    if (Internal.instance.state.items[aboveItemId].type !== ItemType.TEXT) return
-
-    // テキスト項目同士のマージを行う
 
     for (const childItemId of targetItem.childItemIds) {
       CurrentState.throwIfCantInsertChildItem(aboveItemId, childItemId)
@@ -572,7 +572,9 @@ function onBackspace(event: KeyboardEvent) {
     const aboveItemDomishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
 
     if (
-      DomishObject.getTextLength(domishObjects) > DomishObject.getTextLength(aboveItemDomishObjects)
+      DomishObject.getTextLength(domishObjects) >
+        DomishObject.getTextLength(aboveItemDomishObjects) &&
+      aboveItemPath.length === targetItemPath.length
     ) {
       // 下の項目の方が文字数が多い場合、上の項目を下の項目にマージする
 
