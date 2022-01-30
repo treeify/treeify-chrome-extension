@@ -3,7 +3,7 @@
     PageTreeBulletAndIndentProps,
     PageTreeBulletState,
   } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-  import { RArray$ } from 'src/Utility/fp-ts/index.js'
+  import { RArray$ } from 'src/Utility/fp-ts'
 
   export let props: PageTreeBulletAndIndentProps
 </script>

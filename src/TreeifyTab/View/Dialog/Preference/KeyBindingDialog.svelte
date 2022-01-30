@@ -5,7 +5,7 @@
   import { CommandId, State } from 'src/TreeifyTab/Internal/State'
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-  import { commandNames } from 'src/TreeifyTab/View/commandNames.js'
+  import { commandNames } from 'src/TreeifyTab/View/commandNames'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
   import { RArray, RArray$ } from 'src/Utility/fp-ts'

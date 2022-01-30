@@ -1,6 +1,6 @@
 <script lang="ts">
   import { External } from 'src/TreeifyTab/External/External'
-  import { allLanguages } from 'src/TreeifyTab/highlightJs.js'
+  import { allLanguages } from 'src/TreeifyTab/highlightJs'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'

@@ -5,7 +5,7 @@
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
   import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
-  import { RArray$ } from 'src/Utility/fp-ts/index.js'
+  import { RArray$ } from 'src/Utility/fp-ts'
 
   export let props: MainAreaNodeProps
 
