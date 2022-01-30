@@ -795,7 +795,7 @@ async function undo() {
     return
   }
 
-  if (Internal.instance.undoStack.size > 0) {
+  if (Internal.instance.undoStackTop.size > 0) {
     Internal.instance.undo()
     Internal.instance.searchEngine = new SearchEngine(Internal.instance.state)
 
