@@ -147,12 +147,12 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   if (isSingleSelect && targetItemId !== TOP_ITEM_ID) {
     if (CurrentState.getExcludedItemIds().includes(targetItemId)) {
       result.push({
-        title: '現在のワークスペースからの除外を解除',
+        title: 'このツリーの除外を解除',
         onClick: () => Command.toggleExcluded(),
       })
     } else {
       result.push({
-        title: '現在のワークスペースのページツリーや検索結果から除外',
+        title: 'このツリーを検索結果やサイドバーから除外',
         onClick: () => Command.toggleExcluded(),
       })
     }
