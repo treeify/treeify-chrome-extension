@@ -5,13 +5,11 @@ import {
   getTextItemSelectionFromDom,
   setDomSelection,
 } from 'src/TreeifyTab/External/domTextSelection'
-import { External } from 'src/TreeifyTab/External/External'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
-import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -24,8 +22,7 @@ import {
   MainAreaNodeProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
 import { CssCustomProperty } from 'src/Utility/browser'
-import { assert, assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { dump } from 'src/Utility/Debug/logger'
+import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { NERArray$, RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { tick } from 'svelte'
@@ -768,33 +765,6 @@ function onSpace(event: KeyboardEvent) {
 }
 
 async function undo() {
-  // TODO: リリースまでに削除するかビルド設定で分岐する
-  if (External.instance.tabIdsToBeClosedForUnloading.size > 0) {
-    console.log('=============================================')
-    console.log('External.instance.tabIdsToBeClosedForUnloading.size > 0')
-    for (const tabId of External.instance.tabIdsToBeClosedForUnloading.values()) {
-      const tab = External.instance.tabItemCorrespondence.getTabByTabId(tabId)
-      dump(tab)
-      const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
-      dump(itemId)
-      if (itemId !== undefined) {
-        dump(extractPlainText(itemId))
-      }
-    }
-    console.log('=============================================')
-    assert(External.instance.tabIdsToBeClosedForUnloading.size === 0)
-    return
-  }
-  if (Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length > 0) {
-    console.log('=============================================')
-    for (const entry of External.instance.urlToItemIdsForTabCreation) {
-      dump(entry)
-    }
-    console.log('=============================================')
-    assert(Array.from(External.instance.urlToItemIdsForTabCreation.values()).flat().length === 0)
-    return
-  }
-
   if (Internal.instance.undoStackTop.size > 0) {
     Internal.instance.undo()
     Internal.instance.searchEngine = new SearchEngine(Internal.instance.state)

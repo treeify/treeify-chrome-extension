@@ -334,8 +334,6 @@ function handleErrorEvent(error: Error, event: Event) {
 }
 
 async function onOnline() {
-  console.log('onOnline', new Date().toLocaleDateString(), new Date().toLocaleTimeString())
-
   await prefetchOrAutoSyncIfDetectSync()
 }
 
