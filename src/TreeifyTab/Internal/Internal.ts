@@ -15,8 +15,8 @@ export class Internal {
   /** Treeifyの項目の全文検索エンジン */
   searchEngine: SearchEngine
 
-  // TODO: スタック化する
-  readonly undoStack = new Map<ChunkId, any>()
+  readonly undoStack: Map<ChunkId, any>[] = [new Map()]
+  static UNDO_STACK_SIZE_LIMIT = 7
 
   private readonly onMutateListeners = new Set<(statePath: StatePath) => void>()
 
@@ -54,8 +54,8 @@ export class Internal {
     if (objectPath.get(this.state, propertyKeys) !== value) {
       // Undo用にミューテート前のデータを退避する
       const chunkId = Chunk.convertToChunkId(statePath)
-      if (!this.undoStack.has(chunkId)) {
-        this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
+      if (!this.undoStackTop.has(chunkId)) {
+        this.undoStackTop.set(chunkId, Chunk.create(this.state, chunkId).data)
       }
 
       objectPath.set(this.state, propertyKeys, value)
@@ -70,8 +70,8 @@ export class Internal {
   delete(statePath: StatePath) {
     // Undo用にミューテート前のデータを退避する
     const chunkId = Chunk.convertToChunkId(statePath)
-    if (!this.undoStack.has(chunkId)) {
-      this.undoStack.set(chunkId, Chunk.create(this.state, chunkId).data)
+    if (!this.undoStackTop.has(chunkId)) {
+      this.undoStackTop.set(chunkId, Chunk.create(this.state, chunkId).data)
     }
 
     const propertyKeys = statePath.map(String)
@@ -86,13 +86,20 @@ export class Internal {
     this.onMutateListeners.add(listener)
   }
 
+  get undoStackTop() {
+    return this.undoStack[this.undoStack.length - 1]
+  }
+
   /** 現在のStateをUndoスタックに保存する */
   saveCurrentStateToUndoStack() {
-    this.undoStack.clear()
+    this.undoStack.push(new Map())
+    if (this.undoStack.length > Internal.UNDO_STACK_SIZE_LIMIT) {
+      this.undoStack.shift()
+    }
   }
 
   undo() {
-    for (const [chunkId, savedData] of this.undoStack) {
+    for (const [chunkId, savedData] of this.undoStackTop) {
       const propertyKeys = chunkId.split(Chunk.delimiter)
       if (savedData !== undefined) {
         objectPath.set(this.state, propertyKeys, savedData)
@@ -100,7 +107,11 @@ export class Internal {
         objectPath.del(this.state, propertyKeys)
       }
     }
-    this.undoStack.clear()
+    if (this.undoStack.length === 1) {
+      this.undoStackTop.clear()
+    } else {
+      this.undoStack.pop()
+    }
   }
 
   dumpCurrentState() {
