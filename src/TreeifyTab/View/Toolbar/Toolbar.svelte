@@ -35,8 +35,8 @@
 
 <div class="toolbar_root">
   {#if process.env.NODE_ENV !== 'prod'}
-    <button on:click={onClickOpmlExport}>OPMLエクスポート</button>
-    <button on:click={onClickStateValidation}>バリデーション</button>
+    <button on:mousedown|preventDefault={onClickOpmlExport}>OPMLエクスポート</button>
+    <button on:mousedown|preventDefault={onClickStateValidation}>バリデーション</button>
   {/if}
   <SyncButton props={props.syncButtonProps} />
   <ItemAdditionButton />

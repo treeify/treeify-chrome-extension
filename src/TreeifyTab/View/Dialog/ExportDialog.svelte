@@ -191,11 +191,11 @@
       {/if}
     </div>
     <div class="export-dialog_button-area">
-      <button class="export-dialog_copy-button" on:click={onClickCopyButton}>
+      <button class="export-dialog_copy-button" on:mousedown|preventDefault={onClickCopyButton}>
         <div class="export-dialog_copy-button-icon" />
         クリップボードにコピー
       </button>
-      <button class="export-dialog_save-button" on:click={onClickSaveButton}>
+      <button class="export-dialog_save-button" on:mousedown|preventDefault={onClickSaveButton}>
         <div class="export-dialog_save-button-icon" />
         ファイルとして保存
       </button>

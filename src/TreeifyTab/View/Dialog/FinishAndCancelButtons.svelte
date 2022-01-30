@@ -4,10 +4,16 @@
 </script>
 
 <div class="finish-and-cancel-buttons_root">
-  <button class="finish-and-cancel-buttons_finish-button" on:click={onClickFinishButton}>
+  <button
+    class="finish-and-cancel-buttons_finish-button"
+    on:mousedown|preventDefault={onClickFinishButton}
+  >
     完了
   </button>
-  <button class="finish-and-cancel-buttons_cancel-button" on:click={onClickCancelButton}>
+  <button
+    class="finish-and-cancel-buttons_cancel-button"
+    on:mousedown|preventDefault={onClickCancelButton}
+  >
     キャンセル
   </button>
 </div>

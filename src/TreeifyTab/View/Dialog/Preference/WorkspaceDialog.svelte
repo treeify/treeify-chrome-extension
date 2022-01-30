@@ -67,12 +67,14 @@
         />
         <div
           class="workspace-dialog_delete-button"
-          on:click={() => onClickDeleteButton(workspace)}
+          on:mousedown|preventDefault={() => onClickDeleteButton(workspace)}
         />
       </div>
     {/each}
     <div>
-      <button class="workspace-dialog_add-button" on:click={onClickAddButton}>新規作成</button>
+      <button class="workspace-dialog_add-button" on:mousedown|preventDefault={onClickAddButton}>
+        新規作成
+      </button>
     </div>
   </div>
 </CommonDialog>

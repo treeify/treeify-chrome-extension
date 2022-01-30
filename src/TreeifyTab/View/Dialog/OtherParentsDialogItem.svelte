@@ -5,7 +5,7 @@
   export let props: OtherParentsDialogItemProps
 </script>
 
-<div class="other-parents-dialog-item_root" on:click={props.onClick}>
+<div class="other-parents-dialog-item_root" on:mousedown|preventDefault={props.onClick}>
   <ItemContent props={props.itemContentProps} />
 </div>
 

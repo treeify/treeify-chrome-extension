@@ -115,7 +115,9 @@
       </label>
     </div>
     <div class="replace-dialog_button-area">
-      <button class="replace-dialog_submit-button" on:click={onSubmit}>全て置換</button>
+      <button class="replace-dialog_submit-button" on:mousedown|preventDefault={onSubmit}>
+        全て置換
+      </button>
     </div>
   </div>
 </CommonDialog>
