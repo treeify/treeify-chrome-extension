@@ -145,6 +145,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 }
 
 function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
+  console.log('onDrop', 1)
   const leftSidebar = document.querySelector('.left-sidebar_root')
   assertNonNull(leftSidebar)
   if (leftSidebar.getBoundingClientRect().right < event.clientX) {
@@ -159,23 +160,28 @@ function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
 }
 
 function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
+  console.log('onDropIntoMainArea', 1)
   // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
   const parentItemId = ItemPath.getParentItemId(draggedItemPath)
   if (parentItemId === undefined) return
 
+  console.log('onDropIntoMainArea', 2)
   const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
   if (itemElement === undefined) return
 
+  console.log('onDropIntoMainArea', 3)
   const itemPath: ItemPath = JSON.parse(itemElement.dataset.itemPath!)
 
   const rect = itemElement.getBoundingClientRect()
   if (event.clientX < rect.x) {
     // Rollへのドロップの場合
 
+    console.log('onDropIntoMainArea', 4)
     // どの項目のRollにドロップしたかを探索する
     const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
     if (rollDroppedItemPath === undefined) return
 
+    console.log('onDropIntoMainArea', 5)
     const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
@@ -191,9 +197,11 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     const isPageOrFolded =
       CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
     if (isPageOrFolded) {
+      console.log('onDropIntoMainArea', 6)
       CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
       CurrentState.setTargetItemPath(rollDroppedItemPath)
     } else {
+      console.log('onDropIntoMainArea', 7)
       CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
       CurrentState.setTargetItemPath(RArray$.append(draggedItemId)(rollDroppedItemPath))
     }
@@ -202,6 +210,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     Rerenderer.instance.rerender()
   } else {
     // Roll以外の場所へのドロップの場合
+    console.log('onDropIntoMainArea', 8)
 
     if (RArray$.shallowEqual(RArray$.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
@@ -213,14 +222,17 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
+    console.log('onDropIntoMainArea', 9)
     // ドロップ先要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
     const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
     if (ratio <= 0.5) {
       // ドロップ先座標がドロップ先要素の上の方の場合
 
+      console.log('onDropIntoMainArea', 10)
       // ドロップ先がアクティブページなら何もしない
       if (!ItemPath.hasParent(itemPath)) return
 
+      console.log('onDropIntoMainArea', 11)
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
       if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
         CurrentState.throwIfCantInsertSiblingItem(itemPath, draggedItemId)
@@ -235,6 +247,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     } else {
       // ドロップ先座標がドロップ先要素の下の方の場合
 
+      console.log('onDropIntoMainArea', 12)
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
       if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
         CurrentState.throwIfCantInsertSiblingItem(itemPath, draggedItemId)
@@ -285,6 +298,7 @@ function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath | 
 }
 
 function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
+  console.log('onDropIntoLeftSidebar', 1)
   const element = searchLeftSidebarElementByYCoordinate(event.clientY)
   if (element === undefined) return
 
@@ -293,6 +307,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
 
   const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
+  console.log('onDropIntoLeftSidebar', 2)
   // エッジの付け替えを行うので、エッジが定義されない場合は何もしない
   const draggedParentItemId = ItemPath.getParentItemId(draggedItemPath)
   if (draggedParentItemId === undefined) return
