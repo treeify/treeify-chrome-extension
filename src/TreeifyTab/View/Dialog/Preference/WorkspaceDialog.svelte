@@ -4,6 +4,7 @@
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Workspace } from 'src/TreeifyTab/Internal/State'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { assert } from 'src/Utility/Debug/assert'
   import { fly } from 'svelte/transition'
 
   type WorkspaceRow = { id: WorkspaceId } & Pick<Workspace, 'name'>
@@ -39,12 +40,10 @@
   }
 
   const onClickDeleteButton = (workspace: WorkspaceRow) => {
-    if (Object.keys(Internal.instance.state.workspaces).length === 1) {
-      alert('ワークスペースを0個にはできません')
-    } else {
-      CurrentState.deleteWorkspace(workspace.id)
-      workspaceArray = getStateWorkspaceArray()
-    }
+    assert(Object.keys(Internal.instance.state.workspaces).length > 1)
+
+    CurrentState.deleteWorkspace(workspace.id)
+    workspaceArray = getStateWorkspaceArray()
   }
 </script>
 
@@ -65,10 +64,14 @@
           value={workspace.name}
           on:input={(event) => onInput(event, workspace)}
         />
-        <div
-          class="workspace-dialog_delete-button"
-          on:mousedown|preventDefault={() => onClickDeleteButton(workspace)}
-        />
+        {#if workspaceArray.length > 1}
+          <div
+            class="workspace-dialog_delete-button"
+            on:mousedown|preventDefault={() => onClickDeleteButton(workspace)}
+          />
+        {:else}
+          <div class="workspace-dialog_delete-button-space" />
+        {/if}
       </div>
     {/each}
     <div>
@@ -81,6 +84,10 @@
 
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
+
+  :root {
+    --workspace-dialog-delete-button-size: 1.5em;
+  }
 
   .workspace-dialog_content {
     padding: 1em;
@@ -110,7 +117,7 @@
   }
 
   .workspace-dialog_delete-button {
-    @include common.circle(1.5em);
+    @include common.circle(var(--workspace-dialog-delete-button-size));
     // lch(90.0%, 0.0, 0.0)相当
     @include common.pseudo-ripple-effect(#e2e2e2);
 
@@ -122,6 +129,10 @@
       // lch(40.0%, 0.0, 0.0)相当
       @include common.icon(#5e5e5e, url('./trash-can.svg'));
     }
+  }
+
+  .workspace-dialog_delete-button-space {
+    @include common.circle(var(--workspace-dialog-delete-button-size));
   }
 
   .workspace-dialog_add-button {
