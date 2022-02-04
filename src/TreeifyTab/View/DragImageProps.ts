@@ -51,7 +51,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       try {
         CurrentState.throwIfCantInsertChildItem(
           ItemPath.getItemId(rollDroppedItemPath),
-          ItemPath.getItemId(itemPath)
+          ItemPath.getItemId(draggedItemPath)
         )
       } catch {
         return ''
