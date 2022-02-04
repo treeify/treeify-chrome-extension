@@ -48,6 +48,9 @@
     height: 100%;
     margin: 0;
     font-size: inherit;
+
+    // lch(50.0%, 134.0, 280.4)相当
+    accent-color: #0077dd;
   }
 
   img {
