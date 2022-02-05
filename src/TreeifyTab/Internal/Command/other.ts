@@ -117,12 +117,6 @@ async function syncWithGoogleDrive() {
 }
 
 async function getState(metaData: GoogleDrive.DataFileMataData): Promise<State> {
-  if (External.instance.backgroundDownload?.modifiedTime === metaData.modifiedTime) {
-    const promise = External.instance.backgroundDownload.promise
-    External.instance.backgroundDownload = undefined
-    return await promise
-  }
-
   const response = await GoogleDrive.readFile(metaData.id)
   const text = await decompress(await response.arrayBuffer())
   return JSON.parse(text)

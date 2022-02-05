@@ -3,7 +3,6 @@ import { ItemId } from 'src/TreeifyTab/basicType'
 import { DialogState } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { State } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
@@ -25,12 +24,6 @@ export class External {
    * TODO: この変数は本来は永続化されるべき。再起動時点で同期済みかどうかは状況次第なので。
    */
   hasUpdatedSinceSync = true
-
-  /**
-   * バックグラウンドでダウンロードしているデータファイルの情報。
-   * 現在はGoogle Driveのみを想定した設計になっている。
-   */
-  backgroundDownload: { modifiedTime: string; promise: Promise<State> } | undefined
 
   /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()

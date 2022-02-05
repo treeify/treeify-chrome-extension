@@ -30,7 +30,6 @@ import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { ShowMessage } from 'src/Utility/Debug/error'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
-import { decompress } from 'src/Utility/gzip'
 import { integer } from 'src/Utility/integer'
 import Alarm = chrome.alarms.Alarm
 import OnClickData = chrome.contextMenus.OnClickData
@@ -346,18 +345,6 @@ export async function prefetchOrAutoSyncIfDetectSync() {
 
   if (metaData.modifiedTime === syncedAt) return
 
-  if (Internal.instance.state.autoSyncWhenDetectSync) {
-    Command.syncTreeifyData()
-  } else {
-    External.instance.backgroundDownload = {
-      modifiedTime: metaData.modifiedTime,
-      promise: call(async () => {
-        const response = await GoogleDrive.readFile(metaData.id)
-        const text = await decompress(await response.arrayBuffer())
-        const state: State = JSON.parse(text)
-        return state
-      }),
-    }
-  }
+  Command.syncTreeifyData()
   Rerenderer.instance.rerender()
 }

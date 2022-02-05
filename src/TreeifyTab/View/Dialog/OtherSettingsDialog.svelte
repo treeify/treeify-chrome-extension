@@ -5,11 +5,8 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
 
-  let autoSyncWhenDetectSync = Internal.instance.state.autoSyncWhenDetectSync
   let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
   let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
-
-  $: Internal.instance.mutate(autoSyncWhenDetectSync, StatePath.of('autoSyncWhenDetectSync'))
 
   $: Internal.instance.mutate(
     leftEndMouseGestureEnabled,
@@ -30,10 +27,6 @@
 <CommonDialog class="other-settings-dialog_root" title="その他の設定">
   <div class="other-settings-dialog_content" tabindex="0">
     <div class="other-settings-dialog_checkbox-area">
-      <label class="other-settings-dialog_checkbox-label">
-        <input type="checkbox" bind:checked={autoSyncWhenDetectSync} />
-        他デバイスで同期されたデータを検知したら自動的に同期する
-      </label>
       <label class="other-settings-dialog_checkbox-label">
         <input type="checkbox" bind:checked={leftEndMouseGestureEnabled} />
         マウスを画面左端まで動かすとTreeifyタブを表示

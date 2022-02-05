@@ -16,7 +16,6 @@
     class="sync-button_cloud-icon"
     class:checked={!props.hasUpdatedSinceSync}
     class:disabled={props.isInSync}
-    class:download={props.isDownload}
   />
 </ToolbarIconButton>
 
@@ -34,10 +33,6 @@
     @include common.square(24px);
     @include common.absolute-center;
     @include common.icon(var(--sync-button-icon-color), url('cloud-upload.svg'));
-
-    &.download {
-      @include common.icon-url(url('cloud-download.svg'));
-    }
 
     &.checked {
       @include common.icon-url(url('cloud-check.svg'));

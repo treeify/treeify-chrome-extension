@@ -218,7 +218,6 @@ export class Internal {
           },
         },
       },
-      autoSyncWhenDetectSync: true,
       leftEndMouseGestureEnabled: true,
       rightEndMouseGestureEnabled: false,
     }
