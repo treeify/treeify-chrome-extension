@@ -28,8 +28,6 @@ export function syncTreeifyData() {
 }
 
 async function syncWithGoogleDrive() {
-  const DATA_FILE_NAME = 'Treeify data.json.gz'
-
   const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
   // TODO: リリースする前にログ出力を削除する
   dump(dataFileMetaData)
@@ -38,11 +36,9 @@ async function syncWithGoogleDrive() {
     console.log('データファイルがない場合')
 
     console.log('create APIを呼んでファイル更新日時を記録して終了')
-    // create APIを呼んでファイル更新日時を記録して終了
-    const gzipped = await compress(JSON.stringify(Internal.instance.state))
-    const response = await GoogleDrive.createFileWithMultipart(DATA_FILE_NAME, new Blob(gzipped))
-    const responseJson = await response.json()
-    setSyncedAt(responseJson.modifiedTime)
+    // データファイルを作成し、日時を記録して終了
+    const modifiedTime = await GoogleDrive.createDataFile(Internal.instance.state)
+    setSyncedAt(modifiedTime)
     External.instance.hasUpdatedSinceSync = false
     Rerenderer.instance.rerender()
   } else {

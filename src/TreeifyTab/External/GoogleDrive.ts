@@ -1,10 +1,13 @@
 import dayjs from 'dayjs'
 import { pipe } from 'fp-ts/function'
+import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNonNull } from 'src/Utility/Debug/assert'
 import { Option$, RArray$ } from 'src/Utility/fp-ts'
+import { compress } from 'src/Utility/gzip'
 
 export namespace GoogleDrive {
-  const DATA_FILE_NAME = 'Treeify data.json.gz'
+  const SNAPSHOT_FILE_NAME = 'snapshot.json.gz'
+  const DATA_FOLDER_NAME = 'Treeify'
 
   async function getAccessToken(): Promise<string> {
     return new Promise<string>((resolve) => {
@@ -19,7 +22,7 @@ export namespace GoogleDrive {
   }
 
   export async function fetchDataFileMetaData(): Promise<DataFileMataData | undefined> {
-    const dataFiles = await GoogleDrive.searchFile(DATA_FILE_NAME)
+    const dataFiles = await GoogleDrive.searchFile(SNAPSHOT_FILE_NAME)
     // タイムスタンプが最新のデータファイルを選ぶ。
     // 複数が該当する場合はIDのソート順で先頭のものを選ぶ。
     return pipe(
@@ -56,11 +59,31 @@ export namespace GoogleDrive {
     })
   }
 
+  /**
+   * データファイルとそれを格納するフォルダを作成する。
+   * Google Drive内にTreeifyのデータファイルが存在しない場合に呼び出される。
+   */
+  export async function createDataFile(state: State) {
+    const folderResponse = await createFolder(DATA_FOLDER_NAME)
+    const folderResponseJson = await folderResponse.json()
+
+    const gzipped = await compress(JSON.stringify(state))
+    const fileResponse = await GoogleDrive.createFileWithMultipart(
+      SNAPSHOT_FILE_NAME,
+      new Blob(gzipped),
+      folderResponseJson.id
+    )
+    const responseJson = await fileResponse.json()
+    return responseJson.modifiedTime
+  }
+
   export async function createFileWithMultipart(
     fileName: string,
-    fileContent: Blob
+    fileContent: Blob,
+    folderId?: string
   ): Promise<Response> {
-    const metadata = JSON.stringify({ name: fileName })
+    const parents = folderId !== undefined ? [folderId] : []
+    const metadata = JSON.stringify({ name: fileName, parents })
     const formData = new FormData()
     formData.append('metadata', new Blob([metadata], { type: 'application/json' }))
     formData.append('data', fileContent, fileName)
@@ -68,6 +91,28 @@ export namespace GoogleDrive {
     const params = new URLSearchParams({
       uploadType: 'multipart',
       fields: 'modifiedTime',
+    })
+    const url = `https://www.googleapis.com/upload/drive/v3/files?${params}`
+    return await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${await getAccessToken()}`,
+      },
+      body: formData,
+    })
+  }
+
+  export async function createFolder(folderName: string): Promise<Response> {
+    const metadata = JSON.stringify({
+      name: folderName,
+      mimeType: 'application/vnd.google-apps.folder',
+    })
+    const formData = new FormData()
+    formData.append('metadata', new Blob([metadata], { type: 'application/json' }))
+
+    const params = new URLSearchParams({
+      uploadType: 'multipart',
+      fields: 'id',
     })
     const url = `https://www.googleapis.com/upload/drive/v3/files?${params}`
     return await fetch(url, {
