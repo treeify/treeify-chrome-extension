@@ -107,7 +107,7 @@ export class Rerenderer {
         const targetItemPath = CurrentState.getTargetItemPath()
         const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
         const focusableElement = document.getElementById(targetElementId)
-        focusableElement?.focus()
+        focusableElement?.focus({ preventScroll: true })
       } else {
         // 複数選択の場合
         focusMainAreaBackground()
@@ -126,7 +126,7 @@ export class Rerenderer {
       const targetItemPath = CurrentState.getTargetItemPath()
       const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
       const focusableElement = document.getElementById(targetElementId)
-      focusableElement?.focus()
+      focusableElement?.focus({ preventScroll: true })
 
       if (document.activeElement !== null) {
         // キャレット位置、テキスト選択範囲を設定する

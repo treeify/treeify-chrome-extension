@@ -269,7 +269,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     const aboveItemDomElementId = MainAreaContentView.focusableDomElementId(aboveItemPath)
     const aboveItemDomElement = document.getElementById(aboveItemDomElementId)
     assertNonNull(aboveItemDomElement)
-    aboveItemDomElement.focus()
+    aboveItemDomElement.focus({ preventScroll: true })
 
     const textLength = DomishObject.getTextLength(aboveItemDomishObjects)
     // キャレット位置を最後の行の右端からスタートし、左にずらしていく
@@ -398,7 +398,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
     const belowItemDomElementId = MainAreaContentView.focusableDomElementId(belowItemPath)
     const belowItemDomElement = document.getElementById(belowItemDomElementId)
     assertNonNull(belowItemDomElement)
-    belowItemDomElement.focus()
+    belowItemDomElement.focus({ preventScroll: true })
 
     let i = 0
     for (; i < firstLine.length; i++) {

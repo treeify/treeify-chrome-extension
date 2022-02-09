@@ -138,7 +138,7 @@ function getTextLength(node: Node): integer {
  */
 export function focusMainAreaBackground() {
   const mainArea = document.querySelector<HTMLElement>('.main-area_root')
-  mainArea?.focus()
+  mainArea?.focus({ preventScroll: true })
   // focusだけでなくselectionも設定しないとcopyイベント等が発行されない
   if (mainArea instanceof Node) {
     getSelection()?.setPosition(mainArea)
