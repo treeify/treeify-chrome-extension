@@ -1,10 +1,18 @@
-<div class="loading-indicator_root" />
+<script lang="ts">
+  export let size = '100%'
+
+  $: style = `
+    --size: ${size};
+  `
+</script>
+
+<div class="loading-indicator_root" {style} />
 
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
   .loading-indicator_root {
-    @include common.circle(100%);
+    @include common.circle(var(--size));
     position: absolute;
     top: 50%;
     left: 50%;
