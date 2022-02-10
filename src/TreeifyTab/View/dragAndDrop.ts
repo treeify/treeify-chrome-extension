@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -55,6 +56,7 @@ export function onItemDrop(
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 ) {
   function onMouseUp(event: MouseEvent) {
+    console.log('onMouseUp', currentDragData, dayjs().format('MM/DD HH:mm:ss'))
     if (currentDragData?.type === 'ItemDragData') {
       onDrop(event, currentDragData.itemPath)
       currentDragData = undefined
