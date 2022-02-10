@@ -298,7 +298,12 @@ function createDateTimeText(reminderSetting: ReminderSetting): string {
 async function onIdleStateChanged(idleState: IdleState) {
   if (idleState !== 'active') return
 
-  console.log('onIdleState active', 'window.navigator.onLine =', window.navigator.onLine)
+  console.log(
+    'onIdleState active',
+    'window.navigator.onLine =',
+    window.navigator.onLine,
+    dayjs().format('MM/DD HH:mm:ss')
+  )
 
   if (!window.navigator.onLine) return
 
@@ -335,7 +340,7 @@ function handleErrorEvent(error: Error, event: Event) {
 }
 
 async function onOnline() {
-  console.log('onOnline')
+  console.log('onOnline', dayjs().format('MM/DD HH:mm:ss'))
   await prefetchOrAutoSyncIfDetectSync()
 }
 
