@@ -24,6 +24,7 @@ export function syncTreeifyData() {
     Rerenderer.instance.rerender()
   }).finally(() => {
     External.instance.isInSync = false
+    Rerenderer.instance.rerender()
   })
 }
 
