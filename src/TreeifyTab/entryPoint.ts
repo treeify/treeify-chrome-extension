@@ -3,7 +3,7 @@ import { registerLanguages } from 'src/TreeifyTab/highlightJs'
 import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
-import { prefetchOrAutoSyncIfDetectSync, startup } from 'src/TreeifyTab/startup'
+import { startAutoSync, startup } from 'src/TreeifyTab/startup'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import Tab = chrome.tabs.Tab
@@ -52,5 +52,5 @@ call(async () => {
   const chunks = await Database.getAllChunks()
   await startup(Chunk.inflateStateFromChunks(chunks))
 
-  await prefetchOrAutoSyncIfDetectSync()
+  await startAutoSync()
 })

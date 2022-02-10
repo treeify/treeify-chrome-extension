@@ -307,7 +307,7 @@ async function onIdleStateChanged(idleState: IdleState) {
 
   if (!window.navigator.onLine) return
 
-  await prefetchOrAutoSyncIfDetectSync()
+  await startAutoSync()
 }
 
 async function getLastFocusedWindowId(): Promise<integer> {
@@ -341,10 +341,10 @@ function handleErrorEvent(error: Error, event: Event) {
 
 async function onOnline() {
   console.log('onOnline', dayjs().format('MM/DD HH:mm:ss'))
-  await prefetchOrAutoSyncIfDetectSync()
+  await startAutoSync()
 }
 
-export async function prefetchOrAutoSyncIfDetectSync() {
+export async function startAutoSync() {
   const syncedAt = getSyncedAt()
   if (syncedAt === undefined) return
 
