@@ -1,5 +1,6 @@
 <script lang="ts">
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
+  import LoadingIndicator from 'src/TreeifyTab/View/LoadingIndicator.svelte'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaWebPageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
   import Source from 'src/TreeifyTab/View/Source.svelte'
@@ -24,7 +25,7 @@
           <div class="main-area-web-page-content_default-favicon" />
         {/if}
         {#if props.isLoading}
-          <div class="loading-indicator" />
+          <LoadingIndicator />
         {/if}
       </div>
     </div>
@@ -114,33 +115,6 @@
     @include common.absolute-center;
 
     @include common.default-favicon;
-  }
-
-  // ローディングインジケータ
-  .loading-indicator {
-    @include common.circle(100%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-
-    border-radius: 50%;
-    // lch(30.0%, 0.0, 0.0)相当
-    border-top: 3px solid #474747;
-    // lch(70.0%, 0.0, 0.0)相当
-    border-right: 3px solid #ababab;
-    border-bottom: 3px solid #ababab;
-    border-left: 3px solid #ababab;
-    animation: rotation 0.8s infinite linear;
-  }
-
-  @keyframes rotation {
-    0% {
-      transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-      transform: translate(-50%, -50%) rotate(360deg);
-    }
   }
 
   // ウェブページ項目の音がなっていることを示すアイコン
