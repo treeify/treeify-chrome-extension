@@ -20,7 +20,7 @@ import { integer } from 'src/Utility/integer'
 
 export const onMessage = (message: any, sender: MessageSender) => {
   call(async () => {
-    const height = window.innerHeight
+    const height = window.screen.availHeight
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
         if (!Internal.instance.state.leftEndMouseGestureEnabled) break
