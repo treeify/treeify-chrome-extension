@@ -1,5 +1,6 @@
 <script lang="ts">
   import { WorkspaceId } from 'src/TreeifyTab/basicType'
+  import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Workspace } from 'src/TreeifyTab/Internal/State'
@@ -23,7 +24,7 @@
 
   function onClickAddButton() {
     const workspaceId = CurrentState.createWorkspace()
-    CurrentState.setCurrentWorkspaceId(workspaceId)
+    External.instance.setCurrentWorkspaceId(workspaceId)
     workspaceArray = getStateWorkspaceArray()
   }
 
@@ -35,7 +36,7 @@
   }
 
   const onClickRadioButton = (workspace: WorkspaceRow) => {
-    CurrentState.setCurrentWorkspaceId(workspace.id)
+    External.instance.setCurrentWorkspaceId(workspace.id)
     workspaceArray = getStateWorkspaceArray()
   }
 
@@ -55,7 +56,7 @@
           type="radio"
           name="currentWorkspaceId"
           value={workspace.id.toString()}
-          checked={workspace.id === CurrentState.getCurrentWorkspaceId()}
+          checked={workspace.id === External.instance.getCurrentWorkspaceId()}
           on:input={() => onClickRadioButton(workspace)}
         />
         <input

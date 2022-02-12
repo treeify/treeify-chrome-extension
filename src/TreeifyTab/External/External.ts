@@ -1,7 +1,9 @@
 import { DefaultMap } from 'mnemonist'
-import { ItemId } from 'src/TreeifyTab/basicType'
+import { ItemId, WorkspaceId } from 'src/TreeifyTab/basicType'
 import { DialogState } from 'src/TreeifyTab/External/DialogState'
 import { TabItemCorrespondence } from 'src/TreeifyTab/External/TabItemCorrespondence'
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { TabId } from 'src/Utility/browser'
@@ -13,6 +15,8 @@ import { integer } from 'src/Utility/integer'
 /** TODO: コメント */
 export class External {
   static #instance: External | undefined
+
+  private static readonly CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
 
   dialogState: DialogState | undefined
 
@@ -29,6 +33,8 @@ export class External {
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 
   lastFocusedWindowId: integer = undefined as any
+
+  currentWorkspaceId: WorkspaceId | undefined
 
   /** 既存のウェブページ項目に対応するタブを開いた際、タブ作成イベントリスナーで項目IDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new DefaultMap<string, RArray<ItemId>>(() => [])
@@ -80,6 +86,36 @@ export class External {
     } else {
       await chrome.tabs.remove(tabId)
     }
+  }
+
+  /** このインスタンスにおける現在のワークスペースのIDを返す */
+  getCurrentWorkspaceId(): WorkspaceId {
+    if (this.currentWorkspaceId !== undefined) {
+      return this.currentWorkspaceId
+    }
+
+    const savedCurrentWorkspaceId = localStorage.getItem(External.CURRENT_WORKSPACE_ID_KEY)
+    if (savedCurrentWorkspaceId !== null) {
+      const parsedCurrentWorkspaceId = Number(savedCurrentWorkspaceId)
+      if (Internal.instance.state.workspaces[parsedCurrentWorkspaceId] !== undefined) {
+        // ローカルに保存されたvalidなワークスペースIDがある場合
+
+        this.currentWorkspaceId = parsedCurrentWorkspaceId
+        return this.currentWorkspaceId
+      }
+    }
+
+    // 既存のワークスペースを適当に選んでIDを返す。
+    // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
+    this.currentWorkspaceId = CurrentState.getWorkspaceIds()[0]
+    localStorage.setItem(External.CURRENT_WORKSPACE_ID_KEY, this.currentWorkspaceId.toString())
+    return this.currentWorkspaceId
+  }
+
+  /** このインスタンスにおける現在のワークスペースのIDを設定する */
+  setCurrentWorkspaceId(workspaceId: WorkspaceId) {
+    this.currentWorkspaceId = workspaceId
+    localStorage.setItem(External.CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
   }
 
   dumpCurrentState() {

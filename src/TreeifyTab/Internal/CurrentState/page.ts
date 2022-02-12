@@ -1,5 +1,6 @@
 import { pipe } from 'fp-ts/function'
 import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
+import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -32,12 +33,12 @@ export function switchActivePage(itemId: ItemId, withoutMount: boolean = false) 
 
 /** 現在のワークスペースのactiveItemIdを返す */
 export function getActivePageId(): ItemId {
-  return Internal.instance.state.workspaces[CurrentState.getCurrentWorkspaceId()].activePageId
+  return Internal.instance.state.workspaces[External.instance.getCurrentWorkspaceId()].activePageId
 }
 
 /** 現在のワークスペースのactiveItemIdを設定する */
 export function setActivePageId(itemId: ItemId) {
-  const currentWorkspaceId = CurrentState.getCurrentWorkspaceId()
+  const currentWorkspaceId = External.instance.getCurrentWorkspaceId()
   Internal.instance.mutate(itemId, StatePath.of('workspaces', currentWorkspaceId, 'activePageId'))
 }
 

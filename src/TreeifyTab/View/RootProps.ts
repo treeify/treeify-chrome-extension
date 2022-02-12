@@ -1,5 +1,5 @@
 import { WorkspaceId } from 'src/TreeifyTab/basicType'
-import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { External } from 'src/TreeifyTab/External/External'
 import { State } from 'src/TreeifyTab/Internal/State'
 import {
   createDialogLayerProps,
@@ -31,6 +31,6 @@ export function createRootProps(state: State): RootProps {
     toolbarProps: createToolbarProps(),
     dialogLayerProps: createDialogLayerProps(),
     dragImageProps: createDragImageProps(),
-    currentWorkspaceId: CurrentState.getCurrentWorkspaceId(),
+    currentWorkspaceId: External.instance.getCurrentWorkspaceId(),
   }
 }

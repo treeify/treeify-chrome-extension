@@ -2,6 +2,7 @@
   import { pipe } from 'fp-ts/function'
   import { MultiSet } from 'mnemonist'
   import { ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
+  import { External } from 'src/TreeifyTab/External/External'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -22,7 +23,7 @@
   let searchResult: SearchResult | undefined
   $: searchResult = makeSearchResult(hitItemIds, RSet$.from(checkedItemTypes))
 
-  const workspaceId = CurrentState.getCurrentWorkspaceId()
+  const workspaceId = External.instance.getCurrentWorkspaceId()
   const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
 
   function onContentAreaKeyDown(event: KeyboardEvent) {
@@ -73,7 +74,7 @@
       event.preventDefault()
 
       // 検索履歴に保存
-      const workspaceId = CurrentState.getCurrentWorkspaceId()
+      const workspaceId = External.instance.getCurrentWorkspaceId()
       const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
       const newHistory = pipe(
         searchHistory,
