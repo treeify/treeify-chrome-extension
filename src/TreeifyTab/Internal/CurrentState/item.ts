@@ -235,7 +235,7 @@ export function insertLastChildItem(itemId: ItemId, newItemId: ItemId, edge?: Ed
 
 export function throwIfCantInsertChildItem(itemId: ItemId, newItemId: ItemId) {
   if (Internal.instance.state.items[itemId].childItemIds.includes(newItemId)) {
-    throw new ShowMessage('兄弟リスト内での同一項目の重複は禁止されています')
+    throw new ShowMessage('同じ項目を兄弟リスト内に重複させる操作は禁止されています')
   }
 
   const upperItemIdSet = pipe(
@@ -243,7 +243,7 @@ export function throwIfCantInsertChildItem(itemId: ItemId, newItemId: ItemId) {
     RSet$.add(itemId)
   )
   if (upperItemIdSet.has(newItemId)) {
-    throw new ShowMessage('循環参照は禁止されています')
+    throw new ShowMessage('循環参照を作る操作は禁止されています')
   }
 }
 
