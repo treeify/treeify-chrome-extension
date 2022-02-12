@@ -56,9 +56,7 @@ async function syncWithGoogleDrive() {
       const state: State = await getState(dataFileMetaData)
 
       if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
-        alert(
-          'Treeifyのバージョンが古いためデータファイルを読み込めません。\nアップデートしてください。'
-        )
+        showRequireUpdateMessage()
         return
       }
 
@@ -71,9 +69,7 @@ async function syncWithGoogleDrive() {
       const state: State = await getState(dataFileMetaData)
 
       if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
-        alert(
-          'Treeifyのバージョンが古いためデータファイルを読み込めません。\nアップデートしてください。'
-        )
+        showRequireUpdateMessage()
         return
       }
 
@@ -103,6 +99,10 @@ async function getState(metaData: GoogleDrive.DataFileMataData): Promise<State> 
   const response = await GoogleDrive.readFile(metaData.id)
   const text = await decompress(await response.arrayBuffer())
   return JSON.parse(text)
+}
+
+function showRequireUpdateMessage() {
+  alert('Treeifyのバージョンが古いためデータファイルを読み込めません。\nアップデートしてください。')
 }
 
 /**
