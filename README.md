@@ -13,7 +13,7 @@ npm install
 `npm install`の完了後、次のコマンドでビルドしてください。  
 
 ```shell
-npm run build-dev
+npm run build-development
 ```
 
 `npm install`の結果はキャッシュされるのでビルドごとに実行する必要はなく、`package.json`が変更された際に実行すれば十分です。

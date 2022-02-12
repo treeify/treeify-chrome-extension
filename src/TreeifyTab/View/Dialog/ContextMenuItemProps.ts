@@ -106,7 +106,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     })
   }
 
-  if (process.env.NODE_ENV !== 'prod') {
+  if (process.env.NODE_ENV !== 'production') {
     if (isSingleSelect) {
       result.push({
         title: 'リマインダーを設定…',

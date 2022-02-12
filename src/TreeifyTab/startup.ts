@@ -62,7 +62,7 @@ export async function startup(initialState: State) {
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
   chrome.commands.onCommand.addListener(onCommand)
-  if (process.env.NODE_ENV !== 'prod') {
+  if (process.env.NODE_ENV !== 'production') {
     chrome.alarms.onAlarm.addListener(onAlarm)
   }
   chrome.idle.onStateChanged.addListener(onIdleStateChanged)
@@ -72,7 +72,7 @@ export async function startup(initialState: State) {
 
   window.addEventListener('online', onOnline)
 
-  if (process.env.NODE_ENV !== 'prod') {
+  if (process.env.NODE_ENV !== 'production') {
     await CurrentState.setupAllAlarms()
   }
 }
@@ -84,7 +84,7 @@ export async function cleanup() {
   window.removeEventListener('online', onOnline)
 
   chrome.idle.onStateChanged.removeListener(onIdleStateChanged)
-  if (process.env.NODE_ENV !== 'prod') {
+  if (process.env.NODE_ENV !== 'production') {
     chrome.alarms.onAlarm.removeListener(onAlarm)
   }
   chrome.commands.onCommand.removeListener(onCommand)

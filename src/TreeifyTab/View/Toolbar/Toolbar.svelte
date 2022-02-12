@@ -34,7 +34,7 @@
 </script>
 
 <div class="toolbar_root">
-  {#if process.env.NODE_ENV !== 'prod'}
+  {#if process.env.NODE_ENV !== 'production'}
     <button on:mousedown|preventDefault={onClickOpmlExport}>OPMLエクスポート</button>
     <button on:mousedown|preventDefault={onClickStateValidation}>バリデーション</button>
   {/if}

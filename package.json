@@ -5,14 +5,14 @@
   "license": "Apache-2.0",
   "author": "ootidea",
   "scripts": {
-    "build-dev": "cross-env NODE_ENV=dev rollup -c",
-    "build-dog": "cross-env NODE_ENV=dog rollup -c",
-    "build-prod": "cross-env NODE_ENV=prod rollup -c",
+    "build-development": "cross-env NODE_ENV=development rollup -c",
+    "build-dogfooding": "cross-env NODE_ENV=dogfooding rollup -c",
+    "build-production": "cross-env NODE_ENV=production rollup -c",
     "format": "prettier --write \"src/**/*.{ts,tsx,svelte}\"",
     "svelte-check": "svelte-check",
-    "watch-dev": "cross-env NODE_ENV=dev rollup -c -w",
-    "watch-dog": "cross-env NODE_ENV=dog rollup -c -w",
-    "watch-prod": "cross-env NODE_ENV=prod rollup -c -w"
+    "watch-development": "cross-env NODE_ENV=development rollup -c -w",
+    "watch-dogfooding": "cross-env NODE_ENV=dogfooding rollup -c -w",
+    "watch-production": "cross-env NODE_ENV=production rollup -c -w"
   },
   "dependencies": {
     "color": "^4.2.0",
