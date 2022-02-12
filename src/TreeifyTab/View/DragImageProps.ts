@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -145,7 +146,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
 }
 
 function onDrop(event: MouseEvent, draggedItemPath: ItemPath) {
-  console.log('onDrop', 1)
+  console.log('onDrop', 1, dayjs().format('MM/DD HH:mm:ss'))
   const leftSidebar = document.querySelector('.left-sidebar_root')
   assertNonNull(leftSidebar)
   if (leftSidebar.getBoundingClientRect().right < event.clientX) {

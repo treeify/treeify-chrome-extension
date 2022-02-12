@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { reverse } from 'fp-ts/ReadonlyArray'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
@@ -71,6 +72,7 @@ export function onCut(event: ClipboardEvent) {
 }
 
 export function onPaste(event: ClipboardEvent) {
+  console.log('onPaste', dayjs().format('MM/DD HH:mm:ss'))
   if (event.clipboardData === null) return
 
   Internal.instance.saveCurrentStateToUndoStack()
