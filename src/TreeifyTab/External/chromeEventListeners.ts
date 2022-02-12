@@ -21,14 +21,16 @@ import { integer } from 'src/Utility/integer'
 export const onMessage = (message: any, sender: MessageSender) => {
   call(async () => {
     const RANGE_LIMIT_RATIO = 0.15
-    const height = window.screen.availHeight
+    const height = window.innerHeight
+    // 厳密ではないがスクリーンY座標をクライアントY座標に変換する（特にDevToolsを開いている場合は計算結果が大きく変わる）
+    const y = message.screenY - window.screenY - (window.outerHeight - window.innerHeight)
+
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
         if (!Internal.instance.state.leftEndMouseGestureEnabled) break
 
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
-        if (message.screenY < height * RANGE_LIMIT_RATIO) break
-        if (height * (1 - RANGE_LIMIT_RATIO) < message.screenY) break
+        if (y < height * RANGE_LIMIT_RATIO || height * (1 - RANGE_LIMIT_RATIO) < y) break
 
         // Treeifyタブを最前面化する
         // TODO: 誤差だろうけれど最適化の余地が一応ある
@@ -38,8 +40,7 @@ export const onMessage = (message: any, sender: MessageSender) => {
         if (!Internal.instance.state.rightEndMouseGestureEnabled) break
 
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
-        if (message.screenY < height * RANGE_LIMIT_RATIO) break
-        if (height * (1 - RANGE_LIMIT_RATIO) < message.screenY) break
+        if (y < height * RANGE_LIMIT_RATIO || height * (1 - RANGE_LIMIT_RATIO) < y) break
 
         await TreeifyTab.open()
         if (sender.tab?.id !== undefined) {
