@@ -206,6 +206,10 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
+  :root {
+    --export-dialog-tab-radius: 0.4em;
+  }
+
   .export-dialog_content {
     min-width: 30em;
     padding: 1em;
@@ -218,11 +222,20 @@
 
   .export-dialog_format-select-button-area {
     display: flex;
+    align-items: stretch;
   }
 
   .export-dialog_format-select-button {
     flex: 1 0;
-    text-align: center;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding-block: 0.12em;
+
+    border-top-left-radius: var(--export-dialog-tab-radius);
+    border-top-right-radius: var(--export-dialog-tab-radius);
 
     // lch(96.0%, 0.0, 0.0)相当
     background: #f3f3f3;
