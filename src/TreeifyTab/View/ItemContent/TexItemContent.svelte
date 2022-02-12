@@ -29,10 +29,11 @@
   }
 
   .tex-item-content_caption {
-    margin-top: 0.1em;
     margin-left: 0.5em;
+    margin-top: 0.1em;
+    margin-bottom: 0.2em;
 
-    font-size: 78%;
+    font-size: 80%;
     // lch(30.0%, 0.0, 0.0)相当
     color: #474747;
   }
