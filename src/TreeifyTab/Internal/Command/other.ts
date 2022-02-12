@@ -62,22 +62,8 @@ async function syncWithGoogleDrive() {
         return
       }
 
-      // ローカルStateのmaxItemIdの方が大きい場合、ローカルStateの方が「先に進んでいる」と判断する
-      dump(state.maxItemId, Internal.instance.state.maxItemId)
-      if (state.maxItemId < Internal.instance.state.maxItemId) {
-        const gzipped = await compress(JSON.stringify(Internal.instance.state))
-        const response = await GoogleDrive.updateFileWithMultipart(
-          dataFileMetaData.id,
-          new Blob(gzipped)
-        )
-        const responseJson = await response.json()
-        setSyncedAt(responseJson.modifiedTime)
-        External.instance.hasUpdatedSinceSync = false
-        Rerenderer.instance.rerender()
-      } else {
-        setSyncedAt(dataFileMetaData.modifiedTime)
-        await restart(state, syncedAt === undefined)
-      }
+      setSyncedAt(dataFileMetaData.modifiedTime)
+      await restart(state, syncedAt === undefined)
     } else if (knownTimestamp > dataFileTimestamp) {
       // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
       console.log('例外的な状況でしか到達できない特殊なケース')
