@@ -40,7 +40,7 @@ async function syncWithGoogleDrive() {
     // データファイルを作成し、日時を記録して終了
     const modifiedTime = await GoogleDrive.createDataFile(Internal.instance.state)
     setSyncedAt(modifiedTime)
-    External.instance.hasUpdatedSinceSync = false
+    External.instance.hasUpdatedAfterSync = false
     Rerenderer.instance.rerender()
   } else {
     // データファイルがある場合
@@ -80,7 +80,7 @@ async function syncWithGoogleDrive() {
       console.log('データファイルの更新日時がsyncedAtと等しければ')
 
       // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
-      if (!External.instance.hasUpdatedSinceSync) return
+      if (!External.instance.hasUpdatedAfterSync) return
 
       const gzipped = await compress(JSON.stringify(Internal.instance.state))
       const response = await GoogleDrive.updateFileWithMultipart(
@@ -89,7 +89,7 @@ async function syncWithGoogleDrive() {
       )
       const responseJson = await response.json()
       setSyncedAt(responseJson.modifiedTime)
-      External.instance.hasUpdatedSinceSync = false
+      External.instance.hasUpdatedAfterSync = false
       Rerenderer.instance.rerender()
     }
   }

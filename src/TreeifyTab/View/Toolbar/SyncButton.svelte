@@ -14,7 +14,11 @@
 
 <ToolbarIconButton class="sync-button_root" title="Google Driveと同期する" on:mousedown={onClick}>
   {#if !props.isInSync}
-    <div class="sync-button_cloud-icon" class:checked={!props.hasUpdatedSinceSync} />
+    <div
+      class="sync-button_cloud-icon"
+      class:has-never-synced={props.hasNeverSynced}
+      class:has-updated-after-sync={!props.hasUpdatedAfterSync}
+    />
   {:else}
     <LoadingIndicator size="24px" />
   {/if}
@@ -24,7 +28,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    // データフォルダを開くボタンのアイコンの色。lch(45.0%, 0.0, 0.0)相当
+    // lch(45.0%, 0.0, 0.0)相当
     --sync-button-icon-color: #6a6a6a;
   }
 
@@ -33,8 +37,12 @@
     @include common.absolute-center;
     @include common.icon(var(--sync-button-icon-color), url('cloud-upload.svg'));
 
-    &.checked {
+    &.has-updated-after-sync {
       @include common.icon-url(url('cloud-check.svg'));
+    }
+
+    &.has-never-synced {
+      @include common.icon-url(url('cloud-sync.svg'));
     }
   }
 </style>

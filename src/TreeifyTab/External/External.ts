@@ -27,7 +27,7 @@ export class External {
    * 前回の同期以降にStateが更新されたかどうか
    * TODO: この変数は本来は永続化されるべき。再起動時点で同期済みかどうかは状況次第なので。
    */
-  hasUpdatedSinceSync = true
+  hasUpdatedAfterSync = true
 
   /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
@@ -61,7 +61,7 @@ export class External {
   }
 
   onMutateState(statePath: StatePath) {
-    this.hasUpdatedSinceSync = true
+    this.hasUpdatedAfterSync = true
   }
 
   getTreeifyClipboardHash(): string | undefined {
