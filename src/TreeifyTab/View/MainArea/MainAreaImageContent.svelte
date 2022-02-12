@@ -1,7 +1,6 @@
 <script lang="ts">
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import { SizePx } from 'src/TreeifyTab/Internal/State'
   import { dragImageBottom } from 'src/TreeifyTab/View/dragAndDrop'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaImageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaImageContentProps'
@@ -12,35 +11,15 @@
   $: originalSize = props.originalSize ?? undefined
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
-  $: style = deriveStyle(originalSize)
 
-  function deriveStyle(originalSize: SizePx | undefined): string {
-    if (props.widthPx !== null) {
-      if (originalSize !== undefined) {
-        return `
-          --width: ${props.widthPx}px;
-          --aspect-ratio: ${originalSize.widthPx / originalSize.heightPx};
-        `
-      } else {
-        return `
-          --width: ${props.widthPx}px;
-          --aspect-ratio: auto;
-        `
-      }
-    } else {
-      if (originalSize !== undefined) {
-        return `
-          --width: ${originalSize.widthPx}px;
-          --aspect-ratio: ${originalSize.widthPx / originalSize.heightPx};
-        `
-      } else {
-        return `
-          --width: auto;
-          --aspect-ratio: auto;
-        `
-      }
-    }
-  }
+  $: widthPx = props.widthPx ?? originalSize?.widthPx
+  $: width = widthPx !== undefined ? `${widthPx}px` : 'auto'
+  $: aspectRatio =
+    originalSize !== undefined ? originalSize.widthPx / originalSize.heightPx : 'auto'
+  $: style = `
+    --width: ${width};
+    --aspect-ratio: ${aspectRatio};
+  `
 
   function onLoad(event: Event) {
     if (event.target instanceof HTMLImageElement) {
