@@ -701,7 +701,9 @@ function onDelete(event: KeyboardEvent) {
     const belowItemDomishObjects = Internal.instance.state.textItems[belowItemId].domishObjects
 
     if (
-      DomishObject.getTextLength(belowItemDomishObjects) > DomishObject.getTextLength(domishObjects)
+      DomishObject.getTextLength(belowItemDomishObjects) >
+        DomishObject.getTextLength(domishObjects) &&
+      belowItemPath.length === targetItemPath.length
     ) {
       CurrentState.setTextItemDomishObjects(
         belowItemId,
