@@ -6,6 +6,7 @@ export type ImageItemContentProps = {
   url: string
   width: string
   aspectRatio: string
+  caption: string
 }
 
 export function createImageItemContentProps(itemId: ItemId): ItemContentProps {
@@ -16,7 +17,8 @@ export function createImageItemContentProps(itemId: ItemId): ItemContentProps {
   return {
     type: 'ImageItemContentProps',
     url: imageItem.url,
-    width: widthPx !== undefined ? `${widthPx}px` : 'max-content',
+    width: widthPx !== undefined ? `${widthPx}px` : 'auto',
     aspectRatio: originalSize !== null ? `${originalSize.widthPx / originalSize.heightPx}` : 'auto',
+    caption: imageItem.caption,
   }
 }

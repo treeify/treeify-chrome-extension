@@ -3,16 +3,19 @@
 
   export let props: ImageItemContentProps
 
-  $: style = `
-    --width: ${props.width};
-    --aspect-ratio: ${props.aspectRatio};
-  `
+  $: style = `--width: ${props.width};`
+  $: imageStyle = `--aspect-ratio: ${props.aspectRatio};`
 </script>
 
-<img class="image-item-content_root" {style} src={props.url} alt="" />
+<div class="image-item-content_root" {style}>
+  <img class="image-item-content_image" style={imageStyle} src={props.url} alt="" />
+  {#if props.caption !== ''}
+    <div class="image-item-content_caption">{props.caption}</div>
+  {/if}
+</div>
 
 <style global lang="scss">
-  .image-item-content_root {
+  .image-item-content_image {
     width: var(--width);
     max-width: 100%;
     min-width: 30px;
@@ -22,5 +25,20 @@
     // Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
     // lch(90.0%, 0.0, 0.0)相当。
     border: 1px solid #e2e2e2;
+  }
+
+  .image-item-content_caption {
+    width: var(--width);
+    max-width: 100%;
+    margin-bottom: 0.2em;
+
+    text-align: center;
+
+    // 完了状態のキャプション
+    .completed &,
+    .completed-children & {
+      // lch(50.0%, 0.0, 0.0)相当
+      color: #777777;
+    }
   }
 </style>
