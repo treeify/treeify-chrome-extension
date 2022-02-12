@@ -305,7 +305,15 @@ export function toggleCompleted() {
     // ヒューリスティックな追加効果
 
     Command.closeTreeTabs()
-    Command.fold()
+
+    // 全てのトランスクルード元を折りたたむ
+    for (const selectedItemId of selectedItemIds) {
+      for (const parentItemId of CurrentState.getParentItemIds(selectedItemId)) {
+        CurrentState.setIsFolded([parentItemId, selectedItemId], true)
+      }
+      CurrentState.updateItemTimestamp(selectedItemId)
+    }
+
     const bottomSelectedItemPath = NERArray$.last(selectedItemPaths)
     const firstFollowingItemPath = CurrentState.findFirstFollowingItemPath(bottomSelectedItemPath)
     if (firstFollowingItemPath !== undefined) {
