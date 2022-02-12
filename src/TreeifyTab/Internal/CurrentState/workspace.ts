@@ -8,27 +8,36 @@ import { NERArray, NERArray$, Option$, RArray, RArray$, RSet$ } from 'src/Utilit
 import { Timestamp } from 'src/Utility/Timestamp'
 
 const CURRENT_WORKSPACE_ID_KEY = 'CURRENT_WORKSPACE_ID_KEY'
+// localStorageのキャッシュ
+let currentWorkspaceId: WorkspaceId | undefined
 
 /** このインスタンスにおける現在のワークスペースのIDを返す */
-export function getCurrentWorkspaceId(): Timestamp {
+export function getCurrentWorkspaceId(): WorkspaceId {
+  if (currentWorkspaceId !== undefined) {
+    return currentWorkspaceId
+  }
+
   const savedCurrentWorkspaceId = localStorage.getItem(CURRENT_WORKSPACE_ID_KEY)
   if (savedCurrentWorkspaceId !== null) {
-    const currentWorkspaceId = Number(savedCurrentWorkspaceId)
-    if (Internal.instance.state.workspaces[currentWorkspaceId] !== undefined) {
+    const parsedCurrentWorkspaceId = Number(savedCurrentWorkspaceId)
+    if (Internal.instance.state.workspaces[parsedCurrentWorkspaceId] !== undefined) {
       // ローカルに保存されたvalidなワークスペースIDがある場合
+
+      currentWorkspaceId = parsedCurrentWorkspaceId
       return currentWorkspaceId
     }
   }
 
   // 既存のワークスペースを適当に選んでIDを返す。
   // おそらく最も昔に作られた（≒初回起動時に作られた）ワークスペースが選ばれると思うが、そうならなくてもまあいい。
-  const currentWorkspaceId = getWorkspaceIds()[0]
+  currentWorkspaceId = getWorkspaceIds()[0]
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, currentWorkspaceId.toString())
   return currentWorkspaceId
 }
 
 /** このインスタンスにおける現在のワークスペースのIDを設定する */
 export function setCurrentWorkspaceId(workspaceId: WorkspaceId) {
+  currentWorkspaceId = workspaceId
   localStorage.setItem(CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
 }
 
