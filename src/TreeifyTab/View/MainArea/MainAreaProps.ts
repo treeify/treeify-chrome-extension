@@ -221,6 +221,7 @@ function onArrowUp(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(aboveItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollAbove()
     Rerenderer.instance.rerender()
     return
   }
@@ -280,6 +281,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
       if (caretXCoordinate === originalXCoordinate) {
         CurrentState.setTargetItemPath(aboveItemPath)
         Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+        Rerenderer.instance.requestToScrollAbove()
         Rerenderer.instance.rerender()
         return
       }
@@ -291,6 +293,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     if (i < 0) {
       CurrentState.setTargetItemPath(aboveItemPath)
       Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+      Rerenderer.instance.requestToScrollAbove()
       Rerenderer.instance.rerender()
       return
     }
@@ -310,6 +313,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
 
   CurrentState.setTargetItemPath(aboveItemPath)
   Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToScrollAbove()
   Rerenderer.instance.rerender()
 }
 
@@ -331,6 +335,7 @@ function onArrowDown(event: KeyboardEvent) {
       CurrentState.setTargetItemPath(bottomItemPath)
     }
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
     Rerenderer.instance.rerender()
     return
   }
@@ -358,6 +363,7 @@ function onArrowDown(event: KeyboardEvent) {
         event.preventDefault()
         CurrentState.setTargetItemPath(belowItemPath)
         Rerenderer.instance.requestToFocusTargetItem()
+        Rerenderer.instance.requestToScrollBelow()
         Rerenderer.instance.rerender()
         return
       }
@@ -421,6 +427,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
   }
   CurrentState.setTargetItemPath(belowItemPath)
   Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToScrollBelow()
   Rerenderer.instance.rerender()
 }
 
