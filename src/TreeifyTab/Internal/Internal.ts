@@ -1,5 +1,5 @@
 import objectPath from 'object-path'
-import { ItemType } from 'src/TreeifyTab/basicType'
+import { ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
 import { CURRENT_SCHEMA_VERSION, ExportFormat, State } from 'src/TreeifyTab/Internal/State'
@@ -125,7 +125,7 @@ export class Internal {
     return {
       schemaVersion: CURRENT_SCHEMA_VERSION,
       items: {
-        0: {
+        [TOP_ITEM_ID]: {
           type: ItemType.TEXT,
           // トップページはどのインスタンスで生成されたかを問わず同一視したい特別な項目なので専用のグローバル項目IDを持つ
           globalItemId: 'Treeify#0',
@@ -137,7 +137,7 @@ export class Internal {
         },
       },
       textItems: {
-        0: {
+        [TOP_ITEM_ID]: {
           domishObjects: [{ type: 'text', textContent: 'Top' }],
         },
       },
@@ -146,29 +146,29 @@ export class Internal {
       codeBlockItems: {},
       texItems: {},
       pages: {
-        0: {
-          targetItemPath: [0],
-          anchorItemPath: [0],
+        [TOP_ITEM_ID]: {
+          targetItemPath: [TOP_ITEM_ID],
+          anchorItemPath: [TOP_ITEM_ID],
         },
       },
       reminders: {},
       workspaces: {
         [Timestamp.now()]: {
           name: 'ワークスペース1',
-          activePageId: 0,
+          activePageId: TOP_ITEM_ID,
           excludedItemIds: [],
           searchHistory: [],
         },
         [Timestamp.now() + 1]: {
           name: 'ワークスペース2',
-          activePageId: 0,
+          activePageId: TOP_ITEM_ID,
           excludedItemIds: [],
           searchHistory: [],
         },
       },
-      mountedPageIds: [0],
+      mountedPageIds: [TOP_ITEM_ID],
       availableItemIds: [],
-      maxItemId: 0,
+      maxItemId: TOP_ITEM_ID,
       mainAreaKeyBindings: {
         '0000Enter': ['enterKeyDefault'],
         '0100Enter': ['insertNewline'],
