@@ -49,6 +49,13 @@ export function createWorkspace(): WorkspaceId {
 /** 指定されたワークスペースを削除する */
 export function deleteWorkspace(workspaceId: WorkspaceId) {
   Internal.instance.delete(StatePath.of('workspaces', workspaceId))
+
+  // もしcurrentWorkspaceを削除した場合は1番目のワークスペースに切り替える
+  const currentWorkspaceId = External.instance.getCurrentWorkspaceId()
+  const workspaces = Internal.instance.state.workspaces
+  if (workspaces[currentWorkspaceId] === undefined) {
+    External.instance.setCurrentWorkspaceId(Number(Object.keys(workspaces)[0]))
+  }
 }
 
 /** mountedPageIdsを除外項目でフィルタリングした結果を返す */

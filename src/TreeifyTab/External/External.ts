@@ -34,7 +34,7 @@ export class External {
 
   lastFocusedWindowId: integer = undefined as any
 
-  currentWorkspaceId: WorkspaceId | undefined
+  private currentWorkspaceId: WorkspaceId | undefined
 
   /** 既存のウェブページ項目に対応するタブを開いた際、タブ作成イベントリスナーで項目IDと紐付けるためのMap */
   readonly urlToItemIdsForTabCreation = new DefaultMap<string, RArray<ItemId>>(() => [])
