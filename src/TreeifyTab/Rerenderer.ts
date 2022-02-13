@@ -101,7 +101,7 @@ export class Rerenderer {
     }
 
     this.requestToFocusTargetItem()
-    this.requestToScrollToCenter()
+    this.requestToScrollCenter()
 
     tick().then(() => {
       this.pendingFocusAndTextSelectionSetting?.()
@@ -150,16 +150,56 @@ export class Rerenderer {
     }
   }
 
-  /** 次の描画後にターゲット項目が画面中央に来るようにスクロールする */
-  requestToScrollToCenter() {
+  /** ターゲット項目が画面中央に来るように次の描画後にスクロールする */
+  requestToScrollCenter() {
     this.pendingScroll = () => {
       const targetItemPath = CurrentState.getTargetItemPath()
       const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-      const focusableElement = document.getElementById(targetElementId)
-      focusableElement?.scrollIntoView({
+      const targetElement = document.getElementById(targetElementId)
+      if (targetElement === null) return
+
+      targetElement.scrollIntoView({
         behavior: 'auto',
         block: 'center',
       })
+    }
+  }
+
+  /** ターゲット項目が画面外（下）の場合、画面下端付近に表示されるよう次の描画後にスクロールする */
+  requestToScrollBelow() {
+    this.pendingScroll = () => {
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const targetElement = document.getElementById(targetElementId)
+      if (targetElement === null) return
+
+      const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+      assertNonNull(mainArea)
+      if (targetElement.getBoundingClientRect().bottom > mainArea.getBoundingClientRect().bottom) {
+        targetElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'end',
+        })
+      }
+    }
+  }
+
+  /** ターゲット項目が画面外（上）の場合、画面上端付近に表示されるよう次の描画後にスクロールする */
+  requestToScrollAbove() {
+    this.pendingScroll = () => {
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const targetElement = document.getElementById(targetElementId)
+      if (targetElement === null) return
+
+      const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+      assertNonNull(mainArea)
+      if (targetElement.getBoundingClientRect().top < mainArea.getBoundingClientRect().top) {
+        targetElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'start',
+        })
+      }
     }
   }
 
