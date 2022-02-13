@@ -19,6 +19,7 @@ export function selectToLastSibling() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPathOnly(lastSiblingItemPath)
   Rerenderer.instance.requestToFocusTargetItem()
+  Rerenderer.instance.requestToScrollBelow()
 }
 
 /**
@@ -34,6 +35,7 @@ export function selectToFirstSibling() {
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPathOnly(firstSiblingItemPath)
   Rerenderer.instance.requestToFocusTargetItem()
+  Rerenderer.instance.requestToScrollAbove()
 }
 
 export function focusFirstSibling() {
@@ -45,6 +47,7 @@ export function focusFirstSibling() {
   assertNonUndefined(firstSiblingItemPath)
   CurrentState.setTargetItemPath(firstSiblingItemPath)
   Rerenderer.instance.requestToFocusTargetItem()
+  Rerenderer.instance.requestToScrollAbove()
 }
 
 export function focusLastSibling() {
@@ -57,4 +60,5 @@ export function focusLastSibling() {
   assertNonUndefined(lastSiblingItemPath)
   CurrentState.setTargetItemPath(lastSiblingItemPath)
   Rerenderer.instance.requestToFocusTargetItem()
+  Rerenderer.instance.requestToScrollBelow()
 }
