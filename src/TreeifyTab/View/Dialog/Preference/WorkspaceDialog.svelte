@@ -50,35 +50,35 @@
 
 <CommonDialog class="workspace-dialog_root" title="ワークスペース" showCloseButton>
   <div class="workspace-dialog_content" tabindex="0">
-    {#each workspaceArray as workspace (workspace.id)}
-      <div class="workspace-dialog_existing-workspace" transition:fly|local>
-        <input
-          type="radio"
-          name="currentWorkspaceId"
-          value={workspace.id.toString()}
-          checked={workspace.id === External.instance.getCurrentWorkspaceId()}
-          on:input={() => onClickRadioButton(workspace)}
-        />
-        <input
-          type="text"
-          class="workspace-dialog_name"
-          value={workspace.name}
-          on:input={(event) => onInput(event, workspace)}
-        />
-        {#if workspaceArray.length > 1}
-          <div
-            class="workspace-dialog_delete-button"
-            on:mousedown|preventDefault={() => onClickDeleteButton(workspace)}
+    <div class="workspace-dialog_workspace-list">
+      {#each workspaceArray as workspace (workspace.id)}
+        <div class="workspace-dialog_workspace" transition:fly|local>
+          <input
+            type="radio"
+            name="currentWorkspaceId"
+            value={workspace.id.toString()}
+            checked={workspace.id === External.instance.getCurrentWorkspaceId()}
+            on:input={() => onClickRadioButton(workspace)}
           />
-        {:else}
-          <div class="workspace-dialog_delete-button-space" />
-        {/if}
-      </div>
-    {/each}
-    <div>
-      <button class="workspace-dialog_add-button" on:mousedown|preventDefault={onClickAddButton}>
-        新規作成
-      </button>
+          <input
+            type="text"
+            class="workspace-dialog_workspace-name"
+            value={workspace.name}
+            on:input={(event) => onInput(event, workspace)}
+          />
+          {#if workspaceArray.length > 1}
+            <div
+              class="workspace-dialog_delete-button"
+              on:mousedown|preventDefault={() => onClickDeleteButton(workspace)}
+            />
+          {:else}
+            <div class="workspace-dialog_delete-button-space" />
+          {/if}
+        </div>
+      {/each}
+    </div>
+    <div class="workspace-dialog_add-button-row">
+      <div class="workspace-dialog_add-button" on:mousedown|preventDefault={onClickAddButton} />
     </div>
   </div>
 </CommonDialog>
@@ -98,13 +98,15 @@
 
     // フォーカス時の枠線を非表示
     outline: none;
+  }
 
+  .workspace-dialog_workspace-list {
     display: flex;
     flex-direction: column;
     row-gap: 0.3em;
   }
 
-  .workspace-dialog_existing-workspace {
+  .workspace-dialog_workspace {
     display: flex;
     align-items: center;
 
@@ -113,7 +115,7 @@
     }
   }
 
-  .workspace-dialog_name {
+  .workspace-dialog_workspace-name {
     margin-left: 0.2em;
   }
 
@@ -136,7 +138,25 @@
     @include common.circle(var(--workspace-dialog-delete-button-size));
   }
 
+  .workspace-dialog_add-button-row {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 0.2em;
+  }
+
   .workspace-dialog_add-button {
-    margin-top: 0.5em;
+    @include common.circle(2em);
+    // lch(90.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#e2e2e2);
+
+    &::before {
+      content: '';
+      @include common.square(1.6em);
+      @include common.absolute-center;
+
+      // lch(50.0%, 0.0, 0.0)相当
+      @include common.icon(#777777, url('./plus.svg'));
+    }
   }
 </style>
