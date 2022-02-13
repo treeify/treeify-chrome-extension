@@ -159,6 +159,12 @@ export class Internal {
           excludedItemIds: [],
           searchHistory: [],
         },
+        [Timestamp.now() + 1]: {
+          name: 'ワークスペース2',
+          activePageId: 0,
+          excludedItemIds: [],
+          searchHistory: [],
+        },
       },
       mountedPageIds: [0],
       availableItemIds: [],
