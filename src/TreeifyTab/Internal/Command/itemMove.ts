@@ -54,6 +54,8 @@ export function indent() {
     CurrentState.setAnchorItemPath(RArray$.append(anchorItemId)(prevSiblingItemPath))
     Rerenderer.instance.requestToFocusTargetItem()
   }
+
+  Rerenderer.instance.requestToScrollBelow()
 }
 
 /** アウトライナーのいわゆるアンインデント操作を実行するコマンド。 */
@@ -155,6 +157,8 @@ export function moveItemToAbove() {
 
   // キャレット位置、テキスト選択範囲を維持する
   Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+
+  Rerenderer.instance.requestToScrollAbove()
 }
 
 /**
@@ -222,6 +226,8 @@ export function moveItemToBelow() {
     CurrentState.setAnchorItemPath(newAnchorItemPath)
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
   }
+
+  Rerenderer.instance.requestToScrollBelow()
 }
 
 /** 兄弟志向で項目を上に移動するコマンド */
@@ -247,6 +253,8 @@ export function moveItemToPrevSibling() {
 
     // キャレット位置、テキスト選択範囲を維持する
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+
+    Rerenderer.instance.requestToScrollAbove()
   } else {
     // 次のようなツリーの中でDを上に動かす際、Aの弟ではなくBの弟にする。
     // A
@@ -284,6 +292,8 @@ export function moveItemToPrevSibling() {
 
           // キャレット位置、テキスト選択範囲を維持する
           Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+
+          Rerenderer.instance.requestToScrollAbove()
           return
         }
       }
@@ -318,6 +328,8 @@ export function moveItemToNextSibling() {
 
     // キャレット位置、テキスト選択範囲を維持する
     Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+
+    Rerenderer.instance.requestToScrollBelow()
   } else {
     moveItemToBelow()
   }

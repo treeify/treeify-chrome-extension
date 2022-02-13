@@ -62,7 +62,8 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
         case MainAreaBulletState.UNFOLDED:
           switch (inputId) {
             case '0000MouseButton0':
-              Command.toggleFolded()
+              Command.fold()
+              Rerenderer.instance.requestToScrollAbove()
               break
             case '1000MouseButton0':
               Command.unfold()
@@ -73,7 +74,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
         case MainAreaBulletState.FOLDED:
           switch (inputId) {
             case '0000MouseButton0':
-              Command.toggleFolded()
+              Command.unfold()
               break
             case '1000MouseButton0':
               Command.unfold()
@@ -85,7 +86,6 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
           switch (inputId) {
             case '0000MouseButton0':
               CurrentState.switchActivePage(ItemPath.getItemId(itemPath))
-              Rerenderer.instance.requestToFocusTargetItem()
               break
             case '1000MouseButton0':
               Command.turnIntoNonPage()

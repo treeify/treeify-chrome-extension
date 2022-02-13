@@ -41,6 +41,9 @@ export class Rerenderer {
   // 次の描画が完了した際に実行される関数。フォーカスなどの設定に用いられる
   private pendingFocusAndTextSelectionSetting: (() => void) | undefined
 
+  // 次の描画が完了した際に実行される関数。自動スクロールのために用いられる
+  private pendingScroll: (() => void) | undefined
+
   /**
    * 画面を再描画すべきタイミングで更新イベントが起こるストアを返す。
    * タイミングを伝えるだけなので値に意味はない。
@@ -51,6 +54,11 @@ export class Rerenderer {
 
   /** DOMを再描画する */
   rerender() {
+    // 再描画によって勝手にスクロールされることがあるので、スクロール位置をリセットするために現在値を記録しておく
+    const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+    assertNonNull(mainArea)
+    const scrollTop = mainArea.scrollTop
+
     // Treeifyタブのタイトルを更新する
     document.title = CurrentState.deriveTreeifyTabTitle()
 
@@ -69,6 +77,13 @@ export class Rerenderer {
     tick().then(() => {
       this.pendingFocusAndTextSelectionSetting?.()
       this.pendingFocusAndTextSelectionSetting = undefined
+
+      // 項目を兄弟リスト内で下に移動した際に勝手にスクロールされる現象への対策。
+      // スクロール位置を再描画の前後で維持する。
+      mainArea.scrollTop = scrollTop
+
+      this.pendingScroll?.()
+      this.pendingScroll = undefined
     })
   }
 
@@ -85,18 +100,15 @@ export class Rerenderer {
       })
     }
 
-    // DOM更新完了後に実行される
+    this.requestToFocusTargetItem()
+    this.requestToScrollCenter()
+
     tick().then(() => {
-      // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().length === 1) {
-        const targetItemPath = CurrentState.getTargetItemPath()
-        const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-        const focusableElement = document.getElementById(targetElementId)
-        focusableElement?.focus()
-      } else {
-        // 複数選択の場合
-        focusMainAreaBackground()
-      }
+      this.pendingFocusAndTextSelectionSetting?.()
+      this.pendingFocusAndTextSelectionSetting = undefined
+
+      this.pendingScroll?.()
+      this.pendingScroll = undefined
     })
   }
 
@@ -133,6 +145,59 @@ export class Rerenderer {
         setDomSelection(document.activeElement, {
           focusDistance: position,
           anchorDistance: position,
+        })
+      }
+    }
+  }
+
+  /** ターゲット項目が画面中央に来るように次の描画後にスクロールする */
+  requestToScrollCenter() {
+    this.pendingScroll = () => {
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const targetElement = document.getElementById(targetElementId)
+      if (targetElement === null) return
+
+      targetElement.scrollIntoView({
+        behavior: 'auto',
+        block: 'center',
+      })
+    }
+  }
+
+  /** ターゲット項目が画面外（下）の場合、画面下端付近に表示されるよう次の描画後にスクロールする */
+  requestToScrollBelow() {
+    this.pendingScroll = () => {
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const targetElement = document.getElementById(targetElementId)
+      if (targetElement === null) return
+
+      const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+      assertNonNull(mainArea)
+      if (targetElement.getBoundingClientRect().bottom > mainArea.getBoundingClientRect().bottom) {
+        targetElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'end',
+        })
+      }
+    }
+  }
+
+  /** ターゲット項目が画面外（上）の場合、画面上端付近に表示されるよう次の描画後にスクロールする */
+  requestToScrollAbove() {
+    this.pendingScroll = () => {
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const targetElement = document.getElementById(targetElementId)
+      if (targetElement === null) return
+
+      const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+      assertNonNull(mainArea)
+      if (targetElement.getBoundingClientRect().top < mainArea.getBoundingClientRect().top) {
+        targetElement.scrollIntoView({
+          behavior: 'auto',
+          block: 'start',
         })
       }
     }

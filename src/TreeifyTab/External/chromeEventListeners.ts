@@ -79,6 +79,7 @@ export function onCreated(tab: Tab) {
       if (tab.active) {
         CurrentState.setTargetItemPath(newItemPath)
         Rerenderer.instance.requestToFocusTargetItem()
+        Rerenderer.instance.requestToScrollBelow()
 
         // 空のテキスト項目上で新しいタブを開いた場合は空のテキスト項目を削除する
         if (CurrentState.isEmptyTextItem(targetItemId)) {
@@ -99,6 +100,7 @@ export function onCreated(tab: Tab) {
           const newItemPath = RArray$.append(newWebPageItemId)(targetItemPath)
           CurrentState.setTargetItemPath(newItemPath)
           Rerenderer.instance.requestToFocusTargetItem()
+          Rerenderer.instance.requestToScrollBelow()
         }
       }
     }

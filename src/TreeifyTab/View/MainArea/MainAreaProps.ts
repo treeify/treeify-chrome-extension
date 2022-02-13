@@ -145,6 +145,7 @@ function onArrowLeft(event: KeyboardEvent) {
       Rerenderer.instance.requestToSetCaretPosition(textLength)
     }
 
+    Rerenderer.instance.requestToScrollAbove()
     Rerenderer.instance.rerender()
   } else {
     // キャレット位置が先頭以外のときはブラウザの挙動に任せる
@@ -163,6 +164,7 @@ function onArrowLeft(event: KeyboardEvent) {
       Rerenderer.instance.requestToSetCaretPosition(textLength)
     }
 
+    Rerenderer.instance.requestToScrollAbove()
     Rerenderer.instance.rerender()
   }
 }
@@ -182,6 +184,7 @@ function onArrowRight(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
     Rerenderer.instance.rerender()
   } else {
     const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -201,6 +204,7 @@ function onArrowRight(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
     Rerenderer.instance.rerender()
   }
 }
@@ -221,6 +225,7 @@ function onArrowUp(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(aboveItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollAbove()
     Rerenderer.instance.rerender()
     return
   }
@@ -280,6 +285,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
       if (caretXCoordinate === originalXCoordinate) {
         CurrentState.setTargetItemPath(aboveItemPath)
         Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+        Rerenderer.instance.requestToScrollAbove()
         Rerenderer.instance.rerender()
         return
       }
@@ -291,6 +297,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
     if (i < 0) {
       CurrentState.setTargetItemPath(aboveItemPath)
       Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+      Rerenderer.instance.requestToScrollAbove()
       Rerenderer.instance.rerender()
       return
     }
@@ -310,6 +317,7 @@ function moveFocusToAboveItem(aboveItemPath: ItemPath) {
 
   CurrentState.setTargetItemPath(aboveItemPath)
   Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToScrollAbove()
   Rerenderer.instance.rerender()
 }
 
@@ -331,6 +339,7 @@ function onArrowDown(event: KeyboardEvent) {
       CurrentState.setTargetItemPath(bottomItemPath)
     }
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
     Rerenderer.instance.rerender()
     return
   }
@@ -358,6 +367,7 @@ function onArrowDown(event: KeyboardEvent) {
         event.preventDefault()
         CurrentState.setTargetItemPath(belowItemPath)
         Rerenderer.instance.requestToFocusTargetItem()
+        Rerenderer.instance.requestToScrollBelow()
         Rerenderer.instance.rerender()
         return
       }
@@ -421,6 +431,7 @@ function moveFocusToBelowItem(belowItemPath: ItemPath) {
   }
   CurrentState.setTargetItemPath(belowItemPath)
   Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
+  Rerenderer.instance.requestToScrollBelow()
   Rerenderer.instance.rerender()
 }
 
@@ -471,6 +482,7 @@ function onShiftArrowUp(event: KeyboardEvent) {
   CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
   // 複数選択中はメインエリア自体をフォーカスする
   focusMainAreaBackground()
+  Rerenderer.instance.requestToScrollAbove()
   Rerenderer.instance.rerender()
 }
 
@@ -502,6 +514,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
   CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
   // 複数選択中はメインエリア自体をフォーカスする
   focusMainAreaBackground()
+  Rerenderer.instance.requestToScrollBelow()
   Rerenderer.instance.rerender()
 }
 

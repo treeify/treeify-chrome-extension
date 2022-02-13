@@ -29,6 +29,8 @@ export function switchActivePage(itemId: ItemId, withoutMount: boolean = false) 
   }
 
   CurrentState.setActivePageId(itemId)
+
+  Rerenderer.instance.requestToScrollCenter()
 }
 
 /** 現在のワークスペースのactiveItemIdを返す */
@@ -122,12 +124,11 @@ export function jumpTo(itemPath: ItemPath) {
   // 再描画完了後に対象項目に自動スクロールする
   tick().then(() => {
     const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
-    const focusableElement = document.getElementById(targetElementId)
-    assertNonNull(focusableElement)
-    focusableElement.scrollIntoView({
+    const targetElement = document.getElementById(targetElementId)
+    assertNonNull(targetElement)
+    targetElement.scrollIntoView({
       behavior: 'auto',
       block: 'center',
-      inline: 'center',
     })
   })
 }
