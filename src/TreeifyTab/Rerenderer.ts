@@ -54,6 +54,11 @@ export class Rerenderer {
 
   /** DOMを再描画する */
   rerender() {
+    // 再描画によって勝手にスクロールされることがあるので、スクロール位置をリセットするために現在値を記録しておく
+    const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+    assertNonNull(mainArea)
+    const scrollTop = mainArea.scrollTop
+
     // Treeifyタブのタイトルを更新する
     document.title = CurrentState.deriveTreeifyTabTitle()
 
@@ -72,6 +77,10 @@ export class Rerenderer {
     tick().then(() => {
       this.pendingFocusAndTextSelectionSetting?.()
       this.pendingFocusAndTextSelectionSetting = undefined
+
+      // 項目を兄弟リスト内で下に移動した際に勝手にスクロールされる現象への対策。
+      // スクロール位置を再描画の前後で維持する。
+      mainArea.scrollTop = scrollTop
 
       this.pendingScroll?.()
       this.pendingScroll = undefined
