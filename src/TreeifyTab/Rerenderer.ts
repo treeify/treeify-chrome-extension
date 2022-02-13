@@ -41,6 +41,9 @@ export class Rerenderer {
   // 次の描画が完了した際に実行される関数。フォーカスなどの設定に用いられる
   private pendingFocusAndTextSelectionSetting: (() => void) | undefined
 
+  // 次の描画が完了した際に実行される関数。自動スクロールのために用いられる
+  private pendingScroll: (() => void) | undefined
+
   /**
    * 画面を再描画すべきタイミングで更新イベントが起こるストアを返す。
    * タイミングを伝えるだけなので値に意味はない。
@@ -69,6 +72,9 @@ export class Rerenderer {
     tick().then(() => {
       this.pendingFocusAndTextSelectionSetting?.()
       this.pendingFocusAndTextSelectionSetting = undefined
+
+      this.pendingScroll?.()
+      this.pendingScroll = undefined
     })
   }
 
@@ -85,18 +91,15 @@ export class Rerenderer {
       })
     }
 
-    // DOM更新完了後に実行される
+    this.requestToFocusTargetItem()
+    this.requestToScrollToCenter()
+
     tick().then(() => {
-      // フォーカスを設定する
-      if (CurrentState.getSelectedItemPaths().length === 1) {
-        const targetItemPath = CurrentState.getTargetItemPath()
-        const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-        const focusableElement = document.getElementById(targetElementId)
-        focusableElement?.focus()
-      } else {
-        // 複数選択の場合
-        focusMainAreaBackground()
-      }
+      this.pendingFocusAndTextSelectionSetting?.()
+      this.pendingFocusAndTextSelectionSetting = undefined
+
+      this.pendingScroll?.()
+      this.pendingScroll = undefined
     })
   }
 
@@ -135,6 +138,19 @@ export class Rerenderer {
           anchorDistance: position,
         })
       }
+    }
+  }
+
+  /** 次の描画後にターゲット項目が画面中央に来るようにスクロールする */
+  requestToScrollToCenter() {
+    this.pendingScroll = () => {
+      const targetItemPath = CurrentState.getTargetItemPath()
+      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
+      const focusableElement = document.getElementById(targetElementId)
+      focusableElement?.scrollIntoView({
+        behavior: 'auto',
+        block: 'center',
+      })
     }
   }
 

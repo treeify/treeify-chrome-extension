@@ -29,6 +29,8 @@ export function switchActivePage(itemId: ItemId, withoutMount: boolean = false) 
   }
 
   CurrentState.setActivePageId(itemId)
+
+  Rerenderer.instance.requestToScrollToCenter()
 }
 
 /** 現在のワークスペースのactiveItemIdを返す */
