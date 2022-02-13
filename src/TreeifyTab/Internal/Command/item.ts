@@ -84,6 +84,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
+      Rerenderer.instance.requestToScrollBelow()
       return
     }
 
@@ -101,6 +102,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
+      Rerenderer.instance.requestToScrollBelow()
     } else if (textItemSelection.focusDistance < textLength / 2) {
       // キャレット位置が前半なら
 
@@ -124,6 +126,7 @@ export function enterKeyDefault() {
         CurrentState.setTargetItemPath(newItemPath)
       }
       Rerenderer.instance.requestToFocusTargetItem()
+      Rerenderer.instance.requestToScrollBelow()
     } else {
       // キャレット位置が後半なら
 
@@ -144,6 +147,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
+      Rerenderer.instance.requestToScrollBelow()
     }
   } else {
     // ターゲット項目がテキスト項目以外の場合
@@ -157,6 +161,7 @@ export function enterKeyDefault() {
       // フォーカスを移す
       CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
+      Rerenderer.instance.requestToScrollBelow()
       return
     }
 
@@ -167,6 +172,7 @@ export function enterKeyDefault() {
     // フォーカスを移す
     CurrentState.setTargetItemPath(newItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
   }
 }
 
