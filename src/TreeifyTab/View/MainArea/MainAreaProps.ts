@@ -145,6 +145,7 @@ function onArrowLeft(event: KeyboardEvent) {
       Rerenderer.instance.requestToSetCaretPosition(textLength)
     }
 
+    Rerenderer.instance.requestToScrollAbove()
     Rerenderer.instance.rerender()
   } else {
     // キャレット位置が先頭以外のときはブラウザの挙動に任せる
@@ -163,6 +164,7 @@ function onArrowLeft(event: KeyboardEvent) {
       Rerenderer.instance.requestToSetCaretPosition(textLength)
     }
 
+    Rerenderer.instance.requestToScrollAbove()
     Rerenderer.instance.rerender()
   }
 }
@@ -182,6 +184,7 @@ function onArrowRight(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
     Rerenderer.instance.rerender()
   } else {
     const targetItemId = ItemPath.getItemId(targetItemPath)
@@ -201,6 +204,7 @@ function onArrowRight(event: KeyboardEvent) {
     event.preventDefault()
     CurrentState.setTargetItemPath(belowItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollBelow()
     Rerenderer.instance.rerender()
   }
 }
