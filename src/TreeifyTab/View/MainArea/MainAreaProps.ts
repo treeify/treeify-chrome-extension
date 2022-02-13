@@ -482,6 +482,7 @@ function onShiftArrowUp(event: KeyboardEvent) {
   CurrentState.setTargetItemPathOnly(prevSiblingItemPath)
   // 複数選択中はメインエリア自体をフォーカスする
   focusMainAreaBackground()
+  Rerenderer.instance.requestToScrollAbove()
   Rerenderer.instance.rerender()
 }
 
@@ -513,6 +514,7 @@ function onShiftArrowDown(event: KeyboardEvent) {
   CurrentState.setTargetItemPathOnly(nextSiblingItemPath)
   // 複数選択中はメインエリア自体をフォーカスする
   focusMainAreaBackground()
+  Rerenderer.instance.requestToScrollBelow()
   Rerenderer.instance.rerender()
 }
 
