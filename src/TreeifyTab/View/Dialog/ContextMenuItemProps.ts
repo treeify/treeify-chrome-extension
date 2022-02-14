@@ -147,12 +147,12 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   if (isSingleSelect && targetItemId !== TOP_ITEM_ID) {
     if (CurrentState.getExcludedItemIds().includes(targetItemId)) {
       result.push({
-        title: 'このツリーの除外を解除',
+        title: 'ツリーの除外を解除',
         onClick: () => Command.toggleExcluded(),
       })
     } else {
       result.push({
-        title: 'このツリーを検索結果やサイドバーから除外',
+        title: 'ツリーを検索結果やサイドバーから除外',
         onClick: () => Command.toggleExcluded(),
       })
     }
