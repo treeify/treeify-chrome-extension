@@ -43,7 +43,6 @@
 <div
   class="common-dialog_root"
   on:mousedown|self={onMouseDownBackdrop}
-  on:keydown={onKeyDown}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
@@ -59,6 +58,9 @@
     </div>
   </div>
 </div>
+
+<!-- イベントを拾うためのフォーカス管理が面倒なのでこうする -->
+<svelte:body on:keydown={onKeyDown} />
 
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
