@@ -84,6 +84,7 @@ async function onKeyDown(event: KeyboardEvent) {
       onShiftArrowDown(event)
       return
     case '0000Backspace':
+    case '1000Backspace':
       onBackspace(event)
       return
     case '0000Delete':
