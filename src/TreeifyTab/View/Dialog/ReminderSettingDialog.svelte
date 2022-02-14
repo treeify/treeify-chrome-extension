@@ -32,7 +32,10 @@
     switch (lastSelectedReminderType) {
       case 'once': {
         const parsed = dayjs(`${pickedDate} ${time}`)
-        if (!parsed.isValid()) return
+        if (!parsed.isValid()) {
+          alert('日時の形式が不正です。')
+          return
+        }
 
         Internal.instance.saveCurrentStateToUndoStack()
         const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
