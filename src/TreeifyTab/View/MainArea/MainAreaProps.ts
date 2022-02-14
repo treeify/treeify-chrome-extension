@@ -608,7 +608,7 @@ function onBackspace(event: KeyboardEvent) {
         aboveItemDomishObjects.concat(domishObjects)
       )
 
-      // 子リストを連結するため、子を全て弟としてエッジ追加。
+      // 子リストを移籍するため、子を全て弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
       for (const childItemId of targetItem.childItemIds) {
         const edge = Internal.instance.state.items[childItemId].parents[targetItemId]
@@ -725,7 +725,7 @@ function onDelete(event: KeyboardEvent) {
       )
 
       // ↑の元のエッジごと削除
-      CurrentState.deleteItem(targetItemId)
+      CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
 
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(belowItemPath)
@@ -736,7 +736,7 @@ function onDelete(event: KeyboardEvent) {
         domishObjects.concat(belowItemDomishObjects)
       )
 
-      // 子リストを連結するため、下の項目の子を全てその弟としてエッジ追加。
+      // 子リストを移籍するため、下の項目の子を全てその弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
       for (const childItemId of belowItem.childItemIds) {
         const edge = Internal.instance.state.items[childItemId].parents[belowItemId]
@@ -744,7 +744,7 @@ function onDelete(event: KeyboardEvent) {
       }
 
       // ↑の元のエッジごと削除
-      CurrentState.deleteItem(belowItemId)
+      CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(belowItemPath)!, belowItemId)
 
       // 元のキャレット位置を維持する
       Rerenderer.instance.requestToSetCaretPosition(DomishObject.getTextLength(domishObjects))
