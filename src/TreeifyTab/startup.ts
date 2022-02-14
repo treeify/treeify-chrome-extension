@@ -21,7 +21,7 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { ReminderSetting, State } from 'src/TreeifyTab/Internal/State'
+import { Reminder, State } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -245,15 +245,14 @@ async function onCommand(commandName: string) {
 }
 
 async function onAlarm(alarm: Alarm) {
-  const [itemId, index] = alarm.name.split('#').map(Number)
-  const reminderSettings = Internal.instance.state.reminders[itemId]
-  const reminderSetting = reminderSettings[index]
-  assertNonUndefined(reminderSetting)
+  const itemId = Number(alarm.name)
+  const reminder = Internal.instance.state.reminders[itemId]
+  assertNonUndefined(reminder)
   Internal.instance.mutate(
-    RArray$.updateAt<ReminderSetting>(index, {
-      ...reminderSetting,
+    {
+      ...reminder,
       notifiedAt: alarm.scheduledTime,
-    })(reminderSettings),
+    },
     StatePath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()
@@ -261,10 +260,9 @@ async function onAlarm(alarm: Alarm) {
   const permission = await Notification.requestPermission()
   if (permission !== 'granted') return
 
-  const notification = new Notification(
-    `Treeifyリマインダー（${createDateTimeText(reminderSetting)}）`,
-    { body: extractPlainText(itemId) }
-  )
+  const notification = new Notification(`Treeifyリマインダー（${createDateTimeText(reminder)}）`, {
+    body: extractPlainText(itemId),
+  })
   // 通知のクリック時は該当項目にジャンプする
   notification.onclick = async () => {
     // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
@@ -276,21 +274,21 @@ async function onAlarm(alarm: Alarm) {
   }
 }
 
-function createDateTimeText(reminderSetting: ReminderSetting): string {
-  switch (reminderSetting.type) {
+function createDateTimeText(reminder: Reminder): string {
+  switch (reminder.type) {
     case 'once':
       return dayjs()
-        .year(reminderSetting.year)
-        .month(reminderSetting.month)
-        .date(reminderSetting.date)
-        .hour(reminderSetting.hour)
-        .minute(reminderSetting.minute)
+        .year(reminder.year)
+        .month(reminder.month)
+        .date(reminder.date)
+        .hour(reminder.hour)
+        .minute(reminder.minute)
         .format('YYYY-MM-DD HH:mm')
     case 'every month':
       return dayjs()
-        .date(reminderSetting.date)
-        .hour(reminderSetting.hour)
-        .minute(reminderSetting.minute)
+        .date(reminder.date)
+        .hour(reminder.hour)
+        .minute(reminder.minute)
         .format('毎月D日 HH:mm')
   }
 }

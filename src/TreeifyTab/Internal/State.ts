@@ -22,7 +22,7 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, RArray<ReminderSetting>>
+  reminders: Record<ItemId, Reminder>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
@@ -164,7 +164,7 @@ export type Page = {
   anchorItemPath: ItemPath
 }
 
-export type ReminderSetting = DiscriminatedUnion<{
+export type Reminder = DiscriminatedUnion<{
   once: {
     notifiedAt?: Timestamp
     year: integer

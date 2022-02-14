@@ -5,13 +5,13 @@
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
+  import { Reminder } from 'src/TreeifyTab/Internal/State'
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
-  let lastSelectedReminderType: ReminderSetting['type']
+  let lastSelectedReminderType: Reminder['type']
   let pickedDate = dayjs().format('YYYY-MM-DD')
   let time = '00:00'
   let date = dayjs().date()
@@ -36,7 +36,7 @@
 
         Internal.instance.saveCurrentStateToUndoStack()
         const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-        const reminderSetting: ReminderSetting = {
+        const reminder: Reminder = {
           type: 'once',
           year: parsed.year(),
           month: parsed.month(),
@@ -44,7 +44,7 @@
           hour: parsed.hour(),
           minute: parsed.minute(),
         }
-        Internal.instance.mutate([reminderSetting], StatePath.of('reminders', targetItemId))
+        Internal.instance.mutate(reminder, StatePath.of('reminders', targetItemId))
 
         break
       }
@@ -52,13 +52,13 @@
         const [hour, minute] = time.split(':').map(Number)
         Internal.instance.saveCurrentStateToUndoStack()
         const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-        const reminderSetting: ReminderSetting = {
+        const reminder: Reminder = {
           type: 'every month',
           date,
           hour,
           minute,
         }
-        Internal.instance.mutate([reminderSetting], StatePath.of('reminders', targetItemId))
+        Internal.instance.mutate(reminder, StatePath.of('reminders', targetItemId))
         break
     }
     CurrentState.setupAllAlarms()
