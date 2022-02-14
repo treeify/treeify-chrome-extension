@@ -37,7 +37,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
 
   if (hasParent && includeTranscludedItem) {
     result.push({
-      title: '他のトランスクルードもまとめて削除',
+      title: '他のトランスクルードごと削除',
       onClick: () => Command.deleteItem(),
     })
   }
