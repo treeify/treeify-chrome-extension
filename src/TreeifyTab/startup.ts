@@ -257,9 +257,6 @@ async function onAlarm(alarm: Alarm) {
   )
   await CurrentState.setupAllAlarms()
 
-  const permission = await Notification.requestPermission()
-  if (permission !== 'granted') return
-
   const notification = new Notification(`Treeifyリマインダー（${createDateTimeText(reminder)}）`, {
     body: extractPlainText(itemId),
     requireInteraction: true,

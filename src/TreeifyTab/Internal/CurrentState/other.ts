@@ -80,7 +80,16 @@ export function getCaption(itemId: ItemId): string | undefined {
 
 export async function setupAllAlarms() {
   await chrome.alarms.clearAll()
-  for (const [itemId, reminder] of Object.entries(Internal.instance.state.reminders)) {
+
+  const reminderEntries = Object.entries(Internal.instance.state.reminders)
+  // リマインダー機能を使っていない場合は通知権限を求めないようにここでreturnする
+  if (reminderEntries.length === 0) return
+
+  // 実際に通知するときに通知権限を求めるようでは遅い印象なので、アラームを設定する段階で求める
+  const permission = await Notification.requestPermission()
+  if (permission !== 'granted') return
+
+  for (const [itemId, reminder] of reminderEntries) {
     const timestamp = calculateNextReminderTimestamp(reminder)
     if (timestamp !== undefined) {
       chrome.alarms.create(itemId, { when: timestamp })
