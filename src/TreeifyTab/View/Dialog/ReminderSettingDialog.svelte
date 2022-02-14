@@ -11,10 +11,16 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
-  let lastSelectedReminderType: Reminder['type']
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const reminder = Internal.instance.state.reminders[targetItemId]
+
+  let lastSelectedReminderType: Reminder['type'] = reminder?.type ?? 'once'
+
+  // TODO: リマインダーが設定済みならその値を初期値として設定する
   let pickedDate = dayjs().format('YYYY-MM-DD')
   let time = '00:00'
-  let date = dayjs().date()
+
+  let date = reminder?.date?.toString() ?? dayjs().date()
 
   function onKeydown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -38,7 +44,6 @@
         }
 
         Internal.instance.saveCurrentStateToUndoStack()
-        const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
         const reminder: Reminder = {
           type: 'once',
           year: parsed.year(),
@@ -54,7 +59,6 @@
       case 'every month':
         const [hour, minute] = time.split(':').map(Number)
         Internal.instance.saveCurrentStateToUndoStack()
-        const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
         const reminder: Reminder = {
           type: 'every month',
           date,
