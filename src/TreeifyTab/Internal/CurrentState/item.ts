@@ -153,6 +153,10 @@ export function setIsFolded(itemPath: ItemPath, isFolded: boolean) {
   const itemId = ItemPath.getItemId(itemPath)
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
+
+  // 子を持たない項目はfold状態にできない決まり
+  if (isFolded && Internal.instance.state.items[itemId].childItemIds.length === 0) return
+
   Internal.instance.mutate(
     isFolded,
     StatePath.of('items', itemId, 'parents', parentItemId, 'isFolded')
@@ -200,7 +204,18 @@ export function addParent(itemid: ItemId, parentItemId: ItemId, edge?: Edge) {
  */
 export function modifyChildItems(itemId: ItemId, f: (itemIds: RArray<ItemId>) => RArray<ItemId>) {
   const childItemIds = Internal.instance.state.items[itemId].childItemIds
-  Internal.instance.mutate(f(childItemIds), StatePath.of('items', itemId, 'childItemIds'))
+  const modified = f(childItemIds)
+  Internal.instance.mutate(modified, StatePath.of('items', itemId, 'childItemIds'))
+
+  // 子がいなくなったときは自動的にunfold状態にしておく
+  if (modified.length === 0) {
+    for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
+      Internal.instance.mutate(
+        false,
+        StatePath.of('items', itemId, 'parents', parentItemId, 'isFolded')
+      )
+    }
+  }
 }
 
 /**

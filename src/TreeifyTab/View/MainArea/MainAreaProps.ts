@@ -608,8 +608,6 @@ function onBackspace(event: KeyboardEvent) {
         aboveItemDomishObjects.concat(domishObjects)
       )
 
-      CurrentState.setIsFolded(aboveItemPath, false)
-
       // 子リストを移籍するため、子を全て弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
       for (const childItemId of targetItem.childItemIds) {
@@ -737,8 +735,6 @@ function onDelete(event: KeyboardEvent) {
         targetItemId,
         domishObjects.concat(belowItemDomishObjects)
       )
-
-      CurrentState.setIsFolded(targetItemPath, false)
 
       // 子リストを移籍するため、下の項目の子を全てその弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
