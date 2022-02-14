@@ -169,7 +169,7 @@
 </script>
 
 <CommonDialog class="key-binding-dialog_root" title="キーボード操作設定">
-  <div class="key-binding-dialog_content" {style} on:keydown={onKeyDown}>
+  <div class="key-binding-dialog_content" {style}>
     <div class="key-binding-dialog_scroll-area">
       <table class="key-binding-dialog_table">
         {#each Object.entries(clonedKeyBindings) as [inputId, commandIds] (inputId)}
@@ -226,6 +226,9 @@
     </div>
   </div>
 </CommonDialog>
+
+<!-- イベントを拾うためのフォーカス管理が面倒なのでこうする -->
+<svelte:body on:keydown={onKeyDown} />
 
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
