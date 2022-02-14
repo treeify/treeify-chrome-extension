@@ -20,7 +20,7 @@
   let pickedDate = dayjs().format('YYYY-MM-DD')
   let time = '00:00'
 
-  let date = reminder?.date?.toString() ?? dayjs().date()
+  let date = reminder?.date ?? dayjs().date()
 
   function onKeydown(event: KeyboardEvent) {
     if (event.isComposing) return
