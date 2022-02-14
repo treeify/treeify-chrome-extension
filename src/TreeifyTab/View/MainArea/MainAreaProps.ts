@@ -738,6 +738,8 @@ function onDelete(event: KeyboardEvent) {
         domishObjects.concat(belowItemDomishObjects)
       )
 
+      CurrentState.setIsFolded(targetItemPath, false)
+
       // 子リストを移籍するため、下の項目の子を全てその弟としてエッジ追加。
       // アンインデントに似ているが元のエッジを削除しない点が異なる。
       for (const childItemId of belowItem.childItemIds) {
