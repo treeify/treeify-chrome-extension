@@ -11,10 +11,16 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
 
-  let lastSelectedReminderType: Reminder['type']
+  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+  const reminder = Internal.instance.state.reminders[targetItemId]
+
+  let reminderType: Reminder['type'] = reminder?.type ?? 'once'
+
+  // TODO: リマインダーが設定済みならその値を初期値として設定する
   let pickedDate = dayjs().format('YYYY-MM-DD')
   let time = '00:00'
-  let date = dayjs().date()
+
+  let date = reminder?.date?.toString() ?? dayjs().date()
 
   function onKeydown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -29,13 +35,15 @@
   }
 
   function onClickFinishButton() {
-    switch (lastSelectedReminderType) {
+    switch (reminderType) {
       case 'once': {
         const parsed = dayjs(`${pickedDate} ${time}`)
-        if (!parsed.isValid()) return
+        if (!parsed.isValid()) {
+          alert('日時の形式が不正です。')
+          return
+        }
 
         Internal.instance.saveCurrentStateToUndoStack()
-        const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
         const reminder: Reminder = {
           type: 'once',
           year: parsed.year(),
@@ -51,7 +59,6 @@
       case 'every month':
         const [hour, minute] = time.split(':').map(Number)
         Internal.instance.saveCurrentStateToUndoStack()
-        const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
         const reminder: Reminder = {
           type: 'every month',
           date,
@@ -75,14 +82,14 @@
 
 <CommonDialog class="reminder-setting-dialog_root" title="リマインダー設定">
   <div class="reminder-setting-dialog_content" on:keydown={onKeydown}>
-    <select bind:value={lastSelectedReminderType} class="reminder-setting-dialog_select">
+    <select bind:value={reminderType} class="reminder-setting-dialog_select">
       <option value="once">繰り返さない</option>
       <option value="every month">毎月</option>
     </select>
-    {#if lastSelectedReminderType === 'once'}
+    {#if reminderType === 'once'}
       <input type="date" bind:value={pickedDate} />
       <input type="time" bind:value={time} />
-    {:else if lastSelectedReminderType === 'every month'}
+    {:else if reminderType === 'every month'}
       <input type="number" min="1" max="31" bind:value={date} />
       日
       <input type="time" bind:value={time} />
