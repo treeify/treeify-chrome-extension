@@ -192,6 +192,9 @@ export function onPaste(event: ClipboardEvent) {
       CurrentState.deleteItem(targetItemId)
     }
 
+    // リマインダー設定をインポートしたときのためにアラームを再設定する
+    CurrentState.setupAllAlarms()
+
     Rerenderer.instance.rerender()
     return
   }
