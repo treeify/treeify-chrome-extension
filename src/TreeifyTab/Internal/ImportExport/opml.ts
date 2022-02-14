@@ -53,9 +53,9 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
     baseAttributes.sourceUrl = item.source.url
   }
 
-  const reminderSetting = Internal.instance.state.reminders[itemId]
-  if (reminderSetting !== undefined) {
-    baseAttributes.reminder = JSON.stringify(reminderSetting)
+  const reminder = Internal.instance.state.reminders[itemId]
+  if (reminder !== undefined) {
+    baseAttributes.reminder = JSON.stringify(reminder)
   }
 
   switch (item.type) {
@@ -240,8 +240,8 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
   const attrReminders = outlineElement.getAttribute('reminders')
   if (attrReminders !== null) {
     try {
-      const reminderSetting = JSON.parse(attrReminders)
-      Internal.instance.mutate(reminderSetting, StatePath.of('reminders', itemId))
+      const reminder = JSON.parse(attrReminders)
+      Internal.instance.mutate(reminder, StatePath.of('reminders', itemId))
     } catch {}
   }
 

@@ -5,7 +5,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { ReminderSetting } from 'src/TreeifyTab/Internal/State'
+import { Reminder } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
@@ -80,8 +80,8 @@ export function getCaption(itemId: ItemId): string | undefined {
 
 export async function setupAllAlarms() {
   await chrome.alarms.clearAll()
-  for (const [itemId, reminderSetting] of Object.entries(Internal.instance.state.reminders)) {
-    const timestamp = calculateNextReminderTimestamp(reminderSetting)
+  for (const [itemId, reminder] of Object.entries(Internal.instance.state.reminders)) {
+    const timestamp = calculateNextReminderTimestamp(reminder)
     if (timestamp !== undefined) {
       chrome.alarms.create(itemId, { when: timestamp })
     }
@@ -89,34 +89,34 @@ export async function setupAllAlarms() {
 }
 
 /** 次に通知すべきタイムスタンプを計算する */
-function calculateNextReminderTimestamp(reminderSetting: ReminderSetting): Timestamp | undefined {
-  switch (reminderSetting.type) {
+function calculateNextReminderTimestamp(reminder: Reminder): Timestamp | undefined {
+  switch (reminder.type) {
     case 'once':
       const timestamp = dayjs()
-        .year(reminderSetting.year)
-        .month(reminderSetting.month)
-        .date(reminderSetting.date)
-        .hour(reminderSetting.hour)
-        .minute(reminderSetting.minute)
+        .year(reminder.year)
+        .month(reminder.month)
+        .date(reminder.date)
+        .hour(reminder.hour)
+        .minute(reminder.minute)
         .startOf('minute')
         .valueOf()
-      if (reminderSetting.notifiedAt === undefined || reminderSetting.notifiedAt < timestamp) {
+      if (reminder.notifiedAt === undefined || reminder.notifiedAt < timestamp) {
         return timestamp
       } else {
         return undefined
       }
     case 'every month': {
       const baseDate = call(() => {
-        if (reminderSetting.notifiedAt === undefined) {
+        if (reminder.notifiedAt === undefined) {
           return dayjs()
         } else {
-          return dayjs(reminderSetting.notifiedAt)
+          return dayjs(reminder.notifiedAt)
         }
       })
       const date = baseDate
-        .date(reminderSetting.date)
-        .hour(reminderSetting.hour)
-        .minute(reminderSetting.minute)
+        .date(reminder.date)
+        .hour(reminder.hour)
+        .minute(reminder.minute)
         .startOf('minute')
       if (date.isBefore(dayjs())) {
         return date.add(1, 'month').valueOf()
