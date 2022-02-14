@@ -262,6 +262,7 @@ async function onAlarm(alarm: Alarm) {
 
   const notification = new Notification(`Treeifyリマインダー（${createDateTimeText(reminder)}）`, {
     body: extractPlainText(itemId),
+    requireInteraction: true,
   })
   // 通知のクリック時は該当項目にジャンプする
   notification.onclick = async () => {
