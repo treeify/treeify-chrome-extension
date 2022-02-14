@@ -11,21 +11,26 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { dump } from 'src/Utility/Debug/logger'
 import { RArray$, RSet$ } from 'src/Utility/fp-ts'
-import { call } from 'src/Utility/function'
 import { compress, decompress } from 'src/Utility/gzip'
 
-export function syncTreeifyData() {
+export async function syncTreeifyData() {
+  // ユーザーが認証用ログイン画面を閉じたりしたら、
+  // getAccessToken()は何も応答しない。
+  // なのでローディングインジケーターが無限にぐるぐるするのを防ぐために
+  // このタイミングでgetAccessToken()を呼んでおく。
+  await GoogleDrive.getAccessToken()
+
   if (External.instance.isInSync) return
 
   External.instance.isInSync = true
   Rerenderer.instance.rerender()
-  call(async () => {
+  try {
     await syncWithGoogleDrive()
     Rerenderer.instance.rerender()
-  }).finally(() => {
+  } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()
-  })
+  }
 }
 
 async function syncWithGoogleDrive() {

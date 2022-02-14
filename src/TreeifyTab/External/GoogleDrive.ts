@@ -9,7 +9,7 @@ export namespace GoogleDrive {
   const SNAPSHOT_FILE_NAME = 'snapshot.json.gz'
   const DATA_FOLDER_NAME = 'Treeify'
 
-  async function getAccessToken(): Promise<string> {
+  export async function getAccessToken(): Promise<string> {
     return new Promise<string>((resolve) => {
       chrome.identity.getAuthToken({ interactive: true }, resolve)
     })
