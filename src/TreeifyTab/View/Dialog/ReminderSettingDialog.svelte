@@ -14,7 +14,7 @@
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const reminder = Internal.instance.state.reminders[targetItemId]
 
-  let lastSelectedReminderType: Reminder['type'] = reminder?.type ?? 'once'
+  let reminderType: Reminder['type'] = reminder?.type ?? 'once'
 
   // TODO: リマインダーが設定済みならその値を初期値として設定する
   let pickedDate = dayjs().format('YYYY-MM-DD')
@@ -35,7 +35,7 @@
   }
 
   function onClickFinishButton() {
-    switch (lastSelectedReminderType) {
+    switch (reminderType) {
       case 'once': {
         const parsed = dayjs(`${pickedDate} ${time}`)
         if (!parsed.isValid()) {
@@ -82,14 +82,14 @@
 
 <CommonDialog class="reminder-setting-dialog_root" title="リマインダー設定">
   <div class="reminder-setting-dialog_content" on:keydown={onKeydown}>
-    <select bind:value={lastSelectedReminderType} class="reminder-setting-dialog_select">
+    <select bind:value={reminderType} class="reminder-setting-dialog_select">
       <option value="once">繰り返さない</option>
       <option value="every month">毎月</option>
     </select>
-    {#if lastSelectedReminderType === 'once'}
+    {#if reminderType === 'once'}
       <input type="date" bind:value={pickedDate} />
       <input type="time" bind:value={time} />
-    {:else if lastSelectedReminderType === 'every month'}
+    {:else if reminderType === 'every month'}
       <input type="number" min="1" max="31" bind:value={date} />
       日
       <input type="time" bind:value={time} />
