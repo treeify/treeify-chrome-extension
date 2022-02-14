@@ -66,5 +66,5 @@
 
 @mixin default-favicon {
   // lch(40.0%, 0.0, 0.0)相当
-  @include icon(#5e5e5e, url('./default-favicon.svg'));
+  @include icon(#5e5e5e, url('default-favicon.svg'));
 }

@@ -93,6 +93,6 @@
     @include common.square(1em);
 
     // lch(60.0%, 0.0, 0.0)相当
-    @include common.icon(#919191, url('./audible.svg'));
+    @include common.icon(#919191, url('audible.svg'));
   }
 </style>

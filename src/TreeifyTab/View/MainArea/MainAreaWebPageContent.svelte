@@ -120,7 +120,7 @@
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
     @include common.square(1em);
-    @include common.icon(var(--main-area-audible-icon-color), url('./audible.svg'));
+    @include common.icon(var(--main-area-audible-icon-color), url('audible.svg'));
   }
 
   // ウェブページ項目のタイトル

@@ -131,7 +131,7 @@
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
-      @include common.icon(#5e5e5e, url('./trash-can.svg'));
+      @include common.icon(#5e5e5e, url('trash-can.svg'));
     }
   }
 
@@ -157,7 +157,7 @@
       @include common.absolute-center;
 
       // lch(50.0%, 0.0, 0.0)相当
-      @include common.icon(#777777, url('./plus.svg'));
+      @include common.icon(#777777, url('plus.svg'));
     }
   }
 </style>
