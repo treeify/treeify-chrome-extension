@@ -16,7 +16,7 @@ export function createTextItem() {
   // 作った項目をフォーカスする
   CurrentState.setTargetItemPath(newItemPath)
   Rerenderer.instance.requestToFocusTargetItem()
-  Rerenderer.instance.requestToScrollBelow()
+  Rerenderer.instance.requestToScrollAppear()
 }
 
 /** 太字のトグルコマンド */

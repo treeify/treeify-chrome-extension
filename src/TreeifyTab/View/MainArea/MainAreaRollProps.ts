@@ -63,7 +63,7 @@ export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainA
           switch (inputId) {
             case '0000MouseButton0':
               Command.fold()
-              Rerenderer.instance.requestToScrollAbove()
+              Rerenderer.instance.requestToScrollAppear()
               break
             case '1000MouseButton0':
               Command.unfold()

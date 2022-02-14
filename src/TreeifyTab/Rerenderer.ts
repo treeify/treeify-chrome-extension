@@ -165,36 +165,25 @@ export class Rerenderer {
     }
   }
 
-  /** ターゲット項目が画面外（下）の場合、画面下端付近に表示されるよう次の描画後にスクロールする */
-  requestToScrollBelow() {
+  /** ターゲット項目が画面外の場合、画面に表示されるよう次の描画後にスクロールする */
+  requestToScrollAppear() {
     this.pendingScroll = () => {
       const targetItemPath = CurrentState.getTargetItemPath()
       const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
       const targetElement = document.getElementById(targetElementId)
       if (targetElement === null) return
 
+      const targetRect = targetElement.getBoundingClientRect()
+
       const mainArea = document.querySelector<HTMLElement>('.main-area_root')
       assertNonNull(mainArea)
-      if (targetElement.getBoundingClientRect().bottom > mainArea.getBoundingClientRect().bottom) {
+      const mainAreaRect = mainArea.getBoundingClientRect()
+      if (targetRect.bottom > mainAreaRect.bottom) {
         targetElement.scrollIntoView({
           behavior: 'auto',
           block: 'end',
         })
-      }
-    }
-  }
-
-  /** ターゲット項目が画面外（上）の場合、画面上端付近に表示されるよう次の描画後にスクロールする */
-  requestToScrollAbove() {
-    this.pendingScroll = () => {
-      const targetItemPath = CurrentState.getTargetItemPath()
-      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-      const targetElement = document.getElementById(targetElementId)
-      if (targetElement === null) return
-
-      const mainArea = document.querySelector<HTMLElement>('.main-area_root')
-      assertNonNull(mainArea)
-      if (targetElement.getBoundingClientRect().top < mainArea.getBoundingClientRect().top) {
+      } else if (targetRect.top < mainAreaRect.top) {
         targetElement.scrollIntoView({
           behavior: 'auto',
           block: 'start',

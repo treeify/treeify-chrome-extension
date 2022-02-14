@@ -84,7 +84,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
-      Rerenderer.instance.requestToScrollBelow()
+      Rerenderer.instance.requestToScrollAppear()
       return
     }
 
@@ -102,7 +102,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
-      Rerenderer.instance.requestToScrollBelow()
+      Rerenderer.instance.requestToScrollAppear()
     } else if (textItemSelection.focusDistance < textLength / 2) {
       // キャレット位置が前半なら
 
@@ -126,7 +126,7 @@ export function enterKeyDefault() {
         CurrentState.setTargetItemPath(newItemPath)
       }
       Rerenderer.instance.requestToFocusTargetItem()
-      Rerenderer.instance.requestToScrollBelow()
+      Rerenderer.instance.requestToScrollAppear()
     } else {
       // キャレット位置が後半なら
 
@@ -147,7 +147,7 @@ export function enterKeyDefault() {
       // キャレット位置を更新する
       CurrentState.setTargetItemPath(newItemPath)
       Rerenderer.instance.requestToFocusTargetItem()
-      Rerenderer.instance.requestToScrollBelow()
+      Rerenderer.instance.requestToScrollAppear()
     }
   } else {
     // ターゲット項目がテキスト項目以外の場合
@@ -161,7 +161,7 @@ export function enterKeyDefault() {
       // フォーカスを移す
       CurrentState.setTargetItemPath(RArray$.append(newItemId)(targetItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
-      Rerenderer.instance.requestToScrollBelow()
+      Rerenderer.instance.requestToScrollAppear()
       return
     }
 
@@ -172,7 +172,7 @@ export function enterKeyDefault() {
     // フォーカスを移す
     CurrentState.setTargetItemPath(newItemPath)
     Rerenderer.instance.requestToFocusTargetItem()
-    Rerenderer.instance.requestToScrollBelow()
+    Rerenderer.instance.requestToScrollAppear()
   }
 }
 
@@ -189,7 +189,7 @@ export function deleteItem() {
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
-  Rerenderer.instance.requestToScrollAbove()
+  Rerenderer.instance.requestToScrollAppear()
 
   // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
@@ -222,7 +222,7 @@ export function removeItem() {
   const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
   assertNonUndefined(aboveItemPath)
   CurrentState.setTargetItemPath(aboveItemPath)
-  Rerenderer.instance.requestToScrollAbove()
+  Rerenderer.instance.requestToScrollAppear()
 
   // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
   const aboveItemId = ItemPath.getItemId(aboveItemPath)
@@ -263,7 +263,7 @@ export function deleteJustOneItem() {
     const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
     assertNonUndefined(aboveItemPath)
     CurrentState.setTargetItemPath(aboveItemPath)
-    Rerenderer.instance.requestToScrollAbove()
+    Rerenderer.instance.requestToScrollAppear()
 
     const aboveItemId = ItemPath.getItemId(aboveItemPath)
     if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
@@ -284,7 +284,7 @@ export function deleteJustOneItem() {
     const newItemPath = ItemPath.createSiblingItemPath(targetItemPath, childItemIds[0])
     assertNonUndefined(newItemPath)
     CurrentState.setTargetItemPath(newItemPath)
-    Rerenderer.instance.requestToScrollAbove()
+    Rerenderer.instance.requestToScrollAppear()
     Rerenderer.instance.requestToFocusTargetItem()
   }
 
