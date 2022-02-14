@@ -245,15 +245,14 @@ async function onCommand(commandName: string) {
 }
 
 async function onAlarm(alarm: Alarm) {
-  const [itemId, index] = alarm.name.split('#').map(Number)
-  const reminderSettings = Internal.instance.state.reminders[itemId]
-  const reminderSetting = reminderSettings[index]
+  const itemId = Number(alarm.name)
+  const reminderSetting = Internal.instance.state.reminders[itemId]
   assertNonUndefined(reminderSetting)
   Internal.instance.mutate(
-    RArray$.updateAt<ReminderSetting>(index, {
+    {
       ...reminderSetting,
       notifiedAt: alarm.scheduledTime,
-    })(reminderSettings),
+    },
     StatePath.of('reminders', itemId)
   )
   await CurrentState.setupAllAlarms()

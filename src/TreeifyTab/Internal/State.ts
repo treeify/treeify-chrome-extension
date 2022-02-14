@@ -22,7 +22,7 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, RArray<ReminderSetting>>
+  reminders: Record<ItemId, ReminderSetting>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。

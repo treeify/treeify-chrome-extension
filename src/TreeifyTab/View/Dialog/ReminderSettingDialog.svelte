@@ -44,7 +44,7 @@
           hour: parsed.hour(),
           minute: parsed.minute(),
         }
-        Internal.instance.mutate([reminderSetting], StatePath.of('reminders', targetItemId))
+        Internal.instance.mutate(reminderSetting, StatePath.of('reminders', targetItemId))
 
         break
       }
@@ -58,7 +58,7 @@
           hour,
           minute,
         }
-        Internal.instance.mutate([reminderSetting], StatePath.of('reminders', targetItemId))
+        Internal.instance.mutate(reminderSetting, StatePath.of('reminders', targetItemId))
         break
     }
     CurrentState.setupAllAlarms()
