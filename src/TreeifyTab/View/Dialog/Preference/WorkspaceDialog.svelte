@@ -56,6 +56,7 @@
           <input
             type="radio"
             name="currentWorkspaceId"
+            class="workspace-dialog_radio-button"
             value={workspace.id.toString()}
             checked={workspace.id === External.instance.getCurrentWorkspaceId()}
             on:input={() => onClickRadioButton(workspace)}
@@ -109,10 +110,10 @@
   .workspace-dialog_workspace {
     display: flex;
     align-items: center;
+  }
 
-    input[type='radio'][name='currentWorkspaceId'] {
-      margin: 0;
-    }
+  .workspace-dialog_radio-button {
+    margin: 0;
   }
 
   .workspace-dialog_workspace-name {

@@ -152,7 +152,12 @@
           {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
             {#if searchResult.counts.get(itemType) > 0}
               <label class="search-dialog_checkbox-label">
-                <input type="checkbox" bind:group={checkedItemTypes} value={itemType} />
+                <input
+                  type="checkbox"
+                  class="search-dialog_filter-checkbox"
+                  bind:group={checkedItemTypes}
+                  value={itemType}
+                />
                 {name}({searchResult.counts.get(itemType)}件)
               </label>
             {/if}

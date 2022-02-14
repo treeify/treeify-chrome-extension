@@ -28,11 +28,19 @@
   <div class="other-settings-dialog_content" tabindex="0">
     <div class="other-settings-dialog_checkbox-area">
       <label class="other-settings-dialog_checkbox-label">
-        <input type="checkbox" bind:checked={leftEndMouseGestureEnabled} />
+        <input
+          type="checkbox"
+          class="other-settings-dialog_checkbox"
+          bind:checked={leftEndMouseGestureEnabled}
+        />
         マウスを画面左端まで動かすとTreeifyタブを表示
       </label>
       <label class="other-settings-dialog_checkbox-label">
-        <input type="checkbox" bind:checked={rightEndMouseGestureEnabled} />
+        <input
+          type="checkbox"
+          class="other-settings-dialog_checkbox"
+          bind:checked={rightEndMouseGestureEnabled}
+        />
         マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
       </label>
     </div>

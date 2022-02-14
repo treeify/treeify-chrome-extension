@@ -87,12 +87,18 @@
       <option value="every month">毎月</option>
     </select>
     {#if reminderType === 'once'}
-      <input type="date" bind:value={pickedDate} />
-      <input type="time" bind:value={time} />
+      <input type="date" class="reminder-setting-dialog_date-picker" bind:value={pickedDate} />
+      <input type="time" class="reminder-setting-dialog_time" bind:value={time} />
     {:else if reminderType === 'every month'}
-      <input type="number" min="1" max="31" bind:value={date} />
+      <input
+        type="number"
+        class="reminder-setting-dialog_date"
+        min="1"
+        max="31"
+        bind:value={date}
+      />
       日
-      <input type="time" bind:value={time} />
+      <input type="time" class="reminder-setting-dialog_time" bind:value={time} />
     {/if}
     <div class="reminder-setting-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
