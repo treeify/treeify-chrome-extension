@@ -8,6 +8,7 @@
   export let props: MainAreaWebPageContentProps
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
+  const nbsp = String.fromCharCode(160)
 </script>
 
 <div class="main-area-web-page-content_root" {id} tabindex="0" on:focus={props.onFocus}>
@@ -39,7 +40,8 @@
       on:click={props.onClickTitle}
       use:dragItem={props.itemPath}
     >
-      {props.title}
+      <!-- 空文字列の場合レイアウト崩れを防ぐためにnbspを入れる -->
+      {props.title || nbsp}
     </div>
     {#if props.isAudible}
       <div class="main-area-web-page-content_audible-icon" />
