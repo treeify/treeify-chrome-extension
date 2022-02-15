@@ -35,7 +35,7 @@ export type State = {
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
   mainAreaKeyBindings: Record<InputId, RArray<CommandId>>
   customCss: string
-  preferredLanguages: Record<string, number>
+  languageScoreOffsets: Record<string, number>
   exportSettings: {
     selectedFormat: ExportFormat
     options: {

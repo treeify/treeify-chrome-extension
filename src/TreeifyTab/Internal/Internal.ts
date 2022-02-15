@@ -207,7 +207,7 @@ export class Internal {
         '0110ArrowDown': ['selectToLastSibling'],
       },
       customCss: '',
-      preferredLanguages: {},
+      languageScoreOffsets: {},
       exportSettings: {
         selectedFormat: ExportFormat.PLAIN_TEXT,
         options: {
