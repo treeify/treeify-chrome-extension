@@ -54,8 +54,10 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
       return prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      // 末尾の改行を除去する
+      const code = codeBlockItem.code.replace(/(\r?\n)+$/, '')
       // 軽く確認したところコードブロックと引用は両立できないようなので無視する
-      return '```' + codeBlockItem.language + '\n' + codeBlockItem.code + '\n```'
+      return '```' + codeBlockItem.language + '\n' + code + '\n```'
     case ItemType.TEX:
       const texItem = Internal.instance.state.texItems[itemId]
       return prefix + `$$ ${texItem.code} $$` + postfix

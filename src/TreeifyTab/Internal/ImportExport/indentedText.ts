@@ -97,10 +97,12 @@ export function extractPlainText(itemId: ItemId): string {
       }
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
+      // 末尾の改行を除去する
+      const code = codeBlockItem.code.replace(/(\r?\n)+$/, '')
       if (codeBlockItem.caption !== '') {
-        return `${codeBlockItem.code}\n${codeBlockItem.caption}`
+        return `${code}\n${codeBlockItem.caption}`
       }
-      return codeBlockItem.code
+      return code
     case ItemType.TEX:
       const texItem = Internal.instance.state.texItems[itemId]
       if (texItem.caption !== '') {
