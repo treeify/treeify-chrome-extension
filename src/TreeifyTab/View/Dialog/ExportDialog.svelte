@@ -20,7 +20,7 @@
   const markdownOptions = Internal.instance.state.exportSettings.options[ExportFormat.MARKDOWN]
   const opmlOptions = Internal.instance.state.exportSettings.options[ExportFormat.OPML]
   let plainTextIncludeInvisibleItems = plainTextOptions.includeInvisibleItems
-  let indentationExpression = plainTextOptions.indentationExpression
+  let indentationUnit = plainTextOptions.indentationUnit
   let minimumHeaderLevel: integer = markdownOptions.minimumHeaderLevel
   let markdownIncludeInvisibleItems = markdownOptions.includeInvisibleItems
   let opmlIncludeInvisibleItems = opmlOptions.includeInvisibleItems
@@ -33,8 +33,8 @@
   )
 
   $: Internal.instance.mutate(
-    indentationExpression,
-    StatePath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationExpression')
+    indentationUnit,
+    StatePath.of('exportSettings', 'options', ExportFormat.PLAIN_TEXT, 'indentationUnit')
   )
 
   $: Internal.instance.mutate(
@@ -175,7 +175,7 @@
           <input
             type="text"
             class="export-dialog_indentation-expression"
-            bind:value={indentationExpression}
+            bind:value={indentationUnit}
             size="4"
           />
         </label>

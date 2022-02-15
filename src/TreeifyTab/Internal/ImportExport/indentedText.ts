@@ -52,7 +52,7 @@ export function removeRedundantIndent(indentedText: string): string {
 /** 指定された項目を頂点とするインデント形式のプレーンテキストを作る */
 export function exportAsIndentedText(itemPath: ItemPath): string {
   const exportSettings = Internal.instance.state.exportSettings
-  const indentUnit = exportSettings.options[ExportFormat.PLAIN_TEXT].indentationExpression
+  const indentUnit = exportSettings.options[ExportFormat.PLAIN_TEXT].indentationUnit
   return Array.from(yieldIndentedLines(itemPath, indentUnit)).join('\n')
 }
 

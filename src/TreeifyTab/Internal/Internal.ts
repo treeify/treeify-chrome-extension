@@ -213,7 +213,7 @@ export class Internal {
         options: {
           [ExportFormat.PLAIN_TEXT]: {
             includeInvisibleItems: false,
-            indentationExpression: '  ',
+            indentationUnit: '  ',
           },
           [ExportFormat.MARKDOWN]: {
             includeInvisibleItems: true,

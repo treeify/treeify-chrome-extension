@@ -41,7 +41,7 @@ export type State = {
     options: {
       [ExportFormat.PLAIN_TEXT]: {
         includeInvisibleItems: boolean
-        indentationExpression: string
+        indentationUnit: string
       }
       [ExportFormat.MARKDOWN]: {
         includeInvisibleItems: boolean
