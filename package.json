@@ -25,7 +25,6 @@
     "nanoid": "^3.1.32",
     "object-path": "^0.11.8",
     "power-radix": "^2.5.6",
-    "rollup-plugin-css-only": "^3.1.0",
     "ua-parser-js": "^1.0.2"
   },
   "devDependencies": {
@@ -47,6 +46,7 @@
     "prettier-plugin-svelte": "^2.6.0",
     "rollup": "^2.64.0",
     "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-svelte": "^7.1.0",
