@@ -170,7 +170,7 @@
     // lch(60.0%, 134.0, 40.4)相当
     text-decoration: underline dashed #ff5534;
     text-decoration-thickness: 1px;
-    text-underline-offset: 0.1em;
+    text-underline-offset: 0.2em;
   }
 
   // 隠れているタブ数
