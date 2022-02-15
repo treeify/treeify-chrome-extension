@@ -167,7 +167,7 @@ export class Internal {
         },
       },
       mountedPageIds: [TOP_ITEM_ID],
-      availableItemIds: [],
+      vacantItemIds: [],
       maxItemId: TOP_ITEM_ID,
       mainAreaKeyBindings: {
         '0000Enter': ['enterKeyDefault'],
