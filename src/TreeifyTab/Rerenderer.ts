@@ -12,7 +12,7 @@ import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import Root from 'src/TreeifyTab/View/Root.svelte'
 import { assertNonNull } from 'src/Utility/Debug/assert'
-import { RSet$ } from 'src/Utility/fp-ts'
+import { RArray$, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { tick } from 'svelte'
 import { Readable, writable } from 'svelte/store'
@@ -168,23 +168,29 @@ export class Rerenderer {
   /** ターゲット項目が画面外の場合、画面に表示されるよう次の描画後にスクロールする */
   requestToScrollAppear() {
     this.pendingScroll = () => {
-      const targetItemPath = CurrentState.getTargetItemPath()
-      const targetElementId = MainAreaContentView.focusableDomElementId(targetItemPath)
-      const targetElement = document.getElementById(targetElementId)
-      if (targetElement === null) return
+      const selectedItemPaths = CurrentState.getSelectedItemPaths()
+      const topItemPath = selectedItemPaths[0]
+      const topElementId = MainAreaContentView.focusableDomElementId(topItemPath)
+      const topElement = document.getElementById(topElementId)
+      assertNonNull(topElement)
+      const top = topElement.getBoundingClientRect().top
 
-      const targetRect = targetElement.getBoundingClientRect()
+      const bottomItemPath = RArray$.lastOrThrow(selectedItemPaths)
+      const bottomElementId = MainAreaContentView.focusableDomElementId(bottomItemPath)
+      const bottomElement = document.getElementById(bottomElementId)
+      assertNonNull(bottomElement)
+      const bottom = bottomElement.getBoundingClientRect().bottom
 
       const mainArea = document.querySelector<HTMLElement>('.main-area_root')
       assertNonNull(mainArea)
       const mainAreaRect = mainArea.getBoundingClientRect()
-      if (targetRect.bottom > mainAreaRect.bottom) {
-        targetElement.scrollIntoView({
+      if (mainAreaRect.bottom < bottom) {
+        bottomElement.scrollIntoView({
           behavior: 'auto',
           block: 'end',
         })
-      } else if (targetRect.top < mainAreaRect.top) {
-        targetElement.scrollIntoView({
+      } else if (top < mainAreaRect.top) {
+        topElement.scrollIntoView({
           behavior: 'auto',
           block: 'start',
         })
