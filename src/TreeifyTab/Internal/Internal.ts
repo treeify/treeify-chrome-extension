@@ -167,7 +167,7 @@ export class Internal {
         },
       },
       mountedPageIds: [TOP_ITEM_ID],
-      availableItemIds: [],
+      vacantItemIds: [],
       maxItemId: TOP_ITEM_ID,
       mainAreaKeyBindings: {
         '0000Enter': ['enterKeyDefault'],
@@ -207,13 +207,13 @@ export class Internal {
         '0110ArrowDown': ['selectToLastSibling'],
       },
       customCss: '',
-      preferredLanguages: {},
+      languageScoreOffsets: {},
       exportSettings: {
         selectedFormat: ExportFormat.PLAIN_TEXT,
         options: {
           [ExportFormat.PLAIN_TEXT]: {
             includeInvisibleItems: false,
-            indentationExpression: '  ',
+            indentationUnit: '  ',
           },
           [ExportFormat.MARKDOWN]: {
             includeInvisibleItems: true,

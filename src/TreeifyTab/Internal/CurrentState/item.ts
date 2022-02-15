@@ -373,7 +373,7 @@ export function removeItemGraphEdge(parentItemId: ItemId, itemId: ItemId): Edge 
 
 /** 新しい未使用の項目IDを取得・使用開始する */
 export function obtainNewItemId(): ItemId {
-  const availableItemIds = Internal.instance.state.availableItemIds
+  const vacantItemIds = Internal.instance.state.vacantItemIds
   return Option$.match(
     () => {
       const maxItemId = Internal.instance.state.maxItemId
@@ -382,18 +382,18 @@ export function obtainNewItemId(): ItemId {
     },
     (last: ItemId) => {
       Internal.instance.mutate(
-        Option$.getOrThrow(init(availableItemIds)),
-        StatePath.of('availableItemIds')
+        Option$.getOrThrow(init(vacantItemIds)),
+        StatePath.of('vacantItemIds')
       )
       return last
     }
-  )(last(availableItemIds))
+  )(last(vacantItemIds))
 }
 
 /** 使われなくなった項目IDを登録する */
 export function recycleItemId(itemId: ItemId) {
-  const availableItemIds = Internal.instance.state.availableItemIds
-  Internal.instance.mutate(append(itemId)(availableItemIds), StatePath.of('availableItemIds'))
+  const vacantItemIds = Internal.instance.state.vacantItemIds
+  Internal.instance.mutate(append(itemId)(vacantItemIds), StatePath.of('vacantItemIds'))
 }
 
 /** 指定された項目のCSSクラスリストを上書き設定する */

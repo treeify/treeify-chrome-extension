@@ -16,15 +16,15 @@
 
   function onClickFinishButton() {
     // 言語自動検出の精度アップのためスコア補正値を計算・保存
-    const preferredLanguages = Internal.instance.state.preferredLanguages
+    const languageScoreOffsets = Internal.instance.state.languageScoreOffsets
     const amount = 1
     Internal.instance.mutate(
-      (preferredLanguages[languageValue] ?? 0) + amount,
-      StatePath.of('preferredLanguages', languageValue)
+      (languageScoreOffsets[languageValue] ?? 0) + amount,
+      StatePath.of('languageScoreOffsets', languageValue)
     )
     Internal.instance.mutate(
-      (preferredLanguages[codeBlockItem.language] ?? 0) - amount,
-      StatePath.of('preferredLanguages', codeBlockItem.language)
+      (languageScoreOffsets[codeBlockItem.language] ?? 0) - amount,
+      StatePath.of('languageScoreOffsets', codeBlockItem.language)
     )
 
     CurrentState.setCodeBlockItemLanguage(itemId, languageValue)

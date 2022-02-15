@@ -30,18 +30,18 @@ export type State = {
    */
   mountedPageIds: NERArray<ItemId>
   /** 削除され再利用される項目ID群 */
-  availableItemIds: RArray<ItemId>
+  vacantItemIds: RArray<ItemId>
   maxItemId: ItemId
   /** メインエリアにおけるキーボード入力とコマンドの対応付け */
   mainAreaKeyBindings: Record<InputId, RArray<CommandId>>
   customCss: string
-  preferredLanguages: Record<string, number>
+  languageScoreOffsets: Record<string, number>
   exportSettings: {
     selectedFormat: ExportFormat
     options: {
       [ExportFormat.PLAIN_TEXT]: {
         includeInvisibleItems: boolean
-        indentationExpression: string
+        indentationUnit: string
       }
       [ExportFormat.MARKDOWN]: {
         includeInvisibleItems: boolean
@@ -297,19 +297,17 @@ export namespace State {
       }
 
       assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)
-      const maxItemId = Option$.get(TOP_ITEM_ID)(
-        RArray$.max(itemIds.concat(state.availableItemIds))
-      )
+      const maxItemId = Option$.get(TOP_ITEM_ID)(RArray$.max(itemIds.concat(state.vacantItemIds)))
       assert(maxItemId === state.maxItemId, `maxItemIdが実際の最大itemId ${maxItemId}と異なる`)
 
-      for (const availableItemId of state.availableItemIds) {
+      for (const vacantItemId of state.vacantItemIds) {
         assert(
-          state.items[availableItemId] === undefined,
-          `items[${availableItemId}]が存在するが、これはavailableItemIdsに含まれる値`
+          state.items[vacantItemId] === undefined,
+          `items[${vacantItemId}]が存在するが、これはvacantItemIdsに含まれる値`
         )
         assert(
-          availableItemId <= state.maxItemId,
-          `availableItemId ${availableItemId}がmaxItemIdを超えている`
+          vacantItemId <= state.maxItemId,
+          `vacantItemId ${vacantItemId}がmaxItemIdを超えている`
         )
       }
 

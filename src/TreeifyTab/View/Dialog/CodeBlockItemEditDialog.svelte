@@ -22,19 +22,19 @@
     // コードを更新
     CurrentState.setCodeBlockItemCode(targetItemId, code)
     // 言語を自動検出
-    const preferredLanguages = Internal.instance.state.preferredLanguages
-    const preferredLanguageNames = Object.keys(preferredLanguages)
-    const preferredResults = preferredLanguageNames.map((language) => {
+    const languageScoreOffsets = Internal.instance.state.languageScoreOffsets
+    const offsettedLanguageNames = Object.keys(languageScoreOffsets)
+    const offsettedResults = offsettedLanguageNames.map((language) => {
       const score =
-        detectLanguage(code, RSet$.singleton(language)).score + preferredLanguages[language]
+        detectLanguage(code, RSet$.singleton(language)).score + languageScoreOffsets[language]
       return { language, score }
     })
     const originalResult = detectLanguage(
       code,
-      RSet$.difference(autoDetectionLanguages, RSet$.from(preferredLanguageNames))
+      RSet$.difference(autoDetectionLanguages, RSet$.from(offsettedLanguageNames))
     )
     const language = pipe(
-      preferredResults,
+      offsettedResults,
       RArray$.append(originalResult),
       RArray$.maxBy((object: LanguageScore) => object.score),
       Option$.map((object: LanguageScore) => object.language)
