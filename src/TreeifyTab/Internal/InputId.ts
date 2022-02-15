@@ -79,8 +79,12 @@ export namespace InputId {
       ArrowDown: '↓',
       ArrowRight: '→',
       ArrowLeft: '←',
-      Slash: '/',
+      Comma: ',',
       Period: '.',
+      Slash: '/',
+      Semicolon: ';',
+      Minus: '-',
+      IntlYen: '¥',
     }
     const mapResult = map[code]
     if (mapResult !== undefined) return mapResult
