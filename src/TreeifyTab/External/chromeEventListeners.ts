@@ -229,7 +229,9 @@ export async function matchTabsAndWebPageItems() {
     assertNonUndefined(tab.id)
 
     const url = tab.pendingUrl ?? tab.url ?? ''
-    const itemId = urlToItemIds.get(url).pop()
+    // ウェブページ項目をコピペしたあとmatchTabsAndWebPageItems()を呼んだ際に
+    // 対応関係が変わってしまう問題の対策としてpopではなくshiftを使う。
+    const itemId = urlToItemIds.get(url).shift()
     if (itemId === undefined) {
       // URLの一致するウェブページ項目がない場合、
       // ウェブページ項目を作る
