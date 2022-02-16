@@ -1,9 +1,7 @@
 {
   "name": "treeify",
   "private": true,
-  "description": "",
   "license": "Apache-2.0",
-  "author": "ootidea",
   "scripts": {
     "build-development": "cross-env NODE_ENV=development rollup -c",
     "build-dogfooding": "cross-env NODE_ENV=dogfooding rollup -c",
