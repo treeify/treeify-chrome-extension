@@ -353,9 +353,7 @@ export async function startAutoSync() {
     if (metaData.modifiedTime === syncedAt) return
 
     await syncWithGoogleDrive(metaData)
-    External.instance.isInSync = false
-    Rerenderer.instance.rerender()
-  } catch {
+  } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()
   }

@@ -26,9 +26,7 @@ export async function syncTreeifyData() {
   try {
     const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
     await syncWithGoogleDrive(dataFileMetaData)
-    External.instance.isInSync = false
-    Rerenderer.instance.rerender()
-  } catch {
+  } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()
   }
