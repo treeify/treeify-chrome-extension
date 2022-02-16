@@ -264,16 +264,12 @@ function getGyazoImageUrl(gyazoUrl: string): string {
 
 // OPMLの可能性があるMIMEタイプをいろいろ試してテキストを取り出す
 function getOpmlMimeTypeText(dataTransfer: DataTransfer): string {
-  const textXOpml = dataTransfer.getData('text/x-opml')
-  if (textXOpml !== '') return textXOpml
-
-  const applicationXml = dataTransfer.getData('application/xml')
-  if (applicationXml !== '') return applicationXml
-
-  const textXml = dataTransfer.getData('text/xml')
-  if (textXml !== '') return textXml
-
-  return dataTransfer.getData('text/plain')
+  return (
+    dataTransfer.getData('text/x-opml') ||
+    dataTransfer.getData('application/xml') ||
+    dataTransfer.getData('text/xml') ||
+    dataTransfer.getData('text/plain')
+  )
 }
 
 /**
