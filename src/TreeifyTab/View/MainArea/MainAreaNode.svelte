@@ -10,14 +10,14 @@
   export let props: MainAreaNodeProps
 
   $: childrenCssClasses = props.cssClasses.map((cssClass) => cssClass + '-children')
-  $: depth = props.itemPath.length - 1
+  $: depth = String(props.itemPath.length - 1)
 
   $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
     '--main-area-strongest-footprint-color',
     '--main-area-weakest-footprint-color'
-  )
+  )?.toString()
 </script>
 
 <div

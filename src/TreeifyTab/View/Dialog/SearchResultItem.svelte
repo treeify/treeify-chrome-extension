@@ -13,7 +13,7 @@
     props.footprintCount,
     '--page-tree-strongest-footprint-color',
     '--page-tree-weakest-footprint-color'
-  )
+  )?.toString()
 </script>
 
 <div

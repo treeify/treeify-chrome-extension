@@ -12,7 +12,7 @@
     props.footprintCount,
     '--page-tree-strongest-footprint-color',
     '--page-tree-weakest-footprint-color'
-  )
+  )?.toString()
 </script>
 
 <div class="page-tree-node_root" style:--footprint-color={footprintColor ?? 'transparent'}>

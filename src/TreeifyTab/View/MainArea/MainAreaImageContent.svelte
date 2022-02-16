@@ -15,7 +15,7 @@
   $: widthPx = props.widthPx ?? originalSize?.widthPx
   $: width = widthPx !== undefined ? `${widthPx}px` : 'auto'
   $: aspectRatio =
-    originalSize !== undefined ? originalSize.widthPx / originalSize.heightPx : 'auto'
+    originalSize !== undefined ? String(originalSize.widthPx / originalSize.heightPx) : 'auto'
 
   function onLoad(event: Event) {
     if (event.target instanceof HTMLImageElement) {
