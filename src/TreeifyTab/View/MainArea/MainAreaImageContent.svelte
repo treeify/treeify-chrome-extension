@@ -1,7 +1,7 @@
 <script lang="ts">
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-  import { dragImageBottom } from 'src/TreeifyTab/View/dragAndDrop'
+  import { dragImageResizeHandle } from 'src/TreeifyTab/View/dragAndDrop'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaImageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaImageContentProps'
   import ResizeHandle from 'src/TreeifyTab/View/MainArea/ResizeHandle.svelte'
@@ -43,7 +43,7 @@
     />
     <div
       class="main-area-image-content_resize-handle"
-      use:dragImageBottom={ItemPath.getItemId(props.itemPath)}
+      use:dragImageResizeHandle={ItemPath.getItemId(props.itemPath)}
     >
       <ResizeHandle />
     </div>

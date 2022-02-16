@@ -72,7 +72,7 @@ export function onItemDrop(
   }
 }
 
-export function dragImageBottom(element: HTMLElement, itemId: ItemId) {
+export function dragImageResizeHandle(element: HTMLElement, itemId: ItemId) {
   let isAfterMouseDown = false
 
   function onMouseDown(event: MouseEvent) {
