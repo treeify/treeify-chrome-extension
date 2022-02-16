@@ -2,13 +2,13 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
   import { onItemDrop } from 'src/TreeifyTab/View/dragAndDrop'
-  import { DragImageProps } from 'src/TreeifyTab/View/DragImageProps'
+  import { DragAndDropLayerProps } from 'src/TreeifyTab/View/DragAndDropLayerProps'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
   import { assertNonNull } from 'src/Utility/Debug/assert'
   import { onMount } from 'svelte'
 
-  export let props: DragImageProps
+  export let props: DragAndDropLayerProps
 
   let mouseX = props.initialMousePosition.x
   let mouseY = props.initialMousePosition.y

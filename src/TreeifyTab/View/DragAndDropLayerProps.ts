@@ -9,14 +9,14 @@ import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { Coordinate, integer } from 'src/Utility/integer'
 
-export type DragImageProps = {
+export type DragAndDropLayerProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
   calculateDropDestinationStyle(clientX: number, clientY: number, draggedItemPath: ItemPath): string
   onDrop(event: MouseEvent, itemPath: ItemPath): void
 }
 
-export function createDragImageProps(): DragImageProps | undefined {
+export function createDragAndDropLayerProps(): DragAndDropLayerProps | undefined {
   if (currentDragData?.type !== 'ItemDragData') return undefined
 
   return {

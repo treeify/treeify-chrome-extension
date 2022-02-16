@@ -3,7 +3,7 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import DialogLayer from 'src/TreeifyTab/View/Dialog/DialogLayer.svelte'
   import { dragStateResetter } from 'src/TreeifyTab/View/dragAndDrop'
-  import DragImage from 'src/TreeifyTab/View/DragImage.svelte'
+  import DragAndDropLayer from 'src/TreeifyTab/View/DragAndDropLayer.svelte'
   import LeftSidebar from 'src/TreeifyTab/View/LeftSidebar/LeftSidebar.svelte'
   import MainArea from 'src/TreeifyTab/View/MainArea/MainArea.svelte'
   import { createRootProps, RootProps } from 'src/TreeifyTab/View/RootProps'
@@ -25,8 +25,8 @@
     </div>
   </div>
   <DialogLayer props={$propsStream.dialogLayerProps} />
-  {#if $propsStream.dragImageProps !== undefined}
-    <DragImage props={$propsStream.dragImageProps} />
+  {#if $propsStream.dragAndDropLayerProps !== undefined}
+    <DragAndDropLayer props={$propsStream.dragAndDropLayerProps} />
   {/if}
 </div>
 
