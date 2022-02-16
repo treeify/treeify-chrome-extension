@@ -111,8 +111,9 @@
 
     cursor: default;
 
-    // ページツリーではテキストは折り返さない
-    overflow-x: hidden;
+    // ページツリーではテキストは折り返さない。
+    // ウェブページ項目に縦スクロールバーが表示される不具合の対策でyもhiddenにする。
+    overflow: hidden;
     white-space: nowrap;
 
     background-color: var(--footprint-color);
