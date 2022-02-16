@@ -19,13 +19,6 @@
   assertNonNull(domElement)
   assertNonUndefined(domElement)
   const rect = domElement.getBoundingClientRect()
-  const style = `
-    --left: ${rect.left}px;
-    --top: ${rect.top}px;
-    --width: ${rect.width}px;
-    --height: ${rect.height}px;
-    --font-size: ${getComputedStyle(domElement).getPropertyValue('font-size')};
-  `
 
   function onClickBackdrop(event: MouseEvent) {
     event.preventDefault()
@@ -66,7 +59,11 @@
 
 <div
   class="web-page-item-title-setting-dialog_root"
-  {style}
+  style:--left="{rect.left}px"
+  style:--top="{rect.top}px"
+  style:--width="{rect.width}px"
+  style:--height="{rect.height}px"
+  style:--font-size={getComputedStyle(domElement).getPropertyValue('font-size')}
   on:mousedown|self={onClickBackdrop}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap

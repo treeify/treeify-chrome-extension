@@ -5,15 +5,11 @@
   } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 
   export let props: MainAreaRollProps
-
-  $: style = `
-    --outer-circle-radius: ${props.outerCircleRadiusEm}em;
-  `
 </script>
 
 <div
   class="main-area-roll_root"
-  {style}
+  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
   on:click={props.onClick}
   on:contextmenu={props.onContextMenu}
 >

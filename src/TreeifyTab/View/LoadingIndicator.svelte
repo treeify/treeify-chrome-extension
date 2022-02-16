@@ -1,12 +1,8 @@
 <script lang="ts">
   export let size = '100%'
-
-  $: style = `
-    --size: ${size};
-  `
 </script>
 
-<div class="loading-indicator_root" {style} />
+<div class="loading-indicator_root" style:--size={size} />
 
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';

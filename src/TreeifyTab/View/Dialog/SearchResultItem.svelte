@@ -14,13 +14,13 @@
     '--page-tree-strongest-footprint-color',
     '--page-tree-weakest-footprint-color'
   )
-  $: style = `
-    --footprint-color: ${footprintColor ?? 'transparent'};
-    --outer-circle-radius: ${props.outerCircleRadiusEm}em;
-  `
 </script>
 
-<div class="search-result-item_root" {style}>
+<div
+  class="search-result-item_root"
+  style:--footprint-color={footprintColor ?? 'transparent'}
+  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+>
   <div
     class={`search-result-item_roll ${props.cssClasses.join(' ')}`}
     class:transcluded={props.isTranscluded}

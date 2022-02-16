@@ -13,12 +13,9 @@
     '--page-tree-strongest-footprint-color',
     '--page-tree-weakest-footprint-color'
   )
-  $: style = `
-    --footprint-color: ${footprintColor ?? 'transparent'};
-  `
 </script>
 
-<div class="page-tree-node_root" {style}>
+<div class="page-tree-node_root" style:--footprint-color={footprintColor ?? 'transparent'}>
   {#if props.isRoot}
     <div class="grid-empty-cell" />
   {:else}
