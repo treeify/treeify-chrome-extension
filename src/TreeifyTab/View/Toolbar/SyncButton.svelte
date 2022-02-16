@@ -12,7 +12,7 @@
   }
 </script>
 
-<ToolbarIconButton class="sync-button_root" title="Google Driveと同期する" on:mousedown={onClick}>
+<ToolbarIconButton class="sync-button_root" title={props.titleAttr} on:mousedown={onClick}>
   {#if !props.isInSync}
     <div
       class="sync-button_cloud-icon"
