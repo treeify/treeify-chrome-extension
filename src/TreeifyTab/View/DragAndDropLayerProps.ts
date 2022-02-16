@@ -9,14 +9,14 @@ import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { Coordinate, integer } from 'src/Utility/integer'
 
-export type DragImageProps = {
+export type DragAndDropLayerProps = {
   initialMousePosition: Coordinate
   itemPath: ItemPath
-  calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemPath): string
+  calculateDropDestinationStyle(clientX: number, clientY: number, draggedItemPath: ItemPath): string
   onDrop(event: MouseEvent, itemPath: ItemPath): void
 }
 
-export function createDragImageProps(): DragImageProps | undefined {
+export function createDragAndDropLayerProps(): DragAndDropLayerProps | undefined {
   if (currentDragData?.type !== 'ItemDragData') return undefined
 
   return {
@@ -27,25 +27,29 @@ export function createDragImageProps(): DragImageProps | undefined {
   }
 }
 
-function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemPath): string {
+function calculateDropDestinationStyle(
+  clientX: number,
+  clientY: number,
+  draggedItemPath: ItemPath
+): string {
   const leftSidebar = document.querySelector('.left-sidebar_root')
   assertNonNull(leftSidebar)
-  if (leftSidebar.getBoundingClientRect().right < event.clientX) {
+  if (leftSidebar.getBoundingClientRect().right < clientX) {
     // 左サイドバーより右の領域の場合
 
     const parentItemId = ItemPath.getParentItemId(draggedItemPath)
     if (parentItemId === undefined) return ''
 
-    const itemElement = searchMainAreaElementByYCoordinate(event.clientY)
+    const itemElement = searchMainAreaElementByYCoordinate(clientY)
     if (itemElement === undefined) return ''
 
     const itemPath: ItemPath = JSON.parse(itemElement.dataset.itemPath!)
 
     const rect = itemElement.getBoundingClientRect()
-    if (event.clientX < rect.x) {
+    if (clientX < rect.x) {
       // Rollへのドロップの場合
 
-      const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+      const rollDroppedItemPath = searchElementByXCoordinate(itemPath, clientX)
       if (rollDroppedItemPath === undefined) return ''
 
       // 循環参照などになるケースでは何も表示しない
@@ -95,7 +99,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
       }
 
       // 要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
-      const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
+      const ratio = (clientY - rect.top) / (rect.bottom - rect.top)
       if (ratio <= 0.5) {
         // 座標が要素の上の方の場合
 
@@ -131,7 +135,7 @@ function calculateDropDestinationStyle(event: MouseEvent, draggedItemPath: ItemP
   } else {
     // 左サイドバーにドロップされた場合
 
-    const pageElement = searchLeftSidebarElementByYCoordinate(event.clientY)
+    const pageElement = searchLeftSidebarElementByYCoordinate(clientY)
     if (pageElement === undefined) return ''
 
     const rect = pageElement.getBoundingClientRect()

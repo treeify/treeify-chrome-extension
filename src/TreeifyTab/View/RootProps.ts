@@ -5,7 +5,10 @@ import {
   createDialogLayerProps,
   DialogLayerProps,
 } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
-import { createDragImageProps, DragImageProps } from 'src/TreeifyTab/View/DragImageProps'
+import {
+  createDragAndDropLayerProps,
+  DragAndDropLayerProps,
+} from 'src/TreeifyTab/View/DragAndDropLayerProps'
 import {
   createLeftSidebarProps,
   LeftSidebarProps,
@@ -19,7 +22,7 @@ export type RootProps = {
   mainAreaProps: MainAreaProps
   toolbarProps: ToolbarProps
   dialogLayerProps: DialogLayerProps
-  dragImageProps: DragImageProps | undefined
+  dragAndDropLayerProps: DragAndDropLayerProps | undefined
   currentWorkspaceId: WorkspaceId
 }
 
@@ -30,7 +33,7 @@ export function createRootProps(state: State): RootProps {
     mainAreaProps: createMainAreaProps(state),
     toolbarProps: createToolbarProps(),
     dialogLayerProps: createDialogLayerProps(),
-    dragImageProps: createDragImageProps(),
+    dragAndDropLayerProps: createDragAndDropLayerProps(),
     currentWorkspaceId: External.instance.getCurrentWorkspaceId(),
   }
 }

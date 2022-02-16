@@ -2,25 +2,48 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
   import { onItemDrop } from 'src/TreeifyTab/View/dragAndDrop'
-  import { DragImageProps } from 'src/TreeifyTab/View/DragImageProps'
+  import { DragAndDropLayerProps } from 'src/TreeifyTab/View/DragAndDropLayerProps'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
+  import { assertNonNull } from 'src/Utility/Debug/assert'
+  import { onMount } from 'svelte'
 
-  export let props: DragImageProps
+  export let props: DragAndDropLayerProps
 
   let mouseX = props.initialMousePosition.x
   let mouseY = props.initialMousePosition.y
 
-  $: dropDestinationStyle = ''
+  $: dropDestinationStyle = props.calculateDropDestinationStyle(mouseX, mouseY, props.itemPath)
 
   $: itemId = ItemPath.getItemId(props.itemPath)
 
   function onMouseMove(event: MouseEvent) {
     mouseX = event.clientX
     mouseY = event.clientY
-
-    dropDestinationStyle = props.calculateDropDestinationStyle(event, props.itemPath)
   }
+
+  const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+  assertNonNull<HTMLElement>(mainArea)
+
+  // focusTrapの影響でドラッグ中はスクロールが無効化されるのでプログラムでスクロールさせる
+  function onWheel(event: WheelEvent) {
+    if (event.deltaY !== 0) {
+      // TODO: メインエリアだけでなく左サイドバーもスクロールできるよう分岐を追加する
+      mainArea.scrollBy({
+        top: event.deltaY,
+        behavior: 'smooth',
+      })
+    }
+  }
+
+  onMount(() => {
+    function onScroll(event: Event) {
+      dropDestinationStyle = props.calculateDropDestinationStyle(mouseX, mouseY, props.itemPath)
+    }
+
+    mainArea.addEventListener('scroll', onScroll)
+    return () => mainArea.removeEventListener('scroll', onScroll)
+  })
 </script>
 
 <svelte:body on:mousemove={onMouseMove} />
@@ -31,6 +54,7 @@
   style:--mouse-y="{mouseY}px"
   use:onItemDrop={props.onDrop}
   use:setupFocusTrap
+  on:wheel={onWheel}
 >
   <div class="drag-image_drop-destination" style={dropDestinationStyle} />
   <div class="drag-image_item-image" tabindex="0">
