@@ -30,8 +30,7 @@
 
   const style = `
     --top: ${props.top}px;
-    --right: ${props.right}px;
-    --screen-width: ${screen.width}px;
+    --right: ${window.innerWidth - props.right}px;
   `
 </script>
 
@@ -64,7 +63,7 @@
   .dropdown-menu-dialog_frame {
     position: absolute;
     top: var(--top);
-    right: calc(var(--screen-width) - var(--right));
+    right: var(--right);
 
     // lch(98.0%, 0.0, 0.0)相当
     background: #f9f9f9;
