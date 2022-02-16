@@ -14,7 +14,7 @@ import { External } from 'src/TreeifyTab/External/External'
 import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
-import { Command } from 'src/TreeifyTab/Internal/Command'
+import { syncWithGoogleDrive } from 'src/TreeifyTab/Internal/Command/other'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -344,11 +344,18 @@ export async function startAutoSync() {
   const syncedAt = getSyncedAt()
   if (syncedAt === undefined) return
 
-  const metaData = await GoogleDrive.fetchDataFileMetaData()
-  if (metaData === undefined) return
-
-  if (metaData.modifiedTime === syncedAt) return
-
-  Command.syncTreeifyData()
+  External.instance.isInSync = true
   Rerenderer.instance.rerender()
+  try {
+    const metaData = await GoogleDrive.fetchDataFileMetaData()
+    if (metaData === undefined) return
+
+    if (metaData.modifiedTime === syncedAt) return
+
+    await syncWithGoogleDrive(metaData)
+    Rerenderer.instance.rerender()
+  } finally {
+    External.instance.isInSync = false
+    Rerenderer.instance.rerender()
+  }
 }

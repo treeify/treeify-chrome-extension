@@ -9,7 +9,6 @@ import { CURRENT_SCHEMA_VERSION, State } from 'src/TreeifyTab/Internal/State'
 import { getSyncedAt, setSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
-import { dump } from 'src/Utility/Debug/logger'
 import { RArray$, RSet$ } from 'src/Utility/fp-ts'
 import { compress, decompress } from 'src/Utility/gzip'
 
@@ -25,7 +24,8 @@ export async function syncTreeifyData() {
   External.instance.isInSync = true
   Rerenderer.instance.rerender()
   try {
-    await syncWithGoogleDrive()
+    const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
+    await syncWithGoogleDrive(dataFileMetaData)
     Rerenderer.instance.rerender()
   } finally {
     External.instance.isInSync = false
@@ -33,10 +33,10 @@ export async function syncTreeifyData() {
   }
 }
 
-async function syncWithGoogleDrive() {
-  const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
-  // TODO: リリースする前にログ出力を削除する
-  dump(dataFileMetaData)
+// TODO: コマンドじゃない関数をCommand配下ファイルからexportするべきでない
+export async function syncWithGoogleDrive(
+  dataFileMetaData: GoogleDrive.DataFileMataData | undefined
+) {
   if (dataFileMetaData === undefined) {
     // データファイルがない場合
     console.log('データファイルがない場合')
