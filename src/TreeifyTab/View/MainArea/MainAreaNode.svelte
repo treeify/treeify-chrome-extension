@@ -18,17 +18,14 @@
     '--main-area-strongest-footprint-color',
     '--main-area-weakest-footprint-color'
   )
-  $: style = `
-    --footprint-color: ${footprintColor ?? 'transparent'};
-    --depth: ${depth};
-  `
 </script>
 
 <div
   class="main-area-node_root"
   class:multi-selected={props.selected === 'multi'}
   id={JSON.stringify(props.itemPath)}
-  {style}
+  style:--footprint-color={footprintColor ?? 'transparent'}
+  style:--depth={depth}
 >
   {#if props.isActivePage}
     <div class="grid-empty-cell" />

@@ -2,13 +2,15 @@
   import { ImageItemContentProps } from 'src/TreeifyTab/View/ItemContent/ImageItemContentProps'
 
   export let props: ImageItemContentProps
-
-  $: style = `--width: ${props.width};`
-  $: imageStyle = `--aspect-ratio: ${props.aspectRatio};`
 </script>
 
-<div class="image-item-content_root" {style}>
-  <img class="image-item-content_image" style={imageStyle} src={props.url} alt="" />
+<div class="image-item-content_root" style:--width={props.width}>
+  <img
+    class="image-item-content_image"
+    style:--aspect-ratio={props.aspectRatio}
+    src={props.url}
+    alt=""
+  />
   {#if props.caption !== ''}
     <div class="image-item-content_caption">{props.caption}</div>
   {/if}

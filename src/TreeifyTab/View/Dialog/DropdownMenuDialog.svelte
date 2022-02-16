@@ -27,16 +27,12 @@
       Rerenderer.instance.rerender()
     }
   }
-
-  const style = `
-    --top: ${props.top}px;
-    --right: ${window.innerWidth - props.right}px;
-  `
 </script>
 
 <div
   class="dropdown-menu-dialog_root"
-  {style}
+  style:--top="{props.top}px"
+  style:--right="{window.innerWidth - props.right}px"
   on:mousedown|self={onClickBackdrop}
   on:keydown={onKeyDown}
   on:contextmenu={onContextMenu}

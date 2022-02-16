@@ -16,10 +16,6 @@
   $: width = widthPx !== undefined ? `${widthPx}px` : 'auto'
   $: aspectRatio =
     originalSize !== undefined ? originalSize.widthPx / originalSize.heightPx : 'auto'
-  $: style = `
-    --width: ${width};
-    --aspect-ratio: ${aspectRatio};
-  `
 
   function onLoad(event: Event) {
     if (event.target instanceof HTMLImageElement) {
@@ -32,7 +28,14 @@
   }
 </script>
 
-<div class="main-area-image-content_root" {id} {style} tabindex="0" on:focus={props.onFocus}>
+<div
+  class="main-area-image-content_root"
+  {id}
+  style:--width={width}
+  style:--aspect-ratio={aspectRatio}
+  tabindex="0"
+  on:focus={props.onFocus}
+>
   <div class="main-area-image-content_image-with-resize-handle">
     <img
       class="main-area-image-content_image"

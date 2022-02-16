@@ -15,8 +15,6 @@
 
   let isAddBindingMode = false
 
-  $: style = `--visibility: ${isAddBindingMode ? 'visible' : 'hidden'};`
-
   function onClick() {
     isAddBindingMode = true
   }
@@ -169,7 +167,10 @@
 </script>
 
 <CommonDialog class="key-binding-dialog_root" title="キーボード操作設定">
-  <div class="key-binding-dialog_content" {style}>
+  <div
+    class="key-binding-dialog_content"
+    style:--visibility={isAddBindingMode ? 'visible' : 'hidden'}
+  >
     <div class="key-binding-dialog_scroll-area">
       <table class="key-binding-dialog_table">
         {#each Object.entries(clonedKeyBindings) as [inputId, commandIds] (inputId)}
