@@ -23,7 +23,7 @@
   }
 
   const mainArea = document.querySelector<HTMLElement>('.main-area_root')
-  assertNonNull<HTMLElement>(mainArea)
+  assertNonNull(mainArea)
 
   // focusTrapの影響でドラッグ中はスクロールが無効化されるのでプログラムでスクロールさせる
   function onWheel(event: WheelEvent) {
