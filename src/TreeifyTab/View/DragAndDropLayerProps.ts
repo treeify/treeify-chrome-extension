@@ -1,10 +1,10 @@
 import dayjs from 'dayjs'
+import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { currentDragData, ItemDragData } from 'src/TreeifyTab/View/dragAndDrop'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { Coordinate, integer } from 'src/Utility/integer'
@@ -17,11 +17,11 @@ export type DragAndDropLayerProps = {
 }
 
 export function createDragAndDropLayerProps(): DragAndDropLayerProps | undefined {
-  if (currentDragData?.type !== 'ItemDragData') return undefined
+  if (External.instance.currentDragData?.type !== 'ItemDragData') return undefined
 
   return {
-    initialMousePosition: currentDragData.initialMousePosition,
-    itemPath: currentDragData.itemPath,
+    initialMousePosition: External.instance.currentDragData.initialMousePosition,
+    itemPath: External.instance.currentDragData.itemPath,
     calculateDropDestinationStyle,
     onDrop,
   }

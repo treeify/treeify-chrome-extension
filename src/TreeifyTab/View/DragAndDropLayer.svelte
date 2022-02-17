@@ -1,7 +1,9 @@
 <script lang="ts">
+  import dayjs from 'dayjs'
+  import { External } from 'src/TreeifyTab/External/External'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
-  import { onItemDrop } from 'src/TreeifyTab/View/dragAndDrop'
   import { DragAndDropLayerProps } from 'src/TreeifyTab/View/DragAndDropLayerProps'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
@@ -44,15 +46,23 @@
     mainArea.addEventListener('scroll', onScroll)
     return () => mainArea.removeEventListener('scroll', onScroll)
   })
+
+  function onMouseUp(event: MouseEvent) {
+    console.log('onMouseUp', External.instance.currentDragData, dayjs().format('MM/DD HH:mm:ss'))
+    if (External.instance.currentDragData?.type === 'ItemDragData') {
+      props.onDrop(event, External.instance.currentDragData.itemPath)
+      External.instance.currentDragData = undefined
+      Rerenderer.instance.rerender()
+    }
+  }
 </script>
 
-<svelte:body on:mousemove={onMouseMove} />
+<svelte:body on:mousemove={onMouseMove} on:mouseup|capture={onMouseUp} />
 
 <div
   class="drag-and-drop-layer_root"
   style:--mouse-x="{mouseX}px"
   style:--mouse-y="{mouseY}px"
-  use:onItemDrop={props.onDrop}
   use:setupFocusTrap
   on:wheel={onWheel}
 >

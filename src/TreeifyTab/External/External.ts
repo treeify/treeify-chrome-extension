@@ -6,6 +6,7 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
+import { DragData } from 'src/TreeifyTab/View/dragAndDrop'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
@@ -44,6 +45,8 @@ export class External {
 
   /** 独自クリップボード */
   treeifyClipboard: TreeifyClipboard | undefined
+
+  currentDragData: DragData | undefined
 
   private constructor() {}
 
