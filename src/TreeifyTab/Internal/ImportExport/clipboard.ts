@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { reverse } from 'fp-ts/ReadonlyArray'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { External } from 'src/TreeifyTab/External/External'
@@ -72,10 +71,8 @@ export function onCut(event: ClipboardEvent) {
 }
 
 export function onPaste(event: ClipboardEvent) {
-  console.log('onPaste', dayjs().format('MM/DD HH:mm:ss'))
   if (event.clipboardData === null) return
 
-  console.log('onPaste', 1)
   Internal.instance.saveCurrentStateToUndoStack()
 
   event.preventDefault()
@@ -87,20 +84,17 @@ export function onPaste(event: ClipboardEvent) {
 
   // 独自クリップボードを優先して貼り付ける
   if (External.instance.treeifyClipboard !== undefined) {
-    console.log('onPaste', 2)
-    const selectedItemPaths = External.instance.treeifyClipboard.selectedItemPaths
-
-    // 独自クリップボードへのコピー後にグラフ構造が変わってしまった場合のガード
-    if (!selectedItemPaths.every(CurrentState.isValidItemPath)) {
-      External.instance.treeifyClipboard = undefined
-      return
-    }
-
-    console.log('onPaste', 3)
     // 独自クリップボードへのコピー後に他アプリ上で何かをコピーされた場合のガード
     if (text === External.instance.getTreeifyClipboardHash()) {
+      const selectedItemPaths = External.instance.treeifyClipboard.selectedItemPaths
+
+      // 独自クリップボードへのコピー後にグラフ構造が変わってしまった場合のガード
+      if (!selectedItemPaths.every(CurrentState.isValidItemPath)) {
+        External.instance.treeifyClipboard = undefined
+        return
+      }
+
       if (External.instance.treeifyClipboard.type === 'CopyForTransclude') {
-        console.log('onPaste', 4)
         for (const selectedItemPath of selectedItemPaths) {
           CurrentState.throwIfCantInsertBelowItem(
             targetItemPath,
@@ -108,7 +102,6 @@ export function onPaste(event: ClipboardEvent) {
           )
         }
 
-        console.log('onPaste', 5)
         for (const selectedItemPath of RArray$.reverse(selectedItemPaths)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const initialEdge: Edge = { isFolded: CurrentState.getIsFolded(selectedItemPath) }
@@ -131,7 +124,6 @@ export function onPaste(event: ClipboardEvent) {
         Rerenderer.instance.rerender()
         return
       } else if (External.instance.treeifyClipboard.type === 'CopyForMove') {
-        console.log('onPaste', 6)
         // 兄弟リスト内の移動の場合はガード不要
         if (
           ItemPath.getParentItemId(targetItemPath) !==
@@ -150,7 +142,6 @@ export function onPaste(event: ClipboardEvent) {
           return
         }
 
-        console.log('onPaste', 7)
         for (const selectedItemPath of reverse(selectedItemPaths)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const parentItemId = ItemPath.getParentItemId(selectedItemPath)
@@ -181,7 +172,6 @@ export function onPaste(event: ClipboardEvent) {
     }
   }
 
-  console.log('onPaste', 8)
   const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
@@ -207,9 +197,7 @@ export function onPaste(event: ClipboardEvent) {
     return
   }
 
-  console.log('onPaste', 9)
   if (!text.includes('\n')) {
-    console.log('onPaste', 10)
     // 1行だけのテキストの場合
 
     // GyazoのスクリーンショットのURLを判定する。
@@ -232,11 +220,9 @@ export function onPaste(event: ClipboardEvent) {
 
       Rerenderer.instance.rerender()
     } else if (getTextItemSelectionFromDom() !== undefined) {
-      console.log('onPaste', 11)
       Internal.instance.saveCurrentStateToUndoStack()
       document.execCommand('insertText', false, text)
     } else {
-      console.log('onPaste', 12)
       const newItemId = CurrentState.createTextItem()
       CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(text))
       const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
@@ -253,7 +239,6 @@ export function onPaste(event: ClipboardEvent) {
       Rerenderer.instance.rerender()
     }
   } else {
-    console.log('onPaste', 13)
     // 複数行にわたるテキストの場合
     pasteMultilineText(text)
   }
