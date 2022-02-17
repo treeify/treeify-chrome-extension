@@ -6,7 +6,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull } from 'src/Utility/Debug/assert'
 import { Coordinate, integer } from 'src/Utility/integer'
 
-export type ItemDragData = {
+type ItemDragData = {
   type: 'ItemDragData'
   itemPath: ItemPath
   initialMousePosition: Coordinate
