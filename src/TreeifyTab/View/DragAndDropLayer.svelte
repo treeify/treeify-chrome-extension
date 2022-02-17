@@ -49,15 +49,15 @@
 <svelte:body on:mousemove={onMouseMove} />
 
 <div
-  class="drag-image_root"
+  class="drag-and-drop-layer_root"
   style:--mouse-x="{mouseX}px"
   style:--mouse-y="{mouseY}px"
   use:onItemDrop={props.onDrop}
   use:setupFocusTrap
   on:wheel={onWheel}
 >
-  <div class="drag-image_drop-destination" style={dropDestinationStyle} />
-  <div class="drag-image_item-image" tabindex="0">
+  <div class="drag-and-drop-layer_drop-destination" style={dropDestinationStyle} />
+  <div class="drag-and-drop-layer_item-image" tabindex="0">
     <ItemContent props={createItemContentProps(itemId)} />
   </div>
 </div>
@@ -68,7 +68,7 @@
     --drop-destination-color: #919191;
   }
 
-  .drag-image_root {
+  .drag-and-drop-layer_root {
     position: fixed;
     top: 0;
     left: 0;
@@ -80,7 +80,7 @@
     cursor: grabbing;
   }
 
-  .drag-image_drop-destination {
+  .drag-and-drop-layer_drop-destination {
     position: absolute;
     height: 1px;
     // left, top, widthはstyle属性で指定する
@@ -88,7 +88,7 @@
     pointer-events: none;
   }
 
-  .drag-image_item-image {
+  .drag-and-drop-layer_item-image {
     position: absolute;
     left: calc(var(--mouse-x) + 8px);
     top: var(--mouse-y);
