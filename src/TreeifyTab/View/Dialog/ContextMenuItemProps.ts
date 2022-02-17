@@ -131,12 +131,12 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     onClick: () => Command.showExportDialog(),
   })
 
-  if (isSingleSelect) {
+  if (isSingleSelect && item.source !== null) {
     result.push({
-      title: '出典を設定…',
+      title: '出典を編集…',
       onClick: () => Command.showSourceSettingDialog(),
     })
-    if (item.source?.title === '' && item.source.url === '') {
+    if (item.source.title === '' && item.source.url === '') {
       result.push({
         title: '出典を削除',
         onClick: () => Command.toggleSource(),
