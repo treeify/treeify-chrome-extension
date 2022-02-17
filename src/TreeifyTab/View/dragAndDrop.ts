@@ -4,21 +4,21 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonNull } from 'src/Utility/Debug/assert'
+import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { Coordinate, integer } from 'src/Utility/integer'
 
-type ItemDragData = {
-  type: 'ItemDragData'
-  itemPath: ItemPath
-  initialMousePosition: Coordinate
-}
+type DragData = DiscriminatedUnion<{
+  ItemDragData: {
+    itemPath: ItemPath
+    initialMousePosition: Coordinate
+  }
+  ImageBottomDragData: {
+    itemId: ItemId
+    imageRectLeft: integer
+  }
+}>
 
-type ImageBottomDragData = {
-  type: 'ImageBottomDragData'
-  itemId: ItemId
-  imageRectLeft: integer
-}
-
-export let currentDragData: ItemDragData | ImageBottomDragData | undefined
+export let currentDragData: DragData | undefined
 
 // クリックしているつもりなのにドラッグ扱いされてしまう問題に対処するため導入した変数。
 // ドラッグ開始の判断が早すぎるのが原因なので、ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない。
