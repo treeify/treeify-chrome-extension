@@ -43,6 +43,8 @@
     min-width: max-content;
 
     font-size: 90%;
+
+    tab-size: 4;
   }
 
   .code-block-item-content_caption {
