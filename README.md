@@ -16,8 +16,8 @@ npm install
 npm run build-development
 ```
 
-`npm install`の結果はキャッシュされるのでビルドごとに実行する必要はなく、`package.json`が変更された際に実行すれば十分です。
 ビルドに成功すると`dist`フォルダに成果物が出力されます。  
+（`npm install`の結果はキャッシュされるのでビルドごとに実行する必要はなく、`package.json`が変更された際に実行すれば十分です）  
 
 [Chromeの拡張機能画面](chrome://extensions/)で`パッケージ化されていない拡張機能を読み込む`ボタンを押下し、`dist`フォルダを読み込むとTreeifyがインストールされます。  
 このボタンはデベロッパーモード（画面右上）をONにすると表示されます。  
