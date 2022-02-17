@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import { ItemId } from 'src/TreeifyTab/basicType'
+import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -7,7 +8,7 @@ import { assertNonNull } from 'src/Utility/Debug/assert'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { Coordinate, integer } from 'src/Utility/integer'
 
-type DragData = DiscriminatedUnion<{
+export type DragData = DiscriminatedUnion<{
   ItemDragData: {
     itemPath: ItemPath
     initialMousePosition: Coordinate
@@ -17,8 +18,6 @@ type DragData = DiscriminatedUnion<{
     imageRectLeft: integer
   }
 }>
-
-export let currentDragData: DragData | undefined
 
 // クリックしているつもりなのにドラッグ扱いされてしまう問題に対処するため導入した変数。
 // ドラッグ開始の判断が早すぎるのが原因なので、ドラッグ開始座標から一定距離離れるまではドラッグ開始と判断しない。
@@ -56,10 +55,10 @@ export function onItemDrop(
   onDrop: (event: MouseEvent, itemPath: ItemPath) => void
 ) {
   function onMouseUp(event: MouseEvent) {
-    console.log('onMouseUp', currentDragData, dayjs().format('MM/DD HH:mm:ss'))
-    if (currentDragData?.type === 'ItemDragData') {
-      onDrop(event, currentDragData.itemPath)
-      currentDragData = undefined
+    console.log('onMouseUp', External.instance.currentDragData, dayjs().format('MM/DD HH:mm:ss'))
+    if (External.instance.currentDragData?.type === 'ItemDragData') {
+      onDrop(event, External.instance.currentDragData.itemPath)
+      External.instance.currentDragData = undefined
       Rerenderer.instance.rerender()
     }
   }
@@ -87,7 +86,7 @@ export function dragImageResizeHandle(element: HTMLElement, itemId: ItemId) {
       assertNonNull(element.parentElement)
 
       // ドラッグ開始
-      currentDragData = {
+      External.instance.currentDragData = {
         type: 'ImageBottomDragData',
         itemId,
         imageRectLeft: element.parentElement.getBoundingClientRect().left,
@@ -112,8 +111,12 @@ export function onResizeImage(
   onDrag: (event: MouseEvent, itemId: ItemId, imageRectLeft: integer) => void
 ) {
   function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && currentDragData?.type === 'ImageBottomDragData') {
-      onDrag(event, currentDragData.itemId, currentDragData.imageRectLeft)
+    if (event.buttons === 1 && External.instance.currentDragData?.type === 'ImageBottomDragData') {
+      onDrag(
+        event,
+        External.instance.currentDragData.itemId,
+        External.instance.currentDragData.imageRectLeft
+      )
     }
   }
 
@@ -132,8 +135,8 @@ export function onResizeImage(
  */
 export function dragStateResetter(element: HTMLElement) {
   function onMouseUp(event: MouseEvent) {
-    if (currentDragData !== undefined) {
-      currentDragData = undefined
+    if (External.instance.currentDragData !== undefined) {
+      External.instance.currentDragData = undefined
       Rerenderer.instance.rerender()
     }
   }
@@ -144,7 +147,7 @@ export function dragStateResetter(element: HTMLElement) {
       const currentMousePosition = { x: event.clientX, y: event.clientY }
       const distance = calculateDistance(itemMouseDown.position, currentMousePosition)
       if (distance > 5) {
-        currentDragData = {
+        External.instance.currentDragData = {
           type: 'ItemDragData',
           itemPath: itemMouseDown.itemPath,
           initialMousePosition: currentMousePosition,
@@ -158,8 +161,8 @@ export function dragStateResetter(element: HTMLElement) {
     if ((event.buttons & 1) === 0) {
       itemMouseDown = undefined
 
-      if (currentDragData !== undefined) {
-        currentDragData = undefined
+      if (External.instance.currentDragData !== undefined) {
+        External.instance.currentDragData = undefined
         Rerenderer.instance.rerender()
       }
     }
