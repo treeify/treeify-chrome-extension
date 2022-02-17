@@ -47,42 +47,42 @@
   }
 </script>
 
-<CommonDialog class="source-setting-dialog_root" title="出典設定">
-  <div class="source-setting-dialog_content" on:keydown={onKeyDown}>
-    <div class="source-setting-dialog_input-area">
-      <label class="source-setting-dialog_label">
+<CommonDialog class="source-edit-dialog_root" title="出典編集">
+  <div class="source-edit-dialog_content" on:keydown={onKeyDown}>
+    <div class="source-edit-dialog_input-area">
+      <label class="source-edit-dialog_label">
         タイトル（省略可）
-        <input type="text" class="source-setting-dialog_source-title" bind:value={titleValue} />
+        <input type="text" class="source-edit-dialog_source-title" bind:value={titleValue} />
       </label>
-      <label class="source-setting-dialog_label">
+      <label class="source-edit-dialog_label">
         URL（省略可）
-        <input type="url" class="source-setting-dialog_source-url" bind:value={urlValue} />
+        <input type="url" class="source-edit-dialog_source-url" bind:value={urlValue} />
       </label>
     </div>
-    <div class="source-setting-dialog_button-area">
+    <div class="source-edit-dialog_button-area">
       <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
     </div>
   </div>
 </CommonDialog>
 
 <style global lang="scss">
-  .source-setting-dialog_content {
+  .source-edit-dialog_content {
     width: 90vw;
     max-width: 40em;
     padding: 1em;
   }
 
-  .source-setting-dialog_input-area {
+  .source-edit-dialog_input-area {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-gap: 0.5em;
   }
 
-  .source-setting-dialog_label {
+  .source-edit-dialog_label {
     display: contents;
   }
 
-  .source-setting-dialog_button-area {
+  .source-edit-dialog_button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

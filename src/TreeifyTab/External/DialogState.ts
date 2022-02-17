@@ -13,7 +13,7 @@ export type TabsDialog = {
 
 export type DialogState = DiscriminatedUnion<{
   CaptionSettingDialog: {}
-  SourceSettingDialog: {}
+  SourceEditDialog: {}
   CodeBlockItemEditDialog: {}
   CodeBlockLanguageSettingDialog: {}
   CommandPaletteDialog: {}

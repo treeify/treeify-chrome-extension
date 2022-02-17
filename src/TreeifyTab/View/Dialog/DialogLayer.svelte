@@ -17,7 +17,7 @@
   import ReminderSettingDialog from 'src/TreeifyTab/View/Dialog/ReminderSettingDialog.svelte'
   import ReplaceDialog from 'src/TreeifyTab/View/Dialog/ReplaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
-  import SourceSettingDialog from 'src/TreeifyTab/View/Dialog/SourceSettingDialog.svelte'
+  import SourceEditDialog from 'src/TreeifyTab/View/Dialog/SourceEditDialog.svelte'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
   import WebPageItemTitleSettingDialog from 'src/TreeifyTab/View/Dialog/WebPageItemTitleSettingDialog.svelte'
@@ -29,8 +29,8 @@
   <!-- ダイアログなし -->
 {:else if props.dialogState.type === 'CaptionSettingDialog'}
   <CaptionSettingDialog />
-{:else if props.dialogState.type === 'SourceSettingDialog'}
-  <SourceSettingDialog />
+{:else if props.dialogState.type === 'SourceEditDialog'}
+  <SourceEditDialog />
 {:else if props.dialogState.type === 'CodeBlockItemEditDialog'}
   <CodeBlockItemEditDialog />
 {:else if props.dialogState.type === 'CodeBlockLanguageSettingDialog'}

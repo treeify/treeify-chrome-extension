@@ -142,7 +142,7 @@
         'showEditDialog',
         'showSearchDialog',
         'showReplaceDialog',
-        'showSourceSettingDialog',
+        'showSourceEditDialog',
         'showContextMenuDialog',
         'showExportDialog',
         'showWorkspaceDialog',
