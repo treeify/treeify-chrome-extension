@@ -134,7 +134,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   if (isSingleSelect && item.source !== null) {
     result.push({
       title: '出典を編集…',
-      onClick: () => Command.showSourceSettingDialog(),
+      onClick: () => Command.showSourceEditDialog(),
     })
     if (item.source.title === '' && item.source.url === '') {
       result.push({

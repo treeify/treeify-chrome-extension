@@ -50,7 +50,7 @@ export const commandNames = {
   showOtherParentsDialog: '他のトランスクルード元を表示',
   showSearchDialog: '検索ダイアログを表示',
   showReplaceDialog: '置換ダイアログを表示',
-  showSourceSettingDialog: '出典設定ダイアログを表示',
+  showSourceEditDialog: '出典編集ダイアログを表示',
   showContextMenuDialog: 'コンテキストメニューを表示',
   showCommandPaletteDialog: 'コマンドパレットを表示',
   doNothing: '何もしない',
