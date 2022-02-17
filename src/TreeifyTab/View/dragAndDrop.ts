@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -44,31 +43,6 @@ export function dragItem(element: HTMLElement, itemPath: ItemPath) {
 
 function calculateDistance(lhs: Coordinate, rhs: Coordinate): integer {
   return Math.sqrt((lhs.x - rhs.x) ** 2 + (lhs.y - rhs.y) ** 2)
-}
-
-/**
- * 項目のドロップ対象となるDOM要素に対して設定するuseディレクティブ用関数。
- * ドロップされたときのコールバックをパラメータとして指定する必要がある。
- */
-export function onItemDrop(
-  element: HTMLElement,
-  onDrop: (event: MouseEvent, itemPath: ItemPath) => void
-) {
-  function onMouseUp(event: MouseEvent) {
-    console.log('onMouseUp', External.instance.currentDragData, dayjs().format('MM/DD HH:mm:ss'))
-    if (External.instance.currentDragData?.type === 'ItemDragData') {
-      onDrop(event, External.instance.currentDragData.itemPath)
-      External.instance.currentDragData = undefined
-      Rerenderer.instance.rerender()
-    }
-  }
-
-  element.addEventListener('mouseup', onMouseUp)
-  return {
-    destroy() {
-      element.removeEventListener('mouseup', onMouseUp)
-    },
-  }
 }
 
 export function dragImageResizeHandle(element: HTMLElement, itemId: ItemId) {
