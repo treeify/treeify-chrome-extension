@@ -175,7 +175,9 @@ export class Rerenderer {
       assertNonNull(topElement)
       const top = topElement.getBoundingClientRect().top
 
-      const bottomItemPath = RArray$.lastOrThrow(selectedItemPaths)
+      const bottomItemPath = CurrentState.getLowerEndItemPath(
+        RArray$.lastOrThrow(selectedItemPaths)
+      )
       const bottomElementId = MainAreaContentView.focusableDomElementId(bottomItemPath)
       const bottomElement = document.getElementById(bottomElementId)
       assertNonNull(bottomElement)
