@@ -66,10 +66,10 @@ export namespace InputId {
 
   export function toReadableText(inputId: InputId): string {
     const parts = []
-    if (inputId[0] === '1') parts.push(getFirstModifierName())
+    if (inputId[0] === '1') parts.push(firstModifierName)
     if (inputId[1] === '1') parts.push('Shift')
-    if (inputId[2] === '1') parts.push(getThirdModifierName())
-    if (inputId[3] === '1') parts.push(getFourthModifierName())
+    if (inputId[2] === '1') parts.push(thirdModifierName)
+    if (inputId[3] === '1') parts.push(fourthModifierName)
 
     parts.push(simplify(inputId.substring(4)))
     return parts.join(' + ')
@@ -100,27 +100,7 @@ export namespace InputId {
     return code
   }
 
-  function getFirstModifierName(): string {
-    if (isNotMac) {
-      return 'Ctrl'
-    } else {
-      return 'Command'
-    }
-  }
-
-  function getThirdModifierName(): string {
-    if (isNotMac) {
-      return 'Alt'
-    } else {
-      return 'Option'
-    }
-  }
-
-  function getFourthModifierName(): string {
-    if (isNotMac) {
-      return 'Windows'
-    } else {
-      return 'Control'
-    }
-  }
+  const firstModifierName = isNotMac ? 'Ctrl' : 'Command'
+  const thirdModifierName = isNotMac ? 'Alt' : 'Option'
+  const fourthModifierName = isNotMac ? 'Windows' : 'Control'
 }
