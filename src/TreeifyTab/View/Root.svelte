@@ -15,7 +15,12 @@
   })
 </script>
 
-<div class="root_root" data-workspace-id={$propsStream.currentWorkspaceId} use:dragStateResetter>
+<div
+  class="root_root"
+  data-workspace-id={$propsStream.currentWorkspaceId}
+  data-os-name={$propsStream.osName}
+  use:dragStateResetter
+>
   {@html $propsStream.customCssHtml}
   <div class="root_toolbar-and-sidebar-layout">
     <Toolbar props={$propsStream.toolbarProps} />

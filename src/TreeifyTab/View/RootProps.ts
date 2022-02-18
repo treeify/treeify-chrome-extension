@@ -15,6 +15,9 @@ import {
 } from 'src/TreeifyTab/View/LeftSidebar/LeftSidebarProps'
 import { createMainAreaProps, MainAreaProps } from 'src/TreeifyTab/View/MainArea/MainAreaProps'
 import { createToolbarProps, ToolbarProps } from 'src/TreeifyTab/View/Toolbar/ToolbarProps'
+import UAParser from 'ua-parser-js'
+
+const osName = new UAParser().getOS().name
 
 export type RootProps = {
   customCssHtml: string
@@ -24,6 +27,7 @@ export type RootProps = {
   dialogLayerProps: DialogLayerProps
   dragAndDropLayerProps: DragAndDropLayerProps | undefined
   currentWorkspaceId: WorkspaceId
+  osName: string | undefined
 }
 
 export function createRootProps(state: State): RootProps {
@@ -35,5 +39,6 @@ export function createRootProps(state: State): RootProps {
     dialogLayerProps: createDialogLayerProps(),
     dragAndDropLayerProps: createDragAndDropLayerProps(),
     currentWorkspaceId: External.instance.getCurrentWorkspaceId(),
+    osName,
   }
 }
