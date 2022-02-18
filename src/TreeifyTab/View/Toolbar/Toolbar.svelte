@@ -50,7 +50,7 @@
   }
 
   .toolbar_root {
-    height: 36px;
+    height: 40px;
     padding-inline: 2em;
 
     // ボタンなどを横に並べる（右寄せ）
