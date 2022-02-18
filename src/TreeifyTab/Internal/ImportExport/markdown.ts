@@ -51,7 +51,13 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
       return prefix + `[${title}](${webPageItem.url})  `
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      return prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
+      if (imageItem.caption === '') {
+        return prefix + `![](${imageItem.url})  ` + postfix
+      } else {
+        return (
+          prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
+        )
+      }
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
       // 末尾の改行を除去する
