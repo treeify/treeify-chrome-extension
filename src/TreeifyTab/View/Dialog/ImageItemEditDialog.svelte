@@ -70,7 +70,7 @@
 
 <style global lang="scss">
   .image-item-edit-dialog_content {
-    min-width: 60em;
+    min-width: 45em;
     padding: 1em;
   }
 
