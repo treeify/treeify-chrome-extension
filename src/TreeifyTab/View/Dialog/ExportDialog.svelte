@@ -236,18 +236,17 @@
   }
 
   .export-dialog_format-select-button-area {
-    display: flex;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .export-dialog_format-select-button {
-    flex: 1 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding-block: 0.12em;
+    padding-block: 0.18em;
+    padding-inline: 1.2em;
 
     border-top-left-radius: var(--export-dialog-tab-radius);
     border-top-right-radius: var(--export-dialog-tab-radius);
