@@ -21,6 +21,8 @@ import UAParser from 'ua-parser-js'
 export type InputId = string
 
 export namespace InputId {
+  const isNotMac = new UAParser().getOS().name !== 'Mac OS'
+
   export function fromKeyboardEvent(event: KeyboardEvent): InputId {
     return getModifierKeysId(event) + event.code
   }
@@ -43,7 +45,7 @@ export namespace InputId {
    * 1番目の修飾キーとはWindowsではCtrlキー、MacではCommandキーのことを指す。
    */
   export function isFirstModifierKeyPressed(event: KeyboardEvent | MouseEvent): boolean {
-    if (new UAParser().getOS().name !== 'Mac OS') {
+    if (isNotMac) {
       return event.ctrlKey
     } else {
       return event.metaKey
@@ -55,7 +57,7 @@ export namespace InputId {
    * 4番目の修飾キーとはWindowsではWindowsキー、MacではControlキーのことを指す。
    */
   export function isFourthModifierKeyPressed(event: KeyboardEvent | MouseEvent): boolean {
-    if (new UAParser().getOS().name !== 'Mac OS') {
+    if (isNotMac) {
       return event.metaKey
     } else {
       return event.ctrlKey
@@ -99,7 +101,7 @@ export namespace InputId {
   }
 
   function getFirstModifierName(): string {
-    if (new UAParser().getOS().name !== 'Mac OS') {
+    if (isNotMac) {
       return 'Ctrl'
     } else {
       return 'Command'
@@ -107,7 +109,7 @@ export namespace InputId {
   }
 
   function getThirdModifierName(): string {
-    if (new UAParser().getOS().name !== 'Mac OS') {
+    if (isNotMac) {
       return 'Alt'
     } else {
       return 'Option'
@@ -115,7 +117,7 @@ export namespace InputId {
   }
 
   function getFourthModifierName(): string {
-    if (new UAParser().getOS().name !== 'Mac OS') {
+    if (isNotMac) {
       return 'Windows'
     } else {
       return 'Control'
