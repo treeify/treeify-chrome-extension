@@ -293,12 +293,12 @@
   }
 
   .export-dialog_button-area {
-    margin-top: 0.5em;
+    margin-top: 1em;
 
     // 中央寄せ
     display: flex;
     justify-content: center;
-    gap: 0.5em;
+    gap: 1.5em;
   }
 
   .export-dialog_copy-button {
