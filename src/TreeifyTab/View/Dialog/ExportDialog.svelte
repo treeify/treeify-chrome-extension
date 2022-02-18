@@ -269,12 +269,17 @@
   }
 
   .export-dialog_option-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
     padding: 1em;
     // lch(80.0%, 0.0, 0.0)相当
     border: 1px solid #c6c6c6;
     border-top-style: none;
 
     > * {
+      // クリックの当たり判定が広がるのを防ぐ
       display: block;
       width: fit-content;
     }
