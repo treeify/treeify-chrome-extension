@@ -35,7 +35,7 @@
     --page-tree-indent-guide-hover-color: #ababab;
 
     // バレット領域のサイズ（正方形の一辺の長さ）
-    --page-tree-bullet-area-size: 0.8em;
+    --page-tree-bullet-area-size: 0.9em;
 
     // 折りたたまれたノードのバレット（二等辺三角形▶）の幅
     --page-tree-bullet-folded-width: 0.56em;
