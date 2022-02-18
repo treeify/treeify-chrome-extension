@@ -24,10 +24,11 @@
   .search-result-page_page {
     display: flex;
     align-items: center;
+    gap: 3px;
   }
 
   .search-result-page_page-icon {
-    @include common.square(1.1em);
+    @include common.square(1.05em);
 
     // lch(30.0%, 0.0, 0.0)相当
     @include common.icon(#474747, url('page.svg'));
