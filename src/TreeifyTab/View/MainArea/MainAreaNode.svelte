@@ -84,7 +84,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --main-area-node-content-area-vertical-padding: 0.11em;
+    --main-area-node-content-area-vertical-padding: 0.105em;
 
     // フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当
     --main-area-focused-item-background-color: #ecf0ff;
@@ -125,7 +125,8 @@
     grid-template-columns: minmax(0, 1fr) auto;
 
     &[data-depth='0'] {
-      font-size: 120%;
+      font-size: 125%;
+      padding-bottom: 0.5em;
     }
 
     &.excluded {

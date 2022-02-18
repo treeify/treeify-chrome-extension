@@ -40,7 +40,6 @@
   .main-area_root {
     overflow-y: auto;
 
-    padding-top: 20px;
     line-height: var(--main-area-line-height);
 
     outline: none;
@@ -50,12 +49,13 @@
   }
 
   .main-area_paper {
-    padding-inline: 30px;
-    padding-top: 20px;
+    padding-inline: 32px;
+    padding-top: 24px;
     padding-bottom: 25vh;
     border-radius: 10px 10px 0 0;
 
     margin-inline: 40px;
+    margin-top: 30px;
 
     // アウトライン表示の横幅が長すぎると右端のaudibleアイコンやタブ数カウントボタンが遠すぎてあまり役に立たなくなるので横幅を制限
     max-width: var(--main-area-max-width);
@@ -70,6 +70,7 @@
     @media print {
       box-shadow: none;
       margin: 0;
+      border-radius: 0;
     }
   }
 </style>

@@ -236,18 +236,17 @@
   }
 
   .export-dialog_format-select-button-area {
-    display: flex;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
   }
 
   .export-dialog_format-select-button {
-    flex: 1 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
 
-    padding-block: 0.12em;
+    padding-block: 0.18em;
+    padding-inline: 1.2em;
 
     border-top-left-radius: var(--export-dialog-tab-radius);
     border-top-right-radius: var(--export-dialog-tab-radius);
@@ -270,12 +269,17 @@
   }
 
   .export-dialog_option-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
     padding: 1em;
     // lch(80.0%, 0.0, 0.0)相当
     border: 1px solid #c6c6c6;
     border-top-style: none;
 
     > * {
+      // クリックの当たり判定が広がるのを防ぐ
       display: block;
       width: fit-content;
     }
@@ -289,12 +293,12 @@
   }
 
   .export-dialog_button-area {
-    margin-top: 0.5em;
+    margin-top: 1em;
 
     // 中央寄せ
     display: flex;
     justify-content: center;
-    gap: 0.5em;
+    gap: 1.5em;
   }
 
   .export-dialog_copy-button {

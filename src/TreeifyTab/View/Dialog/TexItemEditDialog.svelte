@@ -72,7 +72,7 @@
 
 <style global lang="scss">
   .tex-edit-dialog_content {
-    min-width: 20em;
+    min-width: 24em;
     padding: 1em;
 
     max-height: 100%;

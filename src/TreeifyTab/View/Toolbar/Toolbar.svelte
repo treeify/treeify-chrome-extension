@@ -50,13 +50,14 @@
   }
 
   .toolbar_root {
-    height: 36px;
+    height: 40px;
     padding-inline: 2em;
 
     // ボタンなどを横に並べる（右寄せ）
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 4px;
 
     // 左サイドバーにも影が落ちるように左サイドバーより高くする
     position: relative;

@@ -214,8 +214,6 @@
   }
 
   .search-dialog_result-area {
-    padding-bottom: 1em;
-
     overflow-y: auto;
   }
 
@@ -223,5 +221,7 @@
     display: flex;
     flex-direction: column;
     row-gap: 1em;
+
+    padding-bottom: 1em;
   }
 </style>
