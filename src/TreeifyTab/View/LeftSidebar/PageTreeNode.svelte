@@ -64,7 +64,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --page-tree-node-content-area-vertical-padding: 0.18em;
+    --page-tree-node-content-area-vertical-padding: 0.22em;
 
     // ページツリーの項目のマウスホバー時の背景色。lch(98%, 134.0, 280.4)相当
     --page-tree-hover-item-background-color: #f7f9ff;
