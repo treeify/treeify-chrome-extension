@@ -109,14 +109,14 @@ function calculateNextReminderTimestamp(reminder: Reminder): Timestamp | undefin
         .minute(reminder.minute)
         .startOf('minute')
         .valueOf()
-      if (reminder.notifiedAt === undefined || reminder.notifiedAt < timestamp) {
+      if (reminder.notifiedAt === null || reminder.notifiedAt < timestamp) {
         return timestamp
       } else {
         return undefined
       }
     case 'every month': {
       const baseDate = call(() => {
-        if (reminder.notifiedAt === undefined) {
+        if (reminder.notifiedAt === null) {
           return dayjs()
         } else {
           return dayjs(reminder.notifiedAt)

@@ -46,6 +46,7 @@
         Internal.instance.saveCurrentStateToUndoStack()
         const reminder: Reminder = {
           type: 'once',
+          notifiedAt: null,
           year: parsed.year(),
           month: parsed.month(),
           date: parsed.date(),
@@ -61,6 +62,7 @@
         Internal.instance.saveCurrentStateToUndoStack()
         const reminder: Reminder = {
           type: 'every month',
+          notifiedAt: null,
           date,
           hour,
           minute,
