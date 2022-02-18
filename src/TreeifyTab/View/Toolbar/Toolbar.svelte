@@ -57,6 +57,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    gap: 4px;
 
     // 左サイドバーにも影が落ちるように左サイドバーより高くする
     position: relative;
