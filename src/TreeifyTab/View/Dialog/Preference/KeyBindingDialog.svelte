@@ -235,7 +235,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --key-binding-dialog-command-button-size: 1.5em;
+    --key-binding-dialog-command-button-size: 1.6em;
     --key-binding-dialog-delete-icon-size: 1.2em;
     --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
   }
@@ -274,7 +274,7 @@
   }
 
   .key-binding-dialog_commands {
-    padding-block: 0.3em;
+    padding-block: 0.4em;
   }
 
   .key-binding-dialog_command-row {
