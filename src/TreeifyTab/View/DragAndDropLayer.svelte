@@ -17,8 +17,6 @@
 
   $: dropDestinationStyle = props.calculateDropDestinationStyle(mouseX, mouseY, props.itemPath)
 
-  $: itemId = ItemPath.getItemId(props.itemPath)
-
   function onMouseMove(event: MouseEvent) {
     mouseX = event.clientX
     mouseY = event.clientY
@@ -68,7 +66,7 @@
 >
   <div class="drag-and-drop-layer_drop-destination" style={dropDestinationStyle} />
   <div class="drag-and-drop-layer_item-image" tabindex="0">
-    <ItemContent props={createItemContentProps(itemId)} />
+    <ItemContent props={createItemContentProps(ItemPath.getItemId(props.itemPath))} />
   </div>
 </div>
 
