@@ -81,7 +81,6 @@
   }
 
   .tex-edit-dialog_scroll-area {
-    max-height: 100%;
     overflow-y: auto;
   }
 
@@ -97,6 +96,8 @@
 
   .tex-edit-dialog_rendered-tex {
     margin-top: 1em;
+    // なぜか縦スクロールバーが出る不具合の対策（KaTeXの複雑なDOMレイアウトの影響でサイズ計算が普通じゃないのだろうか）
+    margin-bottom: 0.3em;
   }
 
   .tex-edit-dialog_button-area {
