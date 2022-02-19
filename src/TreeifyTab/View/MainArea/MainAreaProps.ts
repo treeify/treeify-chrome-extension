@@ -149,6 +149,8 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const textLength = DomishObject.getTextLength(domishObjects)
       Rerenderer.instance.requestToSetCaretPosition(textLength)
+    } else {
+      Rerenderer.instance.requestToFocusTargetItem()
     }
 
     Rerenderer.instance.requestToScrollAppear()
@@ -168,6 +170,8 @@ function onArrowLeft(event: KeyboardEvent) {
       const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
       const textLength = DomishObject.getTextLength(domishObjects)
       Rerenderer.instance.requestToSetCaretPosition(textLength)
+    } else {
+      Rerenderer.instance.requestToFocusTargetItem()
     }
 
     Rerenderer.instance.requestToScrollAppear()
