@@ -14,7 +14,7 @@ export namespace GoogleDrive {
   const SNAPSHOT_FILE_NAME = 'snapshot.json.gz'
   const DATA_FOLDER_NAME = 'Treeify'
 
-  export async function getAccessToken(): Promise<string> {
+  async function getAccessToken(): Promise<string> {
     return new Promise<string>((resolve) => {
       chrome.identity.getAuthToken({ interactive: true }, resolve)
     })
@@ -27,7 +27,7 @@ export namespace GoogleDrive {
   }
 
   export async function fetchDataFileMetaData(): Promise<DataFileMataData | undefined> {
-    const dataFiles = await GoogleDrive.searchFile(SNAPSHOT_FILE_NAME)
+    const dataFiles = await searchFile(SNAPSHOT_FILE_NAME)
     // タイムスタンプが最新のデータファイルを選ぶ。
     // 複数が該当する場合はIDのソート順で先頭のものを選ぶ。
     return pipe(
@@ -38,7 +38,7 @@ export namespace GoogleDrive {
     )
   }
 
-  export async function searchFile(fileName: string): Promise<DataFileMataData[]> {
+  async function searchFile(fileName: string): Promise<DataFileMataData[]> {
     const params = new URLSearchParams({
       fields: 'files/id,files/name,files/modifiedTime',
       q: `name = '${fileName}' and trashed = false`,
@@ -54,7 +54,7 @@ export namespace GoogleDrive {
     return responseBody.files
   }
 
-  export async function readFile(fileId: string): Promise<Response> {
+  async function readFile(fileId: string): Promise<Response> {
     const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`
     return await fetch(url, {
       method: 'GET',
@@ -68,12 +68,12 @@ export namespace GoogleDrive {
    * データファイルとそれを格納するフォルダを作成する。
    * Googleドライブ内にTreeifyのデータファイルが存在しない場合に呼び出される。
    */
-  export async function createDataFile(state: State) {
+  async function createDataFile(state: State) {
     const folderResponse = await createFolder(DATA_FOLDER_NAME)
     const folderResponseJson = await folderResponse.json()
 
     const gzipped = await compress(JSON.stringify(state))
-    const fileResponse = await GoogleDrive.createFileWithMultipart(
+    const fileResponse = await createFileWithMultipart(
       SNAPSHOT_FILE_NAME,
       new Blob(gzipped),
       folderResponseJson.id
@@ -82,7 +82,7 @@ export namespace GoogleDrive {
     return responseJson.modifiedTime
   }
 
-  export async function createFileWithMultipart(
+  async function createFileWithMultipart(
     fileName: string,
     fileContent: Blob,
     folderId?: string
@@ -107,7 +107,7 @@ export namespace GoogleDrive {
     })
   }
 
-  export async function createFolder(folderName: string): Promise<Response> {
+  async function createFolder(folderName: string): Promise<Response> {
     const metadata = JSON.stringify({
       name: folderName,
       mimeType: 'application/vnd.google-apps.folder',
@@ -129,10 +129,7 @@ export namespace GoogleDrive {
     })
   }
 
-  export async function updateFileWithMultipart(
-    fileId: string,
-    fileContent: Blob
-  ): Promise<Response> {
+  async function updateFileWithMultipart(fileId: string, fileContent: Blob): Promise<Response> {
     // TODO: メタデータを更新しないならシンプルのやつでいいんじゃないか？
     const metadata = JSON.stringify({})
     const formData = new FormData()
@@ -188,7 +185,7 @@ export namespace GoogleDrive {
     // getAccessToken()は何も応答しない。
     // なのでローディングインジケーターが無限にぐるぐるするのを防ぐために
     // このタイミングでgetAccessToken()を呼んでおく。
-    await GoogleDrive.getAccessToken()
+    await getAccessToken()
 
     if (External.instance.isInSync) return
 
@@ -203,7 +200,6 @@ export namespace GoogleDrive {
     }
   }
 
-  // TODO: コマンドじゃない関数をCommand配下ファイルからexportするべきでない
   export async function syncWithGoogleDrive(
     dataFileMetaData: GoogleDrive.DataFileMataData | undefined
   ) {
@@ -213,7 +209,7 @@ export namespace GoogleDrive {
 
       console.log('create APIを呼んでファイル更新日時を記録して終了')
       // データファイルを作成し、日時を記録して終了
-      const modifiedTime = await GoogleDrive.createDataFile(Internal.instance.state)
+      const modifiedTime = await createDataFile(Internal.instance.state)
       setSyncedAt(modifiedTime)
       External.instance.hasUpdatedAfterSync = false
       Rerenderer.instance.rerender()
@@ -258,10 +254,7 @@ export namespace GoogleDrive {
         if (!External.instance.hasUpdatedAfterSync) return
 
         const gzipped = await compress(JSON.stringify(Internal.instance.state))
-        const response = await GoogleDrive.updateFileWithMultipart(
-          dataFileMetaData.id,
-          new Blob(gzipped)
-        )
+        const response = await updateFileWithMultipart(dataFileMetaData.id, new Blob(gzipped))
         const responseJson = await response.json()
         setSyncedAt(responseJson.modifiedTime)
         External.instance.hasUpdatedAfterSync = false
@@ -271,7 +264,7 @@ export namespace GoogleDrive {
   }
 
   async function getState(metaData: GoogleDrive.DataFileMataData): Promise<State> {
-    const response = await GoogleDrive.readFile(metaData.id)
+    const response = await readFile(metaData.id)
     const text = await decompress(await response.arrayBuffer())
     return JSON.parse(text)
   }

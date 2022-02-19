@@ -13,7 +13,6 @@ import {
 import { External } from 'src/TreeifyTab/External/External'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
-import { syncWithGoogleDrive } from 'src/TreeifyTab/Internal/Command/other'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
@@ -352,7 +351,7 @@ export async function startAutoSync() {
 
     if (metaData.modifiedTime === syncedAt) return
 
-    await syncWithGoogleDrive(metaData)
+    await GoogleDrive.syncWithGoogleDrive(metaData)
   } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()
