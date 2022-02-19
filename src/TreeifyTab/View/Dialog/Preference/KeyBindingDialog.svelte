@@ -161,7 +161,7 @@
     },
     {
       name: 'その他',
-      commandIds: ['doNothing', 'syncTreeifyData', 'toggleExcluded'],
+      commandIds: ['doNothing', 'toggleExcluded'],
     },
   ]
 </script>

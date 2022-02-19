@@ -98,6 +98,10 @@ async function onKeyDown(event: KeyboardEvent) {
       CurrentState.selectAll()
       Rerenderer.instance.rerender()
       return
+    case '1000KeyS':
+      event.preventDefault()
+      Command.syncTreeifyData()
+      return
     case '1000KeyZ':
       event.preventDefault()
       undo()
