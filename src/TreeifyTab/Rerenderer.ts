@@ -181,19 +181,16 @@ export class Rerenderer {
       assertNonNull(bottomElement)
       const bottom = bottomElement.getBoundingClientRect().bottom
 
+      // 上端や下端にぴったりくっつくようにスクロールするのではなく、この量だけ余裕を持たせてスクロールする
+      const SPACE_PX = 40
+
       const mainArea = document.querySelector<HTMLElement>('.main-area_root')
       assertNonNull(mainArea)
       const mainAreaRect = mainArea.getBoundingClientRect()
-      if (mainAreaRect.bottom < bottom) {
-        bottomElement.scrollIntoView({
-          behavior: 'auto',
-          block: 'end',
-        })
-      } else if (top < mainAreaRect.top) {
-        topElement.scrollIntoView({
-          behavior: 'auto',
-          block: 'start',
-        })
+      if (mainAreaRect.bottom < bottom + SPACE_PX) {
+        mainArea.scrollTop += bottom + SPACE_PX - mainAreaRect.bottom
+      } else if (top < mainAreaRect.top + SPACE_PX) {
+        mainArea.scrollTop -= mainAreaRect.top + SPACE_PX - top
       }
     }
   }
