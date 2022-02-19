@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Command } from 'src/TreeifyTab/Internal/Command'
+  import { GoogleDrive } from 'src/TreeifyTab/Internal/GoogleDrive'
   import LoadingIndicator from 'src/TreeifyTab/View/LoadingIndicator.svelte'
   import { SyncButtonProps } from 'src/TreeifyTab/View/Toolbar/SyncButtonProps'
   import ToolbarIconButton from 'src/TreeifyTab/View/Toolbar/ToolbarIconButton.svelte'
@@ -8,7 +8,7 @@
 
   function onClick(event: MouseEvent) {
     event.preventDefault()
-    Command.syncTreeifyData()
+    GoogleDrive.syncTreeifyData()
   }
 </script>
 
