@@ -84,9 +84,9 @@
 
 <CommonDialog class="reminder-setting-dialog_root" title="リマインダー設定">
   <div class="reminder-setting-dialog_content" on:keydown={onKeydown}>
-    <select bind:value={reminderType} class="reminder-setting-dialog_select">
-      <option value="once">繰り返さない</option>
-      <option value="every month">毎月</option>
+    <select class="reminder-setting-dialog_select" bind:value={reminderType}>
+      <option class="reminder-setting-dialog_option" value="once">繰り返さない</option>
+      <option class="reminder-setting-dialog_option" value="every month">毎月</option>
     </select>
     {#if reminderType === 'once'}
       <input type="date" class="reminder-setting-dialog_date-picker" bind:value={pickedDate} />

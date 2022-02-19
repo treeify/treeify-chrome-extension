@@ -140,7 +140,7 @@
       {#if searchResult === undefined}
         <datalist id="search-dialog_search-history-list">
           {#each RArray$.reverse(searchHistory) as searchQuery}
-            <option value={searchQuery} />
+            <option class="search-dialog_search-history-option" value={searchQuery} />
           {/each}
         </datalist>
       {/if}

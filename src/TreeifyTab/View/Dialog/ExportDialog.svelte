@@ -170,7 +170,7 @@
     </div>
     <div class="export-dialog_option-area">
       {#if selectedFormat === ExportFormat.PLAIN_TEXT}
-        <label>
+        <label class="export-dialog_text-input-label">
           インデントの表現:
           <input
             type="text"
@@ -180,11 +180,15 @@
           />
         </label>
         <label class="export-dialog_checkbox-label">
-          <input type="checkbox" bind:checked={plainTextIncludeInvisibleItems} />
+          <input
+            type="checkbox"
+            class="export-dialog_checkbox"
+            bind:checked={plainTextIncludeInvisibleItems}
+          />
           折りたたまれた項目も出力する
         </label>
       {:else if selectedFormat === ExportFormat.MARKDOWN}
-        <label>
+        <label class="export-dialog_text-input-label">
           最上位の見出しの#の数:
           <input
             type="number"
@@ -195,12 +199,20 @@
           />
         </label>
         <label class="export-dialog_checkbox-label">
-          <input type="checkbox" bind:checked={markdownIncludeInvisibleItems} />
+          <input
+            type="checkbox"
+            class="export-dialog_checkbox"
+            bind:checked={markdownIncludeInvisibleItems}
+          />
           折りたたまれた項目も出力する
         </label>
       {:else if selectedFormat === ExportFormat.OPML}
         <label class="export-dialog_checkbox-label">
-          <input type="checkbox" bind:checked={opmlIncludeInvisibleItems} />
+          <input
+            type="checkbox"
+            class="export-dialog_checkbox"
+            bind:checked={opmlIncludeInvisibleItems}
+          />
           折りたたまれた項目も出力する
         </label>
       {/if}

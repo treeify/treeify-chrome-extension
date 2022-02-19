@@ -179,11 +179,21 @@
             <td class="key-binding-dialog_commands">
               {#each commandIds as selectedCommandId, index}
                 <div class="key-binding-dialog_command-row">
-                  <select on:change={(event) => onChange(event, index, inputId)}>
+                  <select
+                    class="key-binding-dialog_command-select"
+                    on:change={(event) => onChange(event, index, inputId)}
+                  >
                     {#each commandGroups as commandGroup}
-                      <optgroup label={commandGroup.name}>
+                      <optgroup
+                        class="key-binding-dialog_command-option-group"
+                        label={commandGroup.name}
+                      >
                         {#each commandGroup.commandIds as commandId}
-                          <option value={commandId} selected={selectedCommandId === commandId}>
+                          <option
+                            class="key-binding-dialog_command-option"
+                            value={commandId}
+                            selected={selectedCommandId === commandId}
+                          >
                             {commandNames[commandId]}
                           </option>
                         {/each}

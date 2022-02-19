@@ -45,7 +45,9 @@
       </label>
     </div>
     <div class="other-settings-dialog_button-area">
-      <button on:mousedown|preventDefault={closeDialog}>OK</button>
+      <button class="other-settings-dialog_ok-button" on:mousedown|preventDefault={closeDialog}>
+        OK
+      </button>
     </div>
   </div>
 </CommonDialog>

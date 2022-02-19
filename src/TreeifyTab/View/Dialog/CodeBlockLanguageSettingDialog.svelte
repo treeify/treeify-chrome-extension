@@ -65,7 +65,7 @@
     />
     <datalist id="code-block-language-setting-dialog_language-list">
       {#each allLanguages as language}
-        <option value={language} />
+        <option class="code-block-language-setting-dialog_language-option" value={language} />
       {/each}
     </datalist>
     <div class="code-block-language-setting-dialog_button-area">

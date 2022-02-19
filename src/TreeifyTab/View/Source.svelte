@@ -6,7 +6,13 @@
 
 {#if props.title !== '' && props.url !== ''}
   <cite class="source_root">
-    <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
+    <a
+      class="source_link"
+      href={props.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      on:mousedown={props.onMouseDown}
+    >
       {props.title}
     </a>
   </cite>
@@ -14,7 +20,13 @@
   <cite class="source_root">{props.title}</cite>
 {:else if props.title === '' && props.url !== ''}
   <cite class="source_root">
-    <a href={props.url} target="_blank" rel="noopener noreferrer" on:mousedown={props.onMouseDown}>
+    <a
+      class="source_link"
+      href={props.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      on:mousedown={props.onMouseDown}
+    >
       {props.url}
     </a>
   </cite>
