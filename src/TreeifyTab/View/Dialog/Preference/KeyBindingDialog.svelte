@@ -7,7 +7,7 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import { commandNames } from 'src/TreeifyTab/View/commandNames'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
   import { RArray, RArray$ } from 'src/Utility/fp-ts'
   import { integer } from 'src/Utility/integer'
 
@@ -37,13 +37,13 @@
     clonedKeyBindings[inputId] = ['doNothing']
   }
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     Internal.instance.mutate(clonedKeyBindings, StatePath.of('mainAreaKeyBindings'))
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
@@ -233,7 +233,7 @@
       </p>
     </div>
     <div class="key-binding-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

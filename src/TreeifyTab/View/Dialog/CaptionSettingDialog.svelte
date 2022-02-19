@@ -5,7 +5,7 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
   import { assertNonUndefined } from 'src/Utility/Debug/assert'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -14,7 +14,7 @@
 
   let captionValue: string = caption
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     const targetItemPath = CurrentState.getTargetItemPath()
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
@@ -26,7 +26,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
@@ -39,7 +39,7 @@
       case '0000Enter':
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
     }
   }
@@ -49,7 +49,7 @@
   <div class="caption-setting-dialog_content" on:keydown={onKeyDown}>
     <input type="text" class="caption-setting-dialog_caption" bind:value={captionValue} />
     <div class="caption-setting-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

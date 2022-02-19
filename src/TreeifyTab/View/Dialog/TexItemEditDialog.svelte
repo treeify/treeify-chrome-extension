@@ -8,14 +8,14 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyTexItem = CurrentState.isEmptyTexItem(targetItemId)
   const dialogTitle = isEmptyTexItem ? 'TeX項目作成' : 'TeX編集'
   let code = Internal.instance.state.texItems[targetItemId].code
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     // コードを更新
     CurrentState.setTexItemCode(targetItemId, code)
     // タイムスタンプを更新
@@ -28,7 +28,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     onCloseDialog()
@@ -39,7 +39,7 @@
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
     }
   }
@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="tex-edit-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

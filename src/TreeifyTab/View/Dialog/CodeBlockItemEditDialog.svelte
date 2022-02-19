@@ -10,7 +10,7 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
   import { Option$, RArray$, RSet$ } from 'src/Utility/fp-ts'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
@@ -18,7 +18,7 @@
   const dialogTitle = isEmptyCodeBlockItem ? 'コードブロック項目作成' : 'コードブロック編集'
   let code = Internal.instance.state.codeBlockItems[targetItemId].code
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     // コードを更新
     CurrentState.setCodeBlockItemCode(targetItemId, code)
     // 言語を自動検出
@@ -70,7 +70,7 @@
     }
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     onCloseDialog()
@@ -81,7 +81,7 @@
     switch (InputId.fromKeyboardEvent(event)) {
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
       case '1100KeyV':
         // インデント自動除去機能を回避する「そのまま貼り付け」機能
@@ -108,7 +108,7 @@
       on:paste={onPaste}
     />
     <div class="code-block-edit-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

@@ -7,7 +7,7 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyImageItem = CurrentState.isEmptyImageItem(targetItemId)
@@ -22,12 +22,12 @@
       case '0000Enter':
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
     }
   }
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     // URLを更新
     CurrentState.setImageItemUrl(targetItemId, url)
     // タイムスタンプを更新
@@ -40,7 +40,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     onCloseDialog()
@@ -63,7 +63,7 @@
       placeholder="https://example.com/image.png"
     />
     <div class="image-item-edit-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

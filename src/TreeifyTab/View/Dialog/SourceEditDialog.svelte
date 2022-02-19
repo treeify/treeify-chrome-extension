@@ -6,7 +6,7 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const item = Internal.instance.state.items[ItemPath.getItemId(targetItemPath)]
@@ -14,7 +14,7 @@
   let titleValue: string = item.source?.title ?? ''
   let urlValue: string = item.source?.url ?? ''
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     const targetItemId = ItemPath.getItemId(targetItemPath)
 
     // sourceプロパティを更新
@@ -28,7 +28,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
@@ -41,7 +41,7 @@
       case '0000Enter':
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
     }
   }
@@ -60,7 +60,7 @@
       </label>
     </div>
     <div class="source-edit-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

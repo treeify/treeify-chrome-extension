@@ -9,7 +9,7 @@
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const reminder = Internal.instance.state.reminders[targetItemId]
@@ -29,12 +29,12 @@
       case '0000Enter':
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
     }
   }
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     switch (reminderType) {
       case 'once': {
         const parsed = dayjs(`${pickedDate} ${time}`)
@@ -76,7 +76,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
   }
@@ -103,7 +103,7 @@
       <input type="time" class="reminder-setting-dialog_time" bind:value={time} />
     {/if}
     <div class="reminder-setting-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>

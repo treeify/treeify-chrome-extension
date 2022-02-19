@@ -5,7 +5,7 @@
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
 
   let textContent: string = Internal.instance.state.customCss
 
@@ -26,7 +26,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
@@ -43,9 +43,9 @@
       on:keydown={onKeyDown}
     />
     <div class="custom-css-dialog_button-area">
-      <FinishAndCancelButtons
-        onClickFinishButton={() => onSubmit(textContent)}
-        {onClickCancelButton}
+      <PrimaryAndSecondaryButtons
+        onClickPrimaryButton={() => onSubmit(textContent)}
+        {onClickSecondaryButton}
       />
     </div>
   </div>

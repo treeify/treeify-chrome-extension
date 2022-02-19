@@ -8,13 +8,13 @@
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import FinishAndCancelButtons from 'src/TreeifyTab/View/Dialog/FinishAndCancelButtons.svelte'
+  import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
 
   const itemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
   let languageValue = ''
 
-  function onClickFinishButton() {
+  function onClickPrimaryButton() {
     // 言語自動検出の精度アップのためスコア補正値を計算・保存
     const languageScoreOffsets = Internal.instance.state.languageScoreOffsets
     const amount = 1
@@ -35,7 +35,7 @@
     Rerenderer.instance.rerender()
   }
 
-  function onClickCancelButton() {
+  function onClickSecondaryButton() {
     // ダイアログを閉じる
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
@@ -48,7 +48,7 @@
       case '0000Enter':
       case '1000Enter':
         event.preventDefault()
-        onClickFinishButton()
+        onClickPrimaryButton()
         break
     }
   }
@@ -69,7 +69,7 @@
       {/each}
     </datalist>
     <div class="code-block-language-setting-dialog_button-area">
-      <FinishAndCancelButtons {onClickFinishButton} {onClickCancelButton} />
+      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
 </CommonDialog>
