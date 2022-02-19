@@ -15,7 +15,6 @@
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyCodeBlockItem = CurrentState.isEmptyCodeBlockItem(targetItemId)
-  const dialogTitle = isEmptyCodeBlockItem ? 'コードブロック項目作成' : 'コードブロック編集'
   let code = Internal.instance.state.codeBlockItems[targetItemId].code
 
   function onClickPrimaryButton() {
@@ -98,7 +97,11 @@
   }
 </script>
 
-<CommonDialog class="code-block-edit-dialog_root" title={dialogTitle} onClose={onCloseDialog}>
+<CommonDialog
+  class="code-block-edit-dialog_root"
+  title={isEmptyCodeBlockItem ? 'コードブロック項目作成' : 'コードブロック編集'}
+  onClose={onCloseDialog}
+>
   <div class="code-block-edit-dialog_content" on:keydown={onKeyDown}>
     <div
       class="code-block-edit-dialog_code"
@@ -108,7 +111,11 @@
       on:paste={onPaste}
     />
     <div class="code-block-edit-dialog_button-area">
-      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
+      <PrimaryAndSecondaryButtons
+        primaryButtonText={isEmptyCodeBlockItem ? '作成' : undefined}
+        {onClickPrimaryButton}
+        {onClickSecondaryButton}
+      />
     </div>
   </div>
 </CommonDialog>

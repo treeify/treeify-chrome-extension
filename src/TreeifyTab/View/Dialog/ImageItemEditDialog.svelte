@@ -11,7 +11,6 @@
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyImageItem = CurrentState.isEmptyImageItem(targetItemId)
-  const dialogTitle = isEmptyImageItem ? '画像項目作成' : '画像項目編集'
 
   let url = Internal.instance.state.imageItems[targetItemId].url
 
@@ -54,7 +53,11 @@
   }
 </script>
 
-<CommonDialog class="image-item-edit-dialog_root" title={dialogTitle} onClose={onCloseDialog}>
+<CommonDialog
+  class="image-item-edit-dialog_root"
+  title={isEmptyImageItem ? '画像項目作成' : '画像項目編集'}
+  onClose={onCloseDialog}
+>
   <div class="image-item-edit-dialog_content" on:keydown={onKeyDown}>
     <input
       type="text"
@@ -63,7 +66,11 @@
       placeholder="https://example.com/image.png"
     />
     <div class="image-item-edit-dialog_button-area">
-      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
+      <PrimaryAndSecondaryButtons
+        primaryButtonText={isEmptyImageItem ? '作成' : undefined}
+        {onClickPrimaryButton}
+        {onClickSecondaryButton}
+      />
     </div>
   </div>
 </CommonDialog>

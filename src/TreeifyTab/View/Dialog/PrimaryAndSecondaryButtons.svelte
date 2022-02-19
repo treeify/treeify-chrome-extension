@@ -1,4 +1,5 @@
 <script lang="ts">
+  export let primaryButtonText: string = '完了'
   export let onClickPrimaryButton = () => {}
   export let onClickSecondaryButton = () => {}
 </script>
@@ -14,7 +15,7 @@
     class="primary-and-secondary-buttons_primary-button"
     on:mousedown|preventDefault={onClickPrimaryButton}
   >
-    完了
+    {primaryButtonText}
   </button>
 </div>
 

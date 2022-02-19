@@ -12,7 +12,6 @@
 
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const isEmptyTexItem = CurrentState.isEmptyTexItem(targetItemId)
-  const dialogTitle = isEmptyTexItem ? 'TeX項目作成' : 'TeX編集'
   let code = Internal.instance.state.texItems[targetItemId].code
 
   function onClickPrimaryButton() {
@@ -51,7 +50,11 @@
   }
 </script>
 
-<CommonDialog class="tex-edit-dialog_root" title={dialogTitle} onClose={onCloseDialog}>
+<CommonDialog
+  class="tex-edit-dialog_root"
+  title={isEmptyTexItem ? 'TeX項目作成' : 'TeX編集'}
+  onClose={onCloseDialog}
+>
   <div class="tex-edit-dialog_content" on:keydown={onKeyDown}>
     <div class="tex-edit-dialog_scroll-area">
       <div
@@ -65,7 +68,11 @@
       </div>
     </div>
     <div class="tex-edit-dialog_button-area">
-      <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
+      <PrimaryAndSecondaryButtons
+        primaryButtonText={isEmptyTexItem ? '作成' : undefined}
+        {onClickPrimaryButton}
+        {onClickSecondaryButton}
+      />
     </div>
   </div>
 </CommonDialog>
