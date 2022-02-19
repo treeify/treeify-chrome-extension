@@ -29,10 +29,21 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   const result: ContextMenuItemProps[] = []
 
   if (hasParent) {
-    result.push({
-      title: '削除',
-      onClick: () => Command.removeItem(),
-    })
+    if (isSingleSelect && item.childItemIds.length > 0) {
+      result.push({
+        title: 'ツリーを削除',
+        onClick: () => Command.removeItem(),
+      })
+      result.push({
+        title: '単体を削除',
+        onClick: () => Command.deleteJustOneItem(),
+      })
+    } else {
+      result.push({
+        title: '削除',
+        onClick: () => Command.removeItem(),
+      })
+    }
   }
 
   if (hasParent && includeTranscludedItem) {
