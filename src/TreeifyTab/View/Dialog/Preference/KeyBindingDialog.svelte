@@ -121,7 +121,7 @@
       ],
     },
     {
-      name: 'ページ関連',
+      name: 'ページ',
       commandIds: ['turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'],
     },
     {
@@ -129,7 +129,7 @@
       commandIds: ['toggleCompleted', 'toggleHighlighted', 'toggleDoubtful', 'toggleSource'],
     },
     {
-      name: '空の項目作成',
+      name: '項目作成',
       commandIds: ['createImageItem', 'createCodeBlockItem', 'createTexItem', 'createTextItem'],
     },
     {
