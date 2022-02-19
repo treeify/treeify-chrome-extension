@@ -113,7 +113,12 @@ export function onPaste(event: ClipboardEvent) {
         // ターゲットを更新する
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
         assertNonUndefined(belowItemPath)
-        CurrentState.setTargetItemPath(belowItemPath)
+        const lastItemPath = ItemPath.createSiblingItemPath(
+          belowItemPath,
+          ItemPath.getItemId(RArray$.lastOrThrow(selectedItemPaths))
+        )
+        assertNonUndefined(lastItemPath)
+        CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
         Rerenderer.instance.requestToFocusTargetItem()
 
         // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
@@ -156,7 +161,12 @@ export function onPaste(event: ClipboardEvent) {
         // ターゲットを更新する
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
         assertNonUndefined(belowItemPath)
-        CurrentState.setTargetItemPath(belowItemPath)
+        const lastItemPath = ItemPath.createSiblingItemPath(
+          belowItemPath,
+          ItemPath.getItemId(RArray$.lastOrThrow(selectedItemPaths))
+        )
+        assertNonUndefined(lastItemPath)
+        CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
         Rerenderer.instance.requestToFocusTargetItem()
 
         // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
@@ -175,14 +185,20 @@ export function onPaste(event: ClipboardEvent) {
   const opmlParseResult = tryParseAsOpml(getOpmlMimeTypeText(event.clipboardData))
   // OPML形式の場合
   if (opmlParseResult !== undefined) {
-    for (const itemAndEdge of RArray$.reverse(createItemsBasedOnOpml(opmlParseResult))) {
+    const newItemAndEdges = createItemsBasedOnOpml(opmlParseResult)
+    for (const itemAndEdge of RArray$.reverse(newItemAndEdges)) {
       CurrentState.insertBelowItem(targetItemPath, itemAndEdge.itemId, itemAndEdge.edge)
     }
 
     // ターゲットを更新する
     const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
     assertNonUndefined(belowItemPath)
-    CurrentState.setTargetItemPath(belowItemPath)
+    const lastItemPath = ItemPath.createSiblingItemPath(
+      belowItemPath,
+      RArray$.lastOrThrow(newItemAndEdges).itemId
+    )
+    assertNonUndefined(lastItemPath)
+    CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
     Rerenderer.instance.requestToFocusTargetItem()
 
     // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
@@ -210,7 +226,10 @@ export function onPaste(event: ClipboardEvent) {
       const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
       // ターゲットを更新する
-      CurrentState.setTargetItemPath(belowItemPath)
+      const lastItemPath = ItemPath.createSiblingItemPath(belowItemPath, newItemId)
+      assertNonUndefined(lastItemPath)
+      CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
+
       Rerenderer.instance.requestToFocusTargetItem()
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
@@ -225,10 +244,12 @@ export function onPaste(event: ClipboardEvent) {
     } else {
       const newItemId = CurrentState.createTextItem()
       CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(text))
-      const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
 
       // ターゲットを更新する
-      CurrentState.setTargetItemPath(belowItemPath)
+      const belowItemPath = CurrentState.insertBelowItem(targetItemPath, newItemId)
+      const lastItemPath = ItemPath.createSiblingItemPath(belowItemPath, newItemId)
+      assertNonUndefined(lastItemPath)
+      CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
       Rerenderer.instance.requestToFocusTargetItem()
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する

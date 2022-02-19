@@ -136,14 +136,20 @@ export function pasteMultilineText(text: string) {
           return itemId
         })
       )
-      for (const rootItemId of rootItemIds.reverse()) {
+      for (const rootItemId of RArray$.reverse(rootItemIds)) {
         CurrentState.insertBelowItem(targetItemPath, rootItemId)
       }
 
       // ターゲットを更新する
       const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
       assertNonUndefined(belowItemPath)
-      CurrentState.setTargetItemPath(belowItemPath)
+      const lastItemPath = ItemPath.createSiblingItemPath(
+        belowItemPath,
+        RArray$.lastOrThrow(rootItemIds)
+      )
+      assertNonUndefined(lastItemPath)
+      CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
+
       Rerenderer.instance.requestToFocusTargetItem()
 
       // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
@@ -157,14 +163,20 @@ export function pasteMultilineText(text: string) {
   }
 
   // 特に形式を認識できなかった場合、フラットな1行テキストの並びとして扱う
-  for (const itemId of lines.map(createItemFromSingleLineText).reverse()) {
+  const newItemIds = lines.map(createItemFromSingleLineText)
+  for (const itemId of RArray$.reverse(newItemIds)) {
     CurrentState.insertBelowItem(targetItemPath, itemId)
   }
 
   // ターゲットを更新する
   const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
   assertNonUndefined(belowItemPath)
-  CurrentState.setTargetItemPath(belowItemPath)
+  const lastItemPath = ItemPath.createSiblingItemPath(
+    belowItemPath,
+    RArray$.lastOrThrow(newItemIds)
+  )
+  assertNonUndefined(lastItemPath)
+  CurrentState.setTargetItemPath(CurrentState.getLowerEndItemPath(lastItemPath))
   Rerenderer.instance.requestToFocusTargetItem()
 
   // 空のテキスト項目上で実行した場合は空のテキスト項目を削除する
