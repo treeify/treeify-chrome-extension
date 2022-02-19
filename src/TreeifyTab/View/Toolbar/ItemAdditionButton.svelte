@@ -18,7 +18,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .item-addition-button_icon {
-    @include common.square(24px);
+    @include common.square(26px);
     @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当

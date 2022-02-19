@@ -18,7 +18,7 @@
 
   // ツールバーのアイコンボタンの共通クラス
   .toolbar-icon-button_root {
-    @include common.circle(32px);
+    @include common.circle(36px);
     @include common.pseudo-ripple-effect(var(--toolbar-icon-button-hover-background));
   }
 </style>

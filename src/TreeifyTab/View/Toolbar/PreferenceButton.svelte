@@ -18,7 +18,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .preference-button_icon {
-    @include common.square(22px);
+    @include common.square(24px);
     @include common.absolute-center;
 
     // lch(45.0%, 0.0, 0.0)相当

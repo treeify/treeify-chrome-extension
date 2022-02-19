@@ -20,7 +20,7 @@
       class:has-updated-after-sync={!props.hasUpdatedAfterSync}
     />
   {:else}
-    <LoadingIndicator size="24px" />
+    <LoadingIndicator size="22px" />
   {/if}
 </ToolbarIconButton>
 
@@ -33,7 +33,7 @@
   }
 
   .sync-button_cloud-icon {
-    @include common.square(24px);
+    @include common.square(26px);
     @include common.absolute-center;
     @include common.icon(var(--sync-button-icon-color), url('cloud-upload.svg'));
 
