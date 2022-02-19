@@ -15,12 +15,9 @@ export function createSyncButtonProps(): SyncButtonProps {
   const hasNeverSynced = getSyncedAt() === undefined
   const titleAttr = call(() => {
     if (hasNeverSynced) {
-      return 'Googleドライブ内にデータファイルを作成します。\n既にデータファイルがあったらダウンロードしてローカルデータを上書きします。'
+      return 'ローカルデータをアップロードしてGoogleドライブ内にデータファイルを作成します。\n既にデータファイルがあったらダウンロードしてローカルデータを上書きします。'
     }
-    if (hasUpdatedAfterSync) {
-      return 'ローカルデータをGoogleドライブに上書きアップロードします。\nただしGoogleドライブ内に未知のデータがあったらダウンロードしてローカルデータを上書きします。'
-    }
-    return 'Googleドライブ内に未知のデータがあったらダウンロードしてローカルデータを上書きします。'
+    return 'ローカルデータとGoogleドライブ内のデータのうち新しい方で古い方を上書きします。'
   })
   return {
     hasUpdatedAfterSync,
