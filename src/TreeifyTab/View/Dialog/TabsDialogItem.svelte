@@ -92,7 +92,9 @@
   .tabs-dialog-item_audible-icon {
     @include common.square(1em);
 
-    // lch(60.0%, 0.0, 0.0)相当
-    @include common.icon(#919191, url('audible.svg'));
+    // lch(50.0%, 0.0, 0.0)相当
+    @include common.icon(#777777, url('audible.svg'));
+
+    margin-left: 0.5em;
   }
 </style>
