@@ -61,7 +61,7 @@ export namespace GoogleDrive {
 
   /**
    * データファイルとそれを格納するフォルダを作成する。
-   * Google Drive内にTreeifyのデータファイルが存在しない場合に呼び出される。
+   * Googleドライブ内にTreeifyのデータファイルが存在しない場合に呼び出される。
    */
   export async function createDataFile(state: State) {
     const folderResponse = await createFolder(DATA_FOLDER_NAME)
