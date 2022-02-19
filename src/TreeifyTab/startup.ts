@@ -11,13 +11,12 @@ import {
   onWindowFocusChanged,
 } from 'src/TreeifyTab/External/chromeEventListeners'
 import { External } from 'src/TreeifyTab/External/External'
-import { GoogleDrive } from 'src/TreeifyTab/External/GoogleDrive'
 import { GlobalItemId } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
-import { syncWithGoogleDrive } from 'src/TreeifyTab/Internal/Command/other'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { GoogleDrive } from 'src/TreeifyTab/Internal/GoogleDrive'
 import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -352,7 +351,7 @@ export async function startAutoSync() {
 
     if (metaData.modifiedTime === syncedAt) return
 
-    await syncWithGoogleDrive(metaData)
+    await GoogleDrive.syncWithGoogleDrive(metaData)
   } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()

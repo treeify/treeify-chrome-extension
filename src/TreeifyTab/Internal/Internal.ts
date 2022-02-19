@@ -194,7 +194,6 @@ export class Internal {
         '0010KeyC': ['copyForTransclude'],
         '1100KeyX': ['copyForMove'],
         '1100KeyV': ['pasteAsPlainText'],
-        '1000KeyS': ['syncTreeifyData'],
         '1100KeyF': ['showSearchDialog'],
         '1100KeyR': ['showReplaceDialog'],
         '1000Slash': ['showCommandPaletteDialog'],
