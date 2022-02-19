@@ -125,6 +125,11 @@ export function toOpmlString(
   const headElement = xmlDocument.createElement('head')
   opmlElement.append(headElement)
 
+  const formatElement = xmlDocument.createElement('format')
+  formatElement.setAttribute('name', 'Treeify')
+  formatElement.setAttribute('version', '1.0')
+  headElement.append(formatElement)
+
   const bodyElement = xmlDocument.createElement('body')
   bodyElement.append(
     ...itemPaths.map((itemPath) =>
