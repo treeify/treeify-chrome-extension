@@ -1,6 +1,8 @@
 import Tab = chrome.tabs.Tab
 
 export namespace TreeifyTab {
+  export const url = chrome.runtime.getURL('TreeifyTab/index.html')
+
   /**
    * Treeifyタブを開く。
    * すでに開かれている場合はTreeifyタブを最前面化する。
@@ -14,15 +16,13 @@ export namespace TreeifyTab {
       await chrome.windows.update(treeifyTab.windowId, { focused: true })
     } else {
       // Treeifyタブを開く
-      await chrome.tabs.create({
-        url: chrome.runtime.getURL('TreeifyTab/index.html'),
-      })
+      await chrome.tabs.create({ url: TreeifyTab.url })
     }
   }
 
   async function findTab(): Promise<Tab | undefined> {
     const windows = await chrome.windows.getAll({ populate: true })
     const tabs = windows.flatMap((window) => window.tabs ?? [])
-    return tabs.find((tab) => tab.url === chrome.runtime.getURL('TreeifyTab/index.html'))
+    return tabs.find((tab) => tab.url === TreeifyTab.url)
   }
 }

@@ -18,12 +18,10 @@ chrome.runtime.onInstalled.addListener(async () => {
 chrome.runtime.onStartup.addListener(openTreeifyTab)
 
 async function openTreeifyTab() {
+  const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
   const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
-  const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
   if (tabs.find((tab) => tab.url === treeifyTabUrl) === undefined) {
-    await chrome.tabs.create({
-      url: chrome.runtime.getURL('TreeifyTab/index.html'),
-    })
+    await chrome.tabs.create({ url: treeifyTabUrl })
   }
 }
