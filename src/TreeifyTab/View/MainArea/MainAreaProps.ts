@@ -10,6 +10,7 @@ import { Command } from 'src/TreeifyTab/Internal/Command'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+import { GoogleDrive } from 'src/TreeifyTab/Internal/GoogleDrive'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
@@ -100,7 +101,7 @@ async function onKeyDown(event: KeyboardEvent) {
       return
     case '1000KeyS':
       event.preventDefault()
-      Command.syncTreeifyData()
+      GoogleDrive.syncTreeifyData()
       return
     case '1000KeyZ':
       event.preventDefault()
