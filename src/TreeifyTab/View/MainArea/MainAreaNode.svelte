@@ -106,8 +106,6 @@
     // 完了状態の項目の標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当
     --completed-item-text-color: #b9b9b9;
 
-    // 削除ボタンのサイズ（正方形の一辺の長さ）
-    --main-area-delete-button-size: 0.8em;
     // 削除ボタンなどのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当
     --main-area-node-button-background-hover-color: #e2e2e2;
   }
@@ -206,7 +204,7 @@
   }
 
   .main-area-node_delete-button-icon {
-    @include common.square(var(--main-area-delete-button-size));
+    @include common.square(0.8em);
     @include common.absolute-center;
 
     // lch(30.0%, 0.0, 0.0)相当

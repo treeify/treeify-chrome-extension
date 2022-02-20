@@ -58,9 +58,6 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    // ウェブページ項目のファビコン領域（正方形）の一辺の長さ
-    --main-area-favicon-size: 1em;
-
     // 未読ウェブページ項目のタイトルの色。lch(35.0%, 134.0, 160.4)相当
     --main-area-unread-web-page-item-title-color: #005f3e;
 
@@ -94,7 +91,7 @@
   }
 
   .main-area-web-page-content_favicon-wrapper {
-    @include common.square(var(--main-area-favicon-size));
+    @include common.square(1em);
     @include common.pseudo-ripple-effect(transparent);
 
     .discarded & {

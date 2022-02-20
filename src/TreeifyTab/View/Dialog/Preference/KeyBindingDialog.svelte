@@ -246,8 +246,6 @@
 
   :root {
     --key-binding-dialog-command-button-size: 1.6em;
-    --key-binding-dialog-delete-icon-size: 1.2em;
-    --key-binding-dialog-add-icon-size: var(--key-binding-dialog-delete-icon-size);
   }
 
   .key-binding-dialog_content {
@@ -305,7 +303,7 @@
     &::before {
       content: '';
 
-      @include common.square(var(--key-binding-dialog-delete-icon-size));
+      @include common.square(1.2em);
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
@@ -328,7 +326,7 @@
     &::before {
       content: '';
 
-      @include common.square(var(--key-binding-dialog-add-icon-size));
+      @include common.square(1.2em);
       @include common.absolute-center;
 
       // lch(40.0%, 0.0, 0.0)相当
