@@ -17,6 +17,7 @@ export type ItemId = integer
  * ・常に親を持たない
  * ・常にページである（非ページ化できない）
  * ・常にマウントされている
+ * ・除外できない
  */
 export const TOP_ITEM_ID = 0
 

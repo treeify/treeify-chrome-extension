@@ -167,6 +167,9 @@ export class Rerenderer {
 
   /** ターゲット項目が画面外の場合、画面に表示されるよう次の描画後にスクロールする */
   requestToScrollAppear() {
+    // 上端や下端にぴったりくっつくようにスクロールするのではなく、この量だけ余裕を持たせてスクロールする
+    const SPACE_PX = 40
+
     this.pendingScroll = () => {
       const selectedItemPaths = CurrentState.getSelectedItemPaths()
       const topItemPath = selectedItemPaths[0]
@@ -180,9 +183,6 @@ export class Rerenderer {
       const bottomElement = document.getElementById(bottomElementId)
       assertNonNull(bottomElement)
       const bottom = bottomElement.getBoundingClientRect().bottom
-
-      // 上端や下端にぴったりくっつくようにスクロールするのではなく、この量だけ余裕を持たせてスクロールする
-      const SPACE_PX = 40
 
       const mainArea = document.querySelector<HTMLElement>('.main-area_root')
       assertNonNull(mainArea)
