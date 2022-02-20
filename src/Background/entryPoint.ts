@@ -15,7 +15,6 @@ chrome.runtime.onInstalled.addListener(async () => {
 
   await openTreeifyTab()
 })
-chrome.runtime.onStartup.addListener(openTreeifyTab)
 
 async function openTreeifyTab() {
   const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
