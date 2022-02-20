@@ -128,7 +128,7 @@ export class Internal {
         [TOP_ITEM_ID]: {
           type: ItemType.TEXT,
           // トップページはどのインスタンスで生成されたかを問わず同一視したい特別な項目なので専用のグローバル項目IDを持つ
-          globalItemId: 'Treeify#0',
+          globalItemId: 'Top',
           childItemIds: [],
           parents: {},
           timestamp: Timestamp.now(),
