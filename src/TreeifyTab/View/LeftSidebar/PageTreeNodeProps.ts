@@ -127,7 +127,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       onTabsCountContextMenu(event: Event) {
         event.preventDefault()
 
-        External.instance.dialogState = { type: 'TabsDialog', targetItemId: itemId }
+        External.instance.dialogState = { type: 'TabsDialog', targetItem: itemId }
         Rerenderer.instance.rerender()
       },
     }

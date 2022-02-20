@@ -53,7 +53,7 @@
         class="main-area-node_content-area"
         class:single-selected={props.selected === 'single'}
         on:mousedown={props.onMouseDownContentArea}
-        on:contextmenu={props.onContextMenu}
+        on:contextmenu={props.onContextMenuContentArea}
       >
         <MainAreaContent props={props.contentProps} />
       </div>
@@ -61,7 +61,11 @@
         <div class="grid-empty-cell" />
       {:else if props.hiddenTabsCount > 0}
         <!-- 隠れているタブ数 -->
-        <div class="main-area-node_hidden-tabs-count" on:mousedown={props.onClickHiddenTabsCount}>
+        <div
+          class="main-area-node_hidden-tabs-count"
+          on:mousedown={props.onClickHiddenTabsCount}
+          on:contextmenu={props.onContextMenuTabsCount}
+        >
           {Math.min(99, props.hiddenTabsCount)}
         </div>
       {:else}
