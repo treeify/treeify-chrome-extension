@@ -15,7 +15,7 @@ call(async () => {
   const tabs = windows.flatMap((window) => window.tabs ?? [])
   const duplicatedTabs = pipe(
     tabs,
-    RArray$.filter((tab: Tab) => tab.url?.startsWith(TreeifyTab.url) === true),
+    RArray$.filter((tab: Tab) => TreeifyTab.isTreeifyTab(tab.url)),
     RArray$.sortByNumber((tab: Tab) => tab.id!),
     RArray$.shift
   )

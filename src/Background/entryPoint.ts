@@ -21,7 +21,7 @@ async function openTreeifyTab() {
   const treeifyTabUrl = chrome.runtime.getURL('TreeifyTab/index.html')
   const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
-  if (tabs.find((tab) => tab.url === treeifyTabUrl) === undefined) {
+  if (!tabs.some((tab) => tab.url?.startsWith(treeifyTabUrl))) {
     await chrome.tabs.create({ url: treeifyTabUrl })
   }
 }

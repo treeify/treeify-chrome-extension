@@ -137,7 +137,7 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
 export function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   // Treeifyタブだった場合は何もしない。
   // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
-  if (tab.url === TreeifyTab.url) return
+  if (TreeifyTab.isTreeifyTab(tab.url)) return
 
   const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   if (itemId === undefined) return
@@ -258,7 +258,7 @@ export async function matchTabsAndWebPageItems() {
 async function getAllNonTreeifyTabs(): Promise<Tab[]> {
   const windows = await chrome.windows.getAll({ populate: true })
   const tabs = windows.flatMap((window) => window.tabs ?? [])
-  return tabs.filter((tab) => !tab.url?.startsWith(TreeifyTab.url))
+  return tabs.filter((tab) => !TreeifyTab.isTreeifyTab(tab.url))
 }
 
 export function onWindowFocusChanged(windowId: integer) {
