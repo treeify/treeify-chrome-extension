@@ -130,6 +130,13 @@ export function enterKeyDefault() {
     } else {
       // キャレット位置が後半なら
 
+      if (textItemSelection.focusDistance === textLength) {
+        // キャレットが書式付きテキストの末尾にいるときにdomishObjectsを分割すると、
+        // 作成された空のはずの項目に改行が含まれる不具合の対策。
+        Command.createTextItem()
+        return
+      }
+
       // キャレットより後ろのテキストをカットする
       const range = selection.getRangeAt(0)
       range.setEndAfter(document.activeElement.lastChild!)
