@@ -183,23 +183,14 @@
   // 各項目の削除ボタン
   .main-area-node_delete-button {
     @include common.circle(var(--main-area-calculated-line-height));
-
-    // アイコンと疑似リップルエフェクトを中央寄せにする
-    position: relative;
+    @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
 
-    // ボタンであることを示す
-    cursor: pointer;
-
     .main-area-node_body-area:hover & {
       // マウスホバー時にのみ表示
       visibility: visible;
-    }
-
-    &:hover {
-      background: var(--main-area-node-button-background-hover-color);
     }
   }
 
