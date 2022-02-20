@@ -65,11 +65,6 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
-  :root {
-    // lch(25.0%, 0.0, 0.0)相当
-    --common-dialog-title-bar-background: #3b3b3b;
-  }
-
   .common-dialog_root {
     position: fixed;
     top: 0;
@@ -108,7 +103,8 @@
 
     padding-inline: 0.5em;
 
-    background: var(--common-dialog-title-bar-background);
+    // lch(25.0%, 0.0, 0.0)相当
+    background: #3b3b3b;
   }
 
   .common-dialog_title {

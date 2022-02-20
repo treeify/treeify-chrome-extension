@@ -29,11 +29,6 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    // インデントガイドの色。lch(88.0%, 0.0, 0.0)相当
-    --page-tree-indent-guide-color: #dddddd;
-    // インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当
-    --page-tree-indent-guide-hover-color: #ababab;
-
     // バレット領域のサイズ（正方形の一辺の長さ）
     --page-tree-bullet-area-size: 0.9em;
 
@@ -74,14 +69,17 @@
 
   // インデントガイド
   .page-tree-bullet-and-indent_indent-guide {
-    background: var(--page-tree-indent-guide-color);
+    // lch(88.0%, 0.0, 0.0)相当
+    background: #dddddd;
+
     width: 1px;
     height: 100%;
     margin: 0 auto;
 
     // ホバー時のインデントガイド
     .page-tree-bullet-and-indent_root:hover & {
-      background: var(--page-tree-indent-guide-hover-color);
+      // lch(70.0%, 0.0, 0.0)相当
+      background: #ababab;
     }
   }
 

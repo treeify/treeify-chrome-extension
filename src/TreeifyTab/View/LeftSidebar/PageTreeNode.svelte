@@ -66,12 +66,6 @@
   :root {
     --page-tree-node-content-area-vertical-padding: 0.22em;
 
-    // ページツリーの項目のマウスホバー時の背景色。lch(98%, 134.0, 280.4)相当
-    --page-tree-hover-item-background-color: #f7f9ff;
-
-    // ページツリーのアクティブページの背景色。lch(95.0%, 134.0, 280.4)相当
-    --page-tree-active-page-background-color: #ecf0ff;
-
     // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
     --page-tree-strongest-footprint-color: #fff6f3;
     // 最も古い足跡の色（線形補間の一端）
@@ -113,12 +107,13 @@
     background-color: var(--footprint-color);
 
     &.active-page {
-      // アクティブページの強調表示
-      background: var(--page-tree-active-page-background-color);
+      // lch(95.0%, 134.0, 280.4)相当
+      background: #ecf0ff;
     }
 
     &:hover {
-      background: var(--page-tree-hover-item-background-color);
+      // lch(98%, 134.0, 280.4)相当
+      background: #f7f9ff;
     }
   }
 

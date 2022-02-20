@@ -27,15 +27,11 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
-  :root {
-    // lch(45.0%, 0.0, 0.0)相当
-    --sync-button-icon-color: #6a6a6a;
-  }
-
   .sync-button_cloud-icon {
     @include common.square(26px);
     @include common.absolute-center;
-    @include common.icon(var(--sync-button-icon-color), url('cloud-upload.svg'));
+    // lch(45.0%, 0.0, 0.0)相当
+    @include common.icon(#6a6a6a, url('cloud-upload.svg'));
 
     &.has-updated-after-sync {
       @include common.icon-url(url('cloud-check.svg'));

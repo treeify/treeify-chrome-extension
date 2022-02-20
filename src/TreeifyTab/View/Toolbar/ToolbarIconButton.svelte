@@ -11,14 +11,10 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
-  :root {
-    // ツールバーのボタンのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当
-    --toolbar-icon-button-hover-background: #e2e2e2;
-  }
-
   // ツールバーのアイコンボタンの共通クラス
   .toolbar-icon-button_root {
     @include common.circle(36px);
-    @include common.pseudo-ripple-effect(var(--toolbar-icon-button-hover-background));
+    // lch(90.0%, 0.0, 0.0)相当
+    @include common.pseudo-ripple-effect(#e2e2e2);
   }
 </style>

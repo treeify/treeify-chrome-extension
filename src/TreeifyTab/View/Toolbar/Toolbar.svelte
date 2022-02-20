@@ -44,11 +44,6 @@
 </div>
 
 <style global lang="scss">
-  :root {
-    // ツールバーの背景。lch(98.0%, 0.0, 0.0)相当
-    --toolbar-background: #f9f9f9;
-  }
-
   .toolbar_root {
     height: 40px;
     padding-inline: 2em;
@@ -63,7 +58,8 @@
     position: relative;
     z-index: 20;
 
-    background: var(--toolbar-background);
+    // lch(98.0%, 0.0, 0.0)相当
+    background: #f9f9f9;
     // Dynalistを参考にして作った影。lch(85.0%, 0.0, 0.0)相当
     box-shadow: 0 1.5px 3px #d4d4d4;
 
