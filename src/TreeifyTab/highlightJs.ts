@@ -1,6 +1,12 @@
 import hljs from 'highlight.js/lib/core'
+import abnf from 'highlight.js/lib/languages/abnf'
+import accesslog from 'highlight.js/lib/languages/accesslog'
+import actionscript from 'highlight.js/lib/languages/actionscript'
+import apache from 'highlight.js/lib/languages/apache'
 import applescript from 'highlight.js/lib/languages/applescript'
 import arduino from 'highlight.js/lib/languages/arduino'
+import asciidoc from 'highlight.js/lib/languages/asciidoc'
+import aspectj from 'highlight.js/lib/languages/aspectj'
 import autohotkey from 'highlight.js/lib/languages/autohotkey'
 import awk from 'highlight.js/lib/languages/awk'
 import bash from 'highlight.js/lib/languages/bash'
@@ -8,6 +14,7 @@ import basic from 'highlight.js/lib/languages/basic'
 import c from 'highlight.js/lib/languages/c'
 import clean from 'highlight.js/lib/languages/clean'
 import clojure from 'highlight.js/lib/languages/clojure'
+import cmake from 'highlight.js/lib/languages/cmake'
 import coffeescript from 'highlight.js/lib/languages/coffeescript'
 import coq from 'highlight.js/lib/languages/coq'
 import cpp from 'highlight.js/lib/languages/cpp'
@@ -21,8 +28,10 @@ import delphi from 'highlight.js/lib/languages/delphi'
 import diff from 'highlight.js/lib/languages/diff'
 import django from 'highlight.js/lib/languages/django'
 import dockerfile from 'highlight.js/lib/languages/dockerfile'
+import ebnf from 'highlight.js/lib/languages/ebnf'
 import elixir from 'highlight.js/lib/languages/elixir'
 import elm from 'highlight.js/lib/languages/elm'
+import erb from 'highlight.js/lib/languages/erb'
 import erlang from 'highlight.js/lib/languages/erlang'
 import fortran from 'highlight.js/lib/languages/fortran'
 import fsharp from 'highlight.js/lib/languages/fsharp'
@@ -149,18 +158,18 @@ export function registerLanguages() {
 
 const languageDefinitions = {
   // 1c,
-  // abnf,
-  // accesslog,
-  // actionscript,
+  abnf,
+  accesslog,
+  actionscript,
   // ada,
   // angelscript,
-  // apache,
+  apache,
   applescript,
   // arcade,
   arduino,
   // armasm,
-  // asciidoc,
-  // aspectj,
+  asciidoc,
+  aspectj,
   autohotkey,
   // autoit,
   // avrasm,
@@ -177,7 +186,7 @@ const languageDefinitions = {
   clean,
   clojure,
   // clojure-repl,
-  // cmake,
+  cmake,
   coffeescript,
   coq,
   // cos,
@@ -198,10 +207,10 @@ const languageDefinitions = {
   // dsconfig,
   // dts,
   // dust,
-  // ebnf,
+  ebnf,
   elixir,
   elm,
-  // erb,
+  erb,
   erlang,
   // erlang-repl,
   // excel,
