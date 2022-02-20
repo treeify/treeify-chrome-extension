@@ -16,6 +16,7 @@ import {
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
+import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray$ } from 'src/Utility/fp-ts'
@@ -147,6 +148,11 @@ export function onPaste(event: ClipboardEvent) {
           return
         }
 
+        // 元のページのtargetItemPathとanchorItemPathが実在しなくなるので退避する準備
+        const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
+        assertNonUndefined(aboveItemPath)
+
+        // 対象項目を移動
         for (const selectedItemPath of reverse(selectedItemPaths)) {
           const selectedItemId = ItemPath.getItemId(selectedItemPath)
           const parentItemId = ItemPath.getParentItemId(selectedItemPath)
@@ -158,7 +164,18 @@ export function onPaste(event: ClipboardEvent) {
           }
         }
 
-        // ターゲットを更新する
+        // 元のページのtargetItemPathとanchorItemPathが実在しなくなるので退避
+        const sourcePageId = ItemPath.getRootItemId(aboveItemPath)
+        Internal.instance.mutate(
+          aboveItemPath,
+          StatePath.of('pages', sourcePageId, 'targetItemPath')
+        )
+        Internal.instance.mutate(
+          aboveItemPath,
+          StatePath.of('pages', sourcePageId, 'anchorItemPath')
+        )
+
+        // 移動先のターゲットを更新する
         const belowItemPath = CurrentState.findBelowItemPath(targetItemPath)
         assertNonUndefined(belowItemPath)
         const lastItemPath = ItemPath.createSiblingItemPath(
