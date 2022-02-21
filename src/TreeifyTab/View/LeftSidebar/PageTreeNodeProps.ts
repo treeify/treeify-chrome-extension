@@ -32,6 +32,7 @@ export type PageTreeNodeProps = {
   footprintCount: integer
   tabsCount: integer
   onClickContentArea(event: MouseEvent): void
+  onContentAreaContextMenu(event: Event): void
   onClickCloseButton(event: Event): void
   onClickTabsCount(event: MouseEvent): void
   onTabsCountContextMenu(event: Event): void
@@ -94,6 +95,21 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
 
             unmountPage(itemId, activePageId)
             break
+        }
+      },
+      onContentAreaContextMenu(event: Event) {
+        event.preventDefault()
+
+        if (event instanceof MouseEvent) {
+          CurrentState.switchActivePage(itemId)
+          CurrentState.setTargetItemPath([itemId])
+
+          // 独自コンテキストメニューを表示
+          External.instance.dialogState = {
+            type: 'ContextMenuDialog',
+            mousePosition: { x: event.clientX, y: event.clientY },
+          }
+          Rerenderer.instance.rerender()
         }
       },
       onClickCloseButton(event) {

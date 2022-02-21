@@ -30,6 +30,7 @@
         class:active-page={props.isActivePage}
         data-item-id={props.itemId}
         on:mousedown={props.onClickContentArea}
+        on:contextmenu={props.onContentAreaContextMenu}
       >
         <ItemContent props={props.contentProps} />
         {#if props.isAudible}
