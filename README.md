@@ -24,4 +24,4 @@ npm run build-development
 
 ![デベロッパーモード](https://gyazo.com/f150bd8592d7fe774f8458dfb82d3afa.png)    
 
-通常のChromeではなく[Dev版のChrome](https://www.google.co.jp/chrome/dev/)を追加インストールして動作確認用に使うのがおすすめです。  
+普段使っているTreeifyとは別にインストールして動作確認するために、Chromeに新しいプロファイルを作るか[Dev版のChrome](https://www.google.co.jp/chrome/dev/)を追加インストールするのがおすすめです。
