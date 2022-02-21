@@ -160,10 +160,16 @@ function reflectInWebPageItem(itemId: ItemId, tab: Tab) {
   if (tab.id !== undefined) {
     External.instance.tabItemCorrespondence.registerTab(tab.id, tab)
   }
-  CurrentState.setWebPageItemTabTitle(itemId, tab.title ?? '')
-  const url = tab.url || tab.pendingUrl || ''
-  CurrentState.setWebPageItemUrl(itemId, url)
-  CurrentState.setWebPageItemFaviconUrl(itemId, tab.favIconUrl ?? '')
+  if (typeof tab.title === 'string') {
+    CurrentState.setWebPageItemTabTitle(itemId, tab.title)
+  }
+  const url = tab.url ?? tab.pendingUrl
+  if (typeof url === 'string') {
+    CurrentState.setWebPageItemUrl(itemId, url)
+  }
+  if (typeof tab.favIconUrl === 'string') {
+    CurrentState.setWebPageItemFaviconUrl(itemId, tab.favIconUrl)
+  }
 }
 
 export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
