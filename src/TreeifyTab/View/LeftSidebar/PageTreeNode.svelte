@@ -7,7 +7,7 @@
 
   export let props: PageTreeNodeProps
 
-  const footprintColor = calculateFootprintColor(
+  $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
     '--page-tree-strongest-footprint-color',

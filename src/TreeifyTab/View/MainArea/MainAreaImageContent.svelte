@@ -8,7 +8,7 @@
   import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: MainAreaImageContentProps
-  let originalSize = props.originalSize ?? undefined
+  $: originalSize = props.originalSize ?? undefined
 
   const id = MainAreaContentView.focusableDomElementId(props.itemPath)
 
