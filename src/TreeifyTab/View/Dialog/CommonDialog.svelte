@@ -74,9 +74,7 @@
     z-index: 30;
 
     // ダイアログを画面中央に表示する
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include common.flex-center;
   }
 
   .common-dialog_frame {

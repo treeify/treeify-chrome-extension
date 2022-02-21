@@ -83,9 +83,7 @@
     // 当たり判定を上下いっぱいまで広げる
     height: 100%;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    @include common.flex-center;
 
     cursor: pointer;
   }

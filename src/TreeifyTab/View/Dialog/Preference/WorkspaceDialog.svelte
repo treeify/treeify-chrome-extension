@@ -140,8 +140,7 @@
   }
 
   .workspace-dialog_add-button-row {
-    display: flex;
-    justify-content: center;
+    @include common.flex-center;
 
     margin-top: 0.2em;
   }

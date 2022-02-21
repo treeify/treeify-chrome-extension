@@ -16,6 +16,12 @@
   transform: translate(-50%, -50%);
 }
 
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @mixin icon($color, $url) {
   background: $color;
   -webkit-mask: $url no-repeat center;

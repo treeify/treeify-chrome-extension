@@ -253,9 +253,7 @@
   }
 
   .export-dialog_format-select-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include common.flex-center;
 
     padding-block: 0.18em;
     padding-inline: 1.2em;
@@ -308,8 +306,7 @@
     margin-top: 1em;
 
     // 中央寄せ
-    display: flex;
-    justify-content: center;
+    @include common.flex-center;
     gap: 1.5em;
   }
 

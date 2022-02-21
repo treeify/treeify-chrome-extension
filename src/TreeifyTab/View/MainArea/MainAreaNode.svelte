@@ -178,18 +178,14 @@
   .main-area-node_right-button-area {
     @include common.square(var(--main-area-calculated-line-height));
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include common.flex-center;
   }
 
   .main-area-node_hidden-tabs-count {
     @include common.circle(1.6em);
     @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    @include common.flex-center;
 
     // lch(40.0%, 0.0, 0.0)相当
     color: #5e5e5e;
