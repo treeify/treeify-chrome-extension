@@ -129,7 +129,7 @@
   }
 
   .page-tree-node_right-button-area {
-    @include common.square(1.45em);
+    @include common.square(1.5em);
   }
 
   .page-tree-node_tabs-count-button {
@@ -137,6 +137,8 @@
 
     // lch(90.0%, 0.0, 0.0)相当
     @include common.pseudo-ripple-effect(#e2e2e2);
+
+    font-size: 97%;
   }
 
   .page-tree-node_tabs-count {

@@ -57,23 +57,25 @@
       >
         <MainAreaContent props={props.contentProps} />
       </div>
-      {#if props.itemPath.length === 1}
-        <div class="grid-empty-cell" />
-      {:else if props.hiddenTabsCount > 0}
-        <!-- 隠れているタブ数 -->
-        <div
-          class="main-area-node_hidden-tabs-count"
-          on:mousedown={props.onClickHiddenTabsCount}
-          on:contextmenu={props.onContextMenuTabsCount}
-        >
-          {Math.min(99, props.hiddenTabsCount)}
-        </div>
-      {:else}
-        <!-- 削除ボタン -->
-        <div class="main-area-node_delete-button" on:mousedown={props.onClickDeleteButton}>
-          <div class="main-area-node_delete-button-icon" />
-        </div>
-      {/if}
+      <div class="main-area-node_right-button-area">
+        {#if props.itemPath.length !== 1}
+          {#if props.hiddenTabsCount > 0}
+            <!-- 隠れているタブ数 -->
+            <div
+              class="main-area-node_hidden-tabs-count"
+              on:mousedown={props.onClickHiddenTabsCount}
+              on:contextmenu={props.onContextMenuTabsCount}
+            >
+              {Math.min(99, props.hiddenTabsCount)}
+            </div>
+          {:else}
+            <!-- 削除ボタン -->
+            <div class="main-area-node_delete-button" on:mousedown={props.onClickDeleteButton}>
+              <div class="main-area-node_delete-button-icon" />
+            </div>
+          {/if}
+        {/if}
+      </div>
     </div>
     <!-- 子リスト領域 -->
     <div class={RArray$.prepend('main-area-node_children-area')(childrenCssClasses).join(' ')}>
@@ -173,20 +175,30 @@
     text-underline-offset: 0.2em;
   }
 
-  // 隠れているタブ数
+  .main-area-node_right-button-area {
+    @include common.square(var(--main-area-calculated-line-height));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   .main-area-node_hidden-tabs-count {
-    @include common.circle(var(--main-area-calculated-line-height));
+    @include common.circle(1.6em);
     @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
 
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     // lch(40.0%, 0.0, 0.0)相当
     color: #5e5e5e;
+
+    font-size: 97%;
   }
 
-  // 各項目の削除ボタン
   .main-area-node_delete-button {
-    @include common.circle(var(--main-area-calculated-line-height));
+    @include common.circle(1.6em);
     @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
 
     // マウスホバー時にのみ表示
