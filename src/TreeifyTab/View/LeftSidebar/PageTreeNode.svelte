@@ -124,6 +124,8 @@
 
     // lch(60.0%, 0.0, 0.0)相当
     @include common.icon(#919191, url('audible.svg'));
+
+    margin-left: 0.2em;
   }
 
   .page-tree-node_right-button-area {

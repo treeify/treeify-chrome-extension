@@ -120,6 +120,8 @@
   .main-area-web-page-content_audible-icon {
     @include common.square(1em);
     @include common.icon(var(--main-area-audible-icon-color), url('audible.svg'));
+
+    margin-left: 0.2em;
   }
 
   // ウェブページ項目のタイトル
