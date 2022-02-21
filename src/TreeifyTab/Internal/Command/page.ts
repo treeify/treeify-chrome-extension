@@ -7,17 +7,19 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
  * ターゲット項目が非ページならページ化する。
  */
 export function togglePaged() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+
   // アクティブページに対しては何もしない
-  if (targetItemPath.length === 1) return
+  if (selectedItemPaths[0].length === 1) return
 
-  const targetItemId = ItemPath.getItemId(targetItemPath)
-
-  if (CurrentState.isPage(targetItemId)) {
-    CurrentState.unmountPage(targetItemId)
-    CurrentState.turnIntoNonPage(targetItemId)
-  } else {
-    CurrentState.turnIntoPage(targetItemId)
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    if (CurrentState.isPage(selectedItemId)) {
+      CurrentState.unmountPage(selectedItemId)
+      CurrentState.turnIntoNonPage(selectedItemId)
+    } else {
+      CurrentState.turnIntoPage(selectedItemId)
+    }
   }
 }
 
@@ -33,18 +35,22 @@ export function switchPage() {
 
 /** 対象項目をページ化する */
 export function turnIntoPage() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  CurrentState.turnIntoPage(targetItemId)
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    CurrentState.turnIntoPage(ItemPath.getItemId(selectedItemPath))
+  }
 }
 
 /** 対象を非ページ化する */
 export function turnIntoNonPage() {
-  const targetItemPath = CurrentState.getTargetItemPath()
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+
   // アクティブページに対しては何もしない
-  if (targetItemPath.length === 1) return
+  if (selectedItemPaths[0].length === 1) return
 
-  const targetItemId = ItemPath.getItemId(targetItemPath)
+  for (const selectedItemPath of selectedItemPaths) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
 
-  CurrentState.unmountPage(targetItemId)
-  CurrentState.turnIntoNonPage(targetItemId)
+    CurrentState.unmountPage(selectedItemId)
+    CurrentState.turnIntoNonPage(selectedItemId)
+  }
 }
