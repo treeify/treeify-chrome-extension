@@ -62,6 +62,9 @@ export const onMessage = (message: any, sender: MessageSender) => {
 }
 
 export function onCreated(tab: Tab) {
+  // Treeifyタブだった場合は無視する（新しく開かれた側のTreeifyタブが多重起動への対処を行うはずなので）
+  if (TreeifyTab.isTreeifyTab(tab.url)) return
+
   // もしこうなるケースがあるならきちんと対応を考えたいのでエラーにする
   assertNonUndefined(tab.id)
 
@@ -145,10 +148,6 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
 }
 
 export function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
-  // Treeifyタブだった場合は何もしない。
-  // 例えばdocument.titleを変更した際にonUpdatedイベントが発生する。
-  if (TreeifyTab.isTreeifyTab(tab.url)) return
-
   const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   if (itemId === undefined) return
 
