@@ -114,6 +114,11 @@ export class Internal {
     }
   }
 
+  clearUndoStack() {
+    this.undoStack.splice(0)
+    this.undoStack.push(new Map())
+  }
+
   dumpCurrentState() {
     console.groupCollapsed('ダンプ：Internal#state')
     const stateString = JSON.stringify(this.state, undefined, 2)

@@ -118,9 +118,8 @@ export function onCreated(tab: Tab) {
       }
     }
 
-    // もしUndoされるとタブと項目の対応関係が壊れるのでUndoさせないようにする
-    // TODO: Undoスタックのサポート後はUndoスタックをクリアするよう修正する
-    Internal.instance.saveCurrentStateToUndoStack()
+    // もしUndoされるとタブと項目の対応関係に関して不具合が出るのでUndoさせないようにする
+    Internal.instance.clearUndoStack()
   } else {
     // 既存のウェブページ項目に対応するタブが開かれた時
 
@@ -152,6 +151,10 @@ export function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
   if (itemId === undefined) return
 
   reflectInWebPageItem(itemId, tab)
+  if (changeInfo.url !== undefined) {
+    // もしUndoされるとタブと項目の対応関係に関して不具合が出るのでUndoさせないようにする
+    Internal.instance.clearUndoStack()
+  }
   Rerenderer.instance.rerender()
 }
 
