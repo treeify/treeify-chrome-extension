@@ -26,11 +26,20 @@
 
   const mainArea = document.querySelector<HTMLElement>('.main-area_root')
   assertNonNull(mainArea)
+  const leftSidebar = document.querySelector<HTMLElement>('.left-sidebar_root')
+  assertNonNull(leftSidebar)
 
   // focusTrapの影響でドラッグ中はスクロールが無効化されるのでプログラムでスクロールさせる
   function onWheel(event: WheelEvent) {
-    if (event.deltaY !== 0) {
-      // TODO: メインエリアだけでなく左サイドバーもスクロールできるよう分岐を追加する
+    if (event.deltaY === 0) return
+    event.preventDefault()
+
+    if (event.clientX < mainArea.getBoundingClientRect().left) {
+      leftSidebar.scrollBy({
+        top: event.deltaY,
+        behavior: 'smooth',
+      })
+    } else {
       mainArea.scrollBy({
         top: event.deltaY,
         behavior: 'smooth',
@@ -43,8 +52,12 @@
       dropDestinationStyle = props.calculateDropDestinationStyle(mouseX, mouseY, props.itemPath)
     }
 
+    leftSidebar.addEventListener('scroll', onScroll)
     mainArea.addEventListener('scroll', onScroll)
-    return () => mainArea.removeEventListener('scroll', onScroll)
+    return () => {
+      leftSidebar.removeEventListener('scroll', onScroll)
+      mainArea.removeEventListener('scroll', onScroll)
+    }
   })
 
   function onMouseUp(event: MouseEvent) {
