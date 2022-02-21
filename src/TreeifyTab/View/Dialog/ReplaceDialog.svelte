@@ -54,8 +54,11 @@
     switch (type) {
       case ItemType.TEXT:
         const domishObjects = state.textItems[itemId].domishObjects
+        const nbsp = String.fromCharCode(160)
+        const before = beforeReplace.replaceAll(' ', nbsp)
+        const after = afterReplace.replaceAll(' ', nbsp)
         const newDomishObjects = domishObjects.map((domishObject) =>
-          DomishObject.replace(domishObject, beforeReplace, afterReplace)
+          DomishObject.replace(domishObject, before, after)
         )
         CurrentState.setTextItemDomishObjects(itemId, newDomishObjects)
         break
