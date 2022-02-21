@@ -30,7 +30,7 @@
   background: $color;
 }
 
-@mixin pseudo-ripple-effect($hover-color) {
+@mixin pseudo-ripple-effect($hover-color, $duration: 0.5s, $color: #777777, $opacity: 0.5) {
   cursor: pointer;
   
   position: relative;
@@ -39,7 +39,7 @@
     background: $hover-color;
   }
   
-  // 疑似リップルエフェクトの終了状態
+  // 疑似リップルエフェクトアニメーション終了時点の状態
   &::after {
     content: '';
     
@@ -47,19 +47,18 @@
     @include absolute-center;
     
     opacity: 0;
-    transition: opacity 0.5s, width 0.5s, height 0.5s;
+    transition: opacity $duration, width $duration, height $duration;
     
-    // lch(50.0%, 0.0, 0.0)相当
-    background: #777777;
+    background: $color;
     
     pointer-events: none;
   }
   
-  // 疑似リップルエフェクトの開始状態
+  // 疑似リップルエフェクトアニメーション開始時点の状態
   &:active::after {
     width: 0;
     height: 0;
-    opacity: 0.5;
+    opacity: $opacity;
     transition: opacity 0s, width 0s, height 0s;
   }
 }
