@@ -11,6 +11,7 @@
   import { ExportFormat } from 'src/TreeifyTab/Internal/State'
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import Checkbox from 'src/TreeifyTab/View/Checkbox.svelte'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import { integer } from 'src/Utility/integer'
 
@@ -179,14 +180,9 @@
             size="4"
           />
         </label>
-        <label class="export-dialog_checkbox-label">
-          <input
-            type="checkbox"
-            class="export-dialog_checkbox"
-            bind:checked={plainTextIncludeInvisibleItems}
-          />
+        <Checkbox bind:checked={plainTextIncludeInvisibleItems}>
           折りたたまれた項目も出力する
-        </label>
+        </Checkbox>
       {:else if selectedFormat === ExportFormat.MARKDOWN}
         <label class="export-dialog_text-input-label">
           最上位の見出しの#の数:
@@ -198,23 +194,11 @@
             max="6"
           />
         </label>
-        <label class="export-dialog_checkbox-label">
-          <input
-            type="checkbox"
-            class="export-dialog_checkbox"
-            bind:checked={markdownIncludeInvisibleItems}
-          />
+        <Checkbox bind:checked={markdownIncludeInvisibleItems}>
           折りたたまれた項目も出力する
-        </label>
+        </Checkbox>
       {:else if selectedFormat === ExportFormat.OPML}
-        <label class="export-dialog_checkbox-label">
-          <input
-            type="checkbox"
-            class="export-dialog_checkbox"
-            bind:checked={opmlIncludeInvisibleItems}
-          />
-          折りたたまれた項目も出力する
-        </label>
+        <Checkbox bind:checked={opmlIncludeInvisibleItems}>折りたたまれた項目も出力する</Checkbox>
       {/if}
     </div>
     <div class="export-dialog_bottom-button-area">
@@ -281,25 +265,15 @@
   .export-dialog_option-area {
     display: flex;
     flex-direction: column;
+    // クリックの当たり判定が広がるのを防ぐ
+    align-items: start;
+
     gap: 0.5em;
 
     padding: 1em;
     // lch(80.0%, 0.0, 0.0)相当
     border: 1px solid #c6c6c6;
     border-top-style: none;
-
-    > * {
-      // クリックの当たり判定が広がるのを防ぐ
-      display: block;
-      width: fit-content;
-    }
-  }
-
-  .export-dialog_checkbox-label {
-    display: flex;
-    align-items: center;
-
-    cursor: pointer;
   }
 
   .export-dialog_bottom-button-area {

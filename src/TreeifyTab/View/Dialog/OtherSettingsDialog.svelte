@@ -3,6 +3,7 @@
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import Checkbox from 'src/TreeifyTab/View/Checkbox.svelte'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
 
   let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
@@ -27,22 +28,12 @@
 <CommonDialog class="other-settings-dialog_root" title="その他の設定">
   <div class="other-settings-dialog_content" tabindex="0">
     <div class="other-settings-dialog_checkbox-area">
-      <label class="other-settings-dialog_checkbox-label">
-        <input
-          type="checkbox"
-          class="other-settings-dialog_checkbox"
-          bind:checked={leftEndMouseGestureEnabled}
-        />
+      <Checkbox bind:checked={leftEndMouseGestureEnabled}>
         マウスを画面左端まで動かすとTreeifyタブを表示
-      </label>
-      <label class="other-settings-dialog_checkbox-label">
-        <input
-          type="checkbox"
-          class="other-settings-dialog_checkbox"
-          bind:checked={rightEndMouseGestureEnabled}
-        />
+      </Checkbox>
+      <Checkbox bind:checked={rightEndMouseGestureEnabled}>
         マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
-      </label>
+      </Checkbox>
     </div>
     <div class="other-settings-dialog_bottom-button-area">
       <button
@@ -73,11 +64,6 @@
     gap: 0.5em;
 
     margin-top: 0.5em;
-  }
-
-  .other-settings-dialog_checkbox-label {
-    display: flex;
-    align-items: center;
   }
 
   .other-settings-dialog_spacer {

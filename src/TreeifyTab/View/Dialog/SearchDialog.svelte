@@ -10,6 +10,7 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
+  import Checkbox from 'src/TreeifyTab/View/Checkbox.svelte'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps'
@@ -151,15 +152,9 @@
           表示する項目:
           {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
             {#if searchResult.counts.get(itemType) > 0}
-              <label class="search-dialog_checkbox-label">
-                <input
-                  type="checkbox"
-                  class="search-dialog_filter-checkbox"
-                  bind:group={checkedItemTypes}
-                  value={itemType}
-                />
+              <Checkbox value={itemType} bind:group={checkedItemTypes}>
                 {name}({searchResult.counts.get(itemType)}件)
-              </label>
+              </Checkbox>
             {/if}
           {/each}
         </div>
@@ -204,13 +199,6 @@
     align-items: center;
     gap: 0.3em;
     padding: 0.5em;
-  }
-
-  .search-dialog_checkbox-label {
-    display: inline-flex;
-    align-items: center;
-
-    cursor: pointer;
   }
 
   .search-dialog_result-area {
