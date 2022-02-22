@@ -42,7 +42,11 @@
     for (const itemId of itemIds) {
       replaceItemData(itemId, beforeReplace, afterReplace)
     }
-    alert(`${itemIds.size}項目のテキストを置換しました。`)
+    if (itemIds.size > 0) {
+      alert(`${itemIds.size}項目を置換しました。`)
+    } else {
+      alert(`「${beforeReplace}」を含む項目はありません。`)
+    }
 
     External.instance.dialogState = undefined
     Rerenderer.instance.rerender()
