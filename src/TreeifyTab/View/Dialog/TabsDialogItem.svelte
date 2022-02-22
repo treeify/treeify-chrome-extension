@@ -37,7 +37,7 @@
 
   :root {
     --tabs-dialog-item-line-height: 1.3em;
-    --tabs-dialog-bullet-size: 0.38em;
+    --tabs-dialog-bullet-size: var(--bullet-default-size);
   }
 
   .tabs-dialog-item_root {

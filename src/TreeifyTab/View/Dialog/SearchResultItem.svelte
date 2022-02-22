@@ -53,7 +53,7 @@
 
   :root {
     --search-result-line-height: 1.3em;
-    --search-result-bullet-size: 0.38em;
+    --search-result-bullet-size: var(--bullet-default-size);
 
     // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
     --search-result-page-tree-strongest-footprint-color: #fff6f3;

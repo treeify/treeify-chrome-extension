@@ -38,6 +38,10 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
+  :root {
+    --bullet-default-size: 0.38em;
+  }
+
   * {
     box-sizing: border-box;
   }
