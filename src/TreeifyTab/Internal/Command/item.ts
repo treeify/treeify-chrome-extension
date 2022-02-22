@@ -189,28 +189,38 @@ export function enterKeyDefault() {
  */
 export function deleteItem() {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  const parentItemPath = ItemPath.getParent(selectedItemPaths[0])
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (!ItemPath.hasParent(selectedItemPaths[0])) return
+  if (parentItemPath === undefined) return
 
-  const aboveItemPath = CurrentState.findAboveItemPath(selectedItemPaths[0])
-  assertNonUndefined(aboveItemPath)
-  CurrentState.setTargetItemPath(aboveItemPath)
-  Rerenderer.instance.requestToScrollAppear()
-
-  // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
-  const aboveItemId = ItemPath.getItemId(aboveItemPath)
-  if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
-    const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
-    const textLength = DomishObject.getTextLength(domishObjects)
-    Rerenderer.instance.requestToSetCaretPosition(textLength)
-  } else {
-    Rerenderer.instance.requestToFocusTargetItem()
-  }
+  // 削除後にターゲットを設定するためにこのタイミングで手がかりを取得しておく。
+  // 下記のような状況ではaboveItemPathが使えなくなるのでその対策。
+  // A
+  //   B（トランスクルード済み）
+  // B（トランスクルード済み）
+  const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(selectedItemPaths[0])
 
   for (const selectedItemPath of selectedItemPaths) {
     const selectedItemId = ItemPath.getItemId(selectedItemPath)
     CurrentState.deleteItem(selectedItemId)
+  }
+
+  const newTargetItemPath =
+    prevSiblingItemPath !== undefined
+      ? CurrentState.getLowerEndItemPath(prevSiblingItemPath)
+      : parentItemPath
+  CurrentState.setTargetItemPath(newTargetItemPath)
+  Rerenderer.instance.requestToScrollAppear()
+
+  // 上の項目がテキスト項目の場合、キャレットを末尾に移動する
+  const newTargetItemId = ItemPath.getItemId(newTargetItemPath)
+  if (Internal.instance.state.items[newTargetItemId].type === ItemType.TEXT) {
+    const domishObjects = Internal.instance.state.textItems[newTargetItemId].domishObjects
+    const textLength = DomishObject.getTextLength(domishObjects)
+    Rerenderer.instance.requestToSetCaretPosition(textLength)
+  } else {
+    Rerenderer.instance.requestToFocusTargetItem()
   }
 }
 
@@ -259,22 +269,33 @@ export function removeItem() {
 export function deleteJustOneItem() {
   const targetItemPath = CurrentState.getTargetItemPath()
   const targetItemId = ItemPath.getItemId(targetItemPath)
-  const parentItemId = ItemPath.getParentItemId(targetItemPath)
+  const parentItemPath = ItemPath.getParent(targetItemPath)
 
   // アクティブページを削除しようとしている場合、何もしない
-  if (parentItemId === undefined) return
+  if (parentItemPath === undefined) return
 
   const childItemIds = Internal.instance.state.items[targetItemId].childItemIds
   if (childItemIds.length === 0) {
+    // 削除後にターゲットを設定するためにこのタイミングで手がかりを取得しておく。
+    // 下記のような状況ではaboveItemPathが使えなくなるのでその対策。
+    // A
+    //   B（トランスクルード済み）
+    // B（トランスクルード済み）
+    const prevSiblingItemPath = CurrentState.findPrevSiblingItemPath(targetItemPath)
+
+    CurrentState.deleteItem(targetItemId, true)
+
     // 上の項目をフォーカス
-    const aboveItemPath = CurrentState.findAboveItemPath(targetItemPath)
-    assertNonUndefined(aboveItemPath)
-    CurrentState.setTargetItemPath(aboveItemPath)
+    const newTargetItemPath =
+      prevSiblingItemPath !== undefined
+        ? CurrentState.getLowerEndItemPath(prevSiblingItemPath)
+        : parentItemPath
+    CurrentState.setTargetItemPath(newTargetItemPath)
     Rerenderer.instance.requestToScrollAppear()
 
-    const aboveItemId = ItemPath.getItemId(aboveItemPath)
-    if (Internal.instance.state.items[aboveItemId].type === ItemType.TEXT) {
-      const domishObjects = Internal.instance.state.textItems[aboveItemId].domishObjects
+    const newTargetItemId = ItemPath.getItemId(newTargetItemPath)
+    if (Internal.instance.state.items[newTargetItemId].type === ItemType.TEXT) {
+      const domishObjects = Internal.instance.state.textItems[newTargetItemId].domishObjects
       const textLength = DomishObject.getTextLength(domishObjects)
       Rerenderer.instance.requestToSetCaretPosition(textLength)
     } else {
@@ -283,6 +304,7 @@ export function deleteJustOneItem() {
   } else {
     // 子がいる場合
 
+    const parentItemId = ItemPath.getItemId(parentItemPath)
     for (const childItemId of childItemIds) {
       CurrentState.throwIfCantInsertChildItem(parentItemId, childItemId)
     }
@@ -293,9 +315,9 @@ export function deleteJustOneItem() {
     CurrentState.setTargetItemPath(newItemPath)
     Rerenderer.instance.requestToScrollAppear()
     Rerenderer.instance.requestToFocusTargetItem()
-  }
 
-  CurrentState.deleteItem(targetItemId, true)
+    CurrentState.deleteItem(targetItemId, true)
+  }
 }
 
 /**
