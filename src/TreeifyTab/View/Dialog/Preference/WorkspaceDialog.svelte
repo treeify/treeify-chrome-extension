@@ -113,7 +113,7 @@
   }
 
   .workspace-dialog_radio-button {
-    margin: 0;
+    margin: 0 0.3em 0 0;
   }
 
   .workspace-dialog_workspace-name {
