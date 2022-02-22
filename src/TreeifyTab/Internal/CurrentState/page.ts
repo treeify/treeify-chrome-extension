@@ -25,7 +25,7 @@ export function switchActivePage(itemId: ItemId, withoutMount: boolean = false) 
       StatePath.of('mountedPageIds')
     )
   } else if (!withoutMount) {
-    Internal.instance.mutate(RArray$.append(itemId)(mountedPageIds), StatePath.of('mountedPageIds'))
+    CurrentState.mountPage(itemId)
   }
 
   CurrentState.setActivePageId(itemId)
@@ -42,6 +42,13 @@ export function getActivePageId(): ItemId {
 export function setActivePageId(itemId: ItemId) {
   const currentWorkspaceId = External.instance.getCurrentWorkspaceId()
   Internal.instance.mutate(itemId, StatePath.of('workspaces', currentWorkspaceId, 'activePageId'))
+}
+
+export function mountPage(itemId: ItemId) {
+  const mountedPageIds = Internal.instance.state.mountedPageIds
+  if (mountedPageIds.includes(itemId)) return
+
+  Internal.instance.mutate(RArray$.append(itemId)(mountedPageIds), StatePath.of('mountedPageIds'))
 }
 
 /**

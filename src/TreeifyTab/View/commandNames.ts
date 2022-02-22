@@ -17,6 +17,8 @@ export const commandNames = {
   turnIntoNonPage: '非ページ化',
   togglePaged: 'ページ化トグル',
   switchPage: 'ページ切り替え',
+  addToPageTree: 'ページツリーに追加',
+  removeFromPageTree: 'ページツリーから削除',
   toggleCompleted: '完了状態トグル',
   toggleHighlighted: 'ハイライト状態トグル',
   toggleDoubtful: 'ダウトフル状態トグル',

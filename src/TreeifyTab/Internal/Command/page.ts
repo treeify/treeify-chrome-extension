@@ -1,3 +1,4 @@
+import { TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -52,5 +53,26 @@ export function turnIntoNonPage() {
 
     CurrentState.unmountPage(selectedItemId)
     CurrentState.turnIntoNonPage(selectedItemId)
+  }
+}
+
+export function addToPageTree() {
+  for (const selectedItemPath of CurrentState.getSelectedItemPaths()) {
+    const selectedItemId = ItemPath.getItemId(selectedItemPath)
+    if (CurrentState.isPage(selectedItemId)) {
+      CurrentState.mountPage(selectedItemId)
+    }
+  }
+}
+
+export function removeFromPageTree() {
+  const selectedItemPaths = CurrentState.getSelectedItemPaths()
+  if (ItemPath.getItemId(selectedItemPaths[0]) === TOP_ITEM_ID) {
+    // トップページはページツリーから削除できない
+    return
+  }
+
+  for (const selectedItemPath of selectedItemPaths) {
+    CurrentState.unmountPage(ItemPath.getItemId(selectedItemPath))
   }
 }

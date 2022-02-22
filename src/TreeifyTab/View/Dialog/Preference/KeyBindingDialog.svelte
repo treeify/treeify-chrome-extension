@@ -122,7 +122,14 @@
     },
     {
       name: 'ページ',
-      commandIds: ['turnIntoPage', 'turnIntoNonPage', 'togglePaged', 'switchPage'],
+      commandIds: [
+        'turnIntoPage',
+        'turnIntoNonPage',
+        'togglePaged',
+        'switchPage',
+        'addToPageTree',
+        'removeFromPageTree',
+      ],
     },
     {
       name: '項目装飾',
