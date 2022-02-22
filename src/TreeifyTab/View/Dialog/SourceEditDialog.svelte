@@ -59,7 +59,7 @@
         <input type="url" class="source-edit-dialog_source-url" bind:value={urlValue} />
       </label>
     </div>
-    <div class="source-edit-dialog_button-area">
+    <div class="source-edit-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
@@ -82,7 +82,7 @@
     display: contents;
   }
 
-  .source-edit-dialog_button-area {
+  .source-edit-dialog_bottom-button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

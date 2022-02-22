@@ -232,7 +232,7 @@
         （例：Ctrl+Shift+K）
       </p>
     </div>
-    <div class="key-binding-dialog_button-area">
+    <div class="key-binding-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
@@ -355,7 +355,7 @@
     visibility: var(--visibility);
   }
 
-  .key-binding-dialog_button-area {
+  .key-binding-dialog_bottom-button-area {
     // ボタンを右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

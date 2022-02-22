@@ -110,7 +110,7 @@
       bind:textContent={code}
       on:paste={onPaste}
     />
-    <div class="code-block-edit-dialog_button-area">
+    <div class="code-block-edit-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons
         primaryButtonText={isEmptyCodeBlockItem ? '作成' : undefined}
         {onClickPrimaryButton}
@@ -140,7 +140,7 @@
     overflow-y: auto;
   }
 
-  .code-block-edit-dialog_button-area {
+  .code-block-edit-dialog_bottom-button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

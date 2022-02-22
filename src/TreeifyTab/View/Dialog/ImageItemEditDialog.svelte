@@ -65,7 +65,7 @@
       bind:value={url}
       placeholder="https://example.com/image.png"
     />
-    <div class="image-item-edit-dialog_button-area">
+    <div class="image-item-edit-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons
         primaryButtonText={isEmptyImageItem ? '作成' : undefined}
         {onClickPrimaryButton}
@@ -85,7 +85,7 @@
     width: 100%;
   }
 
-  .image-item-edit-dialog_button-area {
+  .image-item-edit-dialog_bottom-button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

@@ -117,7 +117,7 @@
         <input type="text" class="replace-dialog_after-replace" bind:value={afterReplace} />
       </label>
     </div>
-    <div class="replace-dialog_button-area">
+    <div class="replace-dialog_bottom-button-area">
       <button class="replace-dialog_submit-button primary" on:mousedown|preventDefault={onSubmit}>
         全て置換
       </button>
@@ -141,7 +141,7 @@
     display: contents;
   }
 
-  .replace-dialog_button-area {
+  .replace-dialog_bottom-button-area {
     margin: 1em 0 0 auto;
     width: max-content;
   }

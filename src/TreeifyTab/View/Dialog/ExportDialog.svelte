@@ -217,7 +217,7 @@
         </label>
       {/if}
     </div>
-    <div class="export-dialog_button-area">
+    <div class="export-dialog_bottom-button-area">
       <button class="export-dialog_copy-button" on:mousedown|preventDefault={onClickCopyButton}>
         <div class="export-dialog_copy-button-icon" />
         クリップボードにコピー
@@ -302,7 +302,7 @@
     cursor: pointer;
   }
 
-  .export-dialog_button-area {
+  .export-dialog_bottom-button-area {
     margin-top: 1em;
 
     // 中央寄せ

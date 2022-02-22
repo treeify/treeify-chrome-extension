@@ -102,7 +102,7 @@
       日
       <input type="time" class="reminder-setting-dialog_time" bind:value={time} />
     {/if}
-    <div class="reminder-setting-dialog_button-area">
+    <div class="reminder-setting-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
@@ -113,7 +113,7 @@
     padding: 1em;
   }
 
-  .reminder-setting-dialog_button-area {
+  .reminder-setting-dialog_bottom-button-area {
     margin: 1em 0 0 auto;
     width: max-content;
   }

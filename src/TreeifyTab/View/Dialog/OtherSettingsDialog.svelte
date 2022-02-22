@@ -44,7 +44,7 @@
         マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
       </label>
     </div>
-    <div class="other-settings-dialog_button-area">
+    <div class="other-settings-dialog_bottom-button-area">
       <button
         class="other-settings-dialog_ok-button primary"
         on:mousedown|preventDefault={closeDialog}
@@ -82,7 +82,7 @@
     height: 1em;
   }
 
-  .other-settings-dialog_button-area {
+  .other-settings-dialog_bottom-button-area {
     // ボタンを右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

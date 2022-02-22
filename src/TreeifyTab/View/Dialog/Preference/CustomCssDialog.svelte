@@ -42,7 +42,7 @@
       bind:textContent
       on:keydown={onKeyDown}
     />
-    <div class="custom-css-dialog_button-area">
+    <div class="custom-css-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons
         onClickPrimaryButton={() => onSubmit(textContent)}
         {onClickSecondaryButton}
@@ -72,7 +72,7 @@
     overflow-y: auto;
   }
 
-  .custom-css-dialog_button-area {
+  .custom-css-dialog_bottom-button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

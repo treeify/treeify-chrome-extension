@@ -68,7 +68,7 @@
         <option class="code-block-language-setting-dialog_language-option" value={language} />
       {/each}
     </datalist>
-    <div class="code-block-language-setting-dialog_button-area">
+    <div class="code-block-language-setting-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
@@ -79,7 +79,7 @@
     padding: 1em;
   }
 
-  .code-block-language-setting-dialog_button-area {
+  .code-block-language-setting-dialog_bottom-button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;

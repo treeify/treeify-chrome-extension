@@ -48,7 +48,7 @@
 <CommonDialog class="caption-setting-dialog_root" title="キャプション設定">
   <div class="caption-setting-dialog_content" on:keydown={onKeyDown}>
     <input type="text" class="caption-setting-dialog_caption" bind:value={captionValue} />
-    <div class="caption-setting-dialog_button-area">
+    <div class="caption-setting-dialog_bottom-button-area">
       <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
@@ -64,7 +64,7 @@
     width: 100%;
   }
 
-  .caption-setting-dialog_button-area {
+  .caption-setting-dialog_bottom-button-area {
     // ボタン群を右寄せにする
     margin: 1em 0 0 auto;
     width: max-content;
