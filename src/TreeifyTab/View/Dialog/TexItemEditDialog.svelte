@@ -78,6 +78,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .tex-edit-dialog_content {
     min-width: 24em;
     padding: 1em;
@@ -108,8 +110,8 @@
   }
 
   .tex-edit-dialog_bottom-button-area {
-    // ボタン群を右寄せにする
-    margin: 1em 0 0 auto;
-    width: max-content;
+    @include common.flex-right;
+
+    margin-top: 1em;
   }
 </style>

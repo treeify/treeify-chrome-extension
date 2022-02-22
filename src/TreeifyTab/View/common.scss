@@ -22,6 +22,11 @@
   justify-content: center;
 }
 
+@mixin flex-right {
+  display: flex;
+  justify-content: right;
+}
+
 @mixin icon($color, $url) {
   background: $color;
   -webkit-mask: $url no-repeat center;

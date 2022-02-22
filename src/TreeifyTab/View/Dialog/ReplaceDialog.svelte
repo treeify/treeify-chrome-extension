@@ -126,6 +126,8 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .replace-dialog_content {
     min-width: 25em;
     padding: 1em;
@@ -142,7 +144,8 @@
   }
 
   .replace-dialog_bottom-button-area {
-    margin: 1em 0 0 auto;
-    width: max-content;
+    @include common.flex-right;
+
+    margin-top: 1em;
   }
 </style>

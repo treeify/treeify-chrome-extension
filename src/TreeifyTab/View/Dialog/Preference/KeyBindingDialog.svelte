@@ -356,8 +356,8 @@
   }
 
   .key-binding-dialog_bottom-button-area {
-    // ボタンを右寄せにする
-    margin: 1em 0 0 auto;
-    width: max-content;
+    @include common.flex-right;
+
+    margin-top: 1em;
   }
 </style>

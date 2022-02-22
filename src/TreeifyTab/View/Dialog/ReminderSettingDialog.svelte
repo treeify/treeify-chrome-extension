@@ -109,12 +109,15 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .reminder-setting-dialog_content {
     padding: 1em;
   }
 
   .reminder-setting-dialog_bottom-button-area {
-    margin: 1em 0 0 auto;
-    width: max-content;
+    @include common.flex-right;
+
+    margin-top: 1em;
   }
 </style>
