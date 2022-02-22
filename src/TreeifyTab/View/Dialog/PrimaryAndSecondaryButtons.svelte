@@ -6,13 +6,13 @@
 
 <div class="primary-and-secondary-buttons_root">
   <button
-    class="primary-and-secondary-buttons_secondary-button"
+    class="primary-and-secondary-buttons_secondary-button secondary"
     on:mousedown|preventDefault={onClickSecondaryButton}
   >
     キャンセル
   </button>
   <button
-    class="primary-and-secondary-buttons_primary-button"
+    class="primary-and-secondary-buttons_primary-button primary"
     on:mousedown|preventDefault={onClickPrimaryButton}
   >
     {primaryButtonText}

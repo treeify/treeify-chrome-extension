@@ -68,8 +68,8 @@
     border-radius: 0.3em;
     // lch(70.0%, 0.0, 0.0)相当
     border: 1px #ababab solid;
-    // lch(95.0%, 0.0, 0.0)相当
-    background: #f1f1f1;
+
+    background: #ffffff;
     // lch(32.5%, 0.0, 0.0)相当
     color: #4c4c4c;
     font-weight: 600;
@@ -77,13 +77,33 @@
     cursor: pointer;
 
     &:hover {
-      // lch(92.5%, 0.0, 0.0)相当
-      background: #e9e9e9;
+      // lch(97.5%, 0.0, 0.0)相当
+      background: #f8f8f8;
     }
 
     &:active {
-      // lch(90.0%, 0.0, 0.0)相当
-      background: #e2e2e2;
+      // lch(95.0%, 0.0, 0.0)相当
+      background: #f1f1f1;
+    }
+
+    &.primary {
+      // lch(57.5%, 67.2, 280.4)相当
+      background: #008afe;
+
+      border-color: transparent;
+
+      // lch(99.3%, 0.0, 0.0)相当
+      color: #fdfdfd;
+
+      &:hover {
+        // lch(55.0%, 67.2, 280.4)相当
+        background: #007de8;
+      }
+
+      &:active {
+        // lch(52.5%, 67.2, 280.4)相当
+        background: #007de8;
+      }
     }
   }
 

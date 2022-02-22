@@ -274,6 +274,11 @@
       // lch(96.0%, 0.0, 0.0)相当
       background: #f3f3f3;
     }
+
+    // 追加ボタン用の行には背景色を付けない
+    tr:last-child {
+      background: inherit;
+    }
   }
 
   .key-binding-dialog_input-id {
