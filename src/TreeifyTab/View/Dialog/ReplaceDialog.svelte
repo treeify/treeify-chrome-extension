@@ -118,7 +118,7 @@
       </label>
     </div>
     <div class="replace-dialog_button-area">
-      <button class="replace-dialog_submit-button" on:mousedown|preventDefault={onSubmit}>
+      <button class="replace-dialog_submit-button primary" on:mousedown|preventDefault={onSubmit}>
         全て置換
       </button>
     </div>
