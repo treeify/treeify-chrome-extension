@@ -10,20 +10,30 @@ import { RArray } from 'src/Utility/fp-ts'
 export type ContextProps = {
   pageId: ItemId
   parentItemId: ItemId
-  siblingItemIds: RArray<ItemId>
+  nearSiblingItemIds: RArray<ItemId>
   selfItemId: ItemId
   onClick(event: MouseEvent): void
 }
 
+/** いくつ離れた兄弟までを表示するかのパラメータ */
+const DISTANCE_LIMIT = 2
+
 export function createContextProps(itemPath: ItemPath): ContextProps {
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
+  const selfItemId = ItemPath.getItemId(itemPath)
 
+  const siblingItemIds = Internal.instance.state.items[parentItemId].childItemIds
+  const index = siblingItemIds.indexOf(selfItemId)
+  const nearSiblingItemIds = siblingItemIds.slice(
+    Math.max(0, index - DISTANCE_LIMIT),
+    index + DISTANCE_LIMIT + 1
+  )
   return {
     pageId: ItemPath.getRootItemId(itemPath),
     parentItemId,
-    siblingItemIds: Internal.instance.state.items[parentItemId].childItemIds,
-    selfItemId: ItemPath.getItemId(itemPath),
+    nearSiblingItemIds,
+    selfItemId,
     onClick(event) {
       event.preventDefault()
 

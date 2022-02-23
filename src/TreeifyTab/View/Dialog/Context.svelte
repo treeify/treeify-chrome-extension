@@ -13,7 +13,7 @@
   </div>
   <div class="context_frame" on:mousedown={props.onClick}>
     <ItemContent props={createItemContentProps(props.parentItemId)} />
-    {#each props.siblingItemIds as siblingItemId}
+    {#each props.nearSiblingItemIds as siblingItemId}
       <div class="context_bullet-and-content">
         <div class="context_bullet-area">
           <div class="context_bullet" />
