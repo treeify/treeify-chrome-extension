@@ -1,7 +1,7 @@
 <script lang="ts">
   // TODO: こういう属性転送ボイラープレートを無くす方法が見つかったらそれを使いたい
   export let checked: boolean = false
-  export let group: boolean[] | undefined = undefined
+  export let group: string[] | undefined = undefined
   export let value: string | undefined = undefined
   let klass = ''
   export { klass as class }

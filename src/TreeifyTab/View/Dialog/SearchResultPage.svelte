@@ -24,7 +24,7 @@
   .search-result-page_page {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 0.2em;
   }
 
   .search-result-page_page-icon {
