@@ -2,13 +2,21 @@
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import TabsDialogItem from 'src/TreeifyTab/View/Dialog/TabsDialogItem.svelte'
   import { TabsDialogItemProps } from 'src/TreeifyTab/View/Dialog/TabsDialogItemProps'
+  import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 
   export let props: TabsDialogItemProps
+
+  $: footprintColor = calculateFootprintColor(
+    props.footprintRank,
+    props.footprintCount,
+    '--newest-footprint-default-color',
+    '--oldest-footprint-default-color'
+  )?.toString()
 </script>
 
-<div class="tabs-dialog-item_root">
+<div class="tabs-dialog-item_root" style:--footprint-color={footprintColor ?? 'transparent'}>
   <div class="tabs-dialog-item_roll">
     {#if props.children.length > 0}
       <div class="tabs-dialog-item_indent-guide" />
@@ -80,6 +88,8 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
+
+    background-color: var(--footprint-color);
 
     cursor: pointer;
 

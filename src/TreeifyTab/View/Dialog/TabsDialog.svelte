@@ -4,6 +4,7 @@
   import { TabsDialog } from 'src/TreeifyTab/External/DialogState'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import TabsDialogItem from 'src/TreeifyTab/View/Dialog/TabsDialogItem.svelte'
@@ -11,7 +12,9 @@
     createTabsDialogItemProps,
     TabsDialogItemProps,
   } from 'src/TreeifyTab/View/Dialog/TabsDialogItemProps'
+  import { CssCustomProperty } from 'src/Utility/browser'
   import { RSet$ } from 'src/Utility/fp-ts'
+  import { integer } from 'src/Utility/integer'
 
   export let dialog: TabsDialog
   const targetItemId: ItemId =
@@ -30,16 +33,29 @@
   )
   const rootNode = CurrentState.treeify(RSet$.add(pageId)(webPageItemIds), pageId, false)
 
-  const items = rootNode.children.map((tree) => {
-    return tree.fold((itemPath, children: TabsDialogItemProps[]) =>
-      createTabsDialogItemProps(itemPath, children)
-    )
+  const items = Internal.instance.state.items
+  const ranking = Array.from(webPageItemIds).sort((a: ItemId, b: ItemId) => {
+    return items[b].timestamp - items[a].timestamp
+  })
+  const exponent = CssCustomProperty.getNumber('--search-result-footprint-count-exponent') ?? 0.5
+  const footprintCount = Math.floor(webPageItemIds.size ** exponent)
+  // 各項目に足跡順位を対応付け
+  const footprintRankMap = new Map<ItemId, integer>()
+  for (let i = 0; i < footprintCount; i++) {
+    footprintRankMap.set(ranking[i], i)
+  }
+
+  const tabsDialogItemPropses = rootNode.children.map((tree) => {
+    return tree.fold((itemPath, children: TabsDialogItemProps[]) => {
+      const footprintRank = footprintRankMap.get(ItemPath.getItemId(itemPath))
+      return createTabsDialogItemProps(itemPath, children, footprintRank, footprintCount)
+    })
   })
 </script>
 
 <CommonDialog class="tabs-dialog_root" title="タブ一覧" showCloseButton>
   <div class="tabs-dialog_content" tabindex="0">
-    {#each items as tabsDialogItemProps}
+    {#each tabsDialogItemPropses as tabsDialogItemProps}
       <TabsDialogItem props={tabsDialogItemProps} />
     {/each}
   </div>
