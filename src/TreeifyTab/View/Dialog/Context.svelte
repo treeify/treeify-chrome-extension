@@ -16,9 +16,9 @@
     {#each props.nearSiblingItemIds as siblingItemId}
       <div class="context_bullet-and-content">
         <div class="context_bullet-area">
-          <div class="context_bullet" />
+          <div class="context_bullet" class:transcluded={siblingItemId === props.selfItemId} />
         </div>
-        <div class="context_content-area" class:is-self={siblingItemId === props.selfItemId}>
+        <div class="context_content-area" class:myself={siblingItemId === props.selfItemId}>
           <ItemContent props={createItemContentProps(siblingItemId)} />
         </div>
       </div>
@@ -78,10 +78,14 @@
     @include common.circle(var(--bullet-default-size));
 
     background: var(--bullet-default-color);
+
+    &.transcluded {
+      background: var(--transcluded-item-bullet-color);
+    }
   }
 
   .context_content-area {
-    &.is-self {
+    &.myself {
       background: var(--selected-item-background-default-color);
     }
   }
