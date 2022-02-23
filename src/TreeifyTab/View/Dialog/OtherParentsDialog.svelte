@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { pipe } from 'fp-ts/function'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import OtherParentsDialogPage from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPage.svelte'
-  import { createOtherParentsDialogPageProps } from 'src/TreeifyTab/View/Dialog/OtherParentsDialogPageProps'
+  import Context from 'src/TreeifyTab/View/Dialog/Context.svelte'
+  import { createContextProps } from 'src/TreeifyTab/View/Dialog/ContextProps'
   import { RArray$ } from 'src/Utility/fp-ts'
 
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -16,18 +15,13 @@
     .map(RArray$.append(targetItemId))
     .filter((itemPath) => !RArray$.shallowEqual(itemPath, targetItemPath))
 
-  const pagePropses = pipe(
-    itemPaths,
-    RArray$.groupBy((itemPath: ItemPath) => String(ItemPath.getRootItemId(itemPath))),
-    Object.values,
-    RArray$.map(createOtherParentsDialogPageProps)
-  )
+  const contextPropses = itemPaths.map(createContextProps)
 </script>
 
 <CommonDialog class="other-parents-dialog_root" title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
-    {#each pagePropses as pageProps}
-      <OtherParentsDialogPage props={pageProps} />
+    {#each contextPropses as contextProps}
+      <Context props={contextProps} />
     {/each}
   </div>
 </CommonDialog>

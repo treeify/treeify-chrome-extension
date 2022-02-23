@@ -74,7 +74,7 @@
     position: absolute;
     top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--tabs-dialog-bullet-size) / 2);
 
-    background: var(--main-area-bullet-inner-circle-color);
+    background: var(--bullet-default-color);
   }
 
   .tabs-dialog-item_content-area {
@@ -85,7 +85,7 @@
     cursor: pointer;
 
     &:hover {
-      background: var(--main-area-hover-item-background-color);
+      background: var(--item-hover-background-default-color);
     }
   }
 

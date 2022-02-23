@@ -92,14 +92,6 @@
   :root {
     --main-area-node-content-area-vertical-padding: 0.105em;
 
-    // フォーカス項目の背景色。lch(95.0%, 134.0, 280.4)相当
-    --main-area-focused-item-background-color: #ecf0ff;
-    // マウスホバー項目の背景色。lch(98%, 134.0, 280.4)相当
-    --main-area-hover-item-background-color: #f7f9ff;
-
-    // 複数選択された項目の背景色。lch(93.0%, 134.0, 280.4)相当
-    --main-area-selected-item-background-color: #e5ebff;
-
     // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
     --main-area-strongest-footprint-color: #fff6f3;
     // 最も古い足跡の色（線形補間の一端）
@@ -152,7 +144,7 @@
     // マウスホバー時のコンテンツ領域
     &:hover {
       // マウスホバー項目の強調表示
-      background: var(--main-area-hover-item-background-color);
+      background: var(--item-hover-background-default-color);
       @media print {
         background-color: transparent;
       }
@@ -160,7 +152,7 @@
 
     // 単一選択された項目のコンテンツ領域
     &.single-selected {
-      background: var(--main-area-focused-item-background-color);
+      background: var(--selected-item-background-default-color);
       @media print {
         background-color: transparent;
       }
@@ -220,6 +212,6 @@
   .multi-selected.main-area-node_root,
   .multi-selected .main-area-node_content-area,
   .multi-selected .main-area-node_body-area {
-    background: var(--main-area-selected-item-background-color);
+    background: var(--selected-item-background-default-color);
   }
 </style>

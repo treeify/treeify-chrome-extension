@@ -108,13 +108,11 @@
     background-color: var(--footprint-color);
 
     &.active-page {
-      // lch(95.0%, 134.0, 280.4)相当
-      background: #ecf0ff;
+      background: var(--selected-item-background-default-color);
     }
 
     &:hover {
-      // lch(98%, 134.0, 280.4)相当
-      background: #f7f9ff;
+      background: var(--item-hover-background-default-color);
     }
   }
 

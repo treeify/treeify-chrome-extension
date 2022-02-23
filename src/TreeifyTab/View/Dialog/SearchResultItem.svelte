@@ -110,7 +110,7 @@
     position: absolute;
     top: calc(var(--search-result-line-height) / 2 - var(--search-result-bullet-size) / 2);
 
-    background: var(--main-area-bullet-inner-circle-color);
+    background: var(--bullet-default-color);
 
     .transcluded & {
       background: var(--transcluded-item-bullet-color);
@@ -135,11 +135,11 @@
 
     &:focus {
       outline: none;
-      background: var(--main-area-focused-item-background-color);
+      background: var(--selected-item-background-default-color);
     }
 
     &:hover {
-      background: var(--main-area-hover-item-background-color);
+      background: var(--item-hover-background-default-color);
     }
   }
 </style>

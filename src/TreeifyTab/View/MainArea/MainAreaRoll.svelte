@@ -43,8 +43,6 @@
     --main-area-bullet-outer-circle-color: #e2e2e2;
     // バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当
     --main-area-bullet-outer-circle-hover-color: #c6c6c6;
-    // バレットの内側の円の色。lch(60.0%, 0.0, 0.0)相当
-    --main-area-bullet-inner-circle-color: #919191;
     // バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当
     --main-area-bullet-inner-circle-hover-color: #5e5e5e;
     // バレットとして表示されるページアイコンの色。lch(30.0%, 0.0, 0.0)相当
@@ -174,7 +172,7 @@
     @include common.circle(0.38em);
     @include common.absolute-center;
 
-    background: var(--main-area-bullet-inner-circle-color);
+    background: var(--bullet-default-color);
 
     .main-area-roll_root:hover & {
       background: var(--main-area-bullet-inner-circle-hover-color);
