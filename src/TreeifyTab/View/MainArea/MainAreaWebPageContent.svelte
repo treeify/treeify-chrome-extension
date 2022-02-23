@@ -58,8 +58,8 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    // 未読ウェブページ項目のタイトルの色
-    --main-area-unread-web-page-item-title-color: lch(35% 134 160.4);
+    // 彩度は色域境界値
+    --main-area-unread-web-page-item-title-color: lch(35% 35.4 160.4);
 
     // ウェブページ項目の音がなっていることを示すアイコンの色
     --main-area-audible-icon-color: lch(45% 0 0);

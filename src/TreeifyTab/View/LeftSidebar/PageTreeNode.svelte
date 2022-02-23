@@ -67,8 +67,8 @@
   :root {
     --page-tree-node-content-area-vertical-padding: 0.22em;
 
-    // 最も新しい足跡の色（線形補間の一端）
-    --page-tree-strongest-footprint-color: lch(97.5% 134 40.4);
+    // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
+    --page-tree-strongest-footprint-color: lch(97.5% 3.5 40.4);
     // 最も古い足跡の色（線形補間の一端）
     --page-tree-weakest-footprint-color: lch(100% 0 0);
     // 足跡表示数のパラメータ。

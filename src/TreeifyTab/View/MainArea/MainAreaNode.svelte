@@ -92,8 +92,8 @@
   :root {
     --main-area-node-content-area-vertical-padding: 0.105em;
 
-    // 最も新しい足跡の色（線形補間の一端）
-    --main-area-strongest-footprint-color: lch(97.5% 134 40.4);
+    // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
+    --main-area-strongest-footprint-color: lch(97.5% 3.5 40.4);
     // 最も古い足跡の色（線形補間の一端）
     --main-area-weakest-footprint-color: lch(100% 0 0);
     // 足跡表示数のパラメータ。
@@ -161,7 +161,8 @@
 
   // ダウトフル状態の項目
   .doubtful .main-area-node_content-area {
-    text-decoration: underline dashed lch(60% 134 40.4);
+    // 彩度は色域境界値
+    text-decoration: underline dashed lch(60% 82.6 40.4);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
   }

@@ -55,10 +55,10 @@
     // トランスクルードされた項目のバレットのマウスホバー時の色
     --transcluded-item-bullet-hover-color: lch(40% 40 160.4);
 
-    // ハイライト状態の項目のバレットの色
-    --highlighted-item-bullet-color: lch(50% 134 40.4);
-    // ハイライト状態の項目のバレットのマウスホバー時の色
-    --highlighted-item-bullet-hover-color: lch(40% 134 40.4);
+    // ハイライト状態の項目のバレットの色。彩度は色域境界値
+    --highlighted-item-bullet-color: lch(50% 98.7 40.4);
+    // ハイライト状態の項目のバレットのマウスホバー時の色。彩度は色域境界値
+    --highlighted-item-bullet-hover-color: lch(40% 83.7 40.4);
 
     // インデントガイドの色
     --main-area-indent-guide-color: lch(88% 0 0);

@@ -41,8 +41,10 @@
   :root {
     --bullet-default-size: 0.38em;
     --bullet-default-color: lch(60% 0 0);
-    --selected-item-background-default-color: lch(95% 134 280.4);
-    --item-hover-background-default-color: lch(98% 134 280.4);
+    // 彩度は色域境界値
+    --selected-item-background-default-color: lch(95% 7.8 280.4);
+    // 彩度は色域境界値
+    --item-hover-background-default-color: lch(98% 3.1 280.4);
   }
 
   * {
@@ -61,7 +63,8 @@
     margin: 0;
     font-size: inherit;
 
-    accent-color: lch(50% 134 280.4);
+    // 彩度は色域境界値
+    accent-color: lch(50% 60.6 280.4);
   }
 
   img {
@@ -89,6 +92,7 @@
     }
 
     &.primary {
+      // 彩度は色域境界値
       background: lch(57.5% 67.2 280.4);
 
       border-color: transparent;
@@ -96,11 +100,13 @@
       color: lch(99.3% 0 0);
 
       &:hover {
-        background: lch(55% 67.2 280.4);
+        // 彩度は色域境界値
+        background: lch(55% 64.8 280.4);
       }
 
       &:active {
-        background: lch(52.5% 67.2 280.4);
+        // 彩度は色域境界値
+        background: lch(52.5% 63 280.4);
       }
     }
   }
