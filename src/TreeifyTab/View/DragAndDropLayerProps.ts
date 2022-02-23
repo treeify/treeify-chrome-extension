@@ -212,6 +212,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
+    Rerenderer.instance.requestToScrollAppear()
     Rerenderer.instance.rerender()
   } else {
     // Roll以外の場所へのドロップの場合
@@ -267,6 +268,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
+    Rerenderer.instance.requestToScrollAppear()
     Rerenderer.instance.rerender()
   }
 }
@@ -336,6 +338,7 @@ function onDropIntoLeftSidebar(event: MouseEvent, draggedItemPath: ItemPath) {
   Internal.instance.mutate(newTargetItemPath, StatePath.of('pages', itemId, 'anchorItemPath'))
 
   CurrentState.updateItemTimestamp(draggedItemId)
+  Rerenderer.instance.requestToScrollAppear()
   Rerenderer.instance.rerender()
 }
 
