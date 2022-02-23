@@ -139,11 +139,18 @@ export function toOpmlString(
   opmlElement.append(bodyElement)
 
   const xmlString = new XMLSerializer().serializeToString(xmlDocument)
+  // OPML内に制御文字が混入して正常に読み込めなくなる不具合の対策。
+  // 下記を除く全ての制御文字を削除する。
+  // ・x09(HT)
+  // ・x0A(LF)
+  // ・x0D(CR)
+  // ・x80-x9F
+  const safeXmlString = xmlString.replaceAll(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
   // XML宣言が付いていない場合は付ける
-  if (xmlString.startsWith('<?xml')) {
-    return xmlString
+  if (safeXmlString.startsWith('<?xml')) {
+    return safeXmlString
   } else {
-    return '<?xml version="1.0"?>' + xmlString
+    return '<?xml version="1.0"?>' + safeXmlString
   }
 }
 
