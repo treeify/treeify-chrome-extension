@@ -58,13 +58,11 @@
     white-space: nowrap;
 
     .discarded & {
-      // lch(35.0%, 0.0, 0.0)相当
-      color: #525252;
+      color: lch(35% 0 0);
     }
 
     .tab-closed & {
-      // lch(60.0%, 0.0, 0.0)相当
-      color: #919191;
+      color: lch(60% 0 0);
     }
 
     // 未読ウェブページ項目のタイトルの強調表示
@@ -73,13 +71,11 @@
     }
 
     .unread.discarded & {
-      // lch(35.0%, 30.0, 160.4)相当
-      color: #1a5d41;
+      color: lch(35% 30 160.4);
     }
 
     .unread.tab-closed & {
-      // lch(60.0%, 30.0, 160.4)相当
-      color: #5d9e7e;
+      color: lch(60% 30 160.4);
     }
   }
 </style>

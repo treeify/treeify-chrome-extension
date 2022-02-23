@@ -97,8 +97,7 @@
     padding: 0.5em;
 
     $outline-size: 1px;
-    // lch(60.0%, 0.0, 0.0)相当
-    outline: $outline-size solid #919191;
+    outline: $outline-size solid lch(60% 0 0);
     // 親要素によってoutlineが見えなくなってしまう現象へのワークアラウンド。
     margin: $outline-size;
   }

@@ -74,8 +74,8 @@
     cursor: pointer;
 
     &:focus {
-      // lch(93.0%, 7.8, 280.4)相当
-      background: #e7ebfa;
+      // 彩度は色域境界値
+      background: lch(93% 7.8 280.4);
     }
   }
 </style>

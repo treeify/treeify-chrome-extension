@@ -35,7 +35,6 @@
     margin-top: 0.1em;
 
     font-size: 80%;
-    // lch(30.0%, 0.0, 0.0)相当
-    color: #474747;
+    color: lch(30% 0 0);
   }
 </style>

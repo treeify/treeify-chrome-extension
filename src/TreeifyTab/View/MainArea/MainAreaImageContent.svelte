@@ -72,9 +72,8 @@
     width: max-content;
     max-width: 100%;
 
-    // Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
-    // lch(80.0%, 0.0, 0.0)
-    outline: 1px solid #c6c6c6;
+    // Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策
+    outline: 1px solid lch(80% 0 0);
   }
 
   .main-area-image-content_image {
@@ -119,8 +118,7 @@
     // 完了状態のキャプション
     .completed &,
     .completed-children & {
-      // lch(50.0%, 0.0, 0.0)相当
-      color: #777777;
+      color: lch(50% 0 0);
     }
   }
 </style>

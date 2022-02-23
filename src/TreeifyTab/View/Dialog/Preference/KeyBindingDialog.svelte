@@ -264,8 +264,7 @@
   }
 
   .key-binding-dialog_scroll-area {
-    // lch(80.0%, 0.0, 0.0)相当
-    border: 1px solid #c6c6c6;
+    border: 1px solid lch(80% 0 0);
 
     max-height: 100%;
     overflow-y: auto;
@@ -278,8 +277,7 @@
     border-collapse: collapse;
 
     tr:nth-child(odd) {
-      // lch(96.0%, 0.0, 0.0)相当
-      background: #f3f3f3;
+      background: lch(96% 0 0);
     }
 
     // 追加ボタン用の行には背景色を付けない
@@ -306,8 +304,7 @@
 
   .key-binding-dialog_delete-button {
     @include common.circle(var(--key-binding-dialog-command-button-size));
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
+    @include common.pseudo-ripple-effect(lch(90% 0 0));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -318,8 +315,7 @@
       @include common.square(1.2em);
       @include common.absolute-center;
 
-      // lch(40.0%, 0.0, 0.0)相当
-      @include common.icon(#5e5e5e, url('trash-can.svg'));
+      @include common.icon(lch(40% 0 0), url('trash-can.svg'));
     }
 
     .key-binding-dialog_command-row:hover & {
@@ -329,8 +325,7 @@
 
   .key-binding-dialog_add-command-button {
     @include common.circle(var(--key-binding-dialog-command-button-size));
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
+    @include common.pseudo-ripple-effect(lch(90% 0 0));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -341,8 +336,7 @@
       @include common.square(1.2em);
       @include common.absolute-center;
 
-      // lch(40.0%, 0.0, 0.0)相当
-      @include common.icon(#5e5e5e, url('plus.svg'));
+      @include common.icon(lch(40% 0 0), url('plus.svg'));
     }
 
     .key-binding-dialog_command-row:hover & {

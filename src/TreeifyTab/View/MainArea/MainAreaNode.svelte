@@ -92,20 +92,20 @@
   :root {
     --main-area-node-content-area-vertical-padding: 0.105em;
 
-    // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
-    --main-area-strongest-footprint-color: #fff6f3;
+    // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
+    --main-area-strongest-footprint-color: lch(97.5% 3.5 40.4);
     // 最も古い足跡の色（線形補間の一端）
-    --main-area-weakest-footprint-color: #ffffff;
+    --main-area-weakest-footprint-color: lch(100% 0 0);
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
     --main-area-footprint-count-exponent: 0.6;
 
-    // 完了状態の項目の標準的なテキスト色。lch(75.0%, 0.0, 0.0)相当
-    --completed-item-text-color: #b9b9b9;
+    // 完了状態の項目の標準的なテキスト色
+    --completed-item-text-color: lch(75% 0 0);
 
-    // 削除ボタンなどのマウスホバー時の背景。lch(90.0%, 0.0, 0.0)相当
-    --main-area-node-button-background-hover-color: #e2e2e2;
+    // 削除ボタンなどのマウスホバー時の背景
+    --main-area-node-button-background-hover-color: lch(90% 0 0);
   }
 
   .main-area-node_root {
@@ -161,8 +161,8 @@
 
   // ダウトフル状態の項目
   .doubtful .main-area-node_content-area {
-    // lch(60.0%, 134.0, 40.4)相当
-    text-decoration: underline dashed #ff5534;
+    // 彩度は色域境界値
+    text-decoration: underline dashed lch(60% 82.6 40.4);
     text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
   }
@@ -179,8 +179,7 @@
 
     @include common.flex-center;
 
-    // lch(40.0%, 0.0, 0.0)相当
-    color: #5e5e5e;
+    color: lch(40% 0 0);
 
     font-size: 97%;
   }
@@ -202,8 +201,7 @@
     @include common.square(0.8em);
     @include common.absolute-center;
 
-    // lch(30.0%, 0.0, 0.0)相当
-    @include common.icon(#474747, url('close.svg'));
+    @include common.icon(lch(30% 0 0), url('close.svg'));
   }
 
   // 複数選択された項目の背景色設定。

@@ -35,8 +35,7 @@
 <style global lang="scss">
   .source_root {
     font-size: 50%;
-    // lch(60.0%, 0.0, 0.0)相当
-    color: #919191;
+    color: lch(60% 0 0);
 
     // 右寄せ
     margin-left: auto;

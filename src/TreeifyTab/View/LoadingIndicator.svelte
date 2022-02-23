@@ -15,12 +15,10 @@
     transform: translate(-50%, -50%);
 
     border-radius: 50%;
-    // lch(30.0%, 0.0, 0.0)相当
-    border-top: 3px solid #474747;
-    // lch(70.0%, 0.0, 0.0)相当
-    border-right: 3px solid #ababab;
-    border-bottom: 3px solid #ababab;
-    border-left: 3px solid #ababab;
+    border-top: 3px solid lch(30% 0 0);
+    border-right: 3px solid lch(70% 0 0);
+    border-bottom: 3px solid lch(70% 0 0);
+    border-left: 3px solid lch(70% 0 0);
     animation: rotation 0.8s infinite linear;
   }
 

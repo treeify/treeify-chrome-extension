@@ -55,10 +55,10 @@
     --search-result-line-height: 1.3em;
     --search-result-bullet-size: var(--bullet-default-size);
 
-    // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
-    --search-result-page-tree-strongest-footprint-color: #fff6f3;
+    // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
+    --search-result-page-tree-strongest-footprint-color: lch(97.5% 3.5 40.4);
     // 最も古い足跡の色（線形補間の一端）
-    --search-result-page-tree-weakest-footprint-color: #ffffff;
+    --search-result-page-tree-weakest-footprint-color: lch(100% 0 0);
     --search-result-footprint-count-exponent: 0.5;
 
     --search-result-bullet-outer-circle-min-diameter: 1.05;
@@ -91,8 +91,7 @@
     position: absolute;
     top: calc(var(--search-result-line-height) / 2);
 
-    // lch(80.0%, 0.0, 0.0)相当
-    background: #c6c6c6;
+    background: lch(80% 0 0);
   }
 
   .search-result-item_roll-outer-circle {

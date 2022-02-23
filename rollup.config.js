@@ -5,6 +5,7 @@ import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
 import path from 'path'
+import postcssLabFunction from 'postcss-lab-function'
 import copy from 'rollup-plugin-copy'
 import css from 'rollup-plugin-css-only'
 import builtins from 'rollup-plugin-node-builtins'
@@ -50,7 +51,11 @@ export default {
     }),
 
     svelte({
-      preprocess: sveltePreprocess(),
+      preprocess: sveltePreprocess({
+        postcss: {
+          plugins: [postcssLabFunction()],
+        },
+      }),
     }),
     css({ output: 'TreeifyTab/bundle.css' }),
     typescript(),

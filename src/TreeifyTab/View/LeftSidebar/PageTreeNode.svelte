@@ -67,10 +67,10 @@
   :root {
     --page-tree-node-content-area-vertical-padding: 0.22em;
 
-    // 最も新しい足跡の色（線形補間の一端）。lch(97.5%, 134.0, 40.4)相当
-    --page-tree-strongest-footprint-color: #fff6f3;
+    // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
+    --page-tree-strongest-footprint-color: lch(97.5% 3.5 40.4);
     // 最も古い足跡の色（線形補間の一端）
-    --page-tree-weakest-footprint-color: #ffffff;
+    --page-tree-weakest-footprint-color: lch(100% 0 0);
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
@@ -120,8 +120,7 @@
   .page-tree-node_audible-icon {
     @include common.square(1em);
 
-    // lch(60.0%, 0.0, 0.0)相当
-    @include common.icon(#919191, url('audible.svg'));
+    @include common.icon(lch(60% 0 0), url('audible.svg'));
 
     margin-left: 0.2em;
   }
@@ -133,8 +132,7 @@
   .page-tree-node_tabs-count-button {
     @include common.circle(100%);
 
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
+    @include common.pseudo-ripple-effect(lch(90% 0 0));
 
     font-size: 97%;
   }
@@ -142,14 +140,12 @@
   .page-tree-node_tabs-count {
     @include common.absolute-center;
 
-    // lch(40.0%, 0.0, 0.0)相当
-    color: #5e5e5e;
+    color: lch(40% 0 0);
   }
 
   .page-tree-node_close-button {
     @include common.circle(100%);
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
+    @include common.pseudo-ripple-effect(lch(90% 0 0));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -160,8 +156,7 @@
       @include common.square(1.3em);
       @include common.absolute-center;
 
-      // lch(50.0%, 0.0, 0.0)相当
-      @include common.icon(#777777, url('close-circle.svg'));
+      @include common.icon(lch(50% 0 0), url('close-circle.svg'));
     }
 
     .page-tree-node_body-area:hover & {

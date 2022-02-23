@@ -42,10 +42,10 @@
     // 折りたたまれたノードのバレット（二等辺三角形▼）の高さ
     --page-tree-bullet-unfolded-height: 0.3em;
 
-    // バレットの色。lch(60.0%, 0.0, 0.0)相当
-    --page-tree-bullet-color: #919191;
-    // バレットの色（ホバー時）。lch(40.0%, 0.0, 0.0)相当
-    --page-tree-bullet-hover-color: #5e5e5e;
+    // バレットの色
+    --page-tree-bullet-color: lch(60% 0 0);
+    // バレットの色（ホバー時）
+    --page-tree-bullet-hover-color: lch(40% 0 0);
   }
 
   .page-tree-bullet-and-indent_root {
@@ -69,8 +69,7 @@
 
   // インデントガイド
   .page-tree-bullet-and-indent_indent-guide {
-    // lch(88.0%, 0.0, 0.0)相当
-    background: #dddddd;
+    background: lch(88% 0 0);
 
     width: 1px;
     height: 100%;
@@ -78,8 +77,7 @@
 
     // ホバー時のインデントガイド
     .page-tree-bullet-and-indent_root:hover & {
-      // lch(70.0%, 0.0, 0.0)相当
-      background: #ababab;
+      background: lch(70% 0 0);
     }
   }
 

@@ -122,16 +122,14 @@
 
   .workspace-dialog_delete-button {
     @include common.circle(var(--workspace-dialog-delete-button-size));
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
+    @include common.pseudo-ripple-effect(lch(90% 0 0));
 
     &::before {
       content: '';
       @include common.square(1.2em);
       @include common.absolute-center;
 
-      // lch(40.0%, 0.0, 0.0)相当
-      @include common.icon(#5e5e5e, url('trash-can.svg'));
+      @include common.icon(lch(40% 0 0), url('trash-can.svg'));
     }
   }
 
@@ -147,16 +145,14 @@
 
   .workspace-dialog_add-button {
     @include common.circle(2em);
-    // lch(90.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#e2e2e2);
+    @include common.pseudo-ripple-effect(lch(90% 0 0));
 
     &::before {
       content: '';
       @include common.square(1.6em);
       @include common.absolute-center;
 
-      // lch(50.0%, 0.0, 0.0)相当
-      @include common.icon(#777777, url('plus.svg'));
+      @include common.icon(lch(50% 0 0), url('plus.svg'));
     }
   }
 </style>
