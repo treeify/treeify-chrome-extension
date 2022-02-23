@@ -41,10 +41,16 @@
   :root {
     --bullet-default-size: 0.38em;
     --bullet-default-color: lch(60% 0 0);
+
     // 彩度は色域境界値
     --selected-item-background-default-color: lch(95% 7.8 280.4);
     // 彩度は色域境界値
     --item-hover-background-default-color: lch(98% 3.1 280.4);
+
+    // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
+    --newest-footprint-default-color: lch(97.5% 3.5 40.4);
+    // 最も古い足跡の色（線形補間の一端）
+    --oldest-footprint-default-color: #ffffff;
   }
 
   * {
