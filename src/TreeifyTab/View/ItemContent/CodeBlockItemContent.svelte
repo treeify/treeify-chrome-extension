@@ -35,8 +35,7 @@
   }
 
   .code-block-item-content_code {
-    // lch(80.0%, 0.0, 0.0)相当
-    border: 1px solid #c6c6c6;
+    border: 1px solid lch(80% 0 0);
     margin: 0;
     padding: 0.2em;
     // これを指定しないとoverflowしたコードがborderからはみ出る
@@ -53,7 +52,6 @@
     margin-bottom: 0.2em;
 
     font-size: 80%;
-    // lch(30.0%, 0.0, 0.0)相当
-    color: #474747;
+    color: lch(30% 0 0);
   }
 </style>

@@ -67,8 +67,7 @@
     min-height: 50vh;
     padding: 0.5em;
 
-    // lch(60.0%, 0.0, 0.0)相当
-    outline: 1px solid #919191;
+    outline: 1px solid lch(60% 0 0);
 
     max-height: 100%;
     overflow-y: auto;

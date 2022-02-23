@@ -44,8 +44,7 @@
 
     outline: none;
 
-    // lch(97.0%, 0.0, 0.0)相当
-    background: #f6f6f6;
+    background: lch(97% 0 0);
   }
 
   .main-area_paper {
@@ -62,8 +61,7 @@
 
     min-height: 100%;
 
-    // lch(80.0%, 0.0, 0.0)相当
-    box-shadow: 0 1.5px 5px #c6c6c6;
+    box-shadow: 0 1.5px 5px lch(80% 0 0);
 
     background: #ffffff;
 

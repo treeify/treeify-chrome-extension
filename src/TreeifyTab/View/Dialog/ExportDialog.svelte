@@ -245,11 +245,9 @@
     border-top-left-radius: var(--export-dialog-tab-radius);
     border-top-right-radius: var(--export-dialog-tab-radius);
 
-    // lch(96.0%, 0.0, 0.0)相当
-    background: #f3f3f3;
+    background: lch(96% 0 0);
 
-    // lch(80.0%, 0.0, 0.0)相当
-    border: 1px solid #c6c6c6;
+    border: 1px solid lch(80% 0 0);
 
     &.selected {
       background: #ffffff;
@@ -271,8 +269,7 @@
     gap: 0.5em;
 
     padding: 1em;
-    // lch(80.0%, 0.0, 0.0)相当
-    border: 1px solid #c6c6c6;
+    border: 1px solid lch(80% 0 0);
     border-top-style: none;
   }
 
@@ -292,8 +289,7 @@
   .export-dialog_copy-button-icon {
     @include common.square(1.5em);
 
-    // lch(45.0%, 0.0, 0.0)相当
-    @include common.icon(#6a6a6a, url('clipboard.svg'));
+    @include common.icon(lch(45% 0 0), url('clipboard.svg'));
   }
 
   .export-dialog_save-button {
@@ -304,7 +300,6 @@
   .export-dialog_save-button-icon {
     @include common.square(1.5em);
 
-    // lch(45.0%, 0.0, 0.0)相当
-    @include common.icon(#6a6a6a, url('file-download.svg'));
+    @include common.icon(lch(45% 0 0), url('file-download.svg'));
   }
 </style>

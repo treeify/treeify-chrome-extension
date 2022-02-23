@@ -30,13 +30,11 @@
   .search-result-page_page-icon {
     @include common.square(1.05em);
 
-    // lch(30.0%, 0.0, 0.0)相当
-    @include common.icon(#474747, url('page.svg'));
+    @include common.icon(lch(30% 0 0), url('page.svg'));
   }
 
   .search-result-page_tree {
-    // lch(70.0%, 0.0, 0.0)相当
-    border: solid 1px #ababab;
+    border: solid 1px lch(70% 0 0);
     border-radius: 0.7em;
     padding: 0.5em 0.5em 0.5em 1em;
   }

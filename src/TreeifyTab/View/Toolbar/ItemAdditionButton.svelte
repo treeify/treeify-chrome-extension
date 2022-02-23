@@ -21,7 +21,6 @@
     @include common.square(26px);
     @include common.absolute-center;
 
-    // lch(45.0%, 0.0, 0.0)相当
-    @include common.icon(#6a6a6a, url('plus.svg'));
+    @include common.icon(lch(45% 0 0), url('plus.svg'));
   }
 </style>

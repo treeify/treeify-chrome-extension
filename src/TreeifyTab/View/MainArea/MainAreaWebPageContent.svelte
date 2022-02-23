@@ -58,11 +58,11 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    // 未読ウェブページ項目のタイトルの色。lch(35.0%, 134.0, 160.4)相当
-    --main-area-unread-web-page-item-title-color: #005f3e;
+    // 未読ウェブページ項目のタイトルの色
+    --main-area-unread-web-page-item-title-color: lch(35% 134 160.4);
 
-    // ウェブページ項目の音がなっていることを示すアイコンの色。lch(45.0%, 0.0, 0.0)相当
-    --main-area-audible-icon-color: #6a6a6a;
+    // ウェブページ項目の音がなっていることを示すアイコンの色
+    --main-area-audible-icon-color: lch(45% 0 0);
   }
 
   // ウェブページ項目のコンテンツ領域のルート
@@ -133,13 +133,11 @@
     white-space: nowrap;
 
     &.discarded {
-      // lch(35.0%, 0.0, 0.0)相当
-      color: #525252;
+      color: lch(35% 0 0);
     }
 
     &.tab-closed {
-      // lch(60.0%, 0.0, 0.0)相当
-      color: #919191;
+      color: lch(60% 0 0);
     }
 
     // 未読ウェブページ項目のタイトルの強調表示
@@ -147,13 +145,11 @@
       color: var(--main-area-unread-web-page-item-title-color);
 
       &.discarded {
-        // lch(35.0%, 30.0, 160.4)相当
-        color: #1a5d41;
+        color: lch(35% 30 160.4);
       }
 
       &.tab-closed {
-        // lch(60.0%, 30.0, 160.4)相当
-        color: #5d9e7e;
+        color: lch(60% 30 160.4);
       }
     }
 

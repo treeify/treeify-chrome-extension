@@ -64,8 +64,7 @@
     position: absolute;
     top: calc(var(--tabs-dialog-item-line-height) / 2);
 
-    // lch(80.0%, 0.0, 0.0)相当
-    background: #c6c6c6;
+    background: lch(80% 0 0);
   }
 
   .tabs-dialog-item_bullet {
@@ -92,8 +91,7 @@
   .tabs-dialog-item_audible-icon {
     @include common.square(1em);
 
-    // lch(50.0%, 0.0, 0.0)相当
-    @include common.icon(#777777, url('audible.svg'));
+    @include common.icon(lch(50% 0 0), url('audible.svg'));
 
     margin-left: 0.5em;
   }

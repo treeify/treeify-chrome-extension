@@ -58,10 +58,9 @@
     position: relative;
     z-index: 20;
 
-    // lch(98.0%, 0.0, 0.0)相当
-    background: #f9f9f9;
-    // Dynalistを参考にして作った影。lch(85.0%, 0.0, 0.0)相当
-    box-shadow: 0 1.5px 3px #d4d4d4;
+    background: lch(98% 0 0);
+    // Dynalistを参考にして作った影
+    box-shadow: 0 1.5px 3px lch(85% 0 0);
 
     @media print {
       display: none;

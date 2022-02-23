@@ -90,8 +90,7 @@
     overflow: hidden;
 
     background: #ffffff;
-    // lch(50.0%, 0.0, 0.0)相当
-    box-shadow: 0 1.5px 8px #777777;
+    box-shadow: 0 1.5px 8px lch(50% 0 0);
   }
 
   .common-dialog_title-bar {
@@ -101,8 +100,7 @@
 
     padding-inline: 0.5em;
 
-    // lch(25.0%, 0.0, 0.0)相当
-    background: #3b3b3b;
+    background: lch(25% 0 0);
   }
 
   .common-dialog_title {
@@ -112,8 +110,7 @@
 
   .common-dialog_close-button {
     @include common.circle(1.6em);
-    // lch(40.0%, 0.0, 0.0)相当
-    @include common.pseudo-ripple-effect(#5e5e5e);
+    @include common.pseudo-ripple-effect(lch(40% 0 0));
 
     margin-left: auto;
 
@@ -124,8 +121,7 @@
       @include common.square(0.8em);
       @include common.absolute-center;
 
-      // lch(80.0%, 0.0, 0.0)相当
-      @include common.icon(#c6c6c6, url('close.svg'));
+      @include common.icon(lch(80% 0 0), url('close.svg'));
     }
   }
 

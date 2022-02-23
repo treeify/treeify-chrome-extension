@@ -87,8 +87,7 @@
 
 <style global lang="scss">
   :root {
-    // lch(60.0%, 0.0, 0.0)相当
-    --drop-destination-color: #919191;
+    --drop-destination-color: lch(60% 0 0);
   }
 
   .drag-and-drop-layer_root {
@@ -121,11 +120,9 @@
     pointer-events: none;
 
     background: #ffffff;
-    // lch(90.0%, 0.0, 0.0)相当
-    border: 1px solid #e2e2e2;
+    border: 1px solid lch(90% 0 0);
 
-    // lch(85.0%, 0.0, 0.0)相当
-    box-shadow: 2px 2px 4px #d4d4d4;
+    box-shadow: 2px 2px 4px lch(85% 0 0);
 
     outline: none;
   }

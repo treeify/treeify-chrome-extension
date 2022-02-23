@@ -40,12 +40,9 @@
 
   :root {
     --bullet-default-size: 0.38em;
-    // lch(60.0%, 0.0, 0.0)相当
-    --bullet-default-color: #919191;
-    // lch(95.0%, 134.0, 280.4)相当
-    --selected-item-background-default-color: #ecf0ff;
-    // lch(98%, 134.0, 280.4)相当
-    --item-hover-background-default-color: #f7f9ff;
+    --bullet-default-color: lch(60% 0 0);
+    --selected-item-background-default-color: lch(95% 134 280.4);
+    --item-hover-background-default-color: lch(98% 134 280.4);
   }
 
   * {
@@ -64,8 +61,7 @@
     margin: 0;
     font-size: inherit;
 
-    // lch(50.0%, 134.0, 280.4)相当
-    accent-color: #0077dd;
+    accent-color: lch(50% 134 280.4);
   }
 
   img {
@@ -76,43 +72,35 @@
     padding-inline: 1.1em;
     padding-block: 0.3em;
     border-radius: 0.3em;
-    // lch(70.0%, 0.0, 0.0)相当
-    border: 1px #ababab solid;
+    border: 1px lch(70% 0 0) solid;
 
     background: #ffffff;
-    // lch(32.5%, 0.0, 0.0)相当
-    color: #4c4c4c;
+    color: lch(32.5% 0 0);
     font-weight: 600;
 
     cursor: pointer;
 
     &:hover {
-      // lch(97.5%, 0.0, 0.0)相当
-      background: #f8f8f8;
+      background: lch(97.5% 0 0);
     }
 
     &:active {
-      // lch(95.0%, 0.0, 0.0)相当
-      background: #f1f1f1;
+      background: lch(95% 0 0);
     }
 
     &.primary {
-      // lch(57.5%, 67.2, 280.4)相当
-      background: #008afe;
+      background: lch(57.5% 67.2 280.4);
 
       border-color: transparent;
 
-      // lch(99.3%, 0.0, 0.0)相当
-      color: #fdfdfd;
+      color: lch(99.3% 0 0);
 
       &:hover {
-        // lch(55.0%, 67.2, 280.4)相当
-        background: #007de8;
+        background: lch(55% 67.2 280.4);
       }
 
       &:active {
-        // lch(52.5%, 67.2, 280.4)相当
-        background: #007de8;
+        background: lch(52.5% 67.2 280.4);
       }
     }
   }

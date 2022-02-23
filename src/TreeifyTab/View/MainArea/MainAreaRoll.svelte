@@ -39,31 +39,31 @@
     // 外側の円が最大サイズになる子孫項目数
     --main-area-bullet-outer-circle-item-count-limit: 20;
 
-    // バレットの外側の円の色。lch(90.0%, 0.0, 0.0)相当
-    --main-area-bullet-outer-circle-color: #e2e2e2;
-    // バレットの外側の円のマウスホバー時の色。lch(80.0%, 0.0, 0.0)相当
-    --main-area-bullet-outer-circle-hover-color: #c6c6c6;
-    // バレットの内側の円のマウスホバー時の色。lch(40.0%, 0.0, 0.0)相当
-    --main-area-bullet-inner-circle-hover-color: #5e5e5e;
-    // バレットとして表示されるページアイコンの色。lch(30.0%, 0.0, 0.0)相当
-    --main-area-bullet-page-icon-color: #474747;
-    // バレットとして表示されるページアイコンのマウスホバー時の色。lch(20.0%, 0.0, 0.0)相当
-    --main-area-bullet-page-icon-hover-color: #303030;
+    // バレットの外側の円の色
+    --main-area-bullet-outer-circle-color: lch(90% 0 0);
+    // バレットの外側の円のマウスホバー時の色
+    --main-area-bullet-outer-circle-hover-color: lch(80% 0 0);
+    // バレットの内側の円のマウスホバー時の色
+    --main-area-bullet-inner-circle-hover-color: lch(40% 0 0);
+    // バレットとして表示されるページアイコンの色
+    --main-area-bullet-page-icon-color: lch(30% 0 0);
+    // バレットとして表示されるページアイコンのマウスホバー時の色
+    --main-area-bullet-page-icon-hover-color: lch(20% 0 0);
 
-    // トランスクルードされた項目のバレットの色。lch(60.0%, 40.0, 160.4)相当
-    --transcluded-item-bullet-color: #44a178;
-    // トランスクルードされた項目のバレットのマウスホバー時の色。lch(40.0%, 40.0, 160.4)相当
-    --transcluded-item-bullet-hover-color: #006c48;
+    // トランスクルードされた項目のバレットの色
+    --transcluded-item-bullet-color: lch(60% 40 160.4);
+    // トランスクルードされた項目のバレットのマウスホバー時の色
+    --transcluded-item-bullet-hover-color: lch(40% 40 160.4);
 
-    // ハイライト状態の項目のバレットの色。lch(50.0%, 134.0, 40.4)相当
-    --highlighted-item-bullet-color: #ee0b00;
-    // ハイライト状態の項目のバレットのマウスホバー時の色。lch(40.0%, 134.0, 40.4)相当
-    --highlighted-item-bullet-hover-color: #bf0600;
+    // ハイライト状態の項目のバレットの色
+    --highlighted-item-bullet-color: lch(50% 134 40.4);
+    // ハイライト状態の項目のバレットのマウスホバー時の色
+    --highlighted-item-bullet-hover-color: lch(40% 134 40.4);
 
-    // インデントガイドの色。lch(88.0%, 0.0, 0.0)相当
-    --main-area-indent-guide-color: #dddddd;
-    // インデントガイドの色（ホバー時）。lch(70.0%, 0.0, 0.0)相当
-    --main-area-indent-guide-hover-color: #ababab;
+    // インデントガイドの色
+    --main-area-indent-guide-color: lch(88% 0 0);
+    // インデントガイドの色（ホバー時）
+    --main-area-indent-guide-hover-color: lch(70% 0 0);
   }
 
   // トランスクルードされた項目の強調表示
