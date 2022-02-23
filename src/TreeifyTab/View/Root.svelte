@@ -38,6 +38,16 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
+  :root {
+    --bullet-default-size: 0.38em;
+    // lch(60.0%, 0.0, 0.0)相当
+    --bullet-default-color: #919191;
+    // lch(95.0%, 134.0, 280.4)相当
+    --selected-item-background-default-color: #ecf0ff;
+    // lch(98%, 134.0, 280.4)相当
+    --item-hover-background-default-color: #f7f9ff;
+  }
+
   * {
     box-sizing: border-box;
   }
