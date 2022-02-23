@@ -39,7 +39,7 @@ export function createMainAreaProps(state: State): MainAreaProps {
 
   const allDisplayingItemIds = [...CurrentState.getAllDisplayingItemIds(state, rootItemPath)]
   // 足跡表示数を計算
-  const exponent = CssCustomProperty.getNumber('--main-area-footprint-count-exponent') ?? 0.5
+  const exponent = CssCustomProperty.getNumber('--main-area-footprint-count-exponent') ?? 0.6
   const footprintCount = Math.floor(allDisplayingItemIds.length ** exponent)
 
   const sorted = allDisplayingItemIds.sort((a: ItemId, b: ItemId) => {

@@ -37,7 +37,7 @@
   const ranking = Array.from(webPageItemIds).sort((a: ItemId, b: ItemId) => {
     return items[b].timestamp - items[a].timestamp
   })
-  const exponent = CssCustomProperty.getNumber('--search-result-footprint-count-exponent') ?? 0.5
+  const exponent = CssCustomProperty.getNumber('--tabs-dialog-footprint-count-exponent') ?? 0.5
   const footprintCount = Math.floor(webPageItemIds.size ** exponent)
   // 各項目に足跡順位を対応付け
   const footprintRankMap = new Map<ItemId, integer>()
@@ -62,6 +62,10 @@
 </CommonDialog>
 
 <style global lang="scss">
+  :root {
+    --tabs-dialog-footprint-count-exponent: 0.5;
+  }
+
   .tabs-dialog_content {
     min-width: 20em;
     padding: 1em;

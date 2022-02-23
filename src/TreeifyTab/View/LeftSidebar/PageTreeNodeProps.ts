@@ -47,7 +47,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
     const activePageId = CurrentState.getActivePageId()
 
     const nonActivePageIds = filteredPageIds.filter((itemId) => activePageId !== itemId)
-    const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.7
+    const exponent = CssCustomProperty.getNumber('--page-tree-footprint-count-exponent') ?? 0.6
     const footprintCount = Math.floor(nonActivePageIds.length ** exponent)
     const index = nonActivePageIds.indexOf(itemId)
     const rank = index !== -1 ? nonActivePageIds.length - index - 1 : 0
