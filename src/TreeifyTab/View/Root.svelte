@@ -74,7 +74,7 @@
     border-radius: 0.3em;
     border: 1px lch(70% 0 0) solid;
 
-    background: #ffffff;
+    background: lch(100% 0 0);
     color: lch(32.5% 0 0);
     font-weight: 600;
 

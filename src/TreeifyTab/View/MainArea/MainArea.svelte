@@ -63,7 +63,7 @@
 
     box-shadow: 0 1.5px 5px lch(80% 0 0);
 
-    background: #ffffff;
+    background: lch(100% 0 0);
 
     @media print {
       box-shadow: none;

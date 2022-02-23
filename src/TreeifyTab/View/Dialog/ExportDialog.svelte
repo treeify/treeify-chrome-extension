@@ -250,7 +250,7 @@
     border: 1px solid lch(80% 0 0);
 
     &.selected {
-      background: #ffffff;
+      background: lch(100% 0 0);
 
       border-bottom-style: none;
     }

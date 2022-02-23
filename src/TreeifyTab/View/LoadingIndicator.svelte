@@ -17,8 +17,8 @@
     border-radius: 50%;
     border-top: 3px solid lch(30% 0 0);
     border-right: 3px solid lch(70% 0 0);
-    border-bottom: 3px solid #ababab;
-    border-left: 3px solid #ababab;
+    border-bottom: 3px solid lch(70% 0 0);
+    border-left: 3px solid lch(70% 0 0);
     animation: rotation 0.8s infinite linear;
   }
 

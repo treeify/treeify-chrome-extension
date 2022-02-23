@@ -95,7 +95,7 @@
     // 最も新しい足跡の色（線形補間の一端）
     --main-area-strongest-footprint-color: lch(97.5% 134 40.4);
     // 最も古い足跡の色（線形補間の一端）
-    --main-area-weakest-footprint-color: #ffffff;
+    --main-area-weakest-footprint-color: lch(100% 0 0);
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。

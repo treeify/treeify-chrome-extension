@@ -119,7 +119,7 @@
 
     pointer-events: none;
 
-    background: #ffffff;
+    background: lch(100% 0 0);
     border: 1px solid lch(90% 0 0);
 
     box-shadow: 2px 2px 4px lch(85% 0 0);

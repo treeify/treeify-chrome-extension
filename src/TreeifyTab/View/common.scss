@@ -41,7 +41,7 @@
   background: $color;
 }
 
-@mixin pseudo-ripple-effect($hover-color, $duration: 0.5s, $color: #777777, $opacity: 0.5) {
+@mixin pseudo-ripple-effect($hover-color, $duration: 0.5s, $color: lch(50% 0 0), $opacity: 0.5) {
   cursor: pointer;
   
   position: relative;

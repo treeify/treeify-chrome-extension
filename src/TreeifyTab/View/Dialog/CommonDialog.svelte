@@ -89,7 +89,7 @@
     // 子要素を角丸からはみ出させない
     overflow: hidden;
 
-    background: #ffffff;
+    background: lch(100% 0 0);
     box-shadow: 0 1.5px 8px lch(50% 0 0);
   }
 
@@ -105,7 +105,7 @@
 
   .common-dialog_title {
     line-height: 2.2em;
-    color: #ffffff;
+    color: lch(100% 0 0);
   }
 
   .common-dialog_close-button {
