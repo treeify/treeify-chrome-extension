@@ -128,7 +128,7 @@
   .page-tree-node_tabs-count-button {
     @include common.circle(100%);
 
-    @include common.pseudo-ripple-effect(lch(90% 0 0));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     font-size: 97%;
   }
@@ -141,7 +141,7 @@
 
   .page-tree-node_close-button {
     @include common.circle(100%);
-    @include common.pseudo-ripple-effect(lch(90% 0 0));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;

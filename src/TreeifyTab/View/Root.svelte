@@ -50,7 +50,9 @@
     // 最も新しい足跡の色（線形補間の一端）。彩度は色域境界値
     --newest-footprint-default-color: lch(97.5% 3.5 40.4);
     // 最も古い足跡の色（線形補間の一端）
-    --oldest-footprint-default-color: #ffffff;
+    --oldest-footprint-default-color: lch(100% 0 0);
+
+    --circle-button-default-hover-color: lch(92% 0 0);
   }
 
   * {

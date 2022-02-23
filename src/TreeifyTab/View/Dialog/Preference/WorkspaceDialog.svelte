@@ -122,7 +122,7 @@
 
   .workspace-dialog_delete-button {
     @include common.circle(var(--workspace-dialog-delete-button-size));
-    @include common.pseudo-ripple-effect(lch(90% 0 0));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     &::before {
       content: '';
@@ -145,7 +145,7 @@
 
   .workspace-dialog_add-button {
     @include common.circle(2em);
-    @include common.pseudo-ripple-effect(lch(90% 0 0));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     &::before {
       content: '';

@@ -99,9 +99,6 @@
 
     // 完了状態の項目の標準的なテキスト色
     --completed-item-text-color: lch(75% 0 0);
-
-    // 削除ボタンなどのマウスホバー時の背景
-    --main-area-node-button-background-hover-color: lch(90% 0 0);
   }
 
   .main-area-node_root {
@@ -171,7 +168,7 @@
 
   .main-area-node_hidden-tabs-count {
     @include common.circle(1.6em);
-    @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     @include common.flex-center;
 
@@ -182,7 +179,7 @@
 
   .main-area-node_delete-button {
     @include common.circle(1.6em);
-    @include common.pseudo-ripple-effect(var(--main-area-node-button-background-hover-color));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;

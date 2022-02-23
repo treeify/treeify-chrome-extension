@@ -304,7 +304,7 @@
 
   .key-binding-dialog_delete-button {
     @include common.circle(var(--key-binding-dialog-command-button-size));
-    @include common.pseudo-ripple-effect(lch(90% 0 0));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -325,7 +325,7 @@
 
   .key-binding-dialog_add-command-button {
     @include common.circle(var(--key-binding-dialog-command-button-size));
-    @include common.pseudo-ripple-effect(lch(90% 0 0));
+    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
