@@ -62,13 +62,12 @@
     outline: none;
 
     font-size: 0.9rem;
-    padding: 0.1em 0.5em;
+    padding: 0.3em 0.5em;
 
     cursor: pointer;
 
     &:focus {
-      // 彩度は色域境界値
-      background: lch(93% 7.8 280.4);
+      background: var(--menu-item-hover-background-default-color);
     }
   }
 </style>

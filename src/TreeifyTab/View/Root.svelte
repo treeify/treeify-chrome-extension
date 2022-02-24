@@ -53,6 +53,8 @@
     --oldest-footprint-default-color: lch(100% 0 0);
 
     --circle-button-default-hover-color: lch(92% 0 0);
+
+    --menu-item-hover-background-default-color: lch(94% 0 0);
   }
 
   * {
