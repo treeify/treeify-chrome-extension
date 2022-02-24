@@ -1,7 +1,7 @@
 import Tab = chrome.tabs.Tab
 
 export namespace TreeifyTab {
-  export const url = chrome.runtime.getURL('TreeifyTab/index.html')
+  export const url = chrome.runtime.getURL('treeify-tab.html')
 
   export function isTreeifyTab(url: string | undefined | null): boolean {
     return url?.startsWith(TreeifyTab.url) === true

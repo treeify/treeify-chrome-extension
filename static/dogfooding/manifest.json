@@ -13,7 +13,7 @@
       "16": "logo/16px.png"
     },
     "default_title": "Treeify",
-    "default_popup": "BrowserAction/index.html"
+    "default_popup": "browser-action.html"
   },
   "content_scripts": [
     {
@@ -23,7 +23,7 @@
       "match_about_blank": true,
       "all_frames": true,
       "js": [
-        "ContentScript/entryPoint.js"
+        "content-script.js"
       ],
       "run_at": "document_start"
     }

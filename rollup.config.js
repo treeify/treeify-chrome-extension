@@ -18,9 +18,9 @@ const projectRootDir = path.resolve(__dirname)
 export default {
   input: {
     background: './src/Background/entryPoint.ts',
-    'BrowserAction/entryPoint': './src/BrowserAction/entryPoint.ts',
-    'ContentScript/entryPoint': './src/ContentScript/entryPoint.ts',
-    'TreeifyTab/entryPoint': './src/TreeifyTab/entryPoint.ts',
+    'browser-action': './src/BrowserAction/entryPoint.ts',
+    'content-script': './src/ContentScript/entryPoint.ts',
+    'treeify-tab': './src/TreeifyTab/entryPoint.ts',
   },
   output: {
     dir: 'dist',
@@ -57,7 +57,7 @@ export default {
         },
       }),
     }),
-    css({ output: 'TreeifyTab/bundle.css' }),
+    css({ output: 'treeify-tab.css' }),
     typescript(),
     json(),
     resolve({ browser: true, preferBuiltins: false }),
