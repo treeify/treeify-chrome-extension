@@ -1,7 +1,6 @@
 <script lang="ts">
   import katex from 'katex'
   import { TexItemContentProps } from 'src/TreeifyTab/View/ItemContent/TexItemContentProps'
-  import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: TexItemContentProps
 </script>
@@ -12,9 +11,6 @@
   </div>
   {#if props.caption !== ''}
     <div class="tex-item-content_caption">{props.caption}</div>
-  {/if}
-  {#if props.sourceProps !== undefined}
-    <Source props={props.sourceProps} />
   {/if}
 </div>
 

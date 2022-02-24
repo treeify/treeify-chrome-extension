@@ -47,9 +47,9 @@
     overflow-x: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
 
-    a {
-      color: inherit;
-    }
+  .source_link {
+    color: inherit;
   }
 </style>

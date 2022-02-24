@@ -1,7 +1,6 @@
 <script lang="ts">
   import { getHighlightedHtml } from 'src/TreeifyTab/highlightJs'
   import { CodeBlockItemContentProps } from 'src/TreeifyTab/View/ItemContent/CodeBlocktemContentProps'
-  import Source from 'src/TreeifyTab/View/Source.svelte'
 
   export let props: CodeBlockItemContentProps
 </script>
@@ -17,9 +16,6 @@
   {/if}
   {#if props.caption !== ''}
     <div class="code-block-item-content_caption">{props.caption}</div>
-  {/if}
-  {#if props.sourceProps !== undefined}
-    <Source props={props.sourceProps} />
   {/if}
 </div>
 

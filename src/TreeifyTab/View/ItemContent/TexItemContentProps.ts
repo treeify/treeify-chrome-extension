@@ -1,12 +1,10 @@
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
-import { createSourceProps, SourceProps } from 'src/TreeifyTab/View/SourceProps'
 
 export type TexItemContentProps = {
   code: string
   caption: string
-  sourceProps: SourceProps | undefined
 }
 
 export function createTexItemContentProps(itemId: ItemId): ItemContentProps {
@@ -15,6 +13,5 @@ export function createTexItemContentProps(itemId: ItemId): ItemContentProps {
     type: 'TexItemContentProps',
     code: texItem.code,
     caption: texItem.caption,
-    sourceProps: createSourceProps(itemId),
   }
 }
