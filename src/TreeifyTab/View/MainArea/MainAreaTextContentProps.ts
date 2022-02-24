@@ -26,7 +26,7 @@ export function createMainAreaTextContentProps(
     itemPath,
     type: 'MainAreaTextContentProps',
     domishObjects: state.textItems[itemId].domishObjects,
-    sourceProps: createSourceProps(itemId),
+    sourceProps: createSourceProps(itemPath),
     onInput(event: Event) {
       if (event instanceof InputEvent && !event.isComposing && event.target instanceof Node) {
         Internal.instance.saveCurrentStateToUndoStack()

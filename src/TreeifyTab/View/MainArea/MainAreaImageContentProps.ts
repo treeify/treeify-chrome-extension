@@ -27,7 +27,7 @@ export function createMainAreaImageContentProps(
     caption: imageItem.caption,
     widthPx: imageItem.widthPx,
     originalSize: imageItem.originalSize,
-    sourceProps: createSourceProps(itemId),
+    sourceProps: createSourceProps(itemPath),
     onFocus(event) {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {

@@ -20,7 +20,7 @@ export function createMainAreaTexContentProps(
     itemPath,
     type: 'MainAreaTexContentProps',
     contentProps: createTexItemContentProps(ItemPath.getItemId(itemPath)),
-    sourceProps: createSourceProps(ItemPath.getItemId(itemPath)),
+    sourceProps: createSourceProps(itemPath),
     onFocus(event) {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {
