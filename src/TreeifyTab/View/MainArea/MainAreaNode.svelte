@@ -96,9 +96,6 @@
     // CSSではなくJSから参照する特殊なCSS変数。
     // 見た目に関する値なのでカスタムCSSで設定できるようCSS変数として定義した。
     --main-area-footprint-count-exponent: 0.6;
-
-    // 完了状態の項目の標準的なテキスト色
-    --completed-item-text-color: lch(75% 0 0);
   }
 
   .main-area-node_root {

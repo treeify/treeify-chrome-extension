@@ -40,7 +40,7 @@
     // 完了状態のテキスト項目
     .completed &,
     .completed-children & {
-      color: var(--completed-item-text-color);
+      color: var(--completed-item-text-default-color);
     }
   }
 </style>

@@ -55,6 +55,8 @@
     --circle-button-default-hover-color: lch(93% 0 0);
 
     --menu-item-hover-background-default-color: lch(94% 0 0);
+
+    --completed-item-text-default-color: lch(75% 0 0);
   }
 
   * {
