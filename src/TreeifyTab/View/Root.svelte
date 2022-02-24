@@ -52,7 +52,7 @@
     // 最も古い足跡の色（線形補間の一端）
     --oldest-footprint-default-color: lch(100% 0 0);
 
-    --circle-button-default-hover-color: lch(92% 0 0);
+    --circle-button-default-hover-color: lch(93% 0 0);
 
     --menu-item-hover-background-default-color: lch(94% 0 0);
   }
