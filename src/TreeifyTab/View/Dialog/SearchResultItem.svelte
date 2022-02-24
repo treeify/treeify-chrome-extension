@@ -57,10 +57,10 @@
 
     --search-result-footprint-count-exponent: 0.5;
 
-    --search-result-bullet-outer-circle-min-diameter: 1.05;
-    --search-result-bullet-outer-circle-max-diameter: 1.3;
+    --search-result-roll-outer-circle-min-diameter: 1.05;
+    --search-result-roll-outer-circle-max-diameter: 1.3;
     // 外側の円が最大サイズになる子項目数
-    --search-result-bullet-outer-circle-item-count-limit: 10;
+    --search-result-roll-outer-circle-item-count-limit: 10;
   }
 
   .search-result-item_root {
@@ -96,7 +96,7 @@
     position: absolute;
     top: calc(var(--search-result-line-height) / 2 - var(--outer-circle-radius) / 2);
 
-    background: var(--main-area-bullet-outer-circle-color);
+    background: var(--main-area-roll-outer-circle-color);
   }
 
   .search-result-item_bullet {

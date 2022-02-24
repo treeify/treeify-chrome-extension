@@ -110,11 +110,11 @@ function calculateOuterCircleRadiusEm(itemId: ItemId): number {
   if (childItemCount === 0) return 0
 
   const outerCircleMinDiameter =
-    CssCustomProperty.getNumber('--search-result-bullet-outer-circle-min-diameter') ?? 1.05
+    CssCustomProperty.getNumber('--search-result-roll-outer-circle-min-diameter') ?? 1.05
   const outerCircleMaxDiameter =
-    CssCustomProperty.getNumber('--search-result-bullet-outer-circle-max-diameter') ?? 1.3
+    CssCustomProperty.getNumber('--search-result-roll-outer-circle-max-diameter') ?? 1.3
   const outerCircleItemCountLimit =
-    CssCustomProperty.getNumber('--search-result-bullet-outer-circle-item-count-limit') ?? 10
+    CssCustomProperty.getNumber('--search-result-roll-outer-circle-item-count-limit') ?? 10
   const step = (outerCircleMaxDiameter - outerCircleMinDiameter) / outerCircleItemCountLimit
   const limitedHiddenItemsCount = Math.min(childItemCount, outerCircleItemCountLimit)
   return outerCircleMinDiameter + limitedHiddenItemsCount * step

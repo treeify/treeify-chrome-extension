@@ -25,7 +25,7 @@
       {#if props.bulletState === MainAreaBulletState.FOLDED}
         <div class="main-area-roll_outer-circle" />
       {/if}
-      <div class="main-area-roll_inner-circle" />
+      <div class="main-area-roll_bullet" />
     {/if}
   </div>
 </div>
@@ -34,17 +34,15 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --main-area-bullet-outer-circle-min-diameter: 1.05;
-    --main-area-bullet-outer-circle-max-diameter: 1.3;
+    --main-area-roll-outer-circle-min-diameter: 1.05;
+    --main-area-roll-outer-circle-max-diameter: 1.3;
     // 外側の円が最大サイズになる子孫項目数
-    --main-area-bullet-outer-circle-item-count-limit: 20;
+    --main-area-roll-outer-circle-item-count-limit: 20;
 
     // バレットの外側の円の色
-    --main-area-bullet-outer-circle-color: lch(90% 0 0);
+    --main-area-roll-outer-circle-color: lch(90% 0 0);
     // バレットの外側の円のマウスホバー時の色
-    --main-area-bullet-outer-circle-hover-color: lch(80% 0 0);
-    // バレットの内側の円のマウスホバー時の色
-    --main-area-bullet-inner-circle-hover-color: lch(40% 0 0);
+    --main-area-roll-outer-circle-hover-color: lch(80% 0 0);
     // バレットとして表示されるページアイコンの色
     --main-area-bullet-page-icon-color: lch(30% 0 0);
     // バレットとして表示されるページアイコンのマウスホバー時の色
@@ -58,11 +56,11 @@
 
   // トランスクルードされた項目の強調表示
   .transcluded {
-    .main-area-roll_inner-circle {
+    .main-area-roll_bullet {
       background: var(--transcluded-item-bullet-default-color);
     }
 
-    .main-area-roll_root:hover .main-area-roll_inner-circle {
+    .main-area-roll_root:hover .main-area-roll_bullet {
       background: var(--transcluded-item-bullet-hover-default-color);
     }
 
@@ -77,11 +75,11 @@
 
   // ハイライト状態の項目の強調表示
   .highlighted {
-    .main-area-roll_inner-circle {
+    .main-area-roll_bullet {
       background: var(--highlighted-item-bullet-default-color);
     }
 
-    .main-area-roll_root:hover .main-area-roll_inner-circle {
+    .main-area-roll_root:hover .main-area-roll_bullet {
       background: var(--highlighted-item-bullet-hover-default-color);
     }
 
@@ -95,7 +93,7 @@
   }
 
   .transcluded.highlighted {
-    .main-area-roll_inner-circle {
+    .main-area-roll_bullet {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-default-color) 50%,
@@ -103,7 +101,7 @@
       );
     }
 
-    .main-area-roll_root:hover .main-area-roll_inner-circle {
+    .main-area-roll_root:hover .main-area-roll_bullet {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-hover-default-color) 50%,
@@ -150,22 +148,22 @@
     @include common.circle(var(--outer-circle-radius));
     @include common.absolute-center;
 
-    background: var(--main-area-bullet-outer-circle-color);
+    background: var(--main-area-roll-outer-circle-color);
 
     .main-area-roll_root:hover & {
-      background: var(--main-area-bullet-outer-circle-hover-color);
+      background: var(--main-area-roll-outer-circle-hover-color);
     }
   }
 
   // メインエリアのバレットの内側の円
-  .main-area-roll_inner-circle {
+  .main-area-roll_bullet {
     @include common.circle(0.38em);
     @include common.absolute-center;
 
     background: var(--bullet-default-color);
 
     .main-area-roll_root:hover & {
-      background: var(--main-area-bullet-inner-circle-hover-color);
+      background: var(--bullet-hover-default-color);
     }
   }
 
