@@ -103,20 +103,20 @@
 
     &.primary {
       // 彩度は色域境界値
-      background: lch(57.5% 67.2 280.4);
+      background: lch(51% 60.6 280.4);
 
       border-color: transparent;
 
-      color: lch(99.3% 0 0);
+      color: lch(99.5% 0 0);
 
       &:hover {
         // 彩度は色域境界値
-        background: lch(55% 64.8 280.4);
+        background: lch(48.5% 57.7 280.4);
       }
 
       &:active {
         // 彩度は色域境界値
-        background: lch(52.5% 63 280.4);
+        background: lch(46% 55.2 280.4);
       }
     }
   }
