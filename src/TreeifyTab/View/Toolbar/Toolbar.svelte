@@ -58,9 +58,8 @@
     position: relative;
     z-index: 20;
 
-    background: lch(98% 0 0);
-    // Dynalistを参考にして作った影
-    box-shadow: 0 1.5px 3px lch(85% 0 0);
+    background: lch(100% 0 0);
+    box-shadow: 0 0 3px lch(70% 0 0);
 
     @media print {
       display: none;

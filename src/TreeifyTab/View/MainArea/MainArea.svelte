@@ -61,7 +61,7 @@
 
     min-height: 100%;
 
-    box-shadow: 0 1.5px 5px lch(80% 0 0);
+    box-shadow: 0 0.5px 3px lch(70% 0 0);
 
     background: lch(100% 0 0);
 

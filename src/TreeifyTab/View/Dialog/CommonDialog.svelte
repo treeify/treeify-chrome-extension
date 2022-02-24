@@ -90,7 +90,7 @@
     overflow: hidden;
 
     background: lch(100% 0 0);
-    box-shadow: 0 1.5px 8px lch(50% 0 0);
+    box-shadow: 0 3px 14px lch(70% 0 0);
   }
 
   .common-dialog_title-bar {

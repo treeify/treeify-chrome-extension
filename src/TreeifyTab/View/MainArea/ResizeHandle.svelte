@@ -20,7 +20,7 @@
     border-radius: 99999px;
     background: lch(100% 0 0);
 
-    box-shadow: 0 0 4px lch(50% 0 0);
+    box-shadow: 0 0 3px lch(70% 0 0);
 
     cursor: ew-resize;
   }

@@ -19,8 +19,7 @@
     overflow-y: auto;
 
     background: lch(100% 0 0);
-    // Dynalistを参考にしながら調整した影
-    box-shadow: 1.5px 0 3px lch(85% 0 0);
+    box-shadow: 0 0 3px lch(70% 0 0);
 
     z-index: 10;
 

@@ -88,13 +88,13 @@
     left: var(--left);
     top: var(--top);
 
-    background: lch(98% 0 0);
+    background: lch(100% 0 0);
 
     border: lch(80% 0 0) 1px solid;
-    border-radius: 3px;
+    border-radius: 6px;
     // 子要素を角丸からはみ出させない
     overflow: hidden;
 
-    box-shadow: 2px 2px 4px lch(85% 0 0);
+    box-shadow: 0 2px 10px lch(75% 0 0);
   }
 </style>
