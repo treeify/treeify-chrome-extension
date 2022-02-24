@@ -120,10 +120,6 @@ export class External {
     this.currentWorkspaceId = workspaceId
     localStorage.setItem(External.CURRENT_WORKSPACE_ID_KEY, workspaceId.toString())
   }
-
-  dumpCurrentState() {
-    this.tabItemCorrespondence.dumpCurrentState()
-  }
 }
 
 type TreeifyClipboard = DiscriminatedUnion<{

@@ -1,6 +1,5 @@
 import { pipe } from 'fp-ts/function'
 import { registerLanguages } from 'src/TreeifyTab/highlightJs'
-import { Instance } from 'src/TreeifyTab/Instance'
 import { Chunk } from 'src/TreeifyTab/Internal/Chunk'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { startAutoSync, startup } from 'src/TreeifyTab/startup'
@@ -29,8 +28,6 @@ call(async () => {
       }
     }
   }
-
-  console.log('インスタンスID = ' + Instance.getId())
 
   chrome.contextMenus.create({
     id: 'treeify',

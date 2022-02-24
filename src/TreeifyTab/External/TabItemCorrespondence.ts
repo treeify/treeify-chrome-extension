@@ -75,11 +75,4 @@ export class TabItemCorrespondence {
   getTabsByUrl(url: string): RArray<Tab> {
     return [...this.tabIdToTab.values()].filter((tab) => tab.url === url)
   }
-
-  dumpCurrentState() {
-    console.groupCollapsed('ダンプ：TabItemCorrespondence#tabIdToTab')
-    const stateString = JSON.stringify(Object.fromEntries(this.tabIdToTab), undefined, 2)
-    console.log(stateString)
-    console.groupEnd()
-  }
 }

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import dayjs from 'dayjs'
   import { External } from 'src/TreeifyTab/External/External'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -61,7 +60,6 @@
   })
 
   function onMouseUp(event: MouseEvent) {
-    console.log('onMouseUp', External.instance.currentDragData, dayjs().format('MM/DD HH:mm:ss'))
     if (External.instance.currentDragData?.type === 'ItemDragData') {
       props.onDrop(event, External.instance.currentDragData.itemPath)
       External.instance.currentDragData = undefined

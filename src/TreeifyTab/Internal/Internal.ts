@@ -119,13 +119,6 @@ export class Internal {
     this.undoStack.push(new Map())
   }
 
-  dumpCurrentState() {
-    console.groupCollapsed('ダンプ：Internal#state')
-    const stateString = JSON.stringify(this.state, undefined, 2)
-    console.log(stateString)
-    console.groupEnd()
-  }
-
   static createInitialState(): State {
     return {
       schemaVersion: CURRENT_SCHEMA_VERSION,
