@@ -201,12 +201,15 @@ export function getLowerEndItemPath(itemPath: ItemPath): ItemPath {
  */
 export function revealItemPath(itemPath: ItemPath) {
   const parentItemPath = ItemPath.getParent(itemPath)
-  if (parentItemPath !== undefined) {
-    if (CurrentState.getIsFolded(itemPath)) {
-      CurrentState.setIsFolded(itemPath, false)
-    }
-    revealItemPath(parentItemPath)
+  if (parentItemPath === undefined) return
+
+  const grandParentItemPath = ItemPath.getParent(parentItemPath)
+  if (grandParentItemPath === undefined) return
+
+  if (CurrentState.getIsFolded(parentItemPath)) {
+    CurrentState.setIsFolded(parentItemPath, false)
   }
+  revealItemPath(grandParentItemPath)
 }
 
 /**
