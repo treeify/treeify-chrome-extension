@@ -42,6 +42,16 @@
     --bullet-default-size: 0.38em;
     --bullet-default-color: lch(60% 0 0);
 
+    // トランスクルードされた項目のバレットの色
+    --transcluded-item-bullet-default-color: lch(60% 40 160.4);
+    // トランスクルードされた項目のバレットのマウスホバー時の色
+    --transcluded-item-bullet-hover-default-color: lch(40% 40 160.4);
+
+    // ハイライト状態の項目のバレットの色。彩度は色域境界値
+    --highlighted-item-bullet-default-color: lch(50% 98.7 40.4);
+    // ハイライト状態の項目のバレットのマウスホバー時の色。彩度は色域境界値
+    --highlighted-item-bullet-hover-default-color: lch(40% 83.7 40.4);
+
     // 彩度は色域境界値
     --selected-item-background-default-color: lch(95% 7.8 280.4);
     // 彩度は色域境界値

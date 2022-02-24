@@ -105,11 +105,13 @@
       }
 
       .highlighted & {
-        border-color: var(--highlighted-item-bullet-color) transparent transparent transparent;
+        border-color: var(--highlighted-item-bullet-default-color) transparent transparent
+          transparent;
       }
 
       .highlighted.page-tree-bullet-and-indent_root:hover & {
-        border-color: var(--highlighted-item-bullet-hover-color) transparent transparent transparent;
+        border-color: var(--highlighted-item-bullet-hover-default-color) transparent transparent
+          transparent;
       }
     }
 
@@ -127,11 +129,13 @@
       }
 
       .highlighted & {
-        border-color: transparent transparent transparent var(--highlighted-item-bullet-color);
+        border-color: transparent transparent transparent
+          var(--highlighted-item-bullet-default-color);
       }
 
       .highlighted.page-tree-bullet-and-indent_root:hover & {
-        border-color: transparent transparent transparent var(--highlighted-item-bullet-hover-color);
+        border-color: transparent transparent transparent
+          var(--highlighted-item-bullet-hover-default-color);
       }
     }
 
@@ -146,11 +150,11 @@
       }
 
       .highlighted & {
-        background-color: var(--highlighted-item-bullet-color);
+        background-color: var(--highlighted-item-bullet-default-color);
       }
 
       .highlighted.page-tree-bullet-and-indent_root:hover & {
-        background: var(--highlighted-item-bullet-hover-color);
+        background: var(--highlighted-item-bullet-hover-default-color);
       }
     }
   }

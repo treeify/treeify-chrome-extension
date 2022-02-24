@@ -81,7 +81,7 @@
     background: var(--bullet-default-color);
 
     &.transcluded {
-      background: var(--transcluded-item-bullet-color);
+      background: var(--transcluded-item-bullet-default-color);
     }
   }
 

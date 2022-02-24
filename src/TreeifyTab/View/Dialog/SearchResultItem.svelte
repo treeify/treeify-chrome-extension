@@ -108,18 +108,18 @@
     background: var(--bullet-default-color);
 
     .transcluded & {
-      background: var(--transcluded-item-bullet-color);
+      background: var(--transcluded-item-bullet-default-color);
     }
 
     .highlighted & {
-      background: var(--highlighted-item-bullet-color);
+      background: var(--highlighted-item-bullet-default-color);
     }
 
     .transcluded.highlighted & {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-color) 50%,
-        var(--transcluded-item-bullet-color) 50%
+        var(--highlighted-item-bullet-default-color) 50%,
+        var(--transcluded-item-bullet-default-color) 50%
       );
     }
   }
