@@ -23,6 +23,6 @@
   .page-tree_root {
     line-height: var(--page-tree-line-height);
 
-    padding: 10px 5px 80px 10px;
+    padding: 0.8em 0.3em 3em 0.7em;
   }
 </style>
