@@ -797,6 +797,7 @@ async function undo() {
     await matchTabsAndWebPageItems()
 
     Rerenderer.instance.requestToFocusTargetItem()
+    Rerenderer.instance.requestToScrollAppear()
     Rerenderer.instance.rerender()
 
     // IndexedDBを新しいStateと一致するよう更新。
