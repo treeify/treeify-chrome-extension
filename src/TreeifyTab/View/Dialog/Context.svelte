@@ -17,10 +17,17 @@
     {#each props.nearSiblingItemIds as siblingItemId}
       <div class="context_bullet-and-content">
         <div class="context_bullet-area">
-          <div
-            class="context_bullet"
-            class:transcluded={CurrentState.countParents(siblingItemId) > 1}
-          />
+          {#if CurrentState.isPage(siblingItemId)}
+            <div
+              class="context_page-icon"
+              class:transcluded={CurrentState.countParents(siblingItemId) > 1}
+            />
+          {:else}
+            <div
+              class="context_bullet"
+              class:transcluded={CurrentState.countParents(siblingItemId) > 1}
+            />
+          {/if}
         </div>
         <div class="context_content-area" class:myself={siblingItemId === props.selfItemId}>
           <ItemContent props={createItemContentProps(siblingItemId)} />
