@@ -46,9 +46,15 @@
     CurrentState.deleteWorkspace(workspace.id)
     workspaceArray = getStateWorkspaceArray()
   }
+
+  function onClose() {
+    // ワークスペースはStateだけでなくlocalStorageも絡むので、Undoした際の整合性維持が難しい。
+    // そのためここでUndoスタックを空にする。
+    Internal.instance.clearUndoStack()
+  }
 </script>
 
-<CommonDialog class="workspace-dialog_root" title="ワークスペース" showCloseButton>
+<CommonDialog class="workspace-dialog_root" title="ワークスペース" showCloseButton {onClose}>
   <div class="workspace-dialog_content" tabindex="0">
     <div class="workspace-dialog_workspace-list">
       {#each workspaceArray as workspace (workspace.id)}
