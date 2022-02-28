@@ -9,7 +9,7 @@ import { CssCustomProperty } from 'src/Utility/browser'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
-export type MainAreaRollProps = {
+export type MainAreaBulletAndIndentProps = {
   bulletState: MainAreaBulletState
   /**
    * unfold時に表示される項目数。
@@ -28,15 +28,18 @@ export enum MainAreaBulletState {
   PAGE,
 }
 
-export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainAreaRollProps {
+export function createMainAreaBulletAndIndentProps(
+  state: State,
+  itemPath: ItemPath
+): MainAreaBulletAndIndentProps {
   const hiddenItemsCount = countHiddenItems(state, itemPath)
 
   const outerCircleMinDiameter =
-    CssCustomProperty.getNumber('--main-area-roll-outer-circle-min-diameter') ?? 1.05
+    CssCustomProperty.getNumber('--main-area-bullet-outer-circle-min-diameter') ?? 1.05
   const outerCircleMaxDiameter =
-    CssCustomProperty.getNumber('--main-area-roll-outer-circle-max-diameter') ?? 1.3
+    CssCustomProperty.getNumber('--main-area-bullet-outer-circle-max-diameter') ?? 1.3
   const outerCircleItemCountLimit =
-    CssCustomProperty.getNumber('--main-area-roll-outer-circle-item-count-limit') ?? 20
+    CssCustomProperty.getNumber('--main-area-bullet-outer-circle-item-count-limit') ?? 20
   const step = (outerCircleMaxDiameter - outerCircleMinDiameter) / outerCircleItemCountLimit
   const limitedHiddenItemsCount = Math.min(hiddenItemsCount, outerCircleItemCountLimit)
   const outerCircleRadiusEm = outerCircleMinDiameter + limitedHiddenItemsCount * step

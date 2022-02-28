@@ -8,15 +8,15 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import {
+  createMainAreaBulletAndIndentProps,
+  deriveBulletState,
+  MainAreaBulletAndIndentProps,
+  MainAreaBulletState,
+} from 'src/TreeifyTab/View/MainArea/MainAreaBulletAndIndentProps'
+import {
   createMainAreaContentProps,
   MainAreaContentProps,
 } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-import {
-  createMainAreaRollProps,
-  deriveBulletState,
-  MainAreaBulletState,
-  MainAreaRollProps,
-} from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
 import { assertNeverType } from 'src/Utility/Debug/assert'
 import { RArray, RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
@@ -39,7 +39,7 @@ export type MainAreaNodeProps = {
   hiddenTabsCount: integer
   contentProps: MainAreaContentProps
   childItemPropses: RArray<MainAreaNodeProps>
-  rollProps: MainAreaRollProps
+  bulletAndIndentProps: MainAreaBulletAndIndentProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenuContentArea(event: Event): void
   onClickDeleteButton(event: MouseEvent): void
@@ -68,7 +68,7 @@ export function createMainAreaNodeProps(
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
     hiddenTabsCount: countHiddenTabs(state, itemPath),
-    rollProps: createMainAreaRollProps(state, itemPath),
+    bulletAndIndentProps: createMainAreaBulletAndIndentProps(state, itemPath),
     contentProps: createMainAreaContentProps(state, itemPath, item.type),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
       return createMainAreaNodeProps(

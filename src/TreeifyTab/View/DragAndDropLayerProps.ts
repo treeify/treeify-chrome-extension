@@ -46,46 +46,46 @@ function calculateDropDestinationStyle(
 
     const rect = itemElement.getBoundingClientRect()
     if (clientX < rect.x) {
-      // Rollへのドロップの場合
+      // バレットへのドロップの場合
 
-      const rollDroppedItemPath = searchElementByXCoordinate(itemPath, clientX)
-      if (rollDroppedItemPath === undefined) return ''
+      const bulletAndIndentDroppedItemPath = searchElementByXCoordinate(itemPath, clientX)
+      if (bulletAndIndentDroppedItemPath === undefined) return ''
 
       // 循環参照などになるケースでは何も表示しない
       try {
         CurrentState.throwIfCantInsertChildItem(
-          ItemPath.getItemId(rollDroppedItemPath),
+          ItemPath.getItemId(bulletAndIndentDroppedItemPath),
           ItemPath.getItemId(draggedItemPath)
         )
       } catch {
         return ''
       }
 
-      const rollElement = document
-        .getElementById(JSON.stringify(rollDroppedItemPath))
-        ?.querySelector('.main-area-roll_root')
-      assertNonNull(rollElement)
-      assertNonUndefined(rollElement)
-      const rollRect = rollElement.getBoundingClientRect()
+      const bulletAndIndentElement = document
+        .getElementById(JSON.stringify(bulletAndIndentDroppedItemPath))
+        ?.querySelector('.main-area-bullet-and-indent_root')
+      assertNonNull(bulletAndIndentElement)
+      assertNonUndefined(bulletAndIndentElement)
+      const bulletAndIndentRect = bulletAndIndentElement.getBoundingClientRect()
 
-      if (CurrentState.getDisplayingChildItemIds(rollDroppedItemPath).length > 0) {
+      if (CurrentState.getDisplayingChildItemIds(bulletAndIndentDroppedItemPath).length > 0) {
         return `
-          top: ${rollRect.bottom}px;
-          left: ${rollRect.right}px;
+          top: ${bulletAndIndentRect.bottom}px;
+          left: ${bulletAndIndentRect.right}px;
           width: ${rect.width}px;
           border: 1px solid var(--drop-destination-color);
         `
       } else {
         return `
-          top: ${rollRect.top}px;
-          left: ${rollRect.left}px;
-          width: ${rollRect.width}px;
-          height: ${rollRect.width}px;
+          top: ${bulletAndIndentRect.top}px;
+          left: ${bulletAndIndentRect.left}px;
+          width: ${bulletAndIndentRect.width}px;
+          height: ${bulletAndIndentRect.width}px;
           border: 1px solid var(--drop-destination-color);
         `
       }
     } else {
-      // Roll以外の場所の場合
+      // バレット以外の場所の場合
 
       if (
         RArray$.shallowEqual(RArray$.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)
@@ -174,18 +174,18 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
   const rect = itemElement.getBoundingClientRect()
   if (event.clientX < rect.x) {
-    // Rollへのドロップの場合
+    // バレットへのドロップの場合
 
-    // どの項目のRollにドロップしたかを探索する
-    const rollDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
-    if (rollDroppedItemPath === undefined) return
+    // どの項目のバレットにドロップしたかを探索する
+    const bulletAndIndentDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
+    if (bulletAndIndentDroppedItemPath === undefined) return
 
-    const rollDroppedItemId = ItemPath.getItemId(rollDroppedItemPath)
+    const bulletAndIndentDroppedItemId = ItemPath.getItemId(bulletAndIndentDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
     // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
-    if (parentItemId !== ItemPath.getItemId(rollDroppedItemPath)) {
-      CurrentState.throwIfCantInsertChildItem(rollDroppedItemId, draggedItemId)
+    if (parentItemId !== ItemPath.getItemId(bulletAndIndentDroppedItemPath)) {
+      CurrentState.throwIfCantInsertChildItem(bulletAndIndentDroppedItemId, draggedItemId)
     }
 
     Internal.instance.saveCurrentStateToUndoStack()
@@ -193,20 +193,21 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     // エッジを付け替える
     const edge = CurrentState.removeItemGraphEdge(parentItemId, draggedItemId)
     const isPageOrFolded =
-      CurrentState.isPage(rollDroppedItemId) || CurrentState.getIsFolded(rollDroppedItemPath)
+      CurrentState.isPage(bulletAndIndentDroppedItemId) ||
+      CurrentState.getIsFolded(bulletAndIndentDroppedItemPath)
     if (isPageOrFolded) {
-      CurrentState.insertFirstChildItem(rollDroppedItemId, draggedItemId, edge)
-      CurrentState.setTargetItemPath(rollDroppedItemPath)
+      CurrentState.insertFirstChildItem(bulletAndIndentDroppedItemId, draggedItemId, edge)
+      CurrentState.setTargetItemPath(bulletAndIndentDroppedItemPath)
     } else {
-      CurrentState.insertLastChildItem(rollDroppedItemId, draggedItemId, edge)
-      CurrentState.setTargetItemPath(RArray$.append(draggedItemId)(rollDroppedItemPath))
+      CurrentState.insertLastChildItem(bulletAndIndentDroppedItemId, draggedItemId, edge)
+      CurrentState.setTargetItemPath(RArray$.append(draggedItemId)(bulletAndIndentDroppedItemPath))
     }
 
     CurrentState.updateItemTimestamp(draggedItemId)
     Rerenderer.instance.requestToScrollAppear()
     Rerenderer.instance.rerender()
   } else {
-    // Roll以外の場所へのドロップの場合
+    // バレット以外の場所へのドロップの場合
 
     if (RArray$.shallowEqual(RArray$.takeLeft(draggedItemPath.length)(itemPath), draggedItemPath)) {
       // 少し分かりづらいが、上記条件を満たすときはドラッグアンドドロップ移動を認めてはならない。
@@ -276,7 +277,7 @@ function searchMainAreaElementByYCoordinate(y: integer): HTMLElement | undefined
   return undefined
 }
 
-// ItemPathの親を辿り、指定されたX座標にRollを表示しているItemPathを探索する
+// ItemPathの親を辿り、指定されたX座標にバレットを表示しているItemPathを探索する
 function searchElementByXCoordinate(itemPath: ItemPath, x: integer): ItemPath | undefined {
   if (itemPath.length === 0) return undefined
 

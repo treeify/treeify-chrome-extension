@@ -17,7 +17,7 @@
 </script>
 
 <div class="tabs-dialog-item_root" style:--footprint-color={footprintColor ?? 'transparent'}>
-  <div class="tabs-dialog-item_roll">
+  <div class="tabs-dialog-item_bullet-and-indent">
     {#if props.children.length > 0}
       <div class="tabs-dialog-item_indent-guide" />
     {/if}
@@ -55,7 +55,7 @@
     line-height: var(--tabs-dialog-item-line-height);
   }
 
-  .tabs-dialog-item_roll {
+  .tabs-dialog-item_bullet-and-indent {
     display: flex;
     flex-direction: column;
     align-items: center;
