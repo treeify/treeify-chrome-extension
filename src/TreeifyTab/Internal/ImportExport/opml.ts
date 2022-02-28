@@ -160,7 +160,14 @@ export function toOpmlString(
  * OPML 1.0文書でもパースに成功する場合がある（意図通り）。
  */
 export function tryParseAsOpml(possiblyOpml: string): RArray<Element> | undefined {
-  const doc = new DOMParser().parseFromString(possiblyOpml, 'text/xml')
+  // OPML内に制御文字が混入しているとエラーになるのでその対策。
+  // 下記を除く全ての制御文字を削除する。
+  // ・x09(HT)
+  // ・x0A(LF)
+  // ・x0D(CR)
+  // ・x80-x9F
+  const safeText = possiblyOpml.replaceAll(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+  const doc = new DOMParser().parseFromString(safeText, 'text/xml')
 
   // 以下、OPMLフォーマットバリデーション
   const opmlElement = doc.documentElement
