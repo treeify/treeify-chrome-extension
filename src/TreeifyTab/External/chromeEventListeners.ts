@@ -256,7 +256,8 @@ export async function matchTabsAndWebPageItems() {
     urlToItemIds.get(url).push(itemId)
   }
 
-  for (const tab of await getAllNonTreeifyTabs()) {
+  const allTabs = await getAllNonTreeifyTabs()
+  for (const tab of allTabs.reverse()) {
     assertNonUndefined(tab.id)
 
     const url = tab.pendingUrl ?? tab.url ?? ''
