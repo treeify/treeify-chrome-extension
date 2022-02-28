@@ -100,7 +100,7 @@ export async function setupAllAlarms() {
 /** 次に通知すべきタイムスタンプを計算する */
 function calculateNextReminderTimestamp(reminder: Reminder): Timestamp | undefined {
   switch (reminder.type) {
-    case 'once':
+    case 'Once':
       const timestamp = dayjs()
         .year(reminder.year)
         .month(reminder.month)
@@ -114,7 +114,7 @@ function calculateNextReminderTimestamp(reminder: Reminder): Timestamp | undefin
       } else {
         return undefined
       }
-    case 'every month': {
+    case 'EveryMonth': {
       const baseDate = call(() => {
         if (reminder.notifiedAt === null) {
           return dayjs()

@@ -14,7 +14,7 @@
   const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
   const reminder = Internal.instance.state.reminders[targetItemId]
 
-  let reminderType: Reminder['type'] = reminder?.type ?? 'once'
+  let reminderType: Reminder['type'] = reminder?.type ?? 'Once'
 
   // TODO: リマインダーが設定済みならその値を初期値として設定する
   let pickedDate = dayjs().format('YYYY-MM-DD')
@@ -36,7 +36,7 @@
 
   function onClickPrimaryButton() {
     switch (reminderType) {
-      case 'once': {
+      case 'Once': {
         const parsed = dayjs(`${pickedDate} ${time}`)
         if (!parsed.isValid()) {
           alert('日時の形式が不正です。')
@@ -45,7 +45,7 @@
 
         Internal.instance.saveCurrentStateToUndoStack()
         const reminder: Reminder = {
-          type: 'once',
+          type: 'Once',
           notifiedAt: null,
           year: parsed.year(),
           month: parsed.month(),
@@ -57,11 +57,11 @@
 
         break
       }
-      case 'every month':
+      case 'EveryMonth':
         const [hour, minute] = time.split(':').map(Number)
         Internal.instance.saveCurrentStateToUndoStack()
         const reminder: Reminder = {
-          type: 'every month',
+          type: 'EveryMonth',
           notifiedAt: null,
           date,
           hour,
@@ -85,13 +85,13 @@
 <CommonDialog class="reminder-setting-dialog_root" title="リマインダー設定">
   <div class="reminder-setting-dialog_content" on:keydown={onKeydown}>
     <select class="reminder-setting-dialog_select" bind:value={reminderType}>
-      <option class="reminder-setting-dialog_option" value="once">繰り返さない</option>
-      <option class="reminder-setting-dialog_option" value="every month">毎月</option>
+      <option class="reminder-setting-dialog_option" value="Once">繰り返さない</option>
+      <option class="reminder-setting-dialog_option" value="EveryMonth">毎月</option>
     </select>
-    {#if reminderType === 'once'}
+    {#if reminderType === 'Once'}
       <input type="date" class="reminder-setting-dialog_date-picker" bind:value={pickedDate} />
       <input type="time" class="reminder-setting-dialog_time" bind:value={time} />
-    {:else if reminderType === 'every month'}
+    {:else if reminderType === 'EveryMonth'}
       <input
         type="number"
         class="reminder-setting-dialog_date"

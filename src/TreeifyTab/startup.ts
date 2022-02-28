@@ -273,7 +273,7 @@ async function onAlarm(alarm: Alarm) {
 
 function createDateTimeText(reminder: Reminder): string {
   switch (reminder.type) {
-    case 'once':
+    case 'Once':
       return dayjs()
         .year(reminder.year)
         .month(reminder.month)
@@ -281,7 +281,7 @@ function createDateTimeText(reminder: Reminder): string {
         .hour(reminder.hour)
         .minute(reminder.minute)
         .format('YYYY-MM-DD HH:mm')
-    case 'every month':
+    case 'EveryMonth':
       return dayjs()
         .date(reminder.date)
         .hour(reminder.hour)

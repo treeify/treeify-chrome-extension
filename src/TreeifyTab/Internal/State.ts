@@ -165,7 +165,7 @@ export type Page = {
 }
 
 export type Reminder = DiscriminatedUnion<{
-  once: {
+  Once: {
     notifiedAt: Timestamp | null
     year: integer
     month: integer
@@ -173,7 +173,7 @@ export type Reminder = DiscriminatedUnion<{
     hour: integer
     minute: integer
   }
-  ['every month']: {
+  EveryMonth: {
     notifiedAt: Timestamp | null
     date: integer
     hour: integer
