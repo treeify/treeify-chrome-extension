@@ -3,6 +3,7 @@
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
+  import { Internal } from 'src/TreeifyTab/Internal/Internal'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import DropdownMenuDialog from 'src/TreeifyTab/View/Dialog/DropdownMenuDialog.svelte'
   import { DropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
@@ -32,6 +33,8 @@
       {
         title: 'ブックマークを全てインポート',
         onClick: async () => {
+          Internal.instance.saveCurrentStateToUndoStack()
+
           const bookmarkTreeNodes = await chrome.bookmarks.getTree()
 
           const bookmarkRootItemIds = bookmarkTreeNodes
