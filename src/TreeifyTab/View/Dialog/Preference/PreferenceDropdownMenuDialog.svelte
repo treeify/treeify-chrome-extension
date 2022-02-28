@@ -21,7 +21,7 @@
           },
         },
         {
-          title: 'ブラウザコマンド設定',
+          title: '拡張機能ショートカット設定',
           onClick: () => {
             chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
           },
