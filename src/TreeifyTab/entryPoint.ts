@@ -31,7 +31,7 @@ call(async () => {
 
   chrome.contextMenus.create({
     id: 'treeify',
-    title: 'Treeifyの項目として取り込み',
+    title: 'Treeifyに引用',
     contexts: ['selection', 'image'],
     type: 'normal',
   })
