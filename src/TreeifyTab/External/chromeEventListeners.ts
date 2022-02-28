@@ -146,15 +146,26 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
   }
 }
 
-export function onUpdated(tabId: integer, changeInfo: TabChangeInfo, tab: Tab) {
+export function onUpdated(tabId: TabId, changeInfo: TabChangeInfo, tab: Tab) {
   const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   if (itemId === undefined) return
 
-  reflectInWebPageItem(itemId, tab)
-  if (changeInfo.url !== undefined) {
+  External.instance.tabItemCorrespondence.registerTab(tabId, tab)
+
+  const webPageItem = Internal.instance.state.webPageItems[itemId]
+  if (changeInfo.title !== undefined && changeInfo.title !== webPageItem.title) {
+    CurrentState.setWebPageItemTabTitle(itemId, changeInfo.title)
+  }
+  if (changeInfo.url !== undefined && changeInfo.url !== webPageItem.url) {
     // もしUndoされるとタブと項目の対応関係に関して不具合が出るのでUndoさせないようにする
     Internal.instance.clearUndoStack()
+
+    CurrentState.setWebPageItemUrl(itemId, changeInfo.url)
   }
+  if (changeInfo.favIconUrl !== undefined && changeInfo.favIconUrl !== webPageItem.faviconUrl) {
+    CurrentState.setWebPageItemFaviconUrl(itemId, changeInfo.favIconUrl)
+  }
+
   Rerenderer.instance.rerender()
 }
 
