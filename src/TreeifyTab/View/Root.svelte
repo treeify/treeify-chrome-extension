@@ -41,6 +41,7 @@
   :root {
     --bullet-default-size: 0.38em;
     --bullet-default-color: lch(60% 0 0);
+    --bullet-hover-default-color: lch(40% 0 0);
 
     // トランスクルードされた項目のバレットの色
     --transcluded-item-bullet-default-color: lch(60% 40 160.4);

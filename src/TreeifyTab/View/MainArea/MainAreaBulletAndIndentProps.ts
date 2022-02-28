@@ -9,7 +9,7 @@ import { CssCustomProperty } from 'src/Utility/browser'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
-export type MainAreaRollProps = {
+export type MainAreaBulletAndIndentProps = {
   bulletState: MainAreaBulletState
   /**
    * unfold時に表示される項目数。
@@ -28,7 +28,10 @@ export enum MainAreaBulletState {
   PAGE,
 }
 
-export function createMainAreaRollProps(state: State, itemPath: ItemPath): MainAreaRollProps {
+export function createMainAreaBulletAndIndentProps(
+  state: State,
+  itemPath: ItemPath
+): MainAreaBulletAndIndentProps {
   const hiddenItemsCount = countHiddenItems(state, itemPath)
 
   const outerCircleMinDiameter =

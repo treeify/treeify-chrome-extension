@@ -22,13 +22,13 @@
   style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
 >
   <div
-    class={`search-result-item_roll ${props.cssClasses.join(' ')}`}
+    class={`search-result-item_bullet-and-indent ${props.cssClasses.join(' ')}`}
     class:transcluded={props.isTranscluded}
   >
     {#if props.children.length > 0}
       <div class="search-result-item_indent-guide" />
     {/if}
-    <div class="search-result-item_roll-outer-circle" />
+    <div class="search-result-item_bullet-outer-circle" />
     <div class="search-result-item_bullet" />
   </div>
   <div class="search-result-item_content-and-children-area">
@@ -70,7 +70,7 @@
     line-height: var(--search-result-line-height);
   }
 
-  .search-result-item_roll {
+  .search-result-item_bullet-and-indent {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -90,7 +90,7 @@
     background: lch(80% 0 0);
   }
 
-  .search-result-item_roll-outer-circle {
+  .search-result-item_bullet-outer-circle {
     @include common.circle(var(--outer-circle-radius));
 
     position: absolute;

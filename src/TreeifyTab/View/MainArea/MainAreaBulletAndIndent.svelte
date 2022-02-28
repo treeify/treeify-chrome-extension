@@ -1,31 +1,31 @@
 <script lang="ts">
   import {
+    MainAreaBulletAndIndentProps,
     MainAreaBulletState,
-    MainAreaRollProps,
-  } from 'src/TreeifyTab/View/MainArea/MainAreaRollProps'
+  } from 'src/TreeifyTab/View/MainArea/MainAreaBulletAndIndentProps'
 
-  export let props: MainAreaRollProps
+  export let props: MainAreaBulletAndIndentProps
 </script>
 
 <div
-  class="main-area-roll_root"
+  class="main-area-bullet-and-indent_root"
   style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
   on:click={props.onClick}
   on:contextmenu={props.onContextMenu}
 >
   {#if props.bulletState === MainAreaBulletState.UNFOLDED}
-    <div class="main-area-roll_indent-area">
-      <div class="main-area-roll_indent-guide" />
+    <div class="main-area-bullet-and-indent_indent-area">
+      <div class="main-area-bullet-and-indent_indent-guide" />
     </div>
   {/if}
-  <div class="main-area-roll_bullet-area">
+  <div class="main-area-bullet-and-indent_bullet-area">
     {#if props.bulletState === MainAreaBulletState.PAGE}
-      <div class="main-area-roll_page-icon" />
+      <div class="main-area-bullet-and-indent_page-icon" />
     {:else}
       {#if props.bulletState === MainAreaBulletState.FOLDED}
-        <div class="main-area-roll_outer-circle" />
+        <div class="main-area-bullet-and-indent_outer-circle" />
       {/if}
-      <div class="main-area-roll_inner-circle" />
+      <div class="main-area-bullet-and-indent_bullet" />
     {/if}
   </div>
 </div>
@@ -43,8 +43,6 @@
     --main-area-bullet-outer-circle-color: lch(90% 0 0);
     // バレットの外側の円のマウスホバー時の色
     --main-area-bullet-outer-circle-hover-color: lch(80% 0 0);
-    // バレットの内側の円のマウスホバー時の色
-    --main-area-bullet-inner-circle-hover-color: lch(40% 0 0);
     // バレットとして表示されるページアイコンの色
     --main-area-bullet-page-icon-color: lch(30% 0 0);
     // バレットとして表示されるページアイコンのマウスホバー時の色
@@ -58,44 +56,44 @@
 
   // トランスクルードされた項目の強調表示
   .transcluded {
-    .main-area-roll_inner-circle {
+    .main-area-bullet-and-indent_bullet {
       background: var(--transcluded-item-bullet-default-color);
     }
 
-    .main-area-roll_root:hover .main-area-roll_inner-circle {
+    .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_bullet {
       background: var(--transcluded-item-bullet-hover-default-color);
     }
 
-    .main-area-roll_page-icon {
+    .main-area-bullet-and-indent_page-icon {
       background: var(--transcluded-item-bullet-default-color);
     }
 
-    .main-area-roll_root:hover .main-area-roll_page-icon {
+    .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
       background: var(--transcluded-item-bullet-hover-default-color);
     }
   }
 
   // ハイライト状態の項目の強調表示
   .highlighted {
-    .main-area-roll_inner-circle {
+    .main-area-bullet-and-indent_bullet {
       background: var(--highlighted-item-bullet-default-color);
     }
 
-    .main-area-roll_root:hover .main-area-roll_inner-circle {
+    .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_bullet {
       background: var(--highlighted-item-bullet-hover-default-color);
     }
 
-    .main-area-roll_page-icon {
+    .main-area-bullet-and-indent_page-icon {
       background: var(--highlighted-item-bullet-default-color);
     }
 
-    .main-area-roll_root:hover .main-area-roll_page-icon {
+    .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
       background: var(--highlighted-item-bullet-hover-default-color);
     }
   }
 
   .transcluded.highlighted {
-    .main-area-roll_inner-circle {
+    .main-area-bullet-and-indent_bullet {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-default-color) 50%,
@@ -103,7 +101,7 @@
       );
     }
 
-    .main-area-roll_root:hover .main-area-roll_inner-circle {
+    .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_bullet {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-hover-default-color) 50%,
@@ -111,7 +109,7 @@
       );
     }
 
-    .main-area-roll_page-icon {
+    .main-area-bullet-and-indent_page-icon {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-default-color) 50%,
@@ -119,7 +117,7 @@
       );
     }
 
-    .main-area-roll_root:hover .main-area-roll_page-icon {
+    .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
       background: linear-gradient(
         to right,
         var(--highlighted-item-bullet-hover-default-color) 50%,
@@ -129,7 +127,7 @@
   }
 
   // メインエリアのバレットとインデントのルート要素
-  .main-area-roll_root {
+  .main-area-bullet-and-indent_root {
     width: var(--main-area-calculated-line-height);
     height: 100%;
     // インデントガイドをバレットの裏まで描画するための設定
@@ -138,7 +136,7 @@
     cursor: pointer;
   }
 
-  .main-area-roll_bullet-area {
+  .main-area-bullet-and-indent_bullet-area {
     @include common.square(var(--main-area-calculated-line-height));
 
     // 外側の円と内側の円を重ねて描画するための設定
@@ -146,42 +144,42 @@
   }
 
   // メインエリアのバレットの外側の円（展開状態用）
-  .main-area-roll_outer-circle {
+  .main-area-bullet-and-indent_outer-circle {
     @include common.circle(var(--outer-circle-radius));
     @include common.absolute-center;
 
     background: var(--main-area-bullet-outer-circle-color);
 
-    .main-area-roll_root:hover & {
+    .main-area-bullet-and-indent_root:hover & {
       background: var(--main-area-bullet-outer-circle-hover-color);
     }
   }
 
   // メインエリアのバレットの内側の円
-  .main-area-roll_inner-circle {
+  .main-area-bullet-and-indent_bullet {
     @include common.circle(0.38em);
     @include common.absolute-center;
 
     background: var(--bullet-default-color);
 
-    .main-area-roll_root:hover & {
-      background: var(--main-area-bullet-inner-circle-hover-color);
+    .main-area-bullet-and-indent_root:hover & {
+      background: var(--bullet-hover-default-color);
     }
   }
 
   // ページのバレット
-  .main-area-roll_page-icon {
+  .main-area-bullet-and-indent_page-icon {
     @include common.square(1em);
     @include common.absolute-center;
     @include common.icon(var(--main-area-bullet-page-icon-color), url('page.svg'));
 
-    .main-area-roll_root:hover & {
+    .main-area-bullet-and-indent_root:hover & {
       background: var(--main-area-bullet-page-icon-hover-color);
     }
   }
 
   // インデント領域
-  .main-area-roll_indent-area {
+  .main-area-bullet-and-indent_indent-area {
     position: absolute;
     // バレットの中心のY座標から子リストの下端までの領域にする
     top: calc(var(--main-area-calculated-line-height) / 2);
@@ -190,14 +188,14 @@
   }
 
   // インデントガイド
-  .main-area-roll_indent-guide {
+  .main-area-bullet-and-indent_indent-guide {
     background: var(--main-area-indent-guide-color);
     width: 1px;
     height: 100%;
     margin: 0 auto;
 
     // バレットとインデントの領域のホバー時のインデントガイド
-    .main-area-roll_root:hover & {
+    .main-area-bullet-and-indent_root:hover & {
       background: var(--main-area-indent-guide-hover-color);
     }
   }

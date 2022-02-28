@@ -19,7 +19,7 @@
   {#if props.isRoot}
     <div class="grid-empty-cell" />
   {:else}
-    <div class="page-tree-node_bullet-and-indent-area">
+    <div class="page-tree-node_bullet-and-indent">
       <PageTreeBulletAndIndent props={props.bulletAndIndentProps} />
     </div>
   {/if}

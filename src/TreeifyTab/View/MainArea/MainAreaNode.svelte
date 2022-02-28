@@ -1,10 +1,10 @@
 <script lang="ts">
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
   import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
+  import MainAreaBulletAndIndent from 'src/TreeifyTab/View/MainArea/MainAreaBulletAndIndent.svelte'
   import MainAreaContent from 'src/TreeifyTab/View/MainArea/MainAreaContent.svelte'
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
-  import MainAreaRoll from 'src/TreeifyTab/View/MainArea/MainAreaRoll.svelte'
   import { RArray$ } from 'src/Utility/fp-ts'
 
   export let props: MainAreaNodeProps
@@ -32,12 +32,12 @@
   {:else}
     <!-- バレットとインデントガイドの領域 -->
     <div
-      class={'main-area-node_roll-area ' + props.cssClasses.join(' ')}
+      class={'main-area-node_bullet-and-indent ' + props.cssClasses.join(' ')}
       class:transcluded={props.isTranscluded}
       data-depth={depth}
       use:dragItem={props.itemPath}
     >
-      <MainAreaRoll props={props.rollProps} />
+      <MainAreaBulletAndIndent props={props.bulletAndIndentProps} />
     </div>
   {/if}
   <div class="main-area-node_body-and-children-area">
@@ -120,7 +120,7 @@
     }
   }
 
-  .main-area-node_roll-area {
+  .main-area-node_bullet-and-indent {
     user-select: none;
   }
 
