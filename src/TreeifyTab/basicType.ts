@@ -29,6 +29,14 @@ export enum ItemType {
   TEX = 'TeX',
 }
 
+export const allItemTypes = [
+  ItemType.TEXT,
+  ItemType.WEB_PAGE,
+  ItemType.IMAGE,
+  ItemType.CODE_BLOCK,
+  ItemType.TEX,
+] as const
+
 export const itemTypeDisplayNames = {
   [ItemType.TEXT]: 'テキスト',
   [ItemType.WEB_PAGE]: 'ウェブページ',

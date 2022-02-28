@@ -1,7 +1,7 @@
 <script lang="ts">
   import { pipe } from 'fp-ts/function'
   import { MultiSet } from 'mnemonist'
-  import { ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
+  import { allItemTypes, ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
   import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
@@ -20,9 +20,11 @@
 
   let searchQueryValue = ''
   let hitItemIds: RSet<ItemId> | undefined
-  let checkedItemTypes: ItemType[] = Object.values(ItemType) as any
+  let checkedItemTypes: Record<ItemType, boolean> = Object.fromEntries(
+    allItemTypes.map((itemType) => [itemType, true])
+  ) as any
   let searchResult: SearchResult | undefined
-  $: searchResult = makeSearchResult(hitItemIds, RSet$.from(checkedItemTypes))
+  $: searchResult = makeSearchResult(hitItemIds, checkedItemTypes)
 
   const workspaceId = External.instance.getCurrentWorkspaceId()
   const searchHistory = Internal.instance.state.workspaces[workspaceId].searchHistory
@@ -88,19 +90,19 @@
       )
 
       hitItemIds = Internal.instance.searchEngine.search(searchQueryValue)
-      checkedItemTypes = Object.values(ItemType) as any
+      checkedItemTypes = Object.fromEntries(allItemTypes.map((itemType) => [itemType, true])) as any
       document.querySelector<HTMLElement>('.search-dialog_result-area')?.scrollTo(0, 0)
     }
   }
 
   function makeSearchResult(
     hitItemIds: RSet<ItemId> | undefined,
-    itemTypes: RSet<ItemType>
+    checkedItemTypes: Record<ItemType, boolean>
   ): SearchResult | undefined {
     if (hitItemIds === undefined) return undefined
 
-    const filteredItemIds = RSet$.filter((itemId: ItemId) =>
-      itemTypes.has(Internal.instance.state.items[itemId].type)
+    const filteredItemIds = RSet$.filter(
+      (itemId: ItemId) => checkedItemTypes[Internal.instance.state.items[itemId].type]
     )(hitItemIds)
 
     // ヒットした項目の所属ページを探索し、その経路をItemPathとして収集する
@@ -152,7 +154,7 @@
           表示する項目:
           {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
             {#if searchResult.counts.get(itemType) > 0}
-              <Checkbox value={itemType} bind:group={checkedItemTypes}>
+              <Checkbox value={itemType} bind:checked={checkedItemTypes[itemType]}>
                 {name}({searchResult.counts.get(itemType)}件)
               </Checkbox>
             {/if}
