@@ -82,7 +82,7 @@
     position: absolute;
     top: calc(var(--search-result-line-height) / 2);
 
-    background: lch(80% 0 0);
+    background: var(--indent-guide-color);
   }
 
   .search-result-item_bullet-outer-circle {
