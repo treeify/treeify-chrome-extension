@@ -56,11 +56,6 @@
     --search-result-bullet-size: var(--bullet-default-size);
 
     --search-result-footprint-count-exponent: 0.5;
-
-    --search-result-bullet-outer-circle-min-diameter: 1.05;
-    --search-result-bullet-outer-circle-max-diameter: 1.3;
-    // 外側の円が最大サイズになる子項目数
-    --search-result-bullet-outer-circle-item-count-limit: 10;
   }
 
   .search-result-item_root {

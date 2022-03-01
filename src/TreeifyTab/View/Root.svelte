@@ -43,6 +43,13 @@
     --bullet-default-color: lch(60% 0 0);
     --bullet-hover-default-color: lch(40% 0 0);
 
+    --bullet-outer-circle-min-diameter-em: 1.05;
+    --bullet-outer-circle-max-diameter-em: 1.3;
+    // 外側の円が最大サイズになる子項目数
+    --bullet-outer-circle-child-count-limit: 10;
+    // 外側の円が最大サイズになる子孫項目数
+    --bullet-outer-circle-item-count-limit: 20;
+
     // トランスクルードされた項目のバレットの色
     --transcluded-item-bullet-default-color: lch(60% 40 160.4);
     // トランスクルードされた項目のバレットのマウスホバー時の色
