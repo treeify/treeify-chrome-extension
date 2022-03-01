@@ -95,11 +95,12 @@
     top: 50%;
     transform: translateY(-50%);
 
-    height: 35%;
-    min-height: 20px;
-    max-height: 160px;
+    height: 55%;
+    min-height: min(30px, 100%);
 
-    width: max-content;
+    width: 5%;
+    min-width: 10px;
+    max-width: 25px;
 
     visibility: hidden;
 

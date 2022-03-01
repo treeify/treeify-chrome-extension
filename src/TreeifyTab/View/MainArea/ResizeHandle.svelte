@@ -1,4 +1,8 @@
-<div class="resize-handle_root">
+<script lang="ts">
+  let clientWidth = 0
+</script>
+
+<div class="resize-handle_root" style:--width="{clientWidth}px" bind:clientWidth>
   <div class="resize-handle_inner" />
 </div>
 
@@ -6,16 +10,15 @@
   @use 'src/TreeifyTab/View/common.scss';
   @use 'sass:math';
 
-  $aspectRatio: 0.16;
+  :root {
+    --resize-handle-stroke-width: 0.4;
+  }
 
   // 角丸のストローク役
   .resize-handle_root {
     position: relative;
 
-    // ラッパー要素に高さを指定してもらうイメージ
-    height: 100%;
-    // 高さが決まると自動的に幅も決まる
-    aspect-ratio: $aspectRatio;
+    @include common.square(100%);
 
     border-radius: 99999px;
     background: lch(100% 0 0);
@@ -29,11 +32,9 @@
   .resize-handle_inner {
     @include common.absolute-center;
 
-    $strokeSize: 7%;
-    height: 100% - $strokeSize;
-    width: 100% - math.div($strokeSize, $aspectRatio);
+    @include common.square(calc(100% - var(--width) * var(--resize-handle-stroke-width)));
 
     border-radius: 99999px;
-    background: lch(30% 0 0);
+    background: lch(50% 0 0);
   }
 </style>
