@@ -57,14 +57,6 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
-  :root {
-    // 彩度は色域境界値
-    --main-area-unread-web-page-item-title-color: lch(35% 35.4 160.4);
-
-    // ウェブページ項目の音がなっていることを示すアイコンの色
-    --main-area-audible-icon-color: lch(45% 0 0);
-  }
-
   // ウェブページ項目のコンテンツ領域のルート
   .main-area-web-page-content_root {
     // フォーカス時の枠線を非表示
@@ -117,7 +109,7 @@
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
     @include common.square(1em);
-    @include common.icon(var(--main-area-audible-icon-color), url('audible.svg'));
+    @include common.icon(lch(45% 0 0), url('audible.svg'));
 
     margin-left: 0.2em;
   }
@@ -142,7 +134,7 @@
 
     // 未読ウェブページ項目のタイトルの強調表示
     &.unread {
-      color: var(--main-area-unread-web-page-item-title-color);
+      color: var(--unread-web-page-item-title-color);
 
       &.discarded {
         color: lch(35% 30 160.4);

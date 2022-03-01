@@ -41,11 +41,6 @@
     --page-tree-bullet-unfolded-width: 0.45em;
     // 折りたたまれたノードのバレット（二等辺三角形▼）の高さ
     --page-tree-bullet-unfolded-height: 0.3em;
-
-    // バレットの色
-    --page-tree-bullet-color: lch(60% 0 0);
-    // バレットの色（ホバー時）
-    --page-tree-bullet-hover-color: lch(40% 0 0);
   }
 
   .page-tree-bullet-and-indent_root {
@@ -69,7 +64,7 @@
 
   // インデントガイド
   .page-tree-bullet-and-indent_indent-guide {
-    background: lch(88% 0 0);
+    background: var(--indent-guide-color);
 
     width: 1px;
     height: 100%;
@@ -77,7 +72,7 @@
 
     // ホバー時のインデントガイド
     .page-tree-bullet-and-indent_root:hover & {
-      background: lch(70% 0 0);
+      background: var(--indent-guide-hover-color);
     }
   }
 
@@ -98,10 +93,10 @@
       border-width: var(--page-tree-bullet-unfolded-height)
         calc(var(--page-tree-bullet-unfolded-width) / 2) 0
         calc(var(--page-tree-bullet-unfolded-width) / 2);
-      border-color: var(--page-tree-bullet-color) transparent transparent transparent;
+      border-color: var(--bullet-default-color) transparent transparent transparent;
 
       .page-tree-bullet-and-indent_root:hover & {
-        border-color: var(--page-tree-bullet-hover-color) transparent transparent transparent;
+        border-color: var(--bullet-hover-default-color) transparent transparent transparent;
       }
 
       .highlighted & {
@@ -122,10 +117,10 @@
       border-style: solid;
       border-width: calc(var(--page-tree-bullet-folded-width) / 2) 0
         calc(var(--page-tree-bullet-folded-width) / 2) var(--page-tree-bullet-folded-height);
-      border-color: transparent transparent transparent var(--page-tree-bullet-color);
+      border-color: transparent transparent transparent var(--bullet-default-color);
 
       .page-tree-bullet-and-indent_root:hover & {
-        border-color: transparent transparent transparent var(--page-tree-bullet-hover-color);
+        border-color: transparent transparent transparent var(--bullet-hover-default-color);
       }
 
       .highlighted & {
@@ -143,10 +138,10 @@
     &.no-children {
       @include common.circle(0.25em);
 
-      background: var(--page-tree-bullet-color);
+      background: var(--bullet-default-color);
 
       .page-tree-bullet-and-indent_root:hover & {
-        background: var(--page-tree-bullet-hover-color);
+        background: var(--bullet-hover-default-color);
       }
 
       .highlighted & {

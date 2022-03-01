@@ -91,7 +91,7 @@
     position: absolute;
     top: calc(var(--search-result-line-height) / 2 - var(--outer-circle-radius) / 2);
 
-    background: var(--main-area-bullet-outer-circle-color);
+    background: var(--bullet-outer-circle-color);
   }
 
   .search-result-item_bullet {
