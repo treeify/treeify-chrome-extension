@@ -72,7 +72,7 @@
     position: absolute;
     top: calc(var(--tabs-dialog-item-line-height) / 2);
 
-    background: lch(80% 0 0);
+    background: var(--indent-guide-color);
   }
 
   .tabs-dialog-item_bullet {

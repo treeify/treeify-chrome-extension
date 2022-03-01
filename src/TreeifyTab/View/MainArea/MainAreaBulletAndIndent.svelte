@@ -33,27 +33,6 @@
 <style global lang="scss">
   @use 'src/TreeifyTab/View/common.scss';
 
-  :root {
-    --main-area-bullet-outer-circle-min-diameter: 1.05;
-    --main-area-bullet-outer-circle-max-diameter: 1.3;
-    // 外側の円が最大サイズになる子孫項目数
-    --main-area-bullet-outer-circle-item-count-limit: 20;
-
-    // バレットの外側の円の色
-    --main-area-bullet-outer-circle-color: lch(90% 0 0);
-    // バレットの外側の円のマウスホバー時の色
-    --main-area-bullet-outer-circle-hover-color: lch(80% 0 0);
-    // バレットとして表示されるページアイコンの色
-    --main-area-bullet-page-icon-color: lch(30% 0 0);
-    // バレットとして表示されるページアイコンのマウスホバー時の色
-    --main-area-bullet-page-icon-hover-color: lch(20% 0 0);
-
-    // インデントガイドの色
-    --main-area-indent-guide-color: lch(88% 0 0);
-    // インデントガイドの色（ホバー時）
-    --main-area-indent-guide-hover-color: lch(70% 0 0);
-  }
-
   // トランスクルードされた項目の強調表示
   .transcluded {
     .main-area-bullet-and-indent_bullet {
@@ -148,10 +127,10 @@
     @include common.circle(var(--outer-circle-radius));
     @include common.absolute-center;
 
-    background: var(--main-area-bullet-outer-circle-color);
+    background: var(--bullet-outer-circle-color);
 
     .main-area-bullet-and-indent_root:hover & {
-      background: var(--main-area-bullet-outer-circle-hover-color);
+      background: var(--bullet-outer-circle-hover-color);
     }
   }
 
@@ -171,10 +150,10 @@
   .main-area-bullet-and-indent_page-icon {
     @include common.square(1em);
     @include common.absolute-center;
-    @include common.icon(var(--main-area-bullet-page-icon-color), url('page.svg'));
+    @include common.icon(var(--bullet-page-icon-color), url('page.svg'));
 
     .main-area-bullet-and-indent_root:hover & {
-      background: var(--main-area-bullet-page-icon-hover-color);
+      background: var(--bullet-page-icon-hover-color);
     }
   }
 
@@ -189,14 +168,14 @@
 
   // インデントガイド
   .main-area-bullet-and-indent_indent-guide {
-    background: var(--main-area-indent-guide-color);
+    background: var(--indent-guide-color);
     width: 1px;
     height: 100%;
     margin: 0 auto;
 
     // バレットとインデントの領域のホバー時のインデントガイド
     .main-area-bullet-and-indent_root:hover & {
-      background: var(--main-area-indent-guide-hover-color);
+      background: var(--indent-guide-hover-color);
     }
   }
 </style>

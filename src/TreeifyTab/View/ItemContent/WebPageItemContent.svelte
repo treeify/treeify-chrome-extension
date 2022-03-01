@@ -67,7 +67,7 @@
 
     // 未読ウェブページ項目のタイトルの強調表示
     .unread & {
-      color: var(--main-area-unread-web-page-item-title-color);
+      color: var(--unread-web-page-item-title-color);
     }
 
     .unread.discarded & {
