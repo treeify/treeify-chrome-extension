@@ -51,14 +51,18 @@ function calculateDropDestinationStyle(
       const bulletAndIndentDroppedItemPath = searchElementByXCoordinate(itemPath, clientX)
       if (bulletAndIndentDroppedItemPath === undefined) return ''
 
-      // 循環参照などになるケースでは何も表示しない
-      try {
-        CurrentState.throwIfCantInsertChildItem(
-          ItemPath.getItemId(bulletAndIndentDroppedItemPath),
-          ItemPath.getItemId(draggedItemPath)
-        )
-      } catch {
-        return ''
+      // 親のバレットやインデントガイドに対してのドラッグ以外の場合にグラフ構造不整合チェックを行う
+      const bulletAndIndentDroppedItemId = ItemPath.getItemId(bulletAndIndentDroppedItemPath)
+      if (bulletAndIndentDroppedItemId !== ItemPath.getParentItemId(draggedItemPath)) {
+        // 循環参照などになるケースでは何も表示しない
+        try {
+          CurrentState.throwIfCantInsertChildItem(
+            bulletAndIndentDroppedItemId,
+            ItemPath.getItemId(draggedItemPath)
+          )
+        } catch {
+          return ''
+        }
       }
 
       const bulletAndIndentElement = document
