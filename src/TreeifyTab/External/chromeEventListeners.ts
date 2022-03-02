@@ -146,24 +146,37 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
   }
 }
 
-export function onUpdated(tabId: TabId, changeInfo: TabChangeInfo, tab: Tab) {
+export async function onUpdated(tabId: TabId, changeInfo: TabChangeInfo, tab: Tab) {
+  const correctTab = await chrome.tabs.get(tabId)
+
   const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   if (itemId === undefined) return
 
-  External.instance.tabItemCorrespondence.registerTab(tabId, tab)
+  // ウェブページ項目のタイトルなどが空文字列のままになる謎の不具合を調査するためのログ出力
+  if (correctTab.url !== tab.url) {
+    dump(correctTab.url, tab.url)
+  }
+  if (correctTab.title !== tab.title) {
+    dump(correctTab.title, tab.title)
+  }
+  if (correctTab.favIconUrl !== tab.favIconUrl) {
+    dump(correctTab.favIconUrl, tab.favIconUrl)
+  }
+
+  External.instance.tabItemCorrespondence.registerTab(tabId, correctTab)
 
   const webPageItem = Internal.instance.state.webPageItems[itemId]
-  if (changeInfo.title !== undefined && changeInfo.title !== webPageItem.title) {
-    CurrentState.setWebPageItemTabTitle(itemId, changeInfo.title)
+  if (correctTab.title !== undefined && correctTab.title !== webPageItem.title) {
+    CurrentState.setWebPageItemTabTitle(itemId, correctTab.title)
   }
-  if (changeInfo.url !== undefined && changeInfo.url !== webPageItem.url) {
+  if (correctTab.url !== undefined && correctTab.url !== webPageItem.url) {
     // もしUndoされるとタブと項目の対応関係に関して不具合が出るのでUndoさせないようにする
     Internal.instance.clearUndoStack()
 
-    CurrentState.setWebPageItemUrl(itemId, changeInfo.url)
+    CurrentState.setWebPageItemUrl(itemId, correctTab.url)
   }
-  if (changeInfo.favIconUrl !== undefined && changeInfo.favIconUrl !== webPageItem.faviconUrl) {
-    CurrentState.setWebPageItemFaviconUrl(itemId, changeInfo.favIconUrl)
+  if (correctTab.favIconUrl !== undefined && correctTab.favIconUrl !== webPageItem.faviconUrl) {
+    CurrentState.setWebPageItemFaviconUrl(itemId, correctTab.favIconUrl)
   }
 
   Rerenderer.instance.rerender()
