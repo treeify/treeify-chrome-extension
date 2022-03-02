@@ -16,11 +16,16 @@
   )?.toString()
 </script>
 
-<div class="tabs-dialog-item_root" style:--footprint-color={footprintColor ?? 'transparent'}>
+<div
+  class="tabs-dialog-item_root"
+  style:--footprint-color={footprintColor ?? 'transparent'}
+  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+>
   <div class="tabs-dialog-item_bullet-and-indent">
     {#if props.children.length > 0}
       <div class="tabs-dialog-item_indent-guide" />
     {/if}
+    <div class="tabs-dialog-item_bullet-outer-circle" />
     <div class="tabs-dialog-item_bullet" />
   </div>
   <div class="search-result-item_content-and-children-area">
@@ -73,6 +78,15 @@
     top: calc(var(--tabs-dialog-item-line-height) / 2);
 
     background: var(--indent-guide-color);
+  }
+
+  .tabs-dialog-item_bullet-outer-circle {
+    @include common.circle(var(--outer-circle-radius));
+
+    position: absolute;
+    top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--outer-circle-radius) / 2);
+
+    background: var(--bullet-outer-circle-color);
   }
 
   .tabs-dialog-item_bullet {
