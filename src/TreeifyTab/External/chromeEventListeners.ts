@@ -3,6 +3,7 @@ import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
+import dayjs from 'dayjs'
 import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -154,13 +155,15 @@ export async function onUpdated(tabId: TabId, changeInfo: TabChangeInfo, tab: Ta
 
   // ウェブページ項目のタイトルなどが空文字列のままになる謎の不具合を調査するためのログ出力
   if (correctTab.url !== tab.url) {
-    dump(correctTab.url, tab.url)
+    console.log('url相違', dayjs().format('MM/DD HH:mm:ss'))
   }
   if (correctTab.title !== tab.title) {
-    dump(correctTab.title, tab.title)
+    console.log('title相違', dayjs().format('MM/DD HH:mm:ss'))
+    dump(correctTab, tab)
   }
   if (correctTab.favIconUrl !== tab.favIconUrl) {
-    dump(correctTab.favIconUrl, tab.favIconUrl)
+    console.log('favIconUrl相違', dayjs().format('MM/DD HH:mm:ss'))
+    dump(correctTab, tab)
   }
 
   External.instance.tabItemCorrespondence.registerTab(tabId, correctTab)
