@@ -15,8 +15,8 @@
   $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
-    '--newest-footprint-default-color',
-    '--oldest-footprint-default-color'
+    '--newest-footprint-color',
+    '--oldest-footprint-color'
   )?.toString()
 </script>
 
@@ -134,7 +134,7 @@
     // マウスホバー時のコンテンツ領域
     &:hover {
       // マウスホバー項目の強調表示
-      background: var(--item-hover-background-default-color);
+      background: var(--item-hover-background-color);
       @media print {
         background-color: transparent;
       }
@@ -142,7 +142,7 @@
 
     // 単一選択された項目のコンテンツ領域
     &.single-selected {
-      background: var(--selected-item-background-default-color);
+      background: var(--selected-item-background-color);
       @media print {
         background-color: transparent;
       }
@@ -165,7 +165,7 @@
 
   .main-area-node_hidden-tabs-count {
     @include common.circle(1.6em);
-    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
+    @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     @include common.flex-center;
 
@@ -176,7 +176,7 @@
 
   .main-area-node_delete-button {
     @include common.circle(1.6em);
-    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
+    @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;
@@ -200,6 +200,6 @@
   .multi-selected.main-area-node_root,
   .multi-selected .main-area-node_content-area,
   .multi-selected .main-area-node_body-area {
-    background: var(--selected-item-background-default-color);
+    background: var(--selected-item-background-color);
   }
 </style>

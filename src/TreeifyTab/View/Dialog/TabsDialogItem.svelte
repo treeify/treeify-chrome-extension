@@ -11,8 +11,8 @@
   $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
-    '--newest-footprint-default-color',
-    '--oldest-footprint-default-color'
+    '--newest-footprint-color',
+    '--oldest-footprint-color'
   )?.toString()
 </script>
 
@@ -45,7 +45,7 @@
 
   :root {
     --tabs-dialog-item-line-height: 1.3em;
-    --tabs-dialog-bullet-size: var(--bullet-default-size);
+    --tabs-dialog-bullet-size: var(--bullet-size);
   }
 
   .tabs-dialog-item_root {
@@ -81,7 +81,7 @@
     position: absolute;
     top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--tabs-dialog-bullet-size) / 2);
 
-    background: var(--bullet-default-color);
+    background: var(--bullet-color);
   }
 
   .tabs-dialog-item_content-area {
@@ -94,7 +94,7 @@
     cursor: pointer;
 
     &:hover {
-      background: var(--item-hover-background-default-color);
+      background: var(--item-hover-background-color);
     }
   }
 

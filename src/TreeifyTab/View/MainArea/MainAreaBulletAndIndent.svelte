@@ -36,38 +36,38 @@
   // トランスクルードされた項目の強調表示
   .transcluded {
     .main-area-bullet-and-indent_bullet {
-      background: var(--transcluded-item-bullet-default-color);
+      background: var(--transcluded-item-bullet-color);
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_bullet {
-      background: var(--transcluded-item-bullet-hover-default-color);
+      background: var(--transcluded-item-bullet-hover-color);
     }
 
     .main-area-bullet-and-indent_page-icon {
-      background: var(--transcluded-item-bullet-default-color);
+      background: var(--transcluded-item-bullet-color);
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
-      background: var(--transcluded-item-bullet-hover-default-color);
+      background: var(--transcluded-item-bullet-hover-color);
     }
   }
 
   // ハイライト状態の項目の強調表示
   .highlighted {
     .main-area-bullet-and-indent_bullet {
-      background: var(--highlighted-item-bullet-default-color);
+      background: var(--highlighted-item-bullet-color);
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_bullet {
-      background: var(--highlighted-item-bullet-hover-default-color);
+      background: var(--highlighted-item-bullet-hover-color);
     }
 
     .main-area-bullet-and-indent_page-icon {
-      background: var(--highlighted-item-bullet-default-color);
+      background: var(--highlighted-item-bullet-color);
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
-      background: var(--highlighted-item-bullet-hover-default-color);
+      background: var(--highlighted-item-bullet-hover-color);
     }
   }
 
@@ -75,32 +75,32 @@
     .main-area-bullet-and-indent_bullet {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-default-color) 50%,
-        var(--transcluded-item-bullet-default-color) 50%
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
       );
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_bullet {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-hover-default-color) 50%,
-        var(--transcluded-item-bullet-hover-default-color) 50%
+        var(--highlighted-item-bullet-hover-color) 50%,
+        var(--transcluded-item-bullet-hover-color) 50%
       );
     }
 
     .main-area-bullet-and-indent_page-icon {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-default-color) 50%,
-        var(--transcluded-item-bullet-default-color) 50%
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
       );
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-hover-default-color) 50%,
-        var(--transcluded-item-bullet-hover-default-color) 50%
+        var(--highlighted-item-bullet-hover-color) 50%,
+        var(--transcluded-item-bullet-hover-color) 50%
       );
     }
   }
@@ -139,10 +139,10 @@
     @include common.circle(0.38em);
     @include common.absolute-center;
 
-    background: var(--bullet-default-color);
+    background: var(--bullet-color);
 
     .main-area-bullet-and-indent_root:hover & {
-      background: var(--bullet-hover-default-color);
+      background: var(--bullet-hover-color);
     }
   }
 

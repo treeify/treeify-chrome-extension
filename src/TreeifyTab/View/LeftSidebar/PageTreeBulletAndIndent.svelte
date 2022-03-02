@@ -93,20 +93,18 @@
       border-width: var(--page-tree-bullet-unfolded-height)
         calc(var(--page-tree-bullet-unfolded-width) / 2) 0
         calc(var(--page-tree-bullet-unfolded-width) / 2);
-      border-color: var(--bullet-default-color) transparent transparent transparent;
+      border-color: var(--bullet-color) transparent transparent transparent;
 
       .page-tree-bullet-and-indent_root:hover & {
-        border-color: var(--bullet-hover-default-color) transparent transparent transparent;
+        border-color: var(--bullet-hover-color) transparent transparent transparent;
       }
 
       .highlighted & {
-        border-color: var(--highlighted-item-bullet-default-color) transparent transparent
-          transparent;
+        border-color: var(--highlighted-item-bullet-color) transparent transparent transparent;
       }
 
       .highlighted.page-tree-bullet-and-indent_root:hover & {
-        border-color: var(--highlighted-item-bullet-hover-default-color) transparent transparent
-          transparent;
+        border-color: var(--highlighted-item-bullet-hover-color) transparent transparent transparent;
       }
     }
 
@@ -117,20 +115,18 @@
       border-style: solid;
       border-width: calc(var(--page-tree-bullet-folded-width) / 2) 0
         calc(var(--page-tree-bullet-folded-width) / 2) var(--page-tree-bullet-folded-height);
-      border-color: transparent transparent transparent var(--bullet-default-color);
+      border-color: transparent transparent transparent var(--bullet-color);
 
       .page-tree-bullet-and-indent_root:hover & {
-        border-color: transparent transparent transparent var(--bullet-hover-default-color);
+        border-color: transparent transparent transparent var(--bullet-hover-color);
       }
 
       .highlighted & {
-        border-color: transparent transparent transparent
-          var(--highlighted-item-bullet-default-color);
+        border-color: transparent transparent transparent var(--highlighted-item-bullet-color);
       }
 
       .highlighted.page-tree-bullet-and-indent_root:hover & {
-        border-color: transparent transparent transparent
-          var(--highlighted-item-bullet-hover-default-color);
+        border-color: transparent transparent transparent var(--highlighted-item-bullet-hover-color);
       }
     }
 
@@ -138,18 +134,18 @@
     &.no-children {
       @include common.circle(0.25em);
 
-      background: var(--bullet-default-color);
+      background: var(--bullet-color);
 
       .page-tree-bullet-and-indent_root:hover & {
-        background: var(--bullet-hover-default-color);
+        background: var(--bullet-hover-color);
       }
 
       .highlighted & {
-        background-color: var(--highlighted-item-bullet-default-color);
+        background-color: var(--highlighted-item-bullet-color);
       }
 
       .highlighted.page-tree-bullet-and-indent_root:hover & {
-        background: var(--highlighted-item-bullet-hover-default-color);
+        background: var(--highlighted-item-bullet-hover-color);
       }
     }
   }

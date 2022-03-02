@@ -67,7 +67,7 @@
     cursor: pointer;
 
     &:focus {
-      background: var(--menu-item-hover-background-default-color);
+      background: var(--menu-item-hover-background-color);
     }
   }
 </style>

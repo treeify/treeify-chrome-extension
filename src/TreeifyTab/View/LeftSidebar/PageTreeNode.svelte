@@ -10,8 +10,8 @@
   $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
-    '--newest-footprint-default-color',
-    '--oldest-footprint-default-color'
+    '--newest-footprint-color',
+    '--oldest-footprint-color'
   )?.toString()
 </script>
 
@@ -104,11 +104,11 @@
     background-color: var(--footprint-color);
 
     &.active-page {
-      background: var(--selected-item-background-default-color);
+      background: var(--selected-item-background-color);
     }
 
     &:hover {
-      background: var(--item-hover-background-default-color);
+      background: var(--item-hover-background-color);
     }
   }
 
@@ -128,7 +128,7 @@
   .page-tree-node_tabs-count-button {
     @include common.circle(100%);
 
-    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
+    @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     font-size: 97%;
   }
@@ -141,7 +141,7 @@
 
   .page-tree-node_close-button {
     @include common.circle(100%);
-    @include common.pseudo-ripple-effect(var(--circle-button-default-hover-color));
+    @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     // マウスホバー時にのみ表示
     visibility: hidden;

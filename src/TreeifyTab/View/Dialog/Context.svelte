@@ -83,18 +83,18 @@
   }
 
   .context_bullet {
-    @include common.circle(var(--bullet-default-size));
+    @include common.circle(var(--bullet-size));
 
-    background: var(--bullet-default-color);
+    background: var(--bullet-color);
 
     &.transcluded {
-      background: var(--transcluded-item-bullet-default-color);
+      background: var(--transcluded-item-bullet-color);
     }
   }
 
   .context_content-area {
     &.myself {
-      background: var(--selected-item-background-default-color);
+      background: var(--selected-item-background-color);
     }
   }
 </style>

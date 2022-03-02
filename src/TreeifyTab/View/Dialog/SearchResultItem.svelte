@@ -11,8 +11,8 @@
   $: footprintColor = calculateFootprintColor(
     props.footprintRank,
     props.footprintCount,
-    '--newest-footprint-default-color',
-    '--oldest-footprint-default-color'
+    '--newest-footprint-color',
+    '--oldest-footprint-color'
   )?.toString()
 </script>
 
@@ -53,7 +53,7 @@
 
   :root {
     --search-result-line-height: 1.3em;
-    --search-result-bullet-size: var(--bullet-default-size);
+    --search-result-bullet-size: var(--bullet-size);
 
     --search-result-footprint-count-exponent: 0.5;
   }
@@ -100,21 +100,21 @@
     position: absolute;
     top: calc(var(--search-result-line-height) / 2 - var(--search-result-bullet-size) / 2);
 
-    background: var(--bullet-default-color);
+    background: var(--bullet-color);
 
     .transcluded & {
-      background: var(--transcluded-item-bullet-default-color);
+      background: var(--transcluded-item-bullet-color);
     }
 
     .highlighted & {
-      background: var(--highlighted-item-bullet-default-color);
+      background: var(--highlighted-item-bullet-color);
     }
 
     .transcluded.highlighted & {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-default-color) 50%,
-        var(--transcluded-item-bullet-default-color) 50%
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
       );
     }
   }
@@ -125,11 +125,11 @@
 
     &:focus {
       outline: none;
-      background: var(--selected-item-background-default-color);
+      background: var(--selected-item-background-color);
     }
 
     &:hover {
-      background: var(--item-hover-background-default-color);
+      background: var(--item-hover-background-color);
     }
   }
 </style>
