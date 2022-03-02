@@ -209,7 +209,7 @@ export function revealItemPath(itemPath: ItemPath) {
   if (CurrentState.getIsFolded(parentItemPath)) {
     CurrentState.setIsFolded(parentItemPath, false)
   }
-  revealItemPath(grandParentItemPath)
+  revealItemPath(parentItemPath)
 }
 
 /**
