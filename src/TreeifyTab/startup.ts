@@ -166,7 +166,7 @@ function onMutateState(statePath: StatePath) {
   Rerenderer.instance.onMutateState(statePath)
 }
 
-function onClickContextMenu(info: OnClickData) {
+async function onClickContextMenu(info: OnClickData) {
   if (info.menuItemId !== 'treeify') return
 
   // APIの都合上どのタブから来たデータなのかよくわからないので、URLの一致するタブを探す。
@@ -193,9 +193,26 @@ function onClickContextMenu(info: OnClickData) {
     Rerenderer.instance.rerender()
     TreeifyTab.open()
   } else if (info.selectionText !== undefined) {
+    // Treeifyタブが最前面でないとクリップボードからの読み込みがエラーになるので先に最前面化する
+    await TreeifyTab.open()
+
+    const text = await call(async () => {
+      if (Internal.instance.state.useClipboardTextWhenQuoting) {
+        const permission = await navigator.permissions.query({ name: 'clipboard-read' } as any)
+        if (permission.state !== 'denied') {
+          const clipboardText = await navigator.clipboard.readText()
+          if (clipboardText.trim().replaceAll(/\r?\n/g, ' ') === info.selectionText) {
+            return clipboardText.trim()
+          }
+        }
+      }
+      return info.selectionText
+    })
+    assertNonUndefined(text)
+
     // テキスト項目として取り込む
     const newItemId = CurrentState.createTextItem()
-    CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(info.selectionText))
+    CurrentState.setTextItemDomishObjects(newItemId, DomishObject.fromPlainText(text))
 
     // 出典を設定
     CurrentState.setSource(newItemId, { title: tabTitle, url: info.pageUrl })
@@ -207,7 +224,6 @@ function onClickContextMenu(info: OnClickData) {
       CurrentState.revealItemPath(newItemPath)
     }
     Rerenderer.instance.rerender()
-    TreeifyTab.open()
   }
 }
 

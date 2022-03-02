@@ -54,6 +54,7 @@ export type State = {
   }
   leftEndMouseGestureEnabled: boolean
   rightEndMouseGestureEnabled: boolean
+  useClipboardTextWhenQuoting: boolean
 }
 
 /**
