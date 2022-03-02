@@ -8,6 +8,7 @@
 
   let leftEndMouseGestureEnabled = Internal.instance.state.leftEndMouseGestureEnabled
   let rightEndMouseGestureEnabled = Internal.instance.state.rightEndMouseGestureEnabled
+  let useClipboardTextWhenQuoting = Internal.instance.state.useClipboardTextWhenQuoting
 
   $: Internal.instance.mutate(
     leftEndMouseGestureEnabled,
@@ -17,6 +18,11 @@
   $: Internal.instance.mutate(
     rightEndMouseGestureEnabled,
     StatePath.of('rightEndMouseGestureEnabled')
+  )
+
+  $: Internal.instance.mutate(
+    useClipboardTextWhenQuoting,
+    StatePath.of('useClipboardTextWhenQuoting')
   )
 
   function closeDialog() {
@@ -33,6 +39,9 @@
       </Checkbox>
       <Checkbox bind:checked={rightEndMouseGestureEnabled}>
         マウスを画面右端まで動かすとタブを閉じてTreeifyタブを表示
+      </Checkbox>
+      <Checkbox bind:checked={useClipboardTextWhenQuoting}>
+        テキストをコピーしてから引用したら改行を維持
       </Checkbox>
     </div>
     <div class="other-settings-dialog_bottom-button-area">
