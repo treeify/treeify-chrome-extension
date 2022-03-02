@@ -352,6 +352,15 @@ export async function startAutoSync() {
     if (metaData.modifiedTime === syncedAt) return
 
     await GoogleDrive.syncWithGoogleDrive(metaData)
+  } catch {
+    console.log('リトライ', dayjs().format('MM/DD HH:mm:ss'))
+    // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
+    const metaData = await GoogleDrive.fetchDataFileMetaData()
+    if (metaData === undefined) return
+
+    if (metaData.modifiedTime === syncedAt) return
+
+    await GoogleDrive.syncWithGoogleDrive(metaData)
   } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()

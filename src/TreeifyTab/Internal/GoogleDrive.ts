@@ -194,6 +194,11 @@ export namespace GoogleDrive {
     try {
       const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
       await syncWithGoogleDrive(dataFileMetaData)
+    } catch {
+      console.log('リトライ', dayjs().format('MM/DD HH:mm:ss'))
+      // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
+      const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
+      await syncWithGoogleDrive(dataFileMetaData)
     } finally {
       External.instance.isInSync = false
       Rerenderer.instance.rerender()
