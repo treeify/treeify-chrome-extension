@@ -14,7 +14,7 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps'
-  import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+  import { NERArray, NERArray$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
   type SearchResult = { pages: RArray<RArray<ItemPath>>; counts: MultiSet<ItemType> }
 
@@ -116,8 +116,17 @@
       // ItemPathをページIDでグループ化する
       RArray$.groupBy((itemPath: ItemPath) => String(ItemPath.getRootItemId(itemPath))),
       Object.values,
-      // ヒットした項目数によってページの並びをソートする
-      RArray$.sortByNumber((entry: RArray<ItemPath>) => -entry.length)
+      // ヒットした項目のタイムスタンプが新しい順にページをソートする
+      RArray$.sortByNumber((itemPathsInPage: NERArray<ItemPath>) => {
+        return -pipe(
+          itemPathsInPage,
+          NERArray$.map((itemPath: ItemPath) => {
+            const itemId = ItemPath.getItemId(itemPath)
+            return Internal.instance.state.items[itemId].timestamp
+          }),
+          NERArray$.max
+        )
+      })
     )
 
     const counts = new MultiSet<ItemType>()
