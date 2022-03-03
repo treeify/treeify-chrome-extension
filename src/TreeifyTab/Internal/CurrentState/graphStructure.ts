@@ -25,15 +25,9 @@ export function* getAllDisplayingItemIds(state: State, itemPath: ItemPath): Gene
 
 /** 与えられたItemPathがメインエリア上で表示されるべきものかどうかを判定する */
 export function isVisible(itemPath: ItemPath): boolean {
-  for (let i = 1; i < itemPath.length - 1; i++) {
-    const displayingChildItemIds = pipe(
-      itemPath,
-      RArray$.takeLeft(i),
-      CurrentState.getDisplayingChildItemIds
-    )
-    const nextItemId = itemPath[i + 1]
-    assertNonUndefined(nextItemId)
-    if (!displayingChildItemIds.includes(nextItemId)) {
+  for (let i = 0; i < itemPath.length - 1; i++) {
+    const displayingChildItemIds = CurrentState.getDisplayingChildItemIds(itemPath.slice(0, i + 1))
+    if (displayingChildItemIds.length === 0) {
       return false
     }
   }

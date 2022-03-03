@@ -227,12 +227,13 @@ export function onActivated(tabActiveInfo: TabActiveInfo) {
   CurrentState.updateItemTimestamp(itemId)
   CurrentState.setIsUnreadFlag(itemId, false)
 
-  // もしタブに対応する項目がアクティブページに所属していれば、それをターゲットする
+  // もしタブに対応する項目がアクティブページに所属しており、不可視でなければそれをターゲットする
   const activePageId = CurrentState.getActivePageId()
   for (const itemPath of CurrentState.yieldItemPaths(itemId)) {
     if (ItemPath.getRootItemId(itemPath) === activePageId && CurrentState.isVisible(itemPath)) {
       CurrentState.setTargetItemPath(itemPath)
       Rerenderer.instance.requestToFocusTargetItem()
+      Rerenderer.instance.requestToScrollAppear()
       break
     }
   }
