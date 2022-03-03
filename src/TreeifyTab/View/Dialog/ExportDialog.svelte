@@ -95,7 +95,7 @@
     const fileExtension = fileExtensions[format]
     const defaultFileName = 'export' + fileExtension
 
-    const itemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
+    const itemId = ItemPath.getItemId(CurrentState.getSelectedItemPaths()[0])
     switch (Internal.instance.state.items[itemId].type) {
       case ItemType.TEXT:
         const domishObjects = Internal.instance.state.textItems[itemId].domishObjects
