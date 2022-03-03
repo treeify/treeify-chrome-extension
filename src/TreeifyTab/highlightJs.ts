@@ -351,7 +351,13 @@ const languageDefinitions = {
 } as const
 
 // 誤検出されがちなマイナー言語は自動検出から省く
-const languagesToExcludeFromAutoDetection = RSet$.from(['qml', 'reasonml', 'stylus', 'zephir'])
+const languagesToExcludeFromAutoDetection = RSet$.from([
+  'apache',
+  'qml',
+  'reasonml',
+  'stylus',
+  'zephir',
+])
 
 export const autoDetectionLanguages = RSet$.difference(
   RSet$.from(Object.keys(languageDefinitions)),
