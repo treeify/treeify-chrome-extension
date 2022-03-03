@@ -7,12 +7,15 @@ import { RArray } from 'src/Utility/fp-ts'
 export type TextItemContentProps = {
   domishObjects: RArray<DomishObject>
   hasSource: boolean
+  cssClasses: RArray<string>
 }
 
 export function createTextItemContentProps(itemId: ItemId): ItemContentProps {
+  const item = Internal.instance.state.items[itemId]
   return {
     type: 'TextItemContentProps',
     domishObjects: Internal.instance.state.textItems[itemId].domishObjects,
-    hasSource: Internal.instance.state.items[itemId].source !== null,
+    hasSource: item.source !== null,
+    cssClasses: item.cssClasses,
   }
 }

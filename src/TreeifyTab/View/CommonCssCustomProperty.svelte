@@ -50,6 +50,12 @@
     --completed-item-text-color: lch(75% 0 0);
 
     // 彩度は色域境界値
+    --doubtful-item-decoration-color: lch(60% 82.6 40.4);
+    --doubtful-item-decoration: underline dashed var(--doubtful-item-decoration-color);
+    --doubtful-item-decoration-thickness: 1px;
+    --doubtful-item-decoration-underline-offset: 0.2em;
+
+    // 彩度は色域境界値
     --unread-web-page-item-title-color: lch(35% 35.4 160.4);
   }
 </style>
