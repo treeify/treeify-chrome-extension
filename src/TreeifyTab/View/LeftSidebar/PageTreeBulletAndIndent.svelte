@@ -78,7 +78,7 @@
 
   // バレットの共通設定
   .page-tree-bullet-and-indent_bullet-area {
-    @include common.square(var(--page-tree-bullet-area-size));
+    @include common.size(var(--page-tree-bullet-area-size));
 
     position: absolute;
     top: calc(var(--page-tree-calculated-line-height) / 2);

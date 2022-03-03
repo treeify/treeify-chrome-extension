@@ -116,7 +116,7 @@
   }
 
   .main-area-bullet-and-indent_bullet-area {
-    @include common.square(var(--main-area-calculated-line-height));
+    @include common.size(var(--main-area-calculated-line-height));
 
     // 外側の円と内側の円を重ねて描画するための設定
     position: relative;
@@ -148,7 +148,7 @@
 
   // ページのバレット
   .main-area-bullet-and-indent_page-icon {
-    @include common.square(1em);
+    @include common.size(1em);
     @include common.absolute-center;
     @include common.icon(var(--bullet-page-icon-color), url('page.svg'));
 

@@ -114,7 +114,7 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .page-tree-node_audible-icon {
-    @include common.square(1em);
+    @include common.size(1em);
 
     @include common.icon(lch(60% 0 0), url('audible.svg'));
 
@@ -122,7 +122,7 @@
   }
 
   .page-tree-node_right-button-area {
-    @include common.square(1.5em);
+    @include common.size(1.5em);
   }
 
   .page-tree-node_tabs-count-button {
@@ -149,7 +149,7 @@
     &::before {
       content: '';
 
-      @include common.square(1.3em);
+      @include common.size(1.3em);
       @include common.absolute-center;
 
       @include common.icon(lch(50% 0 0), url('close-circle.svg'));

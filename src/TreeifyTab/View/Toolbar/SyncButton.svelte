@@ -28,7 +28,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .sync-button_cloud-icon {
-    @include common.square(26px);
+    @include common.size(26px);
     @include common.absolute-center;
     @include common.icon(lch(45% 0 0), url('cloud-upload.svg'));
 

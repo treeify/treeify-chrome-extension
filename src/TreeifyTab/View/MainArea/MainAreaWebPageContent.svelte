@@ -81,7 +81,7 @@
   }
 
   .main-area-web-page-content_favicon-wrapper {
-    @include common.square(1em);
+    @include common.size(1em);
     @include common.pseudo-ripple-effect(transparent);
 
     .discarded & {
@@ -94,13 +94,13 @@
   }
 
   .main-area-web-page-content_favicon {
-    @include common.square(100%);
+    @include common.size(100%);
     @include common.absolute-center;
     object-fit: contain;
   }
 
   .main-area-web-page-content_default-favicon {
-    @include common.square(100%);
+    @include common.size(100%);
     @include common.absolute-center;
 
     @include common.default-favicon;
@@ -108,7 +108,7 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
-    @include common.square(1em);
+    @include common.size(1em);
     @include common.icon(lch(45% 0 0), url('audible.svg'));
 
     margin-left: 0.2em;

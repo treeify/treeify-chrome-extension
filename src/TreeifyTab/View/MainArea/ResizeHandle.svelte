@@ -11,14 +11,14 @@
   @use 'sass:math';
 
   :root {
-    --resize-handle-stroke-width: 0.4;
+    --resize-handle-stroke-thickness: 0.4;
   }
 
   // 角丸のストローク役
   .resize-handle_root {
     position: relative;
 
-    @include common.square(100%);
+    @include common.size(100%);
 
     border-radius: 99999px;
     background: lch(100% 0 0);
@@ -32,7 +32,7 @@
   .resize-handle_inner {
     @include common.absolute-center;
 
-    @include common.square(calc(100% - var(--width) * var(--resize-handle-stroke-width)));
+    @include common.size(calc(100% - var(--width) * var(--resize-handle-stroke-thickness)));
 
     border-radius: 99999px;
     background: lch(50% 0 0);

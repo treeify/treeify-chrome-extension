@@ -132,7 +132,7 @@
 
     &::before {
       content: '';
-      @include common.square(1.2em);
+      @include common.size(1.2em);
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('trash-can.svg'));
@@ -155,7 +155,7 @@
 
     &::before {
       content: '';
-      @include common.square(1.6em);
+      @include common.size(1.6em);
       @include common.absolute-center;
 
       @include common.icon(lch(50% 0 0), url('plus.svg'));

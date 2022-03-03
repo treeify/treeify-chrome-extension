@@ -55,7 +55,7 @@
   }
 
   .context_page-icon {
-    @include common.square(1em);
+    @include common.size(1em);
 
     @include common.icon(lch(30% 0 0), url('page.svg'));
   }
@@ -78,7 +78,7 @@
   }
 
   .context_bullet-area {
-    @include common.square(var(--context-item-line-height));
+    @include common.size(var(--context-item-line-height));
     @include common.flex-center;
   }
 

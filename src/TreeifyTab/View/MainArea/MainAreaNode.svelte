@@ -158,7 +158,7 @@
   }
 
   .main-area-node_right-button-area {
-    @include common.square(var(--main-area-calculated-line-height));
+    @include common.size(var(--main-area-calculated-line-height));
 
     @include common.flex-center;
   }
@@ -188,7 +188,7 @@
   }
 
   .main-area-node_delete-button-icon {
-    @include common.square(0.8em);
+    @include common.size(0.8em);
     @include common.absolute-center;
 
     @include common.icon(lch(30% 0 0), url('close.svg'));

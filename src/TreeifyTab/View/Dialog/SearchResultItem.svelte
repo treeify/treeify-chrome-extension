@@ -53,7 +53,6 @@
 
   :root {
     --search-result-line-height: 1.3em;
-    --search-result-bullet-size: var(--bullet-size);
 
     --search-result-footprint-count-exponent: 0.5;
   }
@@ -95,10 +94,10 @@
   }
 
   .search-result-item_bullet {
-    @include common.circle(var(--search-result-bullet-size));
+    @include common.circle(var(--bullet-size));
 
     position: absolute;
-    top: calc(var(--search-result-line-height) / 2 - var(--search-result-bullet-size) / 2);
+    top: calc(var(--search-result-line-height) / 2 - var(--bullet-size) / 2);
 
     background: var(--bullet-color);
 

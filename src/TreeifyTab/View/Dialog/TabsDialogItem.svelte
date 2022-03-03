@@ -113,7 +113,7 @@
   }
 
   .tabs-dialog-item_audible-icon {
-    @include common.square(1em);
+    @include common.size(1em);
 
     @include common.icon(lch(50% 0 0), url('audible.svg'));
 

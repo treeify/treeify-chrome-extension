@@ -18,7 +18,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .preference-button_icon {
-    @include common.square(24px);
+    @include common.size(24px);
     @include common.absolute-center;
 
     @include common.icon(lch(45% 0 0), url('gear.svg'));

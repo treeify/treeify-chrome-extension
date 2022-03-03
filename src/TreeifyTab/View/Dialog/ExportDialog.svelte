@@ -287,7 +287,7 @@
   }
 
   .export-dialog_copy-button-icon {
-    @include common.square(1.5em);
+    @include common.size(1.5em);
 
     @include common.icon(lch(45% 0 0), url('clipboard.svg'));
   }
@@ -298,7 +298,7 @@
   }
 
   .export-dialog_save-button-icon {
-    @include common.square(1.5em);
+    @include common.size(1.5em);
 
     @include common.icon(lch(45% 0 0), url('file-download.svg'));
   }

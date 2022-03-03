@@ -34,15 +34,14 @@ export function createMainAreaBulletAndIndentProps(
 ): MainAreaBulletAndIndentProps {
   const hiddenItemsCount = countHiddenItems(state, itemPath)
 
-  const outerCircleMinDiameter =
-    CssCustomProperty.getNumber('--bullet-outer-circle-min-diameter-em') ?? 1.05
-  const outerCircleMaxDiameter =
-    CssCustomProperty.getNumber('--bullet-outer-circle-max-diameter-em') ?? 1.3
+  const outerCircleMinSize =
+    CssCustomProperty.getNumber('--bullet-outer-circle-min-size-em') ?? 1.05
+  const outerCircleMaxSize = CssCustomProperty.getNumber('--bullet-outer-circle-max-size-em') ?? 1.3
   const outerCircleItemCountLimit =
     CssCustomProperty.getNumber('--bullet-outer-circle-item-count-limit') ?? 20
-  const step = (outerCircleMaxDiameter - outerCircleMinDiameter) / outerCircleItemCountLimit
+  const step = (outerCircleMaxSize - outerCircleMinSize) / outerCircleItemCountLimit
   const limitedHiddenItemsCount = Math.min(hiddenItemsCount, outerCircleItemCountLimit)
-  const outerCircleRadiusEm = outerCircleMinDiameter + limitedHiddenItemsCount * step
+  const outerCircleRadiusEm = outerCircleMinSize + limitedHiddenItemsCount * step
 
   return {
     bulletState: deriveBulletState(state, itemPath),

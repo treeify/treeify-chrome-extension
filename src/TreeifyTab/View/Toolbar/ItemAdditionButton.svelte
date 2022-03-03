@@ -18,7 +18,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .item-addition-button_icon {
-    @include common.square(26px);
+    @include common.size(26px);
     @include common.absolute-center;
 
     @include common.icon(lch(45% 0 0), url('plus.svg'));

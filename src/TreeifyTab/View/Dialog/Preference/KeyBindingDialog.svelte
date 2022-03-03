@@ -251,8 +251,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --key-binding-dialog-command-button-size: 1.6em;
-
+    --key-binding-dialog-circle-button-size: 1.6em;
     --key-binding-dialog-circle-button-hover-color: lch(88% 0 0);
   }
 
@@ -304,7 +303,7 @@
   }
 
   .key-binding-dialog_delete-button {
-    @include common.circle(var(--key-binding-dialog-command-button-size));
+    @include common.circle(var(--key-binding-dialog-circle-button-size));
     @include common.pseudo-ripple-effect(var(--key-binding-dialog-circle-button-hover-color));
 
     // マウスホバー時にのみ表示
@@ -313,7 +312,7 @@
     &::before {
       content: '';
 
-      @include common.square(1.2em);
+      @include common.size(1.2em);
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('trash-can.svg'));
@@ -325,7 +324,7 @@
   }
 
   .key-binding-dialog_add-command-button {
-    @include common.circle(var(--key-binding-dialog-command-button-size));
+    @include common.circle(var(--key-binding-dialog-circle-button-size));
     @include common.pseudo-ripple-effect(var(--key-binding-dialog-circle-button-hover-color));
 
     // マウスホバー時にのみ表示
@@ -334,7 +333,7 @@
     &::before {
       content: '';
 
-      @include common.square(1.2em);
+      @include common.size(1.2em);
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('plus.svg'));

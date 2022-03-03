@@ -11,8 +11,8 @@
     // バレットとして表示されるページアイコンのマウスホバー時の色
     --bullet-page-icon-hover-color: lch(20% 0 0);
 
-    --bullet-outer-circle-min-diameter-em: 1.05;
-    --bullet-outer-circle-max-diameter-em: 1.3;
+    --bullet-outer-circle-min-size-em: 1.05;
+    --bullet-outer-circle-max-size-em: 1.3;
     // 外側の円が最大サイズになる子項目数
     --bullet-outer-circle-child-count-limit: 10;
     // 外側の円が最大サイズになる子孫項目数

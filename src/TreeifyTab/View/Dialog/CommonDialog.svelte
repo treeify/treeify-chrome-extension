@@ -118,7 +118,7 @@
 
     &::before {
       content: '';
-      @include common.square(0.8em);
+      @include common.size(0.8em);
       @include common.absolute-center;
 
       @include common.icon(lch(80% 0 0), url('close.svg'));

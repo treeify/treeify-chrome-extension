@@ -32,7 +32,7 @@
   }
 
   .web-page-item-content_favicon-area {
-    @include common.square(1em);
+    @include common.size(1em);
 
     .discarded & {
       filter: opacity(75%);
@@ -44,12 +44,12 @@
   }
 
   .web-page-item-content_favicon {
-    @include common.square(100%);
+    @include common.size(100%);
     object-fit: contain;
   }
 
   .web-page-item-content_default-favicon {
-    @include common.square(100%);
+    @include common.size(100%);
     @include common.default-favicon;
   }
 
