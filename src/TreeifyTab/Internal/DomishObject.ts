@@ -284,38 +284,4 @@ export namespace DomishObject {
         }
     }
   }
-
-  /** 半角スペースまたはnbspをbrに変換する */
-  export function convertSpaceToNewline(
-    value: DomishObject | RArray<DomishObject>
-  ): RArray<DomishObject> {
-    if (value instanceof Array) {
-      return value.flatMap(convertSpaceToNewline)
-    } else {
-      const domishObject = value as DomishObject
-      switch (domishObject.type) {
-        case 'br':
-          return [domishObject]
-        case 'b':
-        case 'u':
-        case 'i':
-        case 's':
-          const newDomishObject: DomishObject = {
-            type: domishObject.type,
-            children: domishObject.children.flatMap(convertSpaceToNewline),
-          }
-          return [newDomishObject]
-        case 'text':
-          // 半角スペースまたはnbspでsplit
-          const lines = domishObject.textContent.split(/[ \u00A0]/)
-          const rarray = lines.map((text) => {
-            return {
-              type: 'text',
-              textContent: text,
-            } as DomishObject
-          })
-          return RArray$.interpose<DomishObject>({ type: 'br' })(rarray)
-      }
-    }
-  }
 }

@@ -121,17 +121,3 @@ export function grouping() {
   CurrentState.setTargetItemPath(newItemPath)
   Rerenderer.instance.requestToFocusTargetItem()
 }
-
-export function convertSpaceToNewline() {
-  const targetItemId = ItemPath.getItemId(CurrentState.getTargetItemPath())
-  if (Internal.instance.state.items[targetItemId].type !== ItemType.TEXT) {
-    return
-  }
-
-  const domishObjects = Internal.instance.state.textItems[targetItemId].domishObjects
-  CurrentState.setTextItemDomishObjects(
-    targetItemId,
-    DomishObject.convertSpaceToNewline(domishObjects)
-  )
-  CurrentState.updateItemTimestamp(targetItemId)
-}

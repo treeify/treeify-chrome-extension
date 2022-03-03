@@ -105,7 +105,6 @@
         'toggleUnderline',
         'toggleItalic',
         'toggleStrikethrough',
-        'convertSpaceToNewline',
       ],
     },
     {

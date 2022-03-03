@@ -57,5 +57,4 @@ export const commandNames = {
   showCommandPaletteDialog: 'コマンドパレットを表示',
   doNothing: '何もしない',
   toggleExcluded: '除外トグル',
-  convertSpaceToNewline: '半角スペースを改行に変換',
 } as const
