@@ -1,12 +1,11 @@
-@mixin circle($size) {
-  width: $size;
-  height: $size;
-  border-radius: 50%;
-}
-
 @mixin size($size) {
   width: $size;
   height: $size;
+}
+
+@mixin circle($size) {
+  @include size($size);
+  border-radius: 50%;
 }
 
 @mixin absolute-center {
@@ -67,8 +66,7 @@
 
   // 疑似リップルエフェクトアニメーション開始時点の状態
   &:active::after {
-    width: 0;
-    height: 0;
+    @include size(0);
     opacity: $opacity;
     transition: opacity 0s, width 0s, height 0s;
   }

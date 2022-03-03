@@ -46,12 +46,13 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .dropdown-menu-dialog_root {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    @include common.size(100%);
 
     z-index: 30;
   }

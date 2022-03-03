@@ -79,12 +79,13 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .web-page-item-title-setting-dialog_root {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    @include common.size(100%);
     z-index: 30;
   }
 
@@ -100,8 +101,7 @@
 
   // ウェブページ項目のタイトル設定ダイアログのテキスト入力欄
   .web-page-item-title-setting-dialog_text-box {
-    width: 100%;
-    height: 100%;
+    @include common.size(100%);
     padding: 0;
     border: none;
     font-size: var(--font-size);

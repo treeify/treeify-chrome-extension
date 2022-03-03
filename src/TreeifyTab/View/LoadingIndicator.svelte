@@ -19,7 +19,6 @@
     left: 50%;
     transform: translate(-50%, -50%);
 
-    border-radius: 50%;
     border-top: var(--loading-indicator-thickness) solid lch(30% 0 0);
     border-right: var(--loading-indicator-thickness) solid var(--loading-indicator-secondary-color);
     border-bottom: var(--loading-indicator-thickness) solid var(--loading-indicator-secondary-color);

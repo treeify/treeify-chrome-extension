@@ -84,6 +84,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --drop-destination-color: lch(60% 0 0);
   }
@@ -92,8 +94,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    @include common.size(100%);
 
     z-index: 40;
 
