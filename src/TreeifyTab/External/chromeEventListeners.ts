@@ -3,7 +3,6 @@ import Tab = chrome.tabs.Tab
 import TabActiveInfo = chrome.tabs.TabActiveInfo
 import TabChangeInfo = chrome.tabs.TabChangeInfo
 import TabRemoveInfo = chrome.tabs.TabRemoveInfo
-import dayjs from 'dayjs'
 import { DefaultMap } from 'mnemonist'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import { External } from 'src/TreeifyTab/External/External'
@@ -148,23 +147,13 @@ function getOpenerItemId(url: string, openerTabId: TabId | undefined): ItemId | 
 }
 
 export async function onUpdated(tabId: TabId, changeInfo: TabChangeInfo, tab: Tab) {
+  // chrome.tabs.onUpdatedイベントハンドラーのtabオブジェクトにはtitle, url, faviconUrlが含まれないことがある（再現条件不明）。
+  // そのときchangeInfoオブジェクトからも該当プロパティの情報は得られない。
+  // そのため改めてタブの情報を取得し、こちらを用いてStateを更新する。
   const correctTab = await chrome.tabs.get(tabId)
 
   const itemId = External.instance.tabItemCorrespondence.getItemId(tabId)
   if (itemId === undefined) return
-
-  // ウェブページ項目のタイトルなどが空文字列のままになる謎の不具合を調査するためのログ出力
-  if (correctTab.url !== tab.url) {
-    console.log('url相違', dayjs().format('MM/DD HH:mm:ss'))
-  }
-  if (correctTab.title !== tab.title) {
-    console.log('title相違', dayjs().format('MM/DD HH:mm:ss'))
-    dump(correctTab, tab)
-  }
-  if (correctTab.favIconUrl !== tab.favIconUrl) {
-    console.log('favIconUrl相違', dayjs().format('MM/DD HH:mm:ss'))
-    dump(correctTab, tab)
-  }
 
   External.instance.tabItemCorrespondence.registerTab(tabId, correctTab)
 
