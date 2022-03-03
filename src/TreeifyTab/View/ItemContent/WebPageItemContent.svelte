@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class="web-page-item-content_root"
+  class="web-page-item-content_root {props.cssClasses.join(' ')}"
   class:discarded={props.isDiscarded}
   class:tab-closed={props.isTabClosed}
   class:unread={props.isUnread}
@@ -29,6 +29,12 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
+
+    &.doubtful {
+      text-decoration: var(--doubtful-item-decoration);
+      text-decoration-thickness: var(--doubtful-item-decoration-thickness);
+      text-underline-offset: var(--doubtful-item-decoration-underline-offset);
+    }
   }
 
   .web-page-item-content_favicon-area {

@@ -151,10 +151,9 @@
 
   // ダウトフル状態の項目
   .doubtful .main-area-node_content-area {
-    // 彩度は色域境界値
-    text-decoration: underline dashed lch(60% 82.6 40.4);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.2em;
+    text-decoration: var(--doubtful-item-decoration);
+    text-decoration-thickness: var(--doubtful-item-decoration-thickness);
+    text-underline-offset: var(--doubtful-item-decoration-underline-offset);
   }
 
   .main-area-node_right-button-area {

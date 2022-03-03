@@ -5,7 +5,7 @@
   export let props: TexItemContentProps
 </script>
 
-<div class="tex-item-content_root">
+<div class="tex-item-content_root {props.cssClasses.join(' ')}">
   <div class="tex-item-content_rendered-tex">
     {@html katex.renderToString(props.code, { throwOnError: false })}
   </div>
@@ -23,6 +23,12 @@
     .completed &,
     .completed-children & {
       filter: opacity(50%);
+    }
+
+    &.doubtful {
+      text-decoration: var(--doubtful-item-decoration);
+      text-decoration-thickness: var(--doubtful-item-decoration-thickness);
+      text-underline-offset: var(--doubtful-item-decoration-underline-offset);
     }
   }
 

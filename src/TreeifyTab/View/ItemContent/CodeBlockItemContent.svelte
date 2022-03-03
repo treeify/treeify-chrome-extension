@@ -5,7 +5,7 @@
   export let props: CodeBlockItemContentProps
 </script>
 
-<div class="code-block-item-content_root">
+<div class="code-block-item-content_root {props.cssClasses.join(' ')}">
   {#if props.language !== ''}
     <pre class="code-block-item-content_code">{@html getHighlightedHtml(
         props.code.replace(/\r?\n$/, ''),
@@ -27,6 +27,12 @@
     .completed &,
     .completed-children & {
       filter: opacity(50%);
+    }
+
+    &.doubtful {
+      text-decoration: var(--doubtful-item-decoration);
+      text-decoration-thickness: var(--doubtful-item-decoration-thickness);
+      text-underline-offset: var(--doubtful-item-decoration-underline-offset);
     }
   }
 
