@@ -256,7 +256,7 @@ function onArrowUp(event: KeyboardEvent) {
     }
 
     // キャレットが最初の行以外にいるときはブラウザの挙動に任せる
-    const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
+    const fontSize = window.getComputedStyle(document.activeElement).getPropertyValue('font-size')
     if (selectionRect.top - activeElementRect.top > parseFloat(fontSize) / 2) {
       return
     }
@@ -382,14 +382,14 @@ function onArrowDown(event: KeyboardEvent) {
         return
       }
 
-      const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
+      const fontSize = window.getComputedStyle(document.activeElement).getPropertyValue('font-size')
       if (activeElementRect.height >= parseFloat(fontSize) * 2) {
         // br要素を含むか、あるいは折り返しが起こっている場合はブラウザの挙動に任せる
         return
       }
     } else {
       // キャレットが最後の行以外にいるときはブラウザの挙動に任せる
-      const fontSize = getComputedStyle(document.activeElement).getPropertyValue('font-size')
+      const fontSize = window.getComputedStyle(document.activeElement).getPropertyValue('font-size')
       if (activeElementRect.bottom - selectionRect.bottom > parseFloat(fontSize) / 2) {
         return
       }

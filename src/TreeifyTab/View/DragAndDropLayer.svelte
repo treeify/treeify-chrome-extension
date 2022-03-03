@@ -23,16 +23,15 @@
     mouseY = event.clientY
   }
 
-  const mainArea = document.querySelector<HTMLElement>('.main-area_root')
-  assertNonNull(mainArea)
-  const leftSidebar = document.querySelector<HTMLElement>('.left-sidebar_root')
-  assertNonNull(leftSidebar)
-
   // focusTrapの影響でドラッグ中はスクロールが無効化されるのでプログラムでスクロールさせる
   function onWheel(event: WheelEvent) {
     if (event.deltaY === 0) return
     event.preventDefault()
 
+    const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+    assertNonNull(mainArea)
+    const leftSidebar = document.querySelector<HTMLElement>('.left-sidebar_root')
+    assertNonNull(leftSidebar)
     if (event.clientX < mainArea.getBoundingClientRect().left) {
       leftSidebar.scrollBy({
         top: event.deltaY,
@@ -51,6 +50,10 @@
       dropDestinationStyle = props.calculateDropDestinationStyle(mouseX, mouseY, props.itemPath)
     }
 
+    const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+    assertNonNull(mainArea)
+    const leftSidebar = document.querySelector<HTMLElement>('.left-sidebar_root')
+    assertNonNull(leftSidebar)
     leftSidebar.addEventListener('scroll', onScroll)
     mainArea.addEventListener('scroll', onScroll)
     return () => {

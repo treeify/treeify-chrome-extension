@@ -63,7 +63,7 @@
   style:--top="{rect.top}px"
   style:--width="{rect.width}px"
   style:--height="{rect.height}px"
-  style:--font-size={getComputedStyle(domElement).getPropertyValue('font-size')}
+  style:--font-size={window.getComputedStyle(domElement).getPropertyValue('font-size')}
   on:mousedown|self={onClickBackdrop}
   on:contextmenu={onContextMenu}
   use:setupFocusTrap

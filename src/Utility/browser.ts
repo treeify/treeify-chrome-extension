@@ -32,7 +32,7 @@ export namespace CssCustomProperty {
    * @param propertyName "--"も含むプロパティ名
    */
   export function getValue(propertyName: string): string {
-    return getComputedStyle(document.documentElement).getPropertyValue(propertyName)
+    return window.getComputedStyle(document.documentElement).getPropertyValue(propertyName)
   }
 }
 

@@ -15,6 +15,7 @@
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps'
   import { NERArray, NERArray$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+  import { RRecord$ } from 'src/Utility/fp-ts/index.js'
 
   type SearchResult = { pages: RArray<RArray<ItemPath>>; counts: MultiSet<ItemType> }
 
@@ -161,7 +162,7 @@
       {#if searchResult !== undefined}
         <div class="search-dialog_filter-area">
           表示する項目:
-          {#each Object.entries(itemTypeDisplayNames) as [itemType, name]}
+          {#each RRecord$.toEntries(itemTypeDisplayNames) as [itemType, name]}
             {#if searchResult.counts.get(itemType) > 0}
               <Checkbox value={itemType} bind:checked={checkedItemTypes[itemType]}>
                 {name}({searchResult.counts.get(itemType)}件)
