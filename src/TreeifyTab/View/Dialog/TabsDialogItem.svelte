@@ -50,7 +50,6 @@
 
   :root {
     --tabs-dialog-item-line-height: 1.3em;
-    --tabs-dialog-bullet-size: var(--bullet-size);
   }
 
   .tabs-dialog-item_root {
@@ -90,10 +89,10 @@
   }
 
   .tabs-dialog-item_bullet {
-    @include common.circle(var(--tabs-dialog-bullet-size));
+    @include common.circle(var(--bullet-size));
 
     position: absolute;
-    top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--tabs-dialog-bullet-size) / 2);
+    top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--bullet-size) / 2);
 
     background: var(--bullet-color);
   }
