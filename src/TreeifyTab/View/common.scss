@@ -43,28 +43,28 @@
 
 @mixin pseudo-ripple-effect($hover-color, $duration: 0.5s, $color: lch(50% 0 0), $opacity: 0.5) {
   cursor: pointer;
-  
+
   position: relative;
-  
+
   &:hover {
     background: $hover-color;
   }
-  
+
   // 疑似リップルエフェクトアニメーション終了時点の状態
   &::after {
     content: '';
-    
+
     @include circle(100%);
     @include absolute-center;
-    
+
     opacity: 0;
     transition: opacity $duration, width $duration, height $duration;
-    
+
     background: $color;
-    
+
     pointer-events: none;
   }
-  
+
   // 疑似リップルエフェクトアニメーション開始時点の状態
   &:active::after {
     width: 0;
