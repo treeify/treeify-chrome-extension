@@ -10,10 +10,6 @@
   @use 'src/TreeifyTab/View/common.scss';
   @use 'sass:math';
 
-  :root {
-    --resize-handle-stroke-thickness: 0.4;
-  }
-
   // 角丸のストローク役
   .resize-handle_root {
     position: relative;
@@ -32,7 +28,7 @@
   .resize-handle_inner {
     @include common.absolute-center;
 
-    @include common.size(calc(100% - var(--width) * var(--resize-handle-stroke-thickness)));
+    @include common.size(calc(100% - var(--width) * 0.4));
 
     border-radius: 99999px;
     background: lch(50% 0 0);
