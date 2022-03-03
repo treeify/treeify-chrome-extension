@@ -4,7 +4,7 @@
   export let props: ImageItemContentProps
 </script>
 
-<div class="image-item-content_root" style:--width={props.width}>
+<div class="image-item-content_root {props.cssClasses.join(' ')}" style:--width={props.width}>
   <img
     class="image-item-content_image"
     style:--aspect-ratio={props.aspectRatio}
@@ -17,6 +17,14 @@
 </div>
 
 <style global lang="scss">
+  .image-item-content_root {
+    &.doubtful {
+      text-decoration: var(--doubtful-item-decoration);
+      text-decoration-thickness: var(--doubtful-item-decoration-thickness);
+      text-underline-offset: var(--doubtful-item-decoration-underline-offset);
+    }
+  }
+
   .image-item-content_image {
     width: var(--width);
     max-width: 100%;
