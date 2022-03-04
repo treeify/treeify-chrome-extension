@@ -22,6 +22,6 @@ npm run build-development
 [Chromeの拡張機能画面](chrome://extensions/)で`パッケージ化されていない拡張機能を読み込む`ボタンを押下し、`dist`フォルダを読み込むとTreeifyがインストールされます。  
 このボタンはデベロッパーモード（画面右上）をONにすると表示されます。  
 
-![デベロッパーモード](https://gyazo.com/f150bd8592d7fe774f8458dfb82d3afa.png)    
+![デベロッパーモード](https://gyazo.com/aee41b01f08f3092d840291bc5ed536c.png)  
 
 普段使っているTreeifyとは別にインストールして動作確認するために、Chromeに新しいプロファイルを作るか[Dev版のChrome](https://www.google.co.jp/chrome/dev/)を追加インストールするのがおすすめです。
