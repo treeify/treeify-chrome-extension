@@ -19,6 +19,8 @@
     overflow: hidden;
 
     padding-block: 0.3em;
+    // 左端が切れてしまうことがある不具合の対策（原因は小数点pxを使っていることか、KaTeXの表示領域サイズの扱いが特殊だからか）
+    padding-inline: 0.1em;
 
     .completed &,
     .completed-children & {

@@ -106,6 +106,9 @@
     margin-top: 1em;
     // なぜか縦スクロールバーが出る不具合の対策（KaTeXの複雑なDOMレイアウトの影響でサイズ計算が普通じゃないのだろうか）
     margin-bottom: 0.3em;
+
+    // 左端が切れてしまうことがある不具合の対策
+    margin-inline: 0.4em;
   }
 
   .tex-edit-dialog_bottom-button-area {
