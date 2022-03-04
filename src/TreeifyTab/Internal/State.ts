@@ -154,11 +154,16 @@ export type TexItem = {
 
 /** 各ページが持つデータの型 */
 export type Page = {
-  /** メインエリア内で操作対象となる項目 */
+  /**
+   * 操作の対象になる項目を表す。
+   * 項目を複数選択中はその範囲の一端を表す。
+   * Shift+クリック時やShift+↓キー押下時はanchorItemPathは変化せず、targetItemPathのみが変化する。
+   */
   targetItemPath: ItemPath
   /**
-   * 項目複数選択時の範囲の一端。
-   * テキスト選択におけるanchorと同じ意味合い。
+   * 項目を複数選択中にその範囲の一端を表す。
+   * 単一項目を選択中はtargetItemPathと同じ値になる。
+   * Shift+クリック時やShift+↓キー押下時はanchorItemPathは変化せず、targetItemPathのみが変化する。
    */
   anchorItemPath: ItemPath
 }
