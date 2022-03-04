@@ -55,5 +55,13 @@
 <style lang="scss">
   .command-palette-dialog_content {
     padding: 1em;
+
+    min-width: 20em;
+  }
+
+  .command-palette-dialog_command-id {
+    width: 100%;
+    padding: 0.35em;
+    font-size: 95%;
   }
 </style>
