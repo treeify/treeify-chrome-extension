@@ -247,7 +247,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
 
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
       if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
-        CurrentState.throwIfCantInsertSiblingItem(itemPath, draggedItemId)
+        CurrentState.throwIfCantInsertBelowItem(itemPath, draggedItemId)
       }
 
       Internal.instance.saveCurrentStateToUndoStack()
