@@ -16,7 +16,7 @@ export class Internal {
   searchEngine: SearchEngine
 
   readonly undoStack: Map<ChunkId, any>[] = [new Map()]
-  static UNDO_STACK_SIZE_LIMIT = 7
+  private static readonly UNDO_STACK_SIZE_LIMIT = 7
 
   private readonly onMutateListeners = new Set<(statePath: StatePath) => void>()
 

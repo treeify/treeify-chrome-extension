@@ -147,7 +147,7 @@ export class SearchEngine {
   }
 
   /** 指定された項目が持っている検索可能テキストデータ（Treeifyではテキストトラックと呼ぶ）のリストを返す */
-  static getTextTracks(itemId: ItemId, state: State): RArray<string> {
+  private static getTextTracks(itemId: ItemId, state: State): RArray<string> {
     const itemType = state.items[itemId].type
     switch (itemType) {
       case ItemType.TEXT:
@@ -169,11 +169,11 @@ export class SearchEngine {
   }
 
   /** 指定された項目のテキストトラックに含まれる文字の集合を返す */
-  static appearingUnigrams(itemId: ItemId, state: State): RSet<string> {
+  private static appearingUnigrams(itemId: ItemId, state: State): RSet<string> {
     return RSet$.from(this.getTextTracks(itemId, state).join(''))
   }
 
-  static parseSearchQuery(searchQuery: string): {
+  private static parseSearchQuery(searchQuery: string): {
     positiveSearchWords: RArray<string>
     negativeSearchWords: RArray<string>
   } {
