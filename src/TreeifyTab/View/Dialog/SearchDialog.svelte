@@ -202,8 +202,8 @@
   }
 
   .search-dialog_search-query {
-    padding-block: 0.5em;
-    padding-left: 0.5em;
+    padding: 0.35em;
+    font-size: 95%;
   }
 
   .search-dialog_filter-area {

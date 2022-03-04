@@ -147,6 +147,12 @@
     display: contents;
   }
 
+  .replace-dialog_before-replace,
+  .replace-dialog_after-replace {
+    padding: 0.35em;
+    font-size: 95%;
+  }
+
   .replace-dialog_bottom-button-area {
     @include common.flex-right;
 
