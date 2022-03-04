@@ -17,10 +17,9 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { GoogleDrive } from 'src/TreeifyTab/Internal/GoogleDrive'
-import { extractPlainText } from 'src/TreeifyTab/Internal/ImportExport/indentedText'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { Reminder, State } from 'src/TreeifyTab/Internal/State'
+import { State } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -30,7 +29,6 @@ import { ShowMessage } from 'src/Utility/Debug/error'
 import { RArray$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
-import Alarm = chrome.alarms.Alarm
 import OnClickData = chrome.contextMenus.OnClickData
 import IdleState = chrome.idle.IdleState
 
@@ -61,19 +59,12 @@ export async function startup(initialState: State) {
   chrome.windows.onFocusChanged.addListener(onWindowFocusChanged)
   chrome.contextMenus.onClicked.addListener(onClickContextMenu)
   chrome.commands.onCommand.addListener(onCommand)
-  if (process.env.NODE_ENV !== 'production') {
-    chrome.alarms.onAlarm.addListener(onAlarm)
-  }
   chrome.idle.onStateChanged.addListener(onIdleStateChanged)
   // idle状態と判定するまでの時間を50分に設定する。
   // 60分休憩を早めに切り上げた場合にも確実に発動させるために50分を採用した。
   chrome.idle.setDetectionInterval(50 * 60)
 
   window.addEventListener('online', onOnline)
-
-  if (process.env.NODE_ENV !== 'production') {
-    await CurrentState.setupAllAlarms()
-  }
 }
 
 /** このプログラムが持っているあらゆる状態（グローバル変数やイベントリスナー登録など）を破棄する */
@@ -83,9 +74,6 @@ export async function cleanup() {
   window.removeEventListener('online', onOnline)
 
   chrome.idle.onStateChanged.removeListener(onIdleStateChanged)
-  if (process.env.NODE_ENV !== 'production') {
-    chrome.alarms.onAlarm.removeListener(onAlarm)
-  }
   chrome.commands.onCommand.removeListener(onCommand)
   chrome.contextMenus.onClicked.removeListener(onClickContextMenu)
   chrome.windows.onFocusChanged.removeListener(onWindowFocusChanged)
@@ -257,53 +245,6 @@ async function onCommand(commandName: string) {
         break
     }
   })
-}
-
-async function onAlarm(alarm: Alarm) {
-  const itemId = Number(alarm.name)
-  const reminder = Internal.instance.state.reminders[itemId]
-  assertNonUndefined(reminder)
-  Internal.instance.mutate(
-    {
-      ...reminder,
-      notifiedAt: alarm.scheduledTime,
-    },
-    StatePath.of('reminders', itemId)
-  )
-  await CurrentState.setupAllAlarms()
-
-  const notification = new Notification(`Treeifyリマインダー（${createDateTimeText(reminder)}）`, {
-    body: extractPlainText(itemId),
-    requireInteraction: true,
-  })
-  // 通知のクリック時は該当項目にジャンプする
-  notification.onclick = async () => {
-    // TODO: ページツリーに含まれるものを優先する。その中でも足跡ランクの高いものを優先したい
-    const itemPath = Array.from(CurrentState.yieldItemPaths(itemId))[0]
-    assertNonUndefined(itemPath)
-    CurrentState.jumpTo(itemPath)
-    Rerenderer.instance.rerender()
-    await TreeifyTab.open()
-  }
-}
-
-function createDateTimeText(reminder: Reminder): string {
-  switch (reminder.type) {
-    case 'Once':
-      return dayjs()
-        .year(reminder.year)
-        .month(reminder.month)
-        .date(reminder.date)
-        .hour(reminder.hour)
-        .minute(reminder.minute)
-        .format('YYYY-MM-DD HH:mm')
-    case 'EveryMonth':
-      return dayjs()
-        .date(reminder.date)
-        .hour(reminder.hour)
-        .minute(reminder.minute)
-        .format('毎月D日 HH:mm')
-  }
 }
 
 async function onIdleStateChanged(idleState: IdleState) {

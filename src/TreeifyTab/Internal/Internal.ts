@@ -149,7 +149,6 @@ export class Internal {
           anchorItemPath: [TOP_ITEM_ID],
         },
       },
-      reminders: {},
       workspaces: {
         [Timestamp.now()]: {
           name: 'ワークスペース1',

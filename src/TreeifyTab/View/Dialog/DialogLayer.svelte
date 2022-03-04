@@ -14,7 +14,6 @@
   import KeyBindingDialog from 'src/TreeifyTab/View/Dialog/Preference/KeyBindingDialog.svelte'
   import PreferenceDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialog.svelte'
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
-  import ReminderSettingDialog from 'src/TreeifyTab/View/Dialog/ReminderSettingDialog.svelte'
   import ReplaceDialog from 'src/TreeifyTab/View/Dialog/ReplaceDialog.svelte'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
   import SourceEditDialog from 'src/TreeifyTab/View/Dialog/SourceEditDialog.svelte'
@@ -61,8 +60,6 @@
   <TabsDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'TexItemEditDialog'}
   <TexItemEditDialog />
-{:else if props.dialogState.type === 'ReminderSettingDialog'}
-  <ReminderSettingDialog />
 {:else if props.dialogState.type === 'ReplaceDialog'}
   <ReplaceDialog />
 {:else if props.dialogState.type === 'WebPageItemTitleSettingDialog'}

@@ -111,9 +111,6 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
       assertNeverType(itemType)
   }
 
-  Internal.instance.delete(StatePath.of('reminders', itemId))
-  CurrentState.setupAllAlarms()
-
   CurrentState.unmountPage(itemId)
   CurrentState.turnIntoNonPage(itemId)
 

@@ -5,7 +5,6 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
@@ -22,7 +21,6 @@ export type State = {
   codeBlockItems: Record<ItemId, CodeBlockItem>
   texItems: Record<ItemId, TexItem>
   pages: Record<ItemId, Page>
-  reminders: Record<ItemId, Reminder>
   workspaces: Record<WorkspaceId, Workspace>
   /**
    * マウントされているページたちの項目ID。
@@ -164,23 +162,6 @@ export type Page = {
    */
   anchorItemPath: ItemPath
 }
-
-export type Reminder = DiscriminatedUnion<{
-  Once: {
-    notifiedAt: Timestamp | null
-    year: integer
-    month: integer
-    date: integer
-    hour: integer
-    minute: integer
-  }
-  EveryMonth: {
-    notifiedAt: Timestamp | null
-    date: integer
-    hour: integer
-    minute: integer
-  }
-}>
 
 export type Workspace = {
   name: string

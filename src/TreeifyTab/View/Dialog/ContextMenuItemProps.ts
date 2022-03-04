@@ -117,17 +117,6 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     })
   }
 
-  if (process.env.NODE_ENV !== 'production') {
-    if (isSingleSelect) {
-      result.push({
-        title: 'リマインダーを設定…',
-        onClick: () => {
-          External.instance.dialogState = { type: 'ReminderSettingDialog' }
-        },
-      })
-    }
-  }
-
   if (isSingleSelect && [ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX].includes(item.type)) {
     result.push({
       title: 'キャプションを設定…',

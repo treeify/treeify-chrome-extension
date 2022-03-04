@@ -1,17 +1,13 @@
-import dayjs from 'dayjs'
 import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
 import { getTextItemSelectionFromDom } from 'src/TreeifyTab/External/domTextSelection'
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
-import { Reminder } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray$ } from 'src/Utility/fp-ts'
-import { call } from 'src/Utility/function'
-import { Timestamp } from 'src/Utility/Timestamp'
 
 /**
  * ターゲットテキスト項目のテキストが全選択状態でなければテキストを全選択する。
@@ -75,63 +71,5 @@ export function getCaption(itemId: ItemId): string | undefined {
       return state.texItems[itemId].caption
     default:
       return undefined
-  }
-}
-
-export async function setupAllAlarms() {
-  await chrome.alarms.clearAll()
-
-  const reminderEntries = Object.entries(Internal.instance.state.reminders)
-  // リマインダー機能を使っていない場合は通知権限を求めないようにここでreturnする
-  if (reminderEntries.length === 0) return
-
-  // 実際に通知するときに通知権限を求めるようでは遅い印象なので、アラームを設定する段階で求める
-  const permission = await Notification.requestPermission()
-  if (permission !== 'granted') return
-
-  for (const [itemId, reminder] of reminderEntries) {
-    const timestamp = calculateNextReminderTimestamp(reminder)
-    if (timestamp !== undefined) {
-      chrome.alarms.create(itemId, { when: timestamp })
-    }
-  }
-}
-
-/** 次に通知すべきタイムスタンプを計算する */
-function calculateNextReminderTimestamp(reminder: Reminder): Timestamp | undefined {
-  switch (reminder.type) {
-    case 'Once':
-      const timestamp = dayjs()
-        .year(reminder.year)
-        .month(reminder.month)
-        .date(reminder.date)
-        .hour(reminder.hour)
-        .minute(reminder.minute)
-        .startOf('minute')
-        .valueOf()
-      if (reminder.notifiedAt === null || reminder.notifiedAt < timestamp) {
-        return timestamp
-      } else {
-        return undefined
-      }
-    case 'EveryMonth': {
-      const baseDate = call(() => {
-        if (reminder.notifiedAt === null) {
-          return dayjs()
-        } else {
-          return dayjs(reminder.notifiedAt)
-        }
-      })
-      const date = baseDate
-        .date(reminder.date)
-        .hour(reminder.hour)
-        .minute(reminder.minute)
-        .startOf('minute')
-      if (date.isBefore(dayjs())) {
-        return date.add(1, 'month').valueOf()
-      } else {
-        return date.valueOf()
-      }
-    }
   }
 }
