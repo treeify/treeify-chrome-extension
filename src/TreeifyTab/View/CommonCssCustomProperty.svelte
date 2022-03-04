@@ -26,10 +26,8 @@
     // ハイライト状態の項目のバレットのマウスホバー時の色。彩度は色域境界値
     --highlighted-item-bullet-hover-color: lch(40% 83.7 40.4);
 
-    // インデントガイドの色
-    --indent-guide-color: lch(88% 0 0);
-    // インデントガイドの色（ホバー時）
-    --indent-guide-hover-color: lch(70% 0 0);
+    --indent-guide-color: lch(90% 0 0);
+    --indent-guide-hover-color: lch(80% 0 0);
 
     // 彩度は色域境界値
     --selected-item-background-color: lch(95% 7.8 280.4);
