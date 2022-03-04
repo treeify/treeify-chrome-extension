@@ -53,8 +53,8 @@ export const commandNames = {
   showSearchDialog: '検索ダイアログを表示',
   showReplaceDialog: '置換ダイアログを表示',
   showSourceEditDialog: '出典編集ダイアログを表示',
-  showContextMenuDialog: 'コンテキストメニューを表示',
-  showCommandPaletteDialog: 'コマンドパレットを表示',
+  showContextMenu: 'コンテキストメニューを表示',
+  showCommandPalette: 'コマンドパレットを表示',
   doNothing: '何もしない',
   toggleExcluded: '除外トグル',
 } as const

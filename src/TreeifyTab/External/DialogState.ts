@@ -3,7 +3,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { DiscriminatedUnion } from 'src/Utility/DiscriminatedUnion'
 import { Coordinate } from 'src/Utility/integer'
 
-export type ContextMenuDialog = {
+export type ContextMenu = {
   mousePosition?: Coordinate
 }
 
@@ -17,8 +17,8 @@ export type DialogState = DiscriminatedUnion<{
   SourceEditDialog: {}
   CodeBlockItemEditDialog: {}
   CodeBlockLanguageSettingDialog: {}
-  CommandPaletteDialog: {}
-  ContextMenuDialog: ContextMenuDialog
+  CommandPalette: {}
+  ContextMenu: ContextMenu
   CustomCssDialog: {}
   ExportDialog: {}
   ImageItemEditDialog: {}

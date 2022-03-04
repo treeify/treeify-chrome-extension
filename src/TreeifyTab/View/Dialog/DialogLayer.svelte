@@ -2,8 +2,8 @@
   import CaptionSettingDialog from 'src/TreeifyTab/View/Dialog/CaptionSettingDialog.svelte'
   import CodeBlockItemEditDialog from 'src/TreeifyTab/View/Dialog/CodeBlockItemEditDialog.svelte'
   import CodeBlockLanguageSettingDialog from 'src/TreeifyTab/View/Dialog/CodeBlockLanguageSettingDialog.svelte'
-  import CommandPaletteDialog from 'src/TreeifyTab/View/Dialog/CommandPaletteDialog.svelte'
-  import ContextMenuDialog from 'src/TreeifyTab/View/Dialog/ContextMenuDialog.svelte'
+  import CommandPalette from 'src/TreeifyTab/View/Dialog/CommandPalette.svelte'
+  import ContextMenu from 'src/TreeifyTab/View/Dialog/ContextMenu.svelte'
   import { DialogLayerProps } from 'src/TreeifyTab/View/Dialog/DialogLayerProps'
   import ExportDialog from 'src/TreeifyTab/View/Dialog/ExportDialog.svelte'
   import ImageItemEditDialog from 'src/TreeifyTab/View/Dialog/ImageItemEditDialog.svelte'
@@ -34,10 +34,10 @@
   <CodeBlockItemEditDialog />
 {:else if props.dialogState.type === 'CodeBlockLanguageSettingDialog'}
   <CodeBlockLanguageSettingDialog />
-{:else if props.dialogState.type === 'CommandPaletteDialog'}
-  <CommandPaletteDialog />
-{:else if props.dialogState.type === 'ContextMenuDialog'}
-  <ContextMenuDialog dialog={props.dialogState} />
+{:else if props.dialogState.type === 'CommandPalette'}
+  <CommandPalette />
+{:else if props.dialogState.type === 'ContextMenu'}
+  <ContextMenu dialog={props.dialogState} />
 {:else if props.dialogState.type === 'CustomCssDialog'}
   <CustomCssDialog />
 {:else if props.dialogState.type === 'ExportDialog'}

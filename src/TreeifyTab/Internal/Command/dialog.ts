@@ -50,16 +50,16 @@ export function showSourceEditDialog() {
 }
 
 /** 独自コンテキストメニューを表示する */
-export function showContextMenuDialog() {
-  External.instance.dialogState = { type: 'ContextMenuDialog' }
+export function showContextMenu() {
+  External.instance.dialogState = { type: 'ContextMenu' }
 }
 
 export function showReplaceDialog() {
   External.instance.dialogState = { type: 'ReplaceDialog' }
 }
 
-export function showCommandPaletteDialog() {
-  External.instance.dialogState = { type: 'CommandPaletteDialog' }
+export function showCommandPalette() {
+  External.instance.dialogState = { type: 'CommandPalette' }
 }
 
 export function showExportDialog() {

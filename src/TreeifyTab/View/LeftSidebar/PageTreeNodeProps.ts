@@ -106,7 +106,7 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
 
           // 独自コンテキストメニューを表示
           External.instance.dialogState = {
-            type: 'ContextMenuDialog',
+            type: 'ContextMenu',
             mousePosition: { x: event.clientX, y: event.clientY },
           }
           Rerenderer.instance.rerender()

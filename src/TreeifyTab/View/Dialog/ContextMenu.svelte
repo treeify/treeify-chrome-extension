@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ContextMenuDialog } from 'src/TreeifyTab/External/DialogState'
+  import { ContextMenu } from 'src/TreeifyTab/External/DialogState'
   import { External } from 'src/TreeifyTab/External/External'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -11,7 +11,7 @@
   import { assertNonNull } from 'src/Utility/Debug/assert'
   import { NERArray$ } from 'src/Utility/fp-ts'
 
-  export let dialog: ContextMenuDialog
+  export let dialog: ContextMenu
 
   const contextMenuItemPropses = createContextMenuItemPropses()
 

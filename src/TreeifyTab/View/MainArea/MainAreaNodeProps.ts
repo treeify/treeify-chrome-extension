@@ -140,7 +140,7 @@ export function createMainAreaNodeProps(
         if (InputId.fromMouseEvent(event) !== '0000MouseButton2') return
 
         External.instance.dialogState = {
-          type: 'ContextMenuDialog',
+          type: 'ContextMenu',
           mousePosition: { x: event.clientX, y: event.clientY },
         }
         Rerenderer.instance.rerender()

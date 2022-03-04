@@ -149,11 +149,11 @@
         'showSearchDialog',
         'showReplaceDialog',
         'showSourceEditDialog',
-        'showContextMenuDialog',
+        'showContextMenu',
         'showExportDialog',
         'showWorkspaceDialog',
         'showOtherParentsDialog',
-        'showCommandPaletteDialog',
+        'showCommandPalette',
       ],
     },
     {
