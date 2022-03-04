@@ -150,10 +150,10 @@
   .main-area-bullet-and-indent_page-icon {
     @include common.size(1em);
     @include common.absolute-center;
-    @include common.icon(var(--bullet-page-icon-color), url('page.svg'));
+    @include common.icon(var(--page-icon-color), url('page.svg'));
 
     .main-area-bullet-and-indent_root:hover & {
-      background: var(--bullet-page-icon-hover-color);
+      background: var(--page-icon-hover-color);
     }
   }
 

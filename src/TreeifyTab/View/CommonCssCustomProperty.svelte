@@ -3,13 +3,8 @@
     --bullet-size: 0.38em;
     --bullet-color: lch(60% 0 0);
     --bullet-hover-color: lch(40% 0 0);
-
     --bullet-outer-circle-color: lch(90% 0 0);
     --bullet-outer-circle-hover-color: lch(80% 0 0);
-    // バレットとして表示されるページアイコンの色
-    --bullet-page-icon-color: lch(30% 0 0);
-    // バレットとして表示されるページアイコンのマウスホバー時の色
-    --bullet-page-icon-hover-color: lch(20% 0 0);
 
     --bullet-outer-circle-min-size-em: 1.05;
     --bullet-outer-circle-max-size-em: 1.3;
@@ -17,6 +12,9 @@
     --bullet-outer-circle-child-count-limit: 10;
     // 外側の円が最大サイズになる子孫項目数
     --bullet-outer-circle-item-count-limit: 20;
+
+    --page-icon-color: lch(30% 0 0);
+    --page-icon-hover-color: lch(20% 0 0);
 
     // トランスクルードされた項目のバレットの色
     --transcluded-item-bullet-color: lch(60% 40 160.4);

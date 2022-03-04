@@ -57,7 +57,7 @@
   .context_page-icon {
     @include common.size(1em);
 
-    @include common.icon(lch(30% 0 0), url('page.svg'));
+    @include common.icon(var(--page-icon-color), url('page.svg'));
   }
 
   .context_frame {
