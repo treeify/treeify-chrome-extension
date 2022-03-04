@@ -4,7 +4,6 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Edge } from 'src/TreeifyTab/Internal/State'
-import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assertNeverType, assertNonNull } from 'src/Utility/Debug/assert'
 import { RArray, RArray$ } from 'src/Utility/fp-ts'
 
@@ -51,11 +50,6 @@ function toOpmlAttributes(itemPath: ItemPath): Record<string, string> {
   if (item.source !== null) {
     baseAttributes.sourceTitle = item.source.title
     baseAttributes.sourceUrl = item.source.url
-  }
-
-  const reminder = Internal.instance.state.reminders[itemId]
-  if (reminder !== undefined) {
-    baseAttributes.reminder = JSON.stringify(reminder)
   }
 
   switch (item.type) {
@@ -254,14 +248,6 @@ function createItemBasedOnOpml(outlineElement: Element, itemIdMap: ItemIdMap): I
       title: attrSourceTitle ?? '',
       url: attrSourceUrl ?? '',
     })
-  }
-
-  const attrReminders = outlineElement.getAttribute('reminders')
-  if (attrReminders !== null) {
-    try {
-      const reminder = JSON.parse(attrReminders)
-      Internal.instance.mutate(reminder, StatePath.of('reminders', itemId))
-    } catch {}
   }
 
   return { itemId, edge }

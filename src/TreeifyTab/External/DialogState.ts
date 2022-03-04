@@ -30,7 +30,6 @@ export type DialogState = DiscriminatedUnion<{
   SearchDialog: {}
   TabsDialog: TabsDialog
   TexItemEditDialog: {}
-  ReminderSettingDialog: {}
   ReplaceDialog: {}
   WebPageItemTitleSettingDialog: {}
   WorkspaceDialog: {}
