@@ -48,6 +48,7 @@
       type="text"
       class="command-palette-dialog_command-id"
       list="command-palette-dialog_command-id-list"
+      placeholder="turn into page"
       bind:value={inputValue}
     />
     <datalist id="command-palette-dialog_command-id-list">
