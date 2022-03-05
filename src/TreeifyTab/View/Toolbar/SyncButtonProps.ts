@@ -16,6 +16,9 @@ export function createSyncButtonProps(): SyncButtonProps {
   const hasNeverSynced = getSyncedAt() === undefined
   const hasSyncIssue = External.instance.hasSyncIssue
   const titleAttr = call(() => {
+    if (hasSyncIssue) {
+      return 'Googleドライブとの通信に失敗しました。ネットワーク接続を確認後、リトライしてください。\nネットワーク接続ができている場合はGoogleドライブの障害だと考えられます。'
+    }
     if (hasNeverSynced) {
       return 'ローカルデータをアップロードしてGoogleドライブ内にデータファイルを作成します。\n既にデータファイルがあったらダウンロードしてローカルデータを上書きします。'
     }
