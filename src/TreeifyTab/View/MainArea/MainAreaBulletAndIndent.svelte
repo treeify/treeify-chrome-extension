@@ -136,7 +136,7 @@
 
   // メインエリアのバレットの内側の円
   .main-area-bullet-and-indent_bullet {
-    @include common.circle(0.38em);
+    @include common.circle(var(--bullet-size));
     @include common.absolute-center;
 
     background: var(--bullet-color);

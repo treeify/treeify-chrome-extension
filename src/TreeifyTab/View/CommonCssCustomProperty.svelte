@@ -1,13 +1,13 @@
 <style global lang="scss">
   :root {
-    --bullet-size: 0.38em;
+    --bullet-size: 0.375em;
     --bullet-color: lch(60% 0 0);
     --bullet-hover-color: lch(40% 0 0);
     --bullet-outer-circle-color: lch(90% 0 0);
     --bullet-outer-circle-hover-color: lch(80% 0 0);
 
     --bullet-outer-circle-min-size-em: 1.05;
-    --bullet-outer-circle-max-size-em: 1.3;
+    --bullet-outer-circle-max-size-em: 1.25;
     // 外側の円が最大サイズになる子項目数
     --bullet-outer-circle-child-count-limit: 10;
     // 外側の円が最大サイズになる子孫項目数
