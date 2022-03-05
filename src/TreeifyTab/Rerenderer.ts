@@ -190,7 +190,11 @@ export class Rerenderer {
       const mainArea = document.querySelector<HTMLElement>('.main-area_root')
       assertNonNull(mainArea)
       const mainAreaRect = mainArea.getBoundingClientRect()
-      if (mainAreaRect.bottom < bottom + SPACE_PX) {
+      if (bottom - top >= mainAreaRect.height - 2 * SPACE_PX) {
+        // 選択中の項目が画面に収まりきらないほど大きい場合、センタリングする
+        const diff = (top + bottom) / 2 - (mainAreaRect.top + mainAreaRect.bottom) / 2
+        mainArea.scrollTop += diff
+      } else if (mainAreaRect.bottom < bottom + SPACE_PX) {
         mainArea.scrollTop += bottom + SPACE_PX - mainAreaRect.bottom
       } else if (top < mainAreaRect.top + SPACE_PX) {
         mainArea.scrollTop -= mainAreaRect.top + SPACE_PX - top
