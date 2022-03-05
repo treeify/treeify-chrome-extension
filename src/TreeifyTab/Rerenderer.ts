@@ -158,10 +158,13 @@ export class Rerenderer {
       const targetElement = document.getElementById(targetElementId)
       if (targetElement === null) return
 
-      targetElement.scrollIntoView({
-        behavior: 'auto',
-        block: 'center',
-      })
+      const mainArea = document.querySelector<HTMLElement>('.main-area_root')
+      assertNonNull(mainArea)
+      const mainAreaRect = mainArea.getBoundingClientRect()
+      const targetRect = targetElement.getBoundingClientRect()
+      const diff =
+        (targetRect.top + targetRect.bottom) / 2 - (mainAreaRect.top + mainAreaRect.bottom) / 2
+      mainArea.scrollTop += diff
     }
   }
 

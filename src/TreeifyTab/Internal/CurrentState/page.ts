@@ -8,10 +8,8 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Page } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
-import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
-import { assert, assertNonNull } from 'src/Utility/Debug/assert'
+import { assert } from 'src/Utility/Debug/assert'
 import { NERArray, RArray$ } from 'src/Utility/fp-ts'
-import { tick } from 'svelte'
 
 /** アクティブページを切り替える */
 export function switchActivePage(itemId: ItemId, withoutMount: boolean = false) {
@@ -126,16 +124,6 @@ export function jumpTo(itemPath: ItemPath) {
 
   // ジャンプ先のページのtargetItemPathを更新する
   CurrentState.setTargetItemPath(itemPath)
+  Rerenderer.instance.requestToScrollCenter()
   Rerenderer.instance.requestToFocusTargetItem()
-
-  // 再描画完了後に対象項目に自動スクロールする
-  tick().then(() => {
-    const targetElementId = MainAreaContentView.focusableDomElementId(itemPath)
-    const targetElement = document.getElementById(targetElementId)
-    assertNonNull(targetElement)
-    targetElement.scrollIntoView({
-      behavior: 'auto',
-      block: 'center',
-    })
-  })
 }
