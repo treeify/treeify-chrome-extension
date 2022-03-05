@@ -30,6 +30,12 @@ export class External {
    */
   hasUpdatedAfterSync = true
 
+  /**
+   * 同期APIを呼んでエラーになった際にtrueになる。
+   * エラーが出ずに同期できたらfalseになる。
+   */
+  hasSyncIssue = false
+
   /** ブラウザのタブとTreeifyのウェブページ項目を紐付けるためのオブジェクト */
   readonly tabItemCorrespondence = new TabItemCorrespondence()
 

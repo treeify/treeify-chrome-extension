@@ -196,9 +196,14 @@ export namespace GoogleDrive {
       await syncWithGoogleDrive(dataFileMetaData)
     } catch {
       console.log('リトライ', dayjs().format('MM/DD HH:mm:ss'))
-      // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
-      const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
-      await syncWithGoogleDrive(dataFileMetaData)
+      try {
+        // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
+        const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
+        await syncWithGoogleDrive(dataFileMetaData)
+      } catch (error) {
+        console.error(error)
+        External.instance.hasSyncIssue = true
+      }
     } finally {
       External.instance.isInSync = false
       Rerenderer.instance.rerender()
@@ -217,6 +222,7 @@ export namespace GoogleDrive {
       const modifiedTime = await createDataFile(Internal.instance.state)
       setSyncedAt(modifiedTime)
       External.instance.hasUpdatedAfterSync = false
+      External.instance.hasSyncIssue = false
       Rerenderer.instance.rerender()
     } else {
       // データファイルがある場合
@@ -263,6 +269,7 @@ export namespace GoogleDrive {
         const responseJson = await response.json()
         setSyncedAt(responseJson.modifiedTime)
         External.instance.hasUpdatedAfterSync = false
+        External.instance.hasSyncIssue = false
         Rerenderer.instance.rerender()
       }
     }

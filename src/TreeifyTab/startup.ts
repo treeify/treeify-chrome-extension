@@ -257,8 +257,6 @@ async function onIdleStateChanged(idleState: IdleState) {
     dayjs().format('MM/DD HH:mm:ss')
   )
 
-  if (!window.navigator.onLine) return
-
   await startAutoSync()
 }
 
@@ -304,20 +302,38 @@ export async function startAutoSync() {
   Rerenderer.instance.rerender()
   try {
     const metaData = await GoogleDrive.fetchDataFileMetaData()
-    if (metaData === undefined) return
+    if (metaData === undefined) {
+      External.instance.hasSyncIssue = false
+      return
+    }
 
-    if (metaData.modifiedTime === syncedAt) return
+    if (metaData.modifiedTime === syncedAt) {
+      External.instance.hasSyncIssue = false
+      return
+    }
 
     await GoogleDrive.syncWithGoogleDrive(metaData)
   } catch {
     console.log('リトライ', dayjs().format('MM/DD HH:mm:ss'))
-    // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
-    const metaData = await GoogleDrive.fetchDataFileMetaData()
-    if (metaData === undefined) return
 
-    if (metaData.modifiedTime === syncedAt) return
+    try {
+      // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
+      const metaData = await GoogleDrive.fetchDataFileMetaData()
+      if (metaData === undefined) {
+        External.instance.hasSyncIssue = false
+        return
+      }
 
-    await GoogleDrive.syncWithGoogleDrive(metaData)
+      if (metaData.modifiedTime === syncedAt) {
+        External.instance.hasSyncIssue = false
+        return
+      }
+
+      await GoogleDrive.syncWithGoogleDrive(metaData)
+    } catch (error) {
+      console.error(error)
+      External.instance.hasSyncIssue = true
+    }
   } finally {
     External.instance.isInSync = false
     Rerenderer.instance.rerender()
