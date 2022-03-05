@@ -49,12 +49,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .dropdown-menu-dialog_root {
-    position: fixed;
-    top: 0;
-    left: 0;
-    @include common.size(100%);
-
-    z-index: 30;
+    @include common.layer(30);
   }
 
   .dropdown-menu-dialog_frame {

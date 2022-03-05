@@ -82,11 +82,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .web-page-item-title-setting-dialog_root {
-    position: fixed;
-    top: 0;
-    left: 0;
-    @include common.size(100%);
-    z-index: 30;
+    @include common.layer(30);
   }
 
   // ウェブページ項目のタイトル設定ダイアログ

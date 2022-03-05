@@ -66,11 +66,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .common-dialog_root {
-    position: fixed;
-    top: 0;
-    left: 0;
-    @include common.size(100%);
-    z-index: 30;
+    @include common.layer(30);
 
     // ダイアログを画面中央に表示する
     @include common.flex-center;

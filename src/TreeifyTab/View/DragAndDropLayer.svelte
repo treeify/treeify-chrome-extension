@@ -94,12 +94,7 @@
   }
 
   .drag-and-drop-layer_root {
-    position: fixed;
-    top: 0;
-    left: 0;
-    @include common.size(100%);
-
-    z-index: 40;
+    @include common.layer(40);
 
     cursor: grabbing;
   }
