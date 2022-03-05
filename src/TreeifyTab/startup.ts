@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { distance as levenshteinDistance } from 'fastest-levenshtein'
 import { ItemId } from 'src/TreeifyTab/basicType'
 import {
   matchTabsAndWebPageItems,
@@ -163,6 +164,7 @@ async function onClickContextMenu(info: OnClickData) {
 
   const targetItemPath = CurrentState.getTargetItemPath()
   const tabTitle = Internal.instance.state.webPageItems[webPageItemId].tabTitle
+  const selectionText = info.selectionText
 
   if (info.mediaType === 'image' && info.srcUrl !== undefined) {
     // 画像項目として取り込む
@@ -180,7 +182,7 @@ async function onClickContextMenu(info: OnClickData) {
     }
     Rerenderer.instance.rerender()
     TreeifyTab.open()
-  } else if (info.selectionText !== undefined) {
+  } else if (selectionText !== undefined) {
     // Treeifyタブが最前面でないとクリップボードからの読み込みがエラーになるので先に最前面化する
     await TreeifyTab.open()
 
@@ -189,12 +191,17 @@ async function onClickContextMenu(info: OnClickData) {
         const permission = await navigator.permissions.query({ name: 'clipboard-read' } as any)
         if (permission.state !== 'denied') {
           const clipboardText = await navigator.clipboard.readText()
-          if (clipboardText.trim().replaceAll(/\r?\n/g, ' ') === info.selectionText) {
+          const distance = normalizedLevenshteinDistance(
+            clipboardText.trim().replaceAll(/\r?\n/g, ' '),
+            selectionText
+          )
+          // 標準化レーベンシュタイン距離が一定以下なら元々同一の文字列だったと判断する
+          if (distance <= 0.3) {
             return clipboardText.trim()
           }
         }
       }
-      return info.selectionText
+      return selectionText
     })
     assertNonUndefined(text)
 
@@ -213,6 +220,10 @@ async function onClickContextMenu(info: OnClickData) {
     }
     Rerenderer.instance.rerender()
   }
+}
+
+function normalizedLevenshteinDistance(a: string, b: string): number {
+  return levenshteinDistance(a, b) / Math.max(a.length, b.length)
 }
 
 // 指定されたURLのタブに対応するウェブページ項目を探す。
