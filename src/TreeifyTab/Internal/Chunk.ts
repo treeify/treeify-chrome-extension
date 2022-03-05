@@ -2,7 +2,7 @@ import objectPath from 'object-path'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
-import { RArray } from 'src/Utility/fp-ts'
+import { RArray, RRecord$ } from 'src/Utility/fp-ts'
 
 /** StatePathをdelimiterで連結した型 */
 export type ChunkId = string
@@ -33,7 +33,7 @@ export namespace Chunk {
   export const delimiter = '~'
 
   // Stateのキーのうち、チャンクを分割するもの
-  const collectionKeys = new Set([
+  const collectionKeys: Set<keyof State> = new Set([
     'items',
     'textItems',
     'webPageItems',
@@ -52,9 +52,8 @@ export namespace Chunk {
 
   // Stateオブジェクトのkeysをenumerateして、チャンクID群を生成する
   export function* yieldAllChunkIds(state: State): Generator<ChunkId> {
-    for (const firstKey of Object.keys(state)) {
+    for (const firstKey of RRecord$.keys(state)) {
       if (collectionKeys.has(firstKey)) {
-        // @ts-ignore
         for (const secondKey of Object.keys(state[firstKey])) {
           yield [firstKey, secondKey].join(delimiter)
         }

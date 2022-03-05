@@ -20,9 +20,9 @@
 
   let searchQueryValue = ''
   let hitItemIds: RSet<ItemId> | undefined
-  let checkedItemTypes: Record<ItemType, boolean> = Object.fromEntries(
-    allItemTypes.map((itemType) => [itemType, true])
-  ) as any
+  let checkedItemTypes: Record<ItemType, boolean> = RRecord$.fromEntries(
+    allItemTypes.map((itemType) => [itemType, true] as const)
+  )
   let searchResult: SearchResult | undefined
   $: searchResult = makeSearchResult(hitItemIds, checkedItemTypes)
 
@@ -90,7 +90,9 @@
       )
 
       hitItemIds = Internal.instance.searchEngine.search(searchQueryValue)
-      checkedItemTypes = Object.fromEntries(allItemTypes.map((itemType) => [itemType, true])) as any
+      checkedItemTypes = RRecord$.fromEntries(
+        allItemTypes.map((itemType) => [itemType, true] as const)
+      )
       document.querySelector<HTMLElement>('.search-dialog_result-area')?.scrollTo(0, 0)
     }
   }
@@ -161,7 +163,7 @@
       {#if searchResult !== undefined}
         <div class="search-dialog_filter-area">
           表示する項目:
-          {#each RRecord$.toEntries(itemTypeDisplayNames) as [itemType, name]}
+          {#each RRecord$.entries(itemTypeDisplayNames) as [itemType, name]}
             {#if searchResult.counts.get(itemType) > 0}
               <Checkbox value={itemType} bind:checked={checkedItemTypes[itemType]}>
                 {name}({searchResult.counts.get(itemType)}件)
