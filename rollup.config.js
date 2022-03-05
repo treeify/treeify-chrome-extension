@@ -53,7 +53,7 @@ export default {
     svelte({
       preprocess: sveltePreprocess({
         postcss: {
-          plugins: [postcssLabFunction()],
+          plugins: [postcssLabFunction({ subFeatures: { displayP3: false } })],
         },
       }),
     }),
