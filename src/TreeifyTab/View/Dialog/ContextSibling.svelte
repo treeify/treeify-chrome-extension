@@ -7,7 +7,10 @@
   export let props: ContextSiblingProps
 </script>
 
-<div class="context-sibling_bullet-and-content">
+<div
+  class="context-sibling_bullet-and-content"
+  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+>
   <div class="context-sibling_bullet-area">
     {#if CurrentState.isPage(props.itemId)}
       <div
@@ -15,6 +18,7 @@
         class:transcluded={CurrentState.countParents(props.itemId) > 1}
       />
     {:else}
+      <div class="context-sibling_bullet--outer-circle" />
       <div
         class="context-sibling_bullet"
         class:transcluded={CurrentState.countParents(props.itemId) > 1}
@@ -36,16 +40,26 @@
 
   .context-sibling_bullet-area {
     @include common.size(var(--context-item-line-height));
-    @include common.flex-center;
+
+    position: relative;
   }
 
   .context-sibling_page-icon {
+    @include common.absolute-center;
     @include common.size(1em);
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
   }
 
+  .context-sibling_bullet--outer-circle {
+    @include common.circle(var(--outer-circle-radius));
+    @include common.absolute-center;
+
+    background: var(--bullet-outer-circle-color);
+  }
+
   .context-sibling_bullet {
+    @include common.absolute-center;
     @include common.circle(var(--bullet-size));
 
     background: var(--bullet-color);
