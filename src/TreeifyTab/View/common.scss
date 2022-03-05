@@ -1,3 +1,23 @@
+// 四捨五入して整数にする。
+// 四捨五入の境界値である0.5ちょうどでは下記のように計算結果が揺れることに注意（0.499や0.501など少しでも上下すれば問題なく動作する）
+// round(0.5) = 0
+// round(1.5) = 2
+// round(2.5) = 2
+// round(3.5) = 4
+// round(4.5) = 4
+// round(5.5) = 6
+@function round($number) {
+  // アンダーフローさせることで小数点以下の情報を捨てる。
+  // 参考：https://stackoverflow.com/questions/37754542/css-calc-round-down-with-two-decimal-cases
+  // なお、このマジックナンバーを$変数化するとなぜか0として扱われてしまうのでリテラルのまま記述する。
+  // TODO: CSSで同様の関数がサポートされたらそちらを使う。
+  @return calc(#{$number} * 4.9406564584124654e-324 / 4.9406564584124654e-324);
+}
+
+@function em($number) {
+  @return round(calc(#{$number} * var(--font-size)));
+}
+
 @mixin size($size) {
   width: $size;
   height: $size;

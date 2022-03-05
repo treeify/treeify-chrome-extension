@@ -1,5 +1,8 @@
 <style global lang="scss">
   :root {
+    --base-font-size: 16px;
+    --font-size: var(--base-font-size);
+
     --bullet-size: 0.375em;
     --bullet-color: lch(60% 0 0);
     --bullet-hover-color: lch(40% 0 0);
