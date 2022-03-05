@@ -17,7 +17,7 @@
     <div
       class="sync-button_cloud-icon"
       class:has-never-synced={props.hasNeverSynced}
-      class:has-updated-after-sync={!props.hasUpdatedAfterSync}
+      class:has-never-updated-after-sync={!props.hasUpdatedAfterSync}
       class:has-sync-issue={props.hasSyncIssue}
     />
   {:else}
@@ -33,7 +33,7 @@
     @include common.absolute-center;
     @include common.icon(lch(45% 0 0), url('cloud-upload.svg'));
 
-    &.has-updated-after-sync {
+    &.has-never-updated-after-sync {
       @include common.icon-url(url('cloud-check.svg'));
     }
 
