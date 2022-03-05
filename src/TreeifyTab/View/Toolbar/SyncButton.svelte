@@ -18,6 +18,7 @@
       class="sync-button_cloud-icon"
       class:has-never-synced={props.hasNeverSynced}
       class:has-updated-after-sync={!props.hasUpdatedAfterSync}
+      class:has-sync-issue={props.hasSyncIssue}
     />
   {:else}
     <LoadingIndicator size="22px" />
@@ -38,6 +39,11 @@
 
     &.has-never-synced {
       @include common.icon-url(url('cloud-sync.svg'));
+    }
+
+    &.has-sync-issue {
+      @include common.icon-url(url('cloud-alert.svg'));
+      @include common.icon-color(lch(35% 70 40.4));
     }
   }
 </style>
