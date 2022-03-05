@@ -1,5 +1,5 @@
 import { External } from 'src/TreeifyTab/External/External'
-import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
+import { getGoogleDriveSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { call } from 'src/Utility/function'
 
 export type SyncButtonProps = {
@@ -13,7 +13,7 @@ export type SyncButtonProps = {
 export function createSyncButtonProps(): SyncButtonProps {
   const hasUpdatedAfterSync = External.instance.hasUpdatedAfterSync
   const isInSync = External.instance.isInSync
-  const hasNeverSynced = getSyncedAt() === undefined
+  const hasNeverSynced = getGoogleDriveSyncedAt() === undefined
   const hasSyncIssue = External.instance.hasSyncIssue
   const titleAttr = call(() => {
     if (hasSyncIssue) {

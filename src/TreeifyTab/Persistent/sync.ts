@@ -1,13 +1,15 @@
 const GOOGLE_DRIVE_SYNCED_AT = 'GOOGLE_DRIVE_SYNCED_AT'
 let googleDriveSyncedAt: string | undefined
 
-export function getSyncedAt(): string | undefined {
-  if (googleDriveSyncedAt !== undefined) return googleDriveSyncedAt
+export function getGoogleDriveSyncedAt(): string | undefined {
+  if (googleDriveSyncedAt !== undefined) {
+    googleDriveSyncedAt = localStorage.getItem(GOOGLE_DRIVE_SYNCED_AT) ?? undefined
+  }
 
-  return localStorage.getItem(GOOGLE_DRIVE_SYNCED_AT) ?? undefined
+  return googleDriveSyncedAt
 }
 
-export function setSyncedAt(dateString: string) {
+export function setGoogleDriveSyncedAt(dateString: string) {
   googleDriveSyncedAt = dateString
   localStorage.setItem(GOOGLE_DRIVE_SYNCED_AT, dateString)
 }

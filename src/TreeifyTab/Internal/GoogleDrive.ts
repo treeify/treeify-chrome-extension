@@ -3,7 +3,7 @@ import { pipe } from 'fp-ts/function'
 import { External } from 'src/TreeifyTab/External/External'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { CURRENT_SCHEMA_VERSION, State } from 'src/TreeifyTab/Internal/State'
-import { getSyncedAt, setSyncedAt } from 'src/TreeifyTab/Persistent/sync'
+import { getGoogleDriveSyncedAt, setGoogleDriveSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonNull } from 'src/Utility/Debug/assert'
@@ -220,7 +220,7 @@ export namespace GoogleDrive {
       console.log('create APIを呼んでファイル更新日時を記録して終了')
       // データファイルを作成し、日時を記録して終了
       const modifiedTime = await createDataFile(Internal.instance.state)
-      setSyncedAt(modifiedTime)
+      setGoogleDriveSyncedAt(modifiedTime)
       External.instance.hasUpdatedAfterSync = false
       External.instance.hasSyncIssue = false
       Rerenderer.instance.rerender()
@@ -228,7 +228,7 @@ export namespace GoogleDrive {
       // データファイルがある場合
       console.log('データファイルがある場合')
 
-      const syncedAt = getSyncedAt()
+      const syncedAt = getGoogleDriveSyncedAt()
       const knownTimestamp = syncedAt !== undefined ? new Date(syncedAt).getTime() : -1
       const dataFileTimestamp = new Date(dataFileMetaData.modifiedTime).getTime()
       if (knownTimestamp < dataFileTimestamp) {
@@ -242,7 +242,7 @@ export namespace GoogleDrive {
           return
         }
 
-        setSyncedAt(dataFileMetaData.modifiedTime)
+        setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
         await restart(state, syncedAt === undefined)
       } else if (knownTimestamp > dataFileTimestamp) {
         // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
@@ -255,7 +255,7 @@ export namespace GoogleDrive {
           return
         }
 
-        setSyncedAt(dataFileMetaData.modifiedTime)
+        setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
         await restart(state)
       } else {
         // データファイルの更新日時がsyncedAtと等しければ
@@ -267,7 +267,7 @@ export namespace GoogleDrive {
         const gzipped = await compress(JSON.stringify(Internal.instance.state))
         const response = await updateFileWithMultipart(dataFileMetaData.id, new Blob(gzipped))
         const responseJson = await response.json()
-        setSyncedAt(responseJson.modifiedTime)
+        setGoogleDriveSyncedAt(responseJson.modifiedTime)
         External.instance.hasUpdatedAfterSync = false
         External.instance.hasSyncIssue = false
         Rerenderer.instance.rerender()

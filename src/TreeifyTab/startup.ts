@@ -21,7 +21,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
-import { getSyncedAt } from 'src/TreeifyTab/Persistent/sync'
+import { getGoogleDriveSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
@@ -295,7 +295,7 @@ async function onOnline() {
 }
 
 export async function startAutoSync() {
-  const syncedAt = getSyncedAt()
+  const syncedAt = getGoogleDriveSyncedAt()
   if (syncedAt === undefined) return
 
   External.instance.isInSync = true
