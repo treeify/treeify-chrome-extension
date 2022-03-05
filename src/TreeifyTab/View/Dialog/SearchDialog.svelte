@@ -14,8 +14,7 @@
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps'
-  import { NERArray, NERArray$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
-  import { RRecord$ } from 'src/Utility/fp-ts/index.js'
+  import { NERArray, NERArray$, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
   type SearchResult = { pages: RArray<RArray<ItemPath>>; counts: MultiSet<ItemType> }
 

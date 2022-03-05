@@ -164,6 +164,8 @@
     top: calc(var(--main-area-calculated-line-height) / 2);
     height: calc(100% - var(--main-area-calculated-line-height) / 2);
     width: 100%;
+
+    @include common.flex-center;
   }
 
   // インデントガイド
@@ -171,7 +173,6 @@
     background: var(--indent-guide-color);
     width: 1px;
     height: 100%;
-    margin: 0 auto;
 
     // バレットとインデントの領域のホバー時のインデントガイド
     .main-area-bullet-and-indent_root:hover & {

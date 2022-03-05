@@ -23,10 +23,14 @@
 >
   <div class="tabs-dialog-item_bullet-and-indent">
     {#if props.children.length > 0}
-      <div class="tabs-dialog-item_indent-guide" />
+      <div class="tabs-dialog-item_indent-area">
+        <div class="tabs-dialog-item_indent-guide" />
+      </div>
     {/if}
-    <div class="tabs-dialog-item_bullet-outer-circle" />
-    <div class="tabs-dialog-item_bullet" />
+    <div class="tabs-dialog-item_bullet-area">
+      <div class="tabs-dialog-item_bullet-outer-circle" />
+      <div class="tabs-dialog-item_bullet" />
+    </div>
   </div>
   <div class="search-result-item_content-and-children-area">
     <div class="tabs-dialog-item_content-area" on:mousedown={props.onClick}>
@@ -60,39 +64,44 @@
   }
 
   .tabs-dialog-item_bullet-and-indent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     position: relative;
 
     width: var(--tabs-dialog-item-line-height);
   }
 
-  .tabs-dialog-item_indent-guide {
-    width: 1px;
-    height: calc(100% - var(--tabs-dialog-item-line-height) / 2);
-
+  .tabs-dialog-item_indent-area {
     position: absolute;
     top: calc(var(--tabs-dialog-item-line-height) / 2);
+    height: calc(100% - var(--tabs-dialog-item-line-height) / 2);
+    width: 100%;
+
+    @include common.flex-center;
+  }
+
+  .tabs-dialog-item_indent-guide {
+    width: 1px;
+    height: 100%;
 
     background: var(--indent-guide-color);
   }
 
+  .tabs-dialog-item_bullet-area {
+    @include common.size(var(--tabs-dialog-item-line-height));
+
+    // 外側の円と内側の円を重ねて描画するための設定
+    position: relative;
+  }
+
   .tabs-dialog-item_bullet-outer-circle {
     @include common.circle(var(--outer-circle-radius));
-
-    position: absolute;
-    top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--outer-circle-radius) / 2);
+    @include common.absolute-center;
 
     background: var(--bullet-outer-circle-color);
   }
 
   .tabs-dialog-item_bullet {
     @include common.circle(var(--bullet-size));
-
-    position: absolute;
-    top: calc(var(--tabs-dialog-item-line-height) / 2 - var(--bullet-size) / 2);
+    @include common.absolute-center;
 
     background: var(--bullet-color);
   }
