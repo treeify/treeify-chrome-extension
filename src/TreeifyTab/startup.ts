@@ -257,8 +257,6 @@ async function onIdleStateChanged(idleState: IdleState) {
     dayjs().format('MM/DD HH:mm:ss')
   )
 
-  if (!window.navigator.onLine) return
-
   await startAutoSync()
 }
 
