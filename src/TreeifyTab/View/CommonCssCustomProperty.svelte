@@ -18,10 +18,10 @@
     --page-icon-color: lch(30% 0 0);
     --page-icon-hover-color: lch(20% 0 0);
 
-    // トランスクルードされた項目のバレットの色
     --transcluded-item-bullet-color: lch(60% 40 160.4);
-    // トランスクルードされた項目のバレットのマウスホバー時の色
     --transcluded-item-bullet-hover-color: lch(40% 40 160.4);
+    --transcluded-item-page-icon-color: lch(60% 40 160.4);
+    --transcluded-item-page-icon-hover-color: lch(40% 40 160.4);
 
     // ハイライト状態の項目のバレットの色。彩度は色域境界値
     --highlighted-item-bullet-color: lch(50% 98.7 40.4);

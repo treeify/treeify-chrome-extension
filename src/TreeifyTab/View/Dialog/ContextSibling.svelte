@@ -49,6 +49,10 @@
     @include common.size(common.toIntegerPx(1em));
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
+
+    &.transcluded {
+      background: var(--transcluded-item-page-icon-color);
+    }
   }
 
   .context-sibling_bullet--outer-circle {
