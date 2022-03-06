@@ -38,7 +38,7 @@
   }
 
   .code-block-item-content_code {
-    border: 1px solid lch(80% 0 0);
+    border: 1px solid oklch(80% 0 0);
     margin: 0;
     padding: common.toIntegerPx(0.2em);
     // これを指定しないとoverflowしたコードがborderからはみ出る
@@ -55,6 +55,6 @@
     margin-bottom: common.toIntegerPx(0.2em);
 
     font-size: 80%;
-    color: lch(30% 0 0);
+    color: oklch(30% 0 0);
   }
 </style>

@@ -69,11 +69,11 @@
     white-space: nowrap;
 
     .discarded & {
-      color: lch(35% 0 0);
+      color: oklch(35% 0 0);
     }
 
     .tab-closed & {
-      color: lch(60% 0 0);
+      color: oklch(60% 0 0);
     }
 
     // 未読ウェブページ項目のタイトルの強調表示
@@ -82,11 +82,11 @@
     }
 
     .unread.discarded & {
-      color: lch(35% 30 160.4);
+      color: oklch(35% 30 135);
     }
 
     .unread.tab-closed & {
-      color: lch(60% 30 160.4);
+      color: oklch(60% 30 135);
     }
   }
 </style>

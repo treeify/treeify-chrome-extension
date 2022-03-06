@@ -17,9 +17,9 @@
     @include common.size(100%);
 
     border-radius: 99999px;
-    background: lch(100% 0 0);
+    background: oklch(100% 0 0);
 
-    box-shadow: 0 0 3px lch(70% 0 0);
+    box-shadow: 0 0 3px oklch(70% 0 0);
 
     cursor: ew-resize;
   }
@@ -31,6 +31,6 @@
     @include common.size(calc(100% - var(--width) * 0.4));
 
     border-radius: 99999px;
-    background: lch(50% 0 0);
+    background: oklch(50% 0 0);
   }
 </style>

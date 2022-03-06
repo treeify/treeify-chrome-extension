@@ -19,7 +19,7 @@
     overflow-x: hidden;
 
     &.has-source {
-      border-left: common.toIntegerPx(0.25em) solid lch(80% 0 0);
+      border-left: common.toIntegerPx(0.25em) solid oklch(80% 0 0);
       padding-left: common.toIntegerPx(0.2em);
     }
 

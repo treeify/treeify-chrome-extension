@@ -21,6 +21,6 @@
     @include common.size(26px);
     @include common.absolute-center;
 
-    @include common.icon(lch(45% 0 0), url('plus.svg'));
+    @include common.icon(oklch(45% 0 0), url('plus.svg'));
   }
 </style>

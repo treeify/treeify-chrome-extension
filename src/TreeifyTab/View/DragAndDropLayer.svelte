@@ -90,7 +90,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --drop-destination-color: lch(60% 0 0);
+    --drop-destination-color: oklch(60% 0 0);
   }
 
   .drag-and-drop-layer_root {
@@ -116,10 +116,10 @@
 
     pointer-events: none;
 
-    background: lch(100% 0 0);
-    border: 1px solid lch(90% 0 0);
+    background: oklch(100% 0 0);
+    border: 1px solid oklch(90% 0 0);
 
-    box-shadow: 0 0.5px 3px lch(80% 0 0);
+    box-shadow: 0 0.5px 3px oklch(80% 0 0);
 
     outline: none;
   }

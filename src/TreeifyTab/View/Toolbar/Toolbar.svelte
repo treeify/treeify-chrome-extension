@@ -60,8 +60,8 @@
     position: relative;
     z-index: 20;
 
-    background: lch(100% 0 0);
-    box-shadow: 0 0 3px lch(70% 0 0);
+    background: oklch(100% 0 0);
+    box-shadow: 0 0 3px oklch(70% 0 0);
 
     @media print {
       display: none;

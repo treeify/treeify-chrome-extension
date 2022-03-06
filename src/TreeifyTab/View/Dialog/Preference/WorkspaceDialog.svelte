@@ -135,7 +135,7 @@
       @include common.size(common.toIntegerPx(1.2em));
       @include common.absolute-center;
 
-      @include common.icon(lch(40% 0 0), url('trash-can.svg'));
+      @include common.icon(oklch(40% 0 0), url('trash-can.svg'));
     }
   }
 
@@ -158,7 +158,7 @@
       @include common.size(common.toIntegerPx(1.6em));
       @include common.absolute-center;
 
-      @include common.icon(lch(50% 0 0), url('plus.svg'));
+      @include common.icon(oklch(50% 0 0), url('plus.svg'));
     }
   }
 </style>

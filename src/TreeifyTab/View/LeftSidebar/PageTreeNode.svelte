@@ -116,7 +116,7 @@
   .page-tree-node_audible-icon {
     @include common.size(common.toIntegerPx(1em));
 
-    @include common.icon(lch(60% 0 0), url('audible.svg'));
+    @include common.icon(oklch(60% 0 0), url('audible.svg'));
 
     margin-left: common.toIntegerPx(0.2em);
   }
@@ -136,7 +136,7 @@
   .page-tree-node_tabs-count {
     @include common.absolute-center;
 
-    color: lch(40% 0 0);
+    color: oklch(40% 0 0);
   }
 
   .page-tree-node_close-button {
@@ -152,7 +152,7 @@
       @include common.size(common.toIntegerPx(1.3em));
       @include common.absolute-center;
 
-      @include common.icon(lch(50% 0 0), url('close-circle.svg'));
+      @include common.icon(oklch(50% 0 0), url('close-circle.svg'));
     }
 
     .page-tree-node_body-area:hover & {
