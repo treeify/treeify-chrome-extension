@@ -109,7 +109,7 @@
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
     @include common.size(common.toIntegerPx(1em));
-    @include common.icon(lch(45% 0 0), url('audible.svg'));
+    @include common.icon(oklch(45% 0 0), url('audible.svg'));
 
     margin-left: common.toIntegerPx(0.2em);
   }
@@ -125,11 +125,11 @@
     white-space: nowrap;
 
     &.discarded {
-      color: lch(35% 0 0);
+      color: oklch(40% 0 0);
     }
 
     &.tab-closed {
-      color: lch(60% 0 0);
+      color: oklch(60% 0 0);
     }
 
     // 未読ウェブページ項目のタイトルの強調表示
@@ -137,11 +137,11 @@
       color: var(--unread-web-page-item-title-color);
 
       &.discarded {
-        color: lch(35% 30 160.4);
+        color: oklch(55% 0.16 135);
       }
 
       &.tab-closed {
-        color: lch(60% 30 160.4);
+        color: oklch(60% 0.1 135);
       }
     }
 

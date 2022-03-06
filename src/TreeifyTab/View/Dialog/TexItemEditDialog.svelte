@@ -97,7 +97,7 @@
     padding: common.toIntegerPx(0.5em);
 
     $outline-size: 1px;
-    outline: $outline-size solid lch(60% 0 0);
+    outline: $outline-size solid oklch(60% 0 0);
     // 親要素によってoutlineが見えなくなってしまう現象へのワークアラウンド。
     margin: $outline-size;
   }

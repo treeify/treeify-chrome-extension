@@ -1,3 +1,4 @@
+import postcssOKLabFunction from '@csstools/postcss-oklab-function'
 import alias from '@rollup/plugin-alias'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
@@ -5,7 +6,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import replace from '@rollup/plugin-replace'
 import typescript from '@rollup/plugin-typescript'
 import path from 'path'
-import postcssLabFunction from 'postcss-lab-function'
 import copy from 'rollup-plugin-copy'
 import css from 'rollup-plugin-css-only'
 import builtins from 'rollup-plugin-node-builtins'
@@ -53,7 +53,7 @@ export default {
     svelte({
       preprocess: sveltePreprocess({
         postcss: {
-          plugins: [postcssLabFunction({ subFeatures: { displayP3: false } })],
+          plugins: [postcssOKLabFunction({ subFeatures: { displayP3: false } })],
         },
       }),
     }),

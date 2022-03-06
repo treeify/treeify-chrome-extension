@@ -40,7 +40,7 @@
     aspect-ratio: var(--aspect-ratio);
 
     // Treeifyタブと同じ背景色の画像（スクショなど）の境界線が分からない問題の対策。
-    border: 1px solid lch(80% 0 0);
+    border: 1px solid oklch(80% 0 0);
   }
 
   .image-item-content_caption {
@@ -52,7 +52,7 @@
 
     .completed &,
     .completed-children & {
-      color: lch(50% 0 0);
+      color: oklch(50% 0 0);
     }
   }
 </style>

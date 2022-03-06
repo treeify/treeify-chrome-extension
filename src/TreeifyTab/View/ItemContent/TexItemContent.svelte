@@ -41,6 +41,6 @@
     margin-top: common.toIntegerPx(0.1em);
 
     font-size: 80%;
-    color: lch(30% 0 0);
+    color: oklch(30% 0 0);
   }
 </style>

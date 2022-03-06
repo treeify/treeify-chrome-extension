@@ -57,13 +57,13 @@
     top: var(--top);
     right: var(--right);
 
-    background: lch(100% 0 0);
+    background: oklch(100% 0 0);
 
-    border: lch(80% 0 0) 1px solid;
+    border: oklch(80% 0 0) 1px solid;
     border-radius: 6px;
     // 子要素を角丸からはみ出させない
     overflow: hidden;
 
-    box-shadow: 0 1px 6px lch(75% 0 0);
+    box-shadow: 0 1px 6px oklch(75% 0 0);
   }
 </style>

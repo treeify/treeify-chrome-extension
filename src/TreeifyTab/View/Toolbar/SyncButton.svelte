@@ -31,7 +31,7 @@
   .sync-button_cloud-icon {
     @include common.size(26px);
     @include common.absolute-center;
-    @include common.icon(lch(45% 0 0), url('cloud-upload.svg'));
+    @include common.icon(oklch(45% 0 0), url('cloud-upload.svg'));
 
     &.has-never-updated-after-sync {
       @include common.icon-url(url('cloud-check.svg'));
@@ -43,7 +43,7 @@
 
     &.has-sync-issue {
       @include common.icon-url(url('cloud-alert.svg'));
-      @include common.icon-color(lch(35% 70 40.4));
+      @include common.icon-color(oklch(50% 1 15));
     }
   }
 </style>

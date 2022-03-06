@@ -168,7 +168,7 @@
 
     @include common.flex-center;
 
-    color: lch(40% 0 0);
+    color: oklch(40% 0 0);
 
     font-size: 97%;
   }
@@ -190,7 +190,7 @@
     @include common.size(common.toIntegerPx(0.8em));
     @include common.absolute-center;
 
-    @include common.icon(lch(30% 0 0), url('close.svg'));
+    @include common.icon(oklch(30% 0 0), url('close.svg'));
   }
 
   // 複数選択された項目の背景色設定。

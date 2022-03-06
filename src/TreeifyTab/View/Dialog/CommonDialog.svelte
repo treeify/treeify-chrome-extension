@@ -84,8 +84,8 @@
     // 子要素を角丸からはみ出させない
     overflow: hidden;
 
-    background: lch(100% 0 0);
-    box-shadow: 0 3px 14px lch(70% 0 0);
+    background: oklch(100% 0 0);
+    box-shadow: 0 3px 14px oklch(70% 0 0);
   }
 
   .common-dialog_title-bar {
@@ -95,17 +95,17 @@
 
     padding-inline: common.toIntegerPx(0.5em);
 
-    background: lch(25% 0 0);
+    background: oklch(25% 0 0);
   }
 
   .common-dialog_title {
     line-height: common.toIntegerPx(2.2em);
-    color: lch(100% 0 0);
+    color: oklch(100% 0 0);
   }
 
   .common-dialog_close-button {
     @include common.circle(common.toIntegerPx(1.6em));
-    @include common.pseudo-ripple-effect(lch(40% 0 0));
+    @include common.pseudo-ripple-effect(oklch(40% 0 0));
 
     margin-left: auto;
 
@@ -116,7 +116,7 @@
       @include common.size(common.toIntegerPx(0.8em));
       @include common.absolute-center;
 
-      @include common.icon(lch(80% 0 0), url('close.svg'));
+      @include common.icon(oklch(80% 0 0), url('close.svg'));
     }
   }
 

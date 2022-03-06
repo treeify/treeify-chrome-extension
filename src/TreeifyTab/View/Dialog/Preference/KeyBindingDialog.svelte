@@ -252,7 +252,7 @@
 
   :root {
     --key-binding-dialog-circle-button-size: #{common.toIntegerPx(1.6em)};
-    --key-binding-dialog-circle-button-hover-color: lch(88% 0 0);
+    --key-binding-dialog-circle-button-hover-color: oklch(88% 0 0);
   }
 
   .key-binding-dialog_content {
@@ -264,7 +264,7 @@
   }
 
   .key-binding-dialog_scroll-area {
-    border: 1px solid lch(80% 0 0);
+    border: 1px solid oklch(80% 0 0);
 
     max-height: 100%;
     overflow-y: auto;
@@ -277,7 +277,7 @@
     border-collapse: collapse;
 
     tr:nth-child(odd) {
-      background: lch(96% 0 0);
+      background: oklch(96% 0 0);
     }
 
     // 追加ボタン用の行には背景色を付けない
@@ -315,7 +315,7 @@
       @include common.size(common.toIntegerPx(1.2em));
       @include common.absolute-center;
 
-      @include common.icon(lch(40% 0 0), url('trash-can.svg'));
+      @include common.icon(oklch(40% 0 0), url('trash-can.svg'));
     }
 
     .key-binding-dialog_command-row:hover & {
@@ -336,7 +336,7 @@
       @include common.size(common.toIntegerPx(1.2em));
       @include common.absolute-center;
 
-      @include common.icon(lch(40% 0 0), url('plus.svg'));
+      @include common.icon(oklch(40% 0 0), url('plus.svg'));
     }
 
     .key-binding-dialog_command-row:hover & {

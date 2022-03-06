@@ -56,8 +56,7 @@
     margin: 0;
     font-size: inherit;
 
-    // 彩度は色域境界値
-    accent-color: lch(50% 60.6 280.4);
+    accent-color: oklch(59% 0.17 255);
   }
 
   img {
@@ -68,38 +67,35 @@
     padding-inline: common.toIntegerPx(1.1em);
     padding-block: common.toIntegerPx(0.3em);
     border-radius: common.toIntegerPx(0.3em);
-    border: 1px lch(70% 0 0) solid;
+    border: 1px oklch(70% 0 0) solid;
 
-    background: lch(100% 0 0);
-    color: lch(32.5% 0 0);
+    background: oklch(100% 0 0);
+    color: oklch(32.5% 0 0);
     font-weight: 600;
 
     cursor: pointer;
 
     &:hover {
-      background: lch(97.5% 0 0);
+      background: oklch(97.5% 0 0);
     }
 
     &:active {
-      background: lch(95% 0 0);
+      background: oklch(95% 0 0);
     }
 
     &.primary {
-      // 彩度は色域境界値
-      background: lch(51% 60.6 280.4);
+      background: oklch(59% 0.17 255);
 
       border-color: transparent;
 
-      color: lch(99.5% 0 0);
+      color: oklch(99.5% 0 0);
 
       &:hover {
-        // 彩度は色域境界値
-        background: lch(48.5% 57.7 280.4);
+        background: oklch(54% 0.17 255);
       }
 
       &:active {
-        // 彩度は色域境界値
-        background: lch(46% 55.2 280.4);
+        background: oklch(51% 0.17 255);
       }
     }
   }

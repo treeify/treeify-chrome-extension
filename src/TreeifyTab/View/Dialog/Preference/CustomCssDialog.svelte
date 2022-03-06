@@ -67,7 +67,7 @@
     min-height: 50vh;
     padding: common.toIntegerPx(0.5em);
 
-    outline: 1px solid lch(60% 0 0);
+    outline: 1px solid oklch(60% 0 0);
 
     max-height: 100%;
     overflow-y: auto;

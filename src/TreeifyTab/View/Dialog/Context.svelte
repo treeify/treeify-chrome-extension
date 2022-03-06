@@ -47,7 +47,7 @@
   }
 
   .context_frame {
-    border: solid 1px lch(70% 0 0);
+    border: solid 1px oklch(70% 0 0);
     border-radius: common.toIntegerPx(0.7em);
     padding: common.toIntegerPx(0.5em) common.toIntegerPx(0.5em) common.toIntegerPx(0.5em)
       common.toIntegerPx(1em);
@@ -55,7 +55,7 @@
     cursor: pointer;
 
     &:hover {
-      border-color: lch(30% 0 0);
+      border-color: oklch(30% 0 0);
     }
   }
 </style>

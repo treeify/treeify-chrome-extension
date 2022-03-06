@@ -46,7 +46,7 @@
 
     outline: none;
 
-    background: lch(97% 0 0);
+    background: oklch(97% 0 0);
   }
 
   .main-area_paper {
@@ -63,9 +63,9 @@
 
     min-height: 100%;
 
-    box-shadow: 0 0.5px 3px lch(70% 0 0);
+    box-shadow: 0 0.5px 3px oklch(70% 0 0);
 
-    background: lch(100% 0 0);
+    background: oklch(100% 0 0);
 
     @media print {
       box-shadow: none;
