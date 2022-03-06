@@ -14,8 +14,10 @@
   @return calc(#{$number} * 4.9406564584124654e-324 / 4.9406564584124654e-324);
 }
 
-@function em($number) {
-  @return round(calc(#{$number} * var(--font-size)));
+// pxに変換してから四捨五入することで整数化する。
+// 小数pxではバレットのような小さな要素のレイアウトが崩れることがあるのでその対策用に定義した。
+@function toIntegerPx($size) {
+  @return round(calc(#{$size} + 0px));
 }
 
 @mixin size($size) {

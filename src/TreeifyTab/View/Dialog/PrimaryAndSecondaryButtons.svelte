@@ -24,7 +24,7 @@
 
   .primary-and-secondary-buttons_root {
     display: inline-flex;
-    gap: common.em(0.8);
+    gap: common.toIntegerPx(0.8em);
 
     [data-os-name='Windows'] & {
       flex-direction: row-reverse;

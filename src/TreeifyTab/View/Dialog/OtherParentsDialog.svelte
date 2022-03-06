@@ -30,12 +30,12 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .other-parents-dialog_content {
-    min-width: common.em(15);
-    padding: common.em(1);
+    min-width: common.toIntegerPx(15em);
+    padding: common.toIntegerPx(1em);
 
     display: flex;
     flex-direction: column;
-    row-gap: common.em(0.3);
+    row-gap: common.toIntegerPx(0.3em);
 
     outline: none;
 

@@ -251,12 +251,12 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --key-binding-dialog-circle-button-size: #{common.em(1.6)};
+    --key-binding-dialog-circle-button-size: #{common.toIntegerPx(1.6em)};
     --key-binding-dialog-circle-button-hover-color: lch(88% 0 0);
   }
 
   .key-binding-dialog_content {
-    padding: common.em(1);
+    padding: common.toIntegerPx(1em);
 
     max-height: 100%;
     display: grid;
@@ -288,18 +288,18 @@
 
   .key-binding-dialog_input-id {
     text-align: right;
-    padding-left: common.em(3);
+    padding-left: common.toIntegerPx(3em);
   }
 
   .key-binding-dialog_commands {
-    padding-block: common.em(0.4);
+    padding-block: common.toIntegerPx(0.4em);
   }
 
   .key-binding-dialog_command-row {
     display: flex;
     align-items: center;
 
-    padding-left: common.em(2);
+    padding-left: common.toIntegerPx(2em);
   }
 
   .key-binding-dialog_delete-button {
@@ -312,7 +312,7 @@
     &::before {
       content: '';
 
-      @include common.size(common.em(1.2));
+      @include common.size(common.toIntegerPx(1.2em));
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('trash-can.svg'));
@@ -333,7 +333,7 @@
     &::before {
       content: '';
 
-      @include common.size(common.em(1.2));
+      @include common.size(common.toIntegerPx(1.2em));
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('plus.svg'));
@@ -359,6 +359,6 @@
   .key-binding-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: common.em(1);
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

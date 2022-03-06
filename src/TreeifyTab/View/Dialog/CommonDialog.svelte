@@ -91,20 +91,20 @@
   .common-dialog_title-bar {
     display: flex;
     align-items: center;
-    column-gap: common.em(1);
+    column-gap: common.toIntegerPx(1em);
 
-    padding-inline: common.em(0.5);
+    padding-inline: common.toIntegerPx(0.5em);
 
     background: lch(25% 0 0);
   }
 
   .common-dialog_title {
-    line-height: common.em(2.2);
+    line-height: common.toIntegerPx(2.2em);
     color: lch(100% 0 0);
   }
 
   .common-dialog_close-button {
-    @include common.circle(common.em(1.6));
+    @include common.circle(common.toIntegerPx(1.6em));
     @include common.pseudo-ripple-effect(lch(40% 0 0));
 
     margin-left: auto;
@@ -113,7 +113,7 @@
 
     &::before {
       content: '';
-      @include common.size(common.em(0.8));
+      @include common.size(common.toIntegerPx(0.8em));
       @include common.absolute-center;
 
       @include common.icon(lch(80% 0 0), url('close.svg'));

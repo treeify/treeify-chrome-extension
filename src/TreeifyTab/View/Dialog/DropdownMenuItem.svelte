@@ -64,7 +64,7 @@
     outline: none;
 
     font-size: 0.9rem;
-    padding: common.em(0.3) common.em(0.5);
+    padding: common.toIntegerPx(0.3em) common.toIntegerPx(0.5em);
 
     cursor: pointer;
 

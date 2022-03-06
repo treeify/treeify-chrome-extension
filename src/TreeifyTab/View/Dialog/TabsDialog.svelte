@@ -69,8 +69,8 @@
   }
 
   .tabs-dialog_content {
-    min-width: common.em(20);
-    padding: common.em(1);
+    min-width: common.toIntegerPx(20em);
+    padding: common.toIntegerPx(1em);
 
     outline: none;
 

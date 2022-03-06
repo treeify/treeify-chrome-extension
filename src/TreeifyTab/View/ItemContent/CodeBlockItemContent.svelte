@@ -41,7 +41,7 @@
   .code-block-item-content_code {
     border: 1px solid lch(80% 0 0);
     margin: 0;
-    padding: common.em(0.2);
+    padding: common.toIntegerPx(0.2em);
     // これを指定しないとoverflowしたコードがborderからはみ出る
     min-width: max-content;
 
@@ -51,9 +51,9 @@
   }
 
   .code-block-item-content_caption {
-    margin-left: common.em(0.5);
-    margin-top: common.em(0.1);
-    margin-bottom: common.em(0.2);
+    margin-left: common.toIntegerPx(0.5em);
+    margin-top: common.toIntegerPx(0.1em);
+    margin-bottom: common.toIntegerPx(0.2em);
 
     font-size: 80%;
     color: lch(30% 0 0);

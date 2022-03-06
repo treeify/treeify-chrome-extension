@@ -59,7 +59,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .other-settings-dialog_content {
-    padding: common.em(1);
+    padding: common.toIntegerPx(1em);
 
     outline: none;
 
@@ -70,18 +70,18 @@
   .other-settings-dialog_checkbox-area {
     display: inline-flex;
     flex-direction: column;
-    gap: common.em(0.5);
+    gap: common.toIntegerPx(0.5em);
 
-    margin-top: common.em(0.5);
+    margin-top: common.toIntegerPx(0.5em);
   }
 
   .other-settings-dialog_spacer {
-    height: common.em(1);
+    height: common.toIntegerPx(1em);
   }
 
   .other-settings-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: common.em(1);
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

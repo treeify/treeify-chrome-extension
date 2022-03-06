@@ -81,7 +81,7 @@
   }
 
   .main-area-web-page-content_favicon-wrapper {
-    @include common.size(common.em(1));
+    @include common.size(common.toIntegerPx(1em));
     @include common.pseudo-ripple-effect(transparent);
 
     .discarded & {
@@ -108,10 +108,10 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .main-area-web-page-content_audible-icon {
-    @include common.size(common.em(1));
+    @include common.size(common.toIntegerPx(1em));
     @include common.icon(lch(45% 0 0), url('audible.svg'));
 
-    margin-left: common.em(0.2);
+    margin-left: common.toIntegerPx(0.2em);
   }
 
   // ウェブページ項目のタイトル

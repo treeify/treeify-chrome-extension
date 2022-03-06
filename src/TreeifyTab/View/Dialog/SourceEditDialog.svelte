@@ -70,14 +70,14 @@
 
   .source-edit-dialog_content {
     width: 90vw;
-    max-width: common.em(40);
-    padding: common.em(1);
+    max-width: common.toIntegerPx(40em);
+    padding: common.toIntegerPx(1em);
   }
 
   .source-edit-dialog_input-area {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    grid-gap: common.em(0.5);
+    grid-gap: common.toIntegerPx(0.5em);
   }
 
   .source-edit-dialog_label {
@@ -87,6 +87,6 @@
   .source-edit-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: common.em(1);
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

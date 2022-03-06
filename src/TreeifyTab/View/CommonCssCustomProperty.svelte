@@ -2,10 +2,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --base-font-size: 16px;
-    --font-size: var(--base-font-size);
-
-    --bullet-size: #{common.em(0.375)};
+    --bullet-size: #{common.toIntegerPx(0.375em)};
     --bullet-color: lch(60% 0 0);
     --bullet-hover-color: lch(40% 0 0);
     --bullet-outer-circle-color: lch(90% 0 0);
@@ -54,7 +51,7 @@
     --doubtful-item-decoration-color: lch(60% 82.6 40.4);
     --doubtful-item-decoration: underline dashed var(--doubtful-item-decoration-color);
     --doubtful-item-decoration-thickness: 1px;
-    --doubtful-item-decoration-underline-offset: #{common.em(0.2)};
+    --doubtful-item-decoration-underline-offset: #{common.toIntegerPx(0.2em)};
 
     // 彩度は色域境界値
     --unread-web-page-item-title-color: lch(35% 35.4 160.4);

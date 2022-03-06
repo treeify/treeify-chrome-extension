@@ -148,7 +148,7 @@
 
   // ページのバレット
   .main-area-bullet-and-indent_page-icon {
-    @include common.size(common.em(1));
+    @include common.size(common.toIntegerPx(1em));
     @include common.absolute-center;
     @include common.icon(var(--page-icon-color), url('page.svg'));
 

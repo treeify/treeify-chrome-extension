@@ -79,8 +79,8 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .image-item-edit-dialog_content {
-    min-width: common.em(45);
-    padding: common.em(1);
+    min-width: common.toIntegerPx(45em);
+    padding: common.toIntegerPx(1em);
   }
 
   .image-item-edit-dialog_url {
@@ -90,6 +90,6 @@
   .image-item-edit-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: common.em(1);
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

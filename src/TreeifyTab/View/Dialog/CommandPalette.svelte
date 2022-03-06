@@ -68,14 +68,14 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .command-palette-dialog_content {
-    padding: common.em(1);
+    padding: common.toIntegerPx(1em);
 
-    min-width: common.em(20);
+    min-width: common.toIntegerPx(20em);
   }
 
   .command-palette-dialog_command-id {
     width: 100%;
-    padding: common.em(0.35);
+    padding: common.toIntegerPx(0.35em);
     font-size: 95%;
   }
 </style>

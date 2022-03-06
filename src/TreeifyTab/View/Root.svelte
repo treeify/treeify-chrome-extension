@@ -42,14 +42,11 @@
 
   * {
     box-sizing: border-box;
-
-    // em単位を使うと小数pxになってしまい、バレットの形が歪んだり、バレットとインデントガイドの軸がずれる不具合が起こる。
-    // そこでemを使わず、どの要素でもfont-sizeを元にcalcで整数pxを計算できるようにする。
-    font-size: var(--font-size);
   }
 
   html {
     height: 100%;
+    font-size: 16px;
   }
 
   body {
@@ -68,9 +65,9 @@
   }
 
   button {
-    padding-inline: common.em(1.1);
-    padding-block: common.em(0.3);
-    border-radius: common.em(0.3);
+    padding-inline: common.toIntegerPx(1.1em);
+    padding-block: common.toIntegerPx(0.3em);
+    border-radius: common.toIntegerPx(0.3em);
     border: 1px lch(70% 0 0) solid;
 
     background: lch(100% 0 0);

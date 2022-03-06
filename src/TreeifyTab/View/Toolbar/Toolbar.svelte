@@ -48,7 +48,7 @@
 
   .toolbar_root {
     height: 40px;
-    padding-inline: common.em(2);
+    padding-inline: common.toIntegerPx(2em);
 
     // ボタンなどを横に並べる（右寄せ）
     display: flex;

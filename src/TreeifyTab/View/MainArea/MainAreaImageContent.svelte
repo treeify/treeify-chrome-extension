@@ -114,7 +114,7 @@
   .main-area-image-content_caption {
     width: var(--width);
     max-width: 100%;
-    margin-bottom: common.em(0.2);
+    margin-bottom: common.toIntegerPx(0.2em);
 
     text-align: center;
 

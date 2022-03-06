@@ -22,6 +22,6 @@
   }
 
   .checkbox_checkbox {
-    margin-right: common.em(0.3);
+    margin-right: common.toIntegerPx(0.3em);
   }
 </style>

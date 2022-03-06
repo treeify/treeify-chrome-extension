@@ -194,8 +194,8 @@
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
 
-    min-width: common.em(25);
-    padding: common.em(1);
+    min-width: common.toIntegerPx(25em);
+    padding: common.toIntegerPx(1em);
   }
 
   .search-dialog_search-box {
@@ -205,15 +205,15 @@
   }
 
   .search-dialog_search-query {
-    padding: common.em(0.35);
+    padding: common.toIntegerPx(0.35em);
     font-size: 95%;
   }
 
   .search-dialog_filter-area {
     display: flex;
     align-items: center;
-    gap: common.em(0.3);
-    padding: common.em(0.5);
+    gap: common.toIntegerPx(0.3em);
+    padding: common.toIntegerPx(0.5em);
   }
 
   .search-dialog_result-area {
@@ -223,8 +223,8 @@
   .search-dialog_result {
     display: flex;
     flex-direction: column;
-    row-gap: common.em(1);
+    row-gap: common.toIntegerPx(1em);
 
-    padding-bottom: common.em(1);
+    padding-bottom: common.toIntegerPx(1em);
   }
 </style>

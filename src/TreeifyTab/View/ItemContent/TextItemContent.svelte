@@ -19,8 +19,8 @@
     overflow-x: hidden;
 
     &.has-source {
-      border-left: common.em(0.25) solid lch(80% 0 0);
-      padding-left: common.em(0.2);
+      border-left: common.toIntegerPx(0.25em) solid lch(80% 0 0);
+      padding-left: common.toIntegerPx(0.2em);
     }
 
     &.doubtful {
