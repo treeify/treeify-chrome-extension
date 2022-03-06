@@ -94,11 +94,11 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --workspace-dialog-delete-button-size: 1.5em;
+    --workspace-dialog-delete-button-size: #{common.em(1.5)};
   }
 
   .workspace-dialog_content {
-    padding: 1em;
+    padding: common.em(1);
 
     max-height: 100%;
     overflow-y: auto;
@@ -110,7 +110,7 @@
   .workspace-dialog_workspace-list {
     display: flex;
     flex-direction: column;
-    row-gap: 0.3em;
+    row-gap: common.em(0.3);
   }
 
   .workspace-dialog_workspace {
@@ -119,11 +119,11 @@
   }
 
   .workspace-dialog_radio-button {
-    margin: 0 0.3em 0 0;
+    margin: 0 common.em(0.3) 0 0;
   }
 
   .workspace-dialog_workspace-name {
-    margin-left: 0.2em;
+    margin-left: common.em(0.2);
   }
 
   .workspace-dialog_delete-button {
@@ -132,7 +132,7 @@
 
     &::before {
       content: '';
-      @include common.size(1.2em);
+      @include common.size(common.em(1.2));
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('trash-can.svg'));
@@ -146,16 +146,16 @@
   .workspace-dialog_add-button-row {
     @include common.flex-center;
 
-    margin-top: 0.2em;
+    margin-top: common.em(0.2);
   }
 
   .workspace-dialog_add-button {
-    @include common.circle(2em);
+    @include common.circle(common.em(2));
     @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     &::before {
       content: '';
-      @include common.size(1.6em);
+      @include common.size(common.em(1.6));
       @include common.absolute-center;
 
       @include common.icon(lch(50% 0 0), url('plus.svg'));

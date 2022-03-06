@@ -218,12 +218,12 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --export-dialog-tab-radius: 0.4em;
+    --export-dialog-tab-radius: #{common.em(0.4)};
   }
 
   .export-dialog_content {
-    min-width: 30em;
-    padding: 1em;
+    min-width: common.em(30);
+    padding: common.em(1);
 
     outline: none;
 
@@ -239,8 +239,8 @@
   .export-dialog_format-select-button {
     @include common.flex-center;
 
-    padding-block: 0.18em;
-    padding-inline: 1.2em;
+    padding-block: common.em(0.18);
+    padding-inline: common.em(1.2);
 
     border-top-left-radius: var(--export-dialog-tab-radius);
     border-top-right-radius: var(--export-dialog-tab-radius);
@@ -266,19 +266,19 @@
     // クリックの当たり判定が広がるのを防ぐ
     align-items: start;
 
-    gap: 0.5em;
+    gap: common.em(0.5);
 
-    padding: 1em;
+    padding: common.em(1);
     border: 1px solid lch(80% 0 0);
     border-top-style: none;
   }
 
   .export-dialog_bottom-button-area {
-    margin-top: 1em;
+    margin-top: common.em(1);
 
     // 中央寄せ
     @include common.flex-center;
-    gap: 1.5em;
+    gap: common.em(1.5);
   }
 
   .export-dialog_copy-button {
@@ -287,7 +287,7 @@
   }
 
   .export-dialog_copy-button-icon {
-    @include common.size(1.5em);
+    @include common.size(common.em(1.5));
 
     @include common.icon(lch(45% 0 0), url('clipboard.svg'));
   }
@@ -298,7 +298,7 @@
   }
 
   .export-dialog_save-button-icon {
-    @include common.size(1.5em);
+    @include common.size(common.em(1.5));
 
     @include common.icon(lch(45% 0 0), url('file-download.svg'));
   }

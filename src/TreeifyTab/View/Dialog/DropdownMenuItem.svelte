@@ -58,11 +58,13 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .dropdown-menu-item_root {
     outline: none;
 
     font-size: 0.9rem;
-    padding: 0.3em 0.5em;
+    padding: common.em(0.3) common.em(0.5);
 
     cursor: pointer;
 

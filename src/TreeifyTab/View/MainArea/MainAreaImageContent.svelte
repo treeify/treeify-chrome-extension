@@ -60,6 +60,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .main-area-image-content_root {
     outline: none;
 
@@ -112,7 +114,7 @@
   .main-area-image-content_caption {
     width: var(--width);
     max-width: 100%;
-    margin-bottom: 0.2em;
+    margin-bottom: common.em(0.2);
 
     text-align: center;
 

@@ -55,7 +55,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .custom-css-dialog_content {
-    padding: 1em;
+    padding: common.em(1);
 
     max-height: 100%;
     display: grid;
@@ -65,7 +65,7 @@
   .custom-css-dialog_code {
     min-width: 50vw;
     min-height: 50vh;
-    padding: 0.5em;
+    padding: common.em(0.5);
 
     outline: 1px solid lch(60% 0 0);
 
@@ -76,6 +76,6 @@
   .custom-css-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.em(1);
   }
 </style>

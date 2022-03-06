@@ -78,12 +78,12 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .code-block-language-setting-dialog_content {
-    padding: 1em;
+    padding: common.em(1);
   }
 
   .code-block-language-setting-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.em(1);
   }
 </style>

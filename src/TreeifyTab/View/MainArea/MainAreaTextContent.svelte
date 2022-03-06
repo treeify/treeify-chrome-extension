@@ -25,6 +25,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   // テキスト項目のcontenteditableな要素
   .main-area-text-content_content-editable {
     // contenteditableな要素のフォーカス時の枠線を非表示
@@ -33,8 +35,8 @@
     padding-block: var(--main-area-node-content-area-vertical-padding);
 
     .has-source & {
-      border-left: 0.25em solid lch(80% 0 0);
-      padding-left: 0.2em;
+      border-left: common.em(0.25) solid lch(80% 0 0);
+      padding-left: common.em(0.2);
     }
 
     // 完了状態のテキスト項目

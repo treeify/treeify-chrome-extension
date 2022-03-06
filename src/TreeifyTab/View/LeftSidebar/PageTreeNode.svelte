@@ -65,7 +65,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --page-tree-node-content-area-vertical-padding: 0.22em;
+    --page-tree-node-content-area-vertical-padding: #{common.em(0.22)};
 
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
@@ -114,15 +114,15 @@
 
   // ウェブページ項目の音がなっていることを示すアイコン
   .page-tree-node_audible-icon {
-    @include common.size(1em);
+    @include common.size(common.em(1));
 
     @include common.icon(lch(60% 0 0), url('audible.svg'));
 
-    margin-left: 0.2em;
+    margin-left: common.em(0.2);
   }
 
   .page-tree-node_right-button-area {
-    @include common.size(1.5em);
+    @include common.size(common.em(1.5));
   }
 
   .page-tree-node_tabs-count-button {
@@ -149,7 +149,7 @@
     &::before {
       content: '';
 
-      @include common.size(1.3em);
+      @include common.size(common.em(1.3));
       @include common.absolute-center;
 
       @include common.icon(lch(50% 0 0), url('close-circle.svg'));

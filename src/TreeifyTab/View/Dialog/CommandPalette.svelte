@@ -64,16 +64,18 @@
   </div>
 </CommonDialog>
 
-<style lang="scss">
-  .command-palette-dialog_content {
-    padding: 1em;
+<style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
 
-    min-width: 20em;
+  .command-palette-dialog_content {
+    padding: common.em(1);
+
+    min-width: common.em(20);
   }
 
   .command-palette-dialog_command-id {
     width: 100%;
-    padding: 0.35em;
+    padding: common.em(0.35);
     font-size: 95%;
   }
 </style>

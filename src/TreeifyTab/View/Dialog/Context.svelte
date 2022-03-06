@@ -27,7 +27,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --context-item-line-height: 1.3em;
+    --context-item-line-height: #{common.em(1.3)};
   }
 
   .context_root {
@@ -37,19 +37,19 @@
   .context_page {
     display: flex;
     align-items: center;
-    gap: 0.2em;
+    gap: common.em(0.2);
   }
 
   .context_page-icon {
-    @include common.size(1em);
+    @include common.size(common.em(1));
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
   }
 
   .context_frame {
     border: solid 1px lch(70% 0 0);
-    border-radius: 0.7em;
-    padding: 0.5em 0.5em 0.5em 1em;
+    border-radius: common.em(0.7);
+    padding: common.em(0.5) common.em(0.5) common.em(0.5) common.em(1);
 
     cursor: pointer;
 

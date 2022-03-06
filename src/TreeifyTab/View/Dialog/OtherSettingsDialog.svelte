@@ -59,7 +59,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .other-settings-dialog_content {
-    padding: 1em;
+    padding: common.em(1);
 
     outline: none;
 
@@ -70,18 +70,18 @@
   .other-settings-dialog_checkbox-area {
     display: inline-flex;
     flex-direction: column;
-    gap: 0.5em;
+    gap: common.em(0.5);
 
-    margin-top: 0.5em;
+    margin-top: common.em(0.5);
   }
 
   .other-settings-dialog_spacer {
-    height: 1em;
+    height: common.em(1);
   }
 
   .other-settings-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.em(1);
   }
 </style>

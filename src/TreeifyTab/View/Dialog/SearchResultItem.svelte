@@ -52,7 +52,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --search-result-line-height: 1.3em;
+    --search-result-line-height: #{common.em(1.3)};
 
     --search-result-footprint-count-exponent: 0.5;
   }

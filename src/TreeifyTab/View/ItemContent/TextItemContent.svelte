@@ -13,12 +13,14 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .text-item-content_root {
     overflow-x: hidden;
 
     &.has-source {
-      border-left: 0.25em solid lch(80% 0 0);
-      padding-left: 0.2em;
+      border-left: common.em(0.25) solid lch(80% 0 0);
+      padding-left: common.em(0.2);
     }
 
     &.doubtful {

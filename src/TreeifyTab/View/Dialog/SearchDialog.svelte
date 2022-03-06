@@ -186,14 +186,16 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .search-dialog_content {
     // 検索結果一覧領域だけをスクロール可能にするための設定
     max-height: 100%;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
 
-    min-width: 25em;
-    padding: 1em;
+    min-width: common.em(25);
+    padding: common.em(1);
   }
 
   .search-dialog_search-box {
@@ -203,15 +205,15 @@
   }
 
   .search-dialog_search-query {
-    padding: 0.35em;
+    padding: common.em(0.35);
     font-size: 95%;
   }
 
   .search-dialog_filter-area {
     display: flex;
     align-items: center;
-    gap: 0.3em;
-    padding: 0.5em;
+    gap: common.em(0.3);
+    padding: common.em(0.5);
   }
 
   .search-dialog_result-area {
@@ -221,8 +223,8 @@
   .search-dialog_result {
     display: flex;
     flex-direction: column;
-    row-gap: 1em;
+    row-gap: common.em(1);
 
-    padding-bottom: 1em;
+    padding-bottom: common.em(1);
   }
 </style>

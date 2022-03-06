@@ -53,7 +53,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --tabs-dialog-item-line-height: 1.3em;
+    --tabs-dialog-item-line-height: #{common.em(1.3)};
   }
 
   .tabs-dialog-item_root {
@@ -121,10 +121,10 @@
   }
 
   .tabs-dialog-item_audible-icon {
-    @include common.size(1em);
+    @include common.size(common.em(1));
 
     @include common.icon(lch(50% 0 0), url('audible.svg'));
 
-    margin-left: 0.5em;
+    margin-left: common.em(0.5);
   }
 </style>

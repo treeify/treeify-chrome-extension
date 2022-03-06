@@ -30,17 +30,17 @@
 
   :root {
     // バレット領域のサイズ（正方形の一辺の長さ）
-    --page-tree-bullet-area-size: 0.9em;
+    --page-tree-bullet-area-size: #{common.em(0.9)};
 
     // 折りたたまれたノードのバレット（二等辺三角形▶）の幅
-    --page-tree-bullet-folded-width: 0.56em;
+    --page-tree-bullet-folded-width: #{common.em(0.56)};
     // 折りたたまれたノードのバレット（二等辺三角形▶）の高さ
-    --page-tree-bullet-folded-height: 0.38em;
+    --page-tree-bullet-folded-height: #{common.em(0.38)};
 
     // 折りたたまれたノードのバレット（二等辺三角形▼）の幅
-    --page-tree-bullet-unfolded-width: 0.45em;
+    --page-tree-bullet-unfolded-width: #{common.em(0.45)};
     // 折りたたまれたノードのバレット（二等辺三角形▼）の高さ
-    --page-tree-bullet-unfolded-height: 0.3em;
+    --page-tree-bullet-unfolded-height: #{common.em(0.3)};
   }
 
   .page-tree-bullet-and-indent_root {
@@ -132,7 +132,7 @@
 
     // 子を持たないノードのバレット
     &.no-children {
-      @include common.circle(0.25em);
+      @include common.circle(common.em(0.25));
 
       background: var(--bullet-color);
 

@@ -15,12 +15,14 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .tex-item-content_root {
     overflow: hidden;
 
-    padding-block: 0.3em;
+    padding-block: common.em(0.3);
     // 左端が切れてしまうことがある不具合の対策（原因は小数点pxを使っていることか、KaTeXの表示領域サイズの扱いが特殊だからか）
-    padding-inline: 0.1em;
+    padding-inline: common.em(0.1);
 
     .completed &,
     .completed-children & {
@@ -35,8 +37,8 @@
   }
 
   .tex-item-content_caption {
-    margin-left: 0.5em;
-    margin-top: 0.1em;
+    margin-left: common.em(0.5);
+    margin-top: common.em(0.1);
 
     font-size: 80%;
     color: lch(30% 0 0);

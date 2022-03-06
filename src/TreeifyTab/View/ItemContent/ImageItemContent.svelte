@@ -17,6 +17,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .image-item-content_root {
     &.doubtful {
       text-decoration: var(--doubtful-item-decoration);
@@ -39,7 +41,7 @@
   .image-item-content_caption {
     width: var(--width);
     max-width: 100%;
-    margin-bottom: 0.2em;
+    margin-bottom: common.em(0.2);
 
     text-align: center;
 

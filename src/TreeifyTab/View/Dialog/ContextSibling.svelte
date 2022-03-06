@@ -46,7 +46,7 @@
 
   .context-sibling_page-icon {
     @include common.absolute-center;
-    @include common.size(1em);
+    @include common.size(common.em(1));
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
   }
