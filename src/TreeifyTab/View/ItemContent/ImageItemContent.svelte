@@ -20,6 +20,11 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .image-item-content_root {
+    &.completed,
+    .completed-children & {
+      filter: opacity(50%);
+    }
+
     &.doubtful {
       text-decoration: var(--doubtful-item-decoration);
       text-decoration-thickness: var(--doubtful-item-decoration-thickness);
@@ -45,7 +50,6 @@
 
     text-align: center;
 
-    // 完了状態のキャプション
     .completed &,
     .completed-children & {
       color: lch(50% 0 0);

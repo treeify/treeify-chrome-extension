@@ -84,7 +84,6 @@
     min-width: 30px;
     aspect-ratio: var(--aspect-ratio);
 
-    // 完了状態の画像
     .completed &,
     .completed-children & {
       filter: opacity(50%);
@@ -118,7 +117,6 @@
 
     text-align: center;
 
-    // 完了状態のキャプション
     .completed &,
     .completed-children & {
       color: lch(50% 0 0);

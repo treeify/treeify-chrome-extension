@@ -145,7 +145,6 @@
       }
     }
 
-    // 完了状態のウェブページ項目のタイトル
     .completed &,
     .completed-children & {
       color: var(--completed-item-text-color);

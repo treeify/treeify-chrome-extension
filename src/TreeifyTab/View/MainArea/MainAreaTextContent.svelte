@@ -39,7 +39,6 @@
       padding-left: common.toIntegerPx(0.2em);
     }
 
-    // 完了状態のテキスト項目
     .completed &,
     .completed-children & {
       color: var(--completed-item-text-color);

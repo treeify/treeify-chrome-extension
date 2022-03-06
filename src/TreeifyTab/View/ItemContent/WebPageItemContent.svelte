@@ -30,6 +30,11 @@
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
 
+    &.completed,
+    .completed-children & {
+      color: var(--completed-item-text-color);
+    }
+
     &.doubtful {
       text-decoration: var(--doubtful-item-decoration);
       text-decoration-thickness: var(--doubtful-item-decoration-thickness);

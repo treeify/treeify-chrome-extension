@@ -28,5 +28,9 @@
       text-decoration-thickness: var(--doubtful-item-decoration-thickness);
       text-underline-offset: var(--doubtful-item-decoration-underline-offset);
     }
+
+    &.completed {
+      color: var(--completed-item-text-color);
+    }
   }
 </style>

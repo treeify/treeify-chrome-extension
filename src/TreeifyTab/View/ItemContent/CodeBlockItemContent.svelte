@@ -25,8 +25,7 @@
   .code-block-item-content_root {
     overflow-x: hidden;
 
-    // 完了状態のコードブロック項目
-    .completed &,
+    &.completed,
     .completed-children & {
       filter: opacity(50%);
     }
