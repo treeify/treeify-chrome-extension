@@ -129,15 +129,9 @@ export namespace GoogleDrive {
     })
   }
 
-  async function updateFileWithMultipart(fileId: string, fileContent: Blob): Promise<Response> {
-    // TODO: メタデータを更新しないならシンプルのやつでいいんじゃないか？
-    const metadata = JSON.stringify({})
-    const formData = new FormData()
-    formData.append('metadata', new Blob([metadata], { type: 'application/json' }))
-    formData.append('data', fileContent)
-
+  async function updateFile(fileId: string, fileContent: Blob): Promise<Response> {
     const params = new URLSearchParams({
-      uploadType: 'multipart',
+      uploadType: 'media',
       fields: 'modifiedTime',
     })
     const url = `https://www.googleapis.com/upload/drive/v3/files/${fileId}?${params}`
@@ -146,7 +140,7 @@ export namespace GoogleDrive {
       headers: {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
-      body: formData,
+      body: fileContent,
     })
   }
 
@@ -265,7 +259,7 @@ export namespace GoogleDrive {
         if (!External.instance.hasUpdatedAfterSync) return
 
         const gzipped = await compress(JSON.stringify(Internal.instance.state))
-        const response = await updateFileWithMultipart(dataFileMetaData.id, new Blob(gzipped))
+        const response = await updateFile(dataFileMetaData.id, new Blob(gzipped))
         const responseJson = await response.json()
         setGoogleDriveSyncedAt(responseJson.modifiedTime)
         External.instance.hasUpdatedAfterSync = false
