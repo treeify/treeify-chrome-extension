@@ -26,7 +26,9 @@
     class:transcluded={props.isTranscluded}
   >
     {#if props.children.length > 0}
-      <div class="search-result-item_indent-guide" />
+      <div class="search-result-item_indent-area">
+        <div class="search-result-item_indent-guide" />
+      </div>
     {/if}
     <div class="search-result-item_bullet-outer-circle" />
     <div class="search-result-item_bullet" />
@@ -74,12 +76,18 @@
     width: var(--search-result-line-height);
   }
 
+  .search-result-item_indent-area {
+    position: absolute;
+    // バレットの中心のY座標から子リストの下端までの領域にする
+    padding-top: calc(var(--search-result-line-height) / 2);
+    @include common.size(100%);
+
+    @include common.flex-center;
+  }
+
   .search-result-item_indent-guide {
     width: 1px;
-    height: calc(100% - var(--search-result-line-height) / 2);
-
-    position: absolute;
-    top: calc(var(--search-result-line-height) / 2);
+    height: 100%;
 
     background: var(--indent-guide-color);
   }

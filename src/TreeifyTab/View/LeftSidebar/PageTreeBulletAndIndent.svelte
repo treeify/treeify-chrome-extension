@@ -57,9 +57,8 @@
   .page-tree-bullet-and-indent_indent-area {
     position: absolute;
     // バレットの中心のY座標から子リストの下端までの領域にする
-    top: calc(var(--page-tree-calculated-line-height) / 2);
-    height: calc(100% - var(--page-tree-calculated-line-height) / 2);
-    width: 100%;
+    padding-top: calc(var(--page-tree-calculated-line-height) / 2);
+    @include common.size(100%);
   }
 
   // インデントガイド

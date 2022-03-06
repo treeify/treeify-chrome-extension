@@ -71,9 +71,9 @@
 
   .tabs-dialog-item_indent-area {
     position: absolute;
-    top: calc(var(--tabs-dialog-item-line-height) / 2);
-    height: calc(100% - var(--tabs-dialog-item-line-height) / 2);
-    width: 100%;
+    // バレットの中心のY座標から子リストの下端までの領域にする
+    padding-top: calc(var(--tabs-dialog-item-line-height) / 2);
+    @include common.size(100%);
 
     @include common.flex-center;
   }
