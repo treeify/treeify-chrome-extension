@@ -94,11 +94,11 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --workspace-dialog-delete-button-size: 1.5em;
+    --workspace-dialog-delete-button-size: #{common.toIntegerPx(1.5em)};
   }
 
   .workspace-dialog_content {
-    padding: 1em;
+    padding: common.toIntegerPx(1em);
 
     max-height: 100%;
     overflow-y: auto;
@@ -110,7 +110,7 @@
   .workspace-dialog_workspace-list {
     display: flex;
     flex-direction: column;
-    row-gap: 0.3em;
+    row-gap: common.toIntegerPx(0.3em);
   }
 
   .workspace-dialog_workspace {
@@ -119,11 +119,11 @@
   }
 
   .workspace-dialog_radio-button {
-    margin: 0 0.3em 0 0;
+    margin: 0 common.toIntegerPx(0.3em) 0 0;
   }
 
   .workspace-dialog_workspace-name {
-    margin-left: 0.2em;
+    margin-left: common.toIntegerPx(0.2em);
   }
 
   .workspace-dialog_delete-button {
@@ -132,7 +132,7 @@
 
     &::before {
       content: '';
-      @include common.size(1.2em);
+      @include common.size(common.toIntegerPx(1.2em));
       @include common.absolute-center;
 
       @include common.icon(lch(40% 0 0), url('trash-can.svg'));
@@ -146,16 +146,16 @@
   .workspace-dialog_add-button-row {
     @include common.flex-center;
 
-    margin-top: 0.2em;
+    margin-top: common.toIntegerPx(0.2em);
   }
 
   .workspace-dialog_add-button {
-    @include common.circle(2em);
+    @include common.circle(common.toIntegerPx(2em));
     @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     &::before {
       content: '';
-      @include common.size(1.6em);
+      @include common.size(common.toIntegerPx(1.6em));
       @include common.absolute-center;
 
       @include common.icon(lch(50% 0 0), url('plus.svg'));

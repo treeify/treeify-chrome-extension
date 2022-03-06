@@ -58,8 +58,8 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .caption-setting-dialog_content {
-    min-width: 20em;
-    padding: 1em;
+    min-width: common.toIntegerPx(20em);
+    padding: common.toIntegerPx(1em);
   }
 
   .caption-setting-dialog_caption {
@@ -69,6 +69,6 @@
   .caption-setting-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

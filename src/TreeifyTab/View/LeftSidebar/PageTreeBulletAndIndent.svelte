@@ -30,17 +30,17 @@
 
   :root {
     // バレット領域のサイズ（正方形の一辺の長さ）
-    --page-tree-bullet-area-size: 0.9em;
+    --page-tree-bullet-area-size: #{common.toIntegerPx(0.9em)};
 
     // 折りたたまれたノードのバレット（二等辺三角形▶）の幅
-    --page-tree-bullet-folded-width: 0.56em;
+    --page-tree-bullet-folded-width: #{common.toIntegerPx(0.56em)};
     // 折りたたまれたノードのバレット（二等辺三角形▶）の高さ
-    --page-tree-bullet-folded-height: 0.38em;
+    --page-tree-bullet-folded-height: #{common.toIntegerPx(0.38em)};
 
     // 折りたたまれたノードのバレット（二等辺三角形▼）の幅
-    --page-tree-bullet-unfolded-width: 0.45em;
+    --page-tree-bullet-unfolded-width: #{common.toIntegerPx(0.45em)};
     // 折りたたまれたノードのバレット（二等辺三角形▼）の高さ
-    --page-tree-bullet-unfolded-height: 0.3em;
+    --page-tree-bullet-unfolded-height: #{common.toIntegerPx(0.3em)};
   }
 
   .page-tree-bullet-and-indent_root {
@@ -57,9 +57,8 @@
   .page-tree-bullet-and-indent_indent-area {
     position: absolute;
     // バレットの中心のY座標から子リストの下端までの領域にする
-    top: calc(var(--page-tree-calculated-line-height) / 2);
-    height: calc(100% - var(--page-tree-calculated-line-height) / 2);
-    width: 100%;
+    padding-top: calc(var(--page-tree-calculated-line-height) / 2);
+    @include common.size(100%);
   }
 
   // インデントガイド
@@ -132,7 +131,7 @@
 
     // 子を持たないノードのバレット
     &.no-children {
-      @include common.circle(0.25em);
+      @include common.circle(common.toIntegerPx(0.25em));
 
       background: var(--bullet-color);
 

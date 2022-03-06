@@ -133,14 +133,15 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .replace-dialog_content {
-    min-width: 25em;
-    padding: 1em;
+    min-width: common.toIntegerPx(25em);
+    padding: common.toIntegerPx(1em);
   }
 
   .replace-dialog_input-area {
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
-    grid-gap: 0.5em;
+    grid-gap: common.toIntegerPx(0.5em);
+    align-items: center;
   }
 
   .replace-dialog_label {
@@ -149,13 +150,13 @@
 
   .replace-dialog_before-replace,
   .replace-dialog_after-replace {
-    padding: 0.35em;
+    padding: common.toIntegerPx(0.35em);
     font-size: 95%;
   }
 
   .replace-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

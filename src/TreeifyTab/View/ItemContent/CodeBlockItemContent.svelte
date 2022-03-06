@@ -20,6 +20,8 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .code-block-item-content_root {
     overflow-x: hidden;
 
@@ -39,7 +41,7 @@
   .code-block-item-content_code {
     border: 1px solid lch(80% 0 0);
     margin: 0;
-    padding: 0.2em;
+    padding: common.toIntegerPx(0.2em);
     // これを指定しないとoverflowしたコードがborderからはみ出る
     min-width: max-content;
 
@@ -49,9 +51,9 @@
   }
 
   .code-block-item-content_caption {
-    margin-left: 0.5em;
-    margin-top: 0.1em;
-    margin-bottom: 0.2em;
+    margin-left: common.toIntegerPx(0.5em);
+    margin-top: common.toIntegerPx(0.1em);
+    margin-bottom: common.toIntegerPx(0.2em);
 
     font-size: 80%;
     color: lch(30% 0 0);

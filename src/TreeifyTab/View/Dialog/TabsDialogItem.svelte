@@ -53,7 +53,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --tabs-dialog-item-line-height: 1.3em;
+    --tabs-dialog-item-line-height: #{common.toIntegerPx(1.3em)};
   }
 
   .tabs-dialog-item_root {
@@ -71,9 +71,9 @@
 
   .tabs-dialog-item_indent-area {
     position: absolute;
-    top: calc(var(--tabs-dialog-item-line-height) / 2);
-    height: calc(100% - var(--tabs-dialog-item-line-height) / 2);
-    width: 100%;
+    // バレットの中心のY座標から子リストの下端までの領域にする
+    padding-top: calc(var(--tabs-dialog-item-line-height) / 2);
+    @include common.size(100%);
 
     @include common.flex-center;
   }
@@ -121,10 +121,10 @@
   }
 
   .tabs-dialog-item_audible-icon {
-    @include common.size(1em);
+    @include common.size(common.toIntegerPx(1em));
 
     @include common.icon(lch(50% 0 0), url('audible.svg'));
 
-    margin-left: 0.5em;
+    margin-left: common.toIntegerPx(0.5em);
   }
 </style>

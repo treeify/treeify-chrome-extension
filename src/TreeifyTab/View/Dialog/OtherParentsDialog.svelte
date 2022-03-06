@@ -27,13 +27,15 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .other-parents-dialog_content {
-    min-width: 15em;
-    padding: 1em;
+    min-width: common.toIntegerPx(15em);
+    padding: common.toIntegerPx(1em);
 
     display: flex;
     flex-direction: column;
-    row-gap: 0.3em;
+    row-gap: common.toIntegerPx(0.3em);
 
     outline: none;
 

@@ -38,7 +38,7 @@
   }
 
   .web-page-item-content_favicon-area {
-    @include common.size(1em);
+    @include common.size(common.toIntegerPx(1em));
 
     .discarded & {
       filter: opacity(75%);

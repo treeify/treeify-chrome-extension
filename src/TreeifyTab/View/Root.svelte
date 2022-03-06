@@ -65,9 +65,9 @@
   }
 
   button {
-    padding-inline: 1.1em;
-    padding-block: 0.3em;
-    border-radius: 0.3em;
+    padding-inline: common.toIntegerPx(1.1em);
+    padding-block: common.toIntegerPx(0.3em);
+    border-radius: common.toIntegerPx(0.3em);
     border: 1px lch(70% 0 0) solid;
 
     background: lch(100% 0 0);

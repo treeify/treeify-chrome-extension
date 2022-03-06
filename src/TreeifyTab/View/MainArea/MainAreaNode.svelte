@@ -90,7 +90,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --main-area-node-content-area-vertical-padding: 0.105em;
+    --main-area-node-content-area-vertical-padding: #{common.toIntegerPx(0.105em)};
 
     // 足跡表示数のパラメータ。
     // CSSではなくJSから参照する特殊なCSS変数。
@@ -112,7 +112,7 @@
 
     &[data-depth='0'] {
       font-size: 125%;
-      padding-bottom: 0.5em;
+      padding-bottom: common.toIntegerPx(0.5em);
     }
 
     &.excluded {
@@ -163,7 +163,7 @@
   }
 
   .main-area-node_hidden-tabs-count {
-    @include common.circle(1.6em);
+    @include common.circle(common.toIntegerPx(1.6em));
     @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     @include common.flex-center;
@@ -174,7 +174,7 @@
   }
 
   .main-area-node_delete-button {
-    @include common.circle(1.6em);
+    @include common.circle(common.toIntegerPx(1.6em));
     @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 
     // マウスホバー時にのみ表示
@@ -187,7 +187,7 @@
   }
 
   .main-area-node_delete-button-icon {
-    @include common.size(0.8em);
+    @include common.size(common.toIntegerPx(0.8em));
     @include common.absolute-center;
 
     @include common.icon(lch(30% 0 0), url('close.svg'));

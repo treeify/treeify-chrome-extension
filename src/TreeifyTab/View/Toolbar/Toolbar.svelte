@@ -44,9 +44,11 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .toolbar_root {
     height: 40px;
-    padding-inline: 2em;
+    padding-inline: common.toIntegerPx(2em);
 
     // ボタンなどを横に並べる（右寄せ）
     display: flex;

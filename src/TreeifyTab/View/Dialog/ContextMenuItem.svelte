@@ -65,11 +65,13 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .context-menu-item_root {
     outline: none;
 
     font-size: 0.9rem;
-    padding: 0.3em 0.8em;
+    padding: common.toIntegerPx(0.3em) common.toIntegerPx(0.8em);
 
     cursor: pointer;
 

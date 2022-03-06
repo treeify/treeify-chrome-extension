@@ -124,8 +124,8 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .code-block-edit-dialog_content {
-    min-width: 30em;
-    padding: 1em;
+    min-width: common.toIntegerPx(30em);
+    padding: common.toIntegerPx(1em);
 
     max-height: 100%;
     display: grid;
@@ -133,8 +133,8 @@
   }
 
   .code-block-edit-dialog_code {
-    min-height: 5em;
-    padding: 0.5em;
+    min-height: common.toIntegerPx(5em);
+    padding: common.toIntegerPx(0.5em);
 
     outline: 1px solid lch(60% 0 0);
 
@@ -144,6 +144,6 @@
   .code-block-edit-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

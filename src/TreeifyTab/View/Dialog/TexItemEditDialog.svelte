@@ -81,8 +81,8 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   .tex-edit-dialog_content {
-    min-width: 24em;
-    padding: 1em;
+    min-width: common.toIntegerPx(24em);
+    padding: common.toIntegerPx(1em);
 
     max-height: 100%;
     display: grid;
@@ -94,7 +94,7 @@
   }
 
   .tex-edit-dialog_code {
-    padding: 0.5em;
+    padding: common.toIntegerPx(0.5em);
 
     $outline-size: 1px;
     outline: $outline-size solid lch(60% 0 0);
@@ -103,17 +103,17 @@
   }
 
   .tex-edit-dialog_rendered-tex {
-    margin-top: 1em;
+    margin-top: common.toIntegerPx(1em);
     // なぜか縦スクロールバーが出る不具合の対策（KaTeXの複雑なDOMレイアウトの影響でサイズ計算が普通じゃないのだろうか）
-    margin-bottom: 0.3em;
+    margin-bottom: common.toIntegerPx(0.3em);
 
     // 左端が切れてしまうことがある不具合の対策
-    margin-inline: 0.4em;
+    margin-inline: common.toIntegerPx(0.4em);
   }
 
   .tex-edit-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: 1em;
+    margin-top: common.toIntegerPx(1em);
   }
 </style>

@@ -148,7 +148,7 @@
 
   // ページのバレット
   .main-area-bullet-and-indent_page-icon {
-    @include common.size(1em);
+    @include common.size(common.toIntegerPx(1em));
     @include common.absolute-center;
     @include common.icon(var(--page-icon-color), url('page.svg'));
 
@@ -161,9 +161,8 @@
   .main-area-bullet-and-indent_indent-area {
     position: absolute;
     // バレットの中心のY座標から子リストの下端までの領域にする
-    top: calc(var(--main-area-calculated-line-height) / 2);
-    height: calc(100% - var(--main-area-calculated-line-height) / 2);
-    width: 100%;
+    padding-top: calc(var(--main-area-calculated-line-height) / 2);
+    @include common.size(100%);
 
     @include common.flex-center;
   }

@@ -62,13 +62,15 @@
 </CommonDialog>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   :root {
     --tabs-dialog-footprint-count-exponent: 0.5;
   }
 
   .tabs-dialog_content {
-    min-width: 20em;
-    padding: 1em;
+    min-width: common.toIntegerPx(20em);
+    padding: common.toIntegerPx(1em);
 
     outline: none;
 

@@ -12,6 +12,8 @@
 </label>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .checkbox_root {
     display: flex;
     align-items: center;
@@ -20,6 +22,6 @@
   }
 
   .checkbox_checkbox {
-    margin-right: 0.3em;
+    margin-right: common.toIntegerPx(0.3em);
   }
 </style>

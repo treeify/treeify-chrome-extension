@@ -20,9 +20,11 @@
 </div>
 
 <style global lang="scss">
+  @use 'src/TreeifyTab/View/common.scss';
+
   .primary-and-secondary-buttons_root {
     display: inline-flex;
-    gap: 0.8em;
+    gap: common.toIntegerPx(0.8em);
 
     [data-os-name='Windows'] & {
       flex-direction: row-reverse;
