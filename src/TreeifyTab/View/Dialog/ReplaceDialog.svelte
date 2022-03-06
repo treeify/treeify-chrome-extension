@@ -141,6 +141,7 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr);
     grid-gap: common.toIntegerPx(0.5em);
+    align-items: center;
   }
 
   .replace-dialog_label {
