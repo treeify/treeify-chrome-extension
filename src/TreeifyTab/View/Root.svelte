@@ -56,8 +56,7 @@
     margin: 0;
     font-size: inherit;
 
-    // 彩度は色域境界値
-    accent-color: oklch(50% 60.6 255);
+    accent-color: oklch(59% 0.17 255);
   }
 
   img {
@@ -85,21 +84,18 @@
     }
 
     &.primary {
-      // 彩度は色域境界値
-      background: oklch(51% 60.6 255);
+      background: oklch(59% 0.17 255);
 
       border-color: transparent;
 
       color: oklch(99.5% 0 0);
 
       &:hover {
-        // 彩度は色域境界値
-        background: oklch(48.5% 57.7 255);
+        background: oklch(54% 0.17 255);
       }
 
       &:active {
-        // 彩度は色域境界値
-        background: oklch(46% 55.2 255);
+        background: oklch(51% 0.17 255);
       }
     }
   }

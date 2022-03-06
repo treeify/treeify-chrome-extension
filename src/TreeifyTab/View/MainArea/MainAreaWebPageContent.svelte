@@ -125,7 +125,7 @@
     white-space: nowrap;
 
     &.discarded {
-      color: oklch(35% 0 0);
+      color: oklch(40% 0 0);
     }
 
     &.tab-closed {
@@ -137,11 +137,11 @@
       color: var(--unread-web-page-item-title-color);
 
       &.discarded {
-        color: oklch(35% 30 135);
+        color: oklch(55% 0.16 135);
       }
 
       &.tab-closed {
-        color: oklch(60% 30 135);
+        color: oklch(60% 0.1 135);
       }
     }
 
