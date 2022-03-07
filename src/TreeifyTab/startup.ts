@@ -167,6 +167,8 @@ async function onClickContextMenu(info: OnClickData) {
   const selectionText = info.selectionText
 
   if (info.mediaType === 'image' && info.srcUrl !== undefined) {
+    Internal.instance.saveCurrentStateToUndoStack()
+
     // 画像項目として取り込む
     const newItemId = CurrentState.createImageItem()
     CurrentState.setImageItemUrl(newItemId, info.srcUrl)
@@ -183,6 +185,8 @@ async function onClickContextMenu(info: OnClickData) {
     Rerenderer.instance.rerender()
     TreeifyTab.open()
   } else if (selectionText !== undefined) {
+    Internal.instance.saveCurrentStateToUndoStack()
+
     // Treeifyタブが最前面でないとクリップボードからの読み込みがエラーになるので先に最前面化する
     await TreeifyTab.open()
 
