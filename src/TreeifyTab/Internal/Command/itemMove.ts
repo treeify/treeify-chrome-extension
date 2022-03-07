@@ -183,7 +183,10 @@ export function moveItemToBelow() {
 
   const selectedItemIds = RArray$.map(ItemPath.getItemId)(selectedItemPaths)
   // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
-  if (targetItemParentItemId !== ItemPath.getParentItemId(firstFollowingItemPath)) {
+  if (
+    targetItemParentItemId !== ItemPath.getParentItemId(firstFollowingItemPath) ||
+    CurrentState.getDisplayingChildItemIds(firstFollowingItemPath).length > 0
+  ) {
     for (const selectedItemId of selectedItemIds) {
       CurrentState.throwIfCantInsertBelowItem(firstFollowingItemPath, selectedItemId)
     }
