@@ -43,6 +43,7 @@
         {#if props.tabsCount > 0}
           <div
             class="page-tree-node_tabs-count-button"
+            title={'・クリック：タブをまとめて閉じる\n・Shift+クリック：タブを残したままこのページをページツリーから削除\n・右クリック：タブ一覧ダイアログを表示'}
             on:mousedown={props.onClickTabsCount}
             on:contextmenu={props.onTabsCountContextMenu}
           >
