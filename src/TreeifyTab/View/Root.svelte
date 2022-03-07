@@ -56,7 +56,7 @@
     margin: 0;
     font-size: inherit;
 
-    accent-color: oklch(59% 0.17 255);
+    accent-color: oklch(59% 0.17 255.4);
   }
 
   img {
@@ -84,18 +84,18 @@
     }
 
     &.primary {
-      background: oklch(59% 0.17 255);
+      background: oklch(59% 0.17 255.4);
 
       border-color: transparent;
 
       color: oklch(99.5% 0 0);
 
       &:hover {
-        background: oklch(54% 0.17 255);
+        background: oklch(54% 0.17 255.4);
       }
 
       &:active {
-        background: oklch(51% 0.17 255);
+        background: oklch(51% 0.17 255.4);
       }
     }
   }

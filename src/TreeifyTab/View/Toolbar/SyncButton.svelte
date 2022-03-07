@@ -43,7 +43,7 @@
 
     &.has-sync-issue {
       @include common.icon-url(url('cloud-alert.svg'));
-      @include common.icon-color(oklch(50% 1 15));
+      @include common.icon-color(oklch(50% 1 15.4));
     }
   }
 </style>

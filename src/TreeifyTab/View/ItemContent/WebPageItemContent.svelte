@@ -82,11 +82,11 @@
     }
 
     .unread.discarded & {
-      color: oklch(65% 1 135);
+      color: oklch(65% 1 135.4);
     }
 
     .unread.tab-closed & {
-      color: oklch(70% 0.3 135);
+      color: oklch(70% 0.3 135.4);
     }
   }
 </style>

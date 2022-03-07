@@ -137,11 +137,11 @@
       color: var(--unread-web-page-item-title-color);
 
       &.discarded {
-        color: oklch(55% 0.16 135);
+        color: oklch(55% 0.16 135.4);
       }
 
       &.tab-closed {
-        color: oklch(60% 0.1 135);
+        color: oklch(60% 0.1 135.4);
       }
     }
 

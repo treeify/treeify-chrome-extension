@@ -18,22 +18,22 @@
     --page-icon-color: oklch(30% 0 0);
     --page-icon-hover-color: oklch(20% 0 0);
 
-    --transcluded-item-bullet-color: oklch(65% 1 135);
-    --transcluded-item-bullet-hover-color: oklch(55% 1 135);
-    --transcluded-item-page-icon-color: oklch(55% 1 135);
-    --transcluded-item-page-icon-hover-color: oklch(45% 1 135);
+    --transcluded-item-bullet-color: oklch(65% 1 135.4);
+    --transcluded-item-bullet-hover-color: oklch(55% 1 135.4);
+    --transcluded-item-page-icon-color: oklch(55% 1 135.4);
+    --transcluded-item-page-icon-hover-color: oklch(45% 1 135.4);
 
-    --highlighted-item-bullet-color: oklch(55% 1 15);
-    --highlighted-item-bullet-hover-color: oklch(45% 1 15);
+    --highlighted-item-bullet-color: oklch(55% 1 15.4);
+    --highlighted-item-bullet-hover-color: oklch(45% 1 15.4);
 
     --indent-guide-color: oklch(90% 0 0);
     --indent-guide-hover-color: oklch(80% 0 0);
 
-    --selected-item-background-color: oklch(96% 1 255);
-    --item-hover-background-color: oklch(98% 1 255);
+    --selected-item-background-color: oklch(96% 1 255.4);
+    --item-hover-background-color: oklch(98% 1 255.4);
 
     // 最も新しい足跡の色（線形補間の一端）
-    --newest-footprint-color: oklch(97.5% 1 15);
+    --newest-footprint-color: oklch(97.5% 1 15.4);
     // 最も古い足跡の色（線形補間の一端）
     --oldest-footprint-color: oklch(100% 0 0);
 
@@ -43,11 +43,11 @@
 
     --completed-item-text-color: oklch(75% 0 0);
 
-    --doubtful-item-decoration-color: oklch(60% 1 15);
+    --doubtful-item-decoration-color: oklch(60% 1 15.4);
     --doubtful-item-decoration: underline dashed var(--doubtful-item-decoration-color);
     --doubtful-item-decoration-thickness: 1px;
     --doubtful-item-decoration-underline-offset: #{common.toIntegerPx(0.2em)};
 
-    --unread-web-page-item-title-color: oklch(48% 1 135);
+    --unread-web-page-item-title-color: oklch(48% 1 135.4);
   }
 </style>
