@@ -36,8 +36,9 @@ export function createContextProps(itemPath: ItemPath): ContextProps {
     selfItemId,
     onClick(event) {
       event.preventDefault()
-
+      Internal.instance.saveCurrentStateToUndoStack()
       CurrentState.jumpTo(itemPath)
+      CurrentState.updateItemTimestamp(selfItemId)
 
       External.instance.dialogState = undefined
       Rerenderer.instance.rerender()

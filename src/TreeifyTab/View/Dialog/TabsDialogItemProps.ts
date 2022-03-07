@@ -36,7 +36,9 @@ export function createTabsDialogItemProps(
     outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
     onClick(event) {
       event.preventDefault()
+      Internal.instance.saveCurrentStateToUndoStack()
       CurrentState.jumpTo(itemPath)
+      CurrentState.updateItemTimestamp(itemId)
 
       // ダイアログを閉じる
       External.instance.dialogState = undefined

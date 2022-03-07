@@ -71,6 +71,7 @@ export function createSearchResultItemPropses(
         const inputId = InputId.fromMouseEvent(event)
         if (inputId === '0000MouseButton0') {
           event.preventDefault()
+          Internal.instance.saveCurrentStateToUndoStack()
           CurrentState.jumpTo(itemPath)
           CurrentState.updateItemTimestamp(itemId)
 
