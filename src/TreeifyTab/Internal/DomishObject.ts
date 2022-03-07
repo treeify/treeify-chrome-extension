@@ -188,7 +188,7 @@ export namespace DomishObject {
         case 'b':
           return `**${toMultiLineMarkdownText(domishObject.children)}**`
         case 'u':
-          return `<u>${toMultiLineMarkdownText(domishObject.children)}</u>`
+          return `<ins>${toMultiLineMarkdownText(domishObject.children)}</ins>`
         case 'i':
           return `*${toMultiLineMarkdownText(domishObject.children)}*`
         case 's':
@@ -216,7 +216,7 @@ export namespace DomishObject {
         case 'b':
           return `**${toSingleLineMarkdownText(domishObject.children)}**`
         case 'u':
-          return `<u>${toSingleLineMarkdownText(domishObject.children)}</u>`
+          return `<ins>${toSingleLineMarkdownText(domishObject.children)}</ins>`
         case 'i':
           return `*${toSingleLineMarkdownText(domishObject.children)}*`
         case 's':
