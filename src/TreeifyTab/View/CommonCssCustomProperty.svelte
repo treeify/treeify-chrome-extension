@@ -29,7 +29,7 @@
     --indent-guide-color: oklch(90% 0 0);
     --indent-guide-hover-color: oklch(80% 0 0);
 
-    --selected-item-background-color: oklch(95% 1 255);
+    --selected-item-background-color: oklch(96% 1 255);
     --item-hover-background-color: oklch(98% 1 255);
 
     // 最も新しい足跡の色（線形補間の一端）
