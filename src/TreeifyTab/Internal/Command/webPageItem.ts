@@ -114,7 +114,7 @@ export function browseTab() {
     const tab = External.instance.tabItemCorrespondence.getTabByTabId(tabId)
     assertNonUndefined(tab)
     chrome.windows.update(tab.windowId, { focused: true })
-  } else {
+  } else if (Internal.instance.state.items[targetItemId].type === ItemType.WEB_PAGE) {
     // 対応するタブがなければ開く
     const url = Internal.instance.state.webPageItems[targetItemId].url
     const itemIds = External.instance.urlToItemIdsForTabCreation.get(url)
