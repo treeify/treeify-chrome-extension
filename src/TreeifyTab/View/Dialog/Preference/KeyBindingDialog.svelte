@@ -10,6 +10,7 @@
   import PrimaryAndSecondaryButtons from 'src/TreeifyTab/View/Dialog/PrimaryAndSecondaryButtons.svelte'
   import { RArray, RArray$ } from 'src/Utility/fp-ts'
   import { integer } from 'src/Utility/integer'
+  import { tick } from 'svelte'
 
   let clonedKeyBindings = State.clone(Internal.instance.state.mainAreaKeyBindings)
 
@@ -17,6 +18,12 @@
 
   function onClick() {
     isAddBindingMode = true
+    tick().then(() => {
+      const messageElement = document.querySelector<HTMLElement>(
+        '.key-binding-dialog_message-for-add-binding'
+      )
+      messageElement.scrollIntoView({ behavior: 'smooth' })
+    })
   }
 
   function onKeyDown(event: KeyboardEvent) {
@@ -221,17 +228,6 @@
             </td>
           </tr>
         {/each}
-        <tr class="key-binding-dialog_add-binding-button-row">
-          <td class="key-binding-dialog_add-binding-button-cell">
-            <button
-              class="key-binding-dialog_add-binding-button"
-              on:mousedown|preventDefault={onClick}
-            >
-              新しい割り当てを追加
-            </button>
-          </td>
-          <td />
-        </tr>
       </table>
       <p class="key-binding-dialog_message-for-add-binding">
         コマンドを割り当てたいキーをそのまま入力してください。<br />
@@ -239,6 +235,9 @@
       </p>
     </div>
     <div class="key-binding-dialog_bottom-button-area">
+      <button class="key-binding-dialog_add-binding-button" on:mousedown|preventDefault={onClick}>
+        新しい割り当てを追加
+      </button>
       <PrimaryAndSecondaryButtons {onClickPrimaryButton} {onClickSecondaryButton} />
     </div>
   </div>
@@ -278,11 +277,6 @@
 
     tr:nth-child(odd) {
       background: oklch(96% 0 0);
-    }
-
-    // 追加ボタン用の行には背景色を付けない
-    tr:last-child {
-      background: inherit;
     }
   }
 
@@ -344,20 +338,18 @@
     }
   }
 
-  .key-binding-dialog_add-binding-button {
-    margin-left: auto;
-    display: block;
-  }
-
   .key-binding-dialog_message-for-add-binding {
     margin-inline: auto;
     width: max-content;
 
     visibility: var(--visibility);
+
+    font-weight: bold;
   }
 
   .key-binding-dialog_bottom-button-area {
-    @include common.flex-right;
+    display: flex;
+    justify-content: space-between;
 
     margin-top: common.toIntegerPx(1em);
   }
