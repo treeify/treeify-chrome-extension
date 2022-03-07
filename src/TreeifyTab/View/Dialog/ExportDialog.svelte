@@ -177,7 +177,7 @@
             type="text"
             class="export-dialog_indentation-expression"
             bind:value={indentationUnit}
-            size="4"
+            size="1"
           />
         </label>
         <Checkbox bind:checked={plainTextIncludeInvisibleItems}>
