@@ -59,14 +59,14 @@
       </div>
       <div class="main-area-node_right-button-area">
         {#if props.itemPath.length !== 1}
-          {#if props.hiddenTabsCount > 0}
+          {#if props.tabsCount > 0}
             <!-- 隠れているタブ数 -->
             <div
-              class="main-area-node_hidden-tabs-count"
-              on:mousedown={props.onClickHiddenTabsCount}
+              class="main-area-node_tabs-count"
+              on:mousedown={props.onClickTabsCount}
               on:contextmenu={props.onContextMenuTabsCount}
             >
-              {Math.min(99, props.hiddenTabsCount)}
+              {Math.min(99, props.tabsCount)}
             </div>
           {:else}
             <!-- 削除ボタン -->
@@ -162,7 +162,7 @@
     @include common.flex-center;
   }
 
-  .main-area-node_hidden-tabs-count {
+  .main-area-node_tabs-count {
     @include common.circle(common.toIntegerPx(1.6em));
     @include common.pseudo-ripple-effect(var(--circle-button-hover-color));
 

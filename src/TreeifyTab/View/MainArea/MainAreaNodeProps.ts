@@ -36,14 +36,14 @@ export type MainAreaNodeProps = {
   cssClasses: RArray<string>
   footprintRank: integer | undefined
   footprintCount: integer
-  hiddenTabsCount: integer
+  tabsCount: integer
   contentProps: MainAreaContentProps
   childItemPropses: RArray<MainAreaNodeProps>
   bulletAndIndentProps: MainAreaBulletAndIndentProps
   onMouseDownContentArea(event: MouseEvent): void
   onContextMenuContentArea(event: Event): void
   onClickDeleteButton(event: MouseEvent): void
-  onClickHiddenTabsCount(event: MouseEvent): void
+  onClickTabsCount(event: MouseEvent): void
   onContextMenuTabsCount(event: Event): void
 }
 
@@ -67,7 +67,7 @@ export function createMainAreaNodeProps(
       item.source === null ? item.cssClasses : RArray$.append('has-source')(item.cssClasses),
     footprintRank: footprintRankMap.get(itemId),
     footprintCount: footprintCount,
-    hiddenTabsCount: countHiddenTabs(state, itemPath),
+    tabsCount: countHiddenTabs(state, itemPath),
     bulletAndIndentProps: createMainAreaBulletAndIndentProps(state, itemPath),
     contentProps: createMainAreaContentProps(state, itemPath, item.type),
     childItemPropses: displayingChildItemIds.map((childItemId: ItemId) => {
@@ -165,7 +165,7 @@ export function createMainAreaNodeProps(
           break
       }
     },
-    onClickHiddenTabsCount(event: MouseEvent) {
+    onClickTabsCount(event: MouseEvent) {
       switch (InputId.fromMouseEvent(event)) {
         case '0000MouseButton0':
           CurrentState.setTargetItemPath(itemPath)
