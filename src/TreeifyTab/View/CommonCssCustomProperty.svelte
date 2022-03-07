@@ -18,10 +18,10 @@
     --page-icon-color: oklch(30% 0 0);
     --page-icon-hover-color: oklch(20% 0 0);
 
-    --transcluded-item-bullet-color: oklch(60% 1 135);
-    --transcluded-item-bullet-hover-color: oklch(50% 1 135);
-    --transcluded-item-page-icon-color: oklch(50% 1 135);
-    --transcluded-item-page-icon-hover-color: oklch(40% 1 135);
+    --transcluded-item-bullet-color: oklch(65% 1 135);
+    --transcluded-item-bullet-hover-color: oklch(55% 1 135);
+    --transcluded-item-page-icon-color: oklch(55% 1 135);
+    --transcluded-item-page-icon-hover-color: oklch(45% 1 135);
 
     --highlighted-item-bullet-color: oklch(55% 1 15);
     --highlighted-item-bullet-hover-color: oklch(45% 1 15);
