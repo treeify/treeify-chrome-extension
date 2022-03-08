@@ -202,7 +202,7 @@ async function onClickContextMenu(info: OnClickData) {
             selectionText
           )
           // 標準化レーベンシュタイン距離が一定以下なら元々同一の文字列だったと判断する
-          if (distance <= 0.3) {
+          if (distance <= 0.5) {
             return clipboardText.trim()
           }
         }
