@@ -33,7 +33,7 @@
     --item-hover-background-color: oklch(98% 1 255.4);
 
     // 最も新しい足跡の色（線形補間の一端）
-    --newest-footprint-color: oklch(97.5% 1 15.4);
+    --newest-footprint-color: oklch(98.5% 1 15.4);
     // 最も古い足跡の色（線形補間の一端）
     --oldest-footprint-color: oklch(100% 0 0);
 
