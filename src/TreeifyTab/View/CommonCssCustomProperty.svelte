@@ -49,5 +49,9 @@
     --doubtful-item-decoration-underline-offset: #{common.toIntegerPx(0.2em)};
 
     --unread-web-page-item-title-color: oklch(48% 1 135.4);
+
+    // Chromeのplaceholderのデフォルトの色はoklch(56.2% 0 0)相当だが、
+    // 初期値なのかプレースホルダーなのか見分けづらいのでもっと薄い色にした。
+    --placeholder-text-color: oklch(70% 0 0);
   }
 </style>

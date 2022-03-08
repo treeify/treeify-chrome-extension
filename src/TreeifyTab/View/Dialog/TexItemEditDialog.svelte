@@ -61,6 +61,7 @@
         class="tex-edit-dialog_code"
         contenteditable="plaintext-only"
         tabindex="0"
+        placeholder={'y = \\dfrac{x^a}{2}'}
         bind:textContent={code}
       />
       <div class="tex-edit-dialog_rendered-tex">
@@ -100,6 +101,12 @@
     outline: $outline-size solid oklch(60% 0 0);
     // 親要素によってoutlineが見えなくなってしまう現象へのワークアラウンド。
     margin: $outline-size;
+
+    &:empty::before {
+      content: attr(placeholder);
+      pointer-events: none;
+      color: var(--placeholder-text-color);
+    }
   }
 
   .tex-edit-dialog_rendered-tex {

@@ -100,6 +100,10 @@
     }
   }
 
+  ::placeholder {
+    color: var(--placeholder-text-color);
+  }
+
   #spa-root {
     height: 100%;
   }

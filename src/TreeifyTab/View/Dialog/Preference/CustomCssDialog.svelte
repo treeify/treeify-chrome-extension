@@ -39,6 +39,7 @@
       class="custom-css-dialog_code"
       contenteditable="plaintext-only"
       tabindex="0"
+      placeholder={'.left-sidebar_root {\n  /* サイドバーの幅を広げる */\n  width: 300px;\n}'}
       bind:textContent
       on:keydown={onKeyDown}
     />
@@ -71,6 +72,12 @@
 
     max-height: 100%;
     overflow-y: auto;
+
+    &:empty::before {
+      content: attr(placeholder);
+      pointer-events: none;
+      color: var(--placeholder-text-color);
+    }
   }
 
   .custom-css-dialog_bottom-button-area {

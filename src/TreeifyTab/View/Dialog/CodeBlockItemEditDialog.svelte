@@ -107,6 +107,7 @@
       class="code-block-edit-dialog_code"
       contenteditable="plaintext-only"
       tabindex="0"
+      placeholder={'if (index < code.length) {\n  console.log(index)\n}'}
       bind:textContent={code}
       on:paste={onPaste}
     />
@@ -139,6 +140,12 @@
     outline: 1px solid oklch(60% 0 0);
 
     overflow-y: auto;
+
+    &:empty::before {
+      content: attr(placeholder);
+      pointer-events: none;
+      color: var(--placeholder-text-color);
+    }
   }
 
   .code-block-edit-dialog_bottom-button-area {
