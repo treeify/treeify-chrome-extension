@@ -22,7 +22,9 @@
       const messageElement = document.querySelector<HTMLElement>(
         '.key-binding-dialog_message-for-add-binding'
       )
-      messageElement.scrollIntoView({ behavior: 'smooth' })
+      if (messageElement !== null) {
+        messageElement.scrollIntoView({ behavior: 'smooth' })
+      }
     })
   }
 
