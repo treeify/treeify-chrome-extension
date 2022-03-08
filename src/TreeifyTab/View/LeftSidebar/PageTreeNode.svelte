@@ -105,12 +105,12 @@
 
     background-color: var(--footprint-color);
 
-    &.active-page {
-      background: var(--selected-item-background-color);
-    }
-
     &:hover {
       background: var(--item-hover-background-color);
+    }
+
+    &.active-page {
+      background: var(--selected-item-background-color);
     }
   }
 
