@@ -7,6 +7,7 @@ import { getGoogleDriveSyncedAt, setGoogleDriveSyncedAt } from 'src/TreeifyTab/P
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonNull } from 'src/Utility/Debug/assert'
+import { dump } from 'src/Utility/Debug/logger'
 import { Option$, RArray$ } from 'src/Utility/fp-ts'
 import { compress, decompress } from 'src/Utility/gzip'
 
@@ -228,6 +229,7 @@ export namespace GoogleDrive {
       if (knownTimestamp < dataFileTimestamp) {
         // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
         console.log('syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ')
+        dump(knownTimestamp, dataFileTimestamp)
 
         const state: State = await getState(dataFileMetaData)
 
@@ -241,6 +243,7 @@ export namespace GoogleDrive {
       } else if (knownTimestamp > dataFileTimestamp) {
         // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
         console.log('例外的な状況でしか到達できない特殊なケース')
+        dump(knownTimestamp, dataFileTimestamp)
 
         const state: State = await getState(dataFileMetaData)
 
