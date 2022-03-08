@@ -179,8 +179,10 @@ async function onClickContextMenu(info: OnClickData) {
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
       const newItemPath = RArray$.append(newItemId)(targetItemPath)
-      CurrentState.setTargetItemPath(newItemPath)
-      CurrentState.revealItemPath(newItemPath)
+      if (CurrentState.isVisible(newItemPath)) {
+        CurrentState.setTargetItemPath(newItemPath)
+        CurrentState.revealItemPath(newItemPath)
+      }
     }
     Rerenderer.instance.rerender()
     TreeifyTab.open()
@@ -219,8 +221,10 @@ async function onClickContextMenu(info: OnClickData) {
     CurrentState.insertFirstChildItem(webPageItemId, newItemId)
     if (webPageItemId === ItemPath.getItemId(targetItemPath)) {
       const newItemPath = RArray$.append(newItemId)(targetItemPath)
-      CurrentState.setTargetItemPath(newItemPath)
-      CurrentState.revealItemPath(newItemPath)
+      if (CurrentState.isVisible(newItemPath)) {
+        CurrentState.setTargetItemPath(newItemPath)
+        CurrentState.revealItemPath(newItemPath)
+      }
     }
     Rerenderer.instance.rerender()
   }
