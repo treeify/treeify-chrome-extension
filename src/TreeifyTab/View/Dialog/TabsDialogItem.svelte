@@ -53,7 +53,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --tabs-dialog-item-line-height: #{common.toIntegerPx(1.3em)};
+    --tabs-dialog-item-line-height: #{common.toIntegerPx(1.5em)};
   }
 
   .tabs-dialog-item_root {

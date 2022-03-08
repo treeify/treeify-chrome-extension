@@ -27,7 +27,7 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --context-item-line-height: #{common.toIntegerPx(1.3em)};
+    --context-item-line-height: #{common.toIntegerPx(1.5em)};
   }
 
   .context_root {
