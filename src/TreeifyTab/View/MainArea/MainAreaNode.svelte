@@ -1,6 +1,7 @@
 <script lang="ts">
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
   import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
+  import GridEmptyCell from 'src/TreeifyTab/View/GridEmptyCell.svelte'
   import MainAreaBulletAndIndent from 'src/TreeifyTab/View/MainArea/MainAreaBulletAndIndent.svelte'
   import MainAreaContent from 'src/TreeifyTab/View/MainArea/MainAreaContent.svelte'
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
@@ -28,7 +29,7 @@
   style:--depth={depth}
 >
   {#if props.isActivePage}
-    <div class="grid-empty-cell" />
+    <GridEmptyCell />
   {:else}
     <!-- バレットとインデントガイドの領域 -->
     <div

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
+  import GridEmptyCell from 'src/TreeifyTab/View/GridEmptyCell.svelte'
   import LoadingIndicator from 'src/TreeifyTab/View/LoadingIndicator.svelte'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { MainAreaWebPageContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaWebPageContentProps'
@@ -46,7 +47,7 @@
     {#if props.isAudible}
       <div class="main-area-web-page-content_audible-icon" />
     {:else}
-      <div class="grid-empty-cell" />
+      <GridEmptyCell />
     {/if}
   </div>
   {#if props.sourceProps !== undefined}

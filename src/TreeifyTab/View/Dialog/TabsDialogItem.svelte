@@ -3,6 +3,7 @@
   import TabsDialogItem from 'src/TreeifyTab/View/Dialog/TabsDialogItem.svelte'
   import { TabsDialogItemProps } from 'src/TreeifyTab/View/Dialog/TabsDialogItemProps'
   import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
+  import GridEmptyCell from 'src/TreeifyTab/View/GridEmptyCell.svelte'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 
@@ -38,7 +39,7 @@
       {#if props.isAudible}
         <div class="tabs-dialog-item_audible-icon" />
       {:else}
-        <div class="grid-empty-cell" />
+        <GridEmptyCell />
       {/if}
     </div>
     <div class="tabs-dialog-item_children-area">

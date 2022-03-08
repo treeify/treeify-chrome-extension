@@ -1,5 +1,6 @@
 <script lang="ts">
   import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
+  import GridEmptyCell from 'src/TreeifyTab/View/GridEmptyCell.svelte'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import PageTreeBulletAndIndent from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndent.svelte'
   import PageTreeNode from 'src/TreeifyTab/View/LeftSidebar/PageTreeNode.svelte'
@@ -17,7 +18,7 @@
 
 <div class="page-tree-node_root" style:--footprint-color={footprintColor ?? 'transparent'}>
   {#if props.isRoot}
-    <div class="grid-empty-cell" />
+    <GridEmptyCell />
   {:else}
     <div class="page-tree-node_bullet-and-indent">
       <PageTreeBulletAndIndent props={props.bulletAndIndentProps} />
@@ -36,7 +37,7 @@
         {#if props.isAudible}
           <div class="page-tree-node_audible-icon" />
         {:else}
-          <div class="grid-empty-cell" />
+          <GridEmptyCell />
         {/if}
       </div>
       <div class="page-tree-node_right-button-area">
