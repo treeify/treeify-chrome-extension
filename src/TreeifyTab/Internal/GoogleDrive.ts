@@ -226,41 +226,45 @@ export namespace GoogleDrive {
       const syncedAt = getGoogleDriveSyncedAt()
       const knownTimestamp = syncedAt !== undefined ? new Date(syncedAt).getTime() : -1
       const dataFileTimestamp = new Date(dataFileMetaData.modifiedTime).getTime()
-      if (knownTimestamp < dataFileTimestamp) {
-        // syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ
-        console.log('syncedAtがundefinedであるか、データファイルの更新日時がsyncedAtより新しければ')
-        dump(knownTimestamp, dataFileTimestamp)
+      if (knownTimestamp !== dataFileTimestamp) {
+        // データファイルの更新日時が既知の値でなければ
+
+        console.log('データファイルの更新日時が既知の値でなければ')
+        dump(syncedAt, dataFileMetaData.modifiedTime)
 
         const state: State = await getState(dataFileMetaData)
-
-        dump(State.isNewerThan(Internal.instance.state, state))
 
         if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
           showRequireUpdateMessage()
           return
         }
 
-        setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
-        await restart(state, syncedAt === undefined)
-      } else if (knownTimestamp > dataFileTimestamp) {
-        // ユーザーがデータファイルをロールバックさせた場合くらいしか到達しない特殊なケース
-        console.log('例外的な状況でしか到達できない特殊なケース')
-        dump(knownTimestamp, dataFileTimestamp)
+        if (syncedAt === undefined) {
+          setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
+          await restart(state, true)
+        } else {
+          // Stateの上書きによって失われるデータの量を最小化するために、どちらのStateが新しいかを判定する
+          if (State.isNewerThan(state, Internal.instance.state, knownTimestamp)) {
+            setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
+            await restart(state)
+          } else {
+            alert(
+              'データファイルのタイムスタンプが未知の値だったが、ローカルデータの方が先に進んでいた'
+            )
 
-        const state: State = await getState(dataFileMetaData)
-
-        dump(State.isNewerThan(Internal.instance.state, state))
-
-        if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
-          showRequireUpdateMessage()
-          return
+            const gzipped = await compress(JSON.stringify(Internal.instance.state))
+            const response = await updateFile(dataFileMetaData.id, new Blob(gzipped))
+            const responseJson = await response.json()
+            setGoogleDriveSyncedAt(responseJson.modifiedTime)
+            External.instance.hasUpdatedAfterSync = false
+            External.instance.hasSyncIssue = false
+            Rerenderer.instance.rerender()
+          }
         }
-
-        setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
-        await restart(state)
       } else {
-        // データファイルの更新日時がsyncedAtと等しければ
-        console.log('データファイルの更新日時がsyncedAtと等しければ')
+        // データファイルの更新日時が既知の値であれば
+
+        console.log('データファイルの更新日時が既知の値であれば')
 
         // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
         if (!External.instance.hasUpdatedAfterSync) return

@@ -5,7 +5,8 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERArray, Option$, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { dump } from 'src/Utility/Debug/logger'
+import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -198,26 +199,63 @@ export namespace State {
   }
 
   /**
-   * 2つのStateのどちらの方が新しい（先に進んでいる）かを推定する。
-   * 同期用に読み込んだStateとローカルのStateを比較するために用いるために定義された。
-   * 同一のStateに対してはfalseを返す。
+   * 2つのStateのどちらの方が新しい（先に進んでいる）かを判定する。
+   * 編集、作成、削除した項目の数が多い方のStateが新しいと判定される。
+   * 計算結果が等しい場合はfalseを返す。
    */
-  export function isNewerThan(a: State, b: State): boolean {
-    let aScore = 0
-    let bScore = 0
-
-    const aItemIds = RRecord$.numberKeys(a.items)
-    const bItemIds = RRecord$.numberKeys(b.items)
-    for (const itemId of RSet$.from(aItemIds.concat(bItemIds))) {
-      const aTimestamp = a.items[itemId]?.timestamp ?? 0
-      const bTimestamp = b.items[itemId]?.timestamp ?? 0
-      if (aTimestamp > bTimestamp) {
-        aScore++
-      } else if (aTimestamp < bTimestamp) {
-        bScore++
+  export function isNewerThan(a: State, b: State, lastSyncedAt: Timestamp): boolean {
+    // aが更新した項目のタイムスタンプの配列
+    const aUpdatedTimestamps: Timestamp[] = []
+    // bが更新した項目のタイムスタンプの配列
+    const bUpdatedTimestamps: Timestamp[] = []
+    // aにしか存在しない項目のタイムスタンプの配列
+    const aOnlyTimestamps: Timestamp[] = []
+    // bにしか存在しない項目のタイムスタンプの配列
+    const bOnlyTimestamps: Timestamp[] = []
+    for (let itemId = 0; itemId <= Math.max(a.maxItemId, b.maxItemId); itemId++) {
+      const aTimestamp = a.items[itemId]?.timestamp
+      const bTimestamp = b.items[itemId]?.timestamp
+      if (aTimestamp !== undefined && bTimestamp !== undefined) {
+        if (aTimestamp > bTimestamp) {
+          aUpdatedTimestamps.push(aTimestamp)
+        } else if (aTimestamp < bTimestamp) {
+          bUpdatedTimestamps.push(bTimestamp)
+        }
+      } else if (aTimestamp !== undefined) {
+        aOnlyTimestamps.push(aTimestamp)
+      } else if (bTimestamp !== undefined) {
+        bOnlyTimestamps.push(bTimestamp)
       }
     }
 
+    // 更新した項目の数
+    const aUpdateCount = aUpdatedTimestamps.length
+    const bUpdateCount = bUpdatedTimestamps.length
+    // 作成した項目の数
+    let aCreateCount = 0
+    let bCreateCount = 0
+    // 削除した項目の数
+    let aDeleteCount = 0
+    let bDeleteCount = 0
+    for (const aOnlyTimestamp of aOnlyTimestamps) {
+      if (aOnlyTimestamp > lastSyncedAt) {
+        aCreateCount++
+      } else {
+        bDeleteCount++
+      }
+    }
+    for (const bOnlyTimestamp of bOnlyTimestamps) {
+      if (bOnlyTimestamp > lastSyncedAt) {
+        bCreateCount++
+      } else {
+        aDeleteCount++
+      }
+    }
+
+    dump(aUpdateCount, aCreateCount, aDeleteCount)
+    dump(bUpdateCount, bCreateCount, bDeleteCount)
+    const aScore = aUpdateCount + aCreateCount + aDeleteCount
+    const bScore = bUpdateCount + bCreateCount + bDeleteCount
     return aScore > bScore
   }
 
