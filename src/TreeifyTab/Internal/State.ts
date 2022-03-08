@@ -5,7 +5,7 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
-import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { NERArray, Option$, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -195,6 +195,30 @@ export namespace State {
 
     // 最適化の余地ありかも
     return JSON.parse(JSON.stringify(state))
+  }
+
+  /**
+   * 2つのStateのどちらの方が新しい（先に進んでいる）かを推定する。
+   * 同期用に読み込んだStateとローカルのStateを比較するために用いるために定義された。
+   * 同一のStateに対してはfalseを返す。
+   */
+  export function isNewerThan(a: State, b: State): boolean {
+    let aScore = 0
+    let bScore = 0
+
+    const aItemIds = RRecord$.numberKeys(a.items)
+    const bItemIds = RRecord$.numberKeys(b.items)
+    for (const itemId of RSet$.from(aItemIds.concat(bItemIds))) {
+      const aTimestamp = a.items[itemId]?.timestamp ?? 0
+      const bTimestamp = b.items[itemId]?.timestamp ?? 0
+      if (aTimestamp > bTimestamp) {
+        aScore++
+      } else if (aTimestamp < bTimestamp) {
+        bScore++
+      }
+    }
+
+    return aScore > bScore
   }
 
   /**

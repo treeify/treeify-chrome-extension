@@ -233,6 +233,8 @@ export namespace GoogleDrive {
 
         const state: State = await getState(dataFileMetaData)
 
+        dump(State.isNewerThan(Internal.instance.state, state))
+
         if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
           showRequireUpdateMessage()
           return
@@ -246,6 +248,8 @@ export namespace GoogleDrive {
         dump(knownTimestamp, dataFileTimestamp)
 
         const state: State = await getState(dataFileMetaData)
+
+        dump(State.isNewerThan(Internal.instance.state, state))
 
         if (state.schemaVersion > CURRENT_SCHEMA_VERSION) {
           showRequireUpdateMessage()
