@@ -121,6 +121,9 @@ export function jumpTo(itemPath: ItemPath) {
   CurrentState.switchActivePage(containerPageId)
 
   CurrentState.revealItemPath(itemPath)
+  if (!CurrentState.isPage(ItemPath.getItemId(itemPath))) {
+    CurrentState.setIsFolded(itemPath, false)
+  }
 
   // ジャンプ先のページのtargetItemPathを更新する
   CurrentState.setTargetItemPath(itemPath)
