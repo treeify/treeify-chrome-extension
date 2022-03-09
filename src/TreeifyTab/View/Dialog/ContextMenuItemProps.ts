@@ -11,7 +11,7 @@ export type ContextMenuItemProps = {
   onClick(): void
 }
 
-export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
+export function createContextMenuItemPropsGroups(): RArray<RArray<ContextMenuItemProps>> {
   const selectedItemPaths = CurrentState.getSelectedItemPaths()
   const selectedItemIds = selectedItemPaths.map(ItemPath.getItemId)
   const subtreeItemIds = selectedItemIds.flatMap((itemId) => [
@@ -26,20 +26,23 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     (itemId) => CurrentState.countParents(itemId) >= 2
   )
 
-  const result: ContextMenuItemProps[] = []
+  const group1: ContextMenuItemProps[] = []
+  const group2: ContextMenuItemProps[] = []
+  const group3: ContextMenuItemProps[] = []
+  const group4: ContextMenuItemProps[] = []
 
   if (hasParent) {
     if (isSingleSelect && item.childItemIds.length > 0) {
-      result.push({
+      group1.push({
         title: 'ツリーを削除',
         onClick: () => Command.removeItem(),
       })
-      result.push({
+      group1.push({
         title: '単体を削除',
         onClick: () => Command.deleteJustOneItem(),
       })
     } else {
-      result.push({
+      group1.push({
         title: '削除',
         onClick: () => Command.removeItem(),
       })
@@ -47,7 +50,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   }
 
   if (hasParent && includeTranscludedItem) {
-    result.push({
+    group1.push({
       title: '削除（他のトランスクルードもまとめて削除）',
       onClick: () => Command.deleteItem(),
     })
@@ -56,7 +59,7 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
   const hasTab = (itemId: ItemId) =>
     External.instance.tabItemCorrespondence.getTabId(itemId) !== undefined
   if (subtreeItemIds.some(hasTab)) {
-    result.push({
+    group2.push({
       title: 'ツリーに紐づくタブを閉じる',
       onClick: () => Command.closeTreeTabs(),
     })
@@ -66,50 +69,14 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     Internal.instance.state.items[itemId].type === ItemType.WEB_PAGE &&
     External.instance.tabItemCorrespondence.getTabId(itemId) === undefined
   if (subtreeItemIds.some(isTabClosed)) {
-    result.push({
+    group2.push({
       title: 'ツリーに紐づくタブをバックグラウンドで開く',
       onClick: () => Command.openTreeTabs(),
     })
   }
 
-  if (includeTranscludedItem && isSingleSelect) {
-    result.push({
-      title: '他のトランスクルード元を表示…',
-      onClick: () => Command.showOtherParentsDialog(),
-    })
-  }
-
-  if (isSingleSelect) {
-    switch (item.type) {
-      case ItemType.WEB_PAGE:
-        result.push({
-          title: 'タイトルを設定…',
-          onClick: () => Command.showEditDialog(),
-        })
-        break
-      case ItemType.IMAGE:
-        result.push({
-          title: '画像URLを編集…',
-          onClick: () => Command.showEditDialog(),
-        })
-        break
-      case ItemType.CODE_BLOCK:
-        result.push({
-          title: 'コードブロックを編集…',
-          onClick: () => Command.showEditDialog(),
-        })
-        break
-      case ItemType.TEX:
-        result.push({
-          title: 'TeXを編集…',
-          onClick: () => Command.showEditDialog(),
-        })
-        break
-    }
-  }
-
   if (item.type === ItemType.CODE_BLOCK && isSingleSelect) {
-    result.push({
+    group3.push({
       title: 'コードブロックの言語を設定…',
       onClick: () => {
         External.instance.dialogState = { type: 'CodeBlockLanguageSettingDialog' }
@@ -117,8 +84,37 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     })
   }
 
+  if (isSingleSelect) {
+    switch (item.type) {
+      case ItemType.WEB_PAGE:
+        group3.push({
+          title: 'タイトルを設定…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+      case ItemType.IMAGE:
+        group3.push({
+          title: '画像URLを編集…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+      case ItemType.CODE_BLOCK:
+        group3.push({
+          title: 'コードブロックを編集…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+      case ItemType.TEX:
+        group3.push({
+          title: 'TeXを編集…',
+          onClick: () => Command.showEditDialog(),
+        })
+        break
+    }
+  }
+
   if (isSingleSelect && [ItemType.IMAGE, ItemType.CODE_BLOCK, ItemType.TEX].includes(item.type)) {
-    result.push({
+    group3.push({
       title: 'キャプションを設定…',
       onClick: () => {
         External.instance.dialogState = { type: 'CaptionSettingDialog' }
@@ -126,37 +122,44 @@ export function createContextMenuItemPropses(): RArray<ContextMenuItemProps> {
     })
   }
 
-  result.push({
-    title: 'エクスポート…',
-    onClick: () => Command.showExportDialog(),
-  })
-
   if (isSingleSelect && item.source !== null) {
-    result.push({
+    group3.push({
       title: '出典を編集…',
       onClick: () => Command.showSourceEditDialog(),
     })
     if (item.source.title === '' && item.source.url === '') {
-      result.push({
+      group3.push({
         title: '出典を削除',
         onClick: () => Command.toggleSource(),
       })
     }
   }
 
+  if (includeTranscludedItem && isSingleSelect) {
+    group4.push({
+      title: '他のトランスクルード元を表示…',
+      onClick: () => Command.showOtherParentsDialog(),
+    })
+  }
+
+  group4.push({
+    title: 'エクスポート…',
+    onClick: () => Command.showExportDialog(),
+  })
+
   if (isSingleSelect && targetItemId !== TOP_ITEM_ID) {
     if (CurrentState.getExcludedItemIds().includes(targetItemId)) {
-      result.push({
+      group4.push({
         title: 'ツリーの除外を解除',
         onClick: () => Command.toggleExcluded(),
       })
     } else {
-      result.push({
+      group4.push({
         title: 'ツリーを検索結果やサイドバーから除外',
         onClick: () => Command.toggleExcluded(),
       })
     }
   }
 
-  return result
+  return [group1, group2, group3, group4].filter((group) => group.length > 0)
 }
