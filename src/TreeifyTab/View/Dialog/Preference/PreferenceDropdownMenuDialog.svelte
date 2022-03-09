@@ -13,35 +13,39 @@
     return {
       top: rect.bottom,
       right: rect.right,
-      itemPropses: [
-        {
-          title: 'キーボード操作設定',
-          onClick: () => {
-            External.instance.dialogState = { type: 'KeyBindingDialog' }
+      itemPropsGroups: [
+        [
+          {
+            title: 'キーボード操作設定',
+            onClick: () => {
+              External.instance.dialogState = { type: 'KeyBindingDialog' }
+            },
           },
-        },
-        {
-          title: '拡張機能ショートカット設定',
-          onClick: () => {
-            chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
+          {
+            title: '拡張機能ショートカット設定',
+            onClick: () => {
+              chrome.tabs.create({ url: 'chrome://extensions/shortcuts' })
+            },
           },
-        },
-        {
-          title: 'カスタムCSS',
-          onClick: () => {
-            External.instance.dialogState = { type: 'CustomCssDialog' }
+        ],
+        [
+          {
+            title: 'カスタムCSS',
+            onClick: () => {
+              External.instance.dialogState = { type: 'CustomCssDialog' }
+            },
           },
-        },
-        {
-          title: 'ワークスペース',
-          onClick: () => Command.showWorkspaceDialog(),
-        },
-        {
-          title: 'その他の設定',
-          onClick: () => {
-            External.instance.dialogState = { type: 'OtherSettingsDialog' }
+          {
+            title: 'ワークスペース',
+            onClick: () => Command.showWorkspaceDialog(),
           },
-        },
+          {
+            title: 'その他の設定',
+            onClick: () => {
+              External.instance.dialogState = { type: 'OtherSettingsDialog' }
+            },
+          },
+        ],
       ],
     }
   }
