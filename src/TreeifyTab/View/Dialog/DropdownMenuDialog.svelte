@@ -5,6 +5,7 @@
   import { DropdownMenuDialogProps } from 'src/TreeifyTab/View/Dialog/DropdownMenuDialogProps'
   import DropdownMenuItem from 'src/TreeifyTab/View/Dialog/DropdownMenuItem.svelte'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
+  import DividerLayout from 'src/TreeifyTab/View/DividerLayout.svelte'
 
   export let props: DropdownMenuDialogProps
 
@@ -39,9 +40,16 @@
   use:setupFocusTrap
 >
   <div class="dropdown-menu-dialog_frame">
-    {#each props.itemPropses as itemProps}
-      <DropdownMenuItem props={itemProps} />
-    {/each}
+    <DividerLayout class="dropdown-menu-dialog_menu-items" contents={props.itemPropsGroups}>
+      <div slot="content" let:content={itemPropsGroup}>
+        {#each itemPropsGroup as itemProps}
+          <DropdownMenuItem props={itemProps} />
+        {/each}
+      </div>
+      <div slot="divider" class="dropdown-menu-dialog_divider-area">
+        <div class="dropdown-menu-dialog_divider" />
+      </div>
+    </DividerLayout>
   </div>
 </div>
 
@@ -65,5 +73,16 @@
     overflow: hidden;
 
     box-shadow: 0 1px 6px oklch(75% 0 0);
+  }
+
+  .dropdown-menu-dialog_divider-area {
+    @include common.flex-center;
+    height: 0.7em;
+  }
+
+  .dropdown-menu-dialog_divider {
+    height: 1px;
+    width: 100%;
+    background-color: oklch(90% 0 0);
   }
 </style>

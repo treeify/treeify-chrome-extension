@@ -5,5 +5,5 @@ import { integer } from 'src/Utility/integer'
 export type DropdownMenuDialogProps = {
   top: integer
   right: integer
-  itemPropses: RArray<DropdownMenuItemProps>
+  itemPropsGroups: RArray<RArray<DropdownMenuItemProps>>
 }

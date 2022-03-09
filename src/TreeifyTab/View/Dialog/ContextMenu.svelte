@@ -5,15 +5,16 @@
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import ContextMenuItem from 'src/TreeifyTab/View/Dialog/ContextMenuItem.svelte'
-  import { createContextMenuItemPropses } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
+  import { createContextMenuItemPropsGroups } from 'src/TreeifyTab/View/Dialog/ContextMenuItemProps'
   import { setupFocusTrap } from 'src/TreeifyTab/View/Dialog/focusTrap'
+  import DividerLayout from 'src/TreeifyTab/View/DividerLayout.svelte'
   import { MainAreaContentView } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
   import { assertNonNull } from 'src/Utility/Debug/assert'
   import { NERArray$ } from 'src/Utility/fp-ts'
 
   export let dialog: ContextMenu
 
-  const contextMenuItemPropses = createContextMenuItemPropses()
+  const contextMenuItemPropsGroups = createContextMenuItemPropsGroups()
 
   const style = deriveStyle()
 
@@ -65,10 +66,17 @@
   on:contextmenu={onContextMenu}
   use:setupFocusTrap
 >
-  <div class="context-menu-dialog_frame">
-    {#each contextMenuItemPropses as contextMenuItemProps}
-      <ContextMenuItem props={contextMenuItemProps} />
-    {/each}
+  <div class="context-menu-dialog_frame" tabindex="0">
+    <DividerLayout class="context-menu-dialog_menu-items" contents={contextMenuItemPropsGroups}>
+      <div slot="content" let:content={contextMenuItemPropsGroup}>
+        {#each contextMenuItemPropsGroup as contextMenuItemProps}
+          <ContextMenuItem props={contextMenuItemProps} />
+        {/each}
+      </div>
+      <div slot="divider" class="context-menu-dialog_divider-area">
+        <div class="context-menu-dialog_divider" />
+      </div>
+    </DividerLayout>
   </div>
 </div>
 
@@ -92,5 +100,16 @@
     overflow: hidden;
 
     box-shadow: 0 2px 10px oklch(75% 0 0);
+  }
+
+  .context-menu-dialog_divider-area {
+    @include common.flex-center;
+    height: 0.7em;
+  }
+
+  .context-menu-dialog_divider {
+    height: 1px;
+    width: 100%;
+    background-color: oklch(90% 0 0);
   }
 </style>

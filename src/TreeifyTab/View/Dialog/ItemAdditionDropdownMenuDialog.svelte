@@ -17,49 +17,56 @@
     const rect = itemAdditionButton?.getBoundingClientRect()
     assertNonUndefined(rect)
 
-    const itemPropses = [
-      {
-        title: '画像項目を作成…',
-        onClick: () => Command.createImageItem(),
-      },
-      {
-        title: 'コードブロック項目を作成…',
-        onClick: () => Command.createCodeBlockItem(),
-      },
-      {
-        title: 'TeX項目を作成…',
-        onClick: () => Command.createTexItem(),
-      },
-      {
-        title: 'ブックマークを全てインポート',
-        onClick: async () => {
-          Internal.instance.saveCurrentStateToUndoStack()
-
-          const bookmarkTreeNodes = await chrome.bookmarks.getTree()
-
-          const bookmarkRootItemIds = bookmarkTreeNodes
-            .flatMap(flattenRedundantRootNode)
-            .map(toItem)
-
-          const bookmarkContainerItemId = CurrentState.createTextItem()
-          const domishObjects = DomishObject.fromPlainText('ブックマーク')
-          CurrentState.setTextItemDomishObjects(bookmarkContainerItemId, domishObjects)
-          CurrentState.insertFirstChildItem(CurrentState.getActivePageId(), bookmarkContainerItemId)
-          for (const bookmarkRootItemId of bookmarkRootItemIds) {
-            CurrentState.insertLastChildItem(bookmarkContainerItemId, bookmarkRootItemId)
-          }
-
-          const targetItemPath = [CurrentState.getActivePageId(), bookmarkContainerItemId]
-          CurrentState.setTargetItemPath(targetItemPath)
-          Rerenderer.instance.requestToFocusTargetItem()
-          Rerenderer.instance.rerender()
+    const itemPropsGroups = [
+      [
+        {
+          title: '画像項目を作成…',
+          onClick: () => Command.createImageItem(),
         },
-      },
+        {
+          title: 'コードブロック項目を作成…',
+          onClick: () => Command.createCodeBlockItem(),
+        },
+        {
+          title: 'TeX項目を作成…',
+          onClick: () => Command.createTexItem(),
+        },
+      ],
+      [
+        {
+          title: 'ブックマークを全てインポート',
+          onClick: async () => {
+            Internal.instance.saveCurrentStateToUndoStack()
+
+            const bookmarkTreeNodes = await chrome.bookmarks.getTree()
+
+            const bookmarkRootItemIds = bookmarkTreeNodes
+              .flatMap(flattenRedundantRootNode)
+              .map(toItem)
+
+            const bookmarkContainerItemId = CurrentState.createTextItem()
+            const domishObjects = DomishObject.fromPlainText('ブックマーク')
+            CurrentState.setTextItemDomishObjects(bookmarkContainerItemId, domishObjects)
+            CurrentState.insertFirstChildItem(
+              CurrentState.getActivePageId(),
+              bookmarkContainerItemId
+            )
+            for (const bookmarkRootItemId of bookmarkRootItemIds) {
+              CurrentState.insertLastChildItem(bookmarkContainerItemId, bookmarkRootItemId)
+            }
+
+            const targetItemPath = [CurrentState.getActivePageId(), bookmarkContainerItemId]
+            CurrentState.setTargetItemPath(targetItemPath)
+            Rerenderer.instance.requestToFocusTargetItem()
+            Rerenderer.instance.rerender()
+          },
+        },
+      ],
     ]
     return {
       top: rect.bottom,
       right: rect.right,
-      itemPropses,
+      itemPropsGroups,
     }
   }
 
