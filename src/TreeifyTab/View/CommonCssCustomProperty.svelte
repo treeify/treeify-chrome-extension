@@ -26,8 +26,8 @@
     --highlighted-item-bullet-color: oklch(55% 1 15.4);
     --highlighted-item-bullet-hover-color: oklch(45% 1 15.4);
 
-    --indent-guide-color: oklch(90% 0 0);
-    --indent-guide-hover-color: oklch(80% 0 0);
+    --indent-guide-color: oklch(92% 0 0);
+    --indent-guide-hover-color: oklch(84% 0 0);
 
     --selected-item-background-color: oklch(96% 1 255.4);
     --item-hover-background-color: oklch(98% 1 255.4);
