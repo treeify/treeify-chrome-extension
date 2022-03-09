@@ -67,7 +67,7 @@
   use:setupFocusTrap
 >
   <div class="context-menu-dialog_frame" tabindex="0">
-    <DividerLayout contents={contextMenuItemPropsGroups}>
+    <DividerLayout class="context-menu-dialog_menu-items" contents={contextMenuItemPropsGroups}>
       <div slot="content" let:content={contextMenuItemPropsGroup}>
         {#each contextMenuItemPropsGroup as contextMenuItemProps}
           <ContextMenuItem props={contextMenuItemProps} />
