@@ -54,6 +54,7 @@
     --unread-web-page-item-title-color: oklch(45% 1 135.4);
     --unread-discarded-web-page-item-title-color: oklch(52% 0.16 135.4);
     --unread-tab-closed-web-page-item-title-color: oklch(60% 0.1 135.4);
+    --unread-completed-web-page-item-title-color: oklch(75% 0.05 135.4);
 
     // Chromeのplaceholderのデフォルトの色はoklch(56.2% 0 0)相当だが、
     // 初期値なのかプレースホルダーなのか見分けづらいのでもっと薄い色にした。

@@ -144,6 +144,11 @@
       &.tab-closed {
         color: var(--unread-tab-closed-web-page-item-title-color);
       }
+
+      .completed &,
+      .completed-children & {
+        color: var(--unread-completed-web-page-item-title-color);
+      }
     }
 
     .completed &,
