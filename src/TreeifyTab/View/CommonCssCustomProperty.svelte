@@ -48,6 +48,9 @@
     --doubtful-item-decoration-thickness: 1px;
     --doubtful-item-decoration-underline-offset: #{common.toIntegerPx(0.2em)};
 
+    --discarded-web-page-item-title-color: oklch(40% 0 0);
+    --tab-closed-web-page-item-title-color: oklch(60% 0 0);
+
     --unread-web-page-item-title-color: oklch(45% 1 135.4);
     --unread-discarded-web-page-item-title-color: oklch(52% 0.16 135.4);
     --unread-tab-closed-web-page-item-title-color: oklch(60% 0.1 135.4);

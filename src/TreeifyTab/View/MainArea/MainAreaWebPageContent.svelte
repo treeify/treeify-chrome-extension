@@ -126,11 +126,11 @@
     white-space: nowrap;
 
     &.discarded {
-      color: oklch(40% 0 0);
+      color: var(--discarded-web-page-item-title-color);
     }
 
     &.tab-closed {
-      color: oklch(60% 0 0);
+      color: var(--tab-closed-web-page-item-title-color);
     }
 
     // 未読ウェブページ項目のタイトルの強調表示
