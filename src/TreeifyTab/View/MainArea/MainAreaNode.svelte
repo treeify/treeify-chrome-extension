@@ -66,7 +66,7 @@
             <div
               class="main-area-node_tabs-count"
               title={[
-                dtdd('クリック', 'ツリーのタブを閉じる'),
+                dtdd('クリック', 'ツリーに紐づくタブを閉じる'),
                 dtdd('右クリック', 'タブ一覧ダイアログを表示'),
               ].join('\n')}
               on:mousedown={props.onClickTabsCount}

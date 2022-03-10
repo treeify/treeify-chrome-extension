@@ -46,7 +46,7 @@
           <div
             class="page-tree-node_tabs-count-button"
             title={[
-              dtdd('クリック', 'タブをまとめて閉じる'),
+              dtdd('クリック', 'このページのタブを全て閉じる'),
               dtdd('Shift+クリック', 'タブを閉じずにこのページをページツリーから削除'),
               dtdd('右クリック', 'タブ一覧ダイアログを表示'),
             ].join('\n')}
