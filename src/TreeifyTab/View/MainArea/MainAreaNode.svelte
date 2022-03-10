@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { dtdd } from 'src/TreeifyTab/other'
   import { dragItem } from 'src/TreeifyTab/View/dragAndDrop'
   import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
   import GridEmptyCell from 'src/TreeifyTab/View/GridEmptyCell.svelte'
@@ -64,6 +65,10 @@
             <!-- 隠れているタブ数 -->
             <div
               class="main-area-node_tabs-count"
+              title={[
+                dtdd('クリック', 'ツリーのタブを閉じる'),
+                dtdd('右クリック', 'タブ一覧ダイアログを表示'),
+              ].join('\n')}
               on:mousedown={props.onClickTabsCount}
               on:contextmenu={props.onContextMenuTabsCount}
             >
@@ -71,7 +76,14 @@
             </div>
           {:else}
             <!-- 削除ボタン -->
-            <div class="main-area-node_delete-button" on:mousedown={props.onClickDeleteButton}>
+            <div
+              class="main-area-node_delete-button"
+              title={[
+                dtdd('クリック', 'このツリーを削除'),
+                dtdd('Ctrl+クリック', 'この項目単体を削除'),
+              ].join('\n')}
+              on:mousedown={props.onClickDeleteButton}
+            >
               <div class="main-area-node_delete-button-icon" />
             </div>
           {/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { dtdd } from 'src/TreeifyTab/other.js'
   import { calculateFootprintColor } from 'src/TreeifyTab/View/footprint'
   import GridEmptyCell from 'src/TreeifyTab/View/GridEmptyCell.svelte'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
@@ -44,14 +45,22 @@
         {#if props.tabsCount > 0}
           <div
             class="page-tree-node_tabs-count-button"
-            title={'クリック：\n   タブをまとめて閉じる\nShift+クリック：\n   タブを閉じずにこのページをページツリーから削除\n右クリック：\n   タブ一覧ダイアログを表示'}
+            title={[
+              dtdd('クリック', 'タブをまとめて閉じる'),
+              dtdd('Shift+クリック', 'タブを閉じずにこのページをページツリーから削除'),
+              dtdd('右クリック', 'タブ一覧ダイアログを表示'),
+            ].join('\n')}
             on:mousedown={props.onClickTabsCount}
             on:contextmenu={props.onTabsCountContextMenu}
           >
             <div class="page-tree-node_tabs-count">{Math.min(99, props.tabsCount)}</div>
           </div>
         {:else if !props.isRoot}
-          <div class="page-tree-node_close-button" on:mousedown={props.onClickCloseButton} />
+          <div
+            class="page-tree-node_close-button"
+            title="このページをページツリーから削除"
+            on:mousedown={props.onClickCloseButton}
+          />
         {/if}
       </div>
     </div>
