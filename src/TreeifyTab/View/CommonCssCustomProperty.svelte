@@ -43,7 +43,7 @@
 
     --completed-item-text-color: oklch(75% 0 0);
 
-    --doubtful-item-decoration-color: oklch(60% 1 15.4);
+    --doubtful-item-decoration-color: oklch(60% 0.22 15.4);
     --doubtful-item-decoration: underline dashed var(--doubtful-item-decoration-color);
     --doubtful-item-decoration-thickness: 1px;
     --doubtful-item-decoration-underline-offset: #{common.toIntegerPx(0.2em)};
