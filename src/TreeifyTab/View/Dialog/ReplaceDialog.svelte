@@ -7,6 +7,8 @@
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { REPLACEMENT_RANGES, ReplacementRange } from 'src/TreeifyTab/Internal/State'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
   import RadioButton from 'src/TreeifyTab/View/RadioButton.svelte'
@@ -17,10 +19,10 @@
   let beforeReplace: string = ''
   let afterReplace: string = ''
 
-  const RANGES = ['all-pages', 'active-page-and-descendants'] as const
-  type Range = typeof RANGES[number]
-  let selectedRange: Range = RANGES[0]
-  const rangeLabels: Record<Range, string> = {
+  let selectedReplacementRange = Internal.instance.state.selectedReplacementRange
+  $: Internal.instance.mutate(selectedReplacementRange, StatePath.of('selectedReplacementRange'))
+
+  const replacementRangeLabels: Record<ReplacementRange, string> = {
     'all-pages': '全てのページ',
     'active-page-and-descendants': '現在のページとその子孫ページ',
   }
@@ -51,7 +53,7 @@
     Internal.instance.saveCurrentStateToUndoStack()
 
     const itemIds = call(() => {
-      switch (selectedRange) {
+      switch (selectedReplacementRange) {
         case 'all-pages':
           return Internal.instance.searchEngine.searchToReplace(beforeReplace)
         case 'active-page-and-descendants':
@@ -151,9 +153,9 @@
     </div>
     <fieldset class="replace-dialog_range-area">
       <legend>置換範囲</legend>
-      {#each RANGES as range}
-        <RadioButton bind:group={selectedRange} value={range}>
-          {rangeLabels[range]}
+      {#each REPLACEMENT_RANGES as replacementRange}
+        <RadioButton bind:group={selectedReplacementRange} value={replacementRange}>
+          {replacementRangeLabels[replacementRange]}
         </RadioButton>
       {/each}
     </fieldset>
