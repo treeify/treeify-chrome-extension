@@ -18,13 +18,13 @@
     --page-icon-color: oklch(30% 0 0);
     --page-icon-hover-color: oklch(20% 0 0);
 
-    --transcluded-item-bullet-color: oklch(65% 1 135.4);
-    --transcluded-item-bullet-hover-color: oklch(55% 1 135.4);
-    --transcluded-item-page-icon-color: oklch(55% 1 135.4);
-    --transcluded-item-page-icon-hover-color: oklch(45% 1 135.4);
+    --transcluded-item-bullet-color: oklch(60% 1 135.4);
+    --transcluded-item-bullet-hover-color: oklch(50% 1 135.4);
+    --transcluded-item-page-icon-color: oklch(50% 1 135.4);
+    --transcluded-item-page-icon-hover-color: oklch(40% 1 135.4);
 
-    --highlighted-item-bullet-color: oklch(55% 1 15.4);
-    --highlighted-item-bullet-hover-color: oklch(45% 1 15.4);
+    --highlighted-item-bullet-color: oklch(52% 1 15.4);
+    --highlighted-item-bullet-hover-color: oklch(42% 1 15.4);
 
     --indent-guide-color: oklch(92% 0 0);
     --indent-guide-hover-color: oklch(84% 0 0);
@@ -48,8 +48,8 @@
     --doubtful-item-decoration-thickness: 1px;
     --doubtful-item-decoration-underline-offset: #{common.toIntegerPx(0.2em)};
 
-    --unread-web-page-item-title-color: oklch(48% 1 135.4);
-    --unread-discarded-web-page-item-title-color: oklch(55% 0.16 135.4);
+    --unread-web-page-item-title-color: oklch(45% 1 135.4);
+    --unread-discarded-web-page-item-title-color: oklch(52% 0.16 135.4);
     --unread-tab-closed-web-page-item-title-color: oklch(60% 0.1 135.4);
 
     // Chromeのplaceholderのデフォルトの色はoklch(56.2% 0 0)相当だが、
