@@ -10,6 +10,7 @@
 <div
   class="main-area-bullet-and-indent_root"
   style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+  title={props.tooltipText}
   on:click={props.onClick}
   on:contextmenu={props.onContextMenu}
 >

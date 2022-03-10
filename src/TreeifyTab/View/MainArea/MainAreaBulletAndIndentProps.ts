@@ -4,9 +4,11 @@ import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { dtdd } from 'src/TreeifyTab/other'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { RArray$ } from 'src/Utility/fp-ts'
+import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 
 export type MainAreaBulletAndIndentProps = {
@@ -17,6 +19,7 @@ export type MainAreaBulletAndIndentProps = {
    */
   hiddenItemsCount: integer
   outerCircleRadiusEm: integer
+  tooltipText: string
   onClick(event: MouseEvent): void
   onContextMenu(event: Event): void
 }
@@ -33,6 +36,7 @@ export function createMainAreaBulletAndIndentProps(
   itemPath: ItemPath
 ): MainAreaBulletAndIndentProps {
   const hiddenItemsCount = countHiddenItems(state, itemPath)
+  const bulletState = deriveBulletState(state, itemPath)
 
   const outerCircleMinSize =
     CssCustomProperty.getNumber('--bullet-outer-circle-min-size-em') ?? 1.05
@@ -45,15 +49,31 @@ export function createMainAreaBulletAndIndentProps(
   const outerCircleRadiusEm = outerCircleMinSize + limitedHiddenItemsCount * step
 
   return {
-    bulletState: deriveBulletState(state, itemPath),
+    bulletState,
     hiddenItemsCount,
     outerCircleRadiusEm,
+    tooltipText: call(() => {
+      switch (bulletState) {
+        case MainAreaBulletState.NO_CHILDREN:
+          return [dtdd('Ctrl+クリック', 'ページ化する')]
+        case MainAreaBulletState.UNFOLDED:
+          return [dtdd('クリック', '折りたたむ'), dtdd('Ctrl+クリック', 'ページ化する')]
+        case MainAreaBulletState.FOLDED:
+          return [dtdd('クリック', '展開する'), dtdd('Ctrl+クリック', 'ページ化する')]
+        case MainAreaBulletState.PAGE:
+          return [
+            dtdd('クリック', 'ページを切り替える'),
+            dtdd('Ctrl+クリック', '非ページ化する'),
+            dtdd('Shift+クリック', 'ページツリーに追加せずにページを切り替える'),
+          ]
+      }
+    }).join('\n'),
     onClick(event: MouseEvent) {
       Internal.instance.saveCurrentStateToUndoStack()
       CurrentState.setTargetItemPath(itemPath)
 
       const inputId = InputId.fromMouseEvent(event)
-      switch (deriveBulletState(state, itemPath)) {
+      switch (bulletState) {
         case MainAreaBulletState.NO_CHILDREN:
           switch (inputId) {
             case '1000MouseButton0':
