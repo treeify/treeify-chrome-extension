@@ -112,7 +112,6 @@
     grid-template-columns: minmax(0, 1fr) auto;
 
     &[data-depth='0'] {
-      font-size: 125%;
       padding-bottom: common.toIntegerPx(0.5em);
     }
 
@@ -130,6 +129,10 @@
     background-color: var(--footprint-color);
     @media print {
       background-color: transparent;
+    }
+
+    [data-depth='0'] & {
+      font-size: 125%;
     }
 
     // マウスホバー時のコンテンツ領域
