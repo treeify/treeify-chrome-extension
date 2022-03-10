@@ -82,11 +82,11 @@
     }
 
     .unread.discarded & {
-      color: oklch(65% 1 135.4);
+      color: var(--unread-discarded-web-page-item-title-color);
     }
 
     .unread.tab-closed & {
-      color: oklch(70% 0.3 135.4);
+      color: var(--unread-tab-closed-web-page-item-title-color);
     }
   }
 </style>
