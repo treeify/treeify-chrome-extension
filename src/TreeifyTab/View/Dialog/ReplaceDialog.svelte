@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { pipe } from 'fp-ts/function'
   import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
   import { Command } from 'src/TreeifyTab/Internal/Command'
@@ -6,12 +7,25 @@
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
+  import { REPLACEMENT_RANGES, ReplacementRange } from 'src/TreeifyTab/Internal/State'
+  import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import RadioButton from 'src/TreeifyTab/View/RadioButton.svelte'
   import { assertNeverType } from 'src/Utility/Debug/assert'
+  import { RSet$ } from 'src/Utility/fp-ts'
+  import { call } from 'src/Utility/function'
 
   let beforeReplace: string = ''
   let afterReplace: string = ''
+
+  let selectedReplacementRange = Internal.instance.state.selectedReplacementRange
+  $: Internal.instance.mutate(selectedReplacementRange, StatePath.of('selectedReplacementRange'))
+
+  const replacementRangeLabels: Record<ReplacementRange, string> = {
+    'all-pages': '全てのページ',
+    'active-page-and-descendants': '現在のページとその子孫ページ',
+  }
 
   function onKeydown(event: KeyboardEvent) {
     if (event.isComposing) return
@@ -38,7 +52,23 @@
   function onSubmit() {
     Internal.instance.saveCurrentStateToUndoStack()
 
-    const itemIds = Internal.instance.searchEngine.searchToReplace(beforeReplace)
+    const itemIds = call(() => {
+      switch (selectedReplacementRange) {
+        case 'all-pages':
+          return Internal.instance.searchEngine.searchToReplace(beforeReplace)
+        case 'active-page-and-descendants':
+          const activePageId = CurrentState.getActivePageId()
+          return pipe(
+            Internal.instance.searchEngine.searchToReplace(beforeReplace),
+            RSet$.filter(
+              (itemId: ItemId) =>
+                itemId === activePageId ||
+                RSet$.from(CurrentState.yieldAncestorItemIds(itemId)).has(activePageId)
+            )
+          )
+      }
+    })
+
     for (const itemId of itemIds) {
       replaceItemData(itemId, beforeReplace, afterReplace)
     }
@@ -121,6 +151,14 @@
         <input type="text" class="replace-dialog_after-replace" bind:value={afterReplace} />
       </label>
     </div>
+    <fieldset class="replace-dialog_range-area">
+      <legend>置換範囲</legend>
+      {#each REPLACEMENT_RANGES as replacementRange}
+        <RadioButton bind:group={selectedReplacementRange} value={replacementRange}>
+          {replacementRangeLabels[replacementRange]}
+        </RadioButton>
+      {/each}
+    </fieldset>
     <div class="replace-dialog_bottom-button-area">
       <button class="replace-dialog_submit-button primary" on:mousedown|preventDefault={onSubmit}>
         全て置換
@@ -152,6 +190,17 @@
   .replace-dialog_after-replace {
     padding: common.toIntegerPx(0.35em);
     font-size: 95%;
+  }
+
+  .replace-dialog_range-area {
+    display: flex;
+    flex-direction: column;
+    // クリックの当たり判定が広がるのを防ぐ
+    align-items: start;
+
+    border: 1px solid oklch(85% 0 0);
+
+    margin-top: 1em;
   }
 
   .replace-dialog_bottom-button-area {

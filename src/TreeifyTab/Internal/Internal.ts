@@ -2,7 +2,12 @@ import objectPath from 'object-path'
 import { ItemType, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import { Chunk, ChunkId } from 'src/TreeifyTab/Internal/Chunk'
 import { SearchEngine } from 'src/TreeifyTab/Internal/SearchEngine/SearchEngine'
-import { CURRENT_SCHEMA_VERSION, ExportFormat, State } from 'src/TreeifyTab/Internal/State'
+import {
+  CURRENT_SCHEMA_VERSION,
+  ExportFormat,
+  REPLACEMENT_RANGES,
+  State,
+} from 'src/TreeifyTab/Internal/State'
 import { PathValue, StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { Timestamp } from 'src/Utility/Timestamp'
@@ -220,6 +225,7 @@ export class Internal {
           },
         },
       },
+      selectedReplacementRange: REPLACEMENT_RANGES[0],
       leftEndMouseGestureEnabled: true,
       rightEndMouseGestureEnabled: false,
       useClipboardTextWhenQuoting: false,

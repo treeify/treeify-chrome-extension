@@ -51,6 +51,7 @@ export type State = {
       }
     }
   }
+  selectedReplacementRange: ReplacementRange
   leftEndMouseGestureEnabled: boolean
   rightEndMouseGestureEnabled: boolean
   useClipboardTextWhenQuoting: boolean
@@ -188,6 +189,9 @@ export enum ExportFormat {
   MARKDOWN = 'Markdown',
   OPML = 'OPML',
 }
+
+export const REPLACEMENT_RANGES = ['all-pages', 'active-page-and-descendants'] as const
+export type ReplacementRange = typeof REPLACEMENT_RANGES[number]
 
 export namespace State {
   /** Stateオブジェクトまたはそのサブオブジェクトを複製する。Undo機能のために必要 */
