@@ -55,11 +55,9 @@ export function createMainAreaBulletAndIndentProps(
     tooltipText: call(() => {
       switch (bulletState) {
         case MainAreaBulletState.NO_CHILDREN:
-          return [dtdd('Ctrl+クリック', 'ページ化する')]
         case MainAreaBulletState.UNFOLDED:
-          return [dtdd('クリック', '折りたたむ'), dtdd('Ctrl+クリック', 'ページ化する')]
         case MainAreaBulletState.FOLDED:
-          return [dtdd('クリック', '展開する'), dtdd('Ctrl+クリック', 'ページ化する')]
+          return []
         case MainAreaBulletState.PAGE:
           return [
             dtdd('クリック', 'ページを切り替える'),
