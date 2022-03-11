@@ -39,7 +39,7 @@
 
     --circle-button-hover-color: oklch(93% 0 0);
 
-    --menu-item-hover-background-color: oklch(94% 0 0);
+    --menu-item-hover-background-color: oklch(96% 0 0);
 
     --completed-item-text-color: oklch(75% 0 0);
 
