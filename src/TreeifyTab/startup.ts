@@ -99,14 +99,13 @@ export async function cleanup() {
 }
 
 /**
- * 事実上の再起動を行う（ただしStateがinvalidだった場合は行わない）。
- * 実際にページをリロードするわけではないが、全てのシングルトンやグローバル変数に対して
- * 必要に応じてリセット処理を行う。
- * DOMの状態もリセットされ、初回描画からやり直される。
+ * Treeifyタブの事実上の再起動を行う。
+ * 実際にページをリロードするわけではないが、DOMの状態をリセットし、初回描画からやり直す。
+ * 一部を除く全てのシングルトンやグローバル変数もリセットする。
  */
-export async function restart(state: State, skipTabMigration: boolean = false) {
+export async function restart(state: State, isFirstSync: boolean = false) {
   if (State.isValid(state)) {
-    if (!skipTabMigration) {
+    if (!isFirstSync) {
       await migrateTabs(state)
     }
 
