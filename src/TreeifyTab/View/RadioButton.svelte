@@ -15,6 +15,8 @@
     display: inline-flex;
     align-items: center;
     gap: common.toIntegerPx(0.3em);
+
+    cursor: pointer;
   }
 
   .radio-button_radio-button {
