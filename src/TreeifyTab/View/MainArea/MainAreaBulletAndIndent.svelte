@@ -64,11 +64,11 @@
     }
 
     .main-area-bullet-and-indent_page-icon {
-      background: var(--highlighted-item-bullet-color);
+      background: var(--highlighted-item-page-icon-color);
     }
 
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
-      background: var(--highlighted-item-bullet-hover-color);
+      background: var(--highlighted-item-page-icon-hover-color);
     }
   }
 
@@ -92,7 +92,7 @@
     .main-area-bullet-and-indent_page-icon {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-color) 50%,
+        var(--highlighted-item-page-icon-color) 50%,
         var(--transcluded-item-page-icon-color) 50%
       );
     }
@@ -100,7 +100,7 @@
     .main-area-bullet-and-indent_root:hover .main-area-bullet-and-indent_page-icon {
       background: linear-gradient(
         to right,
-        var(--highlighted-item-bullet-hover-color) 50%,
+        var(--highlighted-item-page-icon-hover-color) 50%,
         var(--transcluded-item-page-icon-hover-color) 50%
       );
     }
