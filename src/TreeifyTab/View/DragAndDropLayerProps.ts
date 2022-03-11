@@ -104,7 +104,7 @@ function calculateDropDestinationStyle(
       // 要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
       const ratio = (clientY - rect.top) / (rect.bottom - rect.top)
       if (ratio <= 0.5) {
-        // 座標が要素の上の方の場合
+        // 座標が要素の上半分の場合
 
         // アクティブページのさらに上にはドロップできない
         if (!ItemPath.hasParent(itemPath)) return ''
@@ -116,7 +116,7 @@ function calculateDropDestinationStyle(
           border: 1px solid var(--drop-destination-color);
         `
       } else {
-        // 座標が要素の下の方の場合
+        // 座標が要素の下半分の場合
 
         if (CurrentState.getDisplayingChildItemIds(itemPath).length > 0) {
           return `
@@ -226,7 +226,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     // ドロップ先要素の上端を0%、下端を100%として、マウスが何%にいるのかを計算する（0~1で表現）
     const ratio = (event.clientY - rect.top) / (rect.bottom - rect.top)
     if (ratio <= 0.5) {
-      // ドロップ先座標がドロップ先要素の上の方の場合
+      // ドロップ先座標がドロップ先要素の上半分の場合
 
       // ドロップ先がアクティブページなら何もしない
       if (!ItemPath.hasParent(itemPath)) return
@@ -243,7 +243,7 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       const newItemPath = CurrentState.insertPrevSiblingItem(itemPath, draggedItemId, edge)
       CurrentState.setTargetItemPath(newItemPath)
     } else {
-      // ドロップ先座標がドロップ先要素の下の方の場合
+      // ドロップ先座標がドロップ先要素の下半分の場合
 
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
       if (ItemPath.getParentItemId(itemPath) !== ItemPath.getParentItemId(draggedItemPath)) {
