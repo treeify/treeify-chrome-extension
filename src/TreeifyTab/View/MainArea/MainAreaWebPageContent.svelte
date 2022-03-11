@@ -22,12 +22,17 @@
     >
       <div class="main-area-web-page-content_favicon-wrapper">
         {#if props.faviconUrl.length > 0}
-          <img class="main-area-web-page-content_favicon" src={props.faviconUrl} alt="" />
+          <img
+            class="main-area-web-page-content_favicon"
+            src={props.faviconUrl}
+            alt=""
+            title={props.tooltipText}
+          />
         {:else if !props.isLoading}
-          <div class="main-area-web-page-content_default-favicon" />
+          <div class="main-area-web-page-content_default-favicon" title={props.tooltipText} />
         {/if}
         {#if props.isLoading}
-          <LoadingIndicator />
+          <LoadingIndicator title={props.tooltipText} />
         {/if}
       </div>
     </div>

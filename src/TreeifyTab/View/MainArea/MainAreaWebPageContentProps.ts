@@ -4,9 +4,11 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
+import { dtdd } from 'src/TreeifyTab/other'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { MainAreaContentProps } from 'src/TreeifyTab/View/MainArea/MainAreaContentProps'
 import { createSourceProps, SourceProps } from 'src/TreeifyTab/View/SourceProps'
+import { call } from 'src/Utility/function'
 
 export type MainAreaWebPageContentProps = {
   itemPath: ItemPath
@@ -18,6 +20,7 @@ export type MainAreaWebPageContentProps = {
   isUnread: boolean
   isAudible: boolean
   sourceProps: SourceProps | undefined
+  tooltipText: string
   onFocus(event: FocusEvent): void
   onClickTitle(event: MouseEvent): void
   onClickFavicon(event: MouseEvent): void
@@ -43,6 +46,23 @@ export function createMainAreaWebPageContentProps(
     isUnread: webPageItem.isUnread,
     isAudible: tab?.audible === true,
     sourceProps: createSourceProps(itemPath),
+    tooltipText: call(() => {
+      if (tab !== undefined) {
+        return [
+          dtdd('クリック', 'ツリーに紐づくタブを閉じる'),
+          dtdd('Ctrl+クリック', '項目に紐づくタブを閉じる'),
+          dtdd('Shift+クリック', 'ツリーに紐づくタブをdiscardする'),
+          dtdd('Ctrl+Shift+クリック', '項目に紐づくタブをdiscardする'),
+        ]
+      } else {
+        return [
+          dtdd('クリック', '項目に紐づくタブをバックグラウンドで開く'),
+          dtdd('Ctrl+クリック', 'ツリーに紐づくタブをバックグラウンドで開く'),
+          dtdd('Shift+クリック', '項目に紐づくタブをバックグラウンドで開く'),
+          dtdd('Ctrl+Shift+クリック', 'ツリーに紐づくタブをバックグラウンドで開く'),
+        ]
+      }
+    }).join('\n'),
     onFocus(event) {
       // focusだけでなくselectionも設定しておかないとcopyイベント等が発行されない
       if (event.target instanceof Node) {
