@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
 import { distance as levenshteinDistance } from 'fastest-levenshtein'
-import { ItemId } from 'src/TreeifyTab/basicType'
+import { ItemId, TOP_ITEM_ID } from 'src/TreeifyTab/basicType'
 import {
   matchTabsAndWebPageItems,
   onActivated,
@@ -18,6 +18,11 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { Database } from 'src/TreeifyTab/Internal/Database'
 import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { GoogleDrive } from 'src/TreeifyTab/Internal/GoogleDrive'
+import {
+  createItemsBasedOnOpml,
+  toOpmlString,
+  tryParseAsOpml,
+} from 'src/TreeifyTab/Internal/ImportExport/opml'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { State } from 'src/TreeifyTab/Internal/State'
@@ -99,16 +104,24 @@ export async function cleanup() {
 }
 
 /**
- * 事実上の再起動を行う（ただしStateがinvalidだった場合は行わない）。
- * 実際にページをリロードするわけではないが、全てのシングルトンやグローバル変数に対して
- * 必要に応じてリセット処理を行う。
- * DOMの状態もリセットされ、初回描画からやり直される。
+ * Treeifyタブの事実上の再起動を行う。
+ * 実際にページをリロードするわけではないが、DOMの状態をリセットし、初回描画からやり直す。
+ * 一部を除く全てのシングルトンやグローバル変数もリセットする。
  */
-export async function restart(state: State, skipTabMigration: boolean = false) {
+export async function restart(state: State, isFirstSync: boolean = false) {
   if (State.isValid(state)) {
-    if (!skipTabMigration) {
+    if (!isFirstSync) {
       await migrateTabs(state)
     }
+
+    // ローカルデータが上書きされ、項目を失ってしまう問題の対策として
+    // 初回同期時はトップページの子項目を全てOPML化しておき、同期完了後にトップページの末尾に貼り付ける。
+    const opmlString: string | undefined = call(() => {
+      if (!isFirstSync) return undefined
+
+      const childItemIds = Internal.instance.state.items[TOP_ITEM_ID].childItemIds
+      return toOpmlString(childItemIds.map((childItemId) => [TOP_ITEM_ID, childItemId]))
+    })
 
     await cleanup()
 
@@ -118,6 +131,18 @@ export async function restart(state: State, skipTabMigration: boolean = false) {
     Database.writeChunks(Chunk.createAllChunks(state))
 
     await startup(state)
+
+    if (opmlString !== undefined) {
+      // 退避しておいたOPMLをトップページの末尾に貼り付ける
+      const opmlParseResult = tryParseAsOpml(opmlString)
+      if (opmlParseResult !== undefined) {
+        for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult)) {
+          CurrentState.insertLastChildItem(TOP_ITEM_ID, itemAndEdge.itemId, itemAndEdge.edge)
+        }
+      }
+
+      Rerenderer.instance.rerender()
+    }
   }
 }
 
