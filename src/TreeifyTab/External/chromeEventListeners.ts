@@ -158,17 +158,20 @@ export async function onUpdated(tabId: TabId, changeInfo: TabChangeInfo, tab: Ta
   External.instance.tabItemCorrespondence.registerTab(tabId, correctTab)
 
   const webPageItem = Internal.instance.state.webPageItems[itemId]
-  if (correctTab.title !== undefined && correctTab.title !== webPageItem.title) {
-    CurrentState.setWebPageItemTabTitle(itemId, correctTab.title)
+  const title = correctTab.title ?? ''
+  if (title !== webPageItem.title) {
+    CurrentState.setWebPageItemTabTitle(itemId, title)
   }
-  if (correctTab.url !== undefined && correctTab.url !== webPageItem.url) {
+  const url = correctTab.url ?? ''
+  if (url !== webPageItem.url) {
     // もしUndoされるとタブと項目の対応関係に関して不具合が出るのでUndoさせないようにする
     Internal.instance.clearUndoStack()
 
-    CurrentState.setWebPageItemUrl(itemId, correctTab.url)
+    CurrentState.setWebPageItemUrl(itemId, url)
   }
-  if (correctTab.favIconUrl !== undefined && correctTab.favIconUrl !== webPageItem.faviconUrl) {
-    CurrentState.setWebPageItemFaviconUrl(itemId, correctTab.favIconUrl)
+  const faviconUrl = correctTab.favIconUrl ?? ''
+  if (faviconUrl !== webPageItem.faviconUrl) {
+    CurrentState.setWebPageItemFaviconUrl(itemId, faviconUrl)
   }
 
   Rerenderer.instance.rerender()
