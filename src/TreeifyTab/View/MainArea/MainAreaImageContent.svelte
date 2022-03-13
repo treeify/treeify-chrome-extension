@@ -101,7 +101,7 @@
 
     width: 5%;
     min-width: 10px;
-    max-width: 25px;
+    max-width: 18px;
 
     visibility: hidden;
 
