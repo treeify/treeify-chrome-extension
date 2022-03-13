@@ -9,7 +9,7 @@ export const commandNames = {
   unfold: '展開する',
   toggleFolded: '折りたたみ状態トグル',
   enterKeyDefault: 'Enterキーデフォルト動作',
-  deleteItem: '項目を削除（他のトランスクルードもまとめて削除）',
+  deleteItem: '項目を削除（他のトランスクルード元もまとめて削除）',
   removeItem: '項目を削除',
   deleteJustOneItem: '項目単体を削除',
   grouping: 'グルーピング',
