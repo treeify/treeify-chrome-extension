@@ -58,8 +58,6 @@ export function createMainAreaWebPageContentProps(
         return [
           dtdd('クリック', '項目に紐づくタブをバックグラウンドで開く'),
           dtdd('Ctrl+クリック', 'ツリーに紐づくタブをバックグラウンドで開く'),
-          dtdd('Shift+クリック', '項目に紐づくタブをバックグラウンドで開く'),
-          dtdd('Ctrl+Shift+クリック', 'ツリーに紐づくタブをバックグラウンドで開く'),
         ]
       }
     }).join('\n'),
