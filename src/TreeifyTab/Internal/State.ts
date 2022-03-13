@@ -6,7 +6,7 @@ import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
-import { NERArray, Option$, RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { NERArray, Option$, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -269,7 +269,7 @@ export namespace State {
    */
   export function isValid(state: State): boolean {
     try {
-      const itemIds = Object.keys(state.items).map(Number)
+      const itemIds = RRecord$.numberKeys(state.items)
       for (const itemId of itemIds) {
         const item = state.items[itemId]
 
@@ -288,8 +288,7 @@ export namespace State {
           )
         }
         // 親項目の子リストに自身が含まれていることのチェック
-        for (const parentsKey in item.parents) {
-          const parentItemId = Number(parentsKey)
+        for (const parentItemId of RRecord$.numberKeys(item.parents)) {
           assert(
             state.items[parentItemId]?.childItemIds?.includes(itemId),
             `items[${parentItemId}]のchildItemIdsに${itemId}が含まれていない`
@@ -332,8 +331,7 @@ export namespace State {
         'トランスクルードによって循環参照が発生している'
       )
 
-      for (const pagesKey in state.pages) {
-        const pageId = Number(pagesKey)
+      for (const pageId of RRecord$.numberKeys(state.pages)) {
         // ページIDに対応する項目IDの存在チェック
         assertNonUndefined(
           state.items[pageId],
@@ -364,8 +362,7 @@ export namespace State {
         )
       }
 
-      for (const workspacesKey in state.workspaces) {
-        const workspaceId = Number(workspacesKey)
+      for (const workspaceId of RRecord$.numberKeys(state.workspaces)) {
         const workspace = state.workspaces[workspaceId]
         assert(typeof workspace.name === 'string', `workspaces[${workspaceId}]のnameの型エラー`)
 

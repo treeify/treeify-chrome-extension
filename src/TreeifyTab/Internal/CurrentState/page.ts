@@ -92,12 +92,9 @@ export function turnIntoNonPage(itemId: ItemId) {
   Internal.instance.delete(StatePath.of('pages', itemId))
 
   // 他のワークスペースのアクティブページが不正にならないよう退避する
-  for (const workspacesKey in Internal.instance.state.workspaces) {
-    if (Internal.instance.state.workspaces[workspacesKey].activePageId === itemId) {
-      Internal.instance.mutate(
-        TOP_ITEM_ID,
-        StatePath.of('workspaces', Number(workspacesKey), 'activePageId')
-      )
+  for (const workspaceId of CurrentState.getWorkspaceIds()) {
+    if (Internal.instance.state.workspaces[workspaceId].activePageId === itemId) {
+      Internal.instance.mutate(TOP_ITEM_ID, StatePath.of('workspaces', workspaceId, 'activePageId'))
     }
   }
 }

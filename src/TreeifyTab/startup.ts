@@ -32,7 +32,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { ShowMessage } from 'src/Utility/Debug/error'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray$, RRecord$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 import OnClickData = chrome.contextMenus.OnClickData
@@ -152,8 +152,8 @@ export async function restart(state: State, isFirstSync: boolean = false) {
 async function migrateTabs(newState: State) {
   // newStateにおけるグローバル項目IDから項目IDへのMapを作る
   const globalItemIdMap = new Map<GlobalItemId, ItemId>()
-  for (const itemsKey in newState.items) {
-    globalItemIdMap.set(newState.items[itemsKey].globalItemId, Number(itemsKey))
+  for (const itemId of RRecord$.numberKeys(newState.items)) {
+    globalItemIdMap.set(newState.items[itemId].globalItemId, itemId)
   }
 
   const allItemIds = External.instance.tabItemCorrespondence.getAllItemIds()

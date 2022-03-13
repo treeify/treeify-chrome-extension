@@ -108,7 +108,7 @@ import xml from 'highlight.js/lib/languages/xml'
 import xquery from 'highlight.js/lib/languages/xquery'
 import yaml from 'highlight.js/lib/languages/yaml'
 import zephir from 'highlight.js/lib/languages/zephir'
-import { RArray, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { RArray, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
 /** シンタックスハイライトした結果のHTML文字列を返す */
 export function getHighlightedHtml(code: string, language: string): string {
@@ -150,9 +150,9 @@ export function detectLanguage(
  * Treeify開発者の判断でコメントアウトしてある。
  */
 export function registerLanguages() {
-  for (const languageDefinitionsKey in languageDefinitions) {
+  for (const [key, value] of RRecord$.entries(languageDefinitions)) {
     // @ts-ignore
-    hljs.registerLanguage(languageDefinitionsKey, languageDefinitions[languageDefinitionsKey])
+    hljs.registerLanguage(key, value)
   }
 }
 

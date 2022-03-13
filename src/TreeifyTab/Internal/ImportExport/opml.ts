@@ -15,8 +15,8 @@ function toOpmlOutlineElement(
   const outlineElement = xmlDocument.createElement('outline')
 
   const attributes = toOpmlAttributes(itemPath)
-  for (const attrName in attributes) {
-    outlineElement.setAttribute(attrName, attributes[attrName])
+  for (const [attrName, attrValue] of Object.entries(attributes)) {
+    outlineElement.setAttribute(attrName, attrValue)
   }
 
   const childItemIds = includeInvisibleItems

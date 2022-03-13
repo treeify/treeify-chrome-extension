@@ -9,7 +9,7 @@ import { createDefaultEdge, Edge, Source } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
 import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { ShowMessage } from 'src/Utility/Debug/error'
-import { Option$, RArray, RArray$, RSet$ } from 'src/Utility/fp-ts'
+import { Option$, RArray, RArray$, RRecord$, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -39,10 +39,10 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
       const parents = Internal.instance.state.items[childItemId].parents
       const edge = parents[itemId]
       Internal.instance.delete(StatePath.of('items', childItemId, 'parents', itemId))
-      for (const parentsKey in item.parents) {
+      for (const parentItemId of CurrentState.getParentItemIds(itemId)) {
         Internal.instance.mutate(
           { ...edge },
-          StatePath.of('items', childItemId, 'parents', Number(parentsKey))
+          StatePath.of('items', childItemId, 'parents', parentItemId)
         )
       }
     }
@@ -73,12 +73,12 @@ export function deleteItem(itemId: ItemId, deleteOnlyItself: boolean = false) {
   }
 
   // 除外リストから削除する
-  for (const key in Internal.instance.state.workspaces) {
-    const workspace = Internal.instance.state.workspaces[key]
+  for (const workspaceId of CurrentState.getWorkspaceIds()) {
+    const workspace = Internal.instance.state.workspaces[workspaceId]
     if (workspace.excludedItemIds.includes(itemId)) {
       Internal.instance.mutate(
         workspace.excludedItemIds.filter((excluded) => excluded !== itemId),
-        StatePath.of('workspaces', Number(key), 'excludedItemIds')
+        StatePath.of('workspaces', workspaceId, 'excludedItemIds')
       )
     }
   }
@@ -178,7 +178,7 @@ export function updateItemTimestamp(itemId: ItemId) {
 
 /** 指定された項目の親項目IDのリストを返す */
 export function getParentItemIds(itemId: ItemId): RArray<ItemId> {
-  return Object.keys(Internal.instance.state.items[itemId].parents).map(Number)
+  return RRecord$.numberKeys(Internal.instance.state.items[itemId].parents)
 }
 
 /** 指定された項目の親の数を返す */

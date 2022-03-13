@@ -15,7 +15,7 @@ import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
-import { RArray$ } from 'src/Utility/fp-ts'
+import { RArray$, RRecord$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
@@ -259,8 +259,7 @@ export async function matchTabsAndWebPageItems() {
   const urlToItemIds = new DefaultMap<string, ItemId[]>(() => [])
 
   const webPageItems = Internal.instance.state.webPageItems
-  for (const key in webPageItems) {
-    const itemId = Number(key)
+  for (const itemId of RRecord$.numberKeys(webPageItems)) {
     const url = webPageItems[itemId].url
     urlToItemIds.get(url).push(itemId)
   }

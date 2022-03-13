@@ -6,7 +6,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { UnigramSearchIndex } from 'src/TreeifyTab/Internal/SearchEngine/UnigramSearchIndex'
 import { State } from 'src/TreeifyTab/Internal/State'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { RArray, RArray$, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
 /** Treeifyの項目を検索するための全文検索エンジン */
 export class SearchEngine {
@@ -15,8 +15,7 @@ export class SearchEngine {
   constructor(state: State) {
     const unigramSearchIndex = new UnigramSearchIndex()
     // 各項目に含まれるテキストを抽出・unigram化し、検索インデックスに登録する
-    for (let itemKey in state.items) {
-      const itemId = Number(itemKey)
+    for (const itemId of RRecord$.numberKeys(state.items)) {
       for (const unigram of SearchEngine.appearingUnigrams(itemId, state)) {
         unigramSearchIndex.addItemId(unigram, itemId)
       }

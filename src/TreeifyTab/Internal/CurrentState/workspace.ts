@@ -5,12 +5,12 @@ import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState/index'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { Workspace } from 'src/TreeifyTab/Internal/State'
 import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
-import { NERArray, NERArray$, Option$, RArray, RArray$, RSet$ } from 'src/Utility/fp-ts'
+import { NERArray, NERArray$, Option$, RArray, RArray$, RRecord$, RSet$ } from 'src/Utility/fp-ts'
 import { Timestamp } from 'src/Utility/Timestamp'
 
 /** Stateに登録されている全てのワークスペースIDを返す */
 export function getWorkspaceIds(): RArray<WorkspaceId> {
-  return Object.keys(Internal.instance.state.workspaces).map(Number)
+  return RRecord$.numberKeys(Internal.instance.state.workspaces)
 }
 
 /** 現在のワークスペースの除外項目リストを返す */
