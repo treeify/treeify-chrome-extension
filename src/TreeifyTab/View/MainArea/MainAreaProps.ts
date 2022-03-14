@@ -658,6 +658,7 @@ function onDelete(event: KeyboardEvent) {
     const belowItemPath = CurrentState.findBelowItemPath(CurrentState.getTargetItemPath())
     if (belowItemPath !== undefined) {
       CurrentState.setTargetItemPath(belowItemPath)
+      Rerenderer.instance.requestToFocusTargetItem()
     }
     Rerenderer.instance.rerender()
     return
