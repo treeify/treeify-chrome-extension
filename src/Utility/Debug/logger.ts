@@ -2,6 +2,13 @@ import { pipe } from 'fp-ts/function'
 import { StackFrame, StackTrace } from 'src/Utility/Debug/StackTrace'
 import { RArray$ } from 'src/Utility/fp-ts'
 
+export function debugLog(...args: any[]) {
+  const stackFrame = new StackTrace().getStackFrameAt(1)
+  console.groupCollapsed(...args)
+  console.log(createCallerInfoString(stackFrame))
+  console.groupEnd()
+}
+
 /**
  * console.logに色々な機能を追加したユーティリティ関数。
  * 呼び出し元に関する情報を収集し、それらも合わせて表示する。
@@ -68,7 +75,7 @@ function replacer(this: any, key: string, value: any): any {
 export function doWithTimeMeasuring<T>(message: string, f: () => T): T {
   const time = Date.now()
   const result = f()
-  console.log(message, Date.now() - time)
+  debugLog(message, Date.now() - time)
   return result
 }
 

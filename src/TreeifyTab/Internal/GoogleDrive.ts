@@ -7,7 +7,7 @@ import { getGoogleDriveSyncedAt, setGoogleDriveSyncedAt } from 'src/TreeifyTab/P
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonNull } from 'src/Utility/Debug/assert'
-import { dump, postErrorMessage } from 'src/Utility/Debug/logger'
+import { debugLog, dump, postErrorMessage } from 'src/Utility/Debug/logger'
 import { Option$, RArray$ } from 'src/Utility/fp-ts'
 import { compress, decompress } from 'src/Utility/gzip'
 
@@ -190,7 +190,7 @@ export namespace GoogleDrive {
       const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
       await syncWithGoogleDrive(dataFileMetaData)
     } catch {
-      console.log('リトライ', dayjs().format('MM/DD HH:mm:ss'))
+      debugLog('リトライ', dayjs().format('MM/DD HH:mm:ss'))
       try {
         // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
         const dataFileMetaData = await GoogleDrive.fetchDataFileMetaData()
@@ -210,9 +210,9 @@ export namespace GoogleDrive {
   ) {
     if (dataFileMetaData === undefined) {
       // データファイルがない場合
-      console.log('データファイルがない場合')
+      debugLog('データファイルがない場合')
 
-      console.log('create APIを呼んでファイル更新日時を記録して終了')
+      debugLog('create APIを呼んでファイル更新日時を記録して終了')
       // データファイルを作成し、日時を記録して終了
       const modifiedTime = await createDataFile(Internal.instance.state)
       setGoogleDriveSyncedAt(modifiedTime)
@@ -221,7 +221,7 @@ export namespace GoogleDrive {
       Rerenderer.instance.rerender()
     } else {
       // データファイルがある場合
-      console.log('データファイルがある場合')
+      debugLog('データファイルがある場合')
 
       const syncedAt = getGoogleDriveSyncedAt()
       const knownTimestamp = syncedAt !== undefined ? new Date(syncedAt).getTime() : -1
@@ -229,7 +229,7 @@ export namespace GoogleDrive {
       if (knownTimestamp !== dataFileTimestamp) {
         // データファイルの更新日時が既知の値でなければ
 
-        console.log('データファイルの更新日時が既知の値でなければ')
+        debugLog('データファイルの更新日時が既知の値でなければ')
         dump(syncedAt, dataFileMetaData.modifiedTime)
 
         const state: State = await getState(dataFileMetaData)
@@ -264,7 +264,7 @@ export namespace GoogleDrive {
       } else {
         // データファイルの更新日時が既知の値であれば
 
-        console.log('データファイルの更新日時が既知の値であれば')
+        debugLog('データファイルの更新日時が既知の値であれば')
 
         // ローカルStateが更新されていないならupdate APIを呼ぶ必要はない
         if (!External.instance.hasUpdatedAfterSync) return

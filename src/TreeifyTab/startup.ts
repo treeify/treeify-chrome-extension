@@ -32,7 +32,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { ShowMessage } from 'src/Utility/Debug/error'
-import { postErrorMessage } from 'src/Utility/Debug/logger'
+import { debugLog, postErrorMessage } from 'src/Utility/Debug/logger'
 import { RArray$, RRecord$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
@@ -295,7 +295,7 @@ async function onCommand(commandName: string) {
 async function onIdleStateChanged(idleState: IdleState) {
   if (idleState !== 'active') return
 
-  console.log(
+  debugLog(
     'onIdleState active',
     'window.navigator.onLine =',
     window.navigator.onLine,
@@ -335,7 +335,7 @@ function handleErrorEvent(error: Error, event: Event) {
 }
 
 async function onOnline() {
-  console.log('onOnline', dayjs().format('MM/DD HH:mm:ss'))
+  debugLog('onOnline', dayjs().format('MM/DD HH:mm:ss'))
   await startAutoSync()
 }
 
@@ -359,7 +359,7 @@ export async function startAutoSync() {
 
     await GoogleDrive.syncWithGoogleDrive(metaData)
   } catch {
-    console.log('リトライ', dayjs().format('MM/DD HH:mm:ss'))
+    debugLog('リトライ', dayjs().format('MM/DD HH:mm:ss'))
 
     try {
       // 特に自動同期がオフラインでエラーになる不具合の対策として、API呼び出しをリトライする
