@@ -271,8 +271,7 @@ export async function matchTabsAndWebPageItems() {
     const url = tab.pendingUrl ?? tab.url ?? ''
     // ウェブページ項目をコピペしたあとmatchTabsAndWebPageItems()を呼んだ際に
     // 対応関係が変わってしまう問題の対策としてpopではなくshiftを使う。
-    // TODO: OPMLコピペによる簡易マイグレーションのために現時点ではpopを使う。リリースまでにshiftに切り替える
-    const itemId = urlToItemIds.get(url).pop()
+    const itemId = urlToItemIds.get(url).shift()
     if (itemId === undefined) {
       // URLの一致するウェブページ項目がない場合、
       // ウェブページ項目を作る
