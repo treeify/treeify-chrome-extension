@@ -2,7 +2,6 @@
   import { pipe } from 'fp-ts/function'
   import { ItemId, ItemType } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
-  import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
@@ -11,12 +10,15 @@
   import { StatePath } from 'src/TreeifyTab/Internal/StatePath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { ReplaceDialogProps } from 'src/TreeifyTab/View/Dialog/ReplaceDialogProps'
   import RadioButton from 'src/TreeifyTab/View/RadioButton.svelte'
   import { assertNeverType } from 'src/Utility/Debug/assert'
   import { RSet$ } from 'src/Utility/fp-ts'
   import { call } from 'src/Utility/function'
 
-  let beforeReplace: string = ''
+  export let props: ReplaceDialogProps
+
+  let beforeReplace: string = props.initialBeforeReplace ?? ''
   let afterReplace: string = ''
 
   let selectedReplacementRange = Internal.instance.state.selectedReplacementRange
@@ -38,7 +40,7 @@
         break
       case '1100KeyF':
         event.preventDefault()
-        Command.showSearchDialog()
+        External.instance.dialogState = { type: 'SearchDialog', initialSearchQuery: beforeReplace }
         Rerenderer.instance.rerender()
         break
       case '1100KeyR':

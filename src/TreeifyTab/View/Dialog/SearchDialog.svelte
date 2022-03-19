@@ -3,7 +3,6 @@
   import { MultiSet } from 'mnemonist'
   import { allItemTypes, ItemId, ItemType, itemTypeDisplayNames } from 'src/TreeifyTab/basicType'
   import { External } from 'src/TreeifyTab/External/External'
-  import { Command } from 'src/TreeifyTab/Internal/Command'
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { InputId } from 'src/TreeifyTab/Internal/InputId'
   import { Internal } from 'src/TreeifyTab/Internal/Internal'
@@ -12,13 +11,16 @@
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
   import Checkbox from 'src/TreeifyTab/View/Checkbox.svelte'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
+  import { SearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps'
   import SearchResultPage from 'src/TreeifyTab/View/Dialog/SearchResultPage.svelte'
   import { createSearchResultPageProps } from 'src/TreeifyTab/View/Dialog/SearchResultPageProps'
   import { NERArray, NERArray$, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 
+  export let props: SearchDialogProps
+
   type SearchResult = { pages: RArray<RArray<ItemPath>>; counts: MultiSet<ItemType> }
 
-  let searchQueryValue = ''
+  let searchQueryValue = props.initialSearchQuery ?? ''
   let hitItemIds: RSet<ItemId> | undefined
   let checkedItemTypes: Record<ItemType, boolean> = RRecord$.fromEntries(
     allItemTypes.map((itemType) => [itemType, true] as const)
@@ -58,7 +60,10 @@
         break
       case '1100KeyR':
         event.preventDefault()
-        Command.showReplaceDialog()
+        External.instance.dialogState = {
+          type: 'ReplaceDialog',
+          initialBeforeReplace: searchQueryValue,
+        }
         Rerenderer.instance.rerender()
         break
       case '1100KeyF':

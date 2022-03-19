@@ -7,9 +7,17 @@ export type ContextMenu = {
   mousePosition?: Coordinate
 }
 
+export type SearchDialog = {
+  initialSearchQuery?: string
+}
+
 export type TabsDialog = {
   // このダイアログは他と異なり専用のターゲット項目IDを持つ
   targetItem: ItemId | ItemPath
+}
+
+export type ReplaceDialog = {
+  initialBeforeReplace?: string
 }
 
 export type DialogState = DiscriminatedUnion<{
@@ -27,10 +35,10 @@ export type DialogState = DiscriminatedUnion<{
   OtherParentsDialog: {}
   OtherSettingsDialog: {}
   PreferenceDropdownMenuDialog: {}
-  SearchDialog: {}
+  SearchDialog: SearchDialog
   TabsDialog: TabsDialog
   TexItemEditDialog: {}
-  ReplaceDialog: {}
+  ReplaceDialog: ReplaceDialog
   WebPageItemTitleSettingDialog: {}
   WorkspaceDialog: {}
 }>

@@ -15,7 +15,9 @@
   import PreferenceDropdownMenuDialog from 'src/TreeifyTab/View/Dialog/Preference/PreferenceDropdownMenuDialog.svelte'
   import WorkspaceDialog from 'src/TreeifyTab/View/Dialog/Preference/WorkspaceDialog.svelte'
   import ReplaceDialog from 'src/TreeifyTab/View/Dialog/ReplaceDialog.svelte'
+  import { createReplaceDialogProps } from 'src/TreeifyTab/View/Dialog/ReplaceDialogProps'
   import SearchDialog from 'src/TreeifyTab/View/Dialog/SearchDialog.svelte'
+  import { createSearchDialogProps } from 'src/TreeifyTab/View/Dialog/SearchDialogProps'
   import SourceEditDialog from 'src/TreeifyTab/View/Dialog/SourceEditDialog.svelte'
   import TabsDialog from 'src/TreeifyTab/View/Dialog/TabsDialog.svelte'
   import TexItemEditDialog from 'src/TreeifyTab/View/Dialog/TexItemEditDialog.svelte'
@@ -55,13 +57,13 @@
 {:else if props.dialogState.type === 'PreferenceDropdownMenuDialog'}
   <PreferenceDropdownMenuDialog />
 {:else if props.dialogState.type === 'SearchDialog'}
-  <SearchDialog />
+  <SearchDialog props={createSearchDialogProps()} />
 {:else if props.dialogState.type === 'TabsDialog'}
   <TabsDialog dialog={props.dialogState} />
 {:else if props.dialogState.type === 'TexItemEditDialog'}
   <TexItemEditDialog />
 {:else if props.dialogState.type === 'ReplaceDialog'}
-  <ReplaceDialog />
+  <ReplaceDialog props={createReplaceDialogProps()} />
 {:else if props.dialogState.type === 'WebPageItemTitleSettingDialog'}
   <WebPageItemTitleSettingDialog />
 {:else if props.dialogState.type === 'WorkspaceDialog'}
