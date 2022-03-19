@@ -7,7 +7,7 @@
   import { DragAndDropLayerProps } from 'src/TreeifyTab/View/DragAndDropLayerProps'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
-  import { assertNonNull } from 'src/Utility/Debug/assert'
+  import { assert, assertNonNull } from 'src/Utility/Debug/assert'
   import { dump } from 'src/Utility/Debug/logger'
   import { onMount } from 'svelte'
 
@@ -23,6 +23,9 @@
   function onMouseMove(event: MouseEvent) {
     mouseX = event.clientX
     mouseY = event.clientY
+
+    // TODO: ドラッグアンドドロップが無効化される不具合が直ったら削除する
+    assert(External.instance.currentDragData?.type === 'ItemDragData')
   }
 
   // focusTrapの影響でドラッグ中はスクロールが無効化されるのでプログラムでスクロールさせる
