@@ -7,7 +7,7 @@ import { getGoogleDriveSyncedAt, setGoogleDriveSyncedAt } from 'src/TreeifyTab/P
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
 import { assertNonNull } from 'src/Utility/Debug/assert'
-import { dump } from 'src/Utility/Debug/logger'
+import { dump, postErrorMessage } from 'src/Utility/Debug/logger'
 import { Option$, RArray$ } from 'src/Utility/fp-ts'
 import { compress, decompress } from 'src/Utility/gzip'
 
@@ -248,7 +248,7 @@ export namespace GoogleDrive {
             setGoogleDriveSyncedAt(dataFileMetaData.modifiedTime)
             await restart(state)
           } else {
-            alert(
+            postErrorMessage(
               'データファイルのタイムスタンプが未知の値だったが、ローカルデータの方が先に進んでいた'
             )
 

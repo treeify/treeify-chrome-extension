@@ -71,3 +71,11 @@ export function doWithTimeMeasuring<T>(message: string, f: () => T): T {
   console.log(message, Date.now() - time)
   return result
 }
+
+export function postErrorMessage(value: any) {
+  if (process.env.NODE_ENV !== 'production') {
+    alert(value)
+  } else {
+    console.error(value)
+  }
+}

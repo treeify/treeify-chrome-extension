@@ -32,6 +32,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { assertNonNull, assertNonUndefined } from 'src/Utility/Debug/assert'
 import { ShowMessage } from 'src/Utility/Debug/error'
+import { postErrorMessage } from 'src/Utility/Debug/logger'
 import { RArray$, RRecord$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
@@ -324,12 +325,12 @@ function onUnhandledRejection(event: PromiseRejectionEvent) {
 
 function handleErrorEvent(error: Error, event: Event) {
   if (error instanceof ShowMessage) {
-    alert(error.message)
+    postErrorMessage(error.message)
     event.preventDefault()
   } else if (error.stack !== undefined) {
-    alert(error.stack)
+    postErrorMessage(error.stack)
   } else {
-    alert(error)
+    postErrorMessage(error)
   }
 }
 
