@@ -12,7 +12,7 @@ export type DragData = DiscriminatedUnion<{
     itemPath: ItemPath
     initialMousePosition: Coordinate
   }
-  ImageBottomDragData: {
+  ImageResizeHandleDragData: {
     itemId: ItemId
     imageRectLeft: integer
   }
@@ -61,7 +61,7 @@ export function dragImageResizeHandle(element: HTMLElement, itemId: ItemId) {
 
       // ドラッグ開始
       External.instance.currentDragData = {
-        type: 'ImageBottomDragData',
+        type: 'ImageResizeHandleDragData',
         itemId,
         imageRectLeft: element.parentElement.getBoundingClientRect().left,
       }
@@ -85,7 +85,10 @@ export function onResizeImage(
   onDrag: (event: MouseEvent, itemId: ItemId, imageRectLeft: integer) => void
 ) {
   function onMouseMove(event: MouseEvent) {
-    if (event.buttons === 1 && External.instance.currentDragData?.type === 'ImageBottomDragData') {
+    if (
+      event.buttons === 1 &&
+      External.instance.currentDragData?.type === 'ImageResizeHandleDragData'
+    ) {
       onDrag(
         event,
         External.instance.currentDragData.itemId,
