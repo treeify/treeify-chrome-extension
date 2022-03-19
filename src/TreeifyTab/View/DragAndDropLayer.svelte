@@ -1,4 +1,5 @@
 <script lang="ts">
+  import dayjs from 'dayjs'
   import { External } from 'src/TreeifyTab/External/External'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
   import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
@@ -7,6 +8,7 @@
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
   import { assertNonNull } from 'src/Utility/Debug/assert'
+  import { dump } from 'src/Utility/Debug/logger'
   import { onMount } from 'svelte'
 
   export let props: DragAndDropLayerProps
@@ -63,6 +65,9 @@
   })
 
   function onMouseUp(event: MouseEvent) {
+    // TODO: ドラッグアンドドロップが無効化されることがある不具合の調査用
+    dump(event.type, dayjs().format('MM/DD HH:mm:ss'))
+
     if (External.instance.currentDragData?.type === 'ItemDragData') {
       props.onDrop(event, External.instance.currentDragData.itemPath)
       External.instance.currentDragData = undefined
