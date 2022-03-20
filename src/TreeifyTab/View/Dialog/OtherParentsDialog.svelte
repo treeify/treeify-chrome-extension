@@ -1,9 +1,9 @@
 <script lang="ts">
   import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
   import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
+  import AdjacentItems from 'src/TreeifyTab/View/Dialog/AdjacentItems.svelte'
+  import { createAdjacentItemsProps } from 'src/TreeifyTab/View/Dialog/AdjacentItemsProps'
   import CommonDialog from 'src/TreeifyTab/View/Dialog/CommonDialog.svelte'
-  import Context from 'src/TreeifyTab/View/Dialog/Context.svelte'
-  import { createContextProps } from 'src/TreeifyTab/View/Dialog/ContextProps'
   import { RArray$ } from 'src/Utility/fp-ts'
 
   const targetItemPath = CurrentState.getTargetItemPath()
@@ -15,13 +15,13 @@
     .map(RArray$.append(targetItemId))
     .filter((itemPath) => !RArray$.shallowEqual(itemPath, targetItemPath))
 
-  const contextPropses = itemPaths.map(createContextProps)
+  const adjacentItemsPropses = itemPaths.map(createAdjacentItemsProps)
 </script>
 
 <CommonDialog class="other-parents-dialog_root" title="他のトランスクルード元" showCloseButton>
   <div class="other-parents-dialog_content" tabindex="0">
-    {#each contextPropses as contextProps}
-      <Context props={contextProps} />
+    {#each adjacentItemsPropses as adjacentItemsProps}
+      <AdjacentItems props={adjacentItemsProps} />
     {/each}
   </div>
 </CommonDialog>
