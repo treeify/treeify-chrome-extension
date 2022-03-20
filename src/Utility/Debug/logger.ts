@@ -3,6 +3,8 @@ import { StackFrame, StackTrace } from 'src/Utility/Debug/StackTrace'
 import { RArray$ } from 'src/Utility/fp-ts'
 
 export function debugLog(...args: any[]) {
+  if (process.env.NODE_ENV === 'production') return
+
   const stackFrame = new StackTrace().getStackFrameAt(1)
   console.groupCollapsed(...args)
   console.log(createCallerInfoString(stackFrame))
@@ -14,6 +16,8 @@ export function debugLog(...args: any[]) {
  * 呼び出し元に関する情報を収集し、それらも合わせて表示する。
  */
 export function dump(...args: any[]) {
+  if (process.env.NODE_ENV === 'production') return
+
   const stackFrame = new StackTrace().getStackFrameAt(1)
   const argString = stackFrame.getArgString()
   const eachArgString = argString.split(', ')
