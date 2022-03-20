@@ -1,23 +1,23 @@
 <script lang="ts">
-  import { ContextProps } from 'src/TreeifyTab/View/Dialog/ContextProps'
-  import ContextSibling from 'src/TreeifyTab/View/Dialog/ContextSibling.svelte'
-  import { createContextSiblingProps } from 'src/TreeifyTab/View/Dialog/ContextSiblingProps'
+  import { AdjacentItemsProps } from 'src/TreeifyTab/View/Dialog/AdjacentItemsProps'
+  import AdjacentSiblingItem from 'src/TreeifyTab/View/Dialog/AdjacentSiblingItem.svelte'
+  import { createAdjacentSiblingItemProps } from 'src/TreeifyTab/View/Dialog/AdjacentSiblingItemProps'
   import ItemContent from 'src/TreeifyTab/View/ItemContent/ItemContent.svelte'
   import { createItemContentProps } from 'src/TreeifyTab/View/ItemContent/ItemContentProps'
 
-  export let props: ContextProps
+  export let props: AdjacentItemsProps
 </script>
 
-<div class="context_root">
-  <div class="context_page">
-    <div class="context_page-icon" />
+<div class="adjacent-items_root">
+  <div class="adjacent-items_page">
+    <div class="adjacent-items_page-icon" />
     <ItemContent props={createItemContentProps(props.pageId)} />
   </div>
-  <div class="context_frame" on:mousedown={props.onClick}>
+  <div class="adjacent-items_frame" on:mousedown={props.onClick}>
     <ItemContent props={createItemContentProps(props.parentItemId)} />
     {#each props.nearSiblingItemIds as siblingItemId}
-      <ContextSibling
-        props={createContextSiblingProps(siblingItemId, siblingItemId === props.selfItemId)}
+      <AdjacentSiblingItem
+        props={createAdjacentSiblingItemProps(siblingItemId, siblingItemId === props.selfItemId)}
       />
     {/each}
   </div>
@@ -27,26 +27,26 @@
   @use 'src/TreeifyTab/View/common.scss';
 
   :root {
-    --context-item-line-height: #{common.toIntegerPx(1.5em)};
+    --adjacent-item-line-height: #{common.toIntegerPx(1.5em)};
   }
 
-  .context_root {
-    line-height: var(--context-item-line-height);
+  .adjacent-items_root {
+    line-height: var(--adjacent-item-line-height);
   }
 
-  .context_page {
+  .adjacent-items_page {
     display: flex;
     align-items: center;
     gap: common.toIntegerPx(0.2em);
   }
 
-  .context_page-icon {
+  .adjacent-items_page-icon {
     @include common.size(common.toIntegerPx(1em));
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
   }
 
-  .context_frame {
+  .adjacent-items_frame {
     border: solid 1px oklch(70% 0 0);
     border-radius: common.toIntegerPx(0.7em);
     padding: common.toIntegerPx(0.5em) common.toIntegerPx(0.5em) common.toIntegerPx(0.5em)

@@ -3,13 +3,16 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { integer } from 'src/Utility/integer'
 
-export type ContextSiblingProps = {
+export type AdjacentSiblingItemProps = {
   itemId: ItemId
   isMyself: boolean
   outerCircleRadiusEm: integer
 }
 
-export function createContextSiblingProps(itemId: ItemId, isMyself: boolean): ContextSiblingProps {
+export function createAdjacentSiblingItemProps(
+  itemId: ItemId,
+  isMyself: boolean
+): AdjacentSiblingItemProps {
   return {
     itemId,
     isMyself,

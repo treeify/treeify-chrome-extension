@@ -7,7 +7,7 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray } from 'src/Utility/fp-ts'
 
-export type ContextProps = {
+export type AdjacentItemsProps = {
   pageId: ItemId
   parentItemId: ItemId
   nearSiblingItemIds: RArray<ItemId>
@@ -18,7 +18,7 @@ export type ContextProps = {
 /** いくつ離れた兄弟までを表示するかのパラメータ */
 const DISTANCE_LIMIT = 2
 
-export function createContextProps(itemPath: ItemPath): ContextProps {
+export function createAdjacentItemsProps(itemPath: ItemPath): AdjacentItemsProps {
   const parentItemId = ItemPath.getParentItemId(itemPath)
   assertNonUndefined(parentItemId)
   const selfItemId = ItemPath.getItemId(itemPath)
