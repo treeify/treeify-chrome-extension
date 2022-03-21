@@ -139,6 +139,7 @@ function transclude(itemPath: ItemPath) {
 
   CurrentState.updateItemTimestamp(ItemPath.getItemId(newItemPath))
   CurrentState.setTargetItemPath(newItemPath)
+  Rerenderer.instance.requestToScrollAppear()
 
   // 検索ダイアログを閉じる
   External.instance.dialogState = undefined
