@@ -15,8 +15,8 @@ export namespace GoogleDrive {
   const SNAPSHOT_FILE_NAME = 'snapshot.json.gz'
   const DATA_FOLDER_NAME = 'Treeify'
 
-  async function getAccessToken(): Promise<string> {
-    return new Promise<string>((resolve) => {
+  async function getAccessToken(): Promise<string | undefined> {
+    return new Promise<string | undefined>((resolve) => {
       chrome.identity.getAuthToken({ interactive: true }, resolve)
     })
   }
@@ -180,7 +180,10 @@ export namespace GoogleDrive {
     // getAccessToken()は何も応答しない。
     // なのでローディングインジケーターが無限にぐるぐるするのを防ぐために
     // このタイミングでgetAccessToken()を呼んでおく。
-    await getAccessToken()
+    const accessToken = await getAccessToken()
+
+    // ユーザーが権限付与をキャンセルした場合は何もせず終了する
+    if (accessToken === undefined) return
 
     if (External.instance.isInSync) return
 
