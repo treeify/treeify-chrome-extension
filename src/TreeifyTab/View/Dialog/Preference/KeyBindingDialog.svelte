@@ -23,7 +23,7 @@
         '.key-binding-dialog_message-for-add-binding'
       )
       if (messageElement !== null) {
-        messageElement.scrollIntoView({ behavior: 'smooth' })
+        messageElement.scrollIntoView()
       }
     })
   }
