@@ -184,6 +184,16 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
     const bulletAndIndentDroppedItemPath = searchElementByXCoordinate(itemPath, event.clientX)
     if (bulletAndIndentDroppedItemPath === undefined) return
 
+    // 自身の子孫のバレットへのドロップ時はアラートを出さずに黙って終了する
+    if (
+      RArray$.shallowEqual(
+        RArray$.takeLeft(draggedItemPath.length)(bulletAndIndentDroppedItemPath),
+        draggedItemPath
+      )
+    ) {
+      return
+    }
+
     const bulletAndIndentDroppedItemId = ItemPath.getItemId(bulletAndIndentDroppedItemPath)
     const draggedItemId = ItemPath.getItemId(draggedItemPath)
 
