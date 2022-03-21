@@ -210,6 +210,9 @@ export function onRemoved(tabId: integer, removeInfo: TabRemoveInfo) {
     // アンロードによりタブが閉じられた場合、ウェブページ項目は削除しない
     External.instance.tabIdsToBeClosedForUnloading.delete(tabId)
   } else if (CurrentState.isItem(itemId)) {
+    // アクティブページを削除するといろいろなリスクがあるので削除しない
+    if (CurrentState.getActivePageId() === itemId) return
+
     Internal.instance.saveCurrentStateToUndoStack()
 
     // 対応するウェブページ項目を削除する
