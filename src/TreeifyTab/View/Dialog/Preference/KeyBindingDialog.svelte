@@ -91,8 +91,8 @@
       name: '基本操作',
       commandIds: [
         'enterKeyDefault',
-        'deleteItem',
         'removeItem',
+        'deleteItem',
         'deleteJustOneItem',
         'moveItemToAbove',
         'moveItemToBelow',
