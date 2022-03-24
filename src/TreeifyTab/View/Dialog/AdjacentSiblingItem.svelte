@@ -18,7 +18,7 @@
         class:transcluded={CurrentState.countParents(props.itemId) > 1}
       />
     {:else}
-      <div class="adjacent-sibling-item_bullet--outer-circle" />
+      <div class="adjacent-sibling-item_bullet-outer-circle" />
       <div
         class="adjacent-sibling-item_bullet"
         class:transcluded={CurrentState.countParents(props.itemId) > 1}
@@ -55,7 +55,7 @@
     }
   }
 
-  .adjacent-sibling-item_bullet--outer-circle {
+  .adjacent-sibling-item_bullet-outer-circle {
     @include common.circle(var(--outer-circle-radius));
     @include common.absolute-center;
 
