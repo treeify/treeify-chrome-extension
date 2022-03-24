@@ -6,7 +6,7 @@ import { integer } from 'src/Utility/integer'
 export type AdjacentSiblingItemProps = {
   itemId: ItemId
   isMyself: boolean
-  outerCircleRadiusEm: integer
+  outerCircleSizeEm: integer
 }
 
 export function createAdjacentSiblingItemProps(
@@ -16,11 +16,11 @@ export function createAdjacentSiblingItemProps(
   return {
     itemId,
     isMyself,
-    outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
+    outerCircleSizeEm: calculateOuterCircleSizeEm(itemId),
   }
 }
 
-function calculateOuterCircleRadiusEm(itemId: ItemId): number {
+function calculateOuterCircleSizeEm(itemId: ItemId): number {
   const childItemCount = Internal.instance.state.items[itemId].childItemIds.length
   if (childItemCount === 0) return 0
 

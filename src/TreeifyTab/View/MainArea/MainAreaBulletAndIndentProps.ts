@@ -18,7 +18,7 @@ export type MainAreaBulletAndIndentProps = {
    * folded状態以外の場合は常に0。
    */
   hiddenItemsCount: integer
-  outerCircleRadiusEm: integer
+  outerCircleSizeEm: integer
   tooltipText: string
   onClick(event: MouseEvent): void
   onContextMenu(event: Event): void
@@ -46,12 +46,12 @@ export function createMainAreaBulletAndIndentProps(
     CssCustomProperty.getNumber('--bullet-outer-circle-item-count-limit') ?? 20
   const step = (outerCircleMaxSize - outerCircleMinSize) / outerCircleItemCountLimit
   const limitedHiddenItemsCount = Math.min(hiddenItemsCount, outerCircleItemCountLimit)
-  const outerCircleRadiusEm = outerCircleMinSize + limitedHiddenItemsCount * step
+  const outerCircleSizeEm = outerCircleMinSize + limitedHiddenItemsCount * step
 
   return {
     bulletState,
     hiddenItemsCount,
-    outerCircleRadiusEm,
+    outerCircleSizeEm,
     tooltipText: call(() => {
       switch (bulletState) {
         case MainAreaBulletState.NO_CHILDREN:

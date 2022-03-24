@@ -15,7 +15,7 @@ export type SearchResultItemProps = {
   children: RArray<SearchResultItemProps>
   footprintRank: integer | undefined
   footprintCount: integer
-  outerCircleRadiusEm: integer
+  outerCircleSizeEm: integer
   isTranscluded: boolean
   cssClasses: RArray<string>
   onClick(event: MouseEvent): void
@@ -64,7 +64,7 @@ export function createSearchResultItemPropses(
       children,
       footprintRank: footprintRankMap.get(itemId),
       footprintCount,
-      outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
+      outerCircleSizeEm: calculateOuterCircleSizeEm(itemId),
       isTranscluded: CurrentState.countParents(itemId) > 1,
       cssClasses: Internal.instance.state.items[itemId].cssClasses,
       onClick(event: MouseEvent) {
@@ -106,7 +106,7 @@ export function createSearchResultItemPropses(
   }
 }
 
-function calculateOuterCircleRadiusEm(itemId: ItemId): number {
+function calculateOuterCircleSizeEm(itemId: ItemId): number {
   const childItemCount = Internal.instance.state.items[itemId].childItemIds.length
   if (childItemCount === 0) return 0
 

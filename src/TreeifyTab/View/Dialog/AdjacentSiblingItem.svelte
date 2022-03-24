@@ -9,7 +9,7 @@
 
 <div
   class="adjacent-sibling-item_bullet-and-content"
-  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+  style:--outer-circle-size="{props.outerCircleSizeEm}em"
 >
   <div class="adjacent-sibling-item_bullet-area">
     {#if CurrentState.isPage(props.itemId)}
@@ -56,7 +56,7 @@
   }
 
   .adjacent-sibling-item_bullet-outer-circle {
-    @include common.circle(var(--outer-circle-radius));
+    @include common.circle(var(--outer-circle-size));
     @include common.absolute-center;
 
     background: var(--bullet-outer-circle-color);

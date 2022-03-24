@@ -9,7 +9,7 @@
 
 <div
   class="main-area-bullet-and-indent_root"
-  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+  style:--outer-circle-size="{props.outerCircleSizeEm}em"
   title={props.tooltipText}
   on:click={props.onClick}
   on:contextmenu={props.onContextMenu}
@@ -125,7 +125,7 @@
 
   // メインエリアのバレットの外側の円（展開状態用）
   .main-area-bullet-and-indent_outer-circle {
-    @include common.circle(var(--outer-circle-radius));
+    @include common.circle(var(--outer-circle-size));
     @include common.absolute-center;
 
     background: var(--bullet-outer-circle-color);
