@@ -69,6 +69,7 @@
   }
 
   .main-area-image-content_image-with-resize-handle {
+    background-color: oklch(100% 0 0);
     position: relative;
 
     width: max-content;
