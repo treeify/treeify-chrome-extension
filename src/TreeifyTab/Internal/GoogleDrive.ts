@@ -6,6 +6,7 @@ import { CURRENT_SCHEMA_VERSION, State } from 'src/TreeifyTab/Internal/State'
 import { getGoogleDriveSyncedAt, setGoogleDriveSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
+import { assert } from 'src/Utility/Debug/assert'
 import { debugLog, dump, postErrorMessage } from 'src/Utility/Debug/logger'
 import { Option$, RArray$ } from 'src/Utility/fp-ts'
 import { compress, decompress } from 'src/Utility/gzip'
@@ -50,6 +51,7 @@ export namespace GoogleDrive {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
     })
+    assert(response.ok)
     const responseBody = await response.json()
     return responseBody.files
   }
@@ -68,25 +70,24 @@ export namespace GoogleDrive {
    * データファイルとそれを格納するフォルダを作成する。
    * Googleドライブ内にTreeifyのデータファイルが存在しない場合に呼び出される。
    */
-  async function createDataFile(state: State) {
-    const folderResponse = await createFolder(DATA_FOLDER_NAME)
-    const folderResponseJson = await folderResponse.json()
-
+  async function createDataFile(state: State): Promise<string> {
+    // TODO: 最適化の余地あり（並列化）
+    const { id } = await createFolder(DATA_FOLDER_NAME)
     const gzipped = await compress(JSON.stringify(state))
-    const fileResponse = await createFileWithMultipart(
+
+    const { modifiedTime } = await createFileWithMultipart(
       SNAPSHOT_FILE_NAME,
       new Blob(gzipped),
-      folderResponseJson.id
+      id
     )
-    const responseJson = await fileResponse.json()
-    return responseJson.modifiedTime
+    return modifiedTime
   }
 
   async function createFileWithMultipart(
     fileName: string,
     fileContent: Blob,
     folderId?: string
-  ): Promise<Response> {
+  ): Promise<{ modifiedTime: string }> {
     const parents = folderId !== undefined ? [folderId] : []
     const metadata = JSON.stringify({ name: fileName, parents })
     const formData = new FormData()
@@ -98,16 +99,18 @@ export namespace GoogleDrive {
       fields: 'modifiedTime',
     })
     const url = `https://www.googleapis.com/upload/drive/v3/files?${params}`
-    return await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: formData,
     })
+    assert(response.ok)
+    return await response.json()
   }
 
-  async function createFolder(folderName: string): Promise<Response> {
+  async function createFolder(folderName: string): Promise<{ id: string }> {
     const metadata = JSON.stringify({
       name: folderName,
       mimeType: 'application/vnd.google-apps.folder',
@@ -120,28 +123,32 @@ export namespace GoogleDrive {
       fields: 'id',
     })
     const url = `https://www.googleapis.com/upload/drive/v3/files?${params}`
-    return await fetch(url, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: formData,
     })
+    assert(response.ok)
+    return await response.json()
   }
 
-  async function updateFile(fileId: string, fileContent: Blob): Promise<Response> {
+  async function updateFile(fileId: string, fileContent: Blob): Promise<{ modifiedTime: string }> {
     const params = new URLSearchParams({
       uploadType: 'media',
       fields: 'modifiedTime',
     })
     const url = `https://www.googleapis.com/upload/drive/v3/files/${fileId}?${params}`
-    return await fetch(url, {
+    const response = await fetch(url, {
       method: 'PATCH',
       headers: {
         Authorization: `Bearer ${await getAccessToken()}`,
       },
       body: fileContent,
     })
+    assert(response.ok)
+    return await response.json()
   }
 
   export async function syncTreeifyData() {
@@ -225,9 +232,8 @@ export namespace GoogleDrive {
             )
 
             const gzipped = await compress(JSON.stringify(Internal.instance.state))
-            const response = await updateFile(dataFileMetaData.id, new Blob(gzipped))
-            const responseJson = await response.json()
-            setGoogleDriveSyncedAt(responseJson.modifiedTime)
+            const { modifiedTime } = await updateFile(dataFileMetaData.id, new Blob(gzipped))
+            setGoogleDriveSyncedAt(modifiedTime)
             External.instance.hasUpdatedAfterSync = false
             External.instance.hasSyncIssue = false
             Rerenderer.instance.rerender()
@@ -242,9 +248,8 @@ export namespace GoogleDrive {
         if (!External.instance.hasUpdatedAfterSync) return
 
         const gzipped = await compress(JSON.stringify(Internal.instance.state))
-        const response = await updateFile(dataFileMetaData.id, new Blob(gzipped))
-        const responseJson = await response.json()
-        setGoogleDriveSyncedAt(responseJson.modifiedTime)
+        const { modifiedTime } = await updateFile(dataFileMetaData.id, new Blob(gzipped))
+        setGoogleDriveSyncedAt(modifiedTime)
         External.instance.hasUpdatedAfterSync = false
         External.instance.hasSyncIssue = false
         Rerenderer.instance.rerender()
@@ -254,6 +259,7 @@ export namespace GoogleDrive {
 
   async function getState(metaData: GoogleDrive.DataFileMataData): Promise<State> {
     const response = await readFile(metaData.id)
+    assert(response.ok)
     const text = await decompress(await response.arrayBuffer())
     return JSON.parse(text)
   }
