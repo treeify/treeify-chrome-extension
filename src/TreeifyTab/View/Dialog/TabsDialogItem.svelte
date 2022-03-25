@@ -20,7 +20,7 @@
 <div
   class="tabs-dialog-item_root"
   style:--footprint-color={footprintColor ?? 'transparent'}
-  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+  style:--outer-circle-size="{props.outerCircleSizeEm}em"
 >
   <div class="tabs-dialog-item_bullet-and-indent">
     {#if props.children.length > 0}
@@ -94,7 +94,7 @@
   }
 
   .tabs-dialog-item_bullet-outer-circle {
-    @include common.circle(var(--outer-circle-radius));
+    @include common.circle(var(--outer-circle-size));
     @include common.absolute-center;
 
     background: var(--bullet-outer-circle-color);

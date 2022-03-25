@@ -54,7 +54,10 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
 
     return {
       itemId,
-      bulletAndIndentProps: createPageTreeBulletAndIndentProps(children.length > 0, itemPath),
+      bulletAndIndentProps: createPageTreeBulletAndIndentProps(
+        countSubtreeNodes(children) - 1,
+        itemPath
+      ),
       contentProps: createItemContentProps(itemId),
       childNodePropses:
         ItemPath.hasParent(itemPath) && CurrentState.getIsFolded(itemPath) ? [] : children,
@@ -148,6 +151,17 @@ export function createPageTreeRootNodeProps(state: State): PageTreeNodeProps {
       },
     }
   })
+}
+
+function countSubtreeNodes(children: RArray<PageTreeNodeProps>): integer {
+  return (
+    1 +
+    pipe(
+      children,
+      RArray$.map((child: PageTreeNodeProps) => countSubtreeNodes(child.childNodePropses)),
+      RArray$.sum
+    )
+  )
 }
 
 function getAudiblePageIds(): RSet<ItemId> {

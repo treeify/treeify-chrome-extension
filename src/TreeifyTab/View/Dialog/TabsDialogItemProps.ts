@@ -14,7 +14,7 @@ export type TabsDialogItemProps = {
   isAudible: boolean
   footprintRank: integer | undefined
   footprintCount: integer
-  outerCircleRadiusEm: integer
+  outerCircleSizeEm: integer
   onClick(event: MouseEvent): void
 }
 
@@ -33,7 +33,7 @@ export function createTabsDialogItemProps(
     isAudible: tab?.audible === true,
     footprintRank,
     footprintCount,
-    outerCircleRadiusEm: calculateOuterCircleRadiusEm(itemId),
+    outerCircleSizeEm: calculateOuterCircleSizeEm(itemId),
     onClick(event) {
       event.preventDefault()
       Internal.instance.saveCurrentStateToUndoStack()
@@ -47,7 +47,7 @@ export function createTabsDialogItemProps(
   }
 }
 
-function calculateOuterCircleRadiusEm(itemId: ItemId): number {
+function calculateOuterCircleSizeEm(itemId: ItemId): number {
   const childItemCount = Internal.instance.state.items[itemId].childItemIds.length
   if (childItemCount === 0) return 0
 

@@ -19,7 +19,7 @@
 <div
   class="search-result-item_root"
   style:--footprint-color={footprintColor ?? 'transparent'}
-  style:--outer-circle-radius="{props.outerCircleRadiusEm}em"
+  style:--outer-circle-size="{props.outerCircleSizeEm}em"
 >
   <div
     class={`search-result-item_bullet-and-indent ${props.cssClasses.join(' ')}`}
@@ -93,10 +93,10 @@
   }
 
   .search-result-item_bullet-outer-circle {
-    @include common.circle(var(--outer-circle-radius));
+    @include common.circle(var(--outer-circle-size));
 
     position: absolute;
-    top: calc(var(--search-result-line-height) / 2 - var(--outer-circle-radius) / 2);
+    top: calc(var(--search-result-line-height) / 2 - var(--outer-circle-size) / 2);
 
     background: var(--bullet-outer-circle-color);
   }
