@@ -14,11 +14,9 @@ import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { TreeifyTab } from 'src/TreeifyTab/TreeifyTab'
 import { TabId } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
-import { dump } from 'src/Utility/Debug/logger'
 import { RArray$, RRecord$ } from 'src/Utility/fp-ts'
 import { call } from 'src/Utility/function'
 import { integer } from 'src/Utility/integer'
-import { Timestamp } from 'src/Utility/Timestamp'
 
 export const onMessage = (message: any, sender: MessageSender) => {
   call(async () => {
@@ -29,8 +27,6 @@ export const onMessage = (message: any, sender: MessageSender) => {
 
     switch (message.type) {
       case 'OnMouseMoveToLeftEnd':
-        // TODO: マウス画面端イベントの処理が妙に遅い不具合を調査し終えたら削除する
-        dump(Timestamp.now() - message.timestamp)
         if (!Internal.instance.state.leftEndMouseGestureEnabled) break
 
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
@@ -39,20 +35,14 @@ export const onMessage = (message: any, sender: MessageSender) => {
         // Treeifyタブを最前面化する
         // TODO: 誤差だろうけれど最適化の余地が一応ある
         await TreeifyTab.open()
-        // TODO: マウス画面端イベントの処理が妙に遅い不具合を調査し終えたら削除する
-        dump(Timestamp.now() - message.timestamp)
         break
       case 'OnMouseMoveToRightEnd':
-        // TODO: マウス画面端イベントの処理が妙に遅い不具合を調査し終えたら削除する
-        dump(Timestamp.now() - message.timestamp)
         if (!Internal.instance.state.rightEndMouseGestureEnabled) break
 
         // 画面の四隅のボタンなどを押したいだけなのにTreeifyのイベントが誤発動してしまう問題の対策
         if (y < height * RANGE_LIMIT_RATIO || height * (1 - RANGE_LIMIT_RATIO) < y) break
 
         await TreeifyTab.open()
-        // TODO: マウス画面端イベントの処理が妙に遅い不具合を調査し終えたら削除する
-        dump(Timestamp.now() - message.timestamp)
         if (sender.tab?.id !== undefined) {
           chrome.tabs.remove(sender.tab.id)
         }

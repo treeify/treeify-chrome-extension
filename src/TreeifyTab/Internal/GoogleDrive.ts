@@ -6,7 +6,6 @@ import { CURRENT_SCHEMA_VERSION, State } from 'src/TreeifyTab/Internal/State'
 import { getGoogleDriveSyncedAt, setGoogleDriveSyncedAt } from 'src/TreeifyTab/Persistent/sync'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { restart } from 'src/TreeifyTab/startup'
-import { assertNonNull } from 'src/Utility/Debug/assert'
 import { debugLog, dump, postErrorMessage } from 'src/Utility/Debug/logger'
 import { Option$, RArray$ } from 'src/Utility/fp-ts'
 import { compress, decompress } from 'src/Utility/gzip'
@@ -143,36 +142,6 @@ export namespace GoogleDrive {
       },
       body: fileContent,
     })
-  }
-
-  /** TODO: 5MBを超えるときはresumableを使うと公式サイトに書かれている */
-  async function createTextFileWithResumable(fileName: string, fileContent: string) {
-    const url = `https://www.googleapis.com/upload/drive/v3/files?uploadType=resumable`
-    const metadata = JSON.stringify({ name: fileName })
-    const firstResponse = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${await getAccessToken()}`,
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Content-Length': new Blob([metadata]).size.toString(),
-        'X-Upload-Content-Type': 'text/plain',
-        'X-Upload-Content-Length': fileContent.length.toString(),
-      },
-      body: metadata,
-    })
-    const nextUrl = firstResponse.headers.get('Location')
-    assertNonNull(nextUrl)
-    const nextResponse = await fetch(nextUrl, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${await getAccessToken()}`,
-        'Content-Type': 'text/plain',
-        'Content-Length': fileContent.length.toString(),
-      },
-      body: fileContent,
-    })
-    // TODO: ファイルサイズが5MBを超える場合はさらにリクエストする必要があるらしい
-    return nextResponse
   }
 
   export async function syncTreeifyData() {

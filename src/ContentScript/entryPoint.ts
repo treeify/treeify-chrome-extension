@@ -7,8 +7,6 @@ window.addEventListener(
       chrome.runtime.sendMessage({
         type: 'OnMouseMoveToLeftEnd',
         screenY: event.screenY,
-        // TODO: マウス画面端イベントの処理が妙に遅い不具合を調査し終えたら削除する
-        timestamp: Date.now(),
       })
     }
 
@@ -17,8 +15,6 @@ window.addEventListener(
       chrome.runtime.sendMessage({
         type: 'OnMouseMoveToRightEnd',
         screenY: event.screenY,
-        // TODO: マウス画面端イベントの処理が妙に遅い不具合を調査し終えたら削除する
-        timestamp: Date.now(),
       })
     }
   },
