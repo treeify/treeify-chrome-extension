@@ -5,6 +5,7 @@ import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { Rerenderer } from 'src/TreeifyTab/Rerenderer'
 import { CssCustomProperty } from 'src/Utility/browser'
+import { assertNonUndefined } from 'src/Utility/Debug/assert'
 import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
@@ -51,12 +52,14 @@ function calculateOuterCircleSizeEm(itemId: ItemId): number {
   const childItemCount = Internal.instance.state.items[itemId].childItemIds.length
   if (childItemCount === 0) return 0
 
-  const outerCircleMinSize =
-    CssCustomProperty.getNumber('--bullet-outer-circle-min-size-em') ?? 1.05
-  const outerCircleMaxSize =
-    CssCustomProperty.getNumber('--bullet-outer-circle-max-size-em') ?? 1.25
-  const outerCircleChildCountLimit =
-    CssCustomProperty.getNumber('--bullet-outer-circle-child-count-limit') ?? 10
+  const outerCircleMinSize = CssCustomProperty.getNumber('--bullet-outer-circle-min-size-em')
+  assertNonUndefined(outerCircleMinSize)
+  const outerCircleMaxSize = CssCustomProperty.getNumber('--bullet-outer-circle-max-size-em')
+  assertNonUndefined(outerCircleMaxSize)
+  const outerCircleChildCountLimit = CssCustomProperty.getNumber(
+    '--bullet-outer-circle-child-count-limit'
+  )
+  assertNonUndefined(outerCircleChildCountLimit)
   const step = (outerCircleMaxSize - outerCircleMinSize) / outerCircleChildCountLimit
   const limitedHiddenItemsCount = Math.min(childItemCount, outerCircleChildCountLimit)
   return outerCircleMinSize + limitedHiddenItemsCount * step
