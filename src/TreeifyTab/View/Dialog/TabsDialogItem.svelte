@@ -30,7 +30,7 @@
     {/if}
     <div class="tabs-dialog-item_bullet-area">
       <div class="tabs-dialog-item_bullet-outer-circle" />
-      <div class="tabs-dialog-item_bullet" />
+      <div class="tabs-dialog-item_bullet" class:transcluded={props.isTranscluded} />
     </div>
   </div>
   <div class="search-result-item_content-and-children-area">
@@ -105,6 +105,10 @@
     @include common.absolute-center;
 
     background: var(--bullet-color);
+
+    &.transcluded {
+      background: var(--transcluded-item-bullet-color);
+    }
   }
 
   .tabs-dialog-item_content-area {

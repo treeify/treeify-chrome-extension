@@ -12,6 +12,7 @@ import { integer } from 'src/Utility/integer'
 export type TabsDialogItemProps = {
   itemPath: ItemPath
   children: RArray<TabsDialogItemProps>
+  isTranscluded: boolean
   isAudible: boolean
   footprintRank: integer | undefined
   footprintCount: integer
@@ -31,6 +32,7 @@ export function createTabsDialogItemProps(
   return {
     itemPath,
     children,
+    isTranscluded: CurrentState.countParents(itemId) > 1,
     isAudible: tab?.audible === true,
     footprintRank,
     footprintCount,
