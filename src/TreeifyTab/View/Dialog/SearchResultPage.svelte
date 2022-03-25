@@ -8,7 +8,7 @@
 
 <div class="search-result-page_root">
   <div class="search-result-page_page">
-    <div class="search-result-page_page-icon" />
+    <div class="search-result-page_page-icon" class:transcluded={props.isTranscluded} />
     <ItemContent props={props.pageContent} />
   </div>
   <div class="search-result-page_tree">
@@ -31,6 +31,10 @@
     @include common.size(common.toIntegerPx(1.05em));
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
+
+    &.transcluded {
+      background: var(--transcluded-item-page-icon-color);
+    }
   }
 
   .search-result-page_tree {

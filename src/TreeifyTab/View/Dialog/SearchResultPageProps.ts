@@ -1,3 +1,4 @@
+import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
   createSearchResultItemPropses,
@@ -11,12 +12,15 @@ import { RArray } from 'src/Utility/fp-ts'
 
 export type SearchResultPageProps = {
   pageContent: ItemContentProps
+  isTranscluded: boolean
   searchResultItemPropses: RArray<SearchResultItemProps>
 }
 
-export function createSearchResultPageProps(itemPaths: RArray<ItemPath>) {
+export function createSearchResultPageProps(itemPaths: RArray<ItemPath>): SearchResultPageProps {
+  const pageId = ItemPath.getRootItemId(itemPaths[0])
   return {
-    pageContent: createItemContentProps(ItemPath.getRootItemId(itemPaths[0])),
+    pageContent: createItemContentProps(pageId),
+    isTranscluded: CurrentState.countParents(pageId) > 1,
     searchResultItemPropses: createSearchResultItemPropses(itemPaths),
   }
 }
