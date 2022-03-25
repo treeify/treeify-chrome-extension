@@ -10,6 +10,7 @@
 
 <div
   class={RArray$.prepend('page-tree-bullet-and-indent_root')(props.cssClasses).join(' ')}
+  style:--outer-circle-size="{props.outerCircleSizeEm}em"
   on:mousedown={props.onClick}
 >
   {#if props.bulletState === PageTreeBulletState.UNFOLDED}
@@ -30,6 +31,11 @@
 
   :root {
     --page-tree-bullet-area-width: #{common.toIntegerPx(1em)};
+
+    --page-tree-bullet-outer-circle-min-size-em: 0.75;
+    --page-tree-bullet-outer-circle-max-size-em: 1;
+    // 外側の円が最大サイズになる子孫項目数
+    --page-tree-bullet-outer-circle-item-count-limit: 5;
   }
 
   .page-tree-bullet-and-indent_root {
@@ -67,8 +73,7 @@
   }
 
   .page-tree-bullet-and-indent_bullet-outer-circle {
-    // TODO: サイズを固定ではなく計算結果にする
-    @include common.circle(common.toIntegerPx(0.9em));
+    @include common.circle(var(--outer-circle-size));
     @include common.absolute-center;
 
     background: var(--bullet-outer-circle-color);
