@@ -45,6 +45,7 @@ export type State = {
       [ExportFormat.MARKDOWN]: {
         includeInvisibleItems: boolean
         minimumHeaderLevel: integer
+        useImgTag: boolean
       }
       [ExportFormat.OPML]: {
         includeInvisibleItems: boolean

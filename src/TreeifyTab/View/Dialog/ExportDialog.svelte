@@ -24,6 +24,7 @@
   let indentationUnit = plainTextOptions.indentationUnit
   let minimumHeaderLevel: integer = markdownOptions.minimumHeaderLevel
   let markdownIncludeInvisibleItems = markdownOptions.includeInvisibleItems
+  let useImgTag = markdownOptions.useImgTag
   let opmlIncludeInvisibleItems = opmlOptions.includeInvisibleItems
 
   $: Internal.instance.mutate(selectedFormat, StatePath.of('exportSettings', 'selectedFormat'))
@@ -46,6 +47,11 @@
   $: Internal.instance.mutate(
     markdownIncludeInvisibleItems,
     StatePath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'includeInvisibleItems')
+  )
+
+  $: Internal.instance.mutate(
+    useImgTag,
+    StatePath.of('exportSettings', 'options', ExportFormat.MARKDOWN, 'useImgTag')
   )
 
   $: Internal.instance.mutate(
@@ -196,6 +202,9 @@
         </label>
         <Checkbox bind:checked={markdownIncludeInvisibleItems}>
           折りたたまれた項目も出力する
+        </Checkbox>
+        <Checkbox bind:checked={useImgTag}>
+          画像項目のエクスポートに&lt;img&gt;を使ってwidth（横幅）を指定する
         </Checkbox>
       {:else if selectedFormat === ExportFormat.OPML}
         <Checkbox bind:checked={opmlIncludeInvisibleItems}>折りたたまれた項目も出力する</Checkbox>

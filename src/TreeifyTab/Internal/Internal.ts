@@ -219,6 +219,7 @@ export class Internal {
           [ExportFormat.MARKDOWN]: {
             includeInvisibleItems: true,
             minimumHeaderLevel: 1,
+            useImgTag: false,
           },
           [ExportFormat.OPML]: {
             includeInvisibleItems: true,
