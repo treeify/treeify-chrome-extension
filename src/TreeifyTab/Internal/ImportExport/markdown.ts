@@ -51,12 +51,26 @@ function toMultiLineMarkdownContent(itemPath: ItemPath): string {
       return prefix + `[${title}](${webPageItem.url})  `
     case ItemType.IMAGE:
       const imageItem = Internal.instance.state.imageItems[itemId]
-      if (imageItem.caption === '') {
-        return prefix + `![](${imageItem.url})  ` + postfix
+      const useImgTag =
+        Internal.instance.state.exportSettings.options[ExportFormat.MARKDOWN].useImgTag
+      if (useImgTag) {
+        if (imageItem.widthPx === null) {
+          return prefix + `<img src="${imageItem.url}" alt="${imageItem.caption}">  ` + postfix
+        } else {
+          return (
+            prefix +
+            `<img src="${imageItem.url}" alt="${imageItem.caption}" width="${imageItem.widthPx}">  ` +
+            postfix
+          )
+        }
       } else {
-        return (
-          prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
-        )
+        if (imageItem.caption === '') {
+          return prefix + `![](${imageItem.url})  ` + postfix
+        } else {
+          return (
+            prefix + `![${imageItem.caption}](${imageItem.url} "${imageItem.caption}")  ` + postfix
+          )
+        }
       }
     case ItemType.CODE_BLOCK:
       const codeBlockItem = Internal.instance.state.codeBlockItems[itemId]
