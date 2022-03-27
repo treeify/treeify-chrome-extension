@@ -2,11 +2,13 @@ import { ItemId } from 'src/TreeifyTab/basicType'
 import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { CssCustomProperty } from 'src/Utility/browser'
 import { assertNonUndefined } from 'src/Utility/Debug/assert'
+import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 export type AdjacentSiblingItemProps = {
   itemId: ItemId
   isMyself: boolean
+  cssClasses: RArray<string>
   outerCircleSizeEm: integer
 }
 
@@ -17,6 +19,7 @@ export function createAdjacentSiblingItemProps(
   return {
     itemId,
     isMyself,
+    cssClasses: Internal.instance.state.items[itemId].cssClasses,
     outerCircleSizeEm: calculateOuterCircleSizeEm(itemId),
   }
 }

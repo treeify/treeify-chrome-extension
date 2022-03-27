@@ -8,21 +8,16 @@
 </script>
 
 <div
-  class="adjacent-sibling-item_bullet-and-content"
+  class="adjacent-sibling-item_bullet-and-content {props.cssClasses.join(' ')}"
+  class:transcluded={CurrentState.countParents(props.itemId) > 1}
   style:--outer-circle-size="{props.outerCircleSizeEm}em"
 >
   <div class="adjacent-sibling-item_bullet-area">
     {#if CurrentState.isPage(props.itemId)}
-      <div
-        class="adjacent-sibling-item_page-icon"
-        class:transcluded={CurrentState.countParents(props.itemId) > 1}
-      />
+      <div class="adjacent-sibling-item_page-icon" />
     {:else}
       <div class="adjacent-sibling-item_bullet-outer-circle" />
-      <div
-        class="adjacent-sibling-item_bullet"
-        class:transcluded={CurrentState.countParents(props.itemId) > 1}
-      />
+      <div class="adjacent-sibling-item_bullet" />
     {/if}
   </div>
   <div class="adjacent-sibling-item_content-area" class:myself={props.isMyself}>
@@ -50,8 +45,20 @@
 
     @include common.icon(var(--page-icon-color), url('page.svg'));
 
-    &.transcluded {
+    .transcluded & {
       background: var(--transcluded-item-page-icon-color);
+    }
+
+    .highlighted & {
+      background: var(--highlighted-item-page-icon-color);
+    }
+
+    .transcluded.highlighted & {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-page-icon-color) 50%,
+        var(--transcluded-item-page-icon-color) 50%
+      );
     }
   }
 
@@ -68,8 +75,20 @@
 
     background: var(--bullet-color);
 
-    &.transcluded {
+    .transcluded & {
       background: var(--transcluded-item-bullet-color);
+    }
+
+    .highlighted & {
+      background: var(--highlighted-item-bullet-color);
+    }
+
+    .transcluded.highlighted & {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
+      );
     }
   }
 
