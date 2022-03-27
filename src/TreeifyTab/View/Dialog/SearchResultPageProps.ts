@@ -1,4 +1,5 @@
 import { CurrentState } from 'src/TreeifyTab/Internal/CurrentState'
+import { Internal } from 'src/TreeifyTab/Internal/Internal'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import {
   createSearchResultItemPropses,
@@ -13,6 +14,7 @@ import { RArray } from 'src/Utility/fp-ts'
 export type SearchResultPageProps = {
   pageContent: ItemContentProps
   isTranscluded: boolean
+  cssClasses: RArray<string>
   searchResultItemPropses: RArray<SearchResultItemProps>
 }
 
@@ -21,6 +23,7 @@ export function createSearchResultPageProps(itemPaths: RArray<ItemPath>): Search
   return {
     pageContent: createItemContentProps(pageId),
     isTranscluded: CurrentState.countParents(pageId) > 1,
+    cssClasses: Internal.instance.state.items[pageId].cssClasses,
     searchResultItemPropses: createSearchResultItemPropses(itemPaths),
   }
 }

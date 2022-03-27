@@ -8,7 +8,10 @@
 
 <div class="search-result-page_root">
   <div class="search-result-page_page">
-    <div class="search-result-page_page-icon" class:transcluded={props.isTranscluded} />
+    <div
+      class="search-result-page_page-icon {props.cssClasses.join(' ')}"
+      class:transcluded={props.isTranscluded}
+    />
     <ItemContent props={props.pageContent} />
   </div>
   <div class="search-result-page_tree">
@@ -34,6 +37,18 @@
 
     &.transcluded {
       background: var(--transcluded-item-page-icon-color);
+    }
+
+    &.highlighted {
+      background: var(--highlighted-item-page-icon-color);
+    }
+
+    &.transcluded.highlighted {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-page-icon-color) 50%,
+        var(--transcluded-item-page-icon-color) 50%
+      );
     }
   }
 

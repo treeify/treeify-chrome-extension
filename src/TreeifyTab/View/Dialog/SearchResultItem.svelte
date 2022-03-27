@@ -22,7 +22,7 @@
   style:--outer-circle-size="{props.outerCircleSizeEm}em"
 >
   <div
-    class={`search-result-item_bullet-and-indent ${props.cssClasses.join(' ')}`}
+    class="search-result-item_bullet-and-indent {props.cssClasses.join(' ')}"
     class:transcluded={props.isTranscluded}
   >
     {#if props.children.length > 0}

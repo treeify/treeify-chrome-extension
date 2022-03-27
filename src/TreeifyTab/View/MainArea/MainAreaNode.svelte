@@ -7,7 +7,6 @@
   import MainAreaContent from 'src/TreeifyTab/View/MainArea/MainAreaContent.svelte'
   import MainAreaNode from 'src/TreeifyTab/View/MainArea/MainAreaNode.svelte'
   import { MainAreaNodeProps } from 'src/TreeifyTab/View/MainArea/MainAreaNodeProps'
-  import { RArray$ } from 'src/Utility/fp-ts'
 
   export let props: MainAreaNodeProps
 
@@ -34,7 +33,7 @@
   {:else}
     <!-- バレットとインデントガイドの領域 -->
     <div
-      class={'main-area-node_bullet-and-indent ' + props.cssClasses.join(' ')}
+      class="main-area-node_bullet-and-indent {props.cssClasses.join(' ')}"
       class:transcluded={props.isTranscluded}
       data-depth={depth}
       use:dragItem={props.itemPath}
@@ -45,7 +44,7 @@
   <div class="main-area-node_body-and-children-area">
     <!-- ボディ領域 -->
     <div
-      class={RArray$.prepend('main-area-node_body-area')(props.cssClasses).join(' ')}
+      class="main-area-node_body-area {props.cssClasses.join(' ')}"
       class:excluded={props.isExcluded}
       data-depth={depth}
     >
@@ -91,7 +90,7 @@
       </div>
     </div>
     <!-- 子リスト領域 -->
-    <div class={RArray$.prepend('main-area-node_children-area')(childrenCssClasses).join(' ')}>
+    <div class="main-area-node_children-area {childrenCssClasses.join(' ')}">
       {#each props.childItemPropses as itemProps (itemProps.itemPath.toString())}
         <MainAreaNode props={itemProps} />
       {/each}

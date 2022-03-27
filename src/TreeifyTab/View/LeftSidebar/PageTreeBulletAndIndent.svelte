@@ -3,13 +3,12 @@
     PageTreeBulletAndIndentProps,
     PageTreeBulletState,
   } from 'src/TreeifyTab/View/LeftSidebar/PageTreeBulletAndIndentProps'
-  import { RArray$ } from 'src/Utility/fp-ts'
 
   export let props: PageTreeBulletAndIndentProps
 </script>
 
 <div
-  class={RArray$.prepend('page-tree-bullet-and-indent_root')(props.cssClasses).join(' ')}
+  class="page-tree-bullet-and-indent_root {props.cssClasses.join(' ')}"
   style:--outer-circle-size="{props.outerCircleSizeEm}em"
   on:mousedown={props.onClick}
 >
