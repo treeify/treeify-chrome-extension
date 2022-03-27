@@ -22,7 +22,10 @@
   style:--footprint-color={footprintColor ?? 'transparent'}
   style:--outer-circle-size="{props.outerCircleSizeEm}em"
 >
-  <div class="tabs-dialog-item_bullet-and-indent">
+  <div
+    class="tabs-dialog-item_bullet-and-indent {props.cssClasses.join(' ')}"
+    class:transcluded={props.isTranscluded}
+  >
     {#if props.children.length > 0}
       <div class="tabs-dialog-item_indent-area">
         <div class="tabs-dialog-item_indent-guide" />
@@ -30,7 +33,7 @@
     {/if}
     <div class="tabs-dialog-item_bullet-area">
       <div class="tabs-dialog-item_bullet-outer-circle" />
-      <div class="tabs-dialog-item_bullet" class:transcluded={props.isTranscluded} />
+      <div class="tabs-dialog-item_bullet" />
     </div>
   </div>
   <div class="search-result-item_content-and-children-area">
@@ -106,8 +109,20 @@
 
     background: var(--bullet-color);
 
-    &.transcluded {
+    .transcluded & {
       background: var(--transcluded-item-bullet-color);
+    }
+
+    .highlighted & {
+      background: var(--highlighted-item-bullet-color);
+    }
+
+    .transcluded.highlighted & {
+      background: linear-gradient(
+        to right,
+        var(--highlighted-item-bullet-color) 50%,
+        var(--transcluded-item-bullet-color) 50%
+      );
     }
   }
 
