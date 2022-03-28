@@ -56,17 +56,22 @@ export function createMainAreaBulletAndIndentProps(
     hiddenItemsCount,
     outerCircleSizeEm,
     tooltipText: call(() => {
+      const rmb =
+        CurrentState.countParents(ItemPath.getItemId(itemPath)) > 1
+          ? [dtdd('右クリック', '他のトランスクルード元を表示')]
+          : []
+
       switch (bulletState) {
         case MainAreaBulletState.NO_CHILDREN:
         case MainAreaBulletState.UNFOLDED:
         case MainAreaBulletState.FOLDED:
-          return []
+          return rmb
         case MainAreaBulletState.PAGE:
           return [
             dtdd('クリック', 'ページを切り替える'),
             dtdd('Ctrl+クリック', '非ページ化する'),
             dtdd('Shift+クリック', 'ページツリーに追加せずにページを切り替える'),
-          ]
+          ].concat(rmb)
       }
     }).join('\n'),
     onClick(event: MouseEvent) {
