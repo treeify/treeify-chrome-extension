@@ -43,6 +43,8 @@
     // ページツリーは横幅に余裕がないのでインデント領域の幅を切り詰める
     width: var(--page-tree-bullet-area-width);
     height: 100%;
+
+    cursor: pointer;
   }
 
   .page-tree-bullet-and-indent_indent-area {
@@ -76,6 +78,10 @@
     @include common.absolute-center;
 
     background: var(--bullet-outer-circle-color);
+
+    .page-tree-bullet-and-indent_root:hover & {
+      background: var(--bullet-outer-circle-hover-color);
+    }
   }
 
   .page-tree-bullet-and-indent_bullet {
