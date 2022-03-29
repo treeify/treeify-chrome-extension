@@ -81,6 +81,8 @@
     // 当たり判定を上下いっぱいまで広げる
     height: 100%;
 
+    padding-right: 0.12em;
+
     @include common.flex-center;
 
     cursor: pointer;

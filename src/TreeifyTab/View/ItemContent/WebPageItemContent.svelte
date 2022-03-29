@@ -45,6 +45,8 @@
   .web-page-item-content_favicon-area {
     @include common.size(common.toIntegerPx(1em));
 
+    margin-right: 0.12em;
+
     .discarded & {
       filter: opacity(75%);
     }
