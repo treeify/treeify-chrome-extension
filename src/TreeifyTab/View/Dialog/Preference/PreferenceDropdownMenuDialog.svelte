@@ -30,14 +30,14 @@
         ],
         [
           {
+            title: 'ワークスペース',
+            onClick: () => Command.showWorkspaceDialog(),
+          },
+          {
             title: 'カスタムCSS',
             onClick: () => {
               External.instance.dialogState = { type: 'CustomCssDialog' }
             },
-          },
-          {
-            title: 'ワークスペース',
-            onClick: () => Command.showWorkspaceDialog(),
           },
           {
             title: 'その他の設定',
