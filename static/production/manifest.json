@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "version": "0.3.0",
   "name": "Treeify",
-  "description": "大量のメモ、タブ、ブックマークをまとめてスマートに管理するための拡張機能です。",
+  "description": "大量のメモ、タブ、ブックマークなどをまとめてスマートに管理するための拡張機能です。",
   "background": {
     "service_worker": "background.js",
     "type": "module"

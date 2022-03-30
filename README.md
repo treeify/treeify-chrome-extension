@@ -1,5 +1,5 @@
 # Treeify
-Treeifyは大量のメモ、タブ、ブックマークをまとめてスマートに管理するChrome拡張機能です。  
+Treeifyは大量のメモ、タブ、ブックマークなどをまとめてスマートに管理するChrome拡張機能です。  
 [Chromeウェブストア](https://chrome.google.com/webstore/detail/treeify/jamajbdcajmklapbejkdkepajjkoblcf)からインストールできます。  
 
 ## 連絡先
