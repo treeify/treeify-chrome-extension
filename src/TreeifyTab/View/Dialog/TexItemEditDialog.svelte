@@ -83,7 +83,6 @@
 
   .tex-edit-dialog_content {
     min-width: common.toIntegerPx(24em);
-    padding: common.toIntegerPx(1em);
 
     max-height: 100%;
     display: grid;
@@ -91,6 +90,7 @@
   }
 
   .tex-edit-dialog_scroll-area {
+    padding: common.toIntegerPx(1em);
     overflow-y: auto;
   }
 
@@ -111,8 +111,6 @@
 
   .tex-edit-dialog_rendered-tex {
     margin-top: common.toIntegerPx(1em);
-    // なぜか縦スクロールバーが出る不具合の対策（KaTeXの複雑なDOMレイアウトの影響でサイズ計算が普通じゃないのだろうか）
-    margin-bottom: common.toIntegerPx(0.3em);
 
     // 左端が切れてしまうことがある不具合の対策
     margin-inline: common.toIntegerPx(0.4em);
@@ -121,6 +119,7 @@
   .tex-edit-dialog_bottom-button-area {
     @include common.flex-right;
 
-    margin-top: common.toIntegerPx(1em);
+    margin-inline: 1em;
+    margin-bottom: 1em;
   }
 </style>
