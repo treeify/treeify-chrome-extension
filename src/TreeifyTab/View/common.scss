@@ -1,0 +1,108 @@
+// 四捨五入して整数にする。
+// 四捨五入の境界値である0.5ちょうどでは下記のように計算結果が揺れることに注意（0.499や0.501など少しでも上下すれば問題なく動作する）
+// round(0.5) = 0
+// round(1.5) = 2
+// round(2.5) = 2
+// round(3.5) = 4
+// round(4.5) = 4
+// round(5.5) = 6
+@function round($number) {
+  // アンダーフローさせることで小数点以下の情報を捨てる。
+  // 参考：https://stackoverflow.com/questions/37754542/css-calc-round-down-with-two-decimal-cases
+  // なお、このマジックナンバーを$変数化するとなぜか0として扱われてしまうのでリテラルのまま記述する。
+  // TODO: CSSで同様の関数がサポートされたらそちらを使う。
+  @return calc(#{$number} * 4.9406564584124654e-324 / 4.9406564584124654e-324);
+}
+
+// pxに変換してから四捨五入することで整数化する。
+// 小数pxではバレットのような小さな要素のレイアウトが崩れることがあるのでその対策用に定義した。
+@function toIntegerPx($size) {
+  @return round(calc(#{$size} + 0px));
+}
+
+@mixin size($size) {
+  width: $size;
+  height: $size;
+}
+
+@mixin circle($size) {
+  @include size($size);
+  border-radius: 50%;
+}
+
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-right {
+  display: flex;
+  justify-content: right;
+}
+
+@mixin layer($z-index) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  @include size(100%);
+
+  z-index: $z-index;
+}
+
+@mixin icon($color, $url) {
+  background: $color;
+  -webkit-mask: $url no-repeat center;
+  -webkit-mask-size: contain;
+}
+
+@mixin icon-url($url) {
+  -webkit-mask-image: $url;
+}
+
+@mixin icon-color($color) {
+  background: $color;
+}
+
+@mixin pseudo-ripple-effect($hover-color, $duration: 0.5s, $color: oklch(50% 0 0), $opacity: 0.5) {
+  cursor: pointer;
+
+  position: relative;
+
+  &:hover {
+    background: $hover-color;
+  }
+
+  // 疑似リップルエフェクトアニメーション終了時点の状態
+  &::after {
+    content: '';
+
+    @include circle(100%);
+    @include absolute-center;
+
+    opacity: 0;
+    transition: opacity $duration, width $duration, height $duration;
+
+    background: $color;
+
+    pointer-events: none;
+  }
+
+  // 疑似リップルエフェクトアニメーション開始時点の状態
+  &:active::after {
+    @include size(0);
+    opacity: $opacity;
+    transition: opacity 0s, width 0s, height 0s;
+  }
+}
+
+@mixin default-favicon {
+  @include icon(oklch(40% 0 0), url('default-favicon.svg'));
+}
