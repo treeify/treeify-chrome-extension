@@ -17,10 +17,10 @@ export function createSyncButtonProps(): SyncButtonProps {
   const hasSyncIssue = External.instance.hasSyncIssue
   const titleAttr = call(() => {
     if (hasSyncIssue) {
-      return 'Googleドライブとの通信に失敗しました。ネットワーク接続を確認後、リトライしてください。\nネットワーク接続ができている場合はGoogleドライブの障害だと考えられます。'
+      return 'Googleドライブとの通信に失敗しました。\nネットワーク接続を確認後、再試行してください。'
     }
     if (hasNeverSynced) {
-      return '他デバイスと共有するために、ローカルデータをアップロードしてGoogleドライブ内にデータファイルを作成します。\nもし既にデータファイルがあったらダウンロードしてローカルデータを上書きします。'
+      return '他デバイスと共有するために、ローカルデータをアップロードしてGoogleドライブ内にデータファイルを作成します。\nもし既にデータファイルがあったらダウンロードしてローカルデータと統合します。'
     }
     return 'ローカルデータとGoogleドライブ内のデータのうち新しい方で古い方を上書きします。'
   })
