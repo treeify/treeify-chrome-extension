@@ -256,11 +256,14 @@ function onDropIntoMainArea(event: MouseEvent, draggedItemPath: ItemPath) {
       // ドロップ先座標がドロップ先要素の下半分の場合
 
       // グラフ構造が不整合にならないことをチェック（兄弟リスト内での移動ならチェック不要）
-      if (
-        ItemPath.getParentItemId(itemPath) !== parentItemId &&
-        ItemPath.getItemId(itemPath) !== parentItemId
-      ) {
-        CurrentState.throwIfCantInsertBelowItem(itemPath, draggedItemId)
+      if (CurrentState.getDisplayingChildItemIds(itemPath).length > 0) {
+        if (ItemPath.getItemId(itemPath) !== parentItemId) {
+          CurrentState.throwIfCantInsertBelowItem(itemPath, draggedItemId)
+        }
+      } else {
+        if (ItemPath.getParentItemId(itemPath) !== parentItemId) {
+          CurrentState.throwIfCantInsertBelowItem(itemPath, draggedItemId)
+        }
       }
 
       Internal.instance.saveCurrentStateToUndoStack()
