@@ -81,16 +81,16 @@ export function createMainAreaNodeProps(
     onMouseDownContentArea(event: MouseEvent) {
       switch (InputId.fromMouseEvent(event)) {
         case '0100MouseButton0':
-          const targetItemPath = CurrentState.getTargetItemPath()
+          const anchorItemPath = CurrentState.getAnchorItemPath()
           // テキスト選択をさせるためにブラウザのデフォルトの挙動に任せる
-          if (RArray$.shallowEqual(itemPath, targetItemPath)) break
+          if (RArray$.shallowEqual(itemPath, anchorItemPath)) break
 
           event.preventDefault()
 
           // 同じ兄弟リストに降りてくるまでtargetとanchorの両方をカットする
-          const commonPrefix = ItemPath.getCommonPrefix(itemPath, targetItemPath)
+          const commonPrefix = ItemPath.getCommonPrefix(itemPath, anchorItemPath)
           const targetCandidate = RArray$.takeLeft(commonPrefix.length + 1)(itemPath)
-          const anchorCandidate = RArray$.takeLeft(commonPrefix.length + 1)(targetItemPath)
+          const anchorCandidate = RArray$.takeLeft(commonPrefix.length + 1)(anchorItemPath)
           if (targetCandidate.length === anchorCandidate.length) {
             CurrentState.setTargetItemPathOnly(targetCandidate)
             CurrentState.setAnchorItemPath(anchorCandidate)
