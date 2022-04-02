@@ -625,7 +625,7 @@ function onBackspace(event: KeyboardEvent) {
       }
 
       // ↑の元のエッジごと削除
-      CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(targetItemPath)!, targetItemId)
+      CurrentState.deleteItem(targetItemId)
 
       // 上の項目の元の末尾にキャレットを移動する
       CurrentState.setTargetItemPath(aboveItemPath)
@@ -754,7 +754,7 @@ function onDelete(event: KeyboardEvent) {
       }
 
       // ↑の元のエッジごと削除
-      CurrentState.removeItemGraphEdge(ItemPath.getParentItemId(belowItemPath)!, belowItemId)
+      CurrentState.deleteItem(belowItemId)
 
       // 元のキャレット位置を維持する
       Rerenderer.instance.requestToSetCaretPosition(DomishObject.getTextLength(domishObjects))
