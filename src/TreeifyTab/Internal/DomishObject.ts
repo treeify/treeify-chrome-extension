@@ -97,13 +97,17 @@ export namespace DomishObject {
     if (node instanceof HTMLElement) {
       switch (node.tagName.toLowerCase()) {
         case 'b':
+        case 'strong':
           return [{ type: 'b', children }]
         case 'u':
+        case 'ins':
           return [{ type: 'u', children }]
         case 'i':
+        case 'em':
           return [{ type: 'i', children }]
         case 'strike':
         case 's':
+        case 'del':
           return [{ type: 's', children }]
       }
     }
