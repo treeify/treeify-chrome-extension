@@ -35,6 +35,11 @@ export function createMainAreaTextContentProps(
         const domishObjects = DomishObject.fromChildren(event.target)
         CurrentState.setTextItemDomishObjects(itemId, domishObjects)
         CurrentState.updateItemTimestamp(itemId)
+
+        if (event.inputType === 'insertFromDrop') {
+          CurrentState.setTargetItemPath(itemPath)
+        }
+
         Rerenderer.instance.requestToFocusTargetItem(getTextItemSelectionFromDom())
         Rerenderer.instance.rerender()
       }

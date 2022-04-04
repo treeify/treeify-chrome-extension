@@ -1,6 +1,5 @@
-import { pipe } from 'fp-ts/function'
 import { assertNeverType } from 'src/Utility/Debug/assert'
-import { RArray, RArray$ } from 'src/Utility/fp-ts'
+import { RArray } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 
 /**
@@ -74,54 +73,45 @@ export namespace DomishObject {
     return DomishObject.fromChildren(templateElement.content)
   }
 
-  /**
-   * 与えられたNodeの子リストをDomishObjectのリストに変換する。
-   * DomishObjectとして表せない子Nodeは無視される。
-   */
+  /** 与えられたNodeをDomishObjectのリストに変換する */
   export function fromChildren(node: Node): RArray<DomishObject> {
-    return pipe(Array.from(node.childNodes), RArray$.map(from), RArray$.filterUndefined)
+    return [...node.childNodes].flatMap(from)
   }
 
   /**
-   * 与えられたNodeをDomishObjectに変換する。
-   * DomishObjectとして表せない場合はundefinedを返す。
+   * 与えられたNodeをDomishObjectのリストに変換する。
+   * DomishObjectがサポートしていない要素は透過的に無視される。
+   * 例えば<div><b>text</b></div> は <b>text</b>であるかのように扱う。
    */
-  export function from(node: Node): DomishObject | undefined {
+  export function from(node: Node): RArray<DomishObject> {
     if (node instanceof HTMLBRElement) {
-      return { type: 'br' }
+      return [{ type: 'br' }]
     }
     if (node.nodeType === Node.TEXT_NODE) {
       // 通常の半角スペースをいわゆる「&nbsp;」に変換してからテキストノード化する
       const textContent = node.textContent ?? ''
-      return { type: 'text', textContent: textContent.replaceAll(' ', nbsp) }
+      return [{ type: 'text', textContent: textContent.replaceAll(' ', nbsp) }]
     }
+
+    const children = [...node.childNodes].flatMap(from)
     if (node instanceof HTMLElement) {
       switch (node.tagName.toLowerCase()) {
         case 'b':
-          return {
-            type: 'b',
-            children: fromChildren(node),
-          }
+        case 'strong':
+          return [{ type: 'b', children }]
         case 'u':
-          return {
-            type: 'u',
-            children: fromChildren(node),
-          }
+        case 'ins':
+          return [{ type: 'u', children }]
         case 'i':
-          return {
-            type: 'i',
-            children: fromChildren(node),
-          }
+        case 'em':
+          return [{ type: 'i', children }]
         case 'strike':
         case 's':
-          return {
-            type: 's',
-            children: fromChildren(node),
-          }
+        case 'del':
+          return [{ type: 's', children }]
       }
-      return undefined
     }
-    return undefined
+    return children
   }
 
   /** 文字列の長さ（文字数ではなくlength） + 改行（br要素）の数を返す */
