@@ -114,40 +114,38 @@ export async function cleanup() {
  * 一部を除く全てのシングルトンやグローバル変数もリセットする。
  */
 export async function restart(state: State, isFirstSync: boolean = false) {
-  if (State.isValid(state)) {
-    if (!isFirstSync) {
-      await migrateTabs(state)
-    }
+  if (!isFirstSync) {
+    await migrateTabs(state)
+  }
 
-    // ローカルデータが上書きされ、項目を失ってしまう問題の対策として
-    // 初回同期時はトップページの子項目を全てOPML化しておき、同期完了後にトップページの末尾に貼り付ける。
-    const opmlString: string | undefined = call(() => {
-      if (!isFirstSync) return undefined
+  // ローカルデータが上書きされ、項目を失ってしまう問題の対策として
+  // 初回同期時はトップページの子項目を全てOPML化しておき、同期完了後にトップページの末尾に貼り付ける。
+  const opmlString: string | undefined = call(() => {
+    if (!isFirstSync) return undefined
 
-      const childItemIds = Internal.instance.state.items[TOP_ITEM_ID].childItemIds
-      return toOpmlString(childItemIds.map((childItemId) => [TOP_ITEM_ID, childItemId]))
-    })
+    const childItemIds = Internal.instance.state.items[TOP_ITEM_ID].childItemIds
+    return toOpmlString(childItemIds.map((childItemId) => [TOP_ITEM_ID, childItemId]))
+  })
 
-    await cleanup()
+  await cleanup()
 
-    // IndexedDBを新しいStateと一致するよう更新
-    await Database.clearAllChunks()
-    // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
-    Database.writeChunks(Chunk.createAllChunks(state))
+  // IndexedDBを新しいStateと一致するよう更新
+  await Database.clearAllChunks()
+  // IndexedDBは基本的にwrite-onlyなので書き込み完了を待つ必要はない
+  Database.writeChunks(Chunk.createAllChunks(state))
 
-    await startup(state)
+  await startup(state)
 
-    if (opmlString !== undefined) {
-      // 退避しておいたOPMLをトップページの末尾に貼り付ける
-      const opmlParseResult = tryParseAsOpml(opmlString)
-      if (opmlParseResult !== undefined) {
-        for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult)) {
-          CurrentState.insertLastChildItem(TOP_ITEM_ID, itemAndEdge.itemId, itemAndEdge.edge)
-        }
+  if (opmlString !== undefined) {
+    // 退避しておいたOPMLをトップページの末尾に貼り付ける
+    const opmlParseResult = tryParseAsOpml(opmlString)
+    if (opmlParseResult !== undefined) {
+      for (const itemAndEdge of createItemsBasedOnOpml(opmlParseResult)) {
+        CurrentState.insertLastChildItem(TOP_ITEM_ID, itemAndEdge.itemId, itemAndEdge.edge)
       }
-
-      Rerenderer.instance.rerender()
     }
+
+    Rerenderer.instance.rerender()
   }
 }
 

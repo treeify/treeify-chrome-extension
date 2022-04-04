@@ -4,9 +4,9 @@ import { DomishObject } from 'src/TreeifyTab/Internal/DomishObject'
 import { InputId } from 'src/TreeifyTab/Internal/InputId'
 import { ItemPath } from 'src/TreeifyTab/Internal/ItemPath'
 import { commandNames } from 'src/TreeifyTab/View/commandNames'
-import { assert, assertNeverType, assertNonUndefined } from 'src/Utility/Debug/assert'
+import { assertNeverType } from 'src/Utility/Debug/assert'
 import { dump } from 'src/Utility/Debug/logger'
-import { NERArray, Option$, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
+import { NERArray, RArray, RArray$, RRecord$, RSet, RSet$ } from 'src/Utility/fp-ts'
 import { integer } from 'src/Utility/integer'
 import { Timestamp } from 'src/Utility/Timestamp'
 
@@ -262,138 +262,6 @@ export namespace State {
     const aScore = aUpdateCount + aCreateCount + aDeleteCount
     const bScore = bUpdateCount + bCreateCount + bDeleteCount
     return aScore > bScore
-  }
-
-  /**
-   * Stateオブジェクトの整合性をチェックする。
-   * 不整合を検出した場合、最初に見つかった不整合の内容をconsoleに出力する。
-   */
-  export function isValid(state: State): boolean {
-    try {
-      const itemIds = RRecord$.numberKeys(state.items)
-      for (const itemId of itemIds) {
-        const item = state.items[itemId]
-
-        // 子リストに重複がないことのチェック
-        assert(
-          item.childItemIds.length === RSet$.from(item.childItemIds).size,
-          `items[${itemId}]のchildItemIdsに重複がある`
-        )
-
-        // 親子関係の対応チェック（エッジの存在チェック）
-        // 子項目の親マップに自身が含まれていることのチェック
-        for (const childItemId of item.childItemIds) {
-          assertNonUndefined(
-            state.items[childItemId]?.parents?.[itemId],
-            `items[${childItemId}]のparentsに${itemId}が無い`
-          )
-        }
-        // 親項目の子リストに自身が含まれていることのチェック
-        for (const parentItemId of RRecord$.numberKeys(item.parents)) {
-          assert(
-            state.items[parentItemId]?.childItemIds?.includes(itemId),
-            `items[${parentItemId}]のchildItemIdsに${itemId}が含まれていない`
-          )
-
-          // TODO: Edgeの検証
-        }
-
-        // itemTypeに対応するオブジェクトの存在チェック（ついでにitemTypeの型チェック）
-        switch (item.type) {
-          case ItemType.TEXT:
-            assertNonUndefined(state.textItems[itemId], `textItems[${itemId}]が存在しない`)
-            break
-          case ItemType.WEB_PAGE:
-            assertNonUndefined(state.webPageItems[itemId], `webPageItems[${itemId}]が存在しない`)
-            break
-          case ItemType.IMAGE:
-            assertNonUndefined(state.imageItems[itemId], `imageItems[${itemId}]が存在しない`)
-            break
-          case ItemType.CODE_BLOCK:
-            assertNonUndefined(
-              state.codeBlockItems[itemId],
-              `codeBlockItems[${itemId}]が存在しない`
-            )
-            break
-          case ItemType.TEX:
-            assertNonUndefined(state.texItems[itemId], `texItems[${itemId}]が存在しない`)
-            break
-          default:
-            assertNeverType(item.type, `items[${itemId}]の不明なitemType "${item.type}"`)
-        }
-
-        // 残りのプロパティの型チェック（存在チェックを兼ねる）
-        assert(typeof item.timestamp === 'number', `items[${itemId}]のtimestampの型エラー`)
-      }
-
-      // 循環参照が存在しないことの確認
-      assert(
-        !hasCycle(state, TOP_ITEM_ID, new Set()),
-        'トランスクルードによって循環参照が発生している'
-      )
-
-      for (const pageId of RRecord$.numberKeys(state.pages)) {
-        // ページIDに対応する項目IDの存在チェック
-        assertNonUndefined(
-          state.items[pageId],
-          `${pageId}がpagesに含まれているのにitemsには含まれていない`
-        )
-
-        const page = state.pages[pageId]
-        assert(
-          RArray$.shallowEqual(RArray$.pop(page.targetItemPath), RArray$.pop(page.anchorItemPath)),
-          `pages[${pageId}]のtargetItemPathとanchorItemPathが兄弟でない`
-        )
-        // TODO: targetItemPath, anchorItemPathがvalidなItemPathであることのチェック
-        page.targetItemPath
-      }
-
-      assert(typeof state.maxItemId === 'number', `maxItemIdの型エラー`)
-      const maxItemId = Option$.get(TOP_ITEM_ID)(RArray$.max(itemIds.concat(state.vacantItemIds)))
-      assert(maxItemId === state.maxItemId, `maxItemIdが実際の最大itemId ${maxItemId}と異なる`)
-
-      for (const vacantItemId of state.vacantItemIds) {
-        assert(
-          state.items[vacantItemId] === undefined,
-          `items[${vacantItemId}]が存在するが、これはvacantItemIdsに含まれる値`
-        )
-        assert(
-          vacantItemId <= state.maxItemId,
-          `vacantItemId ${vacantItemId}がmaxItemIdを超えている`
-        )
-      }
-
-      for (const workspaceId of RRecord$.numberKeys(state.workspaces)) {
-        const workspace = state.workspaces[workspaceId]
-        assert(typeof workspace.name === 'string', `workspaces[${workspaceId}]のnameの型エラー`)
-
-        for (const excludedItemId of workspace.excludedItemIds) {
-          assertNonUndefined(
-            state.items[excludedItemId],
-            `workspaces[${workspaceId}]のexcludedItemId ${excludedItemId}がitemsに存在しない`
-          )
-        }
-      }
-
-      for (const mountedPageId of state.mountedPageIds) {
-        assertNonUndefined(
-          state.pages[mountedPageId],
-          `mountedPageId ${mountedPageId}がpagesに含まれていない`
-        )
-      }
-      assert(
-        RSet$.from(state.mountedPageIds).size === state.mountedPageIds.length,
-        `mountedPageIdsに重複がある`
-      )
-      assert(state.mountedPageIds.length > 0, `mountedPageIdsが空である`)
-
-      // TODO: ダイアログなど、残りのプロパティのチェック
-
-      return true
-    } catch (e) {
-      console.error(e)
-      return false
-    }
   }
 
   /**
