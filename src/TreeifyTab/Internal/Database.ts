@@ -12,8 +12,8 @@ import { integer } from 'src/Utility/integer'
 export namespace Database {
   let database: IDBDatabase | undefined
 
-  const databaseName = 'Treeify'
-  const chunkStoreName = 'ChunkStore'
+  const DATABASE_NAME = 'Treeify'
+  const CHUNK_STORE_NAME = 'ChunkStore'
 
   function getDatabase(): IDBDatabase {
     assertNonUndefined(database)
@@ -49,12 +49,12 @@ export namespace Database {
 
   /** データベースのスキーマバージョンに応じてマイグレーションを行う */
   export async function migrate() {
-    await openDatabase(databaseName, 1, async (database, oldVersion) => {
+    await openDatabase(DATABASE_NAME, 1, async (database, oldVersion) => {
       if (oldVersion === 0) {
         // 初回起動時
 
         // ObjectStoreを新規作成する
-        const objectStore = database.createObjectStore(chunkStoreName, { keyPath: 'id' })
+        const objectStore = database.createObjectStore(CHUNK_STORE_NAME, { keyPath: 'id' })
 
         // 初期データを投入する
         const allChunks = Chunk.createAllChunks(Internal.createInitialState())
@@ -66,7 +66,7 @@ export namespace Database {
   /** チャンクストア内の全チャンクを読み込む */
   export async function getAllChunks(): Promise<RArray<Chunk>> {
     return new Promise((resolve, reject) => {
-      const objectStore = getDatabase().transaction(chunkStoreName).objectStore(chunkStoreName)
+      const objectStore = getDatabase().transaction(CHUNK_STORE_NAME).objectStore(CHUNK_STORE_NAME)
       const request = objectStore.getAll()
       // 読み込みリクエスト成功時
       request.onsuccess = () => {
@@ -87,7 +87,7 @@ export namespace Database {
     return new Promise((resolve, reject) => {
       const objectStore =
         givenObjectStore ??
-        getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+        getDatabase().transaction(CHUNK_STORE_NAME, 'readwrite').objectStore(CHUNK_STORE_NAME)
       if (chunk.data !== undefined) {
         const request = objectStore.put(chunk)
         request.onsuccess = () => {
@@ -111,7 +111,7 @@ export namespace Database {
   export async function writeChunks(chunks: RArray<Chunk>, givenObjectStore?: IDBObjectStore) {
     const objectStore =
       givenObjectStore ??
-      getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+      getDatabase().transaction(CHUNK_STORE_NAME, 'readwrite').objectStore(CHUNK_STORE_NAME)
     await Promise.all(chunks.map((chunk) => writeChunk(chunk, objectStore)))
   }
 
@@ -120,7 +120,7 @@ export namespace Database {
     return new Promise((resolve, reject) => {
       const objectStore =
         givenObjectStore ??
-        getDatabase().transaction(chunkStoreName, 'readwrite').objectStore(chunkStoreName)
+        getDatabase().transaction(CHUNK_STORE_NAME, 'readwrite').objectStore(CHUNK_STORE_NAME)
       const request = objectStore.clear()
       // 書き込みリクエスト成功時
       request.onsuccess = () => {
