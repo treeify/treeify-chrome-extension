@@ -42,7 +42,8 @@ import IdleState = chrome.idle.IdleState
 export async function startup(initialState: State) {
   if (!State.isValid(initialState)) {
     // 2022/04/12に報告された原因不明のデータ破損と見られる不具合の対策
-    State.removeBrokenReferences(initialState)
+    State.repairBrokenEdges(initialState)
+    State.removeCyclicEdge(initialState)
 
     await Database.clearAllChunks()
     await Database.writeChunks(Chunk.createAllChunks(initialState))

@@ -397,10 +397,10 @@ export namespace State {
   }
 
   /**
-   * State内でItemIdによって指し示されている項目が実在するかどうかを調べる。
-   * 実在しない場合はその参照を削除する。
+   * 親子の対応関係の壊れたエッジを修復する。
+   * 実在しない項目を指すエッジは削除する。
    */
-  export function removeBrokenReferences(state: State) {
+  export function repairBrokenEdges(state: State) {
     for (const itemId of RRecord$.numberKeys(state.items)) {
       const item = state.items[itemId]
 
@@ -414,10 +414,25 @@ export namespace State {
         return state.items[childItemId] !== undefined
       })
 
+      // 対応関係の壊れた子項目への参照を修復
+      for (const childItemId of item.childItemIds) {
+        if (state.items[childItemId].parents[itemId] === undefined) {
+          state.items[childItemId].parents[itemId] = { isFolded: false }
+        }
+      }
+
       // 存在しない親項目への参照を削除
       for (const parentItemId of RRecord$.numberKeys(item.parents)) {
         if (state.items[parentItemId] === undefined) {
           delete item.parents[parentItemId]
+        }
+      }
+
+      // 対応関係の壊れた親項目への参照を修復
+      for (const parentItemId of RRecord$.numberKeys(item.parents)) {
+        const parentItem = state.items[parentItemId]
+        if (!parentItem.childItemIds.includes(itemId)) {
+          parentItem.childItemIds = [...parentItem.childItemIds, itemId]
         }
       }
     }
@@ -429,6 +444,37 @@ export namespace State {
     state.mountedPageIds = state.mountedPageIds.filter((mountedPageId) => {
       return state.items[mountedPageId] !== undefined
     }) as any
+  }
+
+  /**
+   * トランスクルードされた項目に対して循環チェックを行い、
+   * 循環を引き起こしているエッジを削除する。
+   */
+  export function removeCyclicEdge(state: State) {
+    for (const itemId of RRecord$.numberKeys(state.items)) {
+      const item = state.items[itemId]
+      const parentItemIds = RRecord$.numberKeys(item.parents)
+      // トランスクルードされていない項目は処理しなくてよい
+      if (parentItemIds.length <= 1) continue
+
+      for (const parentItemId of parentItemIds) {
+        if (isCyclic(itemId, parentItemId, state)) {
+          // エッジを削除
+          delete item.parents[parentItemId]
+          const parentItem = state.items[parentItemId]
+          parentItem.childItemIds = RArray$.remove(itemId)(parentItem.childItemIds)
+        }
+      }
+    }
+  }
+
+  function isCyclic(itemId: ItemId, parentItemId: ItemId, state: State): boolean {
+    if (itemId === parentItemId) return true
+
+    for (const grandParentItemId of RRecord$.numberKeys(state.items[parentItemId].parents)) {
+      if (isCyclic(itemId, grandParentItemId, state)) return true
+    }
+    return false
   }
 
   /** Top項目から辿れない項目を返す */
