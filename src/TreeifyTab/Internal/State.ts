@@ -397,61 +397,97 @@ export namespace State {
   }
 
   /**
-   * Backspace, Deleteキーでのテキスト項目結合時に項目が正しく削除されない不具合でState内に残っている項目データを削除するための関数。
-   * この不具合は1.0.0で発生しており、1.0.1では発生しないよう修正されたが壊れたStateはそのままだった。
+   * State内でItemIdによって指し示されている項目が実在するかどうかを調べる。
+   * 実在しない場合はその参照を削除する。
    */
-  export function deleteUnreachableItems(state: State) {
+  export function removeBrokenReferences(state: State) {
+    for (const itemId of RRecord$.numberKeys(state.items)) {
+      const item = state.items[itemId]
+
+      // 子リスト内の重複を削除
+      if (item.childItemIds.length !== RSet$.from(item.childItemIds).size) {
+        item.childItemIds = RArray$.from(RSet$.from(item.childItemIds))
+      }
+
+      // 存在しない子項目への参照を削除
+      item.childItemIds = item.childItemIds.filter((childItemId) => {
+        return state.items[childItemId] !== undefined
+      })
+
+      // 存在しない親項目への参照を削除
+      for (const parentItemId of RRecord$.numberKeys(item.parents)) {
+        if (state.items[parentItemId] === undefined) {
+          delete item.parents[parentItemId]
+        }
+      }
+    }
+
+    state.vacantItemIds = state.vacantItemIds.filter((vacantItemId) => {
+      return state.items[vacantItemId] !== undefined
+    })
+
+    state.mountedPageIds = state.mountedPageIds.filter((mountedPageId) => {
+      return state.items[mountedPageId] !== undefined
+    }) as any
+  }
+
+  /** Top項目から辿れない項目を返す */
+  export function detectUnreachableItems(state: State): RArray<ItemId> {
     // Top項目から辿れる項目ID
     const itemIds = RSet$.from(yieldSubtreeItemIds(state, TOP_ITEM_ID))
 
-    for (const itemId of RRecord$.numberKeys(state.items)) {
-      if (!itemIds.has(itemId) && state.items[itemId] !== undefined) {
-        // Top項目から辿れない項目だった場合
+    return RRecord$.numberKeys(state.items).filter(
+      (itemId) => !itemIds.has(itemId) && state.items[itemId] !== undefined
+    )
+  }
 
-        // 項目データをまるごと削除する前に、親子関係の整合性を保つためにエッジを削除
-        for (const childItemId of state.items[itemId].childItemIds) {
-          delete state.items[childItemId].parents[itemId]
-        }
-        for (const parentItemId of RRecord$.numberKeys(state.items[itemId].parents)) {
-          const parentItem = state.items[parentItemId]
-          parentItem.childItemIds = RArray$.remove(itemId)(parentItem.childItemIds)
-        }
-
-        // 項目タイプごとのデータを削除する
-        const itemType = state.items[itemId].type
-        switch (itemType) {
-          case ItemType.TEXT:
-            delete state.textItems[itemId]
-            break
-          case ItemType.WEB_PAGE:
-            delete state.webPageItems[itemId]
-            break
-          case ItemType.IMAGE:
-            delete state.imageItems[itemId]
-            break
-          case ItemType.CODE_BLOCK:
-            delete state.codeBlockItems[itemId]
-            break
-          case ItemType.TEX:
-            delete state.texItems[itemId]
-            break
-          default:
-            assertNeverType(itemType)
-        }
-
-        delete state.items[itemId]
-        delete state.pages[itemId]
-
-        // 除外リストから削除する
-        for (const workspace of Object.values(state.workspaces)) {
-          workspace.excludedItemIds = RArray$.remove(itemId)(workspace.excludedItemIds)
-        }
-
-        state.mountedPageIds = RArray$.remove(itemId)(state.mountedPageIds) as any
-
-        state.vacantItemIds = [...state.vacantItemIds, itemId]
-      }
+  /**
+   * Backspace, Deleteキーでのテキスト項目結合時に項目が正しく削除されない不具合でState内に残っている項目データを削除するための関数。
+   * この不具合は1.0.0で発生しており、1.0.1では発生しないよう修正されたが壊れたStateはそのままだった。
+   */
+  export function deleteUnreachableItem(itemId: ItemId, state: State) {
+    // 項目データをまるごと削除する前に、親子関係の整合性を保つためにエッジを削除
+    for (const childItemId of state.items[itemId].childItemIds) {
+      delete state.items[childItemId].parents[itemId]
     }
+    for (const parentItemId of RRecord$.numberKeys(state.items[itemId].parents)) {
+      const parentItem = state.items[parentItemId]
+      parentItem.childItemIds = RArray$.remove(itemId)(parentItem.childItemIds)
+    }
+
+    // 項目タイプごとのデータを削除する
+    const itemType = state.items[itemId].type
+    switch (itemType) {
+      case ItemType.TEXT:
+        delete state.textItems[itemId]
+        break
+      case ItemType.WEB_PAGE:
+        delete state.webPageItems[itemId]
+        break
+      case ItemType.IMAGE:
+        delete state.imageItems[itemId]
+        break
+      case ItemType.CODE_BLOCK:
+        delete state.codeBlockItems[itemId]
+        break
+      case ItemType.TEX:
+        delete state.texItems[itemId]
+        break
+      default:
+        assertNeverType(itemType)
+    }
+
+    delete state.items[itemId]
+    delete state.pages[itemId]
+
+    // 除外リストから削除する
+    for (const workspace of Object.values(state.workspaces)) {
+      workspace.excludedItemIds = RArray$.remove(itemId)(workspace.excludedItemIds)
+    }
+
+    state.mountedPageIds = RArray$.remove(itemId)(state.mountedPageIds) as any
+
+    state.vacantItemIds = [...state.vacantItemIds, itemId]
   }
 
   function* yieldSubtreeItemIds(state: State, itemId: ItemId): Generator<ItemId> {
