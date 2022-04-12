@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "key": "TIDBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0W0/YVPvLrj2cWBOXfPBBYwPp56R+OJb9QLudyMpigF+V4DFV0NEUnbo9iA6m+7cVPiD6YbhbIaiAoHSdtqEKwaYvrEJRGuGsLjDq+RMwG2x+FcGIsO4ny0BuZaZ/Q2+DaL33NBUl2h9dIi1xa0Suq6qpoJ4yykTu9y7Q6rB9ulJze6DiZL7LWU5NzHCEWt21zAhpLZOqvYY8wzY69pMf+P0+uOLuy87x84rvCRNegbSmEYLC5f4y6ikjVnFUxJBxMlpMg3bByxbrLVBFPuHj4khkr6adUXgks2vBBHFcrRh5EYXopI+PLwUJPfFtzyN8+L7swen9kcK8gXMwX28KwIDAQAB",
   "name": "Treeify（開発用）",
   "description": "大量のメモ、タブ、ブックマークなどをまとめてスマートに管理するための拡張機能です。",
