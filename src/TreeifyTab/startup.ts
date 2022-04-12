@@ -44,6 +44,7 @@ export async function startup(initialState: State) {
     // 2022/04/12に報告された原因不明のデータ破損と見られる不具合の対策
     State.repairBrokenEdges(initialState)
     State.removeCyclicEdge(initialState)
+    State.repairInvalidItemIds(initialState)
 
     await Database.clearAllChunks()
     await Database.writeChunks(Chunk.createAllChunks(initialState))

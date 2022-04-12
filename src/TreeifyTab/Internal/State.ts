@@ -477,6 +477,58 @@ export namespace State {
     return false
   }
 
+  export function repairInvalidItemIds(state: State) {
+    const itemIds = RRecord$.numberKeys(state.items)
+    state.maxItemId = Option$.getOrThrow(RArray$.max(itemIds.concat(state.vacantItemIds)))
+
+    for (const itemId of itemIds) {
+      switch (state.items[itemId].type) {
+        case ItemType.TEXT:
+          delete state.webPageItems[itemId]
+          delete state.imageItems[itemId]
+          delete state.codeBlockItems[itemId]
+          delete state.texItems[itemId]
+          break
+        case ItemType.WEB_PAGE:
+          delete state.textItems[itemId]
+          delete state.imageItems[itemId]
+          delete state.codeBlockItems[itemId]
+          delete state.texItems[itemId]
+          break
+        case ItemType.IMAGE:
+          delete state.textItems[itemId]
+          delete state.webPageItems[itemId]
+          delete state.codeBlockItems[itemId]
+          delete state.texItems[itemId]
+          break
+        case ItemType.CODE_BLOCK:
+          delete state.textItems[itemId]
+          delete state.webPageItems[itemId]
+          delete state.imageItems[itemId]
+          delete state.texItems[itemId]
+          break
+        case ItemType.TEX:
+          delete state.textItems[itemId]
+          delete state.webPageItems[itemId]
+          delete state.imageItems[itemId]
+          delete state.codeBlockItems[itemId]
+          break
+      }
+    }
+
+    // maxItemId以下だがvacantItemIdsにもitemsにも存在しない場合→vacantItemIdsに追加
+    // vacantItemIdsにもitemsにも存在する場合→vacantItemIdsから削除
+    for (let itemId = 0; itemId <= state.maxItemId; itemId++) {
+      const existsInItems = state.items[itemId] !== undefined
+      const existsInVacantItemIds = state.vacantItemIds.includes(itemId)
+      if (existsInItems && existsInVacantItemIds) {
+        state.vacantItemIds = RArray$.remove(itemId)(state.vacantItemIds)
+      } else if (!existsInItems && !existsInVacantItemIds) {
+        state.vacantItemIds = [...state.vacantItemIds, itemId]
+      }
+    }
+  }
+
   /** Top項目から辿れない項目を返す */
   export function detectUnreachableItems(state: State): RArray<ItemId> {
     // Top項目から辿れる項目ID
