@@ -40,9 +40,24 @@ import OnClickData = chrome.contextMenus.OnClickData
 import IdleState = chrome.idle.IdleState
 
 export async function startup(initialState: State) {
-  // TODO: このコードを追加する以前のバージョンのTreeifyのユーザーが見当たらなくなったらこのコードを削除する。
+  if (!State.isValid(initialState)) {
+    // 2022/04/12に報告された原因不明のデータ破損と見られる不具合の対策
+    State.removeBrokenReferences(initialState)
+
+    await Database.clearAllChunks()
+    await Database.writeChunks(Chunk.createAllChunks(initialState))
+  }
+
   // 1.0.0の不具合（BackspaceおよびDeleteで孤立項目がうまれてしまう）で起こるデータ不整合の対策
-  State.deleteUnreachableItems(initialState)
+  const unreachableItemIds = State.detectUnreachableItems(initialState)
+  if (unreachableItemIds.length > 0) {
+    for (const itemId of unreachableItemIds) {
+      State.deleteUnreachableItem(itemId, initialState)
+    }
+
+    await Database.clearAllChunks()
+    Database.writeChunks(Chunk.createAllChunks(initialState))
+  }
 
   External.instance.lastFocusedWindowId = await getLastFocusedWindowId()
 
